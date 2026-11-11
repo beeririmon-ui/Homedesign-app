@@ -12,13 +12,21 @@
  *   lib/shipments.ts), or refused (the order goes on; a return after delivery is the way).
  * - **Shipped or delivered:** no cancellation; a refund, full or partial, once the item is back.
  * - **Again:** asking again resumes what is left (a cancellation whose refund did not complete), never a second refund.
+ *   S16, QA ת42: a request already waiting on the supplier returns its state, without asking the supplier again.
+ * - **S16, QA ת35, maybe at the supplier:** a submit that failed in a way that may have created the order (`reach =
+ *   'maybe'`: a timeout, a network or server error), or any failed submit of an order in `supplier_error`, counts as
+ *   sent: never a silent full refund. The supplier is asked by our order number (`findOrder`, when its client has it):
+ *   it holds the order → the after-supplier path; it holds none → the before-supplier path. A supplier that cannot be
+ *   asked leaves it to a person (409 `supplier_check_needed`): they check at the supplier and record what they found
+ *   (`recordSupplierCheck`, the admin's "בדיקה אצל הספק"), and the cancellation then takes the matching path.
  */
 import type { Env } from '../env';
 import { requestRefund, refundTotals, type RefundResult } from './refunds';
 import { supplierClient } from './suppliers';
 import type { SupplierClient } from './suppliers/types';
 import type { PaymentProvider } from './payments/types';
-import { log } from './log';
+import { errorCode, log } from './log';
+import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from './deadline';
 
 export type CancelResult = {
   outcome: 'canceled' | 'requested' | 'refused';
@@ -30,6 +38,12 @@ export type CancelError = { error: true; status: 404 | 409 | 503; code: string; 
 
 /** shipments that are with the supplier, or on their way to it */
 const SENT = "('submitting', 'submitted', 'accepted', 'cancel_requested', 'shipped', 'delivered')";
+/**
+ * S16, QA ת35: a failed submit that may be at the supplier: one whose failure may have created the order, or any failed
+ * submit of an order in supplier_error (whatever its last error said), unless the supplier or a person said it holds none.
+ * `o` is the order's alias in the statement.
+ */
+const MAYBE_SENT = "(s.status = 'failed' AND s.supplier_order_id IS NULL AND (s.reach = 'maybe' OR (s.reach = 'none' AND o.status = 'supplier_error')))";
 
 const audit = (db: D1Database, at: string, actor: string, action: string, subject: string, detail: object) =>
   db
@@ -41,7 +55,7 @@ export async function cancelOrder(
   orderId: string,
   actor: string,
   reason: string,
-  opts: { supplier?: SupplierClient; payment?: PaymentProvider; now?: () => number } = {},
+  opts: { supplier?: SupplierClient; payment?: PaymentProvider; now?: () => number; callTimeoutMs?: number; asked?: boolean } = {},
 ): Promise<CancelResult | CancelError> {
   const iso = () => new Date((opts.now ?? Date.now)()).toISOString();
   const why = reason.trim().slice(0, 300);
@@ -80,13 +94,13 @@ export async function cancelOrder(
       message_he: order.status === 'refunded' ? 'ההזמנה כבר זוכתה במלואה.' : 'ההזמנה כבר נשלחה. אי אפשר לבטל; אפשר להחזיר כסף (מלא או חלקי) אחרי שהפריט חוזר.',
     };
 
-  // paid (or a supplier error) and nothing with the supplier: canceled in one statement, then refunded
+  // paid (or a supplier error) and nothing with the supplier, nor maybe with it (ת35): canceled in one statement, then refunded
   const at = iso();
   const before = await env.DB.prepare(
-    `UPDATE orders SET status = 'canceled', updated_at = ? WHERE id = ? AND status IN ('paid', 'supplier_error')
-       AND NOT EXISTS (SELECT 1 FROM supplier_shipments WHERE order_id = ? AND status IN ${SENT})`,
+    `UPDATE orders AS o SET status = 'canceled', updated_at = ? WHERE o.id = ? AND o.status IN ('paid', 'supplier_error')
+       AND NOT EXISTS (SELECT 1 FROM supplier_shipments s WHERE s.order_id = o.id AND (s.status IN ${SENT} OR ${MAYBE_SENT}))`,
   )
-    .bind(at, orderId, orderId)
+    .bind(at, orderId)
     .run();
   if (before.meta.changes) {
     await env.DB.batch([
@@ -103,22 +117,62 @@ export async function cancelOrder(
   }
 
   // with the supplier: one being sent right now cannot be canceled from here yet
-  const { results: ships } = await env.DB.prepare('SELECT supplier, status, supplier_order_id FROM supplier_shipments WHERE order_id = ?')
+  const { results: ships } = await env.DB.prepare(
+    `SELECT s.supplier, s.status, s.supplier_order_id, s.updated_at, ${MAYBE_SENT} AS maybe FROM supplier_shipments s JOIN orders o ON o.id = s.order_id WHERE s.order_id = ?`,
+  )
     .bind(orderId)
-    .all<{ supplier: string; status: string; supplier_order_id: string | null }>();
+    .all<{ supplier: string; status: string; supplier_order_id: string | null; updated_at: string; maybe: number }>();
   if (ships.some((s) => s.status === 'submitting'))
     return { error: true, status: 409, code: 'supplier_submit_in_progress', message_he: 'ההזמנה נשלחת לספק ממש עכשיו. נסו שוב בעוד דקה.' };
   if (ships.some((s) => s.status === 'shipped' || s.status === 'delivered'))
     return { error: true, status: 409, code: 'already_shipped', message_he: 'חלק מההזמנה כבר נשלח. אי אפשר לבטל; אפשר להחזיר כסף על מה שחוזר.' };
-  const open = ships.filter((s) => s.status === 'submitted' || s.status === 'accepted' || s.status === 'cancel_requested');
-  if (!open.length) return { error: true, status: 409, code: 'not_cancelable', message_he: `אי אפשר לבטל הזמנה במצב ${order.status}.` };
 
   let client = opts.supplier ?? null;
-  if (!client) {
+  const pickClient = (): CancelError | null => {
+    if (client) return null;
     const c = supplierClient(env);
     if (!c.ok) return { error: true, status: 503, code: 'supplier_not_configured', message_he: 'אין חיבור לספק: בטלו אצל הספק ביד.' };
     client = c.client;
+    return null;
+  };
+
+  // S16, QA ת35: maybe at the supplier (a submit that may have created the order): asked first, never refunded blindly
+  const maybe = ships.filter((s) => s.maybe);
+  if (maybe.length) {
+    if (opts.asked || pickClient() || !client!.findOrder) return needsPerson(env, orderId, actor, iso());
+    const c = client!;
+    const find = c.findOrder!.bind(c);
+    for (const s of maybe.filter((x) => x.supplier === c.id)) {
+      // the last call ended a moment ago: the supplier may still be creating the order
+      if ((opts.now ?? Date.now)() - Date.parse(s.updated_at) < (opts.callTimeoutMs ?? PROVIDER_CALL_TIMEOUT_MS))
+        return { error: true, status: 409, code: 'supplier_submit_in_progress', message_he: 'ההזמנה נשלחה לספק לפני רגע ולא נענתה. נסו שוב בעוד דקה.' };
+      let found: { supplier_order_id: string } | null;
+      try {
+        found = await withDeadline(`${c.id} findOrder`, opts.callTimeoutMs ?? PROVIDER_CALL_TIMEOUT_MS, (signal) => find(orderId, { signal }));
+      } catch (err) {
+        const error_id = log.error('cancel.supplier_find_failed', { order_id: orderId, supplier: c.id, code: errorCode(err) });
+        return { error: true, status: 503, code: 'supplier_failed', message_he: `הספק לא ענה על השאלה אם ההזמנה אצלו. לא הוחזר כסף. נסו שוב (קוד ${error_id}).` };
+      }
+      await supplierHolds(env, orderId, c.id, found, `supplier:${c.id}`, iso());
+    }
+    if (maybe.some((s) => s.supplier !== c.id)) return needsPerson(env, orderId, actor, iso());
+    return cancelOrder(env, orderId, actor, reason, { ...opts, asked: true });
   }
+
+  const open = ships.filter((s) => s.status === 'submitted' || s.status === 'accepted' || s.status === 'cancel_requested');
+  if (!open.length) return { error: true, status: 409, code: 'not_cancelable', message_he: `אי אפשר לבטל הזמנה במצב ${order.status}.` };
+
+  // S16, QA ת42: a request already waiting on the supplier: its state, without asking the supplier again
+  const waitingOn = await env.DB.prepare('SELECT state FROM cancellations WHERE order_id = ?').bind(orderId).first<{ state: string }>();
+  if (waitingOn?.state === 'requested' && open.every((s) => s.status === 'cancel_requested'))
+    return {
+      outcome: 'requested',
+      stage: 'after_supplier',
+      message_he: 'בקשת הביטול כבר נשלחה לספק, ועוד לא ענה. ההזמנה תבוטל ותזוכה כשהספק יאשר.',
+    };
+
+  const missing = pickClient();
+  if (missing) return missing;
   if (!client.cancelOrder)
     return {
       error: true,
@@ -133,12 +187,13 @@ export async function cancelOrder(
     audit(env.DB, at, actor, 'order.cancel_requested', orderId, { stage: 'after_supplier', reason: why, supplier: client.id }),
   ]);
   const answers: string[] = [];
-  for (const s of open.filter((x) => x.supplier === client!.id && x.supplier_order_id)) {
+  for (const s of open.filter((x) => x.supplier === client!.id && x.supplier_order_id && x.status !== 'cancel_requested')) {
     let outcome: 'canceled' | 'requested' | 'refused';
     try {
       outcome = (await client.cancelOrder(s.supplier_order_id!)).outcome;
     } catch (err) {
-      const error_id = log.error('cancel.supplier_failed', { order_id: orderId, supplier: client.id }, err);
+      // S16, QA ת38: a provider's error by its code only
+      const error_id = log.error('cancel.supplier_failed', { order_id: orderId, supplier: client.id, code: errorCode(err) });
       return { error: true, status: 503, code: 'supplier_failed', message_he: `הספק לא ענה לבקשת הביטול. נסו שוב (קוד ${error_id}).` };
     }
     answers.push(outcome);
@@ -168,6 +223,71 @@ export async function cancelOrder(
     stage: 'after_supplier',
     message_he: 'בקשת הביטול נשלחה לספק. ההזמנה תבוטל ותזוכה כשהספק יאשר.',
   };
+}
+
+/** S16 (ת35): the cancellation of an order that may be at the supplier, left to a person: nothing refunded, said so. */
+async function needsPerson(env: Env, orderId: string, actor: string, at: string): Promise<CancelError> {
+  await audit(env.DB, at, actor, 'order.cancel_needs_person', orderId, { why: 'a submit may have reached the supplier' }).run();
+  log.warn('cancel.supplier_check_needed', { order_id: orderId });
+  return {
+    error: true,
+    status: 409,
+    code: 'supplier_check_needed',
+    message_he: `ייתכן שההזמנה הגיעה לספק (שליחה שלא נענתה). לא הוחזר כסף. בדקו אצל הספק לפי מספר ההזמנה ${orderId} ורשמו כאן מה מצאתם ("בדיקה אצל הספק"); אחר כך הביטול ימשיך במסלול הנכון.`,
+  };
+}
+
+/**
+ * S16 (ת35): what the supplier holds for our order number, recorded: an order (its id) → the shipment is submitted and
+ * the order is with the supplier; none → the shipment is `checked`, and the order no longer counts as sent.
+ */
+async function supplierHolds(
+  env: Env,
+  orderId: string,
+  supplier: string,
+  found: { supplier_order_id: string } | null,
+  actor: string,
+  at: string,
+  note?: string,
+): Promise<void> {
+  if (found)
+    await env.DB.batch([
+      env.DB.prepare(
+        `UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = ?, reach = 'none', failing_since = NULL, last_error = NULL, updated_at = ?
+         WHERE order_id = ? AND supplier = ? AND status = 'failed' AND supplier_order_id IS NULL`,
+      ).bind(found.supplier_order_id.slice(0, 120), at, orderId, supplier),
+      env.DB.prepare("UPDATE orders SET status = 'sent_to_supplier', updated_at = ? WHERE id = ? AND status IN ('paid', 'supplier_error')").bind(at, orderId),
+      audit(env.DB, at, actor, 'supplier.found_by_order', orderId, { supplier, supplier_order: found.supplier_order_id.slice(0, 120), ...(note ? { note } : {}) }),
+    ]);
+  else
+    await env.DB.batch([
+      env.DB.prepare(
+        "UPDATE supplier_shipments SET reach = 'checked', updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'failed' AND supplier_order_id IS NULL",
+      ).bind(at, orderId, supplier),
+      audit(env.DB, at, actor, 'supplier.none_by_order', orderId, { supplier, ...(note ? { note } : {}) }),
+    ]);
+}
+
+/**
+ * S16 (ת35): a person's check at the supplier for a shipment that may be there (the admin's "בדיקה אצל הספק"): `found`
+ * with the supplier's order id, or `none`. Only for a shipment that counts as maybe sent.
+ */
+export async function recordSupplierCheck(
+  env: Env,
+  orderId: string,
+  actor: string,
+  check: { outcome: 'found'; supplier_order_id: string; note: string } | { outcome: 'none'; note: string },
+): Promise<{ ok: true } | { ok: false; status: 404 | 409; code: string; message_he: string }> {
+  const { results } = await env.DB.prepare(
+    `SELECT s.supplier FROM supplier_shipments s JOIN orders o ON o.id = s.order_id WHERE s.order_id = ? AND ${MAYBE_SENT}`,
+  )
+    .bind(orderId)
+    .all<{ supplier: string }>();
+  if (!results.length) return { ok: false, status: 409, code: 'no_supplier_check_needed', message_he: 'אין בהזמנה הזו משלוח שצריך לבדוק אצל הספק.' };
+  const at = new Date().toISOString();
+  for (const r of results)
+    await supplierHolds(env, orderId, r.supplier, check.outcome === 'found' ? { supplier_order_id: check.supplier_order_id } : null, actor, at, check.note.slice(0, 300));
+  return { ok: true };
 }
 
 /**
