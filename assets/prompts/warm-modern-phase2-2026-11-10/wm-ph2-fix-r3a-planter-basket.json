@@ -1,0 +1,156 @@
+{
+ "id": "wm-ph2-fix-r3a-planter-basket",
+ "pass_": "R3A",
+ "slots": [
+  "planter",
+  "basket"
+ ],
+ "model": "seedream-5-pro i2i 2K",
+ "aspect_ratio": "auto",
+ "resolution": "2K",
+ "type": "image-to-image",
+ "tokens": 650,
+ "estimate": 650,
+ "estimate_call": {
+  "tool": "var2_estimate_cost",
+  "model_id": "seedream-5-pro",
+  "type": "image-to-image",
+  "params": {
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 2
+  },
+  "total_tokens": 650,
+  "deviation_pct": 0.0
+ },
+ "idempotency_key": "wm-ph2-fix-r3a-planter-basket-20261111",
+ "placeholder_id": "aba72c53-4b87-4768-a582-c3759fc87c70",
+ "task_id": "8ae64d719978d68364f90921d9b92e6f",
+ "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-8ae64d719978d68364f90921d9b92e6f-0-1794423277877-b7b681e0.png",
+ "returned_px": [
+  2720,
+  1530
+ ],
+ "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/72720256-673f-4719-8715-2bd4a1d1075c.png",
+ "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3a-input.png",
+ "image_sha256": "9459143bd51424b3ffeddf8a7d66817e68e06e6a6a79e496c9d7a88021a3fb19",
+ "image_upload_verified": "GET of the public URL returned the same sha256",
+ "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3a-input.json",
+ "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/fix-r3a-planter-basket.txt",
+ "prompt_chars": 2194,
+ "refs": [
+  {
+   "n": 1,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/61eb456a-1b6b-4843-afff-2dba3d9f6418.png",
+   "card": "planter-cj-cement-ribbed-belly",
+   "sku": "CJJT154204209IR",
+   "what": "SKU beige large 42 x 35.5 (dimension lines cropped out)",
+   "source_image": "planter/sku.jpg",
+   "crop": [
+    0.13,
+    0.18,
+    0.8,
+    0.8
+   ],
+   "note": "the same crop as R1 / R2 (scratchpad/ph2/refs, var2 only, never in the repo)"
+  },
+  {
+   "n": 2,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/84e63b11-5684-47b7-ae14-73310c28926b.png",
+   "card": "basket-cj-jute-rope-cylinder",
+   "sku": "CJYD186026903CX",
+   "what": "SKU large 35 x 39 (dimensions cropped out)",
+   "source_image": "basket/sku.jpeg",
+   "crop": [
+    0.28,
+    0.06,
+    0.82,
+    0.74
+   ],
+   "note": "the same crop as R1 / R2 (scratchpad/ph2/refs, var2 only, never in the repo)"
+  }
+ ],
+ "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/r3a-seedream.png",
+ "register_to_input": [
+  [
+   0.9966999888420105,
+   -0.00019999999494757503,
+   5.230400085449219
+  ],
+  [
+   -0.0,
+   1.0003000497817993,
+   -0.28630000352859497
+  ]
+ ],
+ "tone_gain_median": [
+  1.0722,
+  1.0688,
+  1.0524
+ ],
+ "model_drift_outside_zones_L": {
+  "raw_median": 2.67,
+  "raw_p95": 10.16,
+  "after_tone_match_median": 1.03,
+  "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+ },
+ "products_cut": {
+  "planter": {
+   "alpha_px": 30286,
+   "soft_px": 6478,
+   "box_px": [
+    956,
+    753,
+    1135,
+    1192
+   ],
+   "placeholder_px": 27735,
+   "placeholder_covered": 0.947,
+   "outside_placeholder_px": 208,
+   "shadow_px_below_0_97": 2429,
+   "shadow_min": 0.592,
+   "model_change_vs_placeholder_dE": {
+    "median": 5.95,
+    "p90": 13.13
+   }
+  },
+  "basket": {
+   "alpha_px": 23727,
+   "soft_px": 2230,
+   "box_px": [
+    992,
+    1027,
+    1132,
+    1236
+   ],
+   "placeholder_px": 23699,
+   "placeholder_covered": 0.983,
+   "outside_placeholder_px": 29,
+   "shadow_px_below_0_97": 10287,
+   "shadow_min": 0.572,
+   "model_change_vs_placeholder_dE": {
+    "median": 4.86,
+    "p90": 10.02
+   }
+  }
+ },
+ "placeholder_fit": {
+  "pot": [
+   0.6696,
+   0.6539
+  ],
+  "tree": 0.6539,
+  "basket": [
+   0.875,
+   0.9665
+  ]
+ },
+ "fidelity": {
+  "planter": "pass on size and place: belly edge, rim top and base on the clay of the card's 42 x 35.5 at (-1.95, 0.42) (belly -0.3 cm, rim -0.4 cm, base +0.9 cm); PARTIAL (shape): the opening reads ~42 cm against the card's 35.5, so the shoulder under the rim is straighter than the card's belly (R1's pot shape, carried by the placeholder; the model widened it a little); it shows only on the pot's visible left side",
+  "basket": "pass: body 35.0 cm (card 35), floor centre 2.7 cm from the plan's (-1.62, 0.78) (0.5 cm from the clay read the same way), in front of the pot, both loops"
+ },
+ "seed": null,
+ "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead",
+ "method": "PHOTOGRAPHIC placeholders (reserve_r3.py): the product's own earlier render (R1 for R3a, R2 for R3b) measured and fitted in code onto its step-0 clay box (card size, house plan 1.3.5 place, step 0's M0 camera), with its contact shadow; one card crop per product; the current scene (base + 9 layered defaults + set B) below. The new render is cut and measured again; nothing of the earlier renders reaches a layer except through the new render",
+ "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/reserve_r3.py"
+}

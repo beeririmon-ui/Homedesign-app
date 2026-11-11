@@ -1,0 +1,117 @@
+{
+ "id": "wm-ph2-fix-r3b-pendant",
+ "pass_": "R3B",
+ "slots": [
+  "pendant"
+ ],
+ "model": "seedream-5-pro i2i 2K",
+ "aspect_ratio": "auto",
+ "resolution": "2K",
+ "type": "image-to-image",
+ "tokens": 650,
+ "estimate": 650,
+ "estimate_call": {
+  "tool": "var2_estimate_cost",
+  "model_id": "seedream-5-pro",
+  "type": "image-to-image",
+  "params": {
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 1
+  },
+  "total_tokens": 650,
+  "deviation_pct": 0.0
+ },
+ "idempotency_key": "wm-ph2-fix-r3b-pendant-20261111",
+ "placeholder_id": "3a8b0b2a-a8c6-4bbb-9b69-94c96b62b303",
+ "task_id": "bbfae2373d555f0cba2cde947bb98847",
+ "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-bbfae2373d555f0cba2cde947bb98847-0-1794423955971-dc412a92.png",
+ "returned_px": [
+  2720,
+  1530
+ ],
+ "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9994910b-777f-4b90-bc03-010020f61f48.png",
+ "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3b-input.png",
+ "image_sha256": "19dfdedfc3aefde2b80beef249b5eae818413423b9638ec20869362ac0c023ab",
+ "image_upload_verified": "GET of the public URL returned the same sha256",
+ "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3b-input.json",
+ "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/fix-r3b-pendant.txt",
+ "prompt_chars": 1689,
+ "refs": [
+  {
+   "n": 1,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6a438baf-2b43-4b68-8613-ecb23bd98464.png",
+   "card": "pendant-cj-tiered-fabric-drum",
+   "sku": "CJYD247032902BY",
+   "what": "the tiered fabric drum, beige 50",
+   "source_image": "pendant/img2.jpg",
+   "crop": [
+    0.02,
+    0.25,
+    0.92,
+    0.85
+   ],
+   "note": "the same crop as R1 / R2 (scratchpad/ph2/refs, var2 only, never in the repo)"
+  }
+ ],
+ "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/r3b-seedream.png",
+ "register_to_input": [
+  [
+   0.998199999332428,
+   9.999999747378752e-05,
+   3.513400077819824
+  ],
+  [
+   0.0003000000142492354,
+   0.9994000196456909,
+   0.22619999945163727
+  ]
+ ],
+ "tone_gain_median": [
+  1.1228,
+  1.1221,
+  1.1053
+ ],
+ "model_drift_outside_zones_L": {
+  "raw_median": 3.87,
+  "raw_p95": 11.37,
+  "after_tone_match_median": 1.26,
+  "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+ },
+ "products_cut": {
+  "pendant": {
+   "alpha_px": 51914,
+   "soft_px": 4126,
+   "box_px": [
+    1524,
+    5,
+    1830,
+    383
+   ],
+   "placeholder_px": 50249,
+   "placeholder_covered": 0.963,
+   "outside_placeholder_px": 2238,
+   "shadow_px_below_0_97": 0,
+   "shadow_min": 1.0,
+   "model_change_vs_placeholder_dE": {
+    "median": 4.19,
+    "p90": 14.64
+   }
+  }
+ },
+ "placeholder_fit": {
+  "shade": [
+   0.9742,
+   0.9859
+  ],
+  "cord_canopy_dx_px": 22.0
+ },
+ "fidelity": {
+  "pendant": "pass: the shade bottom fits Z 1.885 (plan 1.90, R2 1.80), width 50.7 cm (card 50), centre +0.2 cm from the hang point's column"
+ },
+ "seed": null,
+ "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead",
+ "method": "PHOTOGRAPHIC placeholders (reserve_r3.py): the product's own earlier render (R1 for R3a, R2 for R3b) measured and fitted in code onto its step-0 clay box (card size, house plan 1.3.5 place, step 0's M0 camera), with its contact shadow; one card crop per product; the current scene (base + 9 layered defaults + set B) below. The new render is cut and measured again; nothing of the earlier renders reaches a layer except through the new render",
+ "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/reserve_r3.py",
+ "run_after": "R3a's result was measured (the brief's order): the photographic placeholder held the clay within ~1 cm, so R3b used the same method"
+}

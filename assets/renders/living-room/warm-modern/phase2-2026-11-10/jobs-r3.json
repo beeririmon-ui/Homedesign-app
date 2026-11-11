@@ -1,0 +1,315 @@
+{
+ "date": "2026-11-11",
+ "brief": "briefs/render-wm-tool-phase2-fix-r3-2026-11-11.md",
+ "continues": "briefs/render-wm-tool-phase2-reserve-2026-11-11.md (jobs-reserve.json), briefs/render-wm-tool-phase2-2026-11-10.md (jobs.json)",
+ "decision": "SPEND2 (owner, 2026-11-10: 'את יכולה לנצל עוד מהקרדיט של var2 במידת הצורך'); the manager: at most two passes at 650, R3a first, R3b after R3a's result, no third pass",
+ "jobs": [
+  {
+   "id": "wm-ph2-fix-r3a-planter-basket",
+   "pass_": "R3A",
+   "slots": [
+    "planter",
+    "basket"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "tokens": 650,
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 2
+    },
+    "total_tokens": 650,
+    "deviation_pct": 0.0
+   },
+   "idempotency_key": "wm-ph2-fix-r3a-planter-basket-20261111",
+   "placeholder_id": "aba72c53-4b87-4768-a582-c3759fc87c70",
+   "task_id": "8ae64d719978d68364f90921d9b92e6f",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-8ae64d719978d68364f90921d9b92e6f-0-1794423277877-b7b681e0.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/72720256-673f-4719-8715-2bd4a1d1075c.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3a-input.png",
+   "image_sha256": "9459143bd51424b3ffeddf8a7d66817e68e06e6a6a79e496c9d7a88021a3fb19",
+   "image_upload_verified": "GET of the public URL returned the same sha256",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3a-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/fix-r3a-planter-basket.txt",
+   "prompt_chars": 2194,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/61eb456a-1b6b-4843-afff-2dba3d9f6418.png",
+     "card": "planter-cj-cement-ribbed-belly",
+     "sku": "CJJT154204209IR",
+     "what": "SKU beige large 42 x 35.5 (dimension lines cropped out)",
+     "source_image": "planter/sku.jpg",
+     "crop": [
+      0.13,
+      0.18,
+      0.8,
+      0.8
+     ],
+     "note": "the same crop as R1 / R2 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/84e63b11-5684-47b7-ae14-73310c28926b.png",
+     "card": "basket-cj-jute-rope-cylinder",
+     "sku": "CJYD186026903CX",
+     "what": "SKU large 35 x 39 (dimensions cropped out)",
+     "source_image": "basket/sku.jpeg",
+     "crop": [
+      0.28,
+      0.06,
+      0.82,
+      0.74
+     ],
+     "note": "the same crop as R1 / R2 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    }
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/r3a-seedream.png",
+   "register_to_input": [
+    [
+     0.9966999888420105,
+     -0.00019999999494757503,
+     5.230400085449219
+    ],
+    [
+     -0.0,
+     1.0003000497817993,
+     -0.28630000352859497
+    ]
+   ],
+   "tone_gain_median": [
+    1.0722,
+    1.0688,
+    1.0524
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 2.67,
+    "raw_p95": 10.16,
+    "after_tone_match_median": 1.03,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products_cut": {
+    "planter": {
+     "alpha_px": 30286,
+     "soft_px": 6478,
+     "box_px": [
+      956,
+      753,
+      1135,
+      1192
+     ],
+     "placeholder_px": 27735,
+     "placeholder_covered": 0.947,
+     "outside_placeholder_px": 208,
+     "shadow_px_below_0_97": 2429,
+     "shadow_min": 0.592,
+     "model_change_vs_placeholder_dE": {
+      "median": 5.95,
+      "p90": 13.13
+     }
+    },
+    "basket": {
+     "alpha_px": 23727,
+     "soft_px": 2230,
+     "box_px": [
+      992,
+      1027,
+      1132,
+      1236
+     ],
+     "placeholder_px": 23699,
+     "placeholder_covered": 0.983,
+     "outside_placeholder_px": 29,
+     "shadow_px_below_0_97": 10287,
+     "shadow_min": 0.572,
+     "model_change_vs_placeholder_dE": {
+      "median": 4.86,
+      "p90": 10.02
+     }
+    }
+   },
+   "placeholder_fit": {
+    "pot": [
+     0.6696,
+     0.6539
+    ],
+    "tree": 0.6539,
+    "basket": [
+     0.875,
+     0.9665
+    ]
+   },
+   "fidelity": {
+    "planter": "pass on size and place: belly edge, rim top and base on the clay of the card's 42 x 35.5 at (-1.95, 0.42) (belly -0.3 cm, rim -0.4 cm, base +0.9 cm); PARTIAL (shape): the opening reads ~42 cm against the card's 35.5, so the shoulder under the rim is straighter than the card's belly (R1's pot shape, carried by the placeholder; the model widened it a little); it shows only on the pot's visible left side",
+    "basket": "pass: body 35.0 cm (card 35), floor centre 2.7 cm from the plan's (-1.62, 0.78) (0.5 cm from the clay read the same way), in front of the pot, both loops"
+   },
+   "seed": null,
+   "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead",
+   "method": "PHOTOGRAPHIC placeholders (reserve_r3.py): the product's own earlier render (R1 for R3a, R2 for R3b) measured and fitted in code onto its step-0 clay box (card size, house plan 1.3.5 place, step 0's M0 camera), with its contact shadow; one card crop per product; the current scene (base + 9 layered defaults + set B) below. The new render is cut and measured again; nothing of the earlier renders reaches a layer except through the new render",
+   "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/reserve_r3.py"
+  },
+  {
+   "id": "wm-ph2-fix-r3b-pendant",
+   "pass_": "R3B",
+   "slots": [
+    "pendant"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "tokens": 650,
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 1
+    },
+    "total_tokens": 650,
+    "deviation_pct": 0.0
+   },
+   "idempotency_key": "wm-ph2-fix-r3b-pendant-20261111",
+   "placeholder_id": "3a8b0b2a-a8c6-4bbb-9b69-94c96b62b303",
+   "task_id": "bbfae2373d555f0cba2cde947bb98847",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-bbfae2373d555f0cba2cde947bb98847-0-1794423955971-dc412a92.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9994910b-777f-4b90-bc03-010020f61f48.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3b-input.png",
+   "image_sha256": "19dfdedfc3aefde2b80beef249b5eae818413423b9638ec20869362ac0c023ab",
+   "image_upload_verified": "GET of the public URL returned the same sha256",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r3b-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/fix-r3b-pendant.txt",
+   "prompt_chars": 1689,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6a438baf-2b43-4b68-8613-ecb23bd98464.png",
+     "card": "pendant-cj-tiered-fabric-drum",
+     "sku": "CJYD247032902BY",
+     "what": "the tiered fabric drum, beige 50",
+     "source_image": "pendant/img2.jpg",
+     "crop": [
+      0.02,
+      0.25,
+      0.92,
+      0.85
+     ],
+     "note": "the same crop as R1 / R2 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    }
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/r3b-seedream.png",
+   "register_to_input": [
+    [
+     0.998199999332428,
+     9.999999747378752e-05,
+     3.513400077819824
+    ],
+    [
+     0.0003000000142492354,
+     0.9994000196456909,
+     0.22619999945163727
+    ]
+   ],
+   "tone_gain_median": [
+    1.1228,
+    1.1221,
+    1.1053
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 3.87,
+    "raw_p95": 11.37,
+    "after_tone_match_median": 1.26,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products_cut": {
+    "pendant": {
+     "alpha_px": 51914,
+     "soft_px": 4126,
+     "box_px": [
+      1524,
+      5,
+      1830,
+      383
+     ],
+     "placeholder_px": 50249,
+     "placeholder_covered": 0.963,
+     "outside_placeholder_px": 2238,
+     "shadow_px_below_0_97": 0,
+     "shadow_min": 1.0,
+     "model_change_vs_placeholder_dE": {
+      "median": 4.19,
+      "p90": 14.64
+     }
+    }
+   },
+   "placeholder_fit": {
+    "shade": [
+     0.9742,
+     0.9859
+    ],
+    "cord_canopy_dx_px": 22.0
+   },
+   "fidelity": {
+    "pendant": "pass: the shade bottom fits Z 1.885 (plan 1.90, R2 1.80), width 50.7 cm (card 50), centre +0.2 cm from the hang point's column"
+   },
+   "seed": null,
+   "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead",
+   "method": "PHOTOGRAPHIC placeholders (reserve_r3.py): the product's own earlier render (R1 for R3a, R2 for R3b) measured and fitted in code onto its step-0 clay box (card size, house plan 1.3.5 place, step 0's M0 camera), with its contact shadow; one card crop per product; the current scene (base + 9 layered defaults + set B) below. The new render is cut and measured again; nothing of the earlier renders reaches a layer except through the new render",
+   "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/reserve_r3.py",
+   "run_after": "R3a's result was measured (the brief's order): the photographic placeholder held the clay within ~1 cm, so R3b used the same method"
+  }
+ ],
+ "tokens_total": 1300,
+ "phase2_tokens_total": {
+  "steps_1_3": 1950,
+  "reserve": 1300,
+  "fix_r3": 1300,
+  "total": 4550,
+  "cap_PH2_WM": 9740,
+  "note": "PH2-WM's cap covered steps 1-3 + the reserve (3,250); R3 is under SPEND2 per the brief"
+ },
+ "third_pass": "none",
+ "layered_after_r3": [
+  "rug",
+  "vase",
+  "floor-lamp",
+  "framed-art",
+  "accent-sconces",
+  "candle-holders",
+  "curtains",
+  "magazine-holder (Orange)",
+  "bowl (position provisional, WM-T2)",
+  "planter (shape partial: opening)",
+  "basket",
+  "pendant"
+ ],
+ "pending": [],
+ "grade_r3": {
+  "script": "grade_cut_r3.py",
+  "manifest": "layers/manifest-r3.json",
+  "verify": "layers/verify-layers-r3.json (pass)",
+  "lock": "lock-and-grade-check-r3.json (pass, worst p90 9.0 px)",
+  "sheet": "phase2-r3-default-scene-sheet.jpg",
+  "fidelity": "work-r3/fidelity-r3.json",
+  "asset_entries": "layers/asset-manifest-entries-r3.json"
+ }
+}
