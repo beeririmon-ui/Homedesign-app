@@ -1,0 +1,23 @@
+=== a. RoomExperience.tsx imports pages/Checkout statically
+5:import { Checkout as QaCheckout } from '../pages/Checkout';
+6:(globalThis as Record<string, unknown>).__qaCheckout = QaCheckout;
+lazy chunk names: Cart-iImpqhHo.js Legal-1YOLffco.js MockPay-CXV22J3U.js Order-D5-flqYr.js Product-BGD33xtY.js 
+FAIL  a lazy page's code is in the room's entry: Checkout (in assets/main-DQZT5c9u.js)
+ok    JS (gzip), the room page entry                              57.6 KB  / 80.0 KB
+ok    CSS (gzip), the room page entry                              8.9 KB  / 15.0 KB
+check-budget exit 1
+=== b. a barrel re-exports pages/Product; media.ts (in the entry) imports it
+1:import { Product as QaProduct } from './qa-barrel';
+2:(globalThis as Record<string, unknown>).__qaProduct = QaProduct;
+lazy chunk names: Cart-CGQv9Jcm.js Checkout-Bzv9sIDm.js Legal-CTx8TjPn.js MockPay-BPulYair.js Order-DHBTxRqP.js 
+FAIL  a lazy page's code is in the room's entry: Product (in assets/sequence-D_oEwdt5.js)
+ok    JS (gzip), the room page entry                              60.3 KB  / 80.0 KB
+ok    CSS (gzip), the room page entry                              8.9 KB  / 15.0 KB
+check-budget exit 1
+=== restored: the clean flag build again
+lazy chunk names: Cart-oVaVV3fH.js Checkout-CwtuzDcU.js Legal-BhegnLcq.js MockPay-BLv1K4q1.js Order-CBs4cdcj.js Product-EDOW8NUw.js 
+ok    no lazy page's code in the room's entry (by content: 4 entry chunk(s) and their static imports)
+ok    JS (gzip), the room page entry                              54.4 KB  / 80.0 KB
+ok    CSS (gzip), the room page entry                              8.9 KB  / 15.0 KB
+check-budget exit 0
+web/src identical to the clean copy

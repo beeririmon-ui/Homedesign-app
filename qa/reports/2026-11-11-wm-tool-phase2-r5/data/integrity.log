@@ -1,0 +1,26 @@
+changed: ['basket', 'basket-shadow', 'curtains', 'floor-lamp', 'magazine-holder', 'planter', 'planter-shadow', 'vase', 'vase-shadow'] | same bytes, new name: ['curtains-shadow', 'floor-lamp-shadow', 'magazine-holder-shadow'] | base ok: True
+recomposite A {'P1': (0.0, 3.0, 13), 'P2': (0.0, 3.0, 13), 'P4': (1.0, 3.0, 13)} 14
+recomposite B {'P1': (0.0, 4.0, 24), 'P2': (0.0, 4.0, 24), 'P4': (1.0, 4.0, 24)} 24
+recomposite C {'P1': (0.0, 4.0, 26), 'P2': (0.0, 4.0, 26), 'P4': (1.0, 4.0, 26)} 35
+swap defaults: toggles 42 outside 0 130
+r5 vs r4 {'A': (419155, 0), 'B': (419155, 0), 'C': (419155, 0)}
+basket {'alpha_changed_px': 42, 'alpha_changed_box': [991, 1058, 1080, 1199], 'alpha_max_change': 2, 'rgb_changed_under_alpha_px': 1026, 'rgb_changed_under_alpha255_both_px': 0, 'rgb_changed_soft_px': 1026, 'rgb_max_change_alpha255': 0, 'rgb_max_change_soft': 189, 'changes_over_planter_r4_or_r5_px': 792, 'changes_not_over_planter_px': 240, 'shadow_changed_px': 1821, 'shadow_changed_box': [950, 1014, 1142, 1203], 'rgb_changed_box': [990, 1038, 1133, 1201]}
+disjoint: variant-slot overlaps {} | non-variant overlaps {'rug x floor-lamp': 281, 'rug x basket': 3872, 'rug x magazine-holder': 33135, 'planter x basket': 19362}
+variant curtains-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 168
+variant framed-art-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 203
+variant accent-sconces-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 237
+variant accent-sconces-v3 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 270
+variant vase-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 304
+variant pendant-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 338
+combo (None, None, None, None, None) done 357 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, None, None, None, 'vase-v2') done 377 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, None, None, 'pendant-v2', None) done 397 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, None, None, 'pendant-v2', 'vase-v2') done 418 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, None, 'framed-art-v2', None, None) done 439 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, None, 'framed-art-v2', None, 'vase-v2') done 459 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, None, 'framed-art-v2', 'pendant-v2', None) done 479 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, None, 'framed-art-v2', 'pendant-v2', 'vase-v2') done 500 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, 'curtains-v2', None, None, None) done 520 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, 'curtains-v2', None, None, 'vase-v2') done 541 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, 'curtains-v2', None, 'pendant-v2', None) done 562 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
+combo (None, 'curtains-v2', None, 'pendant-v2', 'vase-v2') done 582 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}

@@ -1,0 +1,670 @@
+/**
+ * qa-agent, 2026-11-11 (S15–S16 at 43cee016): my own reproduction of ת34–ת44 at the Worker, on the REAL seed the build
+ * made (.generated/seed.sql: the shop's catalog plus the story's), not frontend-dev's fixture (vase-a). Copied into the
+ * isolated copy as site/api/test/qa-s1516.test.ts and run there only (never in the live tree). Every number printed with
+ * "QA " is quoted in the report.
+ *
+ *  A  ת34: a cross-site cancel (text/plain; charset=application/json, foreign Origin, Sec-Fetch-Site cross-site) with a
+ *     valid person JWT, on every admin action; my own marker and content-type variants; the screen's forms.
+ *  B  ת35: a timed-out supplier call, then a cancellation at once and after the window: a supplier that can be asked
+ *     (holds it / holds none / its lookup fails) and one that cannot (a person's check through the API, by JWT);
+ *     a timeout then a server error then success; supplier_error made of refusals only.
+ *  C  ת36: 5 concurrent refunds with the same key for three provider kinds; the first call times out and still completes
+ *     at the provider (late), or never does: within the lease 409, after it the provider is asked.
+ *  D  ת38: PII in error text: Hebrew and Latin customer details in exceptions, provider errors, and odd phone formats.
+ *  E  ת39: a failed send → degraded after 30 minutes (and not before), for a timeout and for the production config that
+ *     refuses before calling; the customer's word; a row per failed send; my edge: a retry that crashes mid-call.
+ *  F  ת37, ת40, ת42: a malformed link, claim_lost, a second cancellation while waiting.
+ */
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { signWebhook } from '@hd/shared';
+import { app } from '../src/app';
+import type { Env, SupplierJob } from '../src/env';
+import { createD1, migrate } from './d1-shim';
+import { processSupplierJob } from '../src/lib/fulfillment';
+import { INVOICE_LEASE_MS, processInvoiceJob, type InvoiceProvider } from '../src/lib/invoices';
+import { requestRefund, REFUND_LEASE_MS } from '../src/lib/refunds';
+import { cancelOrder } from '../src/lib/cancel';
+import { applySupplierUpdate, customerTrackingUrl } from '../src/lib/shipments';
+import { resetAccessCache } from '../src/lib/access';
+import { RefundRefused, type IssuedRefund, type PaymentProvider, type RefundInput } from '../src/lib/payments/types';
+import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from '../src/lib/suppliers/types';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const SITE = resolve(here, '../..');
+const GEN = resolve(SITE, '.generated');
+const SEED = readFileSync(resolve(GEN, 'seed.sql'), 'utf8');
+const SECRET = 'qa-dummy-webhook-secret-not-a-key-1516';
+const DEV_TOKEN = 'qa-dummy-admin-token-not-a-key-1516-0123456789';
+const TEAM = 'qa1516.cloudflareaccess.com';
+const AUD = 'qa1516-aud-0123456789abcdef';
+
+type Full = { products: { id: string; price_agorot: number | null; availability: { status: string }; pack: unknown; variants: { id: string }[] }[] };
+const shop = JSON.parse(readFileSync(resolve(GEN, 'catalog.full.json'), 'utf8')) as Full;
+const plain = shop.products.find((p) => p.availability.status === 'available' && p.price_agorot && !p.pack && p.variants.length === 1)!;
+const PLAIN = plain.variants[0]!.id;
+
+// distinct personal details, Hebrew and (a customer who types in English) Latin: any of these in a log row is a leak
+const HE = { full_name: 'אורנה טל־בודקת', email: 'orna.qa1516@example.invalid', phone: '054-7716203', city: 'מצפה־בדיקה', street: 'שדרות הבודקים', house: '41', apartment: '12', zip: '7711223', notes: 'בדלת האחורית' };
+const LA = { full_name: 'Orna Tal-Bodeket', email: 'orna.latin1516@example.invalid', phone: '+972 54 771 6204', city: 'Mitzpe Bdika', street: 'Sderot HaBodkim', house: '41', apartment: '12', zip: '7711224', notes: 'back door' };
+const NEEDLES = ['אורנה', 'טל־בודקת', 'מצפה־בדיקה', 'הבודקים', 'orna.qa1516', '054-7716203', '0547716203', '7716203', 'Orna', 'Bodeket', 'Mitzpe', 'Bdika', 'Sderot', 'HaBodkim', 'orna.latin1516', '7716204', '972547716204'];
+
+let env: Env;
+let sent: SupplierJob[];
+beforeEach(() => {
+  const DB = createD1();
+  migrate(DB, SEED);
+  sent = [];
+  resetAccessCache();
+  env = {
+    DB,
+    SUPPLIER_QUEUE: { send: vi.fn(async (m: SupplierJob) => void sent.push(m)), sendBatch: vi.fn() } as unknown as Queue<SupplierJob>,
+    ENVIRONMENT: 'test',
+    PAYMENT_PROVIDER: 'mock',
+    SUPPLIER_PROVIDER: 'mock',
+    INVOICE_PROVIDER: 'mock',
+    NOTIFY_PROVIDER: 'mock',
+    ACCESS_TEAM_DOMAIN: '',
+    ACCESS_AUD: '',
+    PAYMENT_WEBHOOK_SECRET: SECRET,
+  };
+});
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
+
+const req = (path: string, init?: RequestInit, e: Env = env) => app.request(`http://localhost${path}`, init, e);
+const json = (body: unknown, method = 'POST', headers: Record<string, string> = {}): RequestInit => ({
+  method,
+  headers: { 'content-type': 'application/json', ...headers },
+  body: JSON.stringify(body),
+});
+const one = async <T>(sql: string, ...b: unknown[]) =>
+  (await env.DB.prepare(sql)
+    .bind(...b)
+    .first<T>())!;
+const count = async (sql: string, ...b: unknown[]) => (await one<{ n: number }>(sql, ...b)).n;
+const status = async (id: string) => (await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', id)).status;
+const ship = async (id: string) =>
+  one<{ status: string; reach: string; failing_since: string | null; supplier_order_id: string | null }>(
+    'SELECT status, reach, failing_since, supplier_order_id FROM supplier_shipments WHERE order_id = ?',
+    id,
+  );
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const snapshot = async () =>
+  JSON.stringify(
+    await Promise.all(
+      ['orders', 'refunds', 'cancellations', 'audit_log', 'supplier_shipments', 'invoices'].map(async (t) => [t, await count(`SELECT COUNT(*) AS n FROM ${t}`)]),
+    ),
+  ) + JSON.stringify((await env.DB.prepare('SELECT id, status FROM orders ORDER BY id').all()).results);
+
+async function cart(items: { variant_id: string; qty?: number }[]) {
+  const { id } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+  for (const i of items) {
+    const r = await req(`/api/cart/${id}/items`, json({ qty: 1, ...i }, 'PUT'));
+    expect(r.status, `${i.variant_id}: ${await r.clone().text()}`).toBe(200);
+  }
+  return id;
+}
+async function paid(who: typeof HE = HE) {
+  const body = {
+    cart_id: await cart([{ variant_id: PLAIN }]),
+    customer: { full_name: who.full_name, email: who.email, phone: who.phone },
+    address: { city: who.city, street: who.street, house: who.house, apartment: who.apartment, zip: who.zip, notes: who.notes },
+    shipping_method: 'economy',
+    consents: { terms: true, marketing: false },
+  };
+  const r = await req('/api/checkout', json(body));
+  expect(r.status, await r.clone().text()).toBe(201);
+  const c = (await r.json()) as { order_id: string; order_token: string };
+  const o = await one<{ payment_session_id: string; total_agorot: number }>('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?', c.order_id);
+  const ev = JSON.stringify({ id: `qa1516_${c.order_id}_${Math.random().toString(36).slice(2, 8)}`, type: 'payment.succeeded', session_id: o.payment_session_id, amount_agorot: o.total_agorot });
+  const p = await req('/api/webhooks/payment/mock', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(SECRET, ev, Math.floor(Date.now() / 1000)) },
+    body: ev,
+  });
+  expect(((await p.json()) as { outcome: string }).outcome).toBe('paid');
+  return { id: c.order_id, token: c.order_token, total: o.total_agorot };
+}
+
+/** a supplier like a network one: creates the order the moment it receives it; can hang, fail, be asked, fail to answer */
+function supplier(o: { hangMs?: number; failWith?: (i: SupplierOrderInput) => Error; find?: 'yes' | 'fails' | 'hangs'; cancel?: 'canceled' | 'requested' | 'refused' } = {}) {
+  const orders: string[] = [];
+  const cancels: string[] = [];
+  const finds: string[] = [];
+  const c: SupplierClient & { orders: string[]; cancels: string[]; finds: string[] } = {
+    id: 'mock',
+    orders,
+    cancels,
+    finds,
+    async submitOrder(input) {
+      if (o.failWith) throw o.failWith(input);
+      orders.push(input.order_id);
+      if (o.hangMs) await sleep(o.hangMs);
+      return { supplier_order_id: `QA-SUP-${input.order_id}`, raw: {} };
+    },
+    async cancelOrder(sid) {
+      cancels.push(sid);
+      return { outcome: o.cancel ?? 'requested' };
+    },
+  };
+  if (o.find)
+    c.findOrder = async (our) => {
+      finds.push(our);
+      if (o.find === 'fails') throw Object.assign(new Error(`lookup 502 for consignee "${HE.full_name}"`), { status: 502 });
+      if (o.find === 'hangs') await sleep(500);
+      return orders.includes(our) ? { supplier_order_id: `QA-SUP-${our}` } : null;
+    };
+  return c;
+}
+
+/** a payment provider like a network one: counts calls and refunds; may dedupe, may be asked; a call may run past its deadline */
+function payments(o: { idempotent?: boolean; find?: boolean; delayMs?: number; lateCompletes?: boolean } = {}) {
+  const calls: string[] = [];
+  const made: { key: string; amount: number }[] = [];
+  const byKey = new Map<string, IssuedRefund>();
+  const p: PaymentProvider & { calls: string[]; made: typeof made } = {
+    id: 'mock',
+    calls,
+    made,
+    refundsIdempotent: o.idempotent ?? true,
+    async createSession() {
+      throw new Error('not used');
+    },
+    async verifyWebhook() {
+      return { ok: false, reason: 'not used' };
+    },
+    async refund(input: RefundInput, { idempotency_key }) {
+      calls.push(idempotency_key);
+      await sleep(o.delayMs ?? 15);
+      if ((o.idempotent ?? true) && byKey.has(idempotency_key)) return byKey.get(idempotency_key)!;
+      if (input.refunded_before_agorot + input.amount_agorot > input.paid_agorot) throw new RefundRefused('exceeds');
+      if (o.lateCompletes === false) throw new Error('connection reset before the provider acted');
+      made.push({ key: idempotency_key, amount: input.amount_agorot });
+      const r = { refund_id: `QA-RF-${made.length}` };
+      byKey.set(idempotency_key, r);
+      return r;
+    },
+  };
+  if (o.find) p.findRefund = async (k) => byKey.get(k) ?? null;
+  return p;
+}
+
+const b64u = (b: ArrayBuffer | string) =>
+  Buffer.from(typeof b === 'string' ? b : new Uint8Array(b))
+    .toString('base64')
+    .replace(/=+$/, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+/** Access as Cloudflare would put it in front: my own team key; a person's JWT and a service token's */
+async function access() {
+  const k = (await crypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, [
+    'sign',
+    'verify',
+  ])) as CryptoKeyPair;
+  const jwk = { ...(await crypto.subtle.exportKey('jwk', k.publicKey)), kid: 'qa1516', alg: 'RS256', use: 'sig' };
+  vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ keys: [jwk] }), { status: 200 })));
+  env.ACCESS_TEAM_DOMAIN = TEAM;
+  env.ACCESS_AUD = AUD;
+  const sign = async (claims: object) => {
+    const h = b64u(JSON.stringify({ alg: 'RS256', kid: 'qa1516' }));
+    const p = b64u(JSON.stringify({ aud: AUD, iss: `https://${TEAM}`, exp: Math.floor(Date.now() / 1000) + 600, ...claims }));
+    return `${h}.${p}.${b64u(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', k.privateKey, new TextEncoder().encode(`${h}.${p}`)))}`;
+  };
+  return { person: await sign({ email: 'owner.qa1516@example.invalid' }), service: await sign({ common_name: 'qa1516-studio.access' }) };
+}
+
+// ---------------------------------------------------------------- A. ת34
+describe('QA A (ת34): a cross-site request with the owner\'s Access login', () => {
+  it('A4 on every admin action: text/plain; charset=application/json, a foreign Origin, Sec-Fetch-Site cross-site → 403, nothing changes', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { person } = await access();
+    const o = await paid();
+    const before = await snapshot();
+    const evil = { 'content-type': 'text/plain; charset=application/json', 'cf-access-jwt-assertion': person, origin: 'https://evil.example', 'sec-fetch-site': 'cross-site' };
+    const actions: [string, string, string][] = [
+      ['POST', `/api/admin/orders/${o.id}/cancel`, JSON.stringify({ reason: 'csrf probe' })],
+      ['POST', `/api/admin/orders/${o.id}/refund`, JSON.stringify({ amount_agorot: 'rest', reason: 'csrf probe', key: 'qa1516_csrf_0001' })],
+      ['POST', `/api/admin/orders/${o.id}/refund`, JSON.stringify({ amount_agorot: 100, reason: 'csrf probe', key: 'qa1516_csrf_0002' })],
+      ['POST', `/api/admin/orders/${o.id}/invoice-check`, JSON.stringify({ outcome: 'none', note: 'csrf probe' })],
+      ['POST', `/api/admin/orders/${o.id}/supplier-check`, JSON.stringify({ outcome: 'none', note: 'csrf probe' })],
+      ['POST', `/api/admin/orders/${o.id}/mock-supplier`, JSON.stringify({ event: 'shipped' })],
+      ['PUT', `/api/admin/orders/${o.id}`, '{}'],
+      ['DELETE', `/api/admin/orders/${o.id}`, ''],
+      ['PATCH', `/api/admin/orders/${o.id}`, '{}'],
+    ];
+    const out: string[] = [];
+    for (const [method, path, body] of actions) {
+      const r = await req(path, { method, headers: evil, ...(body ? { body } : {}) });
+      out.push(`${method} ${path.replace(o.id, ':id')} → ${r.status} ${((await r.json().catch(() => ({}))) as { error?: string }).error ?? ''}`);
+      expect(r.status, path).toBe(403);
+    }
+    // a cross-site HTML form (no preflight either) to the screen's form route
+    const form = await req(`/admin/orders/${o.id}/cancel`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded', 'cf-access-jwt-assertion': person, origin: 'https://evil.example', 'sec-fetch-site': 'cross-site' },
+      body: 'reason=csrf+probe',
+    });
+    out.push(`form POST /admin/orders/:id/cancel → ${form.status} ${form.headers.get('location')}`);
+    console.log(`QA A4: ${out.join(' | ')}; order ${await status(o.id)}; refunds ${await count('SELECT COUNT(*) AS n FROM refunds WHERE order_id = ?', o.id)}`);
+    expect(form.headers.get('location')).toContain('error=bad_origin');
+    expect(await snapshot()).toBe(before);
+  });
+
+  it('my markers and content types: only a same-origin request with an essence of exactly application/json acts', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { person, service } = await access();
+    const cases: [string, Record<string, string>, string, number][] = [
+      ['other port', { origin: 'http://localhost:8080' }, 'application/json', 403],
+      ['https of the same host', { origin: 'https://localhost' }, 'application/json', 403],
+      ['subdomain', { origin: 'http://admin.localhost' }, 'application/json', 403],
+      ['Origin with a trailing slash', { origin: 'http://localhost/' }, 'application/json', 403],
+      ['same-site only', { 'sec-fetch-site': 'same-site' }, 'application/json', 403],
+      ['none (a navigation)', { 'sec-fetch-site': 'none' }, 'application/json', 403],
+      ['same Origin, cross-site fetch', { origin: 'http://localhost', 'sec-fetch-site': 'cross-site' }, 'application/json', 403],
+      ['no marker, person', {}, 'application/json', 403],
+      ['same origin, text/plain;charset=application/json', { origin: 'http://localhost' }, 'text/plain;charset=application/json', 400],
+      ['same origin, application/json in a parameter', { origin: 'http://localhost' }, 'text/plain; x=application/json', 400],
+      ['same origin, two types', { origin: 'http://localhost' }, 'application/json, text/plain', 400],
+      ['same origin, +json', { origin: 'http://localhost' }, 'application/vnd.api+json', 400],
+      ['same origin, multipart', { origin: 'http://localhost' }, 'multipart/form-data; boundary=x', 400],
+      ['same origin, padded and upper case', { origin: 'http://localhost', 'sec-fetch-site': 'same-origin' }, ' Application/JSON ; charset=UTF-8', 200],
+    ];
+    const out: string[] = [];
+    for (const [name, h, ct, want] of cases) {
+      const o = await paid();
+      const r = await req(`/api/admin/orders/${o.id}/cancel`, { method: 'POST', headers: { 'content-type': ct, 'cf-access-jwt-assertion': person, ...h }, body: JSON.stringify({ reason: 'בדיקת QA' }) });
+      out.push(`${name}: ${r.status}`);
+      expect(r.status, name).toBe(want);
+      if (want !== 200) expect(await status(o.id), name).toBe('paid');
+    }
+    // the service token: no marker acts; any cross-site marker is still refused
+    const s1 = await paid();
+    const svcCross = await req(`/api/admin/orders/${s1.id}/cancel`, json({ reason: 'בדיקת QA' }, 'POST', { 'cf-access-jwt-assertion': service, 'sec-fetch-site': 'cross-site' }));
+    const svc = await req(`/api/admin/orders/${s1.id}/cancel`, json({ reason: 'בדיקת QA' }, 'POST', { 'cf-access-jwt-assertion': service }));
+    const actor = (await one<{ actor: string }>("SELECT actor FROM audit_log WHERE subject = ? AND action = 'order.canceled'", s1.id)).actor;
+    console.log(`QA A6: ${out.join(' | ')} | service token cross-site ${svcCross.status}, no marker ${svc.status} (actor ${actor})`);
+    expect(svcCross.status).toBe(403);
+    expect(svc.status).toBe(200);
+  });
+});
+
+// ---------------------------------------------------------------- B. ת35
+describe('QA B (ת35): a timed-out supplier call, then a cancellation', () => {
+  const ACTOR = 'owner.qa1516@example.invalid';
+  const refundsOf = async (id: string) => count('SELECT COUNT(*) AS n FROM refunds WHERE order_id = ?', id);
+
+  it('B4 askable supplier: at once → 409 (still in flight); after the window → asked, it holds the order → a cancel request, 0 refunds', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const sup = supplier({ hangMs: 150, find: 'yes' });
+    const o = await paid();
+    const job = await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup, callTimeoutMs: 30 });
+    const s0 = await ship(o.id);
+    const p = payments();
+    // the cancellation right after the deadline (the supplier is still creating the order)
+    const now1 = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { supplier: sup, payment: p, callTimeoutMs: 5_000 });
+    await sleep(160);
+    // after the window: the supplier is asked by our order number
+    const later = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { supplier: sup, payment: p, callTimeoutMs: 30 });
+    const s1 = await ship(o.id);
+    console.log(
+      `QA B4a: timed out → job ${job}, shipment ${s0.status}/${s0.reach}; cancel at once → ${'error' in now1 ? `${now1.status} ${now1.code}` : now1.outcome}; after the window → ${'error' in later ? `${later.status} ${later.code}` : `${later.outcome}/${later.stage}`}; asked ${sup.finds.length}×, cancel requests ${sup.cancels.length}, refunds ${p.made.length}; shipment ${s1.status}/${s1.reach} ${s1.supplier_order_id}; order ${await status(o.id)}`,
+    );
+    expect(s0).toMatchObject({ status: 'failed', reach: 'maybe' });
+    expect('error' in now1 && now1.code).toBe('supplier_submit_in_progress');
+    expect('outcome' in later && later.outcome).toBe('requested');
+    expect(p.made).toHaveLength(0);
+    expect(sup.cancels).toEqual([`QA-SUP-${o.id}`]);
+    expect(await refundsOf(o.id)).toBe(0);
+  });
+
+  it('B4 askable supplier whose lookup fails (502, echoing the buyer) or hangs past the deadline: nothing refunded, no text in the log', async () => {
+    const rows: string[] = [];
+    for (const m of ['log', 'warn', 'error'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push(JSON.stringify(a)));
+    const out: string[] = [];
+    for (const find of ['fails', 'hangs'] as const) {
+      const sup = supplier({ hangMs: 60, find });
+      const o = await paid();
+      await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup, callTimeoutMs: 20 });
+      await sleep(80);
+      const p = payments();
+      const c = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { supplier: sup, payment: p, callTimeoutMs: 40 });
+      out.push(`${find} → ${'error' in c ? `${c.status} ${c.code}` : c.outcome}, refunds ${p.made.length}, order ${await status(o.id)}`);
+      expect('error' in c && c.status).toBe(503);
+      expect(p.made).toHaveLength(0);
+    }
+    const leaks = NEEDLES.filter((n) => rows.some((r) => r.includes(n)));
+    vi.restoreAllMocks();
+    console.log(`QA B4b: lookup ${out.join(' | ')}; log rows ${rows.length}, PII in them: ${leaks.length ? leaks.join(',') : 'none'}`);
+    expect(leaks).toEqual([]);
+  });
+
+  it('B4 supplier that cannot be asked: 409 for a person; the person records "found" through the API with a JWT → cancel request; confirmed → refunded once', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { person } = await access();
+    const sup = supplier({ hangMs: 60 });
+    const o = await paid();
+    await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup, callTimeoutMs: 20 });
+    await sleep(80);
+    const p = payments();
+    const c1 = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { supplier: sup, payment: p });
+    // the check before anything was found, in the wrong shape, and from another site
+    const bad = await req(`/api/admin/orders/${o.id}/supplier-check`, json({ outcome: 'found', note: 'בדקתי' }, 'POST', { 'cf-access-jwt-assertion': person, origin: 'http://localhost' }));
+    const cross = await req(
+      `/api/admin/orders/${o.id}/supplier-check`,
+      json({ outcome: 'none', note: 'בדקתי' }, 'POST', { 'cf-access-jwt-assertion': person, origin: 'https://evil.example' }),
+    );
+    const chk = await req(
+      `/api/admin/orders/${o.id}/supplier-check`,
+      json({ outcome: 'found', supplier_order_id: `QA-SUP-${o.id}`, note: 'נמצאה אצל הספק' }, 'POST', { 'cf-access-jwt-assertion': person, origin: 'http://localhost' }),
+    );
+    const again = await req(
+      `/api/admin/orders/${o.id}/supplier-check`,
+      json({ outcome: 'none', note: 'שוב' }, 'POST', { 'cf-access-jwt-assertion': person, origin: 'http://localhost' }),
+    );
+    const c2 = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { supplier: sup, payment: p });
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'canceled' }, actor: 'supplier:mock' });
+    const rf = await one<{ n: number; s: number }>("SELECT COUNT(*) AS n, COALESCE(SUM(amount_agorot),0) AS s FROM refunds WHERE order_id = ? AND state = 'refunded'", o.id);
+    const who = (await env.DB.prepare("SELECT actor, action FROM audit_log WHERE subject = ? AND action IN ('order.cancel_needs_person','supplier.found_by_order','order.cancel_requested') ORDER BY id").bind(o.id).all<{ actor: string; action: string }>()).results;
+    console.log(
+      `QA B4c: cannot be asked → ${'error' in c1 ? `${c1.status} ${c1.code}` : c1.outcome}; check without its number ${bad.status}, from another site ${cross.status}, found ${chk.status}, again ${again.status}; cancel → ${'error' in c2 ? c2.code : `${c2.outcome}/${c2.stage}`}, cancel requests ${sup.cancels.length}; confirmed → order ${await status(o.id)}, refunds ${rf.n} (${rf.s}/${o.total}); audit ${JSON.stringify(who.map((w) => `${w.actor}:${w.action}`))}`,
+    );
+    expect('error' in c1 && c1.code).toBe('supplier_check_needed');
+    expect(cross.status).toBe(403);
+    expect(chk.status).toBe(200);
+    expect('outcome' in c2 && c2.outcome).toBe('requested');
+    expect(sup.cancels).toHaveLength(1);
+  });
+
+  it('B4 my sequence: a timeout, then a server error, then a success → submitted; the cancel takes the after-supplier path', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const o = await paid();
+    const hang = supplier({ hangMs: 60 });
+    const r1 = await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: hang, callTimeoutMs: 20 });
+    await sleep(70);
+    const r2 = await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 2, { client: supplier({ failWith: () => Object.assign(new Error('upstream 503'), { status: 503 }) }) });
+    const mid = await ship(o.id);
+    const ok = supplier();
+    const r3 = await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 3, { client: ok });
+    const end = await ship(o.id);
+    console.log(`QA B4d: timeout → ${r1}, 503 → ${r2} (${mid.status}/${mid.reach}), success → ${r3} (${end.status}/${end.reach}, failing_since ${end.failing_since}); supplier orders created: ${hang.orders.length + ok.orders.length} (the first may be a duplicate: the supplier must dedupe by our number)`);
+    expect(end).toMatchObject({ status: 'submitted', reach: 'none', failing_since: null });
+  });
+
+  it('supplier_error made only of refusals (nothing ever reached the supplier): per the brief it counts as sent → a person', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const o = await paid();
+    const refusing = supplier({ failWith: () => new SupplierRefused('cj_order_api_docs_needed') });
+    for (let a = 1; a <= 5; a++) await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, a, { client: refusing });
+    const s = await ship(o.id);
+    const p = payments();
+    const c = await cancelOrder(env, o.id, ACTOR, 'הלקוח ביקש', { supplier: refusing, payment: p });
+    console.log(`QA B5: 5 refusals → order ${await status(o.id)}, shipment ${s.status}/${s.reach}; cancel → ${'error' in c ? `${c.status} ${c.code}` : c.outcome}, refunds ${p.made.length}`);
+    expect(await refundsOf(o.id)).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------- C. ת36
+describe('QA C (ת36): 5 concurrent refunds with the same key', () => {
+  it('three provider kinds, 5 at once, same key, on the real seed: one provider call and one refund each', async () => {
+    const out: string[] = [];
+    for (const kind of [{ idempotent: true }, { idempotent: false, find: true }, { idempotent: false, find: false }] as const) {
+      const o = await paid();
+      const p = payments({ ...kind, delayMs: 40 });
+      const res = await Promise.all(
+        Array.from({ length: 5 }, () => requestRefund(env, { orderId: o.id, amount: 1500, reason: 'qa', key: `qa1516_same_${o.id}`, actor: 'qa' }, { provider: p })),
+      );
+      const rows = await count('SELECT COUNT(*) AS n FROM refunds WHERE order_id = ?', o.id);
+      out.push(`${JSON.stringify(kind)}: calls ${p.calls.length}, refunds ${p.made.length}, rows ${rows}, results ${res.map((x) => (x.ok ? `ok${x.duplicate ? '/dup' : ''}` : x.code)).join(',')}`);
+      expect(p.calls).toHaveLength(1);
+      expect(p.made).toHaveLength(1);
+    }
+    // 5 at once with the same key but different amounts: the first wins, the rest are key_reused or in_progress
+    const o2 = await paid();
+    const p2 = payments({ idempotent: false, find: true, delayMs: 40 });
+    const mixed = await Promise.all([1500, 1600, 1500, 1700, 1500].map((a) => requestRefund(env, { orderId: o2.id, amount: a, reason: 'qa', key: `qa1516_mix_${o2.id}`, actor: 'qa' }, { provider: p2 })));
+    out.push(`mixed amounts: calls ${p2.calls.length}, refunds ${p2.made.length}, results ${mixed.map((x) => (x.ok ? 'ok' : x.code)).join(',')}`);
+    console.log(`QA C2: ${out.join(' | ')}`);
+    expect(p2.made).toHaveLength(1);
+  });
+
+  it('the first call times out but completes late at a provider that does not dedupe: 409 inside the lease, after it asked → recorded, never a second refund', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const out: string[] = [];
+    for (const late of [true, false]) {
+      const o = await paid();
+      const p = payments({ idempotent: false, find: true, delayMs: 120, lateCompletes: late });
+      let clock = Date.now();
+      const now = () => clock;
+      const key = `qa1516_late_${o.id}`;
+      const first = await requestRefund(env, { orderId: o.id, amount: 2000, reason: 'qa', key, actor: 'qa' }, { provider: p, now, callTimeoutMs: 30 });
+      const burst = await Promise.all(Array.from({ length: 5 }, () => requestRefund(env, { orderId: o.id, amount: 2000, reason: 'qa', key, actor: 'qa' }, { provider: p, now, callTimeoutMs: 30 })));
+      await sleep(150); // the late call ends at the provider (or fails there)
+      clock += REFUND_LEASE_MS + 1_000;
+      const after = await requestRefund(env, { orderId: o.id, amount: 2000, reason: 'qa', key, actor: 'qa' }, { provider: p, now, callTimeoutMs: 500 });
+      await sleep(150);
+      const row = await one<{ state: string }>('SELECT state FROM refunds WHERE id = ?', key);
+      out.push(
+        `late ${late ? 'completes' : 'never completes'}: first ${first.ok ? 'ok' : first.code}; 5 within the lease ${burst.map((x) => (x.ok ? 'ok' : x.code)).join(',')}; after the lease ${after.ok ? `ok${after.duplicate ? '/dup' : ''}` : after.code}; provider calls ${p.calls.length}, refunds made ${p.made.length}; row ${row.state}`,
+      );
+      expect(burst.every((x) => !x.ok && x.code === 'in_progress')).toBe(true);
+      expect(p.made.length).toBe(late ? 1 : 0);
+      expect(p.calls.length).toBe(late ? 1 : 2);
+    }
+    console.log(`QA C7: ${out.join(' | ')}`);
+  });
+});
+
+// ---------------------------------------------------------------- D. ת38
+describe('QA D (ת38): PII in error text', () => {
+  it('Hebrew and Latin customer details in exceptions and provider errors; odd phone formats', async () => {
+    const rows: { phase: string; text: string }[] = [];
+    let phase = '';
+    for (const m of ['log', 'warn', 'error', 'info', 'debug'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push({ phase, text: JSON.stringify(a) }));
+    const crash = async (msg: string, extra: object = {}) => {
+      const o = await paid();
+      const broken = { ...env, DB: { prepare: () => ({ bind: () => ({ first: async () => { throw Object.assign(new Error(msg), extra); } }) }) } as unknown as D1Database };
+      await app.request(`http://localhost/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } }, broken);
+    };
+    phase = 'he-crash-unquoted';
+    await crash(`failed for ${HE.full_name}, ${HE.street} ${HE.house}, ${HE.city}; zip ${HE.zip}`);
+    phase = 'he-crash-parenthesised';
+    await crash(`consignee(${HE.full_name})[${HE.city}]{${HE.street}}`);
+    phase = 'latin-crash-unquoted';
+    await crash(`failed for ${LA.full_name}, ${LA.street} ${LA.house}, ${LA.city}; zip ${LA.zip}`);
+    phase = 'phone-972-no-plus';
+    await crash(`invalid phone 972547716204 for order`);
+    phase = 'phone-00972';
+    await crash(`invalid phone 00972547716204 for order`);
+    phase = 'phone-spaced';
+    await crash(`invalid phone +972 54 771 6204 for order`);
+    phase = 'supplier-echo-latin';
+    const o1 = await paid(LA);
+    for (let a = 1; a <= 2; a++)
+      await processSupplierJob(env, { kind: 'submit-order', order_id: o1.id }, a, {
+        client: supplier({ failWith: (i) => Object.assign(new Error(`400 bad consignee ${i.ship_to.full_name} at ${i.ship_to.street}, ${i.ship_to.city}; tel ${i.ship_to.phone}`), { status: 400 }) }),
+      });
+    phase = 'supplier-echo-in-code';
+    const o2 = await paid(LA);
+    await processSupplierJob(env, { kind: 'submit-order', order_id: o2.id }, 1, {
+      client: supplier({ failWith: (i) => Object.assign(new Error('x'), { code: `invalid_consignee:${i.ship_to.full_name.split(' ')[0]}` }) }),
+    });
+    phase = 'invoice-echo-latin';
+    const o3 = await paid(LA);
+    const inv = { id: 'qa-inv', idempotent: false, async issue(input: { customer: { full_name: string } }) { throw new Error(`invoice refused for ${input.customer.full_name} (${LA.city})`); } } as unknown as InvoiceProvider;
+    await processInvoiceJob(env, o3.id, inv);
+    vi.restoreAllMocks();
+    const byPhase: Record<string, { rows: number; leaks: string[] }> = {};
+    for (const r of rows) {
+      const b = (byPhase[r.phase] ??= { rows: 0, leaks: [] });
+      b.rows++;
+      for (const n of NEEDLES) if (r.text.includes(n) && !b.leaks.includes(n)) b.leaks.push(n);
+    }
+    const sample = (p: string) => rows.find((r) => r.phase === p && /error_message|"code"/.test(r.text))?.text.slice(0, 260) ?? '';
+    console.log(`QA D1: ${JSON.stringify(byPhase)}`);
+    console.log(`QA D2 samples:\n  latin-crash: ${sample('latin-crash-unquoted')}\n  972: ${sample('phone-972-no-plus')}\n  00972: ${sample('phone-00972')}\n  code: ${sample('supplier-echo-in-code')}`);
+    // the brief's case (Hebrew) must be clean; the Latin and phone variants are reported
+    expect(byPhase['he-crash-unquoted']!.leaks).toEqual([]);
+    expect(byPhase['he-crash-parenthesised']!.leaks).toEqual([]);
+    expect(byPhase['supplier-echo-latin']!.leaks).toEqual([]);
+    expect(byPhase['invoice-echo-latin']!.leaks).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------- E. ת39
+describe('QA E (ת39): a failed supplier send → degraded after 30 minutes', () => {
+  const health = async () => {
+    const r = await req('/healthz');
+    return `${r.status} ${JSON.stringify(((await r.json()) as { checks: object }).checks)}`;
+  };
+  it('a timeout at T0, retries failing until T0+25; /healthz at 29:30, 30:30; one row per failed send by code; the customer reads "מתעכבת"', async () => {
+    const rows: string[] = [];
+    for (const m of ['log', 'warn', 'error'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push(JSON.stringify(a)));
+    const T0 = Date.now();
+    vi.useFakeTimers({ toFake: ['Date'], now: T0 });
+    const o = await paid();
+    const outs: string[] = [];
+    const hangs = supplier({ hangMs: 40 });
+    vi.setSystemTime(T0);
+    outs.push(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: hangs, callTimeoutMs: 15 }));
+    const at = [60, 180, 420, 900, 1500]; // the queue's retries (1, 2, 4, 8, 10 minutes apart)
+    for (let a = 2; a <= 6; a++) {
+      vi.setSystemTime(T0 + at[a - 2]! * 1000);
+      outs.push(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, a, { client: supplier({ failWith: () => Object.assign(new Error(`502 for ${HE.full_name}`), { status: 502 }) }) }));
+    }
+    const s = await ship(o.id);
+    const view = async () => (await (await req(`/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } })).json()) as { status: string; status_he: string; message_he?: string };
+    vi.setSystemTime(T0 + 29.5 * 60_000);
+    const h29 = await health();
+    vi.setSystemTime(T0 + 30.5 * 60_000);
+    const h31 = await health();
+    const v = await view();
+    // canceled (by a person after checking): no longer counted
+    vi.useRealTimers();
+    const failedRows = rows.filter((r) => r.includes('supplier.submit_failed'));
+    const leaks = NEEDLES.filter((n) => failedRows.some((r) => r.includes(n)));
+    vi.restoreAllMocks();
+    console.log(
+      `QA E2: attempts ${outs.join(',')}; order ${await status(o.id)}, shipment ${s.status}/${s.reach}, failing_since = T0+${(Date.parse(s.failing_since!) - T0) / 1000}s; /healthz at 29:30 → ${h29}; at 30:30 → ${h31}; customer: ${v.status} "${v.status_he}"; supplier.submit_failed rows ${failedRows.length} (${failedRows.map((r) => /"code":"([^"]+)"/.exec(r)?.[1]).join(',')}), PII ${leaks.length ? leaks.join(',') : 'none'}`,
+    );
+    expect(h29.startsWith('200')).toBe(true);
+    expect(h31).toBe('503 {"db":"ok","queue":"ok","supplier":"degraded"}');
+    expect(failedRows).toHaveLength(outs.filter((x) => x === 'retry').length);
+    expect(leaks).toEqual([]);
+  });
+
+  it('the production config that refuses before calling (cj today): the same 30 minutes; and my edge: a retry that crashes mid-call', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const T0 = Date.now();
+    vi.useFakeTimers({ toFake: ['Date'], now: T0 });
+    const prod: Env = { ...env, ENVIRONMENT: 'production', SUPPLIER_PROVIDER: 'cj' };
+    const o = await paid();
+    // as in production, the row the payment queued belongs to no supplier yet (my order was paid under the mock config)
+    await env.DB.prepare("UPDATE supplier_shipments SET supplier = 'unconfigured' WHERE order_id = ?").bind(o.id).run();
+    const outs: string[] = [];
+    for (let a = 1; a <= 6; a++) {
+      vi.setSystemTime(T0 + [0, 60, 180, 420, 900, 1500][a - 1]! * 1000);
+      outs.push(await processSupplierJob(prod, { kind: 'submit-order', order_id: o.id }, a));
+    }
+    const s = await ship(o.id);
+    const sAll = (await env.DB.prepare('SELECT supplier, status, reach, failing_since, fulfillment_source FROM supplier_shipments WHERE order_id = ?').bind(o.id).all()).results;
+    const oSt = await status(o.id);
+    vi.setSystemTime(T0 + 29.5 * 60_000);
+    const h29 = await health();
+    vi.setSystemTime(T0 + 30.5 * 60_000);
+    const h31 = await health();
+    // my edge: a second order fails once (failing_since and last_error set), then its retry claims the shipment and the
+    // isolate dies mid-call (no catch runs): the row stays 'submitting' with last_error set; an hour later
+    vi.setSystemTime(T0);
+    const e = await paid();
+    await processSupplierJob(env, { kind: 'submit-order', order_id: e.id }, 1, { client: supplier({ failWith: () => Object.assign(new Error('503'), { status: 503 }) }) });
+    await env.DB.prepare("UPDATE supplier_shipments SET status = 'submitting', attempts = 6, updated_at = ? WHERE order_id = ?").bind(new Date(T0 + 25 * 60_000).toISOString(), e.id).run();
+    // and the first order canceled meanwhile, so only the edge is left
+    await env.DB.prepare("UPDATE orders SET status = 'canceled' WHERE id = ?").bind(o.id).run();
+    vi.setSystemTime(T0 + 90 * 60_000);
+    const hEdge = await health();
+    const se = await one<{ status: string; last_error: string | null; failing_since: string | null }>('SELECT status, last_error, failing_since FROM supplier_shipments WHERE order_id = ?', e.id);
+    vi.useRealTimers();
+    console.log(
+      `QA E3: production cj (refuses before calling) ×6 → ${outs.join(',')}; order ${oSt}, shipments ${JSON.stringify(sAll.map((r) => ({ ...r, failing_since: r.failing_since ? `T0+${(Date.parse(String(r.failing_since)) - T0) / 1000}s` : null })))}, shipment ${s.status}; /healthz at 29:30 → ${h29}; at 30:30 → ${h31} | edge: a retry crashed mid-call (shipment ${se.status}, last_error set ${!!se.last_error}, failing since T0) → /healthz 90 min later ${hEdge}`,
+    );
+    expect(h31).toBe('503 {"db":"ok","queue":"ok","supplier":"degraded"}');
+  });
+});
+
+// ---------------------------------------------------------------- F. ת37, ת40, ת42
+describe('QA F: ת37, ת40, ת42', () => {
+  it('ת37: malformed and hostile tracking links; the order page answers 200', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const links = ['https://parcelsapp.com/he/tracking/%E0%A4%A', 'https://parcelsapp.com/he/tracking/%', 'https://parcelsapp.com/he/tracking/%ZZ%', 'https://parcelsapp.com/he/tracking/%C0%AF', 'https://parcelsapp.com/he/tracking/IL1%2F2'];
+    const out = links.map((u) => {
+      try {
+        return `${u.slice(-12)} → ${customerTrackingUrl(u) ?? 'null'}`;
+      } catch (e) {
+        return `${u.slice(-12)} → THROWS ${(e as Error).name}`;
+      }
+    });
+    const sup = supplier();
+    const o = await paid();
+    await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup });
+    await applySupplierUpdate(env, { orderId: o.id, supplier: 'mock', update: { status: 'shipped', tracking_number: 'IL98765432', tracking_url: 'https://parcelsapp.com/he/tracking/%ZZ%' }, actor: 'supplier:mock' });
+    const r = await req(`/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } });
+    const v = (await r.json()) as { shipments?: { tracking_number: string; tracking_url: string | null }[] };
+    console.log(`QA F1: ${out.join(' | ')}; order API ${r.status}, shipment ${JSON.stringify(v.shipments?.[0])}`);
+    expect(out.every((x) => !x.includes('THROWS'))).toBe(true);
+    expect(r.status).toBe(200);
+  });
+
+  it('ת42: a second and a third cancellation while one waits: the supplier is asked once, one request row', async () => {
+    const sup = supplier({ cancel: 'requested' });
+    const o = await paid();
+    await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup });
+    const p = payments();
+    const rs = [];
+    for (let i = 0; i < 3; i++) rs.push(await cancelOrder(env, o.id, 'owner.qa1516@example.invalid', 'שוב', { supplier: sup, payment: p }));
+    const rows = await count("SELECT COUNT(*) AS n FROM audit_log WHERE subject = ? AND action = 'order.cancel_requested'", o.id);
+    console.log(`QA F2: 3 cancellations → ${rs.map((r) => ('outcome' in r ? r.outcome : r.code)).join(',')}; supplier asked ${sup.cancels.length}×; cancel_requested rows ${rows}`);
+    expect(sup.cancels).toHaveLength(1);
+    expect(rows).toBe(1);
+  });
+
+  it('ת40: lease overrun on the invoice: the takeover issued and recorded; the late run\'s second invoice → claim_lost', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const o = await paid();
+    let release!: () => void;
+    const hang = new Promise<void>((r) => (release = r));
+    let n = 0;
+    const prov = (slow: boolean) =>
+      ({
+        id: 'qa-inv',
+        idempotent: false,
+        async issue() {
+          if (slow) await hang;
+          n++;
+          return { invoice_id: `QA-INV-${n}`, url: null };
+        },
+        find: async () => null,
+      }) as unknown as InvoiceProvider;
+    let clock = Date.now();
+    const runA = processInvoiceJob(env, o.id, prov(true), { now: () => clock, callTimeoutMs: 5_000 });
+    await sleep(30);
+    clock += INVOICE_LEASE_MS + 1_000;
+    const b = await processInvoiceJob(env, o.id, prov(false), { now: () => clock });
+    release();
+    const a = await runA;
+    const lost = await count("SELECT COUNT(*) AS n FROM audit_log WHERE subject = ? AND action = 'invoice.claim_lost'", o.id);
+    console.log(`QA F3: takeover → ${b}; late run → ${a}; invoices at the provider ${n}; claim_lost rows ${lost}`);
+    expect(lost).toBe(1);
+  });
+});

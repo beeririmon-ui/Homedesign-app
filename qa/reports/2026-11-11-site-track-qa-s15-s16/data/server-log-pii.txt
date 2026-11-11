@@ -1,0 +1,27 @@
+qa-agent S15–S16: the copy's Worker log (wrangler dev 8799) over the full e2e + a11y run and my live checks: 15595 lines, 44 structured rows.
+Customer values searched (count of lines containing each):
+  0  בודקת
+  0  חוצת
+  0  עיכוב
+  0  נועה
+  0  כהן
+  0  qa1516@
+  0  csrf.qa1516
+  0  copy.qa1516
+  0  delay.qa1516
+  0  noa.ops
+  0  050-1234567
+  0  0501234567
+  0  050-7654321
+  0  050-0000000
+  0  הנמל
+  0  חיפה
+Refusals of the live cross-site requests:
+      event: 'admin.cross_site_refused',
+      event: 'admin.cross_site_refused',
+      event: 'admin.cross_site_refused',
+  [wrangler:info] POST /api/admin/orders/6530890566/cancel 403 Forbidden (6ms)
+      event: 'admin.cross_site_refused',
+  [wrangler:info] POST /api/admin/orders/7608140448/refund 403 Forbidden (8ms)
+  [wrangler:info] POST /admin/orders/5011885666/cancel 303 See Other (10ms)
+  [wrangler:info] POST /api/admin/orders/6530890566/cancel 200 OK (23ms)

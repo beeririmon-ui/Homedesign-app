@@ -1,0 +1,283 @@
+
+ RUN  v4.0.8 /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/build-s1516/site
+
+(node:4194) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4200) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > QA A4: a cross-site "text/plain; charset=application/json" cancel is refused, and the order is untouched
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.595Z',
+  path: '/api/admin/orders/3991351645/cancel',
+  reason: 'cross_origin',
+  kind: 'user'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > a person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.686Z',
+  path: '/api/admin/orders/4401730581/cancel',
+  reason: 'cross_origin',
+  kind: 'user'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > a person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.687Z',
+  path: '/api/admin/orders/4401730581/cancel',
+  reason: 'cross_origin',
+  kind: 'user'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > a person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.690Z',
+  path: '/api/admin/orders/4401730581/cancel',
+  reason: 'cross_site',
+  kind: 'user'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > a person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.692Z',
+  path: '/api/admin/orders/4401730581/cancel',
+  reason: 'cross_site',
+  kind: 'user'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > a person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.693Z',
+  path: '/api/admin/orders/4401730581/cancel',
+  reason: 'cross_site',
+  kind: 'user'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > a person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.694Z',
+  path: '/api/admin/orders/4401730581/cancel',
+  reason: 'no_origin',
+  kind: 'user'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > a service token (the studio): no browser markers needed; the actor names the token; a foreign Origin is still refused
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.765Z',
+  path: '/api/admin/orders/8722286307/cancel',
+  reason: 'cross_origin',
+  kind: 'service'
+}
+
+stderr | api/test/s16.test.ts > ת34: the Admin API acts only for the admin itself > the screen’s forms: the same rule (a foreign Origin is bad_origin); the local dev token acts without markers
+{
+  level: 'warn',
+  event: 'admin.cross_site_refused',
+  at: '2026-11-11T23:24:53.815Z',
+  path: '/api/admin/orders/3975132520/cancel',
+  reason: 'cross_origin',
+  kind: 'dev'
+}
+
+ ✓ api/test/s16.test.ts (22 tests) 1470ms
+ ✓ tools/test/s14-catalog.test.ts (13 tests) 2034ms
+ ✓ api/test/s14.test.ts (8 tests) 1805ms
+(node:4339) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4333) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4385) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ api/test/s12.test.ts (25 tests) 744ms
+stderr | api/test/s13.test.ts > the admin: 403 without permission, everywhere > the dev token: only in a local run, only the exact value
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.175Z',
+  path: '/api/admin/orders',
+  reason: 'no_token'
+}
+
+stderr | api/test/s13.test.ts > the admin: 403 without permission, everywhere > the dev token: only in a local run, only the exact value
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.176Z',
+  path: '/api/admin/orders',
+  reason: 'no_token'
+}
+
+stderr | api/test/s13.test.ts > the admin: 403 without permission, everywhere > the dev token: only in a local run, only the exact value
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.176Z',
+  path: '/admin/',
+  reason: 'no_token'
+}
+
+stderr | api/test/s13.test.ts > the admin: 403 without permission, everywhere > the dev token: only in a local run, only the exact value
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.177Z',
+  path: '/api/admin/orders',
+  reason: 'no_token'
+}
+
+stderr | api/test/s13.test.ts > the admin: 403 without permission, everywhere > the dev token: only in a local run, only the exact value
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.177Z',
+  path: '/admin/',
+  reason: 'no_token'
+}
+
+stderr | api/test/api.test.ts > payment webhook > rejects bad and stale signatures
+{
+  level: 'warn',
+  event: 'payment.webhook_rejected',
+  at: '2026-11-11T23:24:56.203Z',
+  provider: 'mock',
+  reason: 'mismatch'
+}
+
+stderr | api/test/api.test.ts > payment webhook > rejects bad and stale signatures
+{
+  level: 'warn',
+  event: 'payment.webhook_rejected',
+  at: '2026-11-11T23:24:56.207Z',
+  provider: 'mock',
+  reason: 'stale'
+}
+
+stderr | api/test/s13.test.ts > the admin screen and API (order operations) > the screen acts through forms from its own origin only; a refund from the form is idempotent by its key
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.304Z',
+  path: '/api/admin/orders/7112153213/mock-supplier',
+  reason: 'no_token'
+}
+
+ ✓ api/test/s13.test.ts (28 tests) 956ms
+stderr | api/test/api.test.ts > admin > is closed without Cloudflare Access and open with the local dev bypass
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.360Z',
+  path: '/api/admin/overview',
+  reason: 'no_token'
+}
+
+stderr | api/test/api.test.ts > admin > dev bypass is ignored in preview
+{
+  level: 'warn',
+  event: 'admin.forbidden',
+  at: '2026-11-11T23:24:56.377Z',
+  path: '/api/admin/overview',
+  reason: 'no_token'
+}
+
+ ✓ api/test/api.test.ts (27 tests) 745ms
+stdout | shared/test/shared.test.ts > repo data against the derived schemas > every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
+draft cards (DS API, colors / visual_weight unfilled): 68
+
+ ✓ shared/test/options.test.ts (8 tests) 200ms
+(node:4465) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ tools/test/design-system.test.ts (8 tests) 59ms
+ ✓ shared/test/shared.test.ts (30 tests) 689ms
+     ✓ agrees with studio/build.py on the real cards  312ms
+stdout | api/test/qa-s1516.test.ts > QA A (ת34): a cross-site request with the owner's Access login > A4 on every admin action: text/plain; charset=application/json, a foreign Origin, Sec-Fetch-Site cross-site → 403, nothing changes
+QA A4: POST /api/admin/orders/:id/cancel → 403 cross_site_request | POST /api/admin/orders/:id/refund → 403 cross_site_request | POST /api/admin/orders/:id/refund → 403 cross_site_request | POST /api/admin/orders/:id/invoice-check → 403 cross_site_request | POST /api/admin/orders/:id/supplier-check → 403 cross_site_request | POST /api/admin/orders/:id/mock-supplier → 403 cross_site_request | PUT /api/admin/orders/:id → 403 cross_site_request | DELETE /api/admin/orders/:id → 403 cross_site_request | PATCH /api/admin/orders/:id → 403 cross_site_request | form POST /admin/orders/:id/cancel → 303 /admin/orders/6756887133?error=bad_origin; order paid; refunds 0
+
+ ✓ web/test/story-cart.test.ts (14 tests) 35ms
+stdout | api/test/qa-s1516.test.ts > QA A (ת34): a cross-site request with the owner's Access login > my markers and content types: only a same-origin request with an essence of exactly application/json acts
+QA A6: other port: 403 | https of the same host: 403 | subdomain: 403 | Origin with a trailing slash: 403 | same-site only: 403 | none (a navigation): 403 | same Origin, cross-site fetch: 403 | no marker, person: 403 | same origin, text/plain;charset=application/json: 400 | same origin, application/json in a parameter: 400 | same origin, two types: 400 | same origin, +json: 400 | same origin, multipart: 400 | same origin, padded and upper case: 200 | service token cross-site 403, no marker 200 (actor service:qa1516-studio.access)
+
+ ✓ api/test/integrations.test.ts (4 tests) 54ms
+ ✓ tools/test/s16.test.ts (10 tests) 36ms
+stdout | api/test/qa-s1516.test.ts > QA B (ת35): a timed-out supplier call, then a cancellation > B4 askable supplier: at once → 409 (still in flight); after the window → asked, it holds the order → a cancel request, 0 refunds
+QA B4a: timed out → job retry, shipment failed/maybe; cancel at once → 409 supplier_submit_in_progress; after the window → requested/after_supplier; asked 1×, cancel requests 1, refunds 0; shipment cancel_requested/none QA-SUP-6549692971; order sent_to_supplier
+
+ ✓ tools/test/story-hotspots.test.ts (7 tests) 16ms
+ ✓ tools/test/qa-frames.test.ts (4 tests) 15ms
+stdout | api/test/qa-s1516.test.ts > QA B (ת35): a timed-out supplier call, then a cancellation > B4 askable supplier whose lookup fails (502, echoing the buyer) or hangs past the deadline: nothing refunded, no text in the log
+QA B4b: lookup fails → 503 supplier_failed, refunds 0, order paid | hangs → 503 supplier_failed, refunds 0, order paid; log rows 4, PII in them: none
+
+ ✓ web/test/product-bits.test.ts (8 tests) 18ms
+ ✓ tools/test/lines.test.ts (9 tests) 9ms
+stdout | api/test/qa-s1516.test.ts > QA B (ת35): a timed-out supplier call, then a cancellation > B4 supplier that cannot be asked: 409 for a person; the person records "found" through the API with a JWT → cancel request; confirmed → refunded once
+QA B4c: cannot be asked → 409 supplier_check_needed; check without its number 422, from another site 403, found 200, again 409; cancel → requested/after_supplier, cancel requests 1; confirmed → order canceled, refunds 1 (14800/14800); audit ["owner.qa1516@example.invalid:order.cancel_needs_person","owner.qa1516@example.invalid:supplier.found_by_order","owner.qa1516@example.invalid:order.cancel_requested"]
+
+ ✓ web/test/option-picker.test.ts (3 tests) 6ms
+ ✓ tools/test/s15-rights.test.ts (8 tests) 7ms
+stdout | api/test/qa-s1516.test.ts > QA B (ת35): a timed-out supplier call, then a cancellation > B4 my sequence: a timeout, then a server error, then a success → submitted; the cancel takes the after-supplier path
+QA B4d: timeout → retry, 503 → retry (failed/maybe), success → submitted (submitted/none, failing_since null); supplier orders created: 2 (the first may be a duplicate: the supplier must dedupe by our number)
+
+ ✓ web/test/s15-copy.test.ts (9 tests) 8ms
+stdout | api/test/qa-s1516.test.ts > QA B (ת35): a timed-out supplier call, then a cancellation > supplier_error made only of refusals (nothing ever reached the supplier): per the brief it counts as sent → a person
+QA B5: 5 refusals → order supplier_error, shipment failed/none; cancel → 409 supplier_check_needed, refunds 0
+
+ ✓ web/test/story-detail.test.ts (6 tests) 5ms
+ ✓ web/test/product-gallery.test.ts (3 tests) 6ms
+ ✓ tools/test/sets.test.ts (3 tests) 4ms
+stdout | api/test/qa-s1516.test.ts > QA C (ת36): 5 concurrent refunds with the same key > three provider kinds, 5 at once, same key, on the real seed: one provider call and one refund each
+QA C2: {"idempotent":true}: calls 1, refunds 1, rows 1, results ok,in_progress,in_progress,in_progress,in_progress | {"idempotent":false,"find":true}: calls 1, refunds 1, rows 1, results ok,in_progress,in_progress,in_progress,in_progress | {"idempotent":false,"find":false}: calls 1, refunds 1, rows 1, results ok,in_progress,in_progress,in_progress,in_progress | mixed amounts: calls 1, refunds 1, results ok,key_reused,in_progress,key_reused,in_progress
+
+ ✓ shared/test/product-url.test.ts (2 tests) 4ms
+ ✓ web/test/viewport-frame.test.ts (4 tests) 3ms
+ ✓ web/test/wheel-physics.test.ts (3 tests) 3ms
+stdout | api/test/qa-s1516.test.ts > QA C (ת36): 5 concurrent refunds with the same key > the first call times out but completes late at a provider that does not dedupe: 409 inside the lease, after it asked → recorded, never a second refund
+QA C7: late completes: first provider_failed; 5 within the lease in_progress,in_progress,in_progress,in_progress,in_progress; after the lease ok; provider calls 1, refunds made 1; row refunded | late never completes: first provider_failed; 5 within the lease in_progress,in_progress,in_progress,in_progress,in_progress; after the lease provider_failed; provider calls 2, refunds made 0; row claimed
+
+stdout | api/test/qa-s1516.test.ts > QA D (ת38): PII in error text > Hebrew and Latin customer details in exceptions and provider errors; odd phone formats
+QA D1: {"he-crash-unquoted":{"rows":1,"leaks":[]},"he-crash-parenthesised":{"rows":1,"leaks":[]},"latin-crash-unquoted":{"rows":1,"leaks":["Orna","Bodeket","Mitzpe","Bdika","Sderot","HaBodkim"]},"phone-972-no-plus":{"rows":1,"leaks":["7716204","972547716204"]},"phone-00972":{"rows":1,"leaks":["7716204","972547716204"]},"phone-spaced":{"rows":1,"leaks":[]},"supplier-echo-latin":{"rows":2,"leaks":[]},"supplier-echo-in-code":{"rows":1,"leaks":["Orna"]},"invoice-echo-latin":{"rows":1,"leaks":[]}}
+QA D2 samples:
+  latin-crash: [{"level":"error","event":"request.unhandled","at":"2026-11-11T23:24:59.606Z","method":"GET","path":"/api/orders/6838933169","error_id":"E-RVYRN5DJ","error_name":"Error","error_message":"failed for Orna Tal-Bodeket, Sderot HaBodkim 41, Mitzpe Bdika; zip 771122
+  972: [{"level":"error","event":"request.unhandled","at":"2026-11-11T23:24:59.611Z","method":"GET","path":"/api/orders/6975556929","error_id":"E-GXQK4H47","error_name":"Error","error_message":"invalid phone 972547716204 for order"}]
+  00972: [{"level":"error","event":"request.unhandled","at":"2026-11-11T23:24:59.616Z","method":"GET","path":"/api/orders/9129463955","error_id":"E-ZDK69W68","error_name":"Error","error_message":"invalid phone 00972547716204 for order"}]
+  code: [{"level":"error","event":"supplier.submit_failed","at":"2026-11-11T23:24:59.629Z","order_id":"4693524443","supplier":"mock","attempt":1,"code":"invalid_consignee:Orna","may_have_reached":true,"error_id":"E-ZTT2QUNA"}]
+
+stdout | api/test/qa-s1516.test.ts > QA E (ת39): a failed supplier send → degraded after 30 minutes > a timeout at T0, retries failing until T0+25; /healthz at 29:30, 30:30; one row per failed send by code; the customer reads "מתעכבת"
+QA E2: attempts retry,retry,retry,retry,retry,skipped; order supplier_error, shipment failed/maybe, failing_since = T0+0s; /healthz at 29:30 → 200 {"db":"ok","queue":"ok","supplier":"ok"}; at 30:30 → 503 {"db":"ok","queue":"ok","supplier":"degraded"}; customer: supplier_error "מתעכבת"; supplier.submit_failed rows 5 (timeout,http_502,http_502,http_502,http_502), PII none
+
+stdout | api/test/qa-s1516.test.ts > QA E (ת39): a failed supplier send → degraded after 30 minutes > the production config that refuses before calling (cj today): the same 30 minutes; and my edge: a retry that crashes mid-call
+QA E3: production cj (refuses before calling) ×6 → retry,retry,retry,retry,retry,skipped; order supplier_error, shipments [{"supplier":"cj","status":"failed","reach":"none","failing_since":"T0+0s","fulfillment_source":"dropship_cj"}], shipment failed; /healthz at 29:30 → 200 {"db":"ok","queue":"ok","supplier":"ok"}; at 30:30 → 503 {"db":"ok","queue":"ok","supplier":"degraded"} | edge: a retry crashed mid-call (shipment submitting, last_error set true, failing since T0) → /healthz 90 min later 200 {"db":"ok","queue":"ok","supplier":"ok"}
+
+stdout | api/test/qa-s1516.test.ts > QA F: ת37, ת40, ת42 > ת37: malformed and hostile tracking links; the order page answers 200
+QA F1: ing/%E0%A4%A → null | e/tracking/% → null | racking/%ZZ% → null | cking/%C0%AF → null | king/IL1%2F2 → https://parcelsapp.com/he/tracking/IL1%2F2; order API 200, shipment {"status_he":"נשלחה","tracking_number":"IL98765432","tracking_url":null,"shipped_at":"2026-11-11T23:24:59.814Z","delivered_at":null}
+
+stdout | api/test/qa-s1516.test.ts > QA F: ת37, ת40, ת42 > ת42: a second and a third cancellation while one waits: the supplier is asked once, one request row
+QA F2: 3 cancellations → requested,requested,requested; supplier asked 1×; cancel_requested rows 1
+
+stdout | api/test/qa-s1516.test.ts > QA F: ת37, ת40, ת42 > ת40: lease overrun on the invoice: the takeover issued and recorded; the late run's second invoice → claim_lost
+QA F3: takeover → invoiced; late run → retry; invoices at the provider 2; claim_lost rows 1
+
+ ✓ api/test/qa-s1516.test.ts (15 tests) 2923ms
+     ✓ B4 askable supplier whose lookup fails (502, echoing the buyer) or hangs past the deadline: nothing refunded, no text in the log  314ms
+     ✓ the first call times out but completes late at a provider that does not dedupe: 409 inside the lease, after it asked → recorded, never a second refund  912ms
+
+ Test Files  26 passed (26)
+      Tests  281 passed (281)
+   Start at  23:24:52
+   Duration  7.83s (transform 2.24s, setup 0ms, collect 5.38s, tests 11.86s, environment 3ms, prepare 219ms)
+

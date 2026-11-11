@@ -1,0 +1,85 @@
+{
+ "proxy_seen": [
+  {
+   "method": "POST",
+   "path": "/api/admin/orders/6530890566/cancel",
+   "origin": "http://localhost:8797",
+   "sec-fetch-site": "cross-site",
+   "content-type": "text/plain; charset=application/json",
+   "cookie": false
+  },
+  {
+   "method": "POST",
+   "path": "/api/admin/orders/7608140448/refund",
+   "origin": "http://localhost:8797",
+   "sec-fetch-site": "cross-site",
+   "content-type": "text/plain; charset=application/json",
+   "cookie": false
+  },
+  {
+   "method": "POST",
+   "path": "/admin/orders/5011885666/cancel",
+   "origin": "http://localhost:8797",
+   "sec-fetch-site": "cross-site",
+   "content-type": "application/x-www-form-urlencoded",
+   "cookie": false
+  },
+  {
+   "method": "GET",
+   "path": "/admin/orders/5011885666?error=bad_origin",
+   "origin": null,
+   "sec-fetch-site": "cross-site",
+   "content-type": null,
+   "cookie": false
+  },
+  {
+   "method": "POST",
+   "path": "/api/admin/orders/6530890566/cancel",
+   "origin": "http://127.0.0.1:8798",
+   "sec-fetch-site": "same-origin",
+   "content-type": "application/json",
+   "cookie": false
+  }
+ ],
+ "orders": [
+  {
+   "id": "6530890566",
+   "pay": 303
+  },
+  {
+   "id": "7608140448",
+   "pay": 303
+  },
+  {
+   "id": "5011885666",
+   "pay": 303
+  }
+ ],
+ "before": [
+  "sent_to_supplier",
+  "sent_to_supplier",
+  "sent_to_supplier"
+ ],
+ "page": {
+  "cancel": "sent (opaque)",
+  "refund": "sent (opaque)",
+  "done": true
+ },
+ "form_landed": "http://127.0.0.1:8798/admin/orders/:id?error=bad_origin",
+ "after": [
+  "sent_to_supplier",
+  "sent_to_supplier",
+  "sent_to_supplier"
+ ],
+ "refunds": [
+  0,
+  0,
+  0
+ ],
+ "cross_site_rows": 0,
+ "control": {
+  "status": 200,
+  "body": "{\"outcome\":\"requested\",\"stage\":\"after_supplier\",\"message_he\":\"בקשת הביטול נשלחה לספק. ההזמנה תבוטל ותזוכה כשהספק יאשר.\"}"
+ },
+ "control_after": "sent_to_supplier"
+}

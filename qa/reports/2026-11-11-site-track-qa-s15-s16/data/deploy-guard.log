@@ -1,0 +1,56 @@
+--- 0. as committed: wrangler deploy --dry-run --env production
+[custom build] Running: npx tsx scripts/check-config.ts
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock); preview preview (payment mock, invoices mock, supplier mock, alerts mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED)
+[custom build] 
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe directory specified by the "assets.directory" field in your configuration file does not exist:[0m
+exit 1
+127:        "SUPPLIER_PROVIDER": "CJ",
+--- 1. mutated (production SUPPLIER_PROVIDER CJ): wrangler deploy --dry-run --env production
+[custom build] Running: npx tsx scripts/check-config.ts
+[custom build] check-config: 1 provider settings would not run:
+[custom build]   production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)
+[custom build] 
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mk [Error]: Process exited with non-zero status (1)[0m
+      _command: 'npx tsx scripts/check-config.ts',
+      stderr: 'check-config: 1 provider settings would not run:\n' +
+        '  production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)\n',
+exit 1
+--- 2. mutated: wrangler versions upload --dry-run --env production
+[custom build] Running: npx tsx scripts/check-config.ts
+[custom build] check-config: 1 provider settings would not run:
+[custom build]   production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)
+[custom build] 
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mk [Error]: Process exited with non-zero status (1)[0m
+      _command: 'npx tsx scripts/check-config.ts',
+      stderr: 'check-config: 1 provider settings would not run:\n' +
+        '  production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)\n',
+exit 1
+--- 3. mutated, from site/: wrangler deploy -c api/wrangler.jsonc --dry-run --env production
+exit 1
+--- 4. mutated, from / : wrangler deploy -c <abs> --dry-run --env production
+[custom build] Running: npx tsx scripts/check-config.ts
+[custom build] npm warn exec The following package was not found and will be installed: tsx@4.23.15
+[custom build] 
+[custom build] 
+[custom build] node:internal/modules/run_main:123
+[custom build]     triggerUncaughtException(
+[custom build]     ^
+[custom build] Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/scripts/check-config.ts' imported from /
+exit 1
+restored: 0 CJ left
+--- 5. as committed, --var SUPPLIER_PROVIDER:CJ on the command line
+[custom build] Running: npx tsx scripts/check-config.ts
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock); preview preview (payment mock, invoices mock, supplier mock, alerts mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED)
+[custom build] 
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe directory specified by the "assets.directory" field in your configuration file does not exist:[0m
+exit 1
+--- 0. as committed: wrangler deploy --dry-run --env production 
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock); preview preview (payment mock, invoices mock, supplier mock, alerts mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED)
+env.SUPPLIER_PROVIDER ("cj")                                           Environment Variable      
+--dry-run: exiting now.
+exit 0
+--- 5. as committed: wrangler deploy --dry-run --env production --var SUPPLIER_PROVIDER:CJ
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock); preview preview (payment mock, invoices mock, supplier mock, alerts mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED)
+env.SUPPLIER_PROVIDER ("(hidden)")                                     Environment Variable      
+--dry-run: exiting now.
+exit 0

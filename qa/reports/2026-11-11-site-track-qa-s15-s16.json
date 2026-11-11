@@ -1,0 +1,158 @@
+{
+ "id": "2026-11-11-site-track-qa-s15-s16",
+ "by": "qa-agent",
+ "date": "2026-11-11",
+ "scope": "Site track S15 (designer copy, SEO per house, public honesty, the image-rights gate) and S16 (fixes of QA S13–S14: ת34–ת44, notes ה1 and ה7); full regression; HD_PUBLIC=1 readiness",
+ "inputs": [
+  "briefs/site-s15-copy-seo-2026-11-11.md",
+  "briefs/site-s16-qa-fixes-2026-11-11.md",
+  "qa/reports/2026-11-07-site-track/s15/README.md",
+  "qa/reports/2026-11-07-site-track/s16/README.md",
+  "qa/reports/2026-11-11-site-track-qa-s13-s14.md and .json",
+  "docs/proposals/your-room-copy-2026-11-11.md",
+  "docs/research/supplier-image-rights-2026-11-11.md"
+ ],
+ "measured": {
+  "commit": "43cee016",
+  "copy": "isolated, outside the live tree: git archive of site/, data/, status/, docs/, .github/ at 43cee016; assets/manifest.json pinned from 43cee016; the other assets dirs linked read-only; qa/reports frozen as links at the start; node_modules hard-linked from the S13–S14 copy (package-lock.json unchanged since a8104956); supplier-image cache hard-linked, builds run --offline",
+  "copies": {
+   "build-s1516": "flag build (HD_PUBLIC=0): CI-order regression, my server, e2e/a11y, browser checks",
+   "build-s1516-pub": "public build (HD_PUBLIC=1): build, byte-level scan, rights-gate mutations, ה7 deploy mutations, public server, public-scan e2e",
+   "build-s1516-mut": "a third copy for the ת44 build mutations and the Artifact build"
+  },
+  "server": "wrangler dev from the copy (a private name, qasrv1516.js), 127.0.0.1:8799 (flag) and 8796 (public), own D1 (migrate + seed, no db:reset), ENVIRONMENT=preview-local, dummy PAYMENT_WEBHOOK_SECRET as --var on the command line only; the copy's api/.dev.vars holds only a dummy ADMIN_DEV_TOKEN (e2e/ops.ts reads it there)",
+  "live_tree_moved_during_round": ["236cbcdd (R5 render-agent: assets/manifest.json, status/board.md; no site/ or data/ change)"],
+  "machine_load": "render-agent's verify_layers_r5.py (1 core, ~1 GB) first seen at 23:31, during my public build. The e2e and a11y ran 23:12–23:24 before it (perf specs passed); my light vitest and deploy dry runs overlapped the e2e. The ת43/ה1 browser numbers are bytes and luminance, not timing-sensitive.",
+  "network": "none beyond the local build, with one exception caused by my ה7 case 4: wrangler run from / made `npx tsx` download tsx@4.23.15 from the npm registry into ~/.npm/_npx (removed afterwards). This is part of finding ת49.",
+  "evidence": "qa/reports/2026-11-11-site-track-qa-s15-s16/{tools,data,overlays}/"
+ },
+ "bottom_line": {
+  "s15": "pass. The designer's copy is in as written (5 order cases of my own, the set panel and the wheel in both houses at 1280 and 400; captions ≤2 lines, max-width 26rem = 416 px); SEO per house is right in the flag build (own title, meta, canonical, ItemList, sitemap) and the public build folds ?style= into the Nordic canonical; 'הדפס במרקם' only on Morandi (card: 'printed embossed film'); the meta is cut at a sentence end (only Morandi, 126 chars); the public build ships 0 supplier pictures: my byte, containment, data-URI, pixel, path and host scan of all 260 files is clean, and check:rights fails on the picture at its own path and on the source mutation. But check:rights is path-based: the same picture renamed, hotlinked, inlined, or as the story's own copies passes it (ת45).",
+  "s16": "pass. ת34–ת44, ה1 and ה7 closed on my own cases (vitest on the real seed, live server, Chromium). New: ת45–ת49 (none blocks the track behind the flag).",
+  "regression": "green: CI order (prepare, typecheck, lint, format, vitest 265 + 1 skipped before the build, check:config, build with budget and check:rights); vitest after the build 266/266 + my 15/15; e2e 122 passed + 1 skipped (the public-only redirects test) in 11.1 min; a11y 16/16; public build + public-scan 3/3; Artifact build and contract ok.",
+  "hd_public": "not yet"
+ },
+ "s15": {
+  "designer_copy": {
+   "verdict": "pass",
+   "order_page_cases": {
+    "1 two pieces of set B": "הדמיה: הסלון בבית המודרני החם. סט קאמל ופקאן מוצג כולו; הזמנתם ממנו 2 פריטים מתוך 4.",
+    "2 the whole of set B (the taupe bouclé is out of stock: PUT 404)": "הדמיה: הסלון בבית המודרני החם. סט קאמל ופקאן מוצג כולו; הזמנתם ממנו 3 פריטים מתוך 4.",
+    "3 Pecan (B) + Clay throw (C)": "caption: '… הזמנתם ממנו פריט אחד: שמיכת מוסלין כותנה עם פרנזים.'; lead 'בהזמנה, ולא בהדמיה:'; row 'שמיכת מוסלין כותנה עם פרנזים · 150×200 ס\"מ, חימר' / 'בהדמיה, באותו מקום: סט קאמל ופקאן.' (display:block)",
+    "4 only a variant with no layer": "lead 'לפריטים שהזמנתם אין הדמיה בחדר.', no reason line, neutral tile",
+    "5 two houses": "a figure each: warm-modern as case 3; nordic 'הדמיה: הסלון בבית הנורדי, עם מה שהזמנתם, בגוונים שבחרתם.'",
+    "measure": "caption and list max-width 416 px (26rem at 16 px); captions 1–2 lines at 1280 and at 400; figure aria-labelledby its caption; list aria-labelledby its lead"
+   },
+   "set_panel_and_wheel": "warm-modern: hotspot 'כריות ושמיכה: סט קאמל ופקאן. פתיחת 3 סטים'; eyebrow '3 סטים'; heading 'כריות ושמיכה'; options 'סט קאמל ופקאן', 'סט לבן חם ותה חלב', 'סט קפה כהה וחימר'; 'בסט 4 פריטים'; 'המלאי אינו זמין כעת'; hidden ': {name} בלבד'; note 'פריט אחד מהסט אינו זמין כעת, ולכן הסט נכנס לסל בלעדיו.'; button 'הסט לסל, 3 מתוך 4 פריטים · ₪ 277'. Nordic: '3 גרסאות', 'כריות ושמיכה'. No 'וריאצי', '(סט)', '· בחדר', 'מיקום זמני' in either dialog. intro_he and alt_he equal §2 rows 15–16; data/slots unchanged (git diff a8104956..43cee016 empty). 'וריאציות' remains only in the internal test page chunk.",
+   "status_he": "behind the flag only (!__HD_PUBLIC__ on the stage); 0 files of the public dist contain it",
+   "morandi": "description_he (names-he.json 1.2, 207 chars) equals the designer's text in all catalogs"
+  },
+  "seo": {
+   "verdict": "pass",
+   "flag_build": {
+    "/rooms/living-room/": "title 'סלון נורדי: לבן חם, אלון ואור חורף · הבית'; meta 126 chars (§4); canonical /rooms/living-room/; ItemList 39 with url",
+    "/rooms/living-room/?style=warm-modern": "title 'סלון מודרני חם: בוקלה, אגוז ואבן · הבית'; meta 140 chars (§4, the 'בוחרים סט כריות ושמיכה' sentence); canonical /rooms/living-room/?style=warm-modern; crumb 'סלון מודרני חם'; ItemList 8 (its set pieces; 4 with url, all 4 also sold in the Nordic room)",
+    "sitemap": "46 urls including /rooms/living-room/?style=warm-modern"
+   },
+   "public_build": "?style=warm-modern and ?style=japandi serve the Nordic page with the Nordic canonical and title; sitemap 45 urls, none with ?style",
+   "bug_closed": "the warm-modern canonical no longer points to the Nordic page"
+  },
+  "public_honesty": {
+   "textured_print": "pass: in all public catalogs only Morandi says 'הדפס במרקם' (card: 'printed embossed film'); 'canvas print' → 'הדפס'; 'canvas, hand-painted…' → 'קנבס'. Latent: negations read as texture (note ה3)",
+   "meta_cut": "pass: 39 product pages; the meta is a prefix of the description and ends at a boundary on every page; only Morandi is cut (207 → 126, at a sentence end); max 142 chars",
+   "image_rights": {
+    "verdict": "pass for today's public build; the gate's scope is narrower than its claim (ת45)",
+    "check_rights_public": {"public_products": 39, "losing_supplier_picture": 39, "withheld_photos": 39, "withheld_option_pictures": 182, "by_rights": {"unclear": 39}, "shipped_publicly": 0, "dist_files": 260, "dist_supplier_files": 0, "left_without_any_picture": ["wall-decor-macrame-dowel-4hx2b", "wall-decor-macrame-diamond-dowel-small-ej8ww", "magazine-holder-felt-log-basket-c59b4", "magazine-holder-arch-iron-cane-ema28", "magazine-holder-felt-snap-bucket-fg4zg"]},
+    "my_scan_public": "clean over 260 files / 169 rasters (+1 data URI): 0 equal bytes, 0 contained signatures, 0 data-URI matches, 0 pixel matches (dHash 16×16), 0 media/products refs, 0 supplier-host URLs; 0 og/twitter images; 34 JSON-LD images, all /media/rooms renders. Supplier set: 454 files (221 flag-build files + 233 cached originals), 5 card hosts",
+    "my_scan_control_on_flag_build": "finds 221 by bytes and 321 more by pixels only (media/story/products, re-encoded at 480/800); 0 false positives on renders",
+    "mutations": {
+     "R1 the picture at its own path": "check:rights exit 1; my scan: found",
+     "R2 same bytes as media/og/look-1.webp + og:image": "check:rights exit 0; my scan: found (bytes)",
+     "R3 og:image hotlink to ae01.alicdn.com (a card's URL)": "check:rights exit 0; my scan: found (host)",
+     "R4 inlined data: URI": "check:rights exit 0; my scan: found (data URI bytes)",
+     "R5 source: vite alias removed (public build reads the full manifest), rebuilt": "check:rights exit 1 (pages name withheld pictures); my scan: found",
+     "R6 the story's own copies (media/story/products, 321 files, as the flag build ships them)": "check:rights exit 0; my scan: found all 321 by pixels",
+     "restored": "rebuilt clean: check:rights exit 0, my scan clean; vite.config.ts identical to the clean copy"
+    }
+   }
+  }
+ },
+ "s16": {
+  "ת34": {"verdict": "closed", "evidence": "vitest A4 with a person JWT of my own key on all 9 admin actions → 403 cross_site_request, snapshot unchanged; form POST → 303 bad_origin; 14 marker/content-type variants (other port, https, subdomain, trailing slash, same-site, none, same Origin + cross-site fetch, no marker → 403; text/plain;charset=application/json, x=application/json, two types, +json, multipart → 400; ' Application/JSON ; charset=UTF-8' same-origin → 200); service token: cross-site 403, no marker 200 (actor service:…). Live in Chromium: a page on http://localhost:8797 sent no-preflight text/plain cancel and refund with credentials through an Access stand-in that always authenticates (worst case): Worker 403 ×2 (admin.cross_site_refused), the form landed on ?error=bad_origin, orders unchanged, 0 refunds, 0 audit rows; the same fetch from the admin's own origin → 200."},
+  "ת35": {"verdict": "closed", "evidence": "B4a askable supplier, call timed out (supplier created the order): cancel at once → 409 supplier_submit_in_progress; after the window → asked once, holds it → after-supplier request, 0 refunds. B4b lookup 502 echoing the buyer / lookup past its deadline → 503, 0 refunds, 0 PII in 4 log rows. B4c not askable → 409 supplier_check_needed; person JWT records 'found' (cross-site 403, no number 422) → request → confirmed → refunded once (14800/14800). B5 supplier_error of refusals only → 409 for a person (per the brief; S16 question 2). Residual: ת48."},
+  "ת36": {"verdict": "closed", "evidence": "5 at once, same key, real seed: idempotent / not idempotent + findRefund / neither → 1 provider call and 1 refund each (ok + 4×in_progress); mixed amounts → 1 refund (key_reused/in_progress). C7: first call times out and completes late at a non-deduplicating provider → 5 more within the lease all 409, after the lease asked → recorded, 1 call, 1 refund; never completes → after the lease asked (none) → called again, 0 refunds made, row claimed."},
+  "ת37": {"verdict": "closed", "evidence": "5 malformed links (%E0%A4%A, %, %ZZ%, %C0%AF, %2F) never throw (number only or the encoded link); the order API answers 200; live: the order page shows the server's own message"},
+  "ת38": {"verdict": "closed for the brief's case; residual ת46", "evidence": "Hebrew name/address in an exception (unquoted and in brackets), supplier and invoice errors that echo the buyer (Latin) → 0 leaks; live server log over the full e2e + my runs: 15,211 lines, 44 structured rows, 0 customer values. Leaks: Latin-letter details in an exception, phones as 972…/00972…, a provider error's own `code` carrying the name."},
+  "ת39": {"verdict": "closed", "evidence": "fake clock: timeout at T0, retries failing (1, 2, 4, 8 min) → /healthz 200 at 29:30, 503 supplier degraded at 30:30; 5 rows supplier.submit_failed by code (timeout, http_502…), 0 PII; customer 'מתעכבת'. Production config (cj refuses before calling): the same 29:30 ok / 30:30 degraded. Live D1: 29 min ok, 31 min degraded, customer API and page 'מתעכבת' + 'יש עיכוב בהכנת ההזמנה…', no supplier word; canceled → ok. Residual edge: ת47."},
+  "ת40": {"verdict": "closed", "evidence": "lease overrun: takeover invoiced and recorded, late run's second invoice → 1 claim_lost row"},
+  "ת41": {"verdict": "closed", "evidence": "public _redirects 1 byte, 0 lines; all 39 old card-id addresses → 404 on the public server; public-scan 3/3"},
+  "ת42": {"verdict": "closed", "evidence": "3 cancellations while one waits → supplier asked once, 1 cancel_requested row"},
+  "ת43": {"verdict": "closed", "evidence": "Chromium's own AVIF switch (CDP Emulation.setDisabledImageTypes), Pixel 7, no interaction: probe 'no AVIF', Accept without avif, 0 AVIF requests, poster default.2720.webp (670 KB), engine ready at idle in 1.46 s, 1.76 MB received at ready (27 files), 2.28 MB 300 ms later (the other sets' layers); control with AVIF: engine waits for intent (not ready in 8 s), 1.37 MB. Budget rows: 1,786.6 KB (warm-modern) and 1,274.6 KB (Nordic) without AVIF, ≤ 3 MB."},
+  "ת44": {"verdict": "closed", "evidence": "my mutations on a full web build: (a) RoomExperience.tsx imports pages/Checkout statically → no Checkout- chunk, JS 57.6 KB (under 80), check-budget FAIL 'Checkout (in assets/main-…js)', exit 1; (b) a barrel re-exports pages/Product, imported by media.ts → FAIL 'Product (in assets/sequence-…js)', exit 1; restored → ok, 54.4 KB, exit 0"},
+  "ה1": {"verdict": "closed", "evidence": "inline WebP placeholder 439 chars; poster held 4 s: stage mean 182.7 (1280) / 188.2 (400) vs ~19 for the stage colour; slow 1.6 Mbps: never dark (mean ~190 from 1.1 s), poster complete at 3.6 s; a blurred copy of the composition (overlay)"},
+  "ה7": {"verdict": "closed, with residual ת49", "evidence": "mutation production SUPPLIER_PROVIDER 'CJ': direct `wrangler deploy --dry-run --env production` → stopped by the custom build (exit 1); `wrangler versions upload --dry-run` → stopped; from site/ with -c → fails closed (no script); from / → fails closed, after npx downloaded tsx; as committed → passes. The exclusions file points to site/tools/test/lines.test.ts and site/api/test/s14.test.ts, both exist."}
+ },
+ "regression": {
+  "ci_order": "prepare:data ok · typecheck ok · lint ok · format ok · vitest 265 passed + 1 skipped (tools/test/s16.test.ts 'the last real build' runs only after a build) · check:config ok · build ok (budget all ok; check:rights behind the flag ok)",
+  "vitest_after_build": "281/281 = 266/266 + my qa-s1516 15/15",
+  "e2e": "122 passed, 1 skipped (public-scan's public-only redirects test), 11.1 min",
+  "a11y": "16/16, 40.5 s",
+  "budget_flag": {"room_js_kb": 54.4, "room_css_kb": 8.9, "first_load_nordic_mobile_kb": 711.8, "nordic_no_avif_kb": 1274.6, "warm_modern_kb": 1025.0, "warm_modern_no_avif_kb": 1786.6},
+  "budget_public": {"room_js_kb": 49.7, "first_load_kb": 690.8, "no_avif_kb": 1253.6},
+  "public_build": "ok (prerendered 47 pages + 0 house pages); public-scan 3/3",
+  "artifact": "build:artifact + finalize + check-artifact ok (194 files, 6.71 MB)",
+  "not_run": "Lighthouse (CI step); real Safari/iPhone (6.4)"
+ },
+ "findings": [
+  {
+   "id": "ת45",
+   "severity": "medium: before the story or any new image path goes public; recommended before HD_PUBLIC=1",
+   "owner": "frontend-dev",
+   "what": "check:rights recognises a supplier picture only by its path (a file under media/products/, or text naming products/<id>/(photo|opt-…).<w>.webp). The same picture under another name (R2, og:image), a hotlink to the supplier's CDN (R3, ae01.alicdn.com), an inlined data: URI (R4), or the story's own re-encoded copies (R6: 321 files under media/story/products, which the flag build ships today) all pass the gate with exit 0. My scan finds every one. Today's public build ships none, because the story is removed from it.",
+   "fix": "Make the gate content-based: (1) the pipeline writes the hash of every supplier-derived file (shop and story, every width) and of every cached original; any dist file with one of those hashes fails; (2) a perceptual check of every dist raster and data: URI against the supplier set (dHash 16×16, Hamming ≤ 24 found all 321 story copies with 0 false positives on 169 renders); (3) fail on any URL on a card-picture host (ae01.alicdn.com, cf/oss-cf.cjdropshipping.com, file.zendrop.com, …); (4) make-story applies the same rights rule before the story leaves the flag."
+  },
+  {
+   "id": "ת46",
+   "severity": "low-medium, before real providers (with 3.1 and 2.1)",
+   "owner": "frontend-dev",
+   "what": "The ת38 scrub masks Hebrew runs and quoted text only. Logged as is: a customer's details typed in Latin letters inside an exception's message (request.unhandled: 'Orna', 'Bodeket', 'Sderot HaBodkim', 'Mitzpe Bdika'), phones written 972… or 00972… without '+', and a provider error's own `code` field ('invalid_consignee:Orna' passes errorCode's pattern). The checkout accepts Latin names.",
+   "fix": "When the order is known, scrub its own customer values (exact match, case-insensitive, both scripts, digits-only phone forms) from any message; otherwise log the error's name and code only in production; PHONE_RE also for 972/00972 without '+'; errorCode takes `code` only from our own error classes or system codes (e.g. ^E[A-Z]+$), never free text."
+  },
+  {
+   "id": "ת47",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "/healthz misses a retry that dies mid-call: the shipment stays 'submitting' with last_error from an earlier failure, which is neither 'stalled' (needs last_error IS NULL) nor 'failing' (needs queued or failed). 90 minutes later: 200 ok, the order still paid and never sent.",
+   "fix": "Count a 'submitting' shipment older than the lease (10 min) as failing (or drop `last_error IS NULL` from the stall query)."
+  },
+  {
+   "id": "ת48",
+   "severity": "medium, before a real supplier adapter (3.1)",
+   "owner": "frontend-dev; CJ documentation (owner)",
+   "what": "A retry after a submit that may have reached the supplier (reach 'maybe') submits again without asking: in B4d the supplier held 2 orders for one of ours (timeout, 503, success). findOrder now exists in the interface, but only the cancellation uses it. The runbook's open question (does CJ reject a duplicate by our order number) decides the risk.",
+   "fix": "In processSupplierJob, when reach is 'maybe': ask first (findOrder: found → record submitted; none → submit); a supplier that cannot be asked is submitted again only if its adapter documents deduplication by our order number, else the order waits for a person, as the cancellation does."
+  },
+  {
+   "id": "ת49",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "(a) The deploy guard's `npx tsx scripts/check-config.ts`, run from a directory without site/node_modules, downloads tsx@latest from the npm registry and executes it before it fails closed (observed: tsx@4.23.15 into ~/.npm/_npx). (b) The guard reads the file only: `wrangler deploy --env production --var SUPPLIER_PROVIDER:CJ` passes it and deploys the override (dry run); the run-time closed list then refuses it loudly (ת17).",
+   "fix": "`npx --no-install tsx` (or `node ../node_modules/tsx/dist/cli.mjs`) with `build.cwd` pinned to the config's folder; in the runbook: a provider is never set with --var or a secret."
+  }
+ ],
+ "notes": [
+  {"id": "ה1", "what": "S16 README's 'why 30' reasoning: the 6th delivery is skipped (attempt 5 already sets supplier_error), so the last send is ~15 min after the first failure and the alarm comes ~15 min after it, not 5. Behaviour is fine; the text, or using the 6th delivery, is the manager's call."},
+  {"id": "ה2", "what": "In the CI's order vitest runs before the build, so tools/test/s16.test.ts 'the last real build' is skipped on a clean checkout (265 + 1 skipped); check-budget in the build covers the same check. After the build: 266/266."},
+  {"id": "ה3", "what": "'הדפס במרקם' reads a negation as texture: 'non-textured print', 'smooth print (no texture)' → 'הדפס במרקם'. Today only Morandi matches in all of data/products, truthfully. A negation guard is cheap."},
+  {"id": "ה4", "what": "The meta cut keeps whole sentences even when that leaves very little (a 12-char first sentence before a long one → 12 chars). No page today: only Morandi is cut."},
+  {"id": "ה5", "what": "Public pages of the 3 magazine holders have no picture but still say 'בתמונה: עיתונים במחזיק. לא כלול במוצר.' (S15 question 2b), and two say 'חומרים: …, לא צוין'. Decide before HD_PUBLIC=1 (frontend-dev recommends hiding the filler line)."},
+  {"id": "ה6", "what": "The public JS carries the warm-modern head copy and the style list (no code path, no supplier, no status_he)."},
+  {"id": "ה7", "what": "ת43 was measured with Chromium's own AVIF switch, not a real Safari; the device check stays in 6.4. Lighthouse was not run."}
+ ],
+ "hd_public_readiness": {
+  "verdict": "not yet",
+  "ours": ["1.1 no frame 'approved for the site'", "1.4 the public room is still temporary images", "ת45 before the story (or any new image path) goes public; recommended before the flag", "ה5 the magazine holders' filler line (designer decision)"],
+  "owner": ["1.5 supplier image rights: 39/39 unclear; 5 public pages without any picture (IMG1, own images)", "2.1–2.4", "3.1 documentation and keys (ת46, ת48 come with it)", "3.4", "4.1, 4.2, 4.4", "5.1–5.3, 5.5 (ORIGIN after the domain), 5.6", "6.5", "Access for /admin with SameSite=Lax, the alert channel, the uptime clock"],
+  "closed_this_round": ["ת34–ת44", "ה1", "ה7 (residual ת49)", "S15: the warm-modern canonical bug"]
+ }
+}
