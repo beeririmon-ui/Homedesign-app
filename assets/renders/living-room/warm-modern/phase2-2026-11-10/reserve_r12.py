@@ -262,7 +262,7 @@ def draw(pass_, below):
         ang = np.arcsin(np.clip(2 * tt - 1, -1, 1))
         s_ = row_param(pot)
         ribs = np.where(s_ < 0.62, 0.92 + 0.08 * np.cos(44 * ang), 1.0)
-        pc = np.array([0.72, 0.69, 0.64], np.float32)
+        pc = np.array([0.60, 0.575, 0.53], np.float32)
         out = paint(out, pot, pc[None, None, :] * (ribs * shade(below, pot, 0.7) * lr(pot, 1.08, 0.80))[..., None])
         out = paint(out, p["soil"], np.array([0.30, 0.25, 0.20], np.float32))
         sil["planter"] = np.maximum.reduce([pot, p["trunk"], crown])
