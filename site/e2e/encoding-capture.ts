@@ -16,7 +16,8 @@ export type Box = [number, number, number, number];
 
 // ---------- one drawing of the stage ----------
 export type Answer = (route: Route, m: RegExpExecArray) => Promise<void>;
-export async function capture(browser: Browser, url: string, v: View, answers: [RegExp, Answer][], slot?: string) {
+/** `before`: runs once the engine is ready, before the zoom and the reading (S14: a set chosen on the engine) */
+export async function capture(browser: Browser, url: string, v: View, answers: [RegExp, Answer][], slot?: string, before?: (page: Page) => Promise<void>) {
   const ctx = await browser.newContext({
     baseURL: BASE_URL,
     locale: 'he-IL',
@@ -39,6 +40,10 @@ export async function capture(browser: Browser, url: string, v: View, answers: [
   const sb = (await page.locator('section.stage').boundingBox())!;
   await page.mouse.click(sb.x + 20, sb.y + sb.height / 2);
   await expect.poll(() => page.evaluate(() => window.__hdEngine?.ready ?? false), { timeout: 30_000 }).toBe(true);
+  if (before) {
+    await before(page);
+    await settle(page);
+  }
   if (v.zoom && slot) {
     // a press can land before the stage takes it (its marks still placing): pressed again until the wheel is open
     const dialog = page.getByRole('dialog');
@@ -71,6 +76,49 @@ export async function capture(browser: Browser, url: string, v: View, answers: [
   const { data, info } = await sharp(shot).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   return { data, w: info.width, h: info.height, eng };
 }
+/**
+ * S14, QA ת29/ת30 (§4): the poster as the page rests on it: a fresh context, the poster's requests answered as the caller
+ * says, nothing that signals intent (no pointer over the stage, no focus, no touch), so the engine never starts; the
+ * controls hidden; the <img class="poster"> read as the browser draws it. `file` is the file the browser chose
+ * (its width), `engine` whether an engine ran at all (it must not).
+ */
+export async function capturePoster(browser: Browser, url: string, v: View, answers: [RegExp, Answer][]) {
+  const ctx = await browser.newContext({
+    baseURL: BASE_URL,
+    locale: 'he-IL',
+    viewport: { width: v.w, height: v.h },
+    deviceScaleFactor: v.dpr,
+    isMobile: v.dpr > 1,
+    hasTouch: v.dpr > 1,
+    reducedMotion: 'reduce',
+  });
+  const page = await ctx.newPage();
+  for (const [re, answer] of answers)
+    await page.route(re, async (route) => {
+      const m = re.exec(new URL(route.request().url()).pathname);
+      if (m) await answer(route, m);
+      else await route.continue();
+    });
+  await page.goto(url);
+  const img = page.locator('img.poster');
+  await expect(img).toBeVisible({ timeout: 20_000 });
+  await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0 && !!i.currentSrc), { timeout: 30_000 }).toBe(true);
+  await hide(page, '.stage-ui, .hotspots, .stage-temp-note, .outlines, .stage-back, .stage-vignette, canvas.room-canvas');
+  let shot = await img.screenshot();
+  for (let i = 0; i < 30; i++) {
+    const next = await img.screenshot();
+    if (next.equals(shot)) break;
+    shot = next;
+  }
+  const info0 = await page.evaluate(() => ({
+    src: document.querySelector<HTMLImageElement>('img.poster')!.currentSrc,
+    engine: !!window.__hdEngine,
+  }));
+  await ctx.close();
+  const { data, info } = await sharp(shot).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  return { data, w: info.width, h: info.height, file: new URL(info0.src).pathname.split('/').pop()!, engine: info0.engine };
+}
+
 /** the page's CSP allows no style element: the controls are hidden through their style attribute */
 const hide = (page: Page, sel: string) =>
   page.evaluate((s) => document.querySelectorAll<HTMLElement>(s).forEach((el) => (el.style.visibility = 'hidden')), sel);

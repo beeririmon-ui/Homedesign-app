@@ -28,6 +28,8 @@ export type House = {
   info?: (position: number) => ComponentChildren;
   /** S12, ת21: the variants the layer of a slot's option draws (a set: every piece of it), as rendered; [] for none */
   drawn: (slotId: string, position: number) => string[];
+  /** S14, ת28: how "החדר שלך" names an option whose layer draws more than one piece (a set: "סט B"); absent: none does */
+  drawnLabel?: (slotId: string, position: number) => string | null;
 };
 
 export const NORDIC = 'nordic';

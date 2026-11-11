@@ -117,4 +117,6 @@ export const house: House = {
   },
   // a set's layer draws every piece of it, each in the SKU the render shows
   drawn: (slotId, position) => (slotId === h.room.slots[0]?.id ? (h.sets[position - 1]?.items ?? []).flatMap((i) => (i.variant_id ? [i.variant_id] : [])) : []),
+  // S14, ת28: the set by its short name ("סט B"), the part of its label before the colon
+  drawnLabel: (slotId, position) => (slotId === h.room.slots[0]?.id ? (h.sets[position - 1]?.label_he.split(':')[0]?.trim() ?? null) : null),
 };

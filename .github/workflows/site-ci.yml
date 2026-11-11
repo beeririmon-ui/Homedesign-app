@@ -31,6 +31,10 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - run: npm ci
+      # S14, QA ת32: the generated data (.generated: the catalogs, the scene, the house, the supplier images' index) is
+      # what the typecheck reads (@generated imports); on a clean checkout it does not exist until this step makes it
+      - name: Generated data (catalogs, scene, house)
+        run: npm run prepare:data
       - name: Typecheck
         run: npm run typecheck
       - name: Lint (ESLint + jsx-a11y)

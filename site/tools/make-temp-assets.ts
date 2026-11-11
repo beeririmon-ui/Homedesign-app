@@ -137,6 +137,13 @@ async function encodeLayer(img: sharp.Sharp, rel: string): Promise<void> {
  * fallback q95. Other pictures (the hall) keep the lighter setting.
  */
 const TOOL_LAYER = { avif: 70, webp: 95 };
+/**
+ * S14, QA S11–S12 ת30 (§4): the base is also the poster the stage rests on until the engine starts (a phone: until the
+ * first touch), drawn almost 1:1 on a desktop (shell.1920 into 1920×1020, shell.1280 at 1280@1). There q70 missed the
+ * threshold (8/11 · 0.6–0.7%); q80 meets it in all four views (6/8/15 · 0.08% · ΔE 2.74–2.79), +24 KB at 1280 and
+ * +61 KB at 1920. The phones' 2752 met it at q70 already.
+ */
+const POSTER_LAYER = { avif: 80, webp: 95 };
 async function encode(img: sharp.Sharp, rel: string, q: { avif: number; webp: number } = { avif: 52, webp: 80 }): Promise<void> {
   for (const fmt of FORMATS) {
     const out = join(MEDIA_OUT, `${rel}.${fmt}`);
@@ -314,10 +321,10 @@ async function main() {
   const bases: Record<string, Raw> = {};
   for (const key of ['lo', 'hi'] as const) {
     bases[key] = await loadRaw(source, WIDTHS[key]);
-    await encode(sharp(source).resize({ width: WIDTHS[key] }), `${roomDir}/base/shell.${WIDTHS[key]}`, TOOL_LAYER);
+    await encode(sharp(source).resize({ width: WIDTHS[key] }), `${roomDir}/base/shell.${WIDTHS[key]}`, key === 'lo' ? POSTER_LAYER : TOOL_LAYER);
   }
   // 1280 for small phones and the poster image
-  await encode(sharp(source).resize({ width: 1280 }), `${roomDir}/base/shell.1280`, TOOL_LAYER);
+  await encode(sharp(source).resize({ width: 1280 }), `${roomDir}/base/shell.1280`, POSTER_LAYER);
   scene.base = [{ id: 'shell', z: 0, blend: 'normal', src: `${roomDir}/base/shell`, widths: [1280, WIDTHS.lo, WIDTHS.hi], temporary: true }];
 
   for (const slot of room!.slots) {

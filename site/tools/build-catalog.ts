@@ -64,10 +64,12 @@ import {
   type PublicOptions,
 } from '@hd/shared';
 import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
-import { materialsHe, colorNameHe, hasHebrew } from './lib/hebrew';
+import { materialsHe, colorNameHe } from './lib/hebrew';
 import { loadLeadRecords } from './lib/leads';
 import { cachedFreight } from './lib/freight-cache';
 import { latinLabels, lineName, lineOf, loadLineData, optionLabel, saleOf, setComposition } from './lib/lines';
+import { latinPublicText, publicDescription } from './lib/public-text';
+import { cjProductOf, singleSku, supplierSkuIssues } from './lib/supplier-skus';
 import { publicId, publicVariantId, slugIndex } from '@hd/shared/product-url';
 
 const STRICT = process.argv.includes('--strict-prices');
@@ -288,7 +290,12 @@ const daysOf = (d: string | null | undefined): [number, number] | null => {
   const m = /^(\d+)(?:-(\d+))?$/.exec(d ?? '');
   return m ? [Number(m[1]), Number(m[2] ?? m[1])] : null;
 };
-type OptionsBuild = { public: PublicOptions; full: FullVariant[] } | null;
+/**
+ * `public` is null when the options collapse to one sold row (the others excluded, or set parts): the product is sold as
+ * `:default`, and `full` still holds that row, so the supplier is asked for that option's SKU (QA ת27), never the card's
+ * product-level SKU.
+ */
+type OptionsBuild = { public: PublicOptions | null; full: FullVariant[] } | null;
 
 /** The product's resolved shipping, in the two numbers every scenario needs: one piece's freight and the sale's. */
 type Freight = { unit_cents: number; sale_cents: number; quoted_for_sale: boolean };
@@ -495,7 +502,7 @@ function buildOptions(
     });
   }
   if (new Set(full.map((v) => v.id)).size !== full.length) throw new Error(`${card.id}: two options share a variant id`);
-  if (rows.length < 2) return null;
+  if (rows.length < 2) return { public: null, full };
   // the room's option first in the variants (the default everywhere); the public list keeps the supplier's order
   full.sort((a, b) => Number(b.in_room) - Number(a.in_room));
   const axes = o.axes.map((a) => ({ a, values: a.values.filter((v) => rows.some((r) => r.s.values[a.id] === v.id)) }));
@@ -575,13 +582,8 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const name_he = named ?? (base ? lineName(base, dfltLabel) : `${slot.name_he}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`);
   const d = card.dimensions_cm ?? {};
   const dims = [d.width, d.depth, d.height].filter((x): x is number => typeof x === 'number');
-  const description = [
-    hasHebrew(card.texture) ? `${card.texture}.` : null,
-    materials.length ? `חומרים: ${materials.join(', ')}.` : null,
-    dims.length ? `מידות: ${dims.join(' × ')} ס"מ (לפי הספק, לא אומת).` : null,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  // S14, QA ת33: the card's data only (its texture when that is a public sentence, materials, dimensions), never its notes
+  const description = publicDescription(card, materials, dims, '');
   const retailIls = retail / 100;
   const compare = typeof econ?.compare_at_ils === 'number' && econ.compare_at_ils > retailIls ? ilsToAgorot(econ.compare_at_ils) : null;
   // P1: a set (sell_qty > 1) is also sold as one piece. Unit price from the studio, else an estimate (marked as such),
@@ -637,7 +639,8 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     line_name_he: lineOf(lineData, card, (dfltSku?.values ?? {}) as Record<string, string>, name_he).line,
     set_part: false,
     sale_excluded: null,
-    supplier_sku: card.supplier.sku ?? null,
+    // S14, QA ת27: the variant's SKU, never the supplier's product-level code (a CJ product of one variant: that variant's)
+    supplier_sku: card.options ? (card.supplier.sku ?? null) : singleSku(card, cjProductOf(REPO, card)).sku,
     cost_usd_cents: cost,
     shipping_usd_cents: freight.sale_cents,
     unit_shipping_usd_cents: freight.unit_cents,
@@ -655,7 +658,15 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     in_room: true,
     supplier_image_url: null,
   };
-  const variantsFull = opts ? opts.full : [defaultVariant];
+  // QA ת27: options that collapse to one sold row are sold as `:default`, carrying that row's supplier SKU (and a set's
+  // parts), never the card's product-level SKU: the supplier must be told which option to send
+  const collapsed = opts && !opts.public ? (opts.full.find((v) => !v.sale_excluded && !v.set_part) ?? null) : null;
+  if (collapsed) {
+    defaultVariant.supplier_sku = collapsed.supplier_sku;
+    defaultVariant.set_skus = collapsed.set_skus ?? null;
+    defaultVariant.set_incomplete = collapsed.set_incomplete ?? null;
+  }
+  const variantsFull = opts?.public ? opts.full : [defaultVariant];
   // NL2 (2026-11-03): the no-loss price more than twice the highest Israeli comparable, or express only: not sold,
   // shown "המלאי אינו זמין כעת" with the waiting list (PRE1); the stored price stays. A slot on hold (AU2, R6Q2) too.
   const highest = highestComparableIls(econ);
@@ -689,7 +700,7 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     variants: variantsFull.map((v) => ({ id: v.id, label_he: v.label_he })),
     pack,
     safety,
-    options: opts ? opts.public : null,
+    options: opts?.public ?? null,
     availability,
     variants_full: variantsFull,
     name_supplier: card.name,
@@ -1039,6 +1050,37 @@ console.log(
 if (latin.length && existsSync(LABELS_FILE)) {
   console.error(
     `build-catalog: ${latin.length} public labels carry Latin letters (ת12):\n${latin.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,
+  );
+  process.exit(1);
+}
+
+// S14, QA ת33: no public name, description or product note in Latin (the studio's notes never reach the page); a unit
+// after a number and a standard's mark (CE) are the exceptions
+const latinText = latinPublicText(publicCatalog.products);
+// S14, QA ת27: every variant sold from a card with supplier options carries one of the card's option SKUs (the very
+// option sold), never the card's product-level SKU
+const cardById = new Map(cards.map((c) => [c.card.id, c.card]));
+const skuIssues = supplierSkuIssues(fullCatalog.products, (p) => {
+  const card = cardById.get(p.card_id ?? p.id);
+  return card && { ...card, product_level_sku: cjProductOf(REPO, card)?.productSku ?? null };
+});
+const resolvedSkus = fullCatalog.products.filter((p) => {
+  const card = cardById.get(p.card_id ?? p.id);
+  return card && !card.options && singleSku(card, cjProductOf(REPO, card)).resolved;
+});
+console.log(
+  `  public text (ת33): Latin in ${latinText.length} names, descriptions or notes · supplier SKUs (ת27): ${skuIssues.length} issues; ` +
+    `a single variant's SKU in place of the card's product-level code: ${resolvedSkus.map((p) => `${p.card_id} → ${p.variants_full?.[0]?.supplier_sku}`).join(', ') || 'none'}`,
+);
+if (latinText.length) {
+  console.error(
+    `build-catalog: ${latinText.length} public texts carry Latin letters (ת33):\n${latinText.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,
+  );
+  process.exit(1);
+}
+if (skuIssues.length) {
+  console.error(
+    `build-catalog: ${skuIssues.length} sold variants would ask the supplier for the wrong SKU (ת27):\n${skuIssues.map((x) => `  ${x.variant} (${x.card}): ${x.supplier_sku ?? 'none'}, ${x.why}`).join('\n')}`,
   );
   process.exit(1);
 }

@@ -7,7 +7,8 @@
  *                                          the sets on the wheel with the SKU of every piece, and the shop's records
  *                                          of those products (public catalog fields only: no card id, no supplier)
  *   web/public/media/house/<room>/<style>/  the layers, AVIF + WebP at the room's widths (the layers WebP only:
- *                                          lossless alpha), a thumbnail per set for the wheel, and a flat depth map
+ *                                          lossless alpha), a thumbnail per set for the wheel, a flat depth map, and the
+ *                                          poster: the approved composite of the default set (S14, QA ת29/ת30)
  *
  * The layers come from the render folder (`pilot`): `layers_dir`/ when render-agent's export is there (base.png,
  * cushions-set-X.png, optional cushions-set-X-shadow.png, manifest.json), else the approved display files themselves:
@@ -178,8 +179,30 @@ const BASE_AVIF_Q = 70;
 const BASE_WEBP_Q = 95;
 const WIDTHS = { lo: 1920, hi: W };
 const THUMB = 360;
+/**
+ * S14, QA ת29/ת30: the poster the stage rests on until the engine starts (a phone: until the first touch) is the house's
+ * approved default composition (composite-set-B), not the base without the set. It is held to the encoding threshold
+ * where the browser draws it (e2e/encoding.spec.ts, "the poster at rest"):
+ *  - 1280 at AVIF q90: 1280@1 and 400@1 (QA §4: 6/7/13 · 0.03% · ΔE 3.27).
+ *  - 2720 at AVIF q85: a phone at DPR 3 (5/8/23 · 0.04% · ΔE 3.31), and every desktop wider than 1280 px. No lossy 1920
+ *    met it at 1920@1, drawn 1:1 (q90: ΔE 3.69); the 2720 drawn down to 1920 does (measured: s14/poster-candidates.json).
+ *  - The WebP fallback (browsers without AVIF): POSTER_WEBP, measured the same way.
+ */
+const POSTER_WIDTHS = [1280, W];
+const POSTER_AVIF_Q: Record<number, number> = { 1280: 90, [W]: 85 };
+const POSTER_WEBP: Record<number, sharp.WebpOptions> = {
+  1280: { nearLossless: true, quality: 60, effort: 5 },
+  [W]: { nearLossless: true, quality: 60, effort: 5 },
+};
+const posterSource = join(pilot, m.approved.composites[def]!);
 const stamp = createHash('sha256')
-  .update(JSON.stringify({ m, tool: readFileSync(new URL(import.meta.url), 'utf8'), sources: sources.map((f) => [f, statSync(f).size, statSync(f).mtimeMs]) }))
+  .update(
+    JSON.stringify({
+      m,
+      tool: readFileSync(new URL(import.meta.url), 'utf8'),
+      sources: [...sources, posterSource].map((f) => [f, statSync(f).size, statSync(f).mtimeMs]),
+    }),
+  )
   .digest('hex')
   .slice(0, 16);
 const STAMP = join(OUT, 'stamp.json');
@@ -206,6 +229,19 @@ if (cached?.stamp !== stamp) {
       .clone()
       .webp({ quality: BASE_WEBP_Q, effort: 5 })
       .toFile(out(`base/shell.${w}.webp`));
+  }
+  // the poster: the default set's approved composite (ת29), at the widths and settings that meet the threshold (ת30)
+  const poster = sharp(posterSource).removeAlpha();
+  for (const w of POSTER_WIDTHS) {
+    const r = poster.clone().resize({ width: w });
+    await r
+      .clone()
+      .avif({ quality: POSTER_AVIF_Q[w]!, effort: 4 })
+      .toFile(out(`poster/default.${w}.avif`));
+    await r
+      .clone()
+      .webp(POSTER_WEBP[w]!)
+      .toFile(out(`poster/default.${w}.webp`));
   }
   const [x0, x1, y0, y1] = rect;
   const cut = { left: x0, top: y0, width: x1 - x0, height: y1 - y0 };
@@ -275,6 +311,8 @@ const scene = {
   native: W,
   formats: ['avif', 'webp'],
   base: [{ id: 'shell', z: 0, blend: 'normal', src: `${REL}/base/shell`, widths: BASE_WIDTHS, temporary: false }],
+  // S14, QA ת29: the stage's poster is the default composition (the base has no set on the sofa)
+  poster: { src: `${REL}/poster/default`, widths: POSTER_WIDTHS },
   slots: {
     [m.slot.id]: {
       z: 55,
@@ -321,9 +359,12 @@ writeFileSync(outFile, JSON.stringify(house));
 const kb = (f: string) => (existsSync(f) ? statSync(f).size / 1024 : 0);
 const firstKb =
   kb(join(OUT, 'base/shell.1920.avif')) + kb(join(OUT, `slots/${m.slot.id}/1.product.1920.webp`)) + kb(join(OUT, `slots/${m.slot.id}/1.shadow.1920.webp`));
+const posterKb = POSTER_WIDTHS.map(
+  (w) => `${w}: ${kb(join(OUT, `poster/default.${w}.avif`)).toFixed(0)}/${kb(join(OUT, `poster/default.${w}.webp`)).toFixed(0)} KB`,
+).join(', ');
 console.log(
   `house ${m.room}/${m.style}: ${layered ? `layers from ${m.layers_dir}/` : `the approved composites (no ${m.layers_dir}/ yet), the default set ${def} as the base`}; ` +
     `the swap rectangle ${rect.join(',')} px (outside it the sets differ by ≤ ${outsideMax} levels); ` +
     `${sets.length} sets, ${sets.reduce((n, s) => n + s.items.length, 0)} pieces (${sets.flatMap((s) => s.items).filter((x) => !x.product_id).length} not sold); ` +
-    `the default composition ≈ ${firstKb.toFixed(0)} KB at 1920; ${(JSON.stringify(house).length / 1024).toFixed(1)} KB of data → ${outFile}`,
+    `the default composition ≈ ${firstKb.toFixed(0)} KB at 1920; the poster (AVIF/WebP) ${posterKb}; ${(JSON.stringify(house).length / 1024).toFixed(1)} KB of data → ${outFile}`,
 );

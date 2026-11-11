@@ -27,7 +27,7 @@ npm run dev        # בונה קטלוג ומדיה זמנית, מאפס D1 מק
 | `npm run build`                   | קטלוג ← מדיה זמנית ← תמונות ספק ← build של האתר ו-prerender ← dry-run של ה-Worker ← בדיקת תקציב (`budget`)                                        |
 | `npm run assets:supplier`         | תמונת הספק הראשונה של כל מוצר מוצג (FR-I): הורדה למטמון, WebP ברוחב 800 ב-`web/public/media/products/`                                            |
 | `npm run preview`                 | הבנייה המקומית "כמו בפרודקשן": Worker אחד מגיש את `web/dist` ואת ה-API ‏(http://127.0.0.1:8788)                                                   |
-| `npm run typecheck`               | ‏tsc בכל ה-workspaces ובדיקה שהסכמה שנוצרה מעודכנת                                                                                                |
+| `npm run typecheck`               | ‏tsc בכל ה-workspaces ובדיקה שהסכמה שנוצרה מעודכנת. קורא את `.generated`: בעותק נקי, קודם `npm run prepare:data` (S14, ת32)                       |
 | `npm run lint`                    | ESLint עם typescript-eslint ו-jsx-a11y (strict)                                                                                                   |
 | `npm run format` / `format:check` | Prettier                                                                                                                                          |
 | `npm test`                        | Vitest: תמחור, סכמות, routes של ה-API מול SQLite, webhook חתום, תור ו-Access JWT                                                                  |

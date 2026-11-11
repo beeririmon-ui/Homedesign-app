@@ -10,6 +10,8 @@ import sharp from 'sharp';
 import { mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { VIEWS, failures, measure } from '../tools/lib/encoding';
+import { capturePoster, fulfil, type Answer } from './encoding-capture';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 /** S12: the evidence screens, when HD_SHOTS_DIR is set */
@@ -127,6 +129,58 @@ test.describe("a house's own address (S10 question 7, S11)", () => {
     // a style without a house is the Nordic page, as before
     expect(await (await request.get('/rooms/living-room/?style=no-such-house')).text()).toContain('class="poster"');
   });
+});
+
+/**
+ * S14, QA S11–S12 ת29: a direct entry to the warm-modern house rests on its default composition (set B on the sofa) from
+ * the poster's first paint, before any touch, never on the base without the set. Measured on what the browser draws at
+ * rest (no engine): the poster against the approved composite-set-B, and against the empty base it used to be.
+ */
+test.describe('ת29 (S14): a direct entry rests on set B from the first paint, before any touch', () => {
+  const wm = JSON.parse(readFileSync(resolve(SITE, 'tools/house/living-room.warm-modern.json'), 'utf8')) as {
+    pilot: string;
+    layers_dir: string;
+    approved: { composites: Record<string, string> };
+  };
+  const REPO = resolve(SITE, '..');
+  const composite = join(REPO, wm.pilot, wm.approved.composites.B!);
+  const emptyBase = join(REPO, wm.pilot, wm.layers_dir, 'base.png');
+  const POSTER = /\/media\/house\/living-room\/warm-modern\/M0\/poster\/default\.(\d+)\.(avif|webp)$/;
+  const as =
+    (src: string): Answer =>
+    async (r, m) =>
+      fulfil(
+        r,
+        await sharp(src)
+          .removeAlpha()
+          .resize({ width: Number(m[1]) })
+          .png({ compressionLevel: 1 })
+          .toBuffer(),
+        'image/png',
+      );
+  for (const v of VIEWS.filter((x) => x.id === '400@1' || x.id === '1280@1'))
+    test(`${v.id}: the poster at rest is the approved set B composition, not the empty sofa`, async ({ browser }) => {
+      test.setTimeout(120_000);
+      const built = await capturePoster(browser, HOUSE, v, []);
+      expect(built.engine, 'at rest, before any touch: no engine').toBe(false);
+      expect(built.file).toMatch(/^default\.\d+\.avif$/);
+      const setB = await capturePoster(browser, HOUSE, v, [[POSTER, as(composite)]]);
+      const empty = await capturePoster(browser, HOUSE, v, [[POSTER, as(emptyBase)]]);
+      const toB = measure(setB.data, built.data, false);
+      const toEmpty = measure(empty.data, built.data, false);
+      console.log(
+        `ת29 ${v.id}: poster vs set B ${toB.p99}/${toB.p999} · ${(toB.over8 * 100).toFixed(2)}%; vs the empty base ${(toEmpty.over8 * 100).toFixed(2)}% above 8`,
+      );
+      expect(failures(toB), 'the poster is set B (the encoding threshold)').toEqual([]);
+      // the cushions and the throw are there: against the empty sofa, a large share of the frame differs
+      expect(toEmpty.over8).toBeGreaterThan(0.02);
+      if (SHOTS) {
+        mkdirSync(SHOTS, { recursive: true });
+        await sharp(built.data, { raw: { width: built.w, height: built.h, channels: 4 } })
+          .png()
+          .toFile(join(SHOTS, `t29-rest-${v.id.replace('@', 'x')}.png`));
+      }
+    });
 });
 
 test.describe('the warm-modern house in the room engine (S10)', () => {

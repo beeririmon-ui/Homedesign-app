@@ -12,8 +12,14 @@
  *   `unresolved`, loudly, for a person.
  * - **ת18, only a paid order.** `paid_at` is set and the status is one a paid order can be in (a closed list), checked in
  *   the claim itself, so an order canceled or refunded before it was paid is never invoiced.
+ *
+ * S14, QA ת31 (a call longer than the lease): every call to the provider has a deadline far below the lease
+ * (lib/deadline.ts, 60 s against 10 minutes), so no run takes a claim over while a call of its holder may still answer;
+ * and a result is recorded only by the run that still holds the claim (its `claimed_at`). A run that lost the claim
+ * records nothing: it says so loudly, with what the provider gave it, for a person to check for a second invoice.
  */
 import { providerOf, refuseLoudly } from '../config';
+import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from '../deadline';
 
 export type InvoiceInput = {
   order_id: string;
@@ -46,11 +52,11 @@ export interface InvoiceProvider {
   /** the provider honours the idempotency key: the same key again returns the first invoice, never a second one */
   readonly idempotent: boolean;
   /** issues the invoice for the order, with our idempotency key (the order id) where the provider takes one */
-  issue(input: InvoiceInput, opts: { idempotency_key: string }): Promise<IssuedInvoice>;
+  issue(input: InvoiceInput, opts: { idempotency_key: string; signal?: AbortSignal }): Promise<IssuedInvoice>;
   /** the invoice the provider already issued for this order (our reference), null when there is none; absent when it cannot be asked */
   find?(orderId: string): Promise<IssuedInvoice | null>;
   /** S13: a credit note for a refund, with our idempotency key (the refund's id); InvoiceRefused when nothing was issued */
-  creditNote?(input: CreditNoteInput, opts: { idempotency_key: string }): Promise<IssuedCreditNote>;
+  creditNote?(input: CreditNoteInput, opts: { idempotency_key: string; signal?: AbortSignal }): Promise<IssuedCreditNote>;
   /** S13: the credit note already issued for this key, null when none; absent when it cannot be asked */
   findCreditNote?(idempotencyKey: string): Promise<IssuedCreditNote | null>;
 }
@@ -109,6 +115,9 @@ export const INVOICEABLE = ['paid', 'sent_to_supplier', 'supplier_error', 'shipp
 const PAID_SQL = `paid_at IS NOT NULL AND status IN (${INVOICEABLE.map((s) => `'${s}'`).join(', ')})`;
 /** how long a claim stands before a run may treat it as left behind by a crash */
 export const INVOICE_LEASE_MS = 10 * 60_000;
+/** ת31: a provider call's deadline is far below the lease (lib/deadline.ts) */
+export const INVOICE_CALL_TIMEOUT_MS = PROVIDER_CALL_TIMEOUT_MS;
+if (INVOICE_CALL_TIMEOUT_MS * 5 > INVOICE_LEASE_MS) throw new Error('the invoice call deadline must stay far below the lease');
 
 export type InvoiceOutcome = 'invoiced' | 'skipped' | 'retry' | 'unresolved';
 type Db = { DB: D1Database };
@@ -123,10 +132,11 @@ export async function processInvoiceJob(
   env: Db & { ENVIRONMENT?: string; INVOICE_PROVIDER?: string },
   orderId: string,
   provider?: InvoiceProvider,
-  opts: { vatRate?: number; now?: () => number } = {},
+  opts: { vatRate?: number; now?: () => number; callTimeoutMs?: number } = {},
 ): Promise<InvoiceOutcome> {
   const now = opts.now ?? Date.now;
   const iso = () => new Date(now()).toISOString();
+  const deadline = opts.callTimeoutMs ?? INVOICE_CALL_TIMEOUT_MS;
   if (!provider) {
     const c = invoiceProvider(env);
     if (!c.ok) {
@@ -157,8 +167,15 @@ export async function processInvoiceJob(
     if (now() - Date.parse(row.claimed_at) < INVOICE_LEASE_MS) return 'retry';
     // a claim left behind (a crash between the call and the record): ask the provider, never issue blindly
     if (provider.find) {
-      const found = await provider.find(orderId);
-      if (found) return (await record(env, orderId, provider.id, found, iso())) ? 'invoiced' : 'skipped';
+      const ask = provider.find.bind(provider);
+      let found: IssuedInvoice | null;
+      try {
+        found = await withDeadline(`${provider.id} find`, deadline, () => ask(orderId));
+      } catch (err) {
+        refuseLoudly('the invoice provider', (err instanceof Error ? err.message : String(err)).slice(0, 500), orderId);
+        return 'retry';
+      }
+      if (found) return recorded(await record(env, orderId, provider.id, found, iso(), row.claimed_at), provider.id, found);
     } else if (!provider.idempotent) {
       const reason = `a claim of ${row.claimed_at} has no result, and ${provider.id} can neither be asked nor deduplicates: a person checks the provider`;
       await env.DB.prepare("UPDATE invoices SET state = 'unresolved', last_error = ? WHERE order_id = ? AND state = 'claimed'").bind(reason, orderId).run();
@@ -186,18 +203,22 @@ export async function processInvoiceJob(
     .bind(orderId)
     .all<{ name_he: string; qty: number; unit_price_agorot: number }>();
   let inv: IssuedInvoice;
+  const p = provider;
   try {
-    inv = await provider.issue(
-      {
-        order_id: orderId,
-        issued_at: iso(),
-        customer: customer ?? { full_name: '', email: '', phone: '' },
-        lines: results,
-        shipping_agorot: head!.shipping_agorot,
-        total_agorot: head!.total_agorot,
-        vat_rate: opts.vatRate ?? 0.18,
-      },
-      { idempotency_key: orderId },
+    // ת31: never longer than the deadline; past it, a failure that may have issued (the claim stays, the provider is asked)
+    inv = await withDeadline(`${p.id} issue`, deadline, (signal) =>
+      p.issue(
+        {
+          order_id: orderId,
+          issued_at: iso(),
+          customer: customer ?? { full_name: '', email: '', phone: '' },
+          lines: results,
+          shipping_agorot: head!.shipping_agorot,
+          total_agorot: head!.total_agorot,
+          vat_rate: opts.vatRate ?? 0.18,
+        },
+        { idempotency_key: orderId, signal },
+      ),
     );
   } catch (err) {
     const msg = (err instanceof Error ? err.message : String(err)).slice(0, 500);
@@ -209,23 +230,51 @@ export async function processInvoiceJob(
     refuseLoudly('the invoice provider', msg, orderId);
     return 'retry';
   }
-  return (await record(env, orderId, provider.id, inv, iso())) ? 'invoiced' : 'skipped';
+  return recorded(await record(env, orderId, provider.id, inv, iso(), ours), provider.id, inv);
+
+  /**
+   * ת31: what a run makes of its record. `lost`: another run holds the claim now (this one outlived its lease): nothing
+   * is recorded from here; the provider's answer goes to the audit log and the log, loudly, for a person to check the
+   * provider for a second invoice; the job is retried and settles on the claim's holder.
+   */
+  async function recorded(r: 'recorded' | 'already' | 'lost', providerId: string, got: IssuedInvoice): Promise<InvoiceOutcome> {
+    if (r === 'recorded') return 'invoiced';
+    if (r === 'already') return 'skipped';
+    const detail = `the claim was taken over by another run before ${providerId} answered (${got.invoice_id}): not recorded; check the provider for a second invoice`;
+    await audit(env, providerId, 'invoice.claim_lost', orderId, JSON.stringify({ provider_invoice_id: got.invoice_id, why: detail }), iso());
+    refuseLoudly('the invoice job', detail, orderId);
+    return 'retry';
+  }
 }
 
-/** The result, in one batch: the claim becomes the invoice, the order carries its number, the audit log says so. */
-async function record(env: Db, orderId: string, providerId: string, inv: IssuedInvoice, at: string): Promise<boolean> {
+/**
+ * The result, in one batch: the claim becomes the invoice, the order carries its number, the audit log says so. Only
+ * the claim's holder records (ת31: `claimedAt` is the claim this run holds, or the stale one it asked the provider about).
+ * `already`: the invoice is recorded (by this claim's holder before); `lost`: another run holds the claim.
+ */
+async function record(
+  env: Db,
+  orderId: string,
+  providerId: string,
+  inv: IssuedInvoice,
+  at: string,
+  claimedAt: string,
+): Promise<'recorded' | 'already' | 'lost'> {
   const [done] = await env.DB.batch([
     env.DB.prepare(
-      "UPDATE invoices SET state = 'issued', provider = ?, provider_invoice_id = ?, url = ?, issued_at = ?, last_error = NULL WHERE order_id = ? AND state = 'claimed'",
-    ).bind(providerId, inv.invoice_id, inv.url, at, orderId),
+      "UPDATE invoices SET state = 'issued', provider = ?, provider_invoice_id = ?, url = ?, issued_at = ?, last_error = NULL WHERE order_id = ? AND state = 'claimed' AND claimed_at = ?",
+    ).bind(providerId, inv.invoice_id, inv.url, at, orderId, claimedAt),
     env.DB.prepare(
       "UPDATE orders SET invoice_provider = ?, invoice_number = ?, invoice_url = ?, updated_at = ? WHERE id = ? AND EXISTS (SELECT 1 FROM invoices WHERE order_id = ? AND state = 'issued' AND provider_invoice_id = ?)",
     ).bind(providerId, inv.invoice_id, inv.url, at, orderId, orderId, inv.invoice_id),
     env.DB.prepare(
-      "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, 'order.invoiced', ?, ? WHERE NOT EXISTS (SELECT 1 FROM audit_log WHERE action = 'order.invoiced' AND subject = ?)",
-    ).bind(at, `invoice:${providerId}`, orderId, JSON.stringify(inv), orderId),
+      // the audit row only when this run's record stands (ת31: a run that lost the claim writes none)
+      "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, 'order.invoiced', ?, ? WHERE NOT EXISTS (SELECT 1 FROM audit_log WHERE action = 'order.invoiced' AND subject = ?) AND EXISTS (SELECT 1 FROM invoices WHERE order_id = ? AND state = 'issued' AND provider_invoice_id = ? AND issued_at = ?)",
+    ).bind(at, `invoice:${providerId}`, orderId, JSON.stringify(inv), orderId, orderId, inv.invoice_id, at),
   ]);
-  return !!done?.meta.changes;
+  if (done?.meta.changes) return 'recorded';
+  const row = await env.DB.prepare('SELECT state FROM invoices WHERE order_id = ?').bind(orderId).first<{ state: string }>();
+  return row?.state === 'claimed' ? 'lost' : 'already';
 }
 
 async function audit(env: Db, providerId: string, action: string, orderId: string, detail: string, at: string): Promise<void> {
@@ -247,10 +296,11 @@ export async function processCreditNoteJob(
   env: Db & { ENVIRONMENT?: string; INVOICE_PROVIDER?: string },
   refundId: string,
   provider?: InvoiceProvider,
-  opts: { vatRate?: number; now?: () => number } = {},
+  opts: { vatRate?: number; now?: () => number; callTimeoutMs?: number } = {},
 ): Promise<'credited' | 'skipped' | 'retry' | 'unresolved'> {
   const now = opts.now ?? Date.now;
   const iso = () => new Date(now()).toISOString();
+  const deadline = opts.callTimeoutMs ?? INVOICE_CALL_TIMEOUT_MS;
   const r = await env.DB.prepare('SELECT id, order_id, amount_agorot, reason, state, credit_state, credit_claimed_at FROM refunds WHERE id = ?')
     .bind(refundId)
     .first<{ id: string; order_id: string; amount_agorot: number; reason: string; state: string; credit_state: string; credit_claimed_at: string | null }>();
@@ -288,8 +338,15 @@ export async function processCreditNoteJob(
     // claimed by another run: fresh, it may be calling the provider; stale, a crash between the call and the record
     if (r.credit_state !== 'claimed' || !r.credit_claimed_at || now() - Date.parse(r.credit_claimed_at) < INVOICE_LEASE_MS) return 'retry';
     if (provider.findCreditNote) {
-      const found = await provider.findCreditNote(refundId);
-      if (found) return (await recordCredit(env, r.order_id, refundId, provider.id, found, iso())) ? 'credited' : 'skipped';
+      const ask = provider.findCreditNote.bind(provider);
+      let found: IssuedCreditNote | null;
+      try {
+        found = await withDeadline(`${provider.id} findCreditNote`, deadline, () => ask(refundId));
+      } catch (err) {
+        refuseLoudly('the credit note provider', (err instanceof Error ? err.message : String(err)).slice(0, 500), r.order_id);
+        return 'retry';
+      }
+      if (found) return (await recordCredit(env, r.order_id, refundId, provider.id, found, iso(), r.credit_claimed_at)) ? 'credited' : 'skipped';
     } else if (!provider.idempotent) {
       const reason = `a credit note claim of ${r.credit_claimed_at} has no result, and ${provider.id} can neither be asked nor deduplicates: a person checks the provider`;
       await env.DB.prepare("UPDATE refunds SET credit_state = 'unresolved', credit_error = ? WHERE id = ? AND credit_state = 'claimed'")
@@ -309,19 +366,24 @@ export async function processCreditNoteJob(
     .bind(r.order_id)
     .first<{ full_name: string; email: string; phone: string }>();
   let cn: IssuedCreditNote;
+  const credit = provider.creditNote.bind(provider);
+  const invoiceId = inv.provider_invoice_id;
   try {
-    cn = await provider.creditNote(
-      {
-        order_id: r.order_id,
-        refund_id: refundId,
-        invoice_id: inv.provider_invoice_id,
-        amount_agorot: r.amount_agorot,
-        issued_at: iso(),
-        customer: { full_name: head?.full_name ?? '', email: head?.email ?? '', phone: head?.phone ?? '' },
-        reason: r.reason,
-        vat_rate: opts.vatRate ?? 0.18,
-      },
-      { idempotency_key: refundId },
+    // ת31: the same deadline as the invoice's, far below the lease
+    cn = await withDeadline(`${provider.id} creditNote`, deadline, (signal) =>
+      credit(
+        {
+          order_id: r.order_id,
+          refund_id: refundId,
+          invoice_id: invoiceId,
+          amount_agorot: r.amount_agorot,
+          issued_at: iso(),
+          customer: { full_name: head?.full_name ?? '', email: head?.email ?? '', phone: head?.phone ?? '' },
+          reason: r.reason,
+          vat_rate: opts.vatRate ?? 0.18,
+        },
+        { idempotency_key: refundId, signal },
+      ),
     );
   } catch (err) {
     const msg = (err instanceof Error ? err.message : String(err)).slice(0, 500);
@@ -333,14 +395,37 @@ export async function processCreditNoteJob(
     refuseLoudly('the credit note provider', msg, r.order_id);
     return 'retry';
   }
-  return (await recordCredit(env, r.order_id, refundId, provider.id, cn, iso())) ? 'credited' : 'skipped';
+  if (await recordCredit(env, r.order_id, refundId, provider.id, cn, iso(), ours)) return 'credited';
+  // ת31: not recorded, and still claimed: another run holds the claim now; a person checks for a second credit note
+  const still = await env.DB.prepare('SELECT credit_state FROM refunds WHERE id = ?').bind(refundId).first<{ credit_state: string }>();
+  if (still?.credit_state !== 'claimed') return 'skipped';
+  const detail = `the credit note claim was taken over by another run before ${provider.id} answered (${cn.credit_note_id}): not recorded; check the provider for a second credit note`;
+  await auditAs(
+    env,
+    `invoice:${provider.id}`,
+    'refund.credit_claim_lost',
+    r.order_id,
+    JSON.stringify({ refund: refundId, credit_note: cn.credit_note_id, why: detail }),
+    iso(),
+  );
+  refuseLoudly('the credit note job', detail, r.order_id);
+  return 'retry';
 }
 
-async function recordCredit(env: Db, orderId: string, refundId: string, providerId: string, cn: IssuedCreditNote, at: string): Promise<boolean> {
+/** The credit note, recorded only by the run that holds the claim (ת31: `claimedAt`, its own or the stale one it asked about). */
+async function recordCredit(
+  env: Db,
+  orderId: string,
+  refundId: string,
+  providerId: string,
+  cn: IssuedCreditNote,
+  at: string,
+  claimedAt: string | null,
+): Promise<boolean> {
   const [done] = await env.DB.batch([
     env.DB.prepare(
-      "UPDATE refunds SET credit_state = 'issued', credit_note_id = ?, credit_issued_at = ?, credit_error = NULL WHERE id = ? AND credit_state = 'claimed'",
-    ).bind(cn.credit_note_id, at, refundId),
+      "UPDATE refunds SET credit_state = 'issued', credit_note_id = ?, credit_issued_at = ?, credit_error = NULL WHERE id = ? AND credit_state = 'claimed' AND credit_claimed_at IS ?",
+    ).bind(cn.credit_note_id, at, refundId, claimedAt),
     env.DB.prepare(
       "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, 'refund.credit_note', ?, ? WHERE EXISTS (SELECT 1 FROM refunds WHERE id = ? AND credit_state = 'issued' AND credit_note_id = ? AND credit_issued_at = ?)",
     ).bind(at, `invoice:${providerId}`, orderId, JSON.stringify({ refund: refundId, credit_note: cn.credit_note_id }), refundId, cn.credit_note_id, at),

@@ -24,7 +24,8 @@ export type SupplierCancelOutcome = { outcome: 'canceled' | 'requested' | 'refus
 
 export interface SupplierClient {
   readonly id: string;
-  submitOrder(input: SupplierOrderInput): Promise<{ supplier_order_id: string; raw: unknown }>;
+  /** S14 (ת31): `signal` fires at the call's deadline; a client that calls out passes it to fetch */
+  submitOrder(input: SupplierOrderInput, opts?: { signal?: AbortSignal }): Promise<{ supplier_order_id: string; raw: unknown }>;
   /** S13: asks the supplier to cancel an order it has; absent when the supplier has no such call (a person does it) */
   cancelOrder?(supplierOrderId: string): Promise<SupplierCancelOutcome>;
   /** S13: the supplier's current state of an order (polled by the cron); null when there is no news */

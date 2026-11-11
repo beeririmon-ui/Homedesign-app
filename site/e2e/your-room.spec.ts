@@ -7,7 +7,7 @@
  *  - ת25: the empty checkout's way back is a 44 px target.
  * Screens for the evidence when HD_SHOTS_DIR is set.
  */
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type APIRequestContext, type Page } from '@playwright/test';
 import { mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -122,6 +122,97 @@ test.describe('ת21: "החדר שלך" draws what was bought, where it was bough
     await shot(page, 'your-room-1280');
     await page.setViewportSize({ width: 400, height: 800 });
     await shot(page, 'your-room-400');
+  });
+});
+
+/**
+ * S14, QA ת28: one order with two options of the same slot. A picture draws one option per slot (the first in the order),
+ * the other is listed under it with its own picture and the reason, never dropped; the caption says what is drawn: a set
+ * drawn whole names the pieces ordered from it, and that another option of the place was ordered too.
+ */
+test.describe('ת28: two options of the same slot in one order: every line is accounted for', () => {
+  async function orderOf(page: Page, request: APIRequestContext, ip: Record<string, string>, items: { variant_id: string; house: string }[]) {
+    await page.setExtraHTTPHeaders(ip);
+    const { id } = (await (await request.post('/api/cart', { headers: ip })).json()) as { id: string };
+    for (const i of items) expect((await request.put(`/api/cart/${id}/items`, { headers: ip, data: { ...i, qty: 1 } })).status(), i.variant_id).toBe(200);
+    await page.goto('/cart/');
+    await page.evaluate((cart) => localStorage.setItem('hd.cart', cart), id);
+    await pay(page);
+  }
+  /** each line of the order is either drawn (the figure's data-drawn) or listed, never both, never neither */
+  async function accounted(page: Page, variants: string[]) {
+    const drawn = (await page.locator('figure.your-room').evaluateAll((fs) => fs.flatMap((f) => (f.getAttribute('data-drawn') ?? '').split(' ')))).filter(
+      Boolean,
+    );
+    const listed = await page.locator('.your-room-missing li').evaluateAll((ls) => ls.map((l) => l.getAttribute('data-variant')));
+    for (const v of variants) expect(Number(drawn.includes(v)) + Number(listed.includes(v)), v).toBe(1);
+    expect(drawn.length + listed.length).toBe(variants.length);
+  }
+
+  test('case 3: the Pecan throw (set B) and the white bouclé (set A), both in the warm-modern house', async ({ page, request }) => {
+    test.setTimeout(150_000);
+    const setA = house.sets.find((s) => s.id === 'A')!;
+    const WHITE = setA.items.find((i) => /לבן חם/.test(i.option_he ?? ''))!.variant_id!;
+    await orderOf(page, request, { 'cf-connecting-ip': '198.51.100.141' }, [
+      { variant_id: PECAN, house: 'warm-modern' },
+      { variant_id: WHITE, house: 'warm-modern' },
+    ]);
+    const wm = page.locator('figure.your-room[data-house="warm-modern"]');
+    await expect(wm).toBeVisible({ timeout: 20_000 });
+    // one option per slot: set B (the first line), drawn whole
+    await expect(wm.locator('span[data-slot]')).toHaveCount(1);
+    await expect(wm.locator('span[data-slot="cushions"]')).toHaveAttribute('data-position', '1');
+    // the caption: the set drawn whole, what was ordered from it, and the other option of the place
+    const cap = wm.locator('figcaption');
+    await expect(cap).toContainText('סט B מצויר כולו');
+    await expect(cap).toContainText('ממנו הזמנת');
+    await expect(cap).toContainText('פקאן');
+    await expect(cap).toContainText('הזמנת גם אפשרות אחרת לאותו מקום');
+    await expect(cap).not.toContainText('מה שהזמנת, בגוון שהזמנת');
+    // the white bouclé: listed, with its card's picture (never a room layer) and what the picture shows in its place
+    const white = page.locator(`.your-room-missing li[data-variant="${WHITE}"]`);
+    await expect(white).toHaveAttribute('data-why', 'slot-taken');
+    await expect(white).toContainText('הוזמן גם. באותו מקום בהדמיה מצויר סט B');
+    for (const img of await white.locator('img').all()) expect(await img.getAttribute('src')).not.toMatch(/\/media\/(rooms|house)\//);
+    await accounted(page, [PECAN, WHITE]);
+    for (const w of [1280, 400]) {
+      await page.setViewportSize({ width: w, height: w === 400 ? 800 : 900 });
+      await shot(page, `your-room-case3-${w}`);
+    }
+  });
+
+  test('case 4: two vases of the vase slot in the Nordic house', async ({ page, request }) => {
+    test.setTimeout(150_000);
+    const slot = gen<Pub>('catalog.public.json')
+      .rooms.find((r) => r.id === 'living-room')!
+      .slots.find((s) => s.id === 'vase')!;
+    const full = gen<Full>('catalog.full.json');
+    const vases = slot.options
+      .filter((o) => o.product_id)
+      .map((o) => {
+        const p = full.products.find((x) => x.id === o.product_id)!;
+        return { position: o.position, variant: p.variants_full?.find((v) => v.in_room)?.id ?? `${p.id}:default` };
+      });
+    expect(vases.length).toBeGreaterThanOrEqual(2);
+    const [first, second] = vases;
+    await orderOf(page, request, { 'cf-connecting-ip': '198.51.100.142' }, [
+      { variant_id: first!.variant, house: 'nordic' },
+      { variant_id: second!.variant, house: 'nordic' },
+    ]);
+    const nd = page.locator('figure.your-room[data-house="nordic"]');
+    await expect(nd).toBeVisible({ timeout: 20_000 });
+    await expect(nd.locator('span[data-slot]')).toHaveCount(1);
+    await expect(nd.locator('span[data-slot="vase"]')).toHaveAttribute('data-position', String(first!.position));
+    await expect(nd.locator('figcaption')).toContainText('כפי שהזמנת');
+    await expect(nd.locator('figcaption')).toContainText('הזמנת גם אפשרות אחרת לאותו מקום');
+    const other = page.locator(`.your-room-missing li[data-variant="${second!.variant}"]`);
+    await expect(other).toHaveAttribute('data-why', 'slot-taken');
+    await expect(other).toContainText('הוזמן גם. באותו מקום בהדמיה מצויר');
+    await accounted(page, [first!.variant, second!.variant]);
+    for (const w of [1280, 400]) {
+      await page.setViewportSize({ width: w, height: w === 400 ? 800 : 900 });
+      await shot(page, `your-room-case4-${w}`);
+    }
   });
 });
 

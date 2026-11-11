@@ -21,6 +21,13 @@ export type Scene = {
   native?: number;
   formats: ('avif' | 'webp')[];
   base: { id: string; z: number; blend: Blend; src: string; widths: number[]; temporary: boolean }[];
+  /**
+   * S14, QA ת29/ת30: the picture the stage rests on before the engine starts (the prerendered poster, the LCP), when it
+   * is not the base: the house's approved default composition (the warm-modern base is the room without its set). Its
+   * widths are the ones that meet the encoding threshold where they are drawn. Absent: the base is the poster (Nordic:
+   * its base already holds the default products).
+   */
+  poster?: { src: string; widths: number[] };
   slots: Record<
     string,
     {

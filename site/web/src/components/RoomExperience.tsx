@@ -508,9 +508,10 @@ export function RoomExperience({
     >
       {/* S10 question 7 (S11): while the address's house is on its way, no poster: never the Nordic one downloaded for nothing */}
       {waiting ? null : (
+        // S14, QA ת29: the house's default composition from the first paint (the warm-modern base has no set on the sofa)
         <Picture
-          src={scene.base[0]!.src}
-          widths={scene.base[0]!.widths}
+          src={(scene.poster ?? scene.base[0]!).src}
+          widths={(scene.poster ?? scene.base[0]!).widths}
           sizes="(max-aspect-ratio: 1/1) min(calc((100svh - 60px) * 1.78), 1080px), 100vw"
           alt=""
           class="poster"

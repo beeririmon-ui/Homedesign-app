@@ -13,13 +13,17 @@
 import type { Env, SupplierJob } from '../env';
 import { nowIso } from './http';
 import { refuseLoudly } from './config';
-import { supplierClient } from './suppliers';
-import type { SupplierOrderInput } from './suppliers/types';
+import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from './deadline';
+import { supplierClient, type SupplierChoice } from './suppliers';
+import type { SupplierClient, SupplierOrderInput } from './suppliers/types';
 import { processCreditNoteJob, processInvoiceJob } from './invoices';
 import { processNotifyJob } from './notify';
 
 /** S13: a claim on a shipment (`submitting`) older than this is a crash between the claim and the supplier's answer */
 export const SUBMIT_LEASE_MS = 10 * 60_000;
+/** S14, QA ת31: the supplier call's deadline, far below the lease (lib/deadline.ts) */
+export const SUBMIT_CALL_TIMEOUT_MS = PROVIDER_CALL_TIMEOUT_MS;
+if (SUBMIT_CALL_TIMEOUT_MS * 5 > SUBMIT_LEASE_MS) throw new Error('the supplier call deadline must stay far below the lease');
 
 type ItemRow = {
   product_id: string;
@@ -59,7 +63,13 @@ export function supplierLines(items: ItemRow[]): SupplierOrderInput['lines'] {
   return [...out.values()];
 }
 
-export async function processSupplierJob(env: Env, job: SupplierJob, attempt: number): Promise<'submitted' | 'skipped' | 'retry'> {
+export async function processSupplierJob(
+  env: Env,
+  job: SupplierJob,
+  attempt: number,
+  /** a test passes its own supplier (as the invoice job takes its provider) and a shorter deadline */
+  opts: { callTimeoutMs?: number; client?: SupplierClient } = {},
+): Promise<'submitted' | 'skipped' | 'retry'> {
   // S9: the tax invoice rides the same queue (a job after "paid"); S12: it fails per message, never for the batch
   if (job.kind === 'issue-invoice') {
     const r = await processInvoiceJob(env, job.order_id);
@@ -79,7 +89,7 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
     .first<{ id: string; status: string; shipping_method: 'economy' | 'express'; address_json: string; customer_id: string }>();
   if (!order || order.status !== 'paid') return 'skipped';
   const now = nowIso();
-  const choice = supplierClient(env);
+  const choice: SupplierChoice = opts.client ? { ok: true, client: opts.client } : supplierClient(env);
   if (!choice.ok) {
     // ת17: no supplier runs; the paid order stays paid (never "sent"), the queued row says why, and the job is retried
     refuseLoudly('the supplier job', choice.reason, order.id);
@@ -143,11 +153,13 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
       ship_to: { ...customer!, ...(JSON.parse(order.address_json) as { city: string; street: string; house: string; apartment: string; zip: string }) },
       shipping_method: order.shipping_method,
     };
-    const res = await client.submitOrder(input);
-    await env.DB.batch([
+    // S14, QA ת31: the call never outlives the claim's lease (a deadline far below it, lib/deadline.ts)
+    const res = await withDeadline(`${client.id} submitOrder`, opts.callTimeoutMs ?? SUBMIT_CALL_TIMEOUT_MS, (signal) => client.submitOrder(input, { signal }));
+    // recorded only by the run that holds the claim (`updated_at` is the claim's, this run's `now`)
+    const [mine] = await env.DB.batch([
       env.DB.prepare(
         `UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = ?, attempts = ?, request_json = ?, response_json = ?, last_error = NULL, updated_at = ?
-         WHERE order_id = ? AND supplier = ? AND status = 'submitting'`,
+         WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?`,
       ).bind(
         res.supplier_order_id,
         attempt,
@@ -156,23 +168,31 @@ export async function processSupplierJob(env: Env, job: SupplierJob, attempt: nu
         now,
         order.id,
         client.id,
-      ),
-      env.DB.prepare("UPDATE orders SET status = 'sent_to_supplier', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id),
-      env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
         now,
-        'queue',
-        'supplier.submitted',
-        order.id,
-        res.supplier_order_id,
       ),
+      env.DB.prepare(
+        "UPDATE orders SET status = 'sent_to_supplier', updated_at = ? WHERE id = ? AND status = 'paid' AND EXISTS (SELECT 1 FROM supplier_shipments WHERE order_id = ? AND supplier = ? AND status = 'submitted' AND supplier_order_id = ?)",
+      ).bind(now, order.id, order.id, client.id, res.supplier_order_id),
+      env.DB.prepare(
+        "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, ?, ?, ? WHERE EXISTS (SELECT 1 FROM supplier_shipments WHERE order_id = ? AND supplier = ? AND status = 'submitted' AND supplier_order_id = ? AND updated_at = ?)",
+      ).bind(now, 'queue', 'supplier.submitted', order.id, res.supplier_order_id, order.id, client.id, res.supplier_order_id, now),
     ]);
+    if (!mine?.meta.changes) {
+      // the claim was taken over while this call ran: nothing recorded from here; a person checks for a second order
+      const detail = `the claim was taken over by another run before ${client.id} answered (${res.supplier_order_id}): not recorded; check the supplier for a second order`;
+      await env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)')
+        .bind(now, 'queue', 'supplier.claim_lost', order.id, detail)
+        .run();
+      refuseLoudly('the supplier job', detail, order.id);
+      return 'skipped';
+    }
     return 'submitted';
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     await env.DB.prepare(
-      "UPDATE supplier_shipments SET status = 'failed', attempts = ?, last_error = ?, updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting'",
+      "UPDATE supplier_shipments SET status = 'failed', attempts = ?, last_error = ?, updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?",
     )
-      .bind(attempt, msg.slice(0, 500), now, order.id, client.id)
+      .bind(attempt, msg.slice(0, 500), now, order.id, client.id, now)
       .run();
     if (attempt >= 5) await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ?").bind(now, order.id).run();
     return 'retry';
