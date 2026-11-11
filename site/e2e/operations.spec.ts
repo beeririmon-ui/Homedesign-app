@@ -24,7 +24,7 @@ test('/healthz: D1 and the queue are ok, and the answer carries no internal deta
   const r = await request.get('/healthz');
   expect(r.status()).toBe(200);
   expect(r.headers()['cache-control']).toBe('no-store');
-  expect(await r.json()).toEqual({ ok: true, checks: { db: 'ok', queue: 'ok' } });
+  expect(await r.json()).toEqual({ ok: true, checks: { db: 'ok', queue: 'ok', supplier: 'ok' } });
 });
 
 test('the admin without permission: 403 for the screen and the API, reads and actions', async ({ request }) => {

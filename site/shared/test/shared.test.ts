@@ -415,6 +415,11 @@ describe("the order in the customer's words (ART6)", () => {
       orderStep('pending_payment'),
     ]).toEqual([0, 1, 1, 2, 3, null]);
   });
+  it('S16 (QA ה7): an order stuck on a supplier error is said honestly, never "בהכנה", and names no supplier', () => {
+    expect(ORDER_STATUS_HE.supplier_error).not.toBe('בהכנה');
+    expect(ORDER_STATUS_HE.supplier_error).toBe('מתעכבת');
+    expect(ORDER_DELAY_HE).not.toMatch(/ספק/);
+  });
 });
 
 describe('standards and safety (D9)', () => {

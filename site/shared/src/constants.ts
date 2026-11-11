@@ -22,7 +22,9 @@ export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 /**
  * The customer's words (ART6, 2026-11-03; site art direction §9.5): "התקבלה · בהכנה · נשלחה · נמסרה". The supplier is
- * never named: an order that went to the supplier, or waits on a supplier error we handle, is "בהכנה".
+ * never named: an order that went to the supplier is "בהכנה".
+ * S16 (QA S11–S12 ה1, S13–S14 ה7): an order stuck on a supplier error is not called "בהכנה" as if all were well: it is
+ * "מתעכבת", in neutral words, with a line on the order page (`ORDER_DELAY_HE`). Wording for master-designer.
  */
 export const ORDER_STATUS_HE: Record<OrderStatus, string> = {
   pending_payment: 'ממתינה לתשלום',
@@ -30,11 +32,14 @@ export const ORDER_STATUS_HE: Record<OrderStatus, string> = {
   payment_failed: 'התשלום נכשל',
   canceled: 'בוטלה',
   sent_to_supplier: 'בהכנה',
-  supplier_error: 'בהכנה',
+  supplier_error: 'מתעכבת',
   shipped: 'נשלחה',
   delivered: 'נמסרה',
   refunded: 'זוכתה',
 };
+
+/** S16: the order page's line for an order in supplier_error (no supplier named, nothing asked of the customer) */
+export const ORDER_DELAY_HE = 'יש עיכוב בהכנת ההזמנה. אנחנו מטפלים בזה, ואין צורך לעשות דבר.';
 
 /** The four steps of a paid order, in order, and the step each status has reached (null: not on the line). */
 export const ORDER_STEPS_HE = ['התקבלה', 'בהכנה', 'נשלחה', 'נמסרה'] as const;

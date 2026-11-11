@@ -507,7 +507,7 @@ describe('/healthz: D1 and the queue, nothing else', () => {
     expect(res.status).toBe(200);
     expect(res.headers.get('cache-control')).toBe('no-store');
     const body = await res.json();
-    expect(body).toEqual({ ok: true, checks: { db: 'ok', queue: 'ok' } });
+    expect(body).toEqual({ ok: true, checks: { db: 'ok', queue: 'ok', supplier: 'ok' } });
     const text = JSON.stringify(body);
     for (const leak of ['test', 'mock', 'environment', 'version', 'catalog', SECRET, 'D1', 'error']) expect(text).not.toContain(leak);
   });
@@ -528,14 +528,14 @@ describe('/healthz: D1 and the queue, nothing else', () => {
     };
     const r1 = await app.request('http://localhost/healthz', {}, broken);
     expect(r1.status).toBe(503);
-    expect(await r1.json()).toEqual({ ok: false, checks: { db: 'fail', queue: 'ok' } });
+    expect(await r1.json()).toEqual({ ok: false, checks: { db: 'fail', queue: 'ok', supplier: 'fail' } });
     const o = await paidOrder();
     await env.DB.prepare('UPDATE orders SET paid_at = ? WHERE id = ?')
       .bind(new Date(Date.now() - 31 * 60_000).toISOString(), o.orderId)
       .run();
     const r2 = await req('/healthz');
     expect(r2.status).toBe(503);
-    expect(await r2.json()).toEqual({ ok: false, checks: { db: 'ok', queue: 'stalled' } });
+    expect(await r2.json()).toEqual({ ok: false, checks: { db: 'ok', queue: 'stalled', supplier: 'ok' } });
   });
 
   it('the old /api/health no longer tells the environment', async () => {
