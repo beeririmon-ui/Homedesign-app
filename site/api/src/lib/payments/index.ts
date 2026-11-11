@@ -32,7 +32,8 @@ export function paymentProvider(env: Env, origin: string, id = env.PAYMENT_PROVI
  * A payment through another provider (or none configured) is refunded by hand at that provider, never through this one.
  */
 export function refundProvider(env: Env, orderProvider: string): { ok: true; provider: PaymentProvider } | { ok: false; reason: string } {
-  if (orderProvider !== env.PAYMENT_PROVIDER) return { ok: false, reason: `the order was paid through ${orderProvider}, and ${env.PAYMENT_PROVIDER || 'no provider'} is configured` };
+  if (orderProvider !== env.PAYMENT_PROVIDER)
+    return { ok: false, reason: `the order was paid through ${orderProvider}, and ${env.PAYMENT_PROVIDER || 'no provider'} is configured` };
   try {
     const p = paymentProvider(env, '', orderProvider);
     if (!p.refund) return { ok: false, reason: `${p.id} has no refund call` };

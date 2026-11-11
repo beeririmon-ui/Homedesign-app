@@ -106,6 +106,23 @@ export const OrderViewSchema = z.object({
       line_total_agorot: z.number().int(),
     }),
   ),
+  /**
+   * S13 (3.3): the shipments that left, from the supplier's reports: "נשלחה" with its tracking number, then "נמסרה".
+   * `tracking_url` only when the supplier's link is a generic tracker naming no supplier; otherwise the number alone.
+   */
+  shipments: z
+    .array(
+      z.object({
+        status_he: z.string(),
+        tracking_number: z.string().nullable(),
+        tracking_url: z.string().nullable(),
+        shipped_at: z.string().nullable(),
+        delivered_at: z.string().nullable(),
+      }),
+    )
+    .optional(),
+  /** S13 (2.5): what was refunded to the customer's card so far, agorot (0 when nothing) */
+  refunded_agorot: z.number().int().optional(),
 });
 export type OrderView = z.infer<typeof OrderViewSchema>;
 

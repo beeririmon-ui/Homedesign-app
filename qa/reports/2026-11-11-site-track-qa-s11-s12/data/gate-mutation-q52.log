@@ -1,0 +1,59 @@
+
+Running 1 test using 1 worker
+
+encoding warm-modern 1920@1: base AVIF 7/11/25 · 0.50% · ΔE 3.57
+encoding warm-modern 1280@1: base AVIF 6/8/16 · 0.09% · ΔE 2.9
+encoding warm-modern 400@1: base AVIF 6/9/14 · 0.11% · ΔE 2.92
+encoding warm-modern 400@3: base AVIF 8/12/28 · 0.73% · ΔE 3.79
+encoding warm-modern 1280-zoom: base AVIF 6/9/19 · 0.18% · ΔE 3.1
+  ✘  1 [e2e] › e2e/encoding.spec.ts:74:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: the base (AVIF q70 and its WebP fallback) and the default set’s layer meet it in every view (53.6s)
+
+
+  1) [e2e] › e2e/encoding.spec.ts:74:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: the base (AVIF q70 and its WebP fallback) and the default set’s layer meet it in every view 
+
+    Error: base AVIF 1920@1: p99 7 > 6
+    base AVIF 1920@1: p99.9 11 > 10
+    base AVIF 1920@1: 0.50% above 8 levels > 0.2%
+    base AVIF 1920@1: ΔE00 p99 3.57 > 3.5
+    base AVIF 400@3: p99 8 > 6
+    base AVIF 400@3: p99.9 12 > 10
+    base AVIF 400@3: 0.73% above 8 levels > 0.2%
+    base AVIF 400@3: ΔE00 p99 3.79 > 3.5
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 10
+
+    - Array []
+    + Array [
+    +   "base AVIF 1920@1: p99 7 > 6",
+    +   "base AVIF 1920@1: p99.9 11 > 10",
+    +   "base AVIF 1920@1: 0.50% above 8 levels > 0.2%",
+    +   "base AVIF 1920@1: ΔE00 p99 3.57 > 3.5",
+    +   "base AVIF 400@3: p99 8 > 6",
+    +   "base AVIF 400@3: p99.9 12 > 10",
+    +   "base AVIF 400@3: 0.73% above 8 levels > 0.2%",
+    +   "base AVIF 400@3: ΔE00 p99 3.79 > 3.5",
+    + ]
+
+      125 |     }
+      126 |     write();
+    > 127 |     expect(bad, bad.join('\n')).toEqual([]);
+          |                                 ^
+      128 |   });
+      129 |
+      130 |   test('Nordic: its base (AVIF q70 and its WebP fallback) meets it in every view (its layers are temporary)', async ({ browser }) => {
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/build-s1112/site/e2e/encoding.spec.ts:127:33
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encoding-the-tool-layer-en-44f9d-layer-meet-it-in-every-view-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encoding-the-tool-layer-en-44f9d-layer-meet-it-in-every-view-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [e2e] › e2e/encoding.spec.ts:74:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: the base (AVIF q70 and its WebP fallback) and the default set’s layer meet it in every view 
+gate on q52: exit 1

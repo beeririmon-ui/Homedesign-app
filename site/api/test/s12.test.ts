@@ -329,7 +329,8 @@ describe('ת17: production fails closed on every provider variable', () => {
       expect(await invoiceRows(orderId)).toBe(0);
       expect((await one<{ invoice_number: string | null }>('SELECT invoice_number FROM orders WHERE id = ?', orderId)).invoice_number).toBeNull();
     }
-    expect(err.mock.calls.some((c) => String(c[0]).includes('INVOICE_PROVIDER'))).toBe(true);
+    // S13: the row is structured (lib/log.ts); the reason names the variable
+    expect(err.mock.calls.some((c) => JSON.stringify(c[0]).includes('INVOICE_PROVIDER'))).toBe(true);
     err.mockRestore();
   });
 
@@ -403,7 +404,13 @@ describe('ת19: a queue message fails alone, never the batch', () => {
     expect(m1.retry).toHaveBeenCalledTimes(1);
     expect(m2.ack).toHaveBeenCalledTimes(1);
     expect(await invoiceRows(orderId)).toBe(1);
-    expect(err.mock.calls.some((c) => String(c[0]).includes(`submit-order for order ${orderId} failed`))).toBe(true);
+    // S13: a structured row (lib/log.ts) with the job's kind and order, and an error id
+    expect(
+      err.mock.calls.some((c) => {
+        const row = c[0] as { event?: string; kind?: string; order_id?: string; error_id?: string };
+        return row.event === 'queue.job_failed' && row.kind === 'submit-order' && row.order_id === orderId && /^E-/.test(row.error_id ?? '');
+      }),
+    ).toBe(true);
     err.mockRestore();
   });
 });

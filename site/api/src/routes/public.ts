@@ -20,12 +20,15 @@ import type { AppEnv } from '../env';
 import { HttpError, clientKey, nowIso, orderId, rateLimit, readJson } from '../lib/http';
 import { createCart, economics, openCartOr404, readCart, setCartItem, shippingOptions } from '../lib/store';
 import { paymentProvider } from '../lib/payments';
+import { deliveryView } from '../lib/shipments';
+import { refundTotals } from '../lib/refunds';
 
 export const publicApi = new Hono<AppEnv>();
 
 publicApi.get('/health', async (c) => {
   const meta = await c.env.DB.prepare("SELECT value FROM catalog_meta WHERE key = 'catalog_version'").first<{ value: string }>();
-  return c.json({ ok: true, environment: c.env.ENVIRONMENT, catalog_version: meta?.value ?? null });
+  // S13: no environment here any more (an internal detail); the uptime clock reads /healthz
+  return c.json({ ok: true, catalog_version: meta?.value ?? null });
 });
 
 // ---------- catalog (live prices; the site bundles the descriptive catalog) ----------
@@ -323,6 +326,9 @@ publicApi.get('/orders/:id', async (c) => {
       qty: r.qty,
       line_total_agorot: r.qty * r.unit_price_agorot,
     })),
+    // S13: the delivery as the supplier reported it (never the supplier's name), and what was refunded
+    shipments: await deliveryView(c.env.DB, o.id),
+    refunded_agorot: (await refundTotals(c.env.DB, o.id)).refunded,
   };
   return c.json(view);
 });

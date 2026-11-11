@@ -32,7 +32,9 @@ export type CancelError = { error: true; status: 404 | 409 | 503; code: string; 
 const SENT = "('submitting', 'submitted', 'accepted', 'cancel_requested', 'shipped', 'delivered')";
 
 const audit = (db: D1Database, at: string, actor: string, action: string, subject: string, detail: object) =>
-  db.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(at, actor.slice(0, 200), action, subject, JSON.stringify(detail));
+  db
+    .prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)')
+    .bind(at, actor.slice(0, 200), action, subject, JSON.stringify(detail));
 
 export async function cancelOrder(
   env: Env,
@@ -43,7 +45,9 @@ export async function cancelOrder(
 ): Promise<CancelResult | CancelError> {
   const iso = () => new Date((opts.now ?? Date.now)()).toISOString();
   const why = reason.trim().slice(0, 300);
-  const order = await env.DB.prepare('SELECT id, status, paid_at FROM orders WHERE id = ?').bind(orderId).first<{ id: string; status: string; paid_at: string | null }>();
+  const order = await env.DB.prepare('SELECT id, status, paid_at FROM orders WHERE id = ?')
+    .bind(orderId)
+    .first<{ id: string; status: string; paid_at: string | null }>();
   if (!order) return { error: true, status: 404, code: 'order_not_found', message_he: 'ההזמנה לא נמצאה.' };
 
   // already canceled: finish what is left (the refund of a cancellation that did not complete), never twice
@@ -86,7 +90,10 @@ export async function cancelOrder(
     .run();
   if (before.meta.changes) {
     await env.DB.batch([
-      env.DB.prepare("UPDATE supplier_shipments SET status = 'canceled', updated_at = ? WHERE order_id = ? AND status IN ('queued', 'failed')").bind(at, orderId),
+      env.DB.prepare("UPDATE supplier_shipments SET status = 'canceled', updated_at = ? WHERE order_id = ? AND status IN ('queued', 'failed')").bind(
+        at,
+        orderId,
+      ),
       env.DB.prepare(
         "INSERT INTO cancellations (order_id, stage, state, reason, requested_by, requested_at, resolved_at) VALUES (?, 'before_supplier', 'canceled', ?, ?, ?, ?) ON CONFLICT(order_id) DO NOTHING",
       ).bind(orderId, why, actor.slice(0, 200), at, at),
@@ -168,7 +175,9 @@ export async function cancelOrder(
  * still with the supplier. Used by the cancellation and by the supplier's answers (lib/shipments.ts).
  */
 export async function settleCanceled(env: Env, orderId: string, actor: string, reason: string, payment?: PaymentProvider): Promise<CancelResult | null> {
-  const left = await env.DB.prepare("SELECT COUNT(*) AS n FROM supplier_shipments WHERE order_id = ? AND status != 'canceled'").bind(orderId).first<{ n: number }>();
+  const left = await env.DB.prepare("SELECT COUNT(*) AS n FROM supplier_shipments WHERE order_id = ? AND status != 'canceled'")
+    .bind(orderId)
+    .first<{ n: number }>();
   if ((left?.n ?? 0) > 0) return null;
   const at = new Date().toISOString();
   const r = await env.DB.prepare(

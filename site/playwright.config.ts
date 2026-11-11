@@ -24,7 +24,7 @@ export default defineConfig({
   projects: [
     {
       name: 'e2e',
-      testMatch: /(flow|perf|swap-diff|hotspots|options|test-page|story|system|public-scan|house|wheel|lines|encoding|your-room)\.spec\.ts/,
+      testMatch: /(flow|perf|swap-diff|hotspots|options|test-page|story|system|public-scan|house|wheel|lines|encoding|your-room|operations)\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], launchOptions },
     },
     { name: 'a11y', testMatch: /a11y\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },

@@ -1,0 +1,136 @@
+{
+ "id": "wm-ph2-reserve-r2-table-ceiling",
+ "pass_": "R2",
+ "slots": [
+  "pendant",
+  "bowl"
+ ],
+ "model": "seedream-5-pro i2i 2K",
+ "aspect_ratio": "auto",
+ "resolution": "2K",
+ "type": "image-to-image",
+ "tokens": 650,
+ "estimate": 650,
+ "estimate_call": {
+  "tool": "var2_estimate_cost",
+  "model_id": "seedream-5-pro",
+  "type": "image-to-image",
+  "params": {
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 2
+  },
+  "total_tokens": 650,
+  "deviation_pct": 0.0
+ },
+ "idempotency_key": "wm-ph2-reserve-r2-table-ceiling-20261111",
+ "placeholder_id": "a4f7cab8-44d9-4276-888f-1d1044d73004",
+ "task_id": "638bf9caee5afefad515495bcb0a012b",
+ "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-638bf9caee5afefad515495bcb0a012b-0-1794358559180-f394571c.png",
+ "returned_px": [
+  2720,
+  1530
+ ],
+ "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/be588bdb-5ec4-4672-8ba1-627763be41ac.png",
+ "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r2-input.png",
+ "image_sha256": "fc8c41877ca4dc4116dabc672acc6c58210b784aeb878fcdfd1e315c405d67fb",
+ "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r2-input.json",
+ "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/reserve-r2-table-ceiling.txt",
+ "prompt_chars": 2063,
+ "refs": [
+  {
+   "n": 1,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6a438baf-2b43-4b68-8613-ecb23bd98464.png",
+   "card": "pendant-cj-tiered-fabric-drum",
+   "sku": "CJYD247032902BY",
+   "what": "the tiered fabric drum, beige 50",
+   "source_image": "pendant/img2.jpg",
+   "crop": [
+    0.02,
+    0.25,
+    0.92,
+    0.85
+   ],
+   "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+  },
+  {
+   "n": 2,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/50ffe4e5-ba93-4cd3-a7cf-b427dc329c83.png",
+   "card": "bowl-cj-matte-black-bowl-20",
+   "sku": "CJJT131449012LO",
+   "what": "SKU style 12, 8 inch matte black bowl",
+   "source_image": "bowl/sku.jpg",
+   "crop": [
+    0.27,
+    0.04,
+    0.82,
+    0.86
+   ],
+   "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+  }
+ ],
+ "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/r2-seedream.png",
+ "register_to_input": [
+  [
+   0.9979000091552734,
+   -0.0,
+   3.193700075149536
+  ],
+  [
+   0.00019999999494757503,
+   0.9968000054359436,
+   1.857300043106079
+  ]
+ ],
+ "tone_gain_median": [
+  1.1198,
+  1.1333,
+  1.1388
+ ],
+ "model_drift_outside_zones_L": {
+  "raw_median": 3.05,
+  "raw_p95": 9.73,
+  "after_tone_match_median": 1.03,
+  "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+ },
+ "products_cut": {
+  "pendant": {
+   "alpha_px": 34591,
+   "soft_px": 2820,
+   "box_px": [
+    1507,
+    224,
+    1809,
+    379
+   ],
+   "placeholder_px": 50537,
+   "placeholder_covered": 0.609,
+   "outside_placeholder_px": 3113,
+   "shadow_px_below_0_97": 0,
+   "shadow_min": 1.0
+  },
+  "bowl": {
+   "alpha_px": 9762,
+   "soft_px": 1204,
+   "box_px": [
+    1929,
+    1253,
+    2078,
+    1340
+   ],
+   "placeholder_px": 9216,
+   "placeholder_covered": 0.971,
+   "outside_placeholder_px": 388,
+   "shadow_px_below_0_97": 3510,
+   "shadow_min": 0.625
+  }
+ },
+ "fidelity": {
+  "pendant": "FAIL (placement): the card's shade (five off-white fabric tiers, 50 cm) at the plan's X / Y, but hung ~11 cm low (shade bottom ~1.79-1.80 against the owner's 1.90, V7Q7 b); equivalently a larger shade further back. Not moved in code",
+  "bowl": "pass on the card (shape, colour, size) and on step 0's position; the position itself is PROVISIONAL, pending WM-T2 (the designer, 2026-11-11: (0.72, 1.94) is 0.009 from the throw; the table group may move left under the pendant)"
+ },
+ "seed": null,
+ "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead",
+ "method": "TINTED clay placeholders (reserve_r12.py): step 0's card-size solids at house plan 1.3.5 places, in each product's base colour with its simple structure; one card crop per product; the current scene (base + 6 layered defaults + set B) below",
+ "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/reserve_r12.py"
+}

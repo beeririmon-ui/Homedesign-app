@@ -203,7 +203,9 @@ export async function orderDetail(db: D1Database, id: string) {
         updated_at: string;
       }>(),
     db
-      .prepare('SELECT state, provider, provider_invoice_id, url, attempts, claimed_at, issued_at, last_error, checked_by, checked_at FROM invoices WHERE order_id = ?')
+      .prepare(
+        'SELECT state, provider, provider_invoice_id, url, attempts, claimed_at, issued_at, last_error, checked_by, checked_at FROM invoices WHERE order_id = ?',
+      )
       .bind(id)
       .first<{
         state: string;
@@ -237,10 +239,15 @@ export async function orderDetail(db: D1Database, id: string) {
         credit_state: string;
         credit_note_id: string | null;
       }>(),
-    db
-      .prepare('SELECT stage, state, reason, requested_by, requested_at, resolved_at, refund_id FROM cancellations WHERE order_id = ?')
-      .bind(id)
-      .first<{ stage: string; state: string; reason: string; requested_by: string; requested_at: string; resolved_at: string | null; refund_id: string | null }>(),
+    db.prepare('SELECT stage, state, reason, requested_by, requested_at, resolved_at, refund_id FROM cancellations WHERE order_id = ?').bind(id).first<{
+      stage: string;
+      state: string;
+      reason: string;
+      requested_by: string;
+      requested_at: string;
+      resolved_at: string | null;
+      refund_id: string | null;
+    }>(),
     db.prepare('SELECT id, at, actor, action, detail FROM audit_log WHERE subject = ? ORDER BY id').bind(id).all<AuditRow>(),
     refundTotals(db, id),
   ]);
@@ -259,7 +266,12 @@ export async function orderDetail(db: D1Database, id: string) {
     cancellation: cancellation ?? null,
     audit: audit.results,
     tracks,
-    money: { paid_agorot: totals.paid, refunded_agorot: totals.refunded, counted_agorot: totals.counted, refundable_agorot: Math.max(0, totals.paid - totals.counted) },
+    money: {
+      paid_agorot: totals.paid,
+      refunded_agorot: totals.refunded,
+      counted_agorot: totals.counted,
+      refundable_agorot: Math.max(0, totals.paid - totals.counted),
+    },
     margin: { net_agorot: net, cogs_agorot: cogs, gross_profit_agorot: net - cogs, note: 'before payment fees, returns reserve and CAC' },
   };
 }
@@ -281,7 +293,9 @@ export async function checkInvoice(
   if (!inv) return { ok: false, status: 404, code: 'no_invoice_claim', message_he: 'אין להזמנה הזו חשבונית בבדיקה.' };
   if (inv.state !== 'unresolved') return { ok: false, status: 409, code: 'invoice_not_unresolved', message_he: 'החשבונית של ההזמנה הזו לא מחכה לבדיקה.' };
   const at = new Date().toISOString();
-  const detail = JSON.stringify(input.outcome === 'found' ? { outcome: 'found', invoice_number: input.invoice_number, note: input.note } : { outcome: 'none', note: input.note });
+  const detail = JSON.stringify(
+    input.outcome === 'found' ? { outcome: 'found', invoice_number: input.invoice_number, note: input.note } : { outcome: 'none', note: input.note },
+  );
   // first in the batch, and only while the claim is still for a person: the row says who checked, once
   const log = env.DB.prepare(
     "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, 'invoice.checked', ?, ? WHERE EXISTS (SELECT 1 FROM invoices WHERE order_id = ? AND state = 'unresolved')",

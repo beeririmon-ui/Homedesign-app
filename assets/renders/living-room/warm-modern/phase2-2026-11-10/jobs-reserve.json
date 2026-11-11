@@ -1,0 +1,375 @@
+{
+ "date": "2026-11-11",
+ "brief": "briefs/render-wm-tool-phase2-reserve-2026-11-11.md",
+ "continues": "briefs/render-wm-tool-phase2-2026-11-10.md (jobs.json)",
+ "decision": "the manager approved the reserve, 1,300, within PH2-WM (owner, 2026-11-10, up to 9,740)",
+ "coordinator_update_2026_11_11": "R2 was already done when the update came: the bowl result is kept, its layer marked 'provisional position, pending WM-T2', nothing more spent on it; the curtain / armchair overlap reported (curtains_vs_armchair)",
+ "jobs": [
+  {
+   "id": "wm-ph2-reserve-r1-window-floor",
+   "pass_": "R1",
+   "slots": [
+    "curtains",
+    "planter",
+    "basket",
+    "magazine-holder"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "tokens": 650,
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 4
+    },
+    "total_tokens": 650,
+    "deviation_pct": 0.0
+   },
+   "idempotency_key": "wm-ph2-reserve-r1-window-floor-20261111",
+   "placeholder_id": "9f782eb9-95f7-45fe-a716-14cf881c960d",
+   "task_id": "caf0e39671392fa83cef0523fb793e43",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-caf0e39671392fa83cef0523fb793e43-0-1794358604276-20716da5.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/ef55c679-1f26-4aa5-a13e-876409a34fc4.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r1-input.png",
+   "image_sha256": "80eb7f8c691e0c905a4742384846485d97670b900e5f84ce4ca69b7635d1c63f",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r1-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/reserve-r1-window-floor.txt",
+   "prompt_chars": 2845,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7359e810-e18d-451a-8631-1ced90229631.png",
+     "card": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+     "sku": "12000029601125492",
+     "what": "linen slub close-up only (fabric and colour; the panel photo of step 2 showed a wide flat panel on a rod)",
+     "source_image": "curtains/img1.jpg",
+     "crop": [
+      0.0,
+      0.0,
+      1.0,
+      0.82
+     ],
+     "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/61eb456a-1b6b-4843-afff-2dba3d9f6418.png",
+     "card": "planter-cj-cement-ribbed-belly",
+     "sku": "CJJT154204209IR",
+     "what": "SKU beige large 42 x 35.5 (dimension lines cropped out)",
+     "source_image": "planter/sku.jpg",
+     "crop": [
+      0.13,
+      0.18,
+      0.8,
+      0.8
+     ],
+     "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/84e63b11-5684-47b7-ae14-73310c28926b.png",
+     "card": "basket-cj-jute-rope-cylinder",
+     "sku": "CJYD186026903CX",
+     "what": "SKU large 35 x 39 (dimensions cropped out)",
+     "source_image": "basket/sku.jpeg",
+     "crop": [
+      0.28,
+      0.06,
+      0.82,
+      0.74
+     ],
+     "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 4,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/95b556a1-5ea2-4548-8133-747bd6a3470b.png",
+     "card": "magazine-holder-cj-gunmetal-leather-strap",
+     "sku": "CJYD201631004DW",
+     "what": "SKU orange (cognac straps) small 35 x 19 x 27.5",
+     "source_image": "magazine-holder/sku-orange.jpg",
+     "crop": [
+      0.15,
+      0.15,
+      0.88,
+      0.8
+     ],
+     "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    }
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/r1-seedream.png",
+   "register_to_input": [
+    [
+     0.996399998664856,
+     -0.0003000000142492354,
+     4.438000202178955
+    ],
+    [
+     -9.999999747378752e-05,
+     0.9957000017166138,
+     4.420300006866455
+    ]
+   ],
+   "tone_gain_median": [
+    1.0833,
+    1.0897,
+    1.0847
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 3.74,
+    "raw_p95": 13.41,
+    "after_tone_match_median": 1.07,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products_cut": {
+    "curtains": {
+     "alpha_px": 358381,
+     "soft_px": 7199,
+     "box_px": [
+      0,
+      0,
+      265,
+      1530
+     ],
+     "placeholder_px": 321666,
+     "placeholder_covered": 0.998,
+     "outside_placeholder_px": 31742,
+     "shadow_px_below_0_97": 4336,
+     "shadow_min": 0.573
+    },
+    "planter": {
+     "alpha_px": 72375,
+     "soft_px": 9849,
+     "box_px": [
+      920,
+      586,
+      1139,
+      1197
+     ],
+     "placeholder_px": 57536,
+     "placeholder_covered": 0.961,
+     "outside_placeholder_px": 14334,
+     "shadow_px_below_0_97": 27878,
+     "shadow_min": 0.556
+    },
+    "basket": {
+     "alpha_px": 21759,
+     "soft_px": 2407,
+     "box_px": [
+      998,
+      1044,
+      1142,
+      1249
+     ],
+     "placeholder_px": 23177,
+     "placeholder_covered": 0.871,
+     "outside_placeholder_px": 1160,
+     "shadow_px_below_0_97": 3855,
+     "shadow_min": 0.655
+    },
+    "magazine-holder": {
+     "alpha_px": 20840,
+     "soft_px": 2098,
+     "box_px": [
+      931,
+      1391,
+      1211,
+      1530
+     ],
+     "placeholder_px": 18296,
+     "placeholder_covered": 0.966,
+     "outside_placeholder_px": 893,
+     "shadow_px_below_0_97": 6177,
+     "shadow_min": 0.659
+    }
+   },
+   "fidelity": {
+    "curtains": "PARTIAL (colour), geometry pass. Colour: the layer reads a warm flax / oatmeal (median chroma ~15, hue ~75 deg) where the card's photo is a pale cream (chroma ~7, hue ~93 deg) and the room's white plaster stays near neutral (chroma 2-5), so the room's light does not explain it; not recoloured in code (no separate grade; for QA / the designer). Geometry: the stack keeps the WMC7 width (step 2 drew it twice as wide, over the whole first pane). Its inner edge follows the clay from the track down and the hem flares out to ~2.6 cm beyond it, so the soft edge lies over the first pane's 46 px glass strip by a median ~10 px (max 17) in the lower rows. Semi-sheer beige linen with slub, matte; it reads a little warmer and darker than the card's cream in the room's shaded front corner",
+    "planter": "FAIL: drawn ~1.36x the card (rim ~57 cm against 42, ~48 cm tall against 35.5). A size miss alone could be scaled in code, but its lower right is hidden by the rendered basket, which is itself off the plan, so the pot cannot be cut whole and cannot be layered without that basket",
+    "basket": "FAIL (placement): in front of the pot, but its floor centre is off the plan's (-1.62, 0.78) (see offset_cm) and it is a little large; a placement miss is not fixed in code",
+    "magazine-holder": "pass: the Orange SKU (glossy black arched tubes, cognac leather slings with rivets), long side to the camera, the arches and slings on the projected 35 x 19 x 27.5 skeleton; the rug in its gaps stays the rug layer's"
+   },
+   "seed": null,
+   "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead",
+   "method": "TINTED clay placeholders (reserve_r12.py): step 0's card-size solids at house plan 1.3.5 places, in each product's base colour with its simple structure; one card crop per product; the current scene (base + 6 layered defaults + set B) below"
+  },
+  {
+   "id": "wm-ph2-reserve-r2-table-ceiling",
+   "pass_": "R2",
+   "slots": [
+    "pendant",
+    "bowl"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "tokens": 650,
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 2
+    },
+    "total_tokens": 650,
+    "deviation_pct": 0.0
+   },
+   "idempotency_key": "wm-ph2-reserve-r2-table-ceiling-20261111",
+   "placeholder_id": "a4f7cab8-44d9-4276-888f-1d1044d73004",
+   "task_id": "638bf9caee5afefad515495bcb0a012b",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-638bf9caee5afefad515495bcb0a012b-0-1794358559180-f394571c.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/be588bdb-5ec4-4672-8ba1-627763be41ac.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r2-input.png",
+   "image_sha256": "fc8c41877ca4dc4116dabc672acc6c58210b784aeb878fcdfd1e315c405d67fb",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/r2-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/reserve-r2-table-ceiling.txt",
+   "prompt_chars": 2063,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6a438baf-2b43-4b68-8613-ecb23bd98464.png",
+     "card": "pendant-cj-tiered-fabric-drum",
+     "sku": "CJYD247032902BY",
+     "what": "the tiered fabric drum, beige 50",
+     "source_image": "pendant/img2.jpg",
+     "crop": [
+      0.02,
+      0.25,
+      0.92,
+      0.85
+     ],
+     "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/50ffe4e5-ba93-4cd3-a7cf-b427dc329c83.png",
+     "card": "bowl-cj-matte-black-bowl-20",
+     "sku": "CJJT131449012LO",
+     "what": "SKU style 12, 8 inch matte black bowl",
+     "source_image": "bowl/sku.jpg",
+     "crop": [
+      0.27,
+      0.04,
+      0.82,
+      0.86
+     ],
+     "note": "the same crop uploaded for steps 2-3 (scratchpad/ph2/refs, var2 only, never in the repo)"
+    }
+   ],
+   "raw": "assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/r2-seedream.png",
+   "register_to_input": [
+    [
+     0.9979000091552734,
+     -0.0,
+     3.193700075149536
+    ],
+    [
+     0.00019999999494757503,
+     0.9968000054359436,
+     1.857300043106079
+    ]
+   ],
+   "tone_gain_median": [
+    1.1198,
+    1.1333,
+    1.1388
+   ],
+   "model_drift_outside_zones_L": {
+    "raw_median": 3.05,
+    "raw_p95": 9.73,
+    "after_tone_match_median": 1.03,
+    "note": "the model's redraw outside the products; discarded (the scene below is kept)"
+   },
+   "products_cut": {
+    "pendant": {
+     "alpha_px": 34591,
+     "soft_px": 2820,
+     "box_px": [
+      1507,
+      224,
+      1809,
+      379
+     ],
+     "placeholder_px": 50537,
+     "placeholder_covered": 0.609,
+     "outside_placeholder_px": 3113,
+     "shadow_px_below_0_97": 0,
+     "shadow_min": 1.0
+    },
+    "bowl": {
+     "alpha_px": 9762,
+     "soft_px": 1204,
+     "box_px": [
+      1929,
+      1253,
+      2078,
+      1340
+     ],
+     "placeholder_px": 9216,
+     "placeholder_covered": 0.971,
+     "outside_placeholder_px": 388,
+     "shadow_px_below_0_97": 3510,
+     "shadow_min": 0.625
+    }
+   },
+   "fidelity": {
+    "pendant": "FAIL (placement): the card's shade (five off-white fabric tiers, 50 cm) at the plan's X / Y, but hung ~11 cm low (shade bottom ~1.79-1.80 against the owner's 1.90, V7Q7 b); equivalently a larger shade further back. Not moved in code",
+    "bowl": "pass on the card (shape, colour, size) and on step 0's position; the position itself is PROVISIONAL, pending WM-T2 (the designer, 2026-11-11: (0.72, 1.94) is 0.009 from the throw; the table group may move left under the pendant)"
+   },
+   "seed": null,
+   "seed_note": "seedream-5-pro is not seedable (docs/var2-models.md): prompt, input and refs are kept instead",
+   "method": "TINTED clay placeholders (reserve_r12.py): step 0's card-size solids at house plan 1.3.5 places, in each product's base colour with its simple structure; one card crop per product; the current scene (base + 6 layered defaults + set B) below"
+  }
+ ],
+ "tokens_total": 1300,
+ "phase2_tokens_total": {
+  "steps_1_3": 1950,
+  "reserve": 1300,
+  "total": 3250,
+  "cap_PH2_WM": 9740
+ },
+ "third_pass": "none (the brief: no third pass if one fails; report)",
+ "layered_after_reserve": [
+  "rug",
+  "vase",
+  "floor-lamp",
+  "framed-art",
+  "accent-sconces",
+  "candle-holders",
+  "curtains",
+  "magazine-holder (Orange)",
+  "bowl (position provisional, WM-T2)"
+ ],
+ "pending": [
+  "planter",
+  "basket",
+  "pendant"
+ ],
+ "grade_r12": {
+  "script": "grade_cut_r12.py",
+  "manifest": "layers/manifest-r12.json",
+  "verify": "layers/verify-layers-r12.json (pass)",
+  "lock": "lock-and-grade-check-r12.json (pass, worst p90 9.0 px)",
+  "sheet": "phase2-reserve-r12-sheet.jpg",
+  "fidelity": "work-reserve/fidelity-r12.json"
+ }
+}

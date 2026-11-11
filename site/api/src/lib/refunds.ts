@@ -62,11 +62,7 @@ const fail = (status: 404 | 409 | 422 | 502 | 503, code: string, message_he: str
   ...(refund_id ? { refund_id } : {}),
 });
 
-export async function requestRefund(
-  env: Env,
-  req: RefundRequest,
-  opts: { provider?: PaymentProvider; now?: () => number } = {},
-): Promise<RefundResult> {
+export async function requestRefund(env: Env, req: RefundRequest, opts: { provider?: PaymentProvider; now?: () => number } = {}): Promise<RefundResult> {
   const now = opts.now ?? Date.now;
   const iso = () => new Date(now()).toISOString();
   if (!REFUND_KEY.test(req.key)) return fail(422, 'invalid_key', 'מפתח ההחזר לא תקין. רעננו את הדף ונסו שוב.');
@@ -179,11 +175,9 @@ export async function requestRefund(
   async function record(row: RefundRow, providerId: string, issued: IssuedRefund): Promise<RefundResult> {
     const at = iso();
     const [done] = await env.DB.batch([
-      env.DB.prepare("UPDATE refunds SET state = 'refunded', provider_refund_id = ?, completed_at = ?, last_error = NULL WHERE id = ? AND state = 'claimed'").bind(
-        issued.refund_id,
-        at,
-        row.id,
-      ),
+      env.DB.prepare(
+        "UPDATE refunds SET state = 'refunded', provider_refund_id = ?, completed_at = ?, last_error = NULL WHERE id = ? AND state = 'claimed'",
+      ).bind(issued.refund_id, at, row.id),
       // all of it refunded: the order says so (a canceled order stays canceled)
       env.DB.prepare(
         `UPDATE orders SET status = 'refunded', updated_at = ? WHERE id = ? AND status NOT IN ('canceled', 'refunded')
@@ -192,7 +186,14 @@ export async function requestRefund(
       // the audit row only for the run that recorded it (the refund's completed_at is this run's)
       env.DB.prepare(
         "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, 'refund.refunded', ?, ? WHERE EXISTS (SELECT 1 FROM refunds WHERE id = ? AND state = 'refunded' AND completed_at = ?)",
-      ).bind(at, req.actor.slice(0, 200), row.order_id, JSON.stringify({ refund: row.id, amount_agorot: row.amount_agorot, provider_refund: issued.refund_id }), row.id, at),
+      ).bind(
+        at,
+        req.actor.slice(0, 200),
+        row.order_id,
+        JSON.stringify({ refund: row.id, amount_agorot: row.amount_agorot, provider_refund: issued.refund_id }),
+        row.id,
+        at,
+      ),
     ]);
     if (done?.meta.changes) await env.SUPPLIER_QUEUE.send({ kind: 'credit-note', order_id: row.order_id, refund_id: row.id });
     log.info('refund.refunded', { order_id: row.order_id, refund_id: row.id, amount_agorot: row.amount_agorot, provider: providerId });
@@ -201,7 +202,9 @@ export async function requestRefund(
 }
 
 function auditStmt(db: D1Database, actor: string, action: string, subject: string, detail: object, at: string): D1PreparedStatement {
-  return db.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(at, actor.slice(0, 200), action, subject, JSON.stringify(detail));
+  return db
+    .prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)')
+    .bind(at, actor.slice(0, 200), action, subject, JSON.stringify(detail));
 }
 async function audit(db: D1Database, actor: string, action: string, subject: string, detail: object, at: string): Promise<void> {
   await auditStmt(db, actor, action, subject, detail, at).run();

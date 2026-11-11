@@ -547,6 +547,21 @@
   padding: var(--s-3) 0;
   border-top: 1px solid var(--rule);
 }
+/* S13 (3.3): the shipments that left, a line each: status, number, and a generic tracker's link when there is one */
+.order-tracking {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.order-tracking li {
+  padding: var(--s-2) 0;
+}
+.order-tracking .order-track-link {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 44px;
+}
 .order-sheet dl {
   display: flex;
   justify-content: space-between;

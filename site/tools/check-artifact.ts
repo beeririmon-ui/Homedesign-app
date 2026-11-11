@@ -18,7 +18,9 @@ check(files.length <= LIMIT_FILES, `${files.length} files > ${LIMIT_FILES}`);
 check(bytes <= LIMIT_BYTES, `${(bytes / 1048576).toFixed(2)} MB > 12 MB`);
 check(!/<!doctype|<html[\s>]|<head[\s>]|<body[\s>]|<\/body>|<\/html>/i.test(html), 'document skeleton tags present (doctype/html/head/body)');
 check(/^<title>[^<]+<\/title>\s*<style>/.test(html), 'the page must start with <title> and then <style>');
-check(/<style>:root\{[^}]*--bg:/.test(html), 'light tokens on :root must come first');
+// the light tokens first: since S5 the first :root block is the magazine system's (styles/system.css, --paper …), which
+// tokens.css imports before its own aliases (--bg …); no dark mode at launch (ART3). S13: the rule reads either.
+check(/<style>:root\{[^}]*--(?:paper|bg):/.test(html), 'light tokens on :root must come first');
 const css = /<style>([\s\S]*?)<\/style>/.exec(html)?.[1] ?? '';
 // one paper, no dark mode at launch (ART3, 2026-11-03): the tokens start the stylesheet and no dark block follows
 check(css.indexOf(':root{') === 0, 'the tokens on :root must start the stylesheet');

@@ -22,5 +22,5 @@ if (bad.length) {
   process.exit(1);
 }
 console.log(
-  `check-config: ${envs.map(([name, v]) => `${name} ${v.ENVIRONMENT} (payment ${String(v.PAYMENT_PROVIDER)}, invoices ${String(v.INVOICE_PROVIDER)}, supplier ${String(v.SUPPLIER_PROVIDER)})`).join('; ')}`,
+  `check-config: ${envs.map(([name, v]) => `${name} ${v.ENVIRONMENT} (payment ${String(v.PAYMENT_PROVIDER)}, invoices ${String(v.INVOICE_PROVIDER)}, supplier ${String(v.SUPPLIER_PROVIDER)}, alerts ${String(v.NOTIFY_PROVIDER)})`).join('; ')}`,
 );

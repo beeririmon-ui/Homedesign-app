@@ -49,3 +49,20 @@ test('no supplier name and no listing number in anything the site serves (paths,
   expect(scanned).toBeGreaterThan(100);
   expect(found.slice(0, 25)).toEqual([]);
 });
+
+/**
+ * S13: the admin is the Worker's (api/src/routes/admin-ui.ts, behind Access); none of its code, routes or headers is in
+ * the public build, and nothing in it calls the Admin API.
+ */
+test('no admin code in the public build: no admin route, API call, dev header or admin screen text', () => {
+  const ADMIN = /\/api\/admin|\/admin\/orders|x-hd-dev-admin|ADMIN_DEV|cf-access-jwt|ניהול הזמנות|mock-supplier/;
+  const found: string[] = [];
+  for (const f of files(DIST)) {
+    const rel = relative(DIST, f);
+    if (CONFIG.has(rel) || !TEXT.test(rel)) continue;
+    const m = ADMIN.exec(readFileSync(f, 'utf8'));
+    if (m) found.push(`${rel}: "${m[0]}"`);
+    if (/(^|\/)admin(\/|$)/.test(rel)) found.push(`path ${rel}`);
+  }
+  expect(found).toEqual([]);
+});

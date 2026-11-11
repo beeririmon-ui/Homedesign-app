@@ -1,0 +1,9 @@
+S13, the full run: cd site && npm run test:all (2026-11-11), log: test-all.log
+typecheck      pass
+lint           pass (eslint, 0 warnings)
+format:check   pass
+vitest         195/195 (19 files; new: api/test/s13.test.ts 28: cancellation x6, refunds x6, delivery x4, no PII x2, healthz x3, admin 403 x2, admin operations x4, new-order alert x1)
+build          pass; check-config pass (alerts: mock in dev and preview, UNDECIDED in production); budget: room JS 53.6/80 KB (was 78.2; S13 goal <= 74), room CSS 8.8/15 KB, first load mobile 710.9 KB/3 MB
+e2e            101/101 (new: operations.spec 5 (healthz, admin 403, delivery statuses at 400, admin screen and refund at 1280, cancellation after the supplier), public-scan: no admin code in the public build); encoding gate inside e2e: pass
+a11y           16/16 (new: the order page with tracking, the admin list and an admin order)
+artifact       npm run preview:artifact: pass (CI step, not in test:all; its token rule fixed, failing since S5)

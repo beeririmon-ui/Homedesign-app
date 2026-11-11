@@ -13,7 +13,8 @@
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
     // S11 (S10 question 7): /rooms/* too, so ?style=<house> gets that house's own page (src/app.ts)
-    "run_worker_first": ["/api/*", "/mock-pay/*", "/order/*", "/rooms/*"],
+    // S13: /admin (the screen, behind Access) and /healthz (the uptime clock) are the Worker's too
+    "run_worker_first": ["/api/*", "/mock-pay/*", "/order/*", "/rooms/*", "/admin", "/admin/*", "/healthz"],
   },
   "d1_databases": [
     {
@@ -44,10 +45,14 @@
     "PAYMENT_PROVIDER": "mock",
     "INVOICE_PROVIDER": "mock",
     "SUPPLIER_PROVIDER": "mock",
+    // S13 (6.3): the new-order alert; a log row outside production until the owner chooses email or Telegram
+    "NOTIFY_PROVIDER": "mock",
     "ACCESS_TEAM_DOMAIN": "",
     "ACCESS_AUD": "",
   },
   "observability": { "enabled": true },
+  // S13 (3.3): the cron asks the supplier about its shipments (only when its client has a tracking call; lib/shipments.ts)
+  "triggers": { "crons": ["*/30 * * * *"] },
   "env": {
     "preview": {
       "name": "homedesign-site-preview",
@@ -79,6 +84,7 @@
         "PAYMENT_PROVIDER": "mock",
         "INVOICE_PROVIDER": "mock",
         "SUPPLIER_PROVIDER": "mock",
+        "NOTIFY_PROVIDER": "mock",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",
       },
@@ -115,6 +121,8 @@
         "PAYMENT_PROVIDER": "UNDECIDED",
         "INVOICE_PROVIDER": "UNDECIDED",
         "SUPPLIER_PROVIDER": "cj",
+        // S13: no channel is built; the owner chooses (email or Telegram). The alert is skipped, never the order
+        "NOTIFY_PROVIDER": "UNDECIDED",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",
       },

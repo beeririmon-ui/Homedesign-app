@@ -4,6 +4,10 @@ import { HttpError, SITE_CSP, securityHeaders } from './lib/http';
 import { publicApi } from './routes/public';
 import { webhooks, mockPay } from './routes/payments';
 import { admin } from './routes/admin';
+import { adminList, adminUi } from './routes/admin-ui';
+import { requireAdmin } from './lib/access';
+import { health } from './routes/health';
+import { errorMessageHe, log } from './lib/log';
 
 export const app = new Hono<AppEnv>();
 
@@ -11,6 +15,11 @@ app.use('*', securityHeaders);
 app.route('/api', publicApi);
 app.route('/api/webhooks', webhooks);
 app.route('/api/admin', admin);
+// S13 (6.3): the admin screen, behind the same gate (Access); rendered here, never part of the public build
+app.route('/admin', adminUi);
+app.get('/admin/', requireAdmin, adminList);
+// S13 (6.2): the uptime clock's endpoint; no secrets and no internal details
+app.route('/healthz', health);
 app.route('/mock-pay', mockPay);
 // Buyer order pages share one prerendered shell; the client reads the id from the URL.
 app.get('/order/*', async (c) => {
@@ -51,10 +60,15 @@ app.all('/api/*', () => {
   throw new HttpError(404, 'not_found');
 });
 
+/**
+ * S13 (6.2): an error the request cannot recover from is a structured row (lib/log.ts: an error id, no PII), and the
+ * customer gets a short message with that id, so a message to the shop finds the row.
+ */
 app.onError((err, c) => {
   if (err instanceof HttpError) return c.json({ error: err.code, message_he: err.messageHe }, err.status);
-  console.error('unhandled', err);
-  return c.json({ error: 'internal_error', message_he: 'משהו השתבש. נסו שוב.' }, 500);
+  const url = new URL(c.req.url);
+  const error_id = log.error('request.unhandled', { method: c.req.method, path: url.pathname.slice(0, 120) }, err);
+  return c.json({ error: 'internal_error', error_id, message_he: errorMessageHe(error_id) }, 500);
 });
 
 app.notFound((c) => (c.env.ASSETS ? c.env.ASSETS.fetch(c.req.raw) : c.json({ error: 'not_found' }, 404)));

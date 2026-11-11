@@ -1,0 +1,450 @@
+/**
+ * qa-agent, 2026-11-11 (S11–S12 at b94c5bc1): my own reproduction at the Worker, on the REAL seed the build made
+ * (.generated/seed.sql: the shop's catalog plus the story's), not frontend-dev's fixture. Copied into the isolated copy as
+ * site/api/test/qa-s1112.test.ts and run there only (never in the live tree).
+ *
+ *  ת16  concurrent invoice jobs (5 at once, a slow provider that dedupes nothing), a crash after the provider issued and
+ *       before anything was written (the batch fails), then the retries: within the lease, after it, with a provider that
+ *       can be asked, one that dedupes by key, and one that can do neither (unresolved: it waits for a person, through
+ *       the queue too). And one adversarial case: a provider call longer than the lease.
+ *  ת17  every provider variable × production spellings of ENVIRONMENT × missing / empty / mock / misspelt / placeholder /
+ *       correct: the payment leaves no order behind, the supplier job never marks the order sent, the invoice job never
+ *       records an invoice; the deploy check (configIssues) refuses each bad value.
+ *  sets the triptych: every SKU of the card at the cart; the order's supplier lines (1 and 2 sets); the order line's name.
+ */
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { signWebhook } from '@hd/shared';
+import { app } from '../src/app';
+import worker from '../src/index';
+import type { Env, SupplierJob } from '../src/env';
+import { createD1, migrate } from './d1-shim';
+import { processSupplierJob } from '../src/lib/fulfillment';
+import { INVOICE_LEASE_MS, processInvoiceJob, type InvoiceProvider, type IssuedInvoice } from '../src/lib/invoices';
+import { configIssues, providerOf } from '../src/lib/config';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const GEN = resolve(here, '../../.generated');
+const SEED = resolve(GEN, 'seed.sql');
+const SECRET = 'qa-dummy-webhook-secret-not-a-key';
+type Cat = { products: { id: string; price_agorot: number | null; availability: { status: string }; pack: unknown; variants: { id: string }[]; variants_full?: { id: string; active: boolean; set_part?: boolean; set_skus?: string[] | null; supplier_sku: string; set_incomplete?: string | null }[]; source_path: string }[] };
+const shop = JSON.parse(readFileSync(resolve(GEN, 'catalog.full.json'), 'utf8')) as Cat;
+const story = JSON.parse(readFileSync(resolve(GEN, 'catalog.story.full.json'), 'utf8')) as Cat;
+// a plain product of the shop: available, priced, one variant, no pack
+const plain = shop.products.find((p) => p.availability.status === 'available' && p.price_agorot && !p.pack && p.variants.length === 1 && (p.variants_full ?? []).length <= 1)!;
+const PLAIN = plain.variants[0]!.id;
+const trip = story.products.find((p) => p.source_path.endsWith('framed-art-aliexpress-minimal-geometric-triptych-prints.json'))!;
+
+let env: Env;
+beforeEach(() => {
+  const DB = createD1();
+  migrate(DB, readFileSync(SEED, 'utf8'));
+  env = {
+    DB,
+    SUPPLIER_QUEUE: { send: vi.fn(async () => undefined), sendBatch: vi.fn() } as unknown as Queue<SupplierJob>,
+    ENVIRONMENT: 'test',
+    PAYMENT_PROVIDER: 'mock',
+    SUPPLIER_PROVIDER: 'mock',
+    INVOICE_PROVIDER: 'mock',
+    ACCESS_TEAM_DOMAIN: '',
+    ACCESS_AUD: '',
+    PAYMENT_WEBHOOK_SECRET: SECRET,
+  };
+});
+const req = (path: string, init?: RequestInit, e: Env = env) => app.request(`http://localhost${path}`, init, e);
+const json = (body: unknown, method = 'POST'): RequestInit => ({ method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+const one = async <T>(sql: string, ...b: unknown[]) => (await env.DB.prepare(sql).bind(...b).first<T>())!;
+const count = async (sql: string, ...b: unknown[]) => (await one<{ n: number }>(sql, ...b)).n;
+async function cart(items: { variant_id: string; qty?: number; pack?: string; house?: string }[], e: Env = env) {
+  const { id } = (await (await req('/api/cart', { method: 'POST' }, e)).json()) as { id: string };
+  for (const i of items) {
+    const r = await req(`/api/cart/${id}/items`, json({ qty: 1, ...i }, 'PUT'), e);
+    expect(r.status, `${i.variant_id}: ${await r.clone().text()}`).toBe(200);
+  }
+  return id;
+}
+const buyer = (cart_id: string) => ({
+  cart_id,
+  customer: { full_name: 'בודקת איכות', email: 'qa@example.invalid', phone: '050-0000000' },
+  address: { city: 'חיפה', street: 'הנמל', house: '1' },
+  shipping_method: 'economy',
+  consents: { terms: true, marketing: false },
+});
+async function checkout(items: Parameters<typeof cart>[0], e: Env = env) {
+  const r = await req('/api/checkout', json(buyer(await cart(items, e))), e);
+  return { status: r.status, body: (await r.json()) as { order_id?: string; error?: string } };
+}
+async function paid(items: Parameters<typeof cart>[0] = [{ variant_id: PLAIN }]) {
+  const c = await checkout(items);
+  expect(c.status, JSON.stringify(c.body)).toBe(201);
+  const o = await one<{ payment_session_id: string; total_agorot: number }>('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?', c.body.order_id);
+  const body = JSON.stringify({ id: `qa_${c.body.order_id}`, type: 'payment.succeeded', session_id: o.payment_session_id, amount_agorot: o.total_agorot });
+  const r = await req('/api/webhooks/payment/mock', { method: 'POST', headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(SECRET, body, Math.floor(Date.now() / 1000)) }, body });
+  expect(((await r.json()) as { outcome: string }).outcome).toBe('paid');
+  return c.body.order_id!;
+}
+
+/** a network-like provider: slow, counts every invoice it issues; options: can be asked (find), dedupes by key */
+function counting(o: { delayMs?: number; find?: boolean; idempotent?: boolean; hangUntil?: Promise<void> } = {}) {
+  const issued: string[] = [];
+  const byKey = new Map<string, IssuedInvoice>();
+  const p: InvoiceProvider & { issued: string[] } = {
+    id: 'qa-counting',
+    idempotent: !!o.idempotent,
+    issued,
+    async issue(input, { idempotency_key }) {
+      if (o.hangUntil) await o.hangUntil;
+      else await new Promise((r) => setTimeout(r, o.delayMs ?? 20));
+      if (o.idempotent && byKey.has(idempotency_key)) return byKey.get(idempotency_key)!;
+      issued.push(`${input.order_id}#${issued.length + 1}`);
+      const inv = { invoice_id: `QA-INV-${input.order_id}-${issued.length}`, url: null };
+      byKey.set(idempotency_key, inv);
+      return inv;
+    },
+  };
+  if (o.find) p.find = async (id) => byKey.get(id) ?? null;
+  return p;
+}
+/** the Worker dies after the provider answered and before anything is written: the next batch() throws, once */
+function dieAtNextBatch(e: Env): Env {
+  let armed = true;
+  const db = e.DB as unknown as { batch: (s: unknown[]) => Promise<unknown> };
+  const real = db.batch.bind(db);
+  return {
+    ...e,
+    DB: new Proxy(e.DB, {
+      get(t, k) {
+        if (k === 'batch')
+          return async (s: unknown[]) => {
+            if (armed) {
+              armed = false;
+              throw new Error('qa: the isolate died');
+            }
+            return real(s);
+          };
+        const v = (t as unknown as Record<string | symbol, unknown>)[k];
+        return typeof v === 'function' ? (v as (...a: unknown[]) => unknown).bind(t) : v;
+      },
+    }),
+  };
+}
+const invoicesOf = (id: string) => count("SELECT COUNT(*) AS n FROM audit_log WHERE action = 'order.invoiced' AND subject = ?", id);
+
+describe('QA ת16: one invoice per order (real seed)', () => {
+  it('5 runs at once, a slow provider that dedupes nothing and cannot be asked: one invoice', async () => {
+    const id = await paid();
+    const p = counting({ delayMs: 40 });
+    const out = await Promise.all(Array.from({ length: 5 }, () => processInvoiceJob(env, id, p)));
+    expect(p.issued).toHaveLength(1);
+    expect(out.filter((o) => o === 'invoiced')).toHaveLength(1);
+    expect(out.filter((o) => o === 'retry')).toHaveLength(4);
+    expect(await invoicesOf(id)).toBe(1);
+    // later runs (the retries) skip
+    expect(await Promise.all([processInvoiceJob(env, id, p), processInvoiceJob(env, id, p)])).toEqual(['skipped', 'skipped']);
+    expect(p.issued).toHaveLength(1);
+  });
+
+  it('a crash after the provider issued, before anything was written: retries within the lease wait; after it a provider that can be asked records the first invoice', async () => {
+    const id = await paid();
+    const p = counting({ find: true });
+    let t = Date.now();
+    const now = () => t;
+    await expect(processInvoiceJob(dieAtNextBatch(env), id, p, { now })).rejects.toThrow('isolate died');
+    expect(p.issued).toHaveLength(1);
+    expect((await one<{ state: string }>('SELECT state FROM invoices WHERE order_id = ?', id)).state).toBe('claimed');
+    t += 60_000;
+    expect(await processInvoiceJob(env, id, p, { now })).toBe('retry');
+    t += INVOICE_LEASE_MS;
+    expect(await processInvoiceJob(env, id, p, { now })).toBe('invoiced');
+    expect(p.issued).toHaveLength(1);
+    expect((await one<{ invoice_number: string }>('SELECT invoice_number FROM orders WHERE id = ?', id)).invoice_number).toBe(`QA-INV-${id}-1`);
+    expect(await invoicesOf(id)).toBe(1);
+  });
+
+  it('the same crash with a provider that dedupes by key (cannot be asked): the retry sends the same key and gets the first invoice', async () => {
+    const id = await paid();
+    const p = counting({ idempotent: true });
+    let t = Date.now();
+    const now = () => t;
+    await expect(processInvoiceJob(dieAtNextBatch(env), id, p, { now })).rejects.toThrow();
+    t += INVOICE_LEASE_MS + 1;
+    expect(await processInvoiceJob(env, id, p, { now })).toBe('invoiced');
+    expect(p.issued).toHaveLength(1);
+    expect((await one<{ invoice_number: string }>('SELECT invoice_number FROM orders WHERE id = ?', id)).invoice_number).toBe(`QA-INV-${id}-1`);
+  });
+
+  it('the same crash with a provider that can neither be asked nor dedupe: unresolved, and it stays so (runs, an hour later, the queue) for a person', async () => {
+    const id = await paid();
+    const p = counting({});
+    let t = Date.now();
+    const now = () => t;
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    await expect(processInvoiceJob(dieAtNextBatch(env), id, p, { now })).rejects.toThrow();
+    t += INVOICE_LEASE_MS + 1;
+    expect(await processInvoiceJob(env, id, p, { now })).toBe('unresolved');
+    for (const dt of [1, 60_000, 3_600_000]) {
+      t += dt;
+      expect(await processInvoiceJob(env, id, p, { now })).toBe('unresolved');
+    }
+    expect(p.issued).toHaveLength(1);
+    expect(await count("SELECT COUNT(*) AS n FROM audit_log WHERE action = 'invoice.unresolved' AND subject = ?", id)).toBe(1);
+    expect((await one<{ invoice_number: string | null }>('SELECT invoice_number FROM orders WHERE id = ?', id)).invoice_number).toBeNull();
+    // through the queue (the configured provider, the mock): the message is acknowledged, never retried, nothing issued
+    const ack = vi.fn();
+    const retry = vi.fn();
+    await worker.queue({ messages: [{ body: { kind: 'issue-invoice', order_id: id }, attempts: 1, ack, retry }] } as unknown as MessageBatch<SupplierJob>, env);
+    expect(ack).toHaveBeenCalledTimes(1);
+    expect(retry).not.toHaveBeenCalled();
+    expect((await one<{ state: string }>('SELECT state FROM invoices WHERE order_id = ?', id)).state).toBe('unresolved');
+    expect((await one<{ invoice_number: string | null }>('SELECT invoice_number FROM orders WHERE id = ?', id)).invoice_number).toBeNull();
+    expect(err).toHaveBeenCalled();
+    err.mockRestore();
+  });
+
+  it('adversarial: a provider call longer than the lease (a hung request); the second run takes the claim over while the first is still waiting', async () => {
+    const id = await paid();
+    let release!: () => void;
+    const hang = new Promise<void>((r) => (release = r));
+    const slow = counting({ find: true, hangUntil: hang }); // can be asked, does not dedupe
+    let t = Date.now();
+    const now = () => t;
+    const first = processInvoiceJob(env, id, slow, { now });
+    await new Promise((r) => setTimeout(r, 20));
+    t += INVOICE_LEASE_MS + 1;
+    // a provider that cannot find the invoice that is still being issued: the takeover issues
+    const fast = { ...counting({ find: true }), id: 'qa-counting' } as InvoiceProvider & { issued: string[] };
+    const second = await processInvoiceJob(env, id, fast, { now });
+    release();
+    const a = await first;
+    // what happened, recorded for the report (not asserted as a pass or a fail)
+    const recorded = await one<{ provider_invoice_id: string }>('SELECT provider_invoice_id FROM invoices WHERE order_id = ?', id);
+    console.log(`QA lease overrun: first=${a} second=${second} issued=${slow.issued.length + fast.issued.length} recorded=${recorded.provider_invoice_id}`);
+    expect(slow.issued.length + fast.issued.length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('QA ת17: production fails closed on every provider variable (real seed)', () => {
+  const PROD_ENVS = ['production', undefined, '', 'Production', 'prod', 'PRODUCTION ', 'staging'];
+  const VALUES: Record<'PAYMENT_PROVIDER' | 'INVOICE_PROVIDER' | 'SUPPLIER_PROVIDER', { bad: (string | undefined)[]; good: string[] }> = {
+    PAYMENT_PROVIDER: { bad: [undefined, '', 'mock', 'Mock', 'MOCK', ' mock', 'Grow', 'GROW', 'grow ', 'UNDECIDED', 'stripe', 'tranzila'], good: ['grow'] },
+    INVOICE_PROVIDER: { bad: [undefined, '', 'mock', 'Mock', 'Morning', 'GROW', 'morning ', 'UNDECIDED', 'icount'], good: ['grow', 'morning'] },
+    SUPPLIER_PROVIDER: { bad: [undefined, '', 'mock', 'MOCK', 'CJ', 'Cj', ' cj', 'cj ', 'cjdropshipping', 'UNDECIDED', 'zendrop'], good: ['cj'] },
+  };
+  const prodEnv = (E: string | undefined, over: Partial<Env>): Env => ({ ...env, ENVIRONMENT: E as Env['ENVIRONMENT'], ...over });
+
+  it('providerOf: in every production spelling, only the exact provider is a provider; mock never', () => {
+    const rows: string[] = [];
+    for (const E of PROD_ENVS)
+      for (const [name, { bad, good }] of Object.entries(VALUES)) {
+        for (const v of bad) {
+          const c = providerOf({ ENVIRONMENT: E, [name]: v }, name as keyof typeof VALUES);
+          if (c.ok) rows.push(`${E}/${name}=${JSON.stringify(v)} ran ${c.id}`);
+        }
+        for (const v of good) {
+          const c = providerOf({ ENVIRONMENT: E, [name]: v }, name as keyof typeof VALUES);
+          if (!c.ok || c.mock) rows.push(`${E}/${name}=${v} refused`);
+        }
+      }
+    expect(rows).toEqual([]);
+  });
+
+  it('the deploy check flags every bad value in a production block (UNDECIDED is the one placeholder it lets through)', () => {
+    const missed: string[] = [];
+    for (const [name, { bad }] of Object.entries(VALUES))
+      for (const v of bad) {
+        if (v === 'UNDECIDED') continue;
+        const vars = { ENVIRONMENT: 'production', PAYMENT_PROVIDER: 'UNDECIDED', INVOICE_PROVIDER: 'UNDECIDED', SUPPLIER_PROVIDER: 'cj', [name]: v };
+        if (v === undefined) delete (vars as Record<string, unknown>)[name];
+        if (!configIssues(vars).length) missed.push(`${name}=${JSON.stringify(v)}`);
+      }
+    expect(missed).toEqual([]);
+    expect(configIssues({ PAYMENT_PROVIDER: 'mock', INVOICE_PROVIDER: 'mock', SUPPLIER_PROVIDER: 'mock' }).length).toBeGreaterThan(0);
+  });
+
+  it('the payment: every bad value, and grow (no documentation), in every production spelling: 5xx and no order left behind', async () => {
+    const c = await cart([{ variant_id: PLAIN }]);
+    const bad: string[] = [];
+    for (const E of PROD_ENVS)
+      for (const v of [...VALUES.PAYMENT_PROVIDER.bad, 'grow']) {
+        const e = prodEnv(E, { PAYMENT_PROVIDER: v as string });
+        const before = await count('SELECT COUNT(*) AS n FROM orders');
+        const r = await req('/api/checkout', json(buyer(c)), e);
+        const after = await count('SELECT COUNT(*) AS n FROM orders');
+        if (r.status < 500 || after !== before) bad.push(`${E}/${JSON.stringify(v)}: ${r.status}, orders ${before}→${after}`);
+        // the mock's pages and webhook: closed
+        const m = await req('/mock-pay/anything', undefined, e);
+        if (m.status !== 404) bad.push(`${E}/${JSON.stringify(v)}: /mock-pay ${m.status}`);
+        const w = await req('/api/webhooks/payment/mock', { method: 'POST', body: '{}', headers: { 'content-type': 'application/json' } }, e);
+        // 401 would mean the mock's verifier ran (the mock is live); 200 that an event was taken
+        if (w.status === 200 || w.status === 401) bad.push(`${E}/${JSON.stringify(v)}: mock webhook ${w.status}`);
+      }
+    expect(bad).toEqual([]);
+  });
+
+  it('the supplier job: every bad value in every production spelling leaves a paid order paid (supplier_error at attempt 5), never sent; cj without a key: the same', async () => {
+    const bad: string[] = [];
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    for (const E of PROD_ENVS.slice(0, 3))
+      for (const v of [...VALUES.SUPPLIER_PROVIDER.bad, 'cj']) {
+        const id = await paid();
+        const e = prodEnv(E, { SUPPLIER_PROVIDER: v as string });
+        for (let attempt = 1; attempt <= 8; attempt++) {
+          const r = await processSupplierJob(e, { kind: 'submit-order', order_id: id }, attempt);
+          const s = (await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', id)).status;
+          // attempts 1-4: retried, still paid; 5: supplier_error (a person looks); after that the job stops (skipped)
+          const want = attempt >= 5 ? 'supplier_error' : 'paid';
+          const wantR = attempt <= 5 ? 'retry' : 'skipped';
+          if (r !== wantR || s !== want) bad.push(`${E}/${JSON.stringify(v)} attempt ${attempt}: ${r}, ${s}`);
+        }
+        const sent = await count("SELECT COUNT(*) AS n FROM supplier_shipments WHERE order_id = ? AND status = 'submitted'", id);
+        if (sent) bad.push(`${E}/${JSON.stringify(v)}: a shipment marked submitted`);
+      }
+    err.mockRestore();
+    expect(bad).toEqual([]);
+  });
+
+  it('the invoice job: every bad value, and the real ids (not built), in every production spelling: retried, nothing recorded', async () => {
+    const bad: string[] = [];
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const id = await paid();
+    for (const E of PROD_ENVS)
+      for (const v of [...VALUES.INVOICE_PROVIDER.bad, 'grow', 'morning']) {
+        const r = await processInvoiceJob(prodEnv(E, { INVOICE_PROVIDER: v as string }), id);
+        if (r !== 'retry') bad.push(`${E}/${JSON.stringify(v)}: ${r}`);
+      }
+    expect(await count('SELECT COUNT(*) AS n FROM invoices WHERE order_id = ?', id)).toBe(0);
+    expect((await one<{ invoice_number: string | null }>('SELECT invoice_number FROM orders WHERE id = ?', id)).invoice_number).toBeNull();
+    err.mockRestore();
+    expect(bad).toEqual([]);
+  });
+});
+
+describe('QA sets: the triptych on the real seed', () => {
+  const full = trip.variants_full!;
+  const own = full.filter((v) => v.set_skus);
+  const parts = full.filter((v) => v.set_part);
+
+  it('every set variant is 200; every other print 422 set_part; one piece 422', async () => {
+    const { id } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+    const got: Record<string, string[]> = {};
+    for (const v of full)
+      for (const pack of ['set', 'unit']) {
+        const r = await req(`/api/cart/${id}/items`, json({ variant_id: v.id, pack, qty: 1 }, 'PUT'));
+        const b = (await r.json()) as { error?: string };
+        (got[`${v.set_skus ? 'own' : v.set_part ? 'part' : 'other'}/${pack}`] ??= []).push(`${r.status}:${b.error ?? ''}`);
+        if (r.status === 200) await req(`/api/cart/${id}/items`, json({ variant_id: v.id, pack, qty: 0 }, 'PUT'));
+      }
+    expect(own).toHaveLength(4);
+    expect(parts).toHaveLength(8);
+    expect([...new Set(got['own/set'])]).toEqual(['200:']);
+    expect([...new Set(got['part/set'])]).toEqual(['422:set_part']);
+    expect([...new Set(got['part/unit'])]).toEqual(['422:set_part']);
+    expect([...new Set(got['own/unit'])]).toEqual(['422:pack_unavailable']);
+  });
+
+  it('the supplier order: one of each print of the size bought; two sets two of each; a plain line beside it unchanged', async () => {
+    const v = own[1]!;
+    const id = await paid([{ variant_id: v.id, qty: 2 }, { variant_id: PLAIN }]);
+    const line = await one<{ name_he: string; supplier_lines_json: string }>('SELECT name_he, supplier_lines_json FROM order_items WHERE order_id = ? AND variant_id = ?', id, v.id);
+    expect(JSON.parse(line.supplier_lines_json).map((x: { supplier_sku: string }) => x.supplier_sku)).toEqual(v.set_skus);
+    expect(await processSupplierJob(env, { kind: 'submit-order', order_id: id }, 1)).toBe('submitted');
+    const sent = JSON.parse((await one<{ request_json: string }>('SELECT request_json FROM supplier_shipments WHERE order_id = ?', id)).request_json) as { lines: [string, number][] };
+    const lines = Object.fromEntries(sent.lines);
+    for (const sku of v.set_skus!) expect(lines[sku], sku).toBe(2);
+    expect(new Set(v.set_skus).size).toBe(3);
+    console.log(`QA triptych line: "${line.name_he}"; supplier lines ${JSON.stringify(sent.lines)}`);
+  });
+});
+
+describe('QA ת18, ת19, ת20 and the admin bypass (real seed)', () => {
+  it('ת18: an order canceled or refunded before it was paid is never invoiced; a paid order canceled before its job runs neither', async () => {
+    const c = await checkout([{ variant_id: PLAIN }]);
+    const id = c.body.order_id!;
+    for (const st of ['canceled', 'refunded']) {
+      await env.DB.prepare('UPDATE orders SET status = ?, paid_at = NULL WHERE id = ?').bind(st, id).run();
+      expect(await processInvoiceJob(env, id, counting())).toBe('skipped');
+    }
+    const id2 = await paid();
+    await env.DB.prepare("UPDATE orders SET status = 'canceled' WHERE id = ?").bind(id2).run();
+    const p = counting();
+    expect(await processInvoiceJob(env, id2, p)).toBe('skipped');
+    expect(p.issued).toHaveLength(0);
+    expect(await count('SELECT COUNT(*) AS n FROM invoices')).toBe(0);
+  });
+
+  it('ת19: INVOICE_PROVIDER=UNDECIDED: the invoice message is retried alone; a submit-order message after it is acknowledged and sent', async () => {
+    const id = await paid();
+    const e = { ...env, INVOICE_PROVIDER: 'UNDECIDED' };
+    const msgs = [
+      { body: { kind: 'issue-invoice', order_id: id }, attempts: 1, ack: vi.fn(), retry: vi.fn() },
+      { body: { kind: 'submit-order', order_id: id }, attempts: 1, ack: vi.fn(), retry: vi.fn() },
+    ];
+    const err = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    await worker.queue({ messages: msgs } as unknown as MessageBatch<SupplierJob>, e);
+    err.mockRestore();
+    expect(msgs[0]!.retry).toHaveBeenCalledTimes(1);
+    expect(msgs[0]!.ack).not.toHaveBeenCalled();
+    expect(msgs[1]!.ack).toHaveBeenCalledTimes(1);
+    expect((await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', id)).status).toBe('sent_to_supplier');
+  });
+
+  it('ת20: with PAYMENT_PROVIDER=grow outside production, a validly signed mock event is 404 and pays nothing; /mock-pay is 404', async () => {
+    const c = await checkout([{ variant_id: PLAIN }]);
+    const o = await one<{ payment_session_id: string; total_agorot: number }>('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?', c.body.order_id);
+    const e = { ...env, PAYMENT_PROVIDER: 'grow' };
+    const body = JSON.stringify({ id: 'qa_grow_1', type: 'payment.succeeded', session_id: o.payment_session_id, amount_agorot: o.total_agorot });
+    const r = await req('/api/webhooks/payment/mock', { method: 'POST', headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(SECRET, body, Math.floor(Date.now() / 1000)) }, body }, e);
+    expect(r.status).toBe(404);
+    expect((await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', c.body.order_id)).status).toBe('pending_payment');
+    expect((await req(`/mock-pay/${o.payment_session_id}`, undefined, e)).status).toBe(404);
+  });
+
+  it('admin: ADMIN_DEV_BYPASS=1 is ignored outside development and test (preview-local, preview, production): 403', async () => {
+    for (const E of ['preview-local', 'preview', 'production', undefined]) {
+      const e = { ...env, ENVIRONMENT: E as Env['ENVIRONMENT'], ADMIN_DEV_BYPASS: '1' };
+      for (const path of ['/api/admin/overview', '/api/admin/orders', '/api/admin/economics']) expect((await req(path, undefined, e)).status, `${E} ${path}`).toBe(403);
+    }
+  });
+});
+
+describe('QA the Mediterranean print: its real card has no named set, and a set without its parts is refused', () => {
+  it('the card (8 prints for a set of 3): setComposition is incomplete at every size; a set variant carrying that is 422 set_unavailable, and a cart that held it loses it before payment', async () => {
+    const { setComposition } = await import('../../tools/lib/lines');
+    const { readdirSync, statSync } = await import('node:fs');
+    const find = (d: string): string | null => {
+      for (const n of readdirSync(d)) {
+        const p = resolve(d, n);
+        if (statSync(p).isDirectory()) { const r = find(p); if (r) return r; } else if (n === 'framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890.json') return p;
+      }
+      return null;
+    };
+    const card = JSON.parse(readFileSync(find(resolve(here, '../../../data/products'))!, 'utf8')) as { options: { axes: { id: string; values: { id: string }[] }[]; skus: { id: string; values: Record<string, string> }[]; default_sku: string } };
+    const story = JSON.parse(readFileSync(resolve(here, '../../../data/story/story.json'), 'utf8')) as { set_axes: Record<string, { axis: string; note_he: string; parts?: string[] }> };
+    const set = story.set_axes['framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890']!;
+    const axis = card.options.axes.find((a) => a.id === set.axis);
+    const reasons = new Set<string>();
+    for (const sku of card.options.skus.filter((k) => k.values[set.axis] === card.options.skus.find((d) => d.id === card.options.default_sku)!.values[set.axis])) {
+      const c = setComposition(set, axis, card.options.skus, sku, 3);
+      expect(c.skus, sku.id).toBeNull();
+      reasons.add(c.incomplete!);
+    }
+    // the server's side of it, with that very reason, on the triptych's set variant (the D1 row the build would write)
+    const v = trip.variants_full!.find((x) => x.set_skus)!;
+    const { id } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+    expect((await req(`/api/cart/${id}/items`, json({ variant_id: v.id, qty: 1 }, 'PUT'))).status).toBe(200);
+    await env.DB.prepare('UPDATE product_variants SET set_incomplete = ?, set_skus_json = NULL WHERE id = ?').bind([...reasons][0], v.id).run();
+    const again = await req(`/api/cart/${id}/items`, json({ variant_id: v.id, qty: 2 }, 'PUT'));
+    expect(again.status).toBe(422);
+    expect(((await again.json()) as { error: string }).error).toBe('set_unavailable');
+    const view = (await (await req(`/api/cart/${id}`)).json()) as { lines: unknown[]; removed?: number };
+    expect(view.lines).toHaveLength(0);
+    expect(view.removed).toBe(1);
+    const co = await req('/api/checkout', json(buyer(id)));
+    expect([409]).toContain(co.status);
+    console.log(`QA Mediterranean: ${[...reasons].join(' | ')}; checkout after: ${co.status} ${((await co.json()) as { error: string }).error}`);
+  });
+});
+
+if (!existsSync(SEED)) throw new Error('run `npm run seed:sql -w @hd/api` in the copy first');

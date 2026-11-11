@@ -1,0 +1,12 @@
+ RUN  v4.0.8 /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/build-s1112/site
+stdout | api/test/qa-s1112.test.ts > QA ת16: one invoice per order (real seed) > adversarial: a provider call longer than the lease (a hung request); the second run takes the claim over while the first is still waiting
+QA lease overrun: first=skipped second=invoiced issued=2 recorded=QA-INV-8618655475-1
+stdout | api/test/qa-s1112.test.ts > QA sets: the triptych on the real seed > the supplier order: one of each print of the size bought; two sets two of each; a plain line beside it unchanged
+QA triptych line: "שלישיית הדפסים גאומטריים · 20×30 ס"מ, בלי מסגרת"; supplier lines [["12000039454944611",2],["12000039454944615",2],["12000039454944619",2],["CJJJJTJT41968-Beige",1]]
+stdout | api/test/qa-s1112.test.ts > QA the Mediterranean print: its real card has no named set, and a set without its parts is refused > the card (8 prints for a set of 3): setComposition is incomplete at every size; a set variant carrying that is 422 set_unavailable, and a cart that held it loses it before payment
+QA Mediterranean: the card has 8 values on "color" (05, 08, 01, 02, 04, 03, 06, 07) for a set of 3: which 3 make the set is not named; checkout after: 409 cart_empty
+ ✓ api/test/qa-s1112.test.ts (17 tests) 1333ms
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  01:55:42
+   Duration  1.90s (transform 278ms, setup 0ms, collect 424ms, tests 1.33s, environment 0ms, prepare 4ms)

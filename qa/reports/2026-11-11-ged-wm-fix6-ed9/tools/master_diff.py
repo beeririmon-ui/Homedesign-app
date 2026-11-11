@@ -9,7 +9,7 @@ qa-agent 2026-11-11: G-ED.8 on warm-modern-MB-A-fix6 against fix5 (the frame QA 
   5. the cushion (QA's lumbar mask from round 5, and the same recipe re-run on fix5), the duvet below the contact line,
      and the ring band above the right pillowcase (the designer: (b)'s mask does not touch it).
 Usage: ~/.venvs/motion/bin/python -I master_diff.py. Writes data/master-diff.json, data/master-toe-curve.json,
-data/qa-lumbar-mask-fix5.png, data/b-only-dL.npy (the (b) residual in L*, for b_edges.py).
+data/qa-lumbar-mask-fix5.png, data/b-only-dL.npz (the (b) residual in L*, for b_edges.py).
 """
 import json
 import os
@@ -79,7 +79,7 @@ out["toe_read_outside_mask"] = curve
 # 4. (b) alone: take QA's empirical toe off inside the mask
 toeL = np.where(L5 < 20, np.interp(L5, ctr[ok], med[ok]), L5)
 bres = np.where(reg, L6 - toeL, 0.0)
-np.save(os.path.join(OUT, "data", "b-only-dL.npy"), bres.astype(np.float32))
+np.savez_compressed(os.path.join(OUT, "data", "b-only-dL.npz"), dL=bres.astype(np.float32))
 bfoot = reg & ((bres > 0.5) | (ch0 & ge20))
 qa_box = np.zeros((H, W), bool)
 qa_box[840:926, 2215:2331] = True

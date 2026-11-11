@@ -144,7 +144,12 @@ admin.post('/orders/:id/mock-supplier', async (c) => {
   if (!mockSupplierOpen(c.env)) throw new HttpError(404, 'not_found');
   const id = orderIdOf(c);
   const body = await readJson(c, MockSupplierBody);
-  const outcome = await applySupplierUpdate(c.env, { orderId: id, supplier: 'mock', update: mockUpdate(body.event, id), actor: `mock-supplier (${c.get('actor')})` });
+  const outcome = await applySupplierUpdate(c.env, {
+    orderId: id,
+    supplier: 'mock',
+    update: mockUpdate(body.event, id),
+    actor: `mock-supplier (${c.get('actor')})`,
+  });
   if (outcome === 'unknown_shipment') throw new HttpError(409, 'no_mock_shipment', 'להזמנה הזו אין משלוח אצל הספק המדומה.');
   return c.json({ outcome });
 });

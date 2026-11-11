@@ -361,6 +361,8 @@ describe('payment webhook', () => {
     expect(sent).toEqual([
       { kind: 'submit-order', order_id: orderId },
       { kind: 'issue-invoice', order_id: orderId },
+      // S13 (6.3): the new-order alert rides the same queue
+      { kind: 'notify-order', order_id: orderId },
     ]);
     const o = await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(orderId).first<{ status: string }>();
     expect(o!.status).toBe('paid');

@@ -9,6 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { PublicCatalog } from '../shared/src/catalog';
 import { productPath, productSlug, shopPath } from '@hd/shared/product-url';
+import { adminHeaders, openCustomerOrder, placeOrder, supplierSays, waitStatus } from './ops';
 
 // a product with supplier options (2026-10-11), the most axes first: swatches, chips and a list on one page
 const catalog = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/catalog.public.json'), 'utf8')) as PublicCatalog;
@@ -105,6 +106,24 @@ for (const scheme of ['light'] as const) {
       await page.getByRole('button', { name: 'מעבר לתשלום מאובטח' }).click();
       await expect(page.locator('.error-summary')).toBeVisible();
       await audit(page, `${scheme} checkout errors`);
+    });
+
+    // S13: the customer's order page with a shipment's tracking, and the admin screen (Hebrew, RTL), list and order
+    test('the order page with its tracking, and the admin screen: list and order', async ({ page, request }) => {
+      test.setTimeout(90_000);
+      const o = await placeOrder(request, '198.51.100.141');
+      await waitStatus(request, o, 'sent_to_supplier');
+      await supplierSays(request, o, 'shipped');
+      await openCustomerOrder(page, o);
+      await expect(page.locator('.order-tracking')).toBeVisible();
+      await audit(page, `${scheme} order page, shipped`);
+      await page.setExtraHTTPHeaders(adminHeaders());
+      await page.goto('/admin/');
+      await expect(page.getByRole('heading', { level: 1, name: 'הזמנות' })).toBeVisible();
+      await audit(page, `${scheme} admin list`);
+      await page.goto(`/admin/orders/${o.id}`);
+      await expect(page.getByRole('heading', { level: 1 })).toContainText(o.id);
+      await audit(page, `${scheme} admin order`);
     });
   });
 }

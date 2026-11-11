@@ -77,6 +77,8 @@ export async function processNotifyJob(
     log.error('notify.failed', { order_id: orderId, provider: n.id, attempt }, err);
     return attempt >= NOTIFY_MAX_ATTEMPTS ? 'skipped' : 'retry';
   }
-  await env.DB.prepare("UPDATE notifications SET state = 'sent', sent_at = ?, last_error = NULL WHERE kind = 'new_order' AND order_id = ?").bind(new Date().toISOString(), orderId).run();
+  await env.DB.prepare("UPDATE notifications SET state = 'sent', sent_at = ?, last_error = NULL WHERE kind = 'new_order' AND order_id = ?")
+    .bind(new Date().toISOString(), orderId)
+    .run();
   return 'sent';
 }

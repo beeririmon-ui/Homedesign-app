@@ -14,5 +14,10 @@ GROW_DOCS_CONFIRMED=
 INVOICE_API_KEY=
 # CJ Dropshipping API key (supplier orders)
 CJ_API_KEY=
-# Local only: 1 lets /api/admin/* through without Cloudflare Access. Ignored outside ENVIRONMENT=development or test.
+# Local only: 1 lets /api/admin/* and /admin/* through without Cloudflare Access. Ignored outside ENVIRONMENT=development or test.
 ADMIN_DEV_BYPASS=
+# S13, local only: a request carrying this value in `x-hd-dev-admin` passes the admin gate (the e2e suite reads it from
+# here). Honoured only when ENVIRONMENT is development, test or preview-local, and only 24 characters or longer.
+ADMIN_DEV_TOKEN=
+# S13: the new-order alert's provider (a var in wrangler.jsonc; `mock` writes a log row). No real channel is built yet.
+# NOTIFY_PROVIDER=mock

@@ -75,12 +75,19 @@ export async function applySupplierUpdate(
   const cur = ship.status;
   const stmts: D1PreparedStatement[] = [];
   const audit = (action: string, detail: object) =>
-    env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(at, actor.slice(0, 200), action, orderId, JSON.stringify(detail));
+    env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(
+      at,
+      actor.slice(0, 200),
+      action,
+      orderId,
+      JSON.stringify(detail),
+    );
 
   let next = cur;
   if (update.status === 'canceled') next = RANK[cur]! < 3 ? 'canceled' : cur;
   else if (cur === 'canceled') next = cur;
-  else if (cur === 'cancel_requested' && update.status === 'accepted' && update.cancel !== 'refused') next = cur; // still waiting on the answer
+  else if (cur === 'cancel_requested' && update.status === 'accepted' && update.cancel !== 'refused')
+    next = cur; // still waiting on the answer
   else if (RANK[update.status]! > RANK[cur]! || (cur === 'cancel_requested' && update.cancel === 'refused')) next = update.status;
 
   const number = update.tracking_number && NUMBER.test(update.tracking_number) ? update.tracking_number : null;
@@ -145,7 +152,8 @@ export async function syncShipments(env: Env, client: SupplierClient, limit = 50
   for (const s of results) {
     try {
       const u = await client.tracking(s.supplier_order_id);
-      if (u && (await applySupplierUpdate(env, { orderId: s.order_id, supplier: client.id, update: u, actor: `supplier:${client.id}` })) === 'applied') applied++;
+      if (u && (await applySupplierUpdate(env, { orderId: s.order_id, supplier: client.id, update: u, actor: `supplier:${client.id}` })) === 'applied')
+        applied++;
     } catch (err) {
       log.error('shipment.sync_failed', { order_id: s.order_id, supplier: client.id }, err);
     }
@@ -160,7 +168,13 @@ export async function deliveryView(db: D1Database, orderId: string) {
       "SELECT status, tracking_number, tracking_url, shipped_at, delivered_at FROM supplier_shipments WHERE order_id = ? AND status IN ('shipped', 'delivered') ORDER BY shipped_at",
     )
     .bind(orderId)
-    .all<{ status: 'shipped' | 'delivered'; tracking_number: string | null; tracking_url: string | null; shipped_at: string | null; delivered_at: string | null }>();
+    .all<{
+      status: 'shipped' | 'delivered';
+      tracking_number: string | null;
+      tracking_url: string | null;
+      shipped_at: string | null;
+      delivered_at: string | null;
+    }>();
   return results.map((r) => ({
     status_he: r.status === 'delivered' ? 'נמסרה' : 'נשלחה',
     tracking_number: r.tracking_number,

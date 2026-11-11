@@ -1,0 +1,246 @@
+{
+ "date": "2026-11-11",
+ "script": "assets/renders/living-room/warm-modern/phase2-2026-11-10/reserve_fidelity.py",
+ "passes": {
+  "r1": [
+   "curtains",
+   "planter",
+   "basket",
+   "magazine-holder"
+  ],
+  "r2": [
+   "pendant",
+   "bowl"
+  ]
+ },
+ "products": {
+  "curtains_vs_armchair": {
+   "rule": "the designer (2026-11-11, 2.5): accepted as a clear overlap only if >= 0.028 in the real layer; step 0's clay: 0.0295",
+   "method": "stack AND armchair, thickness on the canvas / 3840 (step 0's code); the stack behind the armchair rebuilt with its inner edge held at x 258 (work px) from the armchair's top row 1153 to the floor line",
+   "overlap_thickness_real_layer": 0.0343,
+   "overlap_thickness_clay_same_code": 0.0296,
+   "armchair_top_row_px": 1153,
+   "stack_inner_edge_px": 258,
+   "stack_inner_edge_frame_u": 0.0704,
+   "passes_0_028": true,
+   "variants_note": "the designer: in the variants the stack's inner (room-side) edge stays at R1's, +-0.003 u (= +-7.7 px here)"
+  },
+  "curtains": {
+   "card": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+   "option": "hooks-top 150x270",
+   "sku": "12000029601125492",
+   "plan": "WMC7: one front stack X -2.29..-2.15, Y 2.65-2.95, track Z 2.86, to the floor; never over glazing",
+   "right_edge_beyond_clay_px": {
+    "median": 8.0,
+    "max": 31
+   },
+   "right_edge_beyond_clay_cm": {
+    "median": 1.4,
+    "max": 5.4
+   },
+   "first_pane_strip_px_wide": 46,
+   "over_glass_px": 12805,
+   "over_glass_rows": 1077,
+   "over_glass_px_per_row": {
+    "median": 13.0,
+    "max": 23
+   },
+   "rows": {
+    "200": {
+     "alpha_right_px": 247,
+     "clay_right_px": 244,
+     "inner_edge_frame_u": 0.0661
+    },
+    "400": {
+     "alpha_right_px": 251,
+     "clay_right_px": 244,
+     "inner_edge_frame_u": 0.0676
+    },
+    "600": {
+     "alpha_right_px": 254,
+     "clay_right_px": 244,
+     "inner_edge_frame_u": 0.0688
+    },
+    "800": {
+     "alpha_right_px": 255,
+     "clay_right_px": 244,
+     "inner_edge_frame_u": 0.0692
+    },
+    "1000": {
+     "alpha_right_px": 257,
+     "clay_right_px": 244,
+     "inner_edge_frame_u": 0.07
+    },
+    "1200": {
+     "alpha_right_px": 242,
+     "clay_right_px": 244,
+     "inner_edge_frame_u": 0.0641
+    },
+    "1400": {
+     "alpha_right_px": 190,
+     "clay_right_px": 244,
+     "inner_edge_frame_u": 0.0439
+    }
+   },
+   "colour": {
+    "layer": {
+     "L": 54.0,
+     "C": 14.8,
+     "hue_deg": 74.7
+    },
+    "card_crop_supplier_photo": {
+     "L": 86.5,
+     "C": 6.7,
+     "hue_deg": 92.9
+    },
+    "room_white_plaster": {
+     "window_lining": {
+      "L": 94.0,
+      "C": 1.6,
+      "hue_deg": 102.4
+     },
+     "back_wall": {
+      "L": 88.6,
+      "C": 4.8,
+      "hue_deg": 82.1
+     }
+    }
+   },
+   "verdict": "PARTIAL (colour), geometry pass. Colour: the layer reads a warm flax / oatmeal (median chroma ~15, hue ~75 deg) where the card's photo is a pale cream (chroma ~7, hue ~93 deg) and the room's white plaster stays near neutral (chroma 2-5), so the room's light does not explain it; not recoloured in code (no separate grade; for QA / the designer). Geometry: the stack keeps the WMC7 width (step 2 drew it twice as wide, over the whole first pane). Its inner edge follows the clay from the track down and the hem flares out to ~2.6 cm beyond it, so the soft edge lies over the first pane's 46 px glass strip by a median ~10 px (max 17) in the lower rows. Semi-sheer beige linen with slub, matte; it reads a little warmer and darker than the card's cream in the room's shaded front corner"
+  },
+  "magazine-holder": {
+   "card": "magazine-holder-cj-gunmetal-leather-strap",
+   "option": "color orange, size small",
+   "sku": "CJYD201631004DW",
+   "plan": "slots 1.9.3 WMC9 / house plan 1.3.4: (-0.47, 2.57) on the rug, long side to the camera, 35 x 19 x 27.5 (Z 0.012-0.287); only Z > ~0.12 is inside the canvas (its foot is below the frame)",
+   "iou_cut_vs_skeleton_dil3": 0.877,
+   "cut_px": 20840,
+   "skeleton_px": 18296,
+   "arch_tops_x_px": {
+    "clay": [
+     982.5,
+     1179.5
+    ],
+    "render": [
+     983.0,
+     1180.0
+    ]
+   },
+   "arch_spacing_cm": {
+    "clay": 27.9,
+    "render": 27.9
+   },
+   "verdict": "pass: the Orange SKU (glossy black arched tubes, cognac leather slings with rivets), long side to the camera, the arches and slings on the projected 35 x 19 x 27.5 skeleton; the rug in its gaps stays the rug layer's"
+  },
+  "planter": {
+   "card": "planter-cj-cement-ribbed-belly",
+   "option": "beige large",
+   "sku": "CJJT154204209IR",
+   "plan": "slots 1.9.1 WMC2: pot centre (-1.95, 0.42), d 42 x 35.5",
+   "rim_edges_px": {
+    "render": [
+     936,
+     1135
+    ]
+   },
+   "rim_width_px": {
+    "clay": 146,
+    "render": 200
+   },
+   "rim_width_cm": {
+    "card": 42.0,
+    "render": 57.5
+   },
+   "scale": 1.37,
+   "base_centre_kept": "its base stays at the plan's place (the pot grew upward and outward from it)",
+   "hidden_by_basket_in_the_render": "its lower right (x ~1058-1135) is behind the rendered basket",
+   "verdict": "FAIL: drawn ~1.36x the card (rim ~57 cm against 42, ~48 cm tall against 35.5). A size miss alone could be scaled in code, but its lower right is hidden by the rendered basket, which is itself off the plan, so the pot cannot be cut whole and cannot be layered without that basket"
+  },
+  "basket": {
+   "card": "basket-cj-jute-rope-cylinder",
+   "option": "large",
+   "sku": "CJYD186026903CX",
+   "plan": "slots 1.7 / 1.9: centre (-1.62, 0.78), d 35 x 39, IN FRONT of the pot",
+   "mask": "GrabCut on the render (work-reserve/r1-basket-mask.npz)",
+   "body_width_px": {
+    "clay": 133,
+    "render": 152
+   },
+   "body_width_cm": 40.0,
+   "centre_x_px": {
+    "clay": 1060.0,
+    "render": 1134.5
+   },
+   "base_lowest_y_px": {
+    "clay": 1235,
+    "render": 1215
+   },
+   "floor_centre_m": {
+    "plan": [
+     -1.62,
+     0.78
+    ],
+    "clay_recovered": [
+     -1.606,
+     0.764
+    ],
+    "render": [
+     -1.541,
+     0.492
+    ]
+   },
+   "offset_cm": 29.9,
+   "in_front_of_pot": "yes this time: it stands nearer the camera and hides the pot's lower right (step 2 had it beside the pot)",
+   "verdict": "FAIL (placement): in front of the pot, but its floor centre is off the plan's (-1.62, 0.78) (see offset_cm) and it is a little large; a placement miss is not fixed in code"
+  },
+  "bowl": {
+   "card": "bowl-cj-matte-black-bowl-20",
+   "option": "style 12 (the only identified variant)",
+   "sku": "CJJT131449012LO",
+   "plan": "step 0: (0.72, 1.94) on the coffee table (top Z 0.38), D20 x H8",
+   "iou_cut_vs_clay": 0.893,
+   "width_px": {
+    "clay": 149,
+    "render": 149
+   },
+   "width_cm": 20.0,
+   "centroid_offset_px": [
+    5.6,
+    0.7
+   ],
+   "centroid_offset_cm_h": 0.8,
+   "verdict": "pass on the card (shape, colour, size) and on step 0's position; the position itself is PROVISIONAL, pending WM-T2 (the designer, 2026-11-11: (0.72, 1.94) is 0.009 from the throw; the table group may move left under the pendant)",
+   "gap_to_cushion_set_frame": {
+    "A": 0.0083,
+    "B": 0.0086,
+    "C": 0.0083
+   },
+   "gap_rule": "F3: a gap < 0.02 of the frame width is 'kissing contours' (fails); WM-T2 is needed for the variants anyway (2.4)"
+  },
+  "pendant": {
+   "card": "pendant-cj-tiered-fabric-drum",
+   "option": "Beige-50cm (the single variant)",
+   "sku": "CJYD247032902BY",
+   "plan": "slots 1.5 (V7Q7 b, the owner): hang point (0.20, 1.72), shade bottom Z 1.90; card Beige 50 (shade height ~28, step 0)",
+   "shade_rows_px": {
+    "clay": [
+     164,
+     373
+    ],
+    "render": [
+     224,
+     436
+    ]
+   },
+   "width_px": {
+    "clay": 302,
+    "render": 308
+   },
+   "width_cm": 51.0,
+   "shade_bottom_Z_fit_m": 1.8,
+   "drop_vs_plan_cm": 10.0,
+   "centre_x_offset_cm": -3.6,
+   "verdict": "FAIL (placement): the card's shade (five off-white fabric tiers, 50 cm) at the plan's X / Y, but hung ~11 cm low (shade bottom ~1.79-1.80 against the owner's 1.90, V7Q7 b); equivalently a larger shade further back. Not moved in code"
+  }
+ }
+}

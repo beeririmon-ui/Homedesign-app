@@ -88,7 +88,7 @@ trio(f5, f6, (2150, 780, 2560, 950), "mb-b-region", "master fix5 | fix6: polish 
 trio(f5, f6, (2190, 805, 2290, 930), "mb-b-left-end", "master: (b)'s left end at the cushion (contact line)", k=4, mask=reg)
 trio(f5, f6, (2380, 850, 2520, 935), "mb-b-right-end", "master: (b)'s right end and base on the duvet", k=4, mask=reg)
 trio(f5, f6, (2240, 795, 2400, 860), "mb-b-top", "master: (b)'s top edge in the half-shadow (L* >= 20 changes)", k=4, mask=reg)
-bres = np.load(os.path.join(OUT, "data/b-only-dL.npy"))
+bres = np.load(os.path.join(OUT, "data/b-only-dL.npz"))["dL"]
 bx = (2150, 780, 2560, 950)
 hm = cv2.applyColorMap(np.clip(crop(bres, bx) / 4.0 * 255, 0, 255).astype(np.uint8), cv2.COLORMAP_INFERNO)[..., ::-1]
 mix = (crop(f6, bx) * 0.3 + hm * 0.7).astype(np.uint8)

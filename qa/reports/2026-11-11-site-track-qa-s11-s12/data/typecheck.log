@@ -1,0 +1,34 @@
+
+> homedesign-site@0.1.0 typecheck
+> tsx shared/scripts/gen-product-card-schema.ts --check && npm run typecheck --workspaces --if-present
+
+product-card.gen.ts is up to date
+
+> @hd/shared@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/api@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/web@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+src/catalog.ts(3,25): error TS2307: Cannot find module '@generated/catalog.public.json' or its corresponding type declarations.
+src/catalog.ts(4,23): error TS2307: Cannot find module '@generated/scene.living-room.nordic.json' or its corresponding type declarations.
+src/catalog.ts(5,26): error TS2307: Cannot find module '@generated/supplier-images.json' or its corresponding type declarations.
+src/houses/warm-modern.tsx(12,18): error TS2307: Cannot find module '@generated/house.living-room.warm-modern.json' or its corresponding type declarations.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/build-s1112/site/web
+npm error workspace @hd/web@0.1.0
+npm error location /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa/build-s1112/site/web
+npm error command failed
+npm error command sh -c tsc -p tsconfig.json --noEmit
+
+
+> @hd/tools@0.1.0 typecheck
+> tsc -p ../tsconfig.tools.json --noEmit
+
+typecheck exit 2

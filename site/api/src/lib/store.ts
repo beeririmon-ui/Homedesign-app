@@ -63,7 +63,7 @@ export async function readCart(db: D1Database, id: string, opts: { prune?: boole
        LEFT JOIN product_variants v ON v.id = ci.variant_id
        LEFT JOIN products p ON p.id = v.product_id
        WHERE ci.cart_id = ?
-       ORDER BY ci.added_at`,
+       ORDER BY ci.added_at, ci.rowid`,
     )
     .bind(id)
     .all<LineRow & { sold: number }>();

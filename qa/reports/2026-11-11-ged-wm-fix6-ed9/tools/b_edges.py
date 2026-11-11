@@ -9,7 +9,7 @@ qa-agent 2026-11-11: polish (b) on warm-modern-MB-A-fix6, the numbers and the ed
   - the creases inside the shadow: L* high-pass (sigma 3) SD in the core, fix5 and fix6, and their correlation (a curve keeps them;
     a fill would drop both);
   - the mask's edge: for every pair of 4-neighbours across the edge (one in, one out), the step it adds,
-    (L6_in - L6_out) - (L5_in - L5_out), split by side; and (b)'s own residual (data/b-only-dL.npy) on the mask's inner 1-2 px.
+    (L6_in - L6_out) - (L5_in - L5_out), split by side; and (b)'s own residual (data/b-only-dL.npz) on the mask's inner 1-2 px.
 Usage: ~/.venvs/motion/bin/python -I b_edges.py (after master_diff.py). Writes data/b-numbers.json.
 """
 import json
@@ -27,7 +27,7 @@ f5 = load(os.path.join(MB, "warm-modern-MB-A-fix5.png"))
 f6 = load(os.path.join(MB, "warm-modern-MB-A-fix6.png"))
 reg = np.asarray(Image.open(os.path.join(MB, "raw/fix6-b-region.png"))) > 0
 lum = np.asarray(Image.open(os.path.join(OUT, "data/qa-lumbar-mask-fix5.png"))) > 127
-bres = np.load(os.path.join(OUT, "data/b-only-dL.npy"))
+bres = np.load(os.path.join(OUT, "data/b-only-dL.npz"))["dL"]
 l5, l6 = lab(f5), lab(f6)
 L5, L6 = l5[..., 0], l6[..., 0]
 H, W = L5.shape

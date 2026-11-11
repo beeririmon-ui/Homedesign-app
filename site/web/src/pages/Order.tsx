@@ -136,6 +136,36 @@ function RoomFigure({ house, picks }: { house: House; picks: Placed[] }) {
 }
 import { lineLabelHe } from './lineLabel';
 
+/**
+ * S13 (3.3): the shipments that left, as the supplier reported them: "נשלחה" with its number, then "נמסרה". The link is
+ * there only when the server passed it (a generic tracker that names no supplier); otherwise the number alone.
+ */
+function Tracking({ shipments }: { shipments: NonNullable<OrderView['shipments']> }) {
+  return (
+    <ul class="order-tracking" aria-label="משלוחים">
+      {shipments.map((s, i) => (
+        <li key={i}>
+          <span class="status-pill">{s.status_he}</span>
+          {s.tracking_number ? (
+            <span>
+              {' '}
+              · מספר משלוח:{' '}
+              <span class="num" dir="ltr">
+                {s.tracking_number}
+              </span>
+            </span>
+          ) : null}
+          {s.tracking_url ? (
+            <a class="order-track-link" href={s.tracking_url} target="_blank" rel="external noopener noreferrer">
+              מעקב אחרי המשלוח<span class="sr-only"> (נפתח בחלון חדש)</span>
+            </a>
+          ) : null}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function OrderPage({ id }: { id: string }) {
   const [order, setOrder] = useState<OrderView | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -162,11 +192,14 @@ export function OrderPage({ id }: { id: string }) {
   }, [id]);
 
   const paid = order && order.status !== 'pending_payment' && order.status !== 'payment_failed';
+  const closed = order?.status === 'canceled' || order?.status === 'refunded';
   const step = order ? orderStep(order.status) : null;
   return (
     <div class="wrap page">
       <div class="page-head">
-        <h1 tabIndex={-1}>{paid ? 'תודה. ההזמנה התקבלה.' : `הזמנה ${id}`}</h1>
+        <h1 tabIndex={-1}>
+          {order?.status === 'canceled' ? 'ההזמנה בוטלה.' : order?.status === 'refunded' ? 'ההזמנה זוכתה.' : paid ? 'תודה. ההזמנה התקבלה.' : `הזמנה ${id}`}
+        </h1>
       </div>
       {error ? (
         <p class="notice error" role="alert">
@@ -180,7 +213,7 @@ export function OrderPage({ id }: { id: string }) {
           <p>
             מספר הזמנה: <strong class="num">{order.id.replace(/^\D+/, '')}</strong>
           </p>
-          {paid ? <YourRoom lines={order.lines} /> : null}
+          {paid && !closed ? <YourRoom lines={order.lines} /> : null}
           {step !== null ? (
             <ol class="order-steps" aria-label={`מצב ההזמנה: ${order.status_he}`}>
               {ORDER_STEPS_HE.map((s, i) => (
@@ -194,6 +227,12 @@ export function OrderPage({ id }: { id: string }) {
               סטטוס: <span class="status-pill">{order.status_he}</span>
             </p>
           )}
+          {order.shipments?.length ? <Tracking shipments={order.shipments} /> : null}
+          {order.refunded_agorot ? (
+            <p class="order-refund">
+              הוחזרו לאמצעי התשלום: <Price agorot={order.refunded_agorot} />. הזיכוי מופיע לפי מועדי חברת האשראי.
+            </p>
+          ) : null}
           <ul class="order-lines">
             {order.lines.map((l, i) => (
               <li key={i}>
@@ -207,7 +246,15 @@ export function OrderPage({ id }: { id: string }) {
               <Price agorot={order.total_agorot} />
             </dd>
           </dl>
-          {paid ? <p class="small muted">אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח.</p> : null}
+          {paid && !closed ? (
+            <p class="small muted">
+              {step === 3
+                ? 'ההזמנה נמסרה. אם משהו לא כפי שציפיתם, כתבו לנו.'
+                : step === 2
+                  ? 'ההזמנה בדרך אליכם. מספר המשלוח למעלה.'
+                  : 'אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח.'}
+            </p>
+          ) : null}
           {order.status === 'payment_failed' ? (
             <p>
               <a href="/cart/">חזרה לסל</a>

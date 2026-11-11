@@ -1,0 +1,983 @@
+{
+ "id": "wm-living-room-m0-tool-layers-phase2-r12",
+ "version": "r12 (supersedes manifest.json of steps 1-3 for the tool; that file is kept)",
+ "room": "living-room",
+ "style": "warm-modern",
+ "camera": "M0 1.2 (tool)",
+ "date": "2026-11-11",
+ "author": "render-agent",
+ "brief": "briefs/render-wm-tool-phase2-reserve-2026-11-11.md (continuing briefs/render-wm-tool-phase2-2026-11-10.md)",
+ "approval": "PH2-WM (owner, 2026-11-10); the reserve 1,300 by the manager; base and cushions: AP3-WM + QA qa/reports/2026-11-10-wm-tool-layers-v3c.md",
+ "status": "phase 2 defaults after the reserve, PARTIAL: 9 of 12 defaults layered (6 from steps 1-3, 3 from the reserve), 3 pending (planter, basket, pendant: both paid passes failed fidelity). The bowl's position is provisional (WM-T2). Not QA'd; for qa-agent and master-designer. HD_PUBLIC=0 only",
+ "grade": "v3c, ONE display grade (stack.Grade = phase 1 grade_v3c; base.png reproduced byte for byte). Every layer is cut from the graded composites; no layer is graded on its own; the site applies no further grade",
+ "grade_params": {
+  "gain": 1.000848,
+  "toe": {
+   "black_point_base_p005": 6.1401,
+   "target": 12.5,
+   "fade_to_L": 25.0,
+   "computed_on": "shell-furniture-v3.png"
+  },
+  "slab": {
+   "mask": "masks/stone-wide.png",
+   "h_top_deg": 87.623,
+   "chroma_max": 12.0103,
+   "share": "stone x (1 - furniture alpha) x (1 - product alpha)"
+  },
+  "source": "pilot_wm.py grade_v3c (phase 1), recomputed; base.png reproduced byte for byte"
+ },
+ "size": {
+  "width": 2720,
+  "height": 1530,
+  "aspect": "16:9",
+  "canvas": "the M0 1.2 overscan canvas (4072 x 2290 at 2720 / 4072), the same as the approved display files; for the engine every file covers the whole canvas, rect [0, 1, 0, 1]",
+  "camera_frame_px": [
+   77.49,
+   43.43,
+   2642.51,
+   1486.57
+  ],
+  "camera_frame_note": "the 3840 x 2160 camera frame inside the canvas [x0, y0, x1, y1]; rect_camera_frame_uv and data/slots boxes are in this frame"
+ },
+ "color": "8-bit sRGB, no ICC profile. Blending on the sRGB-encoded values (CSS mix-blend-mode, canvas 2D, the engine's GL path)",
+ "compose": {
+  "order": [
+   "base",
+   "curtains-shadow",
+   "curtains",
+   "framed-art-shadow",
+   "framed-art",
+   "accent-sconces-shadow",
+   "accent-sconces",
+   "vase-shadow",
+   "vase",
+   "rug-shadow",
+   "rug",
+   "floor-lamp-shadow",
+   "floor-lamp",
+   "cushions-shadow",
+   "cushions",
+   "magazine-holder-shadow",
+   "magazine-holder",
+   "bowl-shadow",
+   "bowl",
+   "candle-holders-shadow",
+   "candle-holders"
+  ],
+  "formula": "for each product in order: out = round((below * shadow / 255) * (1 - a) + rgb * a), a = alpha / 255, straight alpha; the cushions: one set at a time, its shadow and its layer together",
+  "swap_region": "per product: alpha > 0 or any shadow channel < 255; a product (or a set) changes nothing outside its region"
+ },
+ "layers": [
+  {
+   "id": "base",
+   "file": "base.png",
+   "blend": "normal",
+   "z": 0,
+   "opaque": true,
+   "replaces_base_layers": [
+    "shell (z 0)",
+    "fixed-furniture-shadow (z 34, multiply)",
+    "fixed-furniture (z 40)"
+   ],
+   "source": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers-v3c/base.png",
+   "how": "byte copy of the approved v3c base (= shell-furniture-v3-graded-v3c.png)",
+   "sha256": "75200f46361dfd62dd03363ef46e21cce119fce04990d914a771383b551aba39"
+  },
+  {
+   "id": "curtains-shadow",
+   "slot": "curtains",
+   "blend": "multiply",
+   "z": 9,
+   "file": "curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "curtains",
+   "slot": "curtains",
+   "blend": "normal",
+   "z": 10,
+   "file": "curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "curtains-aliexpress-beige-linen-sheer-curtains-554205",
+    "card": "data/products/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.json",
+    "option": {
+     "style": "hooks-top",
+     "size": "150x270"
+    },
+    "sku": "12000029601125492",
+    "default": true
+   },
+   "region": {
+    "px": 367312,
+    "bbox_px": [
+     0,
+     0,
+     297,
+     1530
+    ],
+    "rect_canvas_uv": [
+     0.0,
+     0.1092,
+     0.0,
+     1.0
+    ],
+    "rect_camera_frame_uv": [
+     -0.0302,
+     0.0856,
+     -0.0301,
+     1.0301
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 361699,
+    "alpha_255_px": 354131,
+    "soft_px": 7568,
+    "shadow_px": 6064,
+    "soft_edge_alpha_raised_px": 103,
+    "shadow_channel_needs_over_255_px": 228,
+    "bleed_px": 57781
+   },
+   "pass_": "reserve R1",
+   "file_origin": "new product: new file",
+   "behind_fixed_furniture": true,
+   "lit_product_rendered_off": false,
+   "note": "stands behind the fixed furniture, which the base already holds: its alpha leaves the furniture whole and its soft edge is solved against it (composed physically in stack.py: (behind x shadow + product) x (1 - fa) + furniture x fa)",
+   "status_note": "the designer's condition (2026-11-11, 2.5): the armchair's overlap of the stack, measured on this layer: see fidelity.curtains_vs_armchair; the stack's inner edge is the reference for the variants (+-0.003 u)",
+   "fidelity": {
+    "plan": "WMC7: one front stack X -2.29..-2.15, Y 2.65-2.95, track Z 2.86, to the floor; never over glazing",
+    "right_edge_beyond_clay_px": {
+     "median": 8.0,
+     "max": 31
+    },
+    "right_edge_beyond_clay_cm": {
+     "median": 1.4,
+     "max": 5.4
+    },
+    "first_pane_strip_px_wide": 46,
+    "over_glass_px": 12805,
+    "over_glass_rows": 1077,
+    "over_glass_px_per_row": {
+     "median": 13.0,
+     "max": 23
+    },
+    "rows": {
+     "200": {
+      "alpha_right_px": 247,
+      "clay_right_px": 244,
+      "inner_edge_frame_u": 0.0661
+     },
+     "400": {
+      "alpha_right_px": 251,
+      "clay_right_px": 244,
+      "inner_edge_frame_u": 0.0676
+     },
+     "600": {
+      "alpha_right_px": 254,
+      "clay_right_px": 244,
+      "inner_edge_frame_u": 0.0688
+     },
+     "800": {
+      "alpha_right_px": 255,
+      "clay_right_px": 244,
+      "inner_edge_frame_u": 0.0692
+     },
+     "1000": {
+      "alpha_right_px": 257,
+      "clay_right_px": 244,
+      "inner_edge_frame_u": 0.07
+     },
+     "1200": {
+      "alpha_right_px": 242,
+      "clay_right_px": 244,
+      "inner_edge_frame_u": 0.0641
+     },
+     "1400": {
+      "alpha_right_px": 190,
+      "clay_right_px": 244,
+      "inner_edge_frame_u": 0.0439
+     }
+    },
+    "colour": {
+     "layer": {
+      "L": 54.0,
+      "C": 14.8,
+      "hue_deg": 74.7
+     },
+     "card_crop_supplier_photo": {
+      "L": 86.5,
+      "C": 6.7,
+      "hue_deg": 92.9
+     },
+     "room_white_plaster": {
+      "window_lining": {
+       "L": 94.0,
+       "C": 1.6,
+       "hue_deg": 102.4
+      },
+      "back_wall": {
+       "L": 88.6,
+       "C": 4.8,
+       "hue_deg": 82.1
+      }
+     }
+    },
+    "verdict": "PARTIAL (colour), geometry pass. Colour: the layer reads a warm flax / oatmeal (median chroma ~15, hue ~75 deg) where the card's photo is a pale cream (chroma ~7, hue ~93 deg) and the room's white plaster stays near neutral (chroma 2-5), so the room's light does not explain it; not recoloured in code (no separate grade; for QA / the designer). Geometry: the stack keeps the WMC7 width (step 2 drew it twice as wide, over the whole first pane). Its inner edge follows the clay from the track down and the hem flares out to ~2.6 cm beyond it, so the soft edge lies over the first pane's 46 px glass strip by a median ~10 px (max 17) in the lower rows. Semi-sheer beige linen with slub, matte; it reads a little warmer and darker than the card's cream in the room's shaded front corner",
+    "curtains_vs_armchair": {
+     "rule": "the designer (2026-11-11, 2.5): accepted as a clear overlap only if >= 0.028 in the real layer; step 0's clay: 0.0295",
+     "method": "stack AND armchair, thickness on the canvas / 3840 (step 0's code); the stack behind the armchair rebuilt with its inner edge held at x 258 (work px) from the armchair's top row 1153 to the floor line",
+     "overlap_thickness_real_layer": 0.0343,
+     "overlap_thickness_clay_same_code": 0.0296,
+     "armchair_top_row_px": 1153,
+     "stack_inner_edge_px": 258,
+     "stack_inner_edge_frame_u": 0.0704,
+     "passes_0_028": true,
+     "variants_note": "the designer: in the variants the stack's inner (room-side) edge stays at R1's, +-0.003 u (= +-7.7 px here)"
+    }
+   }
+  },
+  {
+   "id": "framed-art-shadow",
+   "slot": "framed-art",
+   "blend": "multiply",
+   "z": 11,
+   "file": "framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "framed-art",
+   "slot": "framed-art",
+   "blend": "normal",
+   "z": 12,
+   "file": "framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+    "card": "data/products/work/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.json",
+    "option": {
+     "color": "tl2356-3pcs",
+     "size": "50x70-no-frame"
+    },
+    "sku": "12000052586400026",
+    "default": true
+   },
+   "region": {
+    "px": 200140,
+    "bbox_px": [
+     1505,
+     491,
+     2184,
+     810
+    ],
+    "rect_canvas_uv": [
+     0.5533,
+     0.8029,
+     0.3209,
+     0.5294
+    ],
+    "rect_camera_frame_uv": [
+     0.5565,
+     0.8212,
+     0.3101,
+     0.5312
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 175287,
+    "alpha_255_px": 155781,
+    "soft_px": 19506,
+    "shadow_px": 36691,
+    "soft_edge_alpha_raised_px": 1610,
+    "shadow_channel_needs_over_255_px": 0,
+    "bleed_px": 70538
+   },
+   "pass_": "steps 1-3",
+   "file_origin": "steps 1-3 file, same bytes",
+   "behind_fixed_furniture": false,
+   "lit_product_rendered_off": false
+  },
+  {
+   "id": "accent-sconces-shadow",
+   "slot": "accent-sconces",
+   "blend": "multiply",
+   "z": 11,
+   "file": "accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "accent-sconces",
+   "slot": "accent-sconces",
+   "blend": "normal",
+   "z": 12,
+   "file": "accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+    "card": "data/products/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.json",
+    "option": {
+     "style": "round-walnut"
+    },
+    "sku": "12000047535430431",
+    "default": true
+   },
+   "region": {
+    "px": 7822,
+    "bbox_px": [
+     1409,
+     491,
+     2320,
+     609
+    ],
+    "rect_canvas_uv": [
+     0.518,
+     0.8529,
+     0.3209,
+     0.398
+    ],
+    "rect_camera_frame_uv": [
+     0.5191,
+     0.8743,
+     0.3101,
+     0.3919
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 5311,
+    "alpha_255_px": 3910,
+    "soft_px": 1401,
+    "shadow_px": 3045,
+    "soft_edge_alpha_raised_px": 61,
+    "shadow_channel_needs_over_255_px": 0,
+    "bleed_px": 19393
+   },
+   "pass_": "steps 1-3",
+   "file_origin": "steps 1-3 file, same bytes",
+   "behind_fixed_furniture": false,
+   "lit_product_rendered_off": true
+  },
+  {
+   "id": "vase-shadow",
+   "slot": "vase",
+   "blend": "multiply",
+   "z": 15,
+   "file": "vase/vase-cj-textured-white-stoneware-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "vase",
+   "slot": "vase",
+   "blend": "normal",
+   "z": 16,
+   "file": "vase/vase-cj-textured-white-stoneware.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "vase-cj-textured-white-stoneware",
+    "card": "data/products/vase/vase-cj-textured-white-stoneware.json",
+    "option": {
+     "size": "large"
+    },
+    "sku": "CJJT312391803CX",
+    "default": true
+   },
+   "region": {
+    "px": 21057,
+    "bbox_px": [
+     611,
+     804,
+     739,
+     1109
+    ],
+    "rect_canvas_uv": [
+     0.2246,
+     0.2717,
+     0.5255,
+     0.7248
+    ],
+    "rect_camera_frame_uv": [
+     0.208,
+     0.2579,
+     0.527,
+     0.7384
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 19865,
+    "alpha_255_px": 16361,
+    "soft_px": 3504,
+    "shadow_px": 1263,
+    "soft_edge_alpha_raised_px": 138,
+    "shadow_channel_needs_over_255_px": 0,
+    "bleed_px": 27374
+   },
+   "pass_": "steps 1-3",
+   "file_origin": "steps 1-3 file, same bytes",
+   "behind_fixed_furniture": false,
+   "lit_product_rendered_off": false
+  },
+  {
+   "id": "rug-shadow",
+   "slot": "rug",
+   "blend": "multiply",
+   "z": 19,
+   "file": "rug/rug-cj-braided-wool-natural-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "rug",
+   "slot": "rug",
+   "blend": "normal",
+   "z": 20,
+   "file": "rug/rug-cj-braided-wool-natural.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "rug-cj-braided-wool-natural",
+    "card": "data/products/rug/rug-cj-braided-wool-natural.json",
+    "option": {
+     "size": "230x330",
+     "other": "square"
+    },
+    "sku": "CJJT211801818RI",
+    "default": true
+   },
+   "region": {
+    "px": 317053,
+    "bbox_px": [
+     442,
+     1203,
+     2720,
+     1530
+    ],
+    "rect_canvas_uv": [
+     0.1625,
+     1.0,
+     0.7863,
+     1.0
+    ],
+    "rect_camera_frame_uv": [
+     0.1421,
+     1.0302,
+     0.8035,
+     1.0301
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 308037,
+    "alpha_255_px": 283831,
+    "soft_px": 24206,
+    "shadow_px": 13283,
+    "soft_edge_alpha_raised_px": 916,
+    "shadow_channel_needs_over_255_px": 27,
+    "bleed_px": 107053
+   },
+   "pass_": "steps 1-3",
+   "file_origin": "steps 1-3 file, same bytes",
+   "behind_fixed_furniture": true,
+   "lit_product_rendered_off": false,
+   "note": "stands behind the fixed furniture, which the base already holds: its alpha leaves the furniture whole and its soft edge is solved against it (composed physically in stack.py: (behind x shadow + product) x (1 - fa) + furniture x fa)"
+  },
+  {
+   "id": "floor-lamp-shadow",
+   "slot": "floor-lamp",
+   "blend": "multiply",
+   "z": 29,
+   "file": "floor-lamp/floor-lamp-cj-pleated-walnut-stem-158-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "floor-lamp",
+   "slot": "floor-lamp",
+   "blend": "normal",
+   "z": 30,
+   "file": "floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "floor-lamp-cj-pleated-walnut-stem-158",
+    "card": "data/products/master/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.json",
+    "option": {
+     "other": "3color-floor-lamp"
+    },
+    "sku": "CJYD224754407GT",
+    "default": true
+   },
+   "region": {
+    "px": 49543,
+    "bbox_px": [
+     2314,
+     576,
+     2551,
+     1377
+    ],
+    "rect_canvas_uv": [
+     0.8507,
+     0.9379,
+     0.3765,
+     0.9
+    ],
+    "rect_camera_frame_uv": [
+     0.8719,
+     0.9643,
+     0.369,
+     0.9241
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 40739,
+    "alpha_255_px": 32046,
+    "soft_px": 8693,
+    "shadow_px": 9500,
+    "soft_edge_alpha_raised_px": 214,
+    "shadow_channel_needs_over_255_px": 30,
+    "bleed_px": 71651
+   },
+   "pass_": "steps 1-3",
+   "file_origin": "steps 1-3 file, same bytes",
+   "behind_fixed_furniture": true,
+   "lit_product_rendered_off": true,
+   "note": "stands behind the fixed furniture, which the base already holds: its alpha leaves the furniture whole and its soft edge is solved against it (composed physically in stack.py: (behind x shadow + product) x (1 - fa) + furniture x fa)"
+  },
+  {
+   "id": "planter",
+   "slot": "planter",
+   "z": 32,
+   "status": "pending: both paid passes failed fidelity (steps 2-3 and the reserve); no third pass (the reserve brief)",
+   "reason": "R1 (reserve) failed: the pot drawn ~1.37x the card (rim ~57.5 cm, card 42) and its lower right hidden by the rendered basket, which is itself off the plan; it cannot be cut whole (work-reserve/fidelity-r12.json)"
+  },
+  {
+   "id": "cushions-shadow",
+   "slot": "cushions",
+   "blend": "multiply",
+   "z": 54,
+   "per_set": "sets.<X>.shadow",
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "cushions",
+   "slot": "cushions",
+   "blend": "normal",
+   "z": 55,
+   "per_set": "sets.<X>.layer",
+   "format": "RGBA, straight alpha",
+   "how": "the approved v3c set where the stack under it did not change; re-cut on the new stack where it did (rug, floor lamp)"
+  },
+  {
+   "id": "basket",
+   "slot": "basket",
+   "z": 60,
+   "status": "pending: both paid passes failed fidelity (steps 2-3 and the reserve); no third pass (the reserve brief)",
+   "reason": "R1 (reserve) failed on placement: in front of the pot this time, but its floor centre ~30 cm off the plan's (-1.62, 0.78) (pushed back toward the wall) and ~40 cm wide (card 35)"
+  },
+  {
+   "id": "magazine-holder-shadow",
+   "slot": "magazine-holder",
+   "blend": "multiply",
+   "z": 59,
+   "file": "magazine-holder/magazine-holder-cj-gunmetal-leather-strap-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "magazine-holder",
+   "slot": "magazine-holder",
+   "blend": "normal",
+   "z": 60,
+   "file": "magazine-holder/magazine-holder-cj-gunmetal-leather-strap.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "magazine-holder-cj-gunmetal-leather-strap",
+    "card": "data/products/magazine-holder/magazine-holder-cj-gunmetal-leather-strap.json",
+    "option": {
+     "color": "orange",
+     "size": "small"
+    },
+    "sku": "CJYD201631004DW",
+    "default": true
+   },
+   "region": {
+    "px": 33626,
+    "bbox_px": [
+     897,
+     1360,
+     1243,
+     1530
+    ],
+    "rect_canvas_uv": [
+     0.3298,
+     0.457,
+     0.8889,
+     1.0
+    ],
+    "rect_camera_frame_uv": [
+     0.3195,
+     0.4544,
+     0.9123,
+     1.0301
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 22207,
+    "alpha_255_px": 20073,
+    "soft_px": 2134,
+    "shadow_px": 12643,
+    "soft_edge_alpha_raised_px": 125,
+    "shadow_channel_needs_over_255_px": 0,
+    "bleed_px": 23043
+   },
+   "pass_": "reserve R1",
+   "file_origin": "new product: new file",
+   "behind_fixed_furniture": false,
+   "lit_product_rendered_off": false,
+   "status_note": "the ORANGE SKU (cognac straps) as the selection and the designer's decision 4 (2026-11-11) describe it, not the card's default black; QA: the strap colour",
+   "fidelity": {
+    "plan": "slots 1.9.3 WMC9 / house plan 1.3.4: (-0.47, 2.57) on the rug, long side to the camera, 35 x 19 x 27.5 (Z 0.012-0.287); only Z > ~0.12 is inside the canvas (its foot is below the frame)",
+    "iou_cut_vs_skeleton_dil3": 0.877,
+    "cut_px": 20840,
+    "skeleton_px": 18296,
+    "arch_tops_x_px": {
+     "clay": [
+      982.5,
+      1179.5
+     ],
+     "render": [
+      983.0,
+      1180.0
+     ]
+    },
+    "arch_spacing_cm": {
+     "clay": 27.9,
+     "render": 27.9
+    },
+    "verdict": "pass: the Orange SKU (glossy black arched tubes, cognac leather slings with rivets), long side to the camera, the arches and slings on the projected 35 x 19 x 27.5 skeleton; the rug in its gaps stays the rug layer's"
+   }
+  },
+  {
+   "id": "bowl-shadow",
+   "slot": "bowl",
+   "blend": "multiply",
+   "z": 64,
+   "file": "bowl/bowl-cj-matte-black-bowl-20-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "bowl",
+   "slot": "bowl",
+   "blend": "normal",
+   "z": 65,
+   "file": "bowl/bowl-cj-matte-black-bowl-20.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "bowl-cj-matte-black-bowl-20",
+    "card": "data/products/bowl/bowl-cj-matte-black-bowl-20.json",
+    "option": {
+     "other": "12style"
+    },
+    "sku": "CJJT131449012LO",
+    "default": true
+   },
+   "region": {
+    "px": 16901,
+    "bbox_px": [
+     1914,
+     1229,
+     2103,
+     1367
+    ],
+    "rect_canvas_uv": [
+     0.7037,
+     0.7732,
+     0.8033,
+     0.8935
+    ],
+    "rect_camera_frame_uv": [
+     0.716,
+     0.7897,
+     0.8215,
+     0.9171
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 10568,
+    "alpha_255_px": 9120,
+    "soft_px": 1448,
+    "shadow_px": 6357,
+    "soft_edge_alpha_raised_px": 40,
+    "shadow_channel_needs_over_255_px": 3,
+    "bleed_px": 15986
+   },
+   "pass_": "reserve R2",
+   "file_origin": "new product: new file",
+   "behind_fixed_furniture": false,
+   "lit_product_rendered_off": false,
+   "status_note": "POSITION PROVISIONAL, pending WM-T2 (the coordinator, 2026-11-11, from docs/proposals/wm-phase2-f3-decisions-2026-11-11.md: (0.72, 1.94) sits 0.009 from the throw, no place in the slot envelope solves it; the designer proposes moving the warm-modern table group left under the pendant). Measured in this layer: 0.0083-0.0086 of the frame from sets A / B / C",
+   "position_status": "provisional, pending WM-T2",
+   "fidelity": {
+    "plan": "step 0: (0.72, 1.94) on the coffee table (top Z 0.38), D20 x H8",
+    "iou_cut_vs_clay": 0.893,
+    "width_px": {
+     "clay": 149,
+     "render": 149
+    },
+    "width_cm": 20.0,
+    "centroid_offset_px": [
+     5.6,
+     0.7
+    ],
+    "centroid_offset_cm_h": 0.8,
+    "verdict": "pass on the card (shape, colour, size) and on step 0's position; the position itself is PROVISIONAL, pending WM-T2 (the designer, 2026-11-11: (0.72, 1.94) is 0.009 from the throw; the table group may move left under the pendant)",
+    "gap_to_cushion_set_frame": {
+     "A": 0.0083,
+     "B": 0.0086,
+     "C": 0.0083
+    },
+    "gap_rule": "F3: a gap < 0.02 of the frame width is 'kissing contours' (fails); WM-T2 is needed for the variants anyway (2.4)"
+   }
+  },
+  {
+   "id": "candle-holders-shadow",
+   "slot": "candle-holders",
+   "blend": "multiply",
+   "z": 64,
+   "file": "candle-holders/candle-holders-cj-travertine-pedestal-shadow.png",
+   "opaque": true,
+   "white_is_none": true,
+   "format": "RGB, no alpha"
+  },
+  {
+   "id": "candle-holders",
+   "slot": "candle-holders",
+   "blend": "normal",
+   "z": 65,
+   "file": "candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "format": "RGBA, straight alpha",
+   "product": {
+    "card_id": "candle-holders-cj-travertine-pedestal",
+    "card": "data/products/candle-holders/candle-holders-cj-travertine-pedestal.json",
+    "option": {
+     "size": "70x110mm"
+    },
+    "sku": "CJYD201648001AZ",
+    "default": true
+   },
+   "region": {
+    "px": 13911,
+    "bbox_px": [
+     1708,
+     1153,
+     1894,
+     1303
+    ],
+    "rect_canvas_uv": [
+     0.6279,
+     0.6963,
+     0.7536,
+     0.8516
+    ],
+    "rect_camera_frame_uv": [
+     0.6357,
+     0.7082,
+     0.7689,
+     0.8728
+    ]
+   },
+   "build": {
+    "stray_px": 0,
+    "alpha_px": 10639,
+    "alpha_255_px": 8386,
+    "soft_px": 2253,
+    "shadow_px": 3299,
+    "soft_edge_alpha_raised_px": 47,
+    "shadow_channel_needs_over_255_px": 0,
+    "bleed_px": 23712
+   },
+   "pass_": "steps 1-3",
+   "file_origin": "steps 1-3 file, same bytes",
+   "behind_fixed_furniture": false,
+   "lit_product_rendered_off": false
+  },
+  {
+   "id": "pendant",
+   "slot": "pendant",
+   "z": 80,
+   "status": "pending: both paid passes failed fidelity (steps 2-3 and the reserve); no third pass (the reserve brief)",
+   "reason": "R2 (reserve) failed on placement: the card's 50 cm tiered shade at the plan's X / Y, but hung ~10 cm low (shade bottom ~1.80 against the owner's 1.90, V7Q7 b); not moved in code (the R2 render can be cut at 0 tokens if 1.80 is accepted)"
+  }
+ ],
+ "slot_cushions": {
+  "default": "B",
+  "order": [
+   "B",
+   "A",
+   "C"
+  ],
+  "sets": {
+   "B": {
+    "layer": "cushions/set-B.png",
+    "shadow": "cushions/set-B-shadow.png",
+    "products": "as layers-v3c/manifest.json sets.B",
+    "region": {
+     "px": 230243,
+     "bbox_px": [
+      1357,
+      859,
+      2437,
+      1411
+     ],
+     "rect_canvas_uv": [
+      0.4989,
+      0.896,
+      0.5614,
+      0.9222
+     ],
+     "rect_camera_frame_uv": [
+      0.4988,
+      0.9199,
+      0.5651,
+      0.9476
+     ]
+    },
+    "recut_on_new_stack_px": 12547,
+    "build": {
+     "stray_px": 0,
+     "alpha_px": 164458,
+     "alpha_255_px": 153130,
+     "soft_px": 11328,
+     "shadow_px": 69563,
+     "soft_edge_alpha_raised_px": 196,
+     "shadow_channel_needs_over_255_px": 332,
+     "bleed_px": 118475,
+     "recut_px": 12547,
+     "kept_approved_px": 217696
+    },
+    "file_origin": "steps 1-3 file, same bytes",
+    "approved_source": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers-v3c/cushions-set-B.png"
+   },
+   "A": {
+    "layer": "cushions/set-A.png",
+    "shadow": "cushions/set-A-shadow.png",
+    "products": "as layers-v3c/manifest.json sets.A",
+    "region": {
+     "px": 236150,
+     "bbox_px": [
+      1369,
+      868,
+      2446,
+      1427
+     ],
+     "rect_canvas_uv": [
+      0.5033,
+      0.8993,
+      0.5673,
+      0.9327
+     ],
+     "rect_camera_frame_uv": [
+      0.5035,
+      0.9234,
+      0.5714,
+      0.9587
+     ]
+    },
+    "recut_on_new_stack_px": 14743,
+    "build": {
+     "stray_px": 0,
+     "alpha_px": 162731,
+     "alpha_255_px": 151145,
+     "soft_px": 11586,
+     "shadow_px": 76774,
+     "soft_edge_alpha_raised_px": 268,
+     "shadow_channel_needs_over_255_px": 296,
+     "bleed_px": 121842,
+     "recut_px": 14743,
+     "kept_approved_px": 221407
+    },
+    "file_origin": "steps 1-3 file, same bytes",
+    "approved_source": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers-v3c/cushions-set-A.png"
+   },
+   "C": {
+    "layer": "cushions/set-C.png",
+    "shadow": "cushions/set-C-shadow.png",
+    "products": "as layers-v3c/manifest.json sets.C",
+    "region": {
+     "px": 256282,
+     "bbox_px": [
+      1351,
+      863,
+      2427,
+      1426
+     ],
+     "rect_canvas_uv": [
+      0.4967,
+      0.8923,
+      0.5641,
+      0.932
+     ],
+     "rect_camera_frame_uv": [
+      0.4965,
+      0.916,
+      0.5679,
+      0.958
+     ]
+    },
+    "recut_on_new_stack_px": 13919,
+    "build": {
+     "stray_px": 0,
+     "alpha_px": 188978,
+     "alpha_255_px": 176999,
+     "soft_px": 11979,
+     "shadow_px": 71765,
+     "soft_edge_alpha_raised_px": 318,
+     "shadow_channel_needs_over_255_px": 334,
+     "bleed_px": 127208,
+     "recut_px": 13919,
+     "kept_approved_px": 242363
+    },
+    "file_origin": "steps 1-3 file, same bytes",
+    "approved_source": "assets/renders/living-room/warm-modern/pilot-phase1-2026-11-07/layers-v3c/cushions-set-C.png"
+   }
+  },
+  "note": "layers above the cushions were cut on set B's stack; their regions touch no set's region (checked): {\"magazine-holder\": {\"A\": 0, \"B\": 0, \"C\": 0}, \"bowl\": {\"A\": 0, \"B\": 0, \"C\": 0}, \"candle-holders\": {\"A\": 0, \"B\": 0, \"C\": 0}}"
+ },
+ "pending": {
+  "planter": "R1 (reserve) failed: the pot drawn ~1.37x the card (rim ~57.5 cm, card 42) and its lower right hidden by the rendered basket, which is itself off the plan; it cannot be cut whole (work-reserve/fidelity-r12.json)",
+  "basket": "R1 (reserve) failed on placement: in front of the pot this time, but its floor centre ~30 cm off the plan's (-1.62, 0.78) (pushed back toward the wall) and ~40 cm wide (card 35)",
+  "pendant": "R2 (reserve) failed on placement: the card's 50 cm tiered shade at the plan's X / Y, but hung ~10 cm low (shade bottom ~1.80 against the owner's 1.90, V7Q7 b); not moved in code (the R2 render can be cut at 0 tokens if 1.80 is accepted)"
+ },
+ "light_layers": "the floor lamp and the wall lamps are rendered OFF as products; their light layers are made in code later (plan section 2, step 8)",
+ "files": {
+  "build": "grade_cut_r12.py (with stack.py, reserve_r12.py, extract.py, phase2_wm.py)",
+  "verify": "verify_layers_r12.py",
+  "verification": "verify-layers-r12.json",
+  "fidelity": "../work-reserve/fidelity-r12.json",
+  "asset_manifest_entries": "asset-manifest-entries-r12.json",
+  "verify_usage": "python3 verify_layers_r12.py  (numpy + Pillow; exit 0 = pass)"
+ },
+ "tokens": {
+  "this_build": 0,
+  "reserve_passes": 1300
+ },
+ "held": {
+  "bowl_shadow_px_held_off_the_sets": 335
+ }
+}

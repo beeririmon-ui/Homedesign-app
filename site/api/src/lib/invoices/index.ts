@@ -251,9 +251,7 @@ export async function processCreditNoteJob(
 ): Promise<'credited' | 'skipped' | 'retry' | 'unresolved'> {
   const now = opts.now ?? Date.now;
   const iso = () => new Date(now()).toISOString();
-  const r = await env.DB.prepare(
-    'SELECT id, order_id, amount_agorot, reason, state, credit_state, credit_claimed_at FROM refunds WHERE id = ?',
-  )
+  const r = await env.DB.prepare('SELECT id, order_id, amount_agorot, reason, state, credit_state, credit_claimed_at FROM refunds WHERE id = ?')
     .bind(refundId)
     .first<{ id: string; order_id: string; amount_agorot: number; reason: string; state: string; credit_state: string; credit_claimed_at: string | null }>();
   if (!r || r.state !== 'refunded' || r.credit_state === 'issued' || r.credit_state === 'not_needed') return 'skipped';
@@ -282,9 +280,7 @@ export async function processCreditNoteJob(
     return 'retry';
   }
   const at = iso();
-  const claim = await env.DB.prepare(
-    "UPDATE refunds SET credit_state = 'claimed', credit_claimed_at = ? WHERE id = ? AND credit_state = 'pending'",
-  )
+  const claim = await env.DB.prepare("UPDATE refunds SET credit_state = 'claimed', credit_claimed_at = ? WHERE id = ? AND credit_state = 'pending'")
     .bind(at, refundId)
     .run();
   let ours = at;
@@ -296,15 +292,15 @@ export async function processCreditNoteJob(
       if (found) return (await recordCredit(env, r.order_id, refundId, provider.id, found, iso())) ? 'credited' : 'skipped';
     } else if (!provider.idempotent) {
       const reason = `a credit note claim of ${r.credit_claimed_at} has no result, and ${provider.id} can neither be asked nor deduplicates: a person checks the provider`;
-      await env.DB.prepare("UPDATE refunds SET credit_state = 'unresolved', credit_error = ? WHERE id = ? AND credit_state = 'claimed'").bind(reason, refundId).run();
+      await env.DB.prepare("UPDATE refunds SET credit_state = 'unresolved', credit_error = ? WHERE id = ? AND credit_state = 'claimed'")
+        .bind(reason, refundId)
+        .run();
       await auditAs(env, `invoice:${provider.id}`, 'refund.credit_unresolved', r.order_id, reason, iso());
       refuseLoudly('the credit note job', reason, r.order_id);
       return 'unresolved';
     }
     ours = iso();
-    const take = await env.DB.prepare(
-      "UPDATE refunds SET credit_claimed_at = ? WHERE id = ? AND credit_state = 'claimed' AND credit_claimed_at = ?",
-    )
+    const take = await env.DB.prepare("UPDATE refunds SET credit_claimed_at = ? WHERE id = ? AND credit_state = 'claimed' AND credit_claimed_at = ?")
       .bind(ours, refundId, r.credit_claimed_at)
       .run();
     if (!take.meta.changes) return 'retry';

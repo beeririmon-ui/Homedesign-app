@@ -1,0 +1,9 @@
+== as-is exit 0 :: check-config: (top level) development (payment mock, invoices mock, supplier mock); preview preview (payment mock, invoices mock, supplier mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj) 
+== preview-supplier-typo exit 1 :: check-config: 1 provider settings would not run:   preview: SUPPLIER_PROVIDER="mok" is not a provider (cj, mock) 
+== prod-env-missing exit 1 :: check-config: 1 provider settings would not run:   production: ENVIRONMENT is not set (it is read as production) 
+== prod-invoice-mock exit 1 :: check-config: 1 provider settings would not run:   production: INVOICE_PROVIDER=mock is refused in production (ENVIRONMENT=production) 
+== prod-payment-Grow exit 1 :: check-config: 1 provider settings would not run:   production: PAYMENT_PROVIDER="Grow" is not a provider (grow, mock) 
+== prod-payment-missing exit 1 :: check-config: 1 provider settings would not run:   production: PAYMENT_PROVIDER is not set 
+== prod-supplier-CJ exit 1 :: check-config: 1 provider settings would not run:   production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock) 
+== prod-supplier-mock exit 1 :: check-config: 1 provider settings would not run:   production: SUPPLIER_PROVIDER=mock is refused in production (ENVIRONMENT=production) 
+api build with SUPPLIER_PROVIDER=mock in production: exit 1

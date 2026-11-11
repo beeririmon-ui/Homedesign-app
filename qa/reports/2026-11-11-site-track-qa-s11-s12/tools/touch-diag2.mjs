@@ -1,0 +1,28 @@
+/** qa-agent, 2026-11-11: on a phone, what the first real tap on the stage at rest hits (and opens). */
+import { createRequire } from 'node:module';
+import { join } from 'node:path';
+const require = createRequire(join(process.env.QA_COPY, 'package.json'));
+const { chromium } = require('playwright-core');
+const BASE = process.env.QA_BASE ?? 'http://127.0.0.1:8799';
+const [W, H, DPR, X, URL_] = [Number(process.argv[2]), Number(process.argv[3]), Number(process.argv[4]), Number(process.argv[5]), process.argv[6] ?? '/rooms/living-room/'];
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--disable-background-networking'] });
+const ctx = await browser.newContext({ locale: 'he-IL', viewport: { width: W, height: H }, deviceScaleFactor: DPR, isMobile: true, hasTouch: true });
+const p = await ctx.newPage();
+const cdp = await ctx.newCDPSession(p);
+await p.goto(`${BASE}${URL_}`, { waitUntil: 'load' });
+await p.locator('button.hotspot').first().waitFor({ state: 'attached', timeout: 30000 });
+await sleep(1500);
+const sb = await p.locator('section.stage').boundingBox();
+const y = Math.round(sb.y + Math.min(sb.height, H - sb.y) * 0.55);
+const marks = await p.evaluate(() => [...document.querySelectorAll('button.hotspot')].map((b) => { const r = b.getBoundingClientRect(); const cs = getComputedStyle(b); return [b.dataset.slot, Math.round(r.left), Math.round(r.top), Math.round(r.width), cs.visibility, cs.opacity, cs.pointerEvents]; }));
+const hit = await p.evaluate(([x, yy]) => { const e = document.elementFromPoint(x, yy); return e ? `${e.tagName}.${String(e.className).slice(0, 40)} ${e.getAttribute('aria-label') ?? ''} ${e.dataset?.slot ?? ''}` : null; }, [X, y]);
+console.log(`${W}: tap at (${X}, ${y}) hits: ${hit}`);
+console.log('marks at rest:', JSON.stringify(marks));
+await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: X, y, id: 1 }] }); await sleep(50);
+await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+await sleep(2500);
+const dlg = await p.evaluate(() => { const d = document.querySelector('[role="dialog"]'); return d ? `${d.getAttribute('aria-label') ?? d.getAttribute('aria-labelledby')} ${d.textContent.replace(/\s+/g, ' ').slice(0, 80)}` : null; });
+console.log('dialog after the tap:', dlg);
+await p.screenshot({ path: `${process.env.QA_OUT}/overlays/first-tap-${W}-x${X}.jpg`, type: 'jpeg', quality: 70 });
+await browser.close();
