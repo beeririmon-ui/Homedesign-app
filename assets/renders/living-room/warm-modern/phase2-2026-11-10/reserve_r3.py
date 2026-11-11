@@ -54,7 +54,9 @@ LAYERED = G12.ACCEPTED                                  # the 9 defaults already
 DEPTH = {"planter": 4.999, "basket": 4.534, "pendant": 2.913}
 SPEC = dict(R.SPEC)
 SPEC.update({
-    "planter": dict(margin=26, band=40, onto="floor_wall", z=32, thin=True),
+    # the planter's contact shadow on the floor only: with the window on the left a shadow on the wall falls right of the pot, where the
+    # basket stands; the darkening R3a drew on the plaster left of the pot and round the crown is edge shading / relighting, not shadow
+    "planter": dict(margin=26, band=40, onto="floor", z=32, thin=True),
     "basket": dict(margin=22, band=36, onto="floor_wall_planter", z=60),
     "pendant": dict(margin=18, band=0, onto="none", z=80, thin=True),
 })
