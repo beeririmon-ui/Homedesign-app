@@ -11,37 +11,37 @@
  "note": "TEST, not for the site; new files only; ed8 and every approved file untouched; no var2. The toe only: the light and the brightness do not move (DL1 is measured on the plaster and the frame median). ed8 was shown to the owner; the manager notes the change when ed9 is shown. Awaiting qa-agent: G-ED.11 (p1, p5, split flag), G-ED.8 for the toe, G-ED.3 spot reads",
  "toe": {
   "curve": "q_ed7_toe.curve: slope s0 below L* 12, smoothstep blend of the slope to 1 at 20, identity from 20; lift (1 - s0)(16 - L) below 12",
-  "s0": 0.5703,
+  "s0": 0.5719,
   "lift_by_L": {
-   "0": 6.88,
-   "2": 6.02,
-   "4": 5.16,
-   "6": 4.3,
-   "8": 3.44,
-   "10": 2.58,
-   "12": 1.72,
-   "14": 0.91,
+   "0": 6.85,
+   "2": 5.99,
+   "4": 5.14,
+   "6": 4.28,
+   "8": 3.43,
+   "10": 2.57,
+   "12": 1.71,
+   "14": 0.9,
    "16": 0.32,
    "18": 0.05,
    "19.5": 0.0,
    "20": 0.0,
    "30": 0.0
   },
-  "chromaticity_own_from_L": 10.0,
-  "chromaticity_local_below_L": 3.0,
+  "chromaticity_own_from_L": 5.0,
+  "chromaticity_local_below_L": 2.0,
   "local_sigma_px": 6.0,
   "local_source_L": [
-   6.0,
+   4.0,
    20.0
   ],
   "local_cover_k": 0.001,
   "fallback_srgb": "#2E2824 (Bible espresso)",
   "info": {
    "px_in_toe": 451809,
-   "px_chromaticity_partly_local": 219079,
-   "px_chromaticity_fully_local": 42471,
-   "px_hue_locked": 227180,
-   "px_gamut_clipped": 9
+   "px_chromaticity_partly_local": 101253,
+   "px_chromaticity_fully_local": 24309,
+   "px_hue_locked": 329552,
+   "px_gamut_clipped": 25
   },
   "p1_target": [
    8.5,
@@ -56,12 +56,12 @@
    "p5": 10.59
   },
   "ed9": {
-   "p0.5": 8.35,
-   "p1": 8.99,
+   "p0.5": 8.33,
+   "p1": 9.01,
    "p5": 13.14
   }
  },
- "p1_rise": 5.34,
+ "p1_rise": 5.36,
  "p5_rise": 2.55,
  "full_res_percentiles": {
   "ed8": {
@@ -70,38 +70,38 @@
    "p5": 9.48
   },
   "ed9": {
-   "p0.5": 7.88,
-   "p1": 8.57,
-   "p5": 12.29
+   "p0.5": 7.85,
+   "p1": 8.53,
+   "p5": 12.28
   }
  },
  "checks": {
-  "px_changed": 359884,
+  "px_changed": 359782,
   "px_changed_at_L_ge_20": 0,
   "px_changed_gt2_at_L_ge_20": 0,
-  "max_L_before_of_a_changed_px": 17.03,
-  "max_abs_change_8bit": 35,
-  "hue_shift_deg_own_class_L_ge_10_C_ge_6": {
-   "p1": -2.77,
-   "p5": -1.85,
-   "p50": 0.05,
-   "p95": 1.85,
-   "p99": 2.63,
-   "px": 134743
+  "max_L_before_of_a_changed_px": 17.01,
+  "max_abs_change_8bit": 34,
+  "hue_shift_deg_own_class_L_ge_5_C_ge_6": {
+   "p1": -2.71,
+   "p5": -1.93,
+   "p50": 0.03,
+   "p95": 1.95,
+   "p99": 2.77,
+   "px": 237581
   },
-  "hue_shift_deg_mixed_class_L_3_10_C_ge_6": {
-   "p1": -13.66,
-   "p5": -3.72,
-   "p50": 1.2,
-   "p95": 9.66,
-   "p99": 17.87,
-   "px": 113027
+  "hue_shift_deg_mixed_class_L_2_5_C_ge_4": {
+   "p1": -14.59,
+   "p5": -4.26,
+   "p50": 0.43,
+   "p95": 5.39,
+   "p99": 11.8,
+   "px": 44440
   },
   "chroma_ratio_own_class": {
    "p1": 0.995,
-   "p5": 0.996,
-   "p50": 1.056,
-   "px": 134743
+   "p5": 1.002,
+   "p50": 1.139,
+   "px": 237581
   },
   "share_changed_px_C_fell_gt_0_5": 0.0,
   "new_magenta_px_from_near_neutral": 0
@@ -124,8 +124,8 @@
    },
    "ed9": {
     "L": 8.3,
-    "C": 4.1,
-    "h": 63.3,
+    "C": 4.3,
+    "h": 65.0,
     "p5_L": 7.1
    },
    "px": 20623,
@@ -145,8 +145,8 @@
    },
    "ed9": {
     "L": 11.5,
-    "C": 13.0,
-    "h": 56.1,
+    "C": 13.6,
+    "h": 54.7,
     "p5_L": 9.1
    },
    "px": 50199,
@@ -166,8 +166,8 @@
    },
    "ed9": {
     "L": 9.8,
-    "C": 9.3,
-    "h": 56.8,
+    "C": 11.4,
+    "h": 54.8,
     "p5_L": 8.5
    },
    "px": 58725,
@@ -187,8 +187,8 @@
    },
    "ed9": {
     "L": 20.0,
-    "C": 16.1,
-    "h": 60.4,
+    "C": 16.2,
+    "h": 59.9,
     "p5_L": 8.6
    },
    "px": 99022,
