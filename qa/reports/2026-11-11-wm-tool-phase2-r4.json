@@ -1,0 +1,2199 @@
+{
+ "id": "qa-2026-11-11-wm-tool-phase2-r4",
+ "date": "2026-11-11",
+ "author": "qa-agent",
+ "scope": "box check of render-agent's R4 code fixes (warm-modern living-room tool, phase 2): only the five changed regions",
+ "inputs": {
+  "folder": "assets/renders/living-room/warm-modern/phase2-2026-11-10/",
+  "read": [
+   "fix_r4.py",
+   "work-r4/fix-r4.json",
+   "layers/manifest-r4.json",
+   "layers/verify_layers_r4.py",
+   "layers/verify-layers-r4.json",
+   "lock-and-grade-check-r4.json",
+   "graded/default-scene-r4-set-{A,B,C}-graded-v3c.png",
+   "crops-r4/",
+   "phase2-r4-default-scene-sheet.jpg"
+  ],
+  "for_comparison": "the committed r3 files (manifest-r3.json, its layers, graded/default-scene-r3-*), raw/{step1,step2,step3,r1,r2,r3a,r3b}-seedream.png, jobs*.json matrices",
+  "r4_files_unchanged_since": "commit 0625ce38 (checked after the container restart)",
+  "checkpoint": "qa/reports/2026-11-11-wm-tool-phase2-checkpoint.md / .json",
+  "designer_targets": "docs/proposals/wm-phase2-f3-decisions-2026-11-11.md section 5"
+ },
+ "cost": "0 tokens; no var2, no network, no commits; new files only",
+ "tools": "2026-11-11-wm-tool-phase2-r4/tools/ (QA's own code; the halo metric and the lock reader are the checkpoint's QA tools, copied)",
+ "verdict": {
+  "overall": "pass",
+  "r4_fixes": {
+   "floor-lamp shade": "pass",
+   "pendant canopy": "pass",
+   "basket right edge": "pass",
+   "planter left side and bottom": "pass",
+   "vase size": "pass with a condition (right-flank edge colour moved with the scale; fix in code only if the R4 vase is kept after pass 4')"
+  },
+  "integrity": "pass (all six claims confirmed)",
+  "new_findings": [
+   "floor lamp: a pale lit wisp on the wall under the shade is part of the lamp layer (since steps 1-3, missed at the checkpoint)",
+   "vase: the right flank's edge colour moved ~14 rows with the scale (bright over the rail, dark on the bench)",
+   "shadow recipe: the unit mismatch is real; on the display it is not a one-way over-darkening against the renders; do not redo old layers now"
+  ]
+ },
+ "integrity": {
+  "files_changed_r3_to_r4": [
+   "basket",
+   "basket-shadow",
+   "floor-lamp",
+   "pendant",
+   "planter",
+   "planter-shadow",
+   "vase",
+   "vase-shadow"
+  ],
+  "same_bytes_new_name": [
+   "floor-lamp-shadow",
+   "pendant-shadow"
+  ],
+  "base_same_bytes_as_approved": true,
+  "scene_r4_vs_r3": {
+   "A": {
+    "changed_px": 48585,
+    "changed_outside_five_union": 0,
+    "changed_in_two_products": 797
+   },
+   "B": {
+    "changed_px": 48585,
+    "changed_outside_five_union": 0,
+    "changed_in_two_products": 797
+   },
+   "C": {
+    "changed_px": 48585,
+    "changed_outside_five_union": 0,
+    "changed_in_two_products": 797
+   }
+  },
+  "per_product_changed_px": {
+   "floor-lamp": 20228,
+   "vase": 21794,
+   "planter": 2782,
+   "basket": 3298,
+   "pendant": 1280
+  },
+  "recomposite": {
+   "A": {
+    "P1": {
+     "p999_region": 0.0,
+     "max": 3.0,
+     "px_gt2": 13,
+     "px_gt6": 0,
+     "outside_region_gt0": 6,
+     "gt2_by_layer": {
+      "set-A": 13
+     }
+    },
+    "P2": {
+     "p999_region": 0.0,
+     "max": 3.0,
+     "px_gt2": 13,
+     "px_gt6": 0,
+     "outside_region_gt0": 6,
+     "gt2_by_layer": {
+      "set-A": 13
+     }
+    },
+    "P4": {
+     "p999_region": 1.0,
+     "max": 3.0,
+     "px_gt2": 13,
+     "px_gt6": 0,
+     "outside_region_gt0": 6,
+     "gt2_by_layer": {
+      "set-A": 13
+     }
+    }
+   },
+   "B": {
+    "P1": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 24,
+     "px_gt6": 0,
+     "outside_region_gt0": 5,
+     "gt2_by_layer": {
+      "set-B": 24
+     }
+    },
+    "P2": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 24,
+     "px_gt6": 0,
+     "outside_region_gt0": 5,
+     "gt2_by_layer": {
+      "set-B": 24
+     }
+    },
+    "P4": {
+     "p999_region": 1.0,
+     "max": 4.0,
+     "px_gt2": 24,
+     "px_gt6": 0,
+     "outside_region_gt0": 5,
+     "gt2_by_layer": {
+      "set-B": 24
+     }
+    }
+   },
+   "C": {
+    "P1": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 26,
+     "px_gt6": 0,
+     "outside_region_gt0": 3,
+     "gt2_by_layer": {
+      "rug": 1,
+      "set-C": 26
+     }
+    },
+    "P2": {
+     "p999_region": 0.0,
+     "max": 4.0,
+     "px_gt2": 26,
+     "px_gt6": 0,
+     "outside_region_gt0": 3,
+     "gt2_by_layer": {
+      "rug": 1,
+      "set-C": 26
+     }
+    },
+    "P4": {
+     "p999_region": 1.0,
+     "max": 4.0,
+     "px_gt2": 26,
+     "px_gt6": 0,
+     "outside_region_gt0": 3,
+     "gt2_by_layer": {
+      "rug": 1,
+      "set-C": 26
+     }
+    }
+   }
+  },
+  "recomposite_five_products_set_B_P4": {
+   "floor-lamp": {
+    "p999": 1.0,
+    "max": 1.0
+   },
+   "vase": {
+    "p999": 1.0,
+    "max": 1.0
+   },
+   "planter": {
+    "p999": 1.0,
+    "max": 2.0
+   },
+   "basket": {
+    "p999": 1.0,
+    "max": 2.0
+   },
+   "pendant": {
+    "p999": 1.0,
+    "max": 1.0
+   }
+  },
+  "swap_diff": {
+   "toggles": 42,
+   "changed_outside_region_total": 0
+  },
+  "one_grade": {
+   "floor-lamp": {
+    "px": 24928,
+    "residual_median": 0.0,
+    "residual_p95_abs": 0.112,
+    "toe_px": 5110,
+    "toe_expected_lift": 5.17,
+    "toe_observed_lift": 5.27
+   },
+   "vase": {
+    "px": 9008,
+    "residual_median": 0.0,
+    "residual_p95_abs": 0.033
+   },
+   "planter": {
+    "px": 22365,
+    "residual_median": 0.0,
+    "residual_p95_abs": 0.032,
+    "toe_px": 3412,
+    "toe_expected_lift": 0.0,
+    "toe_observed_lift": 0.1
+   },
+   "basket": {
+    "px": 20970,
+    "residual_median": 0.0,
+    "residual_p95_abs": 0.006,
+    "toe_px": 394,
+    "toe_expected_lift": 0.0,
+    "toe_observed_lift": 0.0
+   },
+   "pendant": {
+    "px": 47938,
+    "residual_median": 0.0,
+    "residual_p95_abs": 0.084
+   }
+  },
+  "one_grade_pass": true,
+  "black_point_and_clip": {
+   "r3 A": {
+    "L_p0_5": 11.37,
+    "clipped_254_pct": 0.0089
+   },
+   "r3 B": {
+    "L_p0_5": 10.91,
+    "clipped_254_pct": 0.0091
+   },
+   "r3 C": {
+    "L_p0_5": 9.71,
+    "clipped_254_pct": 0.0089
+   },
+   "r4 A": {
+    "L_p0_5": 11.37,
+    "clipped_254_pct": 0.0011
+   },
+   "r4 B": {
+    "L_p0_5": 10.91,
+    "clipped_254_pct": 0.0013
+   },
+   "r4 C": {
+    "L_p0_5": 9.71,
+    "clipped_254_pct": 0.0011
+   }
+  },
+  "lock": {
+   "r3 B": {
+    "glazing back jamb (X -2.30, Y 0.75)": 0.0,
+    "glazing head (Z 2.70)": 0.0,
+    "bench front top edge (X -1.98, Z 0.45)": 4.399999999999999,
+    "bench back-end front corner (X -1.98, Y 1.00)": 1.0,
+    "bench back-end top edge (Y 1.00, Z 0.45)": 1.0,
+    "back wall ceiling line (Y 0, Z 3.00)": 0.0,
+    "back wall floor line (Y 0.015, Z 0; WMC10)": 9.0,
+    "ceiling band bottom edge (X -2.05, Z 2.82)": 1.0,
+    "mullion (Y 1.45, frame plane X -2.65)": 1.0,
+    "mullion (Y 2.15, frame plane X -2.65)": 2.0
+   },
+   "r4 B": {
+    "glazing back jamb (X -2.30, Y 0.75)": 0.0,
+    "glazing head (Z 2.70)": 0.0,
+    "bench front top edge (X -1.98, Z 0.45)": 4.399999999999999,
+    "bench back-end front corner (X -1.98, Y 1.00)": 1.0,
+    "bench back-end top edge (Y 1.00, Z 0.45)": 1.0,
+    "back wall ceiling line (Y 0, Z 3.00)": 0.0,
+    "back wall floor line (Y 0.015, Z 0; WMC10)": 9.0,
+    "ceiling band bottom edge (X -2.05, Z 2.82)": 1.0,
+    "mullion (Y 1.45, frame plane X -2.65)": 1.0,
+    "mullion (Y 2.15, frame plane X -2.65)": 2.0
+   }
+  },
+  "lock_identical_r3_r4_all_sets": true,
+  "five_layers_r4_vs_r3": {
+   "floor-lamp": {
+    "alpha_changed_px": 52,
+    "alpha_changed_box": [
+     2331,
+     577,
+     2476,
+     672
+    ],
+    "rgb_changed_under_alpha_px": 20228,
+    "rgb_changed_box": [
+     2315,
+     576,
+     2551,
+     705
+    ],
+    "shadow_changed_px": 0,
+    "shadow_changed_box": null,
+    "alpha_px_r3": 40739,
+    "alpha_px_r4": 40739,
+    "alpha_sum_r3": 35653.9,
+    "alpha_sum_r4": 35653.5,
+    "shadow_dark_px_r3": 9500,
+    "shadow_dark_px_r4": 9500,
+    "changed_outside_shade_rows_px": 0,
+    "alpha_changed_px_note": "the alpha is expected unchanged"
+   },
+   "vase": {
+    "alpha_changed_px": 11644,
+    "alpha_changed_box": [
+     620,
+     804,
+     727,
+     1086
+    ],
+    "rgb_changed_under_alpha_px": 21111,
+    "rgb_changed_box": [
+     620,
+     804,
+     727,
+     1086
+    ],
+    "shadow_changed_px": 1460,
+    "shadow_changed_box": [
+     611,
+     1027,
+     739,
+     1109
+    ],
+    "alpha_px_r3": 19865,
+    "alpha_px_r4": 13323,
+    "alpha_sum_r3": 17941.5,
+    "alpha_sum_r4": 11790.9,
+    "shadow_dark_px_r3": 1263,
+    "shadow_dark_px_r4": 1038
+   },
+   "planter": {
+    "alpha_changed_px": 459,
+    "alpha_changed_box": [
+     955,
+     1039,
+     992,
+     1194
+    ],
+    "rgb_changed_under_alpha_px": 2450,
+    "rgb_changed_box": [
+     954,
+     755,
+     1133,
+     1194
+    ],
+    "shadow_changed_px": 572,
+    "shadow_changed_box": [
+     928,
+     1101,
+     994,
+     1196
+    ],
+    "alpha_px_r3": 33828,
+    "alpha_px_r4": 33648,
+    "alpha_sum_r3": 30169.7,
+    "alpha_sum_r4": 30061.9,
+    "shadow_dark_px_r3": 3422,
+    "shadow_dark_px_r4": 3459
+   },
+   "basket": {
+    "alpha_changed_px": 42,
+    "alpha_changed_box": [
+     1002,
+     1025,
+     1133,
+     1238
+    ],
+    "rgb_changed_under_alpha_px": 1124,
+    "rgb_changed_box": [
+     991,
+     1025,
+     1134,
+     1238
+    ],
+    "shadow_changed_px": 3383,
+    "shadow_changed_box": [
+     950,
+     1015,
+     1165,
+     1272
+    ],
+    "alpha_px_r3": 24975,
+    "alpha_px_r4": 24975,
+    "alpha_sum_r3": 23736.3,
+    "alpha_sum_r4": 23735.0,
+    "shadow_dark_px_r3": 16591,
+    "shadow_dark_px_r4": 16851
+   },
+   "pendant": {
+    "alpha_changed_px": 1399,
+    "alpha_changed_box": [
+     1646,
+     3,
+     1719,
+     62
+    ],
+    "rgb_changed_under_alpha_px": 1291,
+    "rgb_changed_box": [
+     1646,
+     3,
+     1719,
+     62
+    ],
+    "shadow_changed_px": 0,
+    "shadow_changed_box": null,
+    "alpha_px_r3": 54613,
+    "alpha_px_r4": 54930,
+    "alpha_sum_r3": 51948.4,
+    "alpha_sum_r4": 52429.5,
+    "shadow_dark_px_r3": 0,
+    "shadow_dark_px_r4": 0,
+    "changed_below_row_62_px": 0
+   }
+  }
+ },
+ "floor_lamp": {
+  "masks": {
+   "qa_mask_px": 17516,
+   "ring_px": 7513,
+   "brass": {
+    "kept_px": 100,
+    "kept_box": [
+     2419,
+     694,
+     2441,
+     701
+    ],
+    "colour_px": 106,
+    "overlap_px": 100,
+    "kept_rows_from_bottom": [
+     2,
+     8
+    ],
+    "kept_r3_colour_Lab_median": [
+     66.5,
+     12.3,
+     45.0
+    ]
+   }
+  },
+  "r4_set_B": {
+   "qa_mask": {
+    "targets": {
+     "1 left >= right + 5": [
+      5.53,
+      true
+     ],
+     "2 bottom15 <= right - 5": [
+      -6.62,
+      true
+     ],
+     "3a left <= ring + 4": [
+      3.19,
+      true
+     ],
+     "3b right <= ring": [
+      -2.34,
+      true
+     ],
+     "4a b* median <= ring b* + 4": [
+      2.38,
+      true
+     ],
+     "4b no px b* >= ring p95 + 8": [
+      119,
+      false
+     ]
+    },
+    "target5_hp_ratio_vs_r3": [
+     0.962,
+     true
+    ],
+    "4b_detail": null,
+    "4b_on_collar": 118
+   },
+   "fabric_kept": {
+    "targets": {
+     "1 left >= right + 5": [
+      5.53,
+      true
+     ],
+     "2 bottom15 <= right - 5": [
+      -6.44,
+      true
+     ],
+     "3a left <= ring + 4": [
+      3.19,
+      true
+     ],
+     "3b right <= ring": [
+      -2.34,
+      true
+     ],
+     "4a b* median <= ring b* + 4": [
+      2.36,
+      true
+     ],
+     "4b no px b* >= ring p95 + 8": [
+      1,
+      false
+     ]
+    },
+    "target5_hp_ratio_vs_r3": [
+     1.002,
+     true
+    ],
+    "4b_detail": [
+     {
+      "xy": [
+       2467,
+       699
+      ],
+      "Lab_r4": [
+       82.6,
+       4.0,
+       20.3
+      ],
+      "Lab_r3": [
+       91.5,
+       2.6,
+       21.0
+      ],
+      "layer_rgb_r3": [
+       252,
+       228,
+       191
+      ],
+      "layer_rgb_r4": [
+       228,
+       202,
+       168
+      ],
+      "dist_to_kept_px": 27.0
+     }
+    ],
+    "4b_on_collar": 0
+   },
+   "fabric_colour": {
+    "targets": {
+     "1 left >= right + 5": [
+      5.52,
+      true
+     ],
+     "2 bottom15 <= right - 5": [
+      -6.34,
+      true
+     ],
+     "3a left <= ring + 4": [
+      3.19,
+      true
+     ],
+     "3b right <= ring": [
+      -2.33,
+      true
+     ],
+     "4a b* median <= ring b* + 4": [
+      2.36,
+      true
+     ],
+     "4b no px b* >= ring p95 + 8": [
+      1,
+      false
+     ]
+    },
+    "target5_hp_ratio_vs_r3": [
+     1.007,
+     true
+    ],
+    "4b_detail": [
+     {
+      "xy": [
+       2467,
+       699
+      ],
+      "Lab_r4": [
+       82.6,
+       4.0,
+       20.3
+      ],
+      "Lab_r3": [
+       91.5,
+       2.6,
+       21.0
+      ],
+      "layer_rgb_r3": [
+       252,
+       228,
+       191
+      ],
+      "layer_rgb_r4": [
+       228,
+       202,
+       168
+      ],
+      "dist_to_kept_px": 27.0
+     }
+    ],
+    "4b_on_collar": 0
+   }
+  },
+  "sets_A_C": "identical to B (the shade is under no cushion set)",
+  "r3_before_fabric": {
+   "1 left >= right + 5": [
+    3.39,
+    false
+   ],
+   "2 bottom15 <= right - 5": [
+    0.74,
+    false
+   ],
+   "3a left <= ring + 4": [
+    8.7,
+    false
+   ],
+   "3b right <= ring": [
+    5.3,
+    false
+   ],
+   "4a b* median <= ring b* + 4": [
+    5.41,
+    false
+   ],
+   "4b no px b* >= ring p95 + 8": [
+    5915,
+    false
+   ]
+  },
+  "folds": {
+   "corr_hp3_r3_vs_r4_on_fabric": 0.823,
+   "phase_shift_px": [
+    0.096,
+    0.056
+   ],
+   "phase_response": 0.679,
+   "fine_hp_std_r3": 1.085,
+   "fine_hp_std_r4": 1.103,
+   "corr_fine": 0.79
+  },
+  "row_profile_max_step": {
+   "r4": 1.7,
+   "r3": 1.79
+  },
+  "fabric_clipped_px": {
+   "r3": 57,
+   "r4": 0
+  },
+  "rim_halo": {
+   "rim_px": 333,
+   "lighter_than_both_by_3": 1,
+   "lighter_than_both_by_6": 0,
+   "max_excess": 3.36
+  },
+  "layer_changes": {
+   "rgb_changed_under_alpha_px": 20228,
+   "rgb_changed_on_brass_colour_px": 6,
+   "rgb_changed_below_shade_rows_px": 0,
+   "alpha_changed_px": 52,
+   "alpha_changed_max_levels": 4
+  },
+  "light_layer_burn_test": "not run: no light layer yet (plan step 8); carried to step 8",
+  "wisp": {
+   "box": [
+    2380,
+    700,
+    2470,
+    800
+   ],
+   "wisp_px": 431,
+   "wisp_box": [
+    2414,
+    700,
+    2469,
+    800
+   ],
+   "dL_vs_base_p50_p95_max": [
+    4.26,
+    6.8,
+    8.17
+   ],
+   "alpha_in_wisp_p50_max": [
+    159,
+    255
+   ],
+   "same_in_r3_layer": false,
+   "verdict": "lit-lamp residue on the wall in the lamp layer; remove in code (0 tokens) before the light layer and the site"
+  }
+ },
+ "pendant": {
+  "pieces": {
+   "r3": {
+    "pieces_above_row_62": [
+     1142,
+     390
+    ],
+    "pieces_ge5px": [
+     1142,
+     390
+    ],
+    "whole_layer_pieces_ge20px": [
+     51524,
+     390
+    ],
+    "alpha_mass_above_row_62": 1539.7
+   },
+   "r4": {
+    "pieces_above_row_62": [
+     2008
+    ],
+    "pieces_ge5px": [
+     2008
+    ],
+    "whole_layer_pieces_ge20px": [
+     52390
+    ],
+    "alpha_mass_above_row_62": 2020.8
+   }
+  },
+  "alpha_changed_only_above_row_62": true,
+  "halo_fix_box": {
+   "r3": {
+    "contour_px": 290,
+    "bright_halo_px": 44,
+    "dark_fringe_px": 26,
+    "bright_longest_run_px": 44,
+    "bright_longest_run_box": [
+     1673,
+     38,
+     1681,
+     71
+    ],
+    "bright_worst_excess_L": 13.3,
+    "bright_p90_excess_L": 12.9,
+    "dark_longest_run_px": 26,
+    "dark_longest_run_box": [
+     1686,
+     4,
+     1709,
+     12
+    ],
+    "dark_worst_excess_L": 27.0,
+    "dark_p90_excess_L": 26.1
+   },
+   "r4": {
+    "contour_px": 262,
+    "bright_halo_px": 56,
+    "dark_fringe_px": 28,
+    "bright_longest_run_px": 55,
+    "bright_longest_run_box": [
+     1674,
+     41,
+     1680,
+     71
+    ],
+    "bright_worst_excess_L": 13.3,
+    "bright_p90_excess_L": 12.9,
+    "dark_longest_run_px": 28,
+    "dark_longest_run_box": [
+     1682,
+     5,
+     1710,
+     12
+    ],
+    "dark_worst_excess_L": 27.0,
+    "dark_p90_excess_L": 25.8
+   }
+  },
+  "note": "the metric's runs are the cord (a thin white line) and the canopy's own shadow arc, both in the raw R3b"
+ },
+ "basket": {
+  "halo_fix_box": {
+   "r3": {
+    "contour_px": 275,
+    "bright_halo_px": 118,
+    "dark_fringe_px": 0,
+    "bright_longest_run_px": 73,
+    "bright_longest_run_box": [
+     1127,
+     1075,
+     1133,
+     1158
+    ],
+    "bright_worst_excess_L": 32.7,
+    "bright_p90_excess_L": 25.8,
+    "dark_longest_run_px": 0
+   },
+   "r4": {
+    "contour_px": 275,
+    "bright_halo_px": 81,
+    "dark_fringe_px": 6,
+    "bright_longest_run_px": 46,
+    "bright_longest_run_box": [
+     1127,
+     1092,
+     1132,
+     1158
+    ],
+    "bright_worst_excess_L": 25.5,
+    "bright_p90_excess_L": 12.1,
+    "dark_longest_run_px": 5,
+    "dark_longest_run_box": [
+     1109,
+     1225,
+     1117,
+     1231
+    ],
+    "dark_worst_excess_L": 12.5,
+    "dark_p90_excess_L": 12.3
+   },
+   "raw_R3a_with_r4_alpha": {
+    "contour_px": 275,
+    "bright_halo_px": 79,
+    "dark_fringe_px": 7,
+    "bright_longest_run_px": 28,
+    "bright_longest_run_box": [
+     1127,
+     1116,
+     1132,
+     1158
+    ],
+    "bright_worst_excess_L": 39.5,
+    "bright_p90_excess_L": 15.1,
+    "dark_longest_run_px": 6,
+    "dark_longest_run_box": [
+     1110,
+     1224,
+     1118,
+     1231
+    ],
+    "dark_worst_excess_L": 35.2,
+    "dark_p90_excess_L": 20.8,
+    "residual_shift_px": [
+     -0.04,
+     -0.35
+    ]
+   }
+  },
+  "shadow_profile": {
+   "r3": {
+    "profile_dist_px_n_shadow_L": [
+     [
+      1,
+      81,
+      0.714,
+      46.8
+     ],
+     [
+      2,
+      80,
+      0.643,
+      41.91
+     ],
+     [
+      3,
+      80,
+      0.608,
+      40.01
+     ],
+     [
+      4,
+      80,
+      0.608,
+      40.5
+     ],
+     [
+      5,
+      80,
+      0.635,
+      42.02
+     ],
+     [
+      6,
+      80,
+      0.667,
+      44.09
+     ],
+     [
+      7,
+      80,
+      0.702,
+      46.51
+     ],
+     [
+      8,
+      80,
+      0.729,
+      48.64
+     ],
+     [
+      9,
+      80,
+      0.761,
+      50.6
+     ],
+     [
+      10,
+      80,
+      0.784,
+      52.27
+     ],
+     [
+      11,
+      80,
+      0.808,
+      53.93
+     ],
+     [
+      12,
+      80,
+      0.827,
+      55.23
+     ]
+    ],
+    "max_step_lighter": 0.035,
+    "any_darker_outward": true
+   },
+   "r4": {
+    "profile_dist_px_n_shadow_L": [
+     [
+      1,
+      81,
+      0.608,
+      40.27
+     ],
+     [
+      2,
+      80,
+      0.608,
+      39.95
+     ],
+     [
+      3,
+      80,
+      0.608,
+      40.01
+     ],
+     [
+      4,
+      80,
+      0.608,
+      40.5
+     ],
+     [
+      5,
+      80,
+      0.635,
+      42.02
+     ],
+     [
+      6,
+      80,
+      0.667,
+      44.09
+     ],
+     [
+      7,
+      80,
+      0.702,
+      46.51
+     ],
+     [
+      8,
+      80,
+      0.729,
+      48.64
+     ],
+     [
+      9,
+      80,
+      0.761,
+      50.6
+     ],
+     [
+      10,
+      80,
+      0.784,
+      52.27
+     ],
+     [
+      11,
+      80,
+      0.808,
+      53.93
+     ],
+     [
+      12,
+      80,
+      0.827,
+      55.23
+     ]
+    ],
+    "max_step_lighter": 0.035,
+    "any_darker_outward": false
+   }
+  }
+ },
+ "planter": {
+  "halo_fix_box": {
+   "r3": {
+    "contour_px": 246,
+    "bright_halo_px": 51,
+    "dark_fringe_px": 35,
+    "bright_longest_run_px": 27,
+    "bright_longest_run_box": [
+     961,
+     1165,
+     973,
+     1185
+    ],
+    "bright_worst_excess_L": 18.9,
+    "bright_p90_excess_L": 16.9,
+    "dark_longest_run_px": 26,
+    "dark_longest_run_box": [
+     959,
+     1054,
+     963,
+     1080
+    ],
+    "dark_worst_excess_L": 26.5,
+    "dark_p90_excess_L": 23.1
+   },
+   "r4": {
+    "contour_px": 235,
+    "bright_halo_px": 46,
+    "dark_fringe_px": 0,
+    "bright_longest_run_px": 27,
+    "bright_longest_run_box": [
+     961,
+     1166,
+     975,
+     1186
+    ],
+    "bright_worst_excess_L": 18.7,
+    "bright_p90_excess_L": 16.8,
+    "dark_longest_run_px": 0
+   },
+   "raw_R3a_with_r4_alpha": {
+    "contour_px": 235,
+    "bright_halo_px": 44,
+    "dark_fringe_px": 12,
+    "bright_longest_run_px": 27,
+    "bright_longest_run_box": [
+     961,
+     1165,
+     972,
+     1184
+    ],
+    "bright_worst_excess_L": 21.2,
+    "bright_p90_excess_L": 17.5,
+    "dark_longest_run_px": 8,
+    "dark_longest_run_box": [
+     959,
+     1078,
+     963,
+     1088
+    ],
+    "dark_worst_excess_L": 9.7,
+    "dark_p90_excess_L": 8.4,
+    "residual_shift_px": [
+     -0.24,
+     -0.25
+    ]
+   }
+  },
+  "crescent": {
+   "r3": {
+    "alpha_mass_left_of_edge": 55.3,
+    "px_alpha_gt_0_1": 71
+   },
+   "r4": {
+    "alpha_mass_left_of_edge": 0.0,
+    "px_alpha_gt_0_1": 0
+   },
+   "edge_line": "x = -0.1228 y + 1093.73 (r4 alpha, rows 1056-1075), the zone: rows 1030-1055, more than 1 px left of it"
+  },
+  "shadow_profile": {
+   "r3": {
+    "profile_dist_px_n_shadow_L": [
+     [
+      1,
+      124,
+      0.776,
+      38.06
+     ],
+     [
+      2,
+      116,
+      0.727,
+      34.27
+     ],
+     [
+      3,
+      127,
+      0.714,
+      32.59
+     ],
+     [
+      4,
+      118,
+      0.714,
+      33.06
+     ],
+     [
+      5,
+      136,
+      0.729,
+      33.22
+     ],
+     [
+      6,
+      121,
+      0.737,
+      35.79
+     ],
+     [
+      7,
+      131,
+      0.753,
+      36.96
+     ],
+     [
+      8,
+      134,
+      0.773,
+      37.15
+     ],
+     [
+      9,
+      125,
+      0.776,
+      39.26
+     ],
+     [
+      10,
+      137,
+      0.824,
+      39.24
+     ],
+     [
+      11,
+      137,
+      0.835,
+      39.04
+     ],
+     [
+      12,
+      129,
+      0.855,
+      41.13
+     ]
+    ],
+    "max_step_lighter": 0.048,
+    "any_darker_outward": true
+   },
+   "r4": {
+    "profile_dist_px_n_shadow_L": [
+     [
+      1,
+      124,
+      0.669,
+      31.59
+     ],
+     [
+      2,
+      116,
+      0.676,
+      32.55
+     ],
+     [
+      3,
+      127,
+      0.71,
+      32.47
+     ],
+     [
+      4,
+      118,
+      0.714,
+      33.06
+     ],
+     [
+      5,
+      136,
+      0.729,
+      33.22
+     ],
+     [
+      6,
+      121,
+      0.737,
+      35.79
+     ],
+     [
+      7,
+      131,
+      0.753,
+      36.96
+     ],
+     [
+      8,
+      134,
+      0.773,
+      37.15
+     ],
+     [
+      9,
+      125,
+      0.776,
+      39.26
+     ],
+     [
+      10,
+      137,
+      0.824,
+      39.24
+     ],
+     [
+      11,
+      137,
+      0.835,
+      39.04
+     ],
+     [
+      12,
+      129,
+      0.855,
+      41.13
+     ]
+    ],
+    "max_step_lighter": 0.048,
+    "any_darker_outward": false
+   }
+  },
+  "layer_file_outside_fix": "1,381 px differ outside the fix box: 1,302 by 1 level (rounding), 29 soft-edge px (alpha 20-113) by up to 13 levels; not visible"
+ },
+ "vase": {
+  "geometry": {
+   "r3": {
+    "foot_contact_y": 1083.2,
+    "foot_centre_x": 676.0,
+    "neck_row": 894,
+    "neck_width_px": 33,
+    "mouth_row": 890,
+    "height_px": 193.7,
+    "widest_row": 1028,
+    "width_px": 81.32,
+    "stand_point_xy": [
+     -2.171,
+     1.591
+    ],
+    "axis_xy": [
+     -2.206,
+     1.556
+    ],
+    "card_at_axis_px": {
+     "width": 71.18,
+     "height": 140.07,
+     "depth_m": 4.079
+    },
+    "height_cm": 44.3,
+    "width_cm": 18.3,
+    "h_to_w": 2.382,
+    "card_h_to_w_px": 1.968,
+    "offset_from_plan_point_m": 0.297,
+    "shadow": {
+     "px_below_0_99": 761,
+     "box": [
+      613,
+      1028,
+      735,
+      1091
+     ],
+     "min": 0.737,
+     "darkest_at": [
+      697,
+      1083
+     ],
+     "centroid_x_minus_foot_x": 11.8
+    }
+   },
+   "r4": {
+    "foot_contact_y": 1083.27,
+    "foot_centre_x": 676.5,
+    "neck_row": 941,
+    "neck_width_px": 29,
+    "mouth_row": 938,
+    "height_px": 145.77,
+    "widest_row": 1042,
+    "width_px": 71.09,
+    "stand_point_xy": [
+     -2.169,
+     1.591
+    ],
+    "axis_xy": [
+     -2.204,
+     1.556
+    ],
+    "card_at_axis_px": {
+     "width": 71.19,
+     "height": 140.1,
+     "depth_m": 4.078
+    },
+    "height_cm": 33.3,
+    "width_cm": 16.0,
+    "h_to_w": 2.05,
+    "card_h_to_w_px": 1.968,
+    "offset_from_plan_point_m": 0.298,
+    "shadow": {
+     "px_below_0_99": 554,
+     "box": [
+      622,
+      1036,
+      719,
+      1090
+     ],
+     "min": 0.741,
+     "darkest_at": [
+      695,
+      1082
+     ],
+     "centroid_x_minus_foot_x": 10.7
+    }
+   },
+   "anchor_shift_px": {
+    "foot_row": 0.07,
+    "foot_centre_x": 0.5
+   }
+  },
+  "uncovered": {
+   "uncovered_px": 7731,
+   "uncovered_scene_vs_base_max_level": 0,
+   "uncovered_px_differing": 0
+  },
+  "edge": {
+   "r3 right": {
+    "n_rows": 66,
+    "rows_lighter_by_8": 44,
+    "rows_darker_by_8": 20,
+    "max_lighter": 27.5,
+    "max_darker": -45.3
+   },
+   "r3 left": {
+    "n_rows": 63,
+    "rows_lighter_by_8": 4,
+    "rows_darker_by_8": 4,
+    "max_lighter": 16.3,
+    "max_darker": -13.6
+   },
+   "r4 right": {
+    "n_rows": 66,
+    "rows_lighter_by_8": 48,
+    "rows_darker_by_8": 16,
+    "max_lighter": 28.4,
+    "max_darker": -24.2
+   },
+   "r4 left": {
+    "n_rows": 66,
+    "rows_lighter_by_8": 3,
+    "rows_darker_by_8": 3,
+    "max_lighter": 14.3,
+    "max_darker": -14.0
+   }
+  },
+  "edge_rows_r4_right": [
+   [
+    1010,
+    60.3,
+    89.5,
+    18.4
+   ],
+   [
+    1011,
+    60.6,
+    57.0,
+    28.4
+   ],
+   [
+    1012,
+    61.0,
+    64.7,
+    20.6
+   ],
+   [
+    1013,
+    60.8,
+    87.3,
+    6.2
+   ],
+   [
+    1014,
+    59.9,
+    84.7,
+    18.6
+   ],
+   [
+    1015,
+    60.0,
+    54.9,
+    27.4
+   ],
+   [
+    1016,
+    59.8,
+    33.5,
+    28.1
+   ],
+   [
+    1017,
+    60.2,
+    43.1,
+    14.5
+   ],
+   [
+    1018,
+    61.0,
+    43.4,
+    21.1
+   ],
+   [
+    1019,
+    61.0,
+    39.8,
+    22.2
+   ],
+   [
+    1020,
+    60.8,
+    40.0,
+    23.1
+   ],
+   [
+    1021,
+    60.9,
+    41.0,
+    23.2
+   ],
+   [
+    1022,
+    60.2,
+    41.9,
+    23.8
+   ],
+   [
+    1023,
+    60.2,
+    40.1,
+    20.0
+   ],
+   [
+    1024,
+    60.3,
+    36.9,
+    24.5
+   ],
+   [
+    1025,
+    60.5,
+    35.5,
+    25.0
+   ],
+   [
+    1026,
+    60.4,
+    34.3,
+    24.7
+   ],
+   [
+    1027,
+    61.0,
+    33.3,
+    21.4
+   ],
+   [
+    1028,
+    61.7,
+    26.9,
+    25.5
+   ],
+   [
+    1029,
+    62.2,
+    19.1,
+    8.7
+   ],
+   [
+    1030,
+    62.9,
+    18.2,
+    -11.2
+   ],
+   [
+    1031,
+    63.1,
+    44.7,
+    -8.5
+   ],
+   [
+    1032,
+    63.7,
+    74.0,
+    -16.5
+   ],
+   [
+    1033,
+    63.6,
+    87.7,
+    -20.9
+   ],
+   [
+    1034,
+    63.4,
+    90.1,
+    -16.7
+   ],
+   [
+    1035,
+    62.9,
+    90.4,
+    -13.0
+   ],
+   [
+    1036,
+    63.1,
+    91.1,
+    -11.8
+   ],
+   [
+    1037,
+    64.9,
+    90.8,
+    -15.7
+   ],
+   [
+    1038,
+    66.9,
+    90.4,
+    -19.3
+   ],
+   [
+    1039,
+    67.2,
+    90.3,
+    -16.1
+   ],
+   [
+    1040,
+    66.6,
+    91.1,
+    -14.9
+   ],
+   [
+    1041,
+    65.8,
+    91.8,
+    -18.6
+   ],
+   [
+    1042,
+    66.6,
+    92.8,
+    -21.5
+   ],
+   [
+    1043,
+    66.7,
+    93.2,
+    -20.3
+   ],
+   [
+    1044,
+    67.7,
+    93.5,
+    -24.2
+   ],
+   [
+    1045,
+    66.9,
+    93.5,
+    -20.8
+   ],
+   [
+    1046,
+    67.1,
+    93.8,
+    1.5
+   ],
+   [
+    1047,
+    67.0,
+    93.5,
+    12.6
+   ],
+   [
+    1048,
+    66.8,
+    93.5,
+    18.9
+   ]
+  ],
+  "halo_fix_box": {
+   "r3": {
+    "contour_px": 125,
+    "bright_halo_px": 15,
+    "dark_fringe_px": 34,
+    "bright_longest_run_px": 14,
+    "bright_longest_run_box": [
+     711,
+     1015,
+     716,
+     1029
+    ],
+    "bright_worst_excess_L": 33.4,
+    "bright_p90_excess_L": 11.9,
+    "dark_longest_run_px": 30,
+    "dark_longest_run_box": [
+     675,
+     1076,
+     701,
+     1085
+    ],
+    "dark_worst_excess_L": 48.6,
+    "dark_p90_excess_L": 32.1
+   },
+   "r4": {
+    "contour_px": 124,
+    "bright_halo_px": 22,
+    "dark_fringe_px": 35,
+    "bright_longest_run_px": 18,
+    "bright_longest_run_box": [
+     709,
+     1013,
+     715,
+     1030
+    ],
+    "bright_worst_excess_L": 32.7,
+    "bright_p90_excess_L": 25.1,
+    "dark_longest_run_px": 24,
+    "dark_longest_run_box": [
+     675,
+     1078,
+     698,
+     1085
+    ],
+    "dark_worst_excess_L": 30.2,
+    "dark_p90_excess_L": 29.0
+   }
+  },
+  "verdict": "size and anchor right (QA 33.3 x 16.0 cm, render-agent 31.9 x 16.0; card 32 x 16); uncovered area = base byte for byte; shadow rescaled consistently; right-flank edge colour displaced ~14 rows (re-matte after scaling, 0 tokens, only if the R4 vase is kept)"
+ },
+ "shadow_recipe": {
+  "real": true,
+  "where": [
+   "extract.shadow_one (phase 2: ratio of PW.lum = linear-light Rec.709 luminance)",
+   "stack.compose / the manifest formula / the site: multiply on sRGB-encoded values",
+   "phase 1 pilot_wm.py: the cushion sets and the fixed-furniture LUT (in the approved base.png) have the same form",
+   "assets/renders/master/editorial-2026-11-07/mb1_fix8.py has a similar function (not checked)"
+  ],
+  "mechanism": "an encoded multiply by s is about s^2.4 in linear light, so the measured shadow is deepened by about 1.4 x its own depth in stops",
+  "display_size_shown_minus_meant": {
+   "curtains [set B]": {
+    "all": {
+     "px": 4984,
+     "p50": 0.87,
+     "p95": 3.69,
+     "max": 6.23,
+     "px_over_2": 796,
+     "px_over_5": 23,
+     "sign_shown_minus_meant_median": -0.87
+    },
+    "within_4px": {
+     "px": 1004,
+     "p50": 1.1,
+     "p95": 4.17,
+     "max": 5.74,
+     "px_over_2": 259,
+     "px_over_5": 4,
+     "sign_shown_minus_meant_median": -1.1
+    },
+    "shadow_min": 0.627,
+    "shadow_p5_in_visible": 0.714
+   },
+   "framed-art [set B]": {
+    "all": {
+     "px": 22280,
+     "p50": 5.99,
+     "p95": 12.15,
+     "max": 12.85,
+     "px_over_2": 16919,
+     "px_over_5": 12718,
+     "sign_shown_minus_meant_median": -5.99
+    },
+    "within_4px": {
+     "px": 10912,
+     "p50": 9.09,
+     "p95": 12.37,
+     "max": 12.85,
+     "px_over_2": 10316,
+     "px_over_5": 8539,
+     "sign_shown_minus_meant_median": -9.09
+    },
+    "shadow_min": 0.698,
+    "shadow_p5_in_visible": 0.714
+   },
+   "accent-sconces [set B]": {
+    "all": {
+     "px": 2183,
+     "p50": 3.12,
+     "p95": 10.8,
+     "max": 11.51,
+     "px_over_2": 1350,
+     "px_over_5": 765,
+     "sign_shown_minus_meant_median": -3.12
+    },
+    "within_4px": {
+     "px": 1165,
+     "p50": 4.91,
+     "p95": 11.07,
+     "max": 11.51,
+     "px_over_2": 860,
+     "px_over_5": 573,
+     "sign_shown_minus_meant_median": -4.91
+    },
+    "shadow_min": 0.729,
+    "shadow_p5_in_visible": 0.749
+   },
+   "vase [set B]": {
+    "all": {
+     "px": 531,
+     "p50": 0.95,
+     "p95": 9.17,
+     "max": 11.37,
+     "px_over_2": 158,
+     "px_over_5": 85,
+     "sign_shown_minus_meant_median": -0.95
+    },
+    "within_4px": {
+     "px": 238,
+     "p50": 2.57,
+     "p95": 10.66,
+     "max": 11.37,
+     "px_over_2": 127,
+     "px_over_5": 84,
+     "sign_shown_minus_meant_median": -2.57
+    },
+    "shadow_min": 0.741,
+    "shadow_p5_in_visible": 0.796
+   },
+   "rug [set B]": {
+    "all": {
+     "px": 8259,
+     "p50": 1.16,
+     "p95": 3.72,
+     "max": 5.52,
+     "px_over_2": 2963,
+     "px_over_5": 7,
+     "sign_shown_minus_meant_median": -1.16
+    },
+    "within_4px": {
+     "px": 2178,
+     "p50": 2.6,
+     "p95": 4.13,
+     "max": 5.52,
+     "px_over_2": 1346,
+     "px_over_5": 5,
+     "sign_shown_minus_meant_median": -2.6
+    },
+    "shadow_min": 0.776,
+    "shadow_p5_in_visible": 0.82
+   },
+   "floor-lamp [set B]": {
+    "all": {
+     "px": 4406,
+     "p50": 0.72,
+     "p95": 4.54,
+     "max": 6.45,
+     "px_over_2": 1139,
+     "px_over_5": 143,
+     "sign_shown_minus_meant_median": -0.72
+    },
+    "within_4px": {
+     "px": 528,
+     "p50": 3.37,
+     "p95": 5.99,
+     "max": 6.45,
+     "px_over_2": 413,
+     "px_over_5": 89,
+     "sign_shown_minus_meant_median": -3.37
+    },
+    "shadow_min": 0.6,
+    "shadow_p5_in_visible": 0.667
+   },
+   "planter [set B]": {
+    "all": {
+     "px": 2903,
+     "p50": 1.81,
+     "p95": 10.08,
+     "max": 11.65,
+     "px_over_2": 1377,
+     "px_over_5": 568,
+     "sign_shown_minus_meant_median": -1.81
+    },
+    "within_4px": {
+     "px": 458,
+     "p50": 4.54,
+     "p95": 10.87,
+     "max": 11.65,
+     "px_over_2": 407,
+     "px_over_5": 203,
+     "sign_shown_minus_meant_median": -4.54
+    },
+    "shadow_min": 0.51,
+    "shadow_p5_in_visible": 0.616
+   },
+   "cushions [set B]": {
+    "all": {
+     "px": 60952,
+     "p50": 3.41,
+     "p95": 19.7,
+     "max": 25.13,
+     "px_over_2": 39739,
+     "px_over_5": 25389,
+     "sign_shown_minus_meant_median": -3.41
+    },
+    "within_4px": {
+     "px": 7812,
+     "p50": 6.31,
+     "p95": 19.49,
+     "max": 23.71,
+     "px_over_2": 5744,
+     "px_over_5": 4293,
+     "sign_shown_minus_meant_median": -6.31
+    },
+    "shadow_min": 0.345,
+    "shadow_p5_in_visible": 0.349
+   },
+   "basket [set B]": {
+    "all": {
+     "px": 14285,
+     "p50": 1.42,
+     "p95": 12.35,
+     "max": 20.21,
+     "px_over_2": 6007,
+     "px_over_5": 3432,
+     "sign_shown_minus_meant_median": -1.42
+    },
+    "within_4px": {
+     "px": 1656,
+     "p50": 9.09,
+     "p95": 17.49,
+     "max": 20.21,
+     "px_over_2": 1419,
+     "px_over_5": 1173,
+     "sign_shown_minus_meant_median": -9.09
+    },
+    "shadow_min": 0.478,
+    "shadow_p5_in_visible": 0.604
+   },
+   "magazine-holder [set B]": {
+    "all": {
+     "px": 8210,
+     "p50": 1.59,
+     "p95": 10.26,
+     "max": 14.41,
+     "px_over_2": 3527,
+     "px_over_5": 1983,
+     "sign_shown_minus_meant_median": -1.59
+    },
+    "within_4px": {
+     "px": 3833,
+     "p50": 3.85,
+     "p95": 11.1,
+     "max": 14.41,
+     "px_over_2": 2500,
+     "px_over_5": 1690,
+     "sign_shown_minus_meant_median": -3.85
+    },
+    "shadow_min": 0.655,
+    "shadow_p5_in_visible": 0.749
+   },
+   "bowl [set B]": {
+    "all": {
+     "px": 5360,
+     "p50": 0.67,
+     "p95": 3.52,
+     "max": 7.1,
+     "px_over_2": 769,
+     "px_over_5": 122,
+     "sign_shown_minus_meant_median": -0.67
+    },
+    "within_4px": {
+     "px": 1294,
+     "p50": 1.35,
+     "p95": 5.22,
+     "max": 7.1,
+     "px_over_2": 424,
+     "px_over_5": 74,
+     "sign_shown_minus_meant_median": -1.35
+    },
+    "shadow_min": 0.62,
+    "shadow_p5_in_visible": 0.808
+   },
+   "candle-holders [set B]": {
+    "all": {
+     "px": 2906,
+     "p50": 2.03,
+     "p95": 7.44,
+     "max": 8.72,
+     "px_over_2": 1476,
+     "px_over_5": 541,
+     "sign_shown_minus_meant_median": -2.03
+    },
+    "within_4px": {
+     "px": 460,
+     "p50": 6.63,
+     "p95": 8.19,
+     "max": 8.72,
+     "px_over_2": 353,
+     "px_over_5": 284,
+     "sign_shown_minus_meant_median": -6.63
+    },
+    "shadow_min": 0.612,
+    "shadow_p5_in_visible": 0.659
+   },
+   "pendant [set B]": {
+    "px": 0,
+    "note": "no visible shadow"
+   },
+   "cushions [set A]": {
+    "all": {
+     "px": 68618,
+     "p50": 3.94,
+     "p95": 17.45,
+     "max": 25.71,
+     "px_over_2": 47808,
+     "px_over_5": 29498,
+     "sign_shown_minus_meant_median": -3.94
+    },
+    "within_4px": {
+     "px": 7543,
+     "p50": 5.48,
+     "p95": 18.1,
+     "max": 24.45,
+     "px_over_2": 5247,
+     "px_over_5": 4007,
+     "sign_shown_minus_meant_median": -5.48
+    },
+    "shadow_min": 0.345,
+    "shadow_p5_in_visible": 0.361
+   },
+   "cushions [set C]": {
+    "all": {
+     "px": 62005,
+     "p50": 4.44,
+     "p95": 19.57,
+     "max": 25.49,
+     "px_over_2": 43240,
+     "px_over_5": 28912,
+     "sign_shown_minus_meant_median": -4.44
+    },
+    "within_4px": {
+     "px": 9105,
+     "p50": 6.88,
+     "p95": 19.29,
+     "max": 23.81,
+     "px_over_2": 6787,
+     "px_over_5": 5471,
+     "sign_shown_minus_meant_median": -6.88
+    },
+    "shadow_min": 0.345,
+    "shadow_p5_in_visible": 0.353
+   },
+   "fixed furniture (phase 1, in base.png)": {
+    "all": {
+     "px": 393159,
+     "p50": 2.74,
+     "p95": 18.05,
+     "max": 26.36,
+     "px_over_2": 227901,
+     "px_over_5": 141515,
+     "sign_shown_minus_meant_median": -2.74
+    },
+    "shadow_min": 0.22,
+    "note": "ungraded shell; the grade is near identity above L* 25"
+   }
+  },
+  "against_raw_renders": {
+   "basket": {
+    "raw": "r3a-seedream.png",
+    "residual_shift_px": [
+     -0.17,
+     -0.36
+    ],
+    "response": 0.721,
+    "ring_px": 43004,
+    "ring_check_median_dL": -0.75,
+    "shadow_px": 7794,
+    "scene_minus_raw_median": 0.01,
+    "predicted_shown_minus_meant_median": -2.45,
+    "meant_minus_raw_median": 3.23,
+    "near6_px": 1734,
+    "near6_scene_minus_raw_median": -1.95,
+    "near6_predicted_median": -8.59,
+    "near6_meant_minus_raw_median": 5.64
+   },
+   "planter": {
+    "raw": "r3a-seedream.png",
+    "residual_shift_px": [
+     -0.37,
+     -0.04
+    ],
+    "response": 0.843,
+    "ring_px": 18540,
+    "ring_check_median_dL": -10.97,
+    "shadow_px": 2318,
+    "scene_minus_raw_median": -7.12,
+    "predicted_shown_minus_meant_median": -2.61,
+    "meant_minus_raw_median": -3.34,
+    "near6_px": 668,
+    "near6_scene_minus_raw_median": -7.41,
+    "near6_predicted_median": -5.61,
+    "near6_meant_minus_raw_median": -1.2
+   },
+   "magazine-holder": {
+    "px": 0,
+    "note": "too few visible shadow px"
+   },
+   "bowl": {
+    "raw": "r2-seedream.png",
+    "residual_shift_px": [
+     -0.13,
+     -0.31
+    ],
+    "response": 0.831,
+    "ring_px": 25509,
+    "ring_check_median_dL": 2.46,
+    "shadow_px": 3307,
+    "scene_minus_raw_median": -2.68,
+    "predicted_shown_minus_meant_median": -0.99,
+    "meant_minus_raw_median": -1.64,
+    "near6_px": 1372,
+    "near6_scene_minus_raw_median": -4.16,
+    "near6_predicted_median": -1.65,
+    "near6_meant_minus_raw_median": -2.61
+   },
+   "rug": {
+    "raw": "step1-seedream.png",
+    "residual_shift_px": [
+     -0.32,
+     -0.1
+    ],
+    "response": 0.773,
+    "ring_px": 75558,
+    "ring_check_median_dL": -0.68,
+    "shadow_px": 5841,
+    "scene_minus_raw_median": -3.49,
+    "predicted_shown_minus_meant_median": -2.02,
+    "meant_minus_raw_median": -1.4,
+    "near6_px": 2868,
+    "near6_scene_minus_raw_median": -4.53,
+    "near6_predicted_median": -2.7,
+    "near6_meant_minus_raw_median": -1.82
+   },
+   "candle-holders": {
+    "raw": "step3-seedream.png",
+    "residual_shift_px": [
+     -1.51,
+     0.77
+    ],
+    "response": 0.167,
+    "ring_px": 30997,
+    "ring_check_median_dL": 0.37,
+    "shadow_px": 2254,
+    "scene_minus_raw_median": 7.39,
+    "predicted_shown_minus_meant_median": -2.75,
+    "meant_minus_raw_median": 11.14,
+    "near6_px": 648,
+    "near6_scene_minus_raw_median": 4.54,
+    "near6_predicted_median": -6.06,
+    "near6_meant_minus_raw_median": 10.48
+   },
+   "framed-art": {
+    "raw": "step3-seedream.png",
+    "residual_shift_px": [
+     -0.55,
+     0.01
+    ],
+    "response": 0.355,
+    "ring_px": 109669,
+    "ring_check_median_dL": -0.12,
+    "shadow_px": 18347,
+    "scene_minus_raw_median": 15.96,
+    "predicted_shown_minus_meant_median": -7.57,
+    "meant_minus_raw_median": 26.78,
+    "near6_px": 15006,
+    "near6_scene_minus_raw_median": 7.72,
+    "near6_predicted_median": -8.72,
+    "near6_meant_minus_raw_median": 18.05
+   },
+   "curtains": {
+    "raw": "r1-seedream.png",
+    "residual_shift_px": [
+     0.63,
+     -0.17
+    ],
+    "response": 0.659,
+    "ring_px": 42862,
+    "ring_check_median_dL": 2.33,
+    "shadow_px": 4023,
+    "scene_minus_raw_median": 5.46,
+    "predicted_shown_minus_meant_median": -0.52,
+    "meant_minus_raw_median": 6.13,
+    "near6_px": 1128,
+    "near6_scene_minus_raw_median": 7.46,
+    "near6_predicted_median": -0.67,
+    "near6_meant_minus_raw_median": 8.5
+   }
+  },
+  "reading": "per pixel the mismatch is large near objects (median 1-9 L* within 4 px, max 12-26), but the displayed shadows are not one-way darker than the renders: scene - raw = 0 / -2 (basket, all / near), -2.7 (bowl), -3.5 (rug), +5.5 (curtains), +16 (framed art); the other terms of the recipe (local gain, falloff, 2 % floor, blur) offset it. Flipping the unit alone would make the basket, the curtains and the framed art lighter than their renders (+5.6, +8.5, +18 near).",
+  "recommendation": "do not redo the old layers in code now. Freeze the current recipe as the tool's house recipe and use it unchanged for passes 4'/5' and steps 4-7 (a swap must not change the shadow recipe); write the unit honestly in extract.py and the manifest. A unit fix only as one recalibration of every layer at once (base and cushions included, so AP3-WM again), measured against the renders (contact zone within +-3 L*), together with the 6K masters, not now."
+ },
+ "combinations": {
+  "data": "2026-11-11-wm-tool-phase2-r4/data/combos.json",
+  "sheet": "2026-11-11-wm-tool-phase2-r4/crops/combos-r4-sheet.jpg",
+  "result": "5 random: 3 natural; 2 with the basket off show the known planter fragment (checkpoint 2.3, not R4; the whole planter is in pass 5')"
+ },
+ "remaining": [
+  {
+   "what": "floor lamp: remove the lit wisp on the wall under the shade from the lamp layer (alpha pieces not joined to the stem or chain)",
+   "owner": "render-agent",
+   "cost": 0,
+   "blocks": "the light layer (step 8) and the site"
+  },
+  {
+   "what": "floor lamp: burn test with the light layer on (shade L* <= 97)",
+   "owner": "qa-agent",
+   "cost": 0,
+   "blocks": "step 8"
+  },
+  {
+   "what": "floor lamp: the eye on the toned shade (reads off; a little grey?)",
+   "owner": "master-designer",
+   "cost": 0,
+   "blocks": "-"
+  },
+  {
+   "what": "vase: re-matte the right flank after the scale (or drop it if pass 4' replaces the vase)",
+   "owner": "render-agent",
+   "cost": 0,
+   "blocks": "the R4 vase as fallback only"
+  },
+  {
+   "what": "shadow recipe: freeze and document; the same recipe for 4'/5' and steps 4-7",
+   "owner": "render-agent",
+   "cost": 0,
+   "blocks": "the variations' swap"
+  },
+  {
+   "what": "shadow recipe: a unit recalibration of all layers, only with the 6K masters and with the owner's re-approval of the base",
+   "owner": "manager -> owner",
+   "cost": 0,
+   "blocks": "-"
+  },
+  {
+   "what": "manifest hygiene: floor-lamp-shadow and pendant-shadow got new -r4 names with the same bytes (grade_cut_r4's own rule keeps the old file)",
+   "owner": "render-agent",
+   "cost": 0,
+   "blocks": "-"
+  }
+ ],
+ "files": {
+  "report": "qa/reports/2026-11-11-wm-tool-phase2-r4.md",
+  "data": "qa/reports/2026-11-11-wm-tool-phase2-r4/data/",
+  "crops": "qa/reports/2026-11-11-wm-tool-phase2-r4/crops/",
+  "tools": "qa/reports/2026-11-11-wm-tool-phase2-r4/tools/"
+ }
+}

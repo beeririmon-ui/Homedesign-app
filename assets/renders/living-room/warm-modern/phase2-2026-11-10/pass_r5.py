@@ -138,7 +138,12 @@ def wall_light(below, m, sig=20):
     """the scene's own light round a wall piece (normalised blur of L* from outside it), relative to its median"""
     Lb = PW.Lstar(below).astype(np.float32)
     w = (m < 0.02).astype(np.float32)
-    nb = cv2.GaussianBlur(Lb * w, (0, 0), sig) / np.maximum(cv2.GaussianBlur(w, (0, 0), sig), 1e-4)
+    d1 = cv2.GaussianBlur(w, (0, 0), sig)
+    n1 = cv2.GaussianBlur(Lb * w, (0, 0), sig) / np.maximum(d1, 1e-4)
+    d2 = cv2.GaussianBlur(w, (0, 0), 6 * sig)                 # inside a large piece (a 200 px frame) the near ring has no support
+    n2 = cv2.GaussianBlur(Lb * w, (0, 0), 6 * sig) / np.maximum(d2, 1e-4)
+    t = np.clip((d1 - 0.02) / 0.10, 0, 1)
+    nb = n1 * t + n2 * (1 - t)
     ref = float(np.median(nb[m > 0.5])) if (m > 0.5).any() else 70.0
     return nb, ref
 
@@ -194,14 +199,57 @@ def ph_framed_art_v2(below):
     nb, ref = wall_light(below, a)
     inner_all = np.zeros(a.shape, bool)
     boxes = []
+    Lw = lab(rgb)
+    walnut = (Lw[..., 0] < 62) & (Lw[..., 1] > 7) & (Lw[..., 2] > 9)
+    mould = {}
     for i in range(1, n):
         if st[i, 4] < 500:
             continue
-        piece = lb == i
-        inner = X.ero(piece, 6)
+        piece = (lb == i) & (a > 0.5)
+        x0, y0, w_, h_ = st[i, :4]
+        # per side: the walnut moulding's inner edge, as an offset from the piece's alpha edge (the median over the lines whose walnut run
+        # starts within 8 px of the edge and is 2-10 px long; a run that merges into a brown print is longer and is skipped)
+        off, starts, lens = {}, {}, {}
+        for side in ("left", "right", "top", "bottom"):
+            st_l, ln_l = [], []
+            lines = range(y0 + int(0.1 * h_), y0 + int(0.9 * h_)) if side in ("left", "right") else range(x0 + int(0.1 * w_), x0 + int(0.9 * w_))
+            for q in lines:
+                line = piece[q] if side in ("left", "right") else piece[:, q]
+                wl = walnut[q] if side in ("left", "right") else walnut[:, q]
+                idx = np.nonzero(line)[0]
+                if not len(idx):
+                    continue
+                seq = list(range(idx.min(), idx.max() + 1) if side in ("left", "top") else range(idx.max(), idx.min() - 1, -1))
+                st_ = next((j for j, p in enumerate(seq[:20]) if wl[p]), None)
+                if st_ is None:
+                    continue
+                ln = 0
+                while st_ + ln < len(seq) and wl[seq[st_ + ln]]:
+                    ln += 1
+                st_l.append(st_)
+                if 2 <= ln <= 10:
+                    ln_l.append(ln)
+            starts[side] = int(np.median(st_l)) if st_l else 6
+            lens[side] = int(np.median(ln_l)) if ln_l else None
+        known = [v for v in lens.values() if v]
+        for side in starts:
+            off[side] = starts[side] + (lens[side] or int(np.median(known)) if known else 5) + 1
+        mould[i] = off
+        inner = np.zeros(a.shape, bool)
+        for y in range(y0, y0 + h_):
+            xs_ = np.nonzero(piece[y])[0]
+            if len(xs_):
+                inner[y, xs_.min() + off["left"]:xs_.max() + 1 - off["right"]] = True
+        for x in range(x0, x0 + w_):
+            ys_ = np.nonzero(piece[:, x])[0]
+            if len(ys_):
+                colm = np.zeros(a.shape[0], bool)
+                colm[ys_.min() + off["top"]:ys_.max() + 1 - off["bottom"]] = True
+                inner[:, x] &= colm
+        inner &= piece
         inner_all |= inner
         ys, xs = np.nonzero(inner)
-        boxes.append([int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1])
+        boxes.append(dict(box=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1], moulding_offset_px=off))
     Lc = np.clip(nb * 0.97, 0, 96)
     canvas = rgb_of(Lc, np.full_like(Lc, 0.6), np.full_like(Lc, 4.5))
     rgb = np.where(inner_all[..., None], canvas, rgb)
