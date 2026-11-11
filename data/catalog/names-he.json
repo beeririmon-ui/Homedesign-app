@@ -1,8 +1,9 @@
 {
-  "version": "1.1",
-  "date": "2026-11-10",
+  "version": "1.2",
+  "date": "2026-11-11",
   "source": "docs/proposals/story-page-design-notes-2026-11-07.md §11.4 (master-designer); the shop's names, over the name the catalog composes from slot, material and colour",
   "changes_1_1": "2026-11-10, master-designer, QA ת8/ת10 (qa/reports/2026-11-10-site-track-qa-s6-s7.md): base_name_he added next to names_he (nothing removed), and frame_names_he plus t10 for the corduroy dot. Summary: docs/proposals/names-labels-he-2026-11-10.md",
+  "changes_1_2": "2026-11-11, master-designer, QA ת33 (S14 question 4): description_he added at the end, the shop's Hebrew description per card id. Nothing else changed. Summary: docs/proposals/your-room-copy-2026-11-11.md §3",
   "pending_sourcing": {
     "sofa-cover-cj-linen-feel-chenille-slipcover": "the default colour is not in the card's name: the name has no colour until verified",
     "accent-sconces-aliexpress-indoor-stone-wall-lamp": "the shape is not in the card's name: a photo is needed",
@@ -111,5 +112,9 @@
     "wrong": "its name_he 'ציפית כרית שניל סרוגה, טאופ' (the 21 Camel chenille that CAM1 replaced)",
     "right": "ציפית כרית קורדרוי בדוגמת שיבולים, קאמל",
     "fix": "frontend-dev removes the dot's name_he override; the dot then takes frame_names_he above (or base_name_he + ', ' + the label 'קאמל'). The frame's alt_he still says 'כריות בלבן, בטאופ ובתה חלב': the taupe there is the old chenille, it should read 'בקאמל'"
+  },
+  "description_rule": "description_he[card_id]: the product page's description (and the source of its meta description), over the one the build composes from the card's texture, materials and dimensions. 2-3 sentences, present tense, facts the card states only (what it is, materials, sizes, framing); never the card's notes, and no finish, glazing or frame material the card does not state. Hebrew only (the ת33 build check). Option-neutral: a sentence about one option names it ('בדגם ד׳: ...'). The first two sentences stand alone within 155 characters, for the meta description.",
+  "description_he": {
+    "framed-art-cj-morandi-triptych-sage": "שלושה הדפסים מופשטים במרקם מובלט על גב סיבית, כל אחד במסגרת שחורה דקה. חמישה דגמים בארבע מידות, מ-40×60 עד 70×90 ס\"מ לכל הדפס. בדגם ד׳: קשת מרווה, משיכות מכחול בבז'-ורוד ובאפור וקו פחם דק במעגל, על רקע שמנת."
   }
 }
