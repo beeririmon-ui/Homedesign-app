@@ -100,10 +100,11 @@ describe('ת64: a known order’s values end at anything but a letter', () => {
       ['dana2', '[customer]2'],
       ['dana1985', '[customer]1985'],
       ['gat123', '[customer]123'],
-      ['DanaGat', '[customer][customer]'],
+      // S23 (ת76): the name without its space is a value of its own, so "DanaGat" goes whole
+      ['DanaGat', '[customer]'],
       ['herzl_12_tel_aviv', '[customer]_12_[customer]_[customer]'],
-      // letters on both sides: one word that is not the value
-      ['danagat', 'danagat'],
+      // S21 left "danagat" (letters on both sides); S23 (QA ת76) takes the value without its space too
+      ['danagat', '[customer]'],
     ];
     for (const [text, want] of cases) expect(stripKnown(text, k), text).toBe(want);
   });
@@ -134,7 +135,8 @@ describe('ת64: a known order’s values end at anything but a letter', () => {
     );
     expect(row).toMatchObject({ event: 'supplier.submit_failed', error_id: 'E-DANA2345', order_id: '9722123456', path: '/api/orders/9722123456/complete' });
     expect(row.reason).toBe('consignee_[customer]_rejected');
-    expect(row.error_message).toBe('refused [customer][customer] at [customer]_12');
+    // S23 (ת76): "DanaGat" is the name without its space, one value
+    expect(row.error_message).toBe('refused [customer] at [customer]_12');
   });
 
   it('through the supplier job: a provider’s text with the name glued to "_" and digits reaches no row', async () => {

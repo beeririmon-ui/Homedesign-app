@@ -230,7 +230,8 @@ async function write(variantId: string, pack: Pack, qty: number, label?: string,
       cart.value = c;
       cartStatus.value = 'ready';
     });
-    if (memId !== c.id) saveId(c.id);
+    // a new id, or storage that keeps it again (S23: then the tab carries it no more)
+    if (memId !== c.id || stored() !== c.id) saveId(c.id);
     if (label) announce(qty > 0 ? label : `הוסר מהסל`);
     return true;
   } catch (e) {

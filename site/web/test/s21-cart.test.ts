@@ -3,7 +3,7 @@
  * - the saved cart is fetched from the start but shown only after the app is mounted (`cartMounted`): until then, and in
  *   the prerendered page, the status is 'loading' (the header, the cart and the checkout are busy, never "empty");
  * - a cart that is gone (404) is empty; a load that failed is 'failed', never empty, and the next add uses the saved id;
- * - storage refused: the id goes to the next page in the address's fragment (#c=) and is removed there once read;
+ * - storage refused: the id goes to the next page (S21: in the address's fragment, #c=; S23, ת72: in window.name);
  * - an add still on its way holds a move to the cart or the checkout (up to LEAVE_WAIT_MS); the writes go with keepalive;
  * - the router: a link to the cart is left to the browser unless the hook has something to wait for or carry.
  */
@@ -40,6 +40,12 @@ function storage(works: boolean, init: Record<string, string> = {}) {
       : { getItem: deny, setItem: deny, removeItem: deny },
   );
   return m;
+}
+/** S23: the tab's window.name (state/carrier.ts) */
+function tab(name = '') {
+  const w = { name };
+  vi.stubGlobal('window', w);
+  return w;
 }
 function address(hash = '') {
   const loc = { pathname: '/cart/', search: '', hash, assign: vi.fn(), replace: vi.fn() };
@@ -108,15 +114,17 @@ describe('ת63 (1): never "empty" or "(0)" while the saved cart loads', () => {
   it('a load that failed is "failed" with its words, never empty; the next add goes to the saved cart, not a new one', async () => {
     storage(true, { 'hd.cart': 'cart-keep-1' });
     address();
-    fake.getCart.mockRejectedValue(new ApiError(0, 'network', 'אין חיבור לשרת. בדקו את החיבור ונסו שוב.'));
+    fake.getCart.mockRejectedValueOnce(new ApiError(0, 'network', 'אין חיבור לשרת. בדקו את החיבור ונסו שוב.'));
     m.cartMounted();
     await m.loadCart();
     expect(m.cartStatus.value).toBe('failed');
     expect(m.cartError.value).toContain('אין חיבור');
-    fake.setItem.mockResolvedValue(cartOf('cart-keep-1', 1));
+    // S23 (ת73 (a)): the add loads the saved cart again first, and adds to its quantity
+    fake.getCart.mockResolvedValueOnce(cartOf('cart-keep-1', 2));
+    fake.setItem.mockResolvedValue(cartOf('cart-keep-1', 3));
     expect(await m.addToCart('vase:white', 'אגרטל')).toBe(true);
     expect(fake.createCart).not.toHaveBeenCalled();
-    expect(fake.setItem.mock.calls[0]![0]).toBe('cart-keep-1');
+    expect(fake.setItem.mock.calls[0]!.slice(0, 4)).toEqual(['cart-keep-1', 'vase:white', 'set', 3]);
     expect(m.cartStatus.value).toBe('ready');
   });
 
@@ -136,42 +144,49 @@ describe('ת63 (1): never "empty" or "(0)" while the saved cart loads', () => {
   });
 });
 
-describe('ת63 (2): without storage, the cart id travels in the fragment', () => {
-  it('the id made here goes to the cart and the checkout as #c=, and nowhere else; with storage, never', async () => {
+describe('ת63 (2): without storage, the cart id travels to the next page (S23: in window.name, no longer in #c=)', () => {
+  it('the id made here goes to the next page in window.name, never in an address; with storage, not at all', async () => {
     storage(false);
     address();
+    const win = tab();
     m.cartMounted();
     await m.loadCart();
     fake.createCart.mockResolvedValue(cartOf('cart-new-77'));
     fake.setItem.mockResolvedValue(cartOf('cart-new-77', 1));
     await m.addToCart('vase:white', 'אגרטל');
-    expect(m.withCartId('/cart/')).toBe('/cart/#c=cart-new-77');
-    expect(m.withCartId('/checkout/?failed=1')).toBe('/checkout/?failed=1#c=cart-new-77');
-    expect(m.withCartId('/p/vase-x/')).toBe('/p/vase-x/');
-    expect(m.withCartId('/order/1234567890/')).toBe('/order/1234567890/');
-    expect(m.leaveFor('/cart/')).toBe('/cart/#c=cart-new-77');
+    expect(JSON.parse(win.name.slice(4))).toEqual({ c: 'cart-new-77' });
+    expect(m.leaveFor('/cart/')).toBe('/cart/');
+    expect(m.leaveFor('/checkout/?failed=1')).toBe('/checkout/?failed=1');
+    // with storage: storage keeps it, and the tab carries nothing
+    vi.resetModules();
+    m = await import('../src/state/cart');
     storage(true);
-    expect(m.withCartId('/cart/')).toBe('/cart/');
+    const w2 = tab();
+    m.cartMounted();
+    await m.loadCart();
+    fake.createCart.mockResolvedValue(cartOf('cart-new-78'));
+    fake.setItem.mockResolvedValue(cartOf('cart-new-78', 1));
+    await m.addToCart('vase:white', 'אגרטל');
+    expect(w2.name).toBe('');
   });
 
-  it('the next page reads the id from the fragment, removes it from the address, and loads that cart', async () => {
+  it('the next page reads the id from window.name, and loads that cart (the address has nothing to remove)', async () => {
     storage(false);
-    const { hist, loc } = address('#c=cart-frag-42');
-    fake.getCart.mockResolvedValue(cartOf('cart-frag-42', 1));
+    const { hist } = address();
+    tab(`hd1:${JSON.stringify({ c: 'cart-name-42' })}`);
+    fake.getCart.mockResolvedValue(cartOf('cart-name-42', 1));
     const load = m.loadCart();
-    expect(hist.replaceState).toHaveBeenCalledWith(null, '', '/cart/');
-    expect(loc.hash).toBe('');
-    expect(fake.getCart).toHaveBeenCalledWith('cart-frag-42');
+    expect(hist.replaceState).not.toHaveBeenCalled();
+    expect(fake.getCart).toHaveBeenCalledWith('cart-name-42');
     m.cartMounted();
     await load;
     expect(m.cartCount.value).toBe(1);
-    // and on to the checkout, again by the fragment
-    expect(m.withCartId('/checkout/')).toBe('/checkout/#c=cart-frag-42');
   });
 
   it('a fragment never replaces a cart this browser keeps, nor takes an id out of shape; it is removed all the same', async () => {
     storage(true, { 'hd.cart': 'cart-mine-01' });
     const a = address('#c=cart-theirs-9');
+    tab();
     fake.getCart.mockResolvedValue(cartOf('cart-mine-01'));
     void m.loadCart();
     expect(fake.getCart).toHaveBeenCalledWith('cart-mine-01');
@@ -206,7 +221,8 @@ describe('ת63 (3): an add still on its way is not lost', () => {
     expect(left).toBeNull();
     put.resolve(cartOf('cart-slow-5', 1));
     await add;
-    expect(await to).toBe('/cart/#c=cart-slow-5');
+    // S23 (ת72): the address as it is; the id went in window.name
+    expect(await to).toBe('/cart/');
   });
 
   it('it waits at most LEAVE_WAIT_MS', async () => {

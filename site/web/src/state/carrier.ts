@@ -101,7 +101,10 @@ export function markWrite(v: string, p: Pack, q: number): { key: string; done: (
   const key = Math.random().toString(36).slice(2, 10);
   const cur = read();
   // a later write of the same line replaces the earlier one's mark: the line ends as the later one sets it
-  write({ ...cur, w: [...(cur.w ?? []).filter((m) => !(m.v === v && m.p === p)), { v, p, q: Math.max(0, Math.min(20, Math.trunc(q))), t: Date.now(), k: key }] });
+  write({
+    ...cur,
+    w: [...(cur.w ?? []).filter((m) => !(m.v === v && m.p === p)), { v, p, q: Math.max(0, Math.min(20, Math.trunc(q))), t: Date.now(), k: key }],
+  });
   return {
     key,
     done: () => {
