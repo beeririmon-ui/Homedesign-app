@@ -23,7 +23,12 @@ export function Product({ p }: { p: PublicProduct }) {
   const [pack, setPack] = useState<Pack>('set');
   // supplier options (2026-10-11): the room's option first; the customer may choose any other
   const [variantId, setVariantId] = useState(() => defaultVariantId(p));
+  // another product in the same page component starts at its room's option; S23 (QA S22 ת83, ת84): not on the first
+  // render, where it ran after hydration and undid a choice made in between
+  const shownId = useRef(p.id);
   useEffect(() => {
+    if (shownId.current === p.id) return;
+    shownId.current = p.id;
     setVariantId(defaultVariantId(p));
   }, [p.id]);
   const v = variantView(p, variantId) ?? variantView(p)!;

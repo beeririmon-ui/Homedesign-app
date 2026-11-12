@@ -100,10 +100,10 @@ test.describe('supplier options on the product page', () => {
     const ok = availableValues(O.axes, O.skus, roomSel, 0);
     const order = first.values.filter((v) => ok.has(v.id)).map((v) => v.id);
     const next = order[(order.indexOf(roomSel[first.id]!) + 1) % order.length]!;
-    // S22: on a busy runner the press can land before the page hydrates, and hydration puts the room's option back. The
-    // app is mounted once the header's cart is known (not aria-busy). S23 (as QA ת77 for house.spec): then the press
-    // is made once, so a press lost after hydration fails
-    await expect(page.locator('a[href="/cart/"][aria-busy="true"]')).toHaveCount(0, { timeout: 30_000 });
+    // S22: on a busy runner the press can land before the page hydrates. S23 (QA S22 ת84, as ת77 for house.spec): the
+    // options form says it has hydrated (`data-hydrated`, OptionPicker; the header's cart is not the form's own sign),
+    // then the press is made once, so a press lost after hydration fails
+    await expect(page.locator('.opt-picker[data-hydrated]')).toHaveCount(1, { timeout: 30_000 });
     await page.locator(`input[name="${fid(first.id)}"][value="${roomSel[first.id]!}"]`).focus();
     await page.keyboard.press('ArrowDown');
     await expect(page.locator(`input[name="${fid(first.id)}"][value="${next}"]`)).toBeChecked({ timeout: 15_000 });
@@ -131,4 +131,41 @@ test.describe('supplier options on the product page', () => {
       await page.screenshot({ path: resolve(OUT, 'product-options-400.png'), fullPage: true, animations: 'disabled' });
     });
   });
+});
+
+/**
+ * S23, QA S22 ת83: a colour chosen before the product page hydrates (a real click as soon as the swatch is in the page)
+ * is what the page shows and what the cart gets: the checked swatch, the legend and the cart line name the same colour
+ * (QA saw "אפור" checked and "לבן חם" in the cart, 4 loads in 10). Phone (a tap) and desktop, 3 loads each.
+ */
+test.describe('S23 ת83: a choice made before hydration', () => {
+  const first = O.axes[0]!;
+  const ok = availableValues(O.axes, O.skus, roomSel, 0);
+  const order = first.values.filter((v) => ok.has(v.id)).map((v) => v.id);
+  const next = order[(order.indexOf(roomSel[first.id]!) + 1) % order.length]!;
+  const nameOf = (id: string) => first.values.find((v) => v.id === id)!.label_he;
+  for (const view of ['desktop', 'phone'] as const)
+    test(`the shown colour is the one in the cart (${view})`, async ({ browser }) => {
+      for (let run = 0; run < 3; run++) {
+        const ctx = await browser.newContext(
+          view === 'phone'
+            ? { ...devices['Pixel 5'], locale: 'he-IL', viewport: { width: 400, height: 860 } }
+            : { locale: 'he-IL', viewport: { width: 1280, height: 900 } },
+        );
+        const page = await ctx.newPage();
+        await page.goto(shopPath(P.id), { waitUntil: 'domcontentloaded' });
+        const swatch = page.locator(`input[name="${fid(first.id)}"][value="${next}"]`);
+        if (view === 'phone') await swatch.tap({ force: true });
+        else await swatch.click({ force: true });
+        await expect(page.locator('.opt-picker[data-hydrated]')).toHaveCount(1, { timeout: 30_000 });
+        const checked = await page.locator(`input[name="${fid(first.id)}"]:checked`).getAttribute('value');
+        const shown = nameOf(checked!);
+        await expect(page.locator('.opt-legend').first(), `run ${run + 1}`).toContainText(shown);
+        await page.getByRole('button', { name: 'הוספה לסל' }).click();
+        await expect(page.locator('.cart-count')).toHaveText('1');
+        await page.goto('/cart/');
+        await expect(page.locator('.cart-line').first(), `run ${run + 1}: checked ${shown}`).toContainText(shown);
+        await ctx.close();
+      }
+    });
 });

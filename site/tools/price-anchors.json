@@ -1,0 +1,978 @@
+{
+  "_about": "S23 (QA S22 ת85): the SKU each studio price (data/economics/products.json retail_ils) was set for. The price gate in tools/build-catalog.ts warns when a card's default SKU is not this one while the price is unchanged (the whole option ladder would move with the default), and when a price was re-set without saying its SKU. A price entry's own `retail_sku` wins over this list. Made by qa/reports/2026-11-07-site-track/s23/tools/make-price-anchors.py: the default SKU at 7b42ddc1 for a price unchanged since, else the default when the price was read.",
+  "base": "7b42ddc1",
+  "anchors": {
+    "accent-sconces-aliexpress-indoor-stone-wall-lamp": {
+      "sku": "12000043242375290",
+      "retail_ils": 649,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket": {
+      "sku": "CJYD320857702BY",
+      "retail_ils": 599,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "basket-cj-cotton-rope-white": {
+      "sku": "CJJT167870901AZ",
+      "retail_ils": 129,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "basket-cj-jute-rope-cylinder": {
+      "sku": "CJYD186026903CX",
+      "retail_ils": 109,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "basket-cj-seagrass-belly": {
+      "sku": "CJJT102597944RI",
+      "retail_ils": 99,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "basket-cj-seagrass-belly-xl": {
+      "sku": "CJJJJTJT19628-Wood color-XL",
+      "retail_ils": 89,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bath-mat-cj-tufted-cotton-frame-beige-40x60": {
+      "sku": "CJYD289719801AZ",
+      "retail_ils": 79,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "bath-towels-cj-cotton-waffle-white": {
+      "sku": "CJMJ178243601AZ",
+      "retail_ils": 69,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "bedding-aliexpress-boho-3d-tufted-cut-500672": {
+      "sku": "12000059568394393",
+      "retail_ils": 349,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedding-cj-cotton-linen-duvet-beige": {
+      "sku": "CJYD291538314NM",
+      "retail_ils": 479,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedding-cj-cream-ruffle-rosebud-set": {
+      "sku": "CJCS235578309IR",
+      "retail_ils": 299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedding-cj-muslin-cotton-duvet-dune": {
+      "sku": "CJCS281437509IR",
+      "retail_ils": 179,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedding-cj-plain-linen-flat-sheet-raw-jute-260x280": {
+      "sku": "CJYD219978836JQ",
+      "retail_ils": 469,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedding-cj-washed-cotton-khaki-set-220x240": {
+      "sku": "CJCS291596123WD",
+      "retail_ils": 349,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedding-cj-washed-linen-natural-set": {
+      "sku": "CJCS278387611KP",
+      "retail_ils": 799,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedding-cj-washed-polyester-set-milk-tea": {
+      "sku": "CJCS231293645SH",
+      "retail_ils": 149,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "bedside-sconces-cj-linen-half-drum-black-trim": {
+      "sku": "CJYD270865301AZ",
+      "retail_ils": 389,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "bedside-sconces-cj-linen-wave-flush": {
+      "sku": "CJYD272955702BY",
+      "retail_ils": 349,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedspread-cj-muslin-blanket-beige-150x200": {
+      "sku": "CJCS235508402BY",
+      "retail_ils": 199,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bedspread-cj-six-layer-gauze-quilt": {
+      "sku": "CJYD278625023WD",
+      "retail_ils": 199,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "bench-pad-cj-tufted-long-cushion-khaki-120": {
+      "sku": "CJYD223150926ZA",
+      "retail_ils": 139,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "bowl-cj-reactive-white-rimmed-plate-21": {
+      "sku": "CJYD264859804DW",
+      "retail_ils": 89,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "bowl-cj-speckled-ivory-wide-bowl-21": {
+      "sku": "CJCJ241334805EV",
+      "retail_ils": 79,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "candle-holders-aliexpress-cutelife-black-ceramic-candelabra": {
+      "sku": "12000056728690425",
+      "retail_ils": 119,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "candle-holders-aliexpress-matte-black-iron-pillar-set2": {
+      "sku": "12000057351444960",
+      "retail_ils": 59,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "candle-holders-cj-travertine-pedestal": {
+      "sku": "CJYD201648001AZ",
+      "retail_ils": 199,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "ceiling-light-aliexpress-flat-oval-paper-lantern-shade-40": {
+      "sku": "12000060627931541",
+      "retail_ils": 169,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "ceiling-light-aliexpress-pleated-cone-shade-41": {
+      "sku": "12000043515055097",
+      "retail_ils": 199,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "ceiling-light-cj-opal-glass-drum-flush-32": {
+      "sku": "CJYD297426532FU",
+      "retail_ils": 249,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "ceiling-light-cj-waxwood-dome-ash-40": {
+      "sku": "CJYD247045503CX",
+      "retail_ils": 269,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "ceiling-lights-aliexpress-flat-oval-paper-lantern-shade-40-pair": {
+      "sku": "12000060627931542",
+      "retail_ils": 279,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "ceiling-lights-aliexpress-scalloped-pleated-shade-26-pair": {
+      "sku": "12000060257573712",
+      "retail_ils": 399,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "ceiling-lights-cj-pleated-fabric-saucer-flush-50": {
+      "sku": "CJYD243196203CX",
+      "retail_ils": 569,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "ceiling-lights-cj-silk-cocoon-flush-40": {
+      "sku": "CJYD196928202BY",
+      "retail_ils": 309,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "centerpiece-vase-aliexpress-modern-minimalist-white-ceramic": {
+      "sku": "10000007605734236",
+      "retail_ils": 109,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "centerpiece-vase-aliexpress-nordic-matte-ceramic-vase": {
+      "sku": "12000029126697717",
+      "retail_ils": 159,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "centerpiece-vase-aliexpress-nordic-morandi-matte-ceramic": {
+      "sku": "12000056826740331",
+      "retail_ils": 209,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "centerpiece-vase-cj-sandy-white-bead-band-25": {
+      "sku": "CJYD283067603CX",
+      "retail_ils": 289,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "condiment-set-cj-kiln-stoneware-oil-cruet-trio": {
+      "sku": "CJYD289918002BY",
+      "retail_ils": 179,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "condiment-set-zendrop-wood-mills-black-white-21": {
+      "sku": "1775149132934082562",
+      "retail_ils": 89,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "curtains-aliexpress-cotton-linen-curtain-look-902882": {
+      "sku": "12000059241454224",
+      "retail_ils": 179,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "curtains-aliexpress-cotton-linen-texture-translucent": {
+      "sku": "12000057728580200",
+      "retail_ils": 299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "curtains-aliexpress-cotton-linen-texture-translucent-091154": {
+      "sku": "12000046939876551",
+      "retail_ils": 329,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "curtains-cj-japanese-linen-half-shade": {
+      "sku": "CJYD218713946TG",
+      "retail_ils": 269,
+      "retail_src": "sku-move-2026-11-12",
+      "from": "now"
+    },
+    "cushions-aliexpress-farmhouse-floral-pillow-covers-166217": {
+      "sku": "12000059675354792",
+      "retail_ils": 129,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-aliexpress-fashion-modern-wabi-sabi-464203": {
+      "sku": "12000047728467291",
+      "retail_ils": 89,
+      "retail_src": "studio",
+      "from": "7b42ddc1"
+    },
+    "cushions-aliexpress-textured-boucle-throw-pillow": {
+      "sku": "12000059524978165",
+      "retail_ils": 59,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-boucle-teddy": {
+      "sku": "CJZT228600103CX",
+      "retail_ils": 59,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-bubble-chenille-bean-green": {
+      "sku": "CJZT255473809IR",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-chenille-wide-wale-green": {
+      "sku": "CJYD258545002BY",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-corduroy-patchwork": {
+      "sku": "CJZT189401906FU",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-dusty-pink-corduroy-patchwork-45": {
+      "sku": "CJKD172412101AZ",
+      "retail_ils": 79,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-knitted-chenille-bean-green": {
+      "sku": "CJYD282217009IR",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-linen-look-charcoal": {
+      "sku": "CJZT113551672TG",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-linen-look-ivory": {
+      "sku": "CJZT242978811KP",
+      "retail_ils": 59,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-sandstone-chenille-flange": {
+      "sku": "CJZT288848605EV",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-washed-cotton-frayed": {
+      "sku": "CJZT218451539MN",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-wide-stripe-corduroy-light-green": {
+      "sku": "CJYD280011314NM",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cushions-cj-wide-wale-corduroy": {
+      "sku": "CJZT225803415OL",
+      "retail_ils": 49,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "cutting-boards-cj-acacia-paddle-pair-43-35": {
+      "sku": "CJCJ294695508HS",
+      "retail_ils": 149,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "dining-pendant-aliexpress-pleated-cone-shade-41": {
+      "sku": "12000043515055097",
+      "retail_ils": 199,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "dining-pendant-cj-black-ring-cloth-lantern-50": {
+      "sku": "CJTH164234902BY",
+      "retail_ils": 359,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "floor-lamp-cj-black-drum-linen": {
+      "sku": "CJSN166907905EV",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "floor-lamp-cj-cream-arc-pleated-152": {
+      "sku": "CJYD273702712LO",
+      "retail_ils": 3529,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "floor-lamp-cj-pleated-walnut-stem-158": {
+      "sku": "CJYD224754407GT",
+      "retail_ils": 769,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "floor-vase-aliexpress-capiron-zen-ceramic": {
+      "sku": "12000047471652183",
+      "retail_ils": 129,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "framed-art-aliexpress-japanese-wabi-sabi-tree-176323": {
+      "sku": "12000058372717411",
+      "retail_ils": 49,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603": {
+      "sku": "12000058489859911",
+      "retail_ils": 129,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "framed-art-cj-black-ink-abstract-wide-mat-50-pair": {
+      "sku": "CJJT219466304DW",
+      "retail_ils": 649,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "framed-art-cj-line-scribble-white-mat-50": {
+      "sku": "CJJT219159803CX",
+      "retail_ils": 229,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "framed-art-cj-morandi-triptych-sage": {
+      "sku": "CJJT230351814NM",
+      "retail_ils": 379,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "framed-art-cj-swinging-line-black-frame-mat-35x45": {
+      "sku": "CJJT222223001AZ",
+      "retail_ils": 199,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "framed-art-cj-taupe-block-black-line-30x40": {
+      "sku": "CJSZ237964101AZ",
+      "retail_ils": 179,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "framed-prints-cj-charcoal-line-black-frame-35x45": {
+      "sku": "CJJT222223001AZ",
+      "retail_ils": 199,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "framed-prints-cj-flower-cutout-set-30x40": {
+      "sku": "CJJT261357801AZ",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "gallery-art-cj-black-botanical-cutout-set3": {
+      "sku": "CJJT261357804DW",
+      "retail_ils": 349,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "gallery-art-cj-black-ink-abstract-wide-mat-40-set3": {
+      "sku": "CJJT219466301AZ",
+      "retail_ils": 749,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "magazine-holder-cj-felt-log-basket": {
+      "sku": "CJYD276054802BY",
+      "retail_ils": 79,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "magazine-holder-cj-felt-snap-bucket": {
+      "sku": "CJYD233454105EV",
+      "retail_ils": 59,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "magazine-holder-cj-gunmetal-leather-strap": {
+      "sku": "CJYD201631002BY",
+      "retail_ils": 269,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "mug-set-cj-oat-speckled-round-mug-wood-saucer": {
+      "sku": "CJYD238051601AZ",
+      "retail_ils": 89,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "nightstand-tray-cj-travertine-look-rect-milktea": {
+      "sku": "CJYD302931314NM",
+      "retail_ils": 129,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "open-shelf-ceramics-cj-morandi-matte-bottle-set": {
+      "sku": "CJJJJTJT21870-M",
+      "retail_ils": 139,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "open-shelf-ceramics-cj-patina-clay-pitcher-and-jar": {
+      "sku": "CJJT316296205EV",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063": {
+      "sku": "12000051296814212",
+      "retail_ils": 39,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "pendant-aliexpress-pleated-cone-shade-41": {
+      "sku": "12000043515055097",
+      "retail_ils": 199,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "pendant-aliexpress-scalloped-pleated-shade-26-ivory": {
+      "sku": "12000060257573710",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "pendant-cj-fabric-dome-ash-cap-25": {
+      "sku": "CJYD247045504DW",
+      "retail_ils": 199,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pendant-cj-fluted-ceramic-wood-cap-short-lantern": {
+      "sku": "CJYD244313508HS",
+      "retail_ils": 159,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pendant-cj-light-wood-slat-drum-43": {
+      "sku": "CJYD286020701AZ",
+      "retail_ils": 299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "pendant-cj-pleated-pumpkin-lantern-40": {
+      "sku": "CJYD272646801AZ",
+      "retail_ils": 449,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pendant-cj-silk-pumpkin-lantern": {
+      "sku": "CJYD243199106FU",
+      "retail_ils": 299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "pendant-cj-wabi-pleated-fabric-lantern-50": {
+      "sku": "CJYD275662201AZ",
+      "retail_ils": 299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "picture-lights-cj-black-tube-rechargeable": {
+      "sku": "CJYD289838802BY",
+      "retail_ils": 89,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pillowcases-cj-linen-pair-coconut-button": {
+      "sku": "CJYD280380501AZ",
+      "retail_ils": 129,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "pillowcases-cj-pure-linen-envelope-pair-48x74": {
+      "sku": "CJYD223749801AZ",
+      "retail_ils": 129,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "planter-cj-cement-ribbed-belly": {
+      "sku": "CJJT154204209IR",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "planter-cj-seagrass-belly": {
+      "sku": "CJJT102597944RI",
+      "retail_ils": 99,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pool-cj-carbonized-wood-pedestal-candlestick": {
+      "sku": "CJYD223459303CX",
+      "retail_ils": 129,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pool-cj-cotton-linen-box-camel-40x30": {
+      "sku": "CJJT238608402BY",
+      "retail_ils": 49,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pool-cj-linen-look-tassel-curtain": {
+      "sku": "CJYD241248707GT",
+      "retail_ils": 119,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pool-cj-travertine-organic-tray-24": {
+      "sku": "CJYD238979001AZ",
+      "retail_ils": 169,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pool-cj-wabi-sabi-floor-vase-white": {
+      "sku": "CJYD219411603CX",
+      "retail_ils": 379,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "pool-cj-wood-sunburst-mirror-43": {
+      "sku": "CJJT239317402BY",
+      "retail_ils": 119,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "pool-cj-woven-cotton-runner-fringe": {
+      "sku": "CJYD239088002BY",
+      "retail_ils": 69,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "pouf-cj-cotton-knit-ball-cover": {
+      "sku": "CJYD270221601AZ",
+      "retail_ils": 179,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "rug-cj-braided-wool-natural": {
+      "sku": "CJJT211801817QJ",
+      "retail_ils": 1299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "shower-curtain-cj-linen-look-khaki-grommet": {
+      "sku": "CJYD236063532FU",
+      "retail_ils": 79,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "sill-vase-cj-cream-fluted-column-25": {
+      "sku": "CJJT293877501AZ",
+      "retail_ils": 59,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "soap-dispenser-cj-matte-ceramic-cream-black-pump": {
+      "sku": "CJYD223975406FU",
+      "retail_ils": 69,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "soap-dispenser-cj-travertine-look-lotion-milktea": {
+      "sku": "CJYD302931306FU",
+      "retail_ils": 79,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "sofa-cover-cj-bubble-stretch-slipcover": {
+      "sku": "CJYD240992703CX",
+      "retail_ils": 239,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "sofa-cover-cj-cotton-muslin-fringe": {
+      "sku": "CJYD205807526ZA",
+      "retail_ils": 129,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "sofa-cover-cj-knit-thick-slipcover": {
+      "sku": "CJYD232708933GT",
+      "retail_ils": 149,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "sofa-cover-cj-linen-feel-chenille-slipcover": {
+      "sku": "CJYD289384903CX",
+      "retail_ils": 179,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "sofa-cover-cj-polar-fleece-jacquard-slipcover": {
+      "sku": "CJJJJTJT03459-Beige-3 seater",
+      "retail_ils": 169,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "sofa-cover-cj-waffle-jacquard-stretch-slipcover": {
+      "sku": "CJYD223205351YB",
+      "retail_ils": 159,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "sofa-cover-cj-washed-hemp-throw": {
+      "sku": "CJYD286012815OL",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "table-lamp-cj-white-teardrop-fabric-cone-25x45": {
+      "sku": "CJSN210583609IR",
+      "retail_ils": 149,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "table-lamp-cj-white-textured-ceramic-linen-drum": {
+      "sku": "CJSN323013906FU",
+      "retail_ils": 239,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "table-runner-aliexpress-boho-macrame-table-runners-263532": {
+      "sku": "12000049664148478",
+      "retail_ils": 69,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "table-runner-aliexpress-boho-macrame-table-runners-263532-dining": {
+      "sku": "12000049664148479",
+      "retail_ils": 69,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "table-runner-aliexpress-boho-table-runner-macrame-072806": {
+      "sku": "12000046780624550",
+      "retail_ils": 69,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "table-runner-aliexpress-nordic-table-runner-kitchen-244347": {
+      "sku": "12000056696249963",
+      "retail_ils": 69,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "table-runner-cj-linen-look-sage-fringe": {
+      "sku": "CJYD242507909IR",
+      "retail_ils": 79,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "table-runner-cj-linen-look-triangle-end": {
+      "sku": "CJYD266334710JQ",
+      "retail_ils": 79,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "tableware-set-cj-grey-sand-matte-plate": {
+      "sku": "CJCJ143646602BY",
+      "retail_ils": 109,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "tableware-set-cj-speckled-oat-stoneware-bowl-13": {
+      "sku": "CJYD264652003CX",
+      "retail_ils": 79,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "tea-towel-zendrop-cotton-linen-washed-60x45": {
+      "sku": "1789415752176766985",
+      "retail_ils": 39,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "throw-cj-cotton-linen-light-gray-200x230": {
+      "sku": "CJYD280287002BY",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "throw-cj-cotton-waffle-ruffle-khaki-150x200": {
+      "sku": "CJMJ117516414NM",
+      "retail_ils": 149,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "toothbrush-cup-cj-silver-travertine-cup": {
+      "sku": "CJYD284387902BY",
+      "retail_ils": 149,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "toothbrush-cup-cj-travertine-look-cup-milktea": {
+      "sku": "CJYD302931304DW",
+      "retail_ils": 49,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vanity-sconces-aliexpress-walnut-color-yellow-travertine-332886": {
+      "sku": "12000051976080272",
+      "retail_ils": 659,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "vanity-sconces-cj-flat-halo-disc-white": {
+      "sku": "CJLE125066102BY",
+      "retail_ils": 79,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "vanity-sconces-cj-fluted-resin-updown-white": {
+      "sku": "CJYD218128701AZ",
+      "retail_ils": 259,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vanity-sconces-cj-ip65-mini-updown-white": {
+      "sku": "CJYD309246902BY",
+      "retail_ils": 69,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vase-aliexpress-vintage-distressed-clay-vase-589009": {
+      "sku": "12000058464365845",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-charcoal-carved": {
+      "sku": "CJJT276474102BY",
+      "retail_ils": 219,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-coarse-sand-white-tall": {
+      "sku": "CJJT280712502BY",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-faceted-cream": {
+      "sku": "CJYD282318303CX",
+      "retail_ils": 219,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-french-matte-white-35": {
+      "sku": "CJJT276268801AZ",
+      "retail_ils": 319,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-matte-moon-jar-white": {
+      "sku": "CJJT276473907GT",
+      "retail_ils": 159,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-textured-white-stoneware": {
+      "sku": "CJJT312391803CX",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-white-plum-hand-thrown": {
+      "sku": "CJJT281811802BY",
+      "retail_ils": 239,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "vase-cj-white-textured-jar": {
+      "sku": "CJYD219407502BY",
+      "retail_ils": 179,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597": {
+      "sku": "12000036069133824",
+      "retail_ils": 89,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "wall-decor-cj-corn-husk-round-38": {
+      "sku": "CJJT159324005EV",
+      "retail_ils": 89,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "wall-decor-cj-water-hyacinth-round-38": {
+      "sku": "CJJT111471505EV",
+      "retail_ils": 89,
+      "retail_src": "initial-2026-10-18",
+      "from": "7b42ddc1"
+    },
+    "wall-decor-zendrop-macrame-diamond-dowel-small": {
+      "sku": "1775152328607887361",
+      "retail_ils": 79,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-hooks-cj-light-wood-rail-5-brass-pegs-58": {
+      "sku": "CJFZ113840808HS",
+      "retail_ils": 99,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-hooks-cj-raw-wood-cylinder-peg-set-of-4": {
+      "sku": "CJYD189371108HS",
+      "retail_ils": 59,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-black-folding-arm-woodgrain-cone-18": {
+      "sku": "CJYD245398302BY",
+      "retail_ils": 119,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-black-swan-arm-white-fabric-cone": {
+      "sku": "CJYD293766504DW",
+      "retail_ils": 119,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-black-swing-arm-wood-shade": {
+      "sku": "CJYD223839501AZ",
+      "retail_ils": 429,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-travertine-cone-walnut": {
+      "sku": "CJYD241918802BY",
+      "retail_ils": 299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-travertine-disc-25": {
+      "sku": "CJYD256173701AZ",
+      "retail_ils": 379,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-travertine-dome-15-alt": {
+      "sku": "CJYD219925401AZ",
+      "retail_ils": 299,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-travertine-dome-15-pull": {
+      "sku": "CJYD223067003CX",
+      "retail_ils": 449,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-travertine-half-bowl-15": {
+      "sku": "CJYD223295301AZ",
+      "retail_ils": 229,
+      "retail_src": "initial-2026-10-11",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-wavy-linen-flush-25": {
+      "sku": "CJYD270865301AZ",
+      "retail_ils": 209,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    },
+    "wall-sconce-cj-white-fabric-cube-15": {
+      "sku": "CJYD270937112LO",
+      "retail_ils": 279,
+      "retail_src": "initial-no-loss-2026-10-20",
+      "from": "7b42ddc1"
+    }
+  }
+}

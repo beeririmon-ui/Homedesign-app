@@ -70,6 +70,7 @@ import { cachedFreight } from './lib/freight-cache';
 import { latinLabels, lineName, lineOf, loadLineData, optionLabel, saleOf, setComposition } from './lib/lines';
 import { latinPublicText, publicDescription, unknownPublicText } from './lib/public-text';
 import { cjProductOf, singleSku, supplierSkuIssues } from './lib/supplier-skus';
+import { ladderInversions, skuAnchorIssue, type PriceAnchor } from './lib/price-checks';
 import { publicId, publicVariantId, slugIndex } from '@hd/shared/product-url';
 
 const STRICT = process.argv.includes('--strict-prices');
@@ -194,6 +195,21 @@ const invalidCards: { path: string; issues: string }[] = [];
 const draftCards: DraftCard[] = [];
 /** The studio's own prices (the owner's, the pricing file's, a per-SKU price) that lose on the site's reading: reported, never raised. */
 const studioLosing: { id: string; variant_id: string; price_agorot: number; no_loss_agorot: number }[] = [];
+/**
+ * S23, QA S22 ת85: a studio price is the card's, but it was set for one SKU (the default at the time), and every other
+ * option's price is derived from it. Two warnings, never a change of price (the prices are the manager's and pricing's):
+ *  - the card's default SKU is not the SKU the price was set for (the entry's `retail_sku`, else tools/price-anchors.json),
+ *    or the price was set again without saying for which SKU;
+ *  - a smaller size priced above a larger one, the other choices the same (the ladder inverted).
+ * Printed with the build's summary and written to .generated/price-warnings.json.
+ */
+const priceAnchors = (
+  (existsSync(sitePath('tools/price-anchors.json')) ? readJson(sitePath('tools/price-anchors.json')) : { anchors: {} }) as {
+    anchors: Record<string, PriceAnchor>;
+  }
+).anchors;
+const priceSkuWarnings: { id: string; what: string; retail_ils: number; retail_src: string | null; set_for: string | null; default_sku: string }[] = [];
+const ladderWarnings: { id: string; axis: string; smaller: string; smaller_ils: number; larger: string; larger_ils: number; pairs: number }[] = [];
 /** derived prices the floor raised (SITE1): evidence for gate G8.2 */
 let flooredVariants = 0;
 let flooredUnits = 0;
@@ -512,6 +528,12 @@ function buildOptions(
     });
   }
   if (new Set(full.map((v) => v.id)).size !== full.length) throw new Error(`${card.id}: two options share a variant id`);
+  // S23 (QA S22 ת85): within a size axis, the other choices the same, a smaller size never costs more than a larger one
+  for (const x of ladderInversions(
+    o.axes,
+    rows.map((r) => ({ values: r.s.values as Record<string, string>, retail_agorot: r.retail })),
+  ))
+    ladderWarnings.push({ id: card.id, ...x });
   if (rows.length < 2) return { public: null, full };
   // the room's option first in the variants (the default everywhere); the public list keeps the supplier's order
   full.sort((a, b) => Number(b.in_room) - Number(a.in_room));
@@ -565,6 +587,16 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   if (STRICT && price0.source !== 'owner' && price0.source !== 'studio')
     return { id: card.id, slot: slot.id, reason: 'no retail_ils in data/economics/products.json' };
   const provisional = price0.source === 'initial-card' || price0.source === 'initial-leads';
+  // S23 (QA S22 ת85): the SKU this studio price was set for, against the card's default SKU now
+  if (!provisional && card.options?.default_sku && econ && typeof econ.retail_ils === 'number') {
+    const issue = skuAnchorIssue(
+      econ as { retail_ils: number; retail_src?: string | null; retail_sku?: string | null },
+      card.options.default_sku,
+      priceAnchors[card.id],
+    );
+    if (issue)
+      priceSkuWarnings.push({ id: card.id, retail_ils: econ.retail_ils, retail_src: econ.retail_src ?? null, default_sku: card.options.default_sku, ...issue });
+  }
   let retail = ilsToAgorot(price0.retail_ils);
   const landed = landedOf(cost, freight.sale_cents, sellQty);
   const noLoss = noLossOf(landed);
@@ -1051,6 +1083,21 @@ console.log(
     `  invalid product cards skipped: ${invalidCards.length}${invalidCards.length ? ' · ' + invalidCards.map((c) => `${c.path} (${c.issues})`).join('; ') : ''}`,
     `  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): ${draftCards.length}${draftCards.length ? ' · ' + draftCards.map((c) => c.path).join('; ') : ''}`,
   ].join('\n'),
+);
+// S23 (QA S22 ת85): warnings only; a price is never changed here
+console.log(
+  `  studio price and SKU (ת85): ${priceSkuWarnings.length} warning(s)${priceSkuWarnings.length ? ' · ' + priceSkuWarnings.map((x) => `${x.id}: ${x.what}`).join('; ') : ''}`,
+);
+console.log(
+  `  size ladder (ת85): ${ladderWarnings.length} product(s) with a smaller size priced above a larger one${ladderWarnings.length ? ' · ' + ladderWarnings.map((x) => `${x.id} (${x.axis}): ${x.smaller} ₪${x.smaller_ils} > ${x.larger} ₪${x.larger_ils}${x.pairs > 1 ? `, ${x.pairs} pairs` : ''}`).join('; ') : ''}`,
+);
+writeFileSync(
+  join(GENERATED, `${outName}.price-warnings.json`),
+  JSON.stringify(
+    { built_at: new Date().toISOString(), anchors: Object.keys(priceAnchors).length, studio_price_sku: priceSkuWarnings, size_ladder: ladderWarnings },
+    null,
+    1,
+  ),
 );
 
 // S11, QA S6–S7 ת12: no public label is in the supplier's English. Once the designer's labels exist, a label (an option,

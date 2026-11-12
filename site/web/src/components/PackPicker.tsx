@@ -1,7 +1,9 @@
 /**
  * Set or single piece (P1): an accessible radio group (native radios: arrow keys, one tab stop, labels read by screen
  * readers) shown only when the product is a set that is also sold by the piece. The set is the default.
+ * S23 (QA S22 ת83, as OptionPicker): a choice made before the page hydrates is taken at hydration, never shown unsent.
  */
+import { useLayoutEffect, useRef } from 'preact/hooks';
 import type { Pack, PublicProduct } from '@hd/shared';
 import { formatIls } from '@hd/shared/money';
 
@@ -18,6 +20,11 @@ type Props = {
 };
 
 export function PackPicker({ p, value, onChange, id, onStage, prices }: Props) {
+  const root = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const shown = root.current?.querySelector<HTMLInputElement>(`input[type="radio"][name="${CSS.escape(id)}"]:checked`)?.value;
+    if ((shown === 'set' || shown === 'unit') && shown !== value) onChange(shown);
+  }, []);
   const pack = p.pack;
   if (!pack) return null;
   const setPrice = prices?.set ?? p.price_agorot;
@@ -30,7 +37,7 @@ export function PackPicker({ p, value, onChange, id, onStage, prices }: Props) {
     { v: 'unit', title: 'יחידה אחת', price: unitPrice, hint: unitEstimated ? 'מחיר משוער' : 'פריט בודד' },
   ];
   return (
-    <div class={`pack-picker${onStage ? ' on-stage' : ''}`} role="radiogroup" aria-labelledby={`${id}-label`}>
+    <div class={`pack-picker${onStage ? ' on-stage' : ''}`} role="radiogroup" aria-labelledby={`${id}-label`} ref={root}>
       <span id={`${id}-label`} class="pack-label">
         איך לקנות
       </span>

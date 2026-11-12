@@ -64,6 +64,12 @@ export const ProductEconomicsSchema = z.looseObject({
   retail_ils: NonNeg.nullable().optional(),
   /** where the price came from: "studio" = the owner set it by hand; "initial-..." = a starting price, not approved */
   retail_src: z.string().nullable().optional(),
+  /**
+   * S23 (QA S22 ת85): the supplier SKU retail_ils was set for. Every option's derived price follows the card's default
+   * SKU, so when the default moves the whole ladder moves: the build warns when this is not the default. Without it, the
+   * build reads site/tools/price-anchors.json.
+   */
+  retail_sku: z.string().nullable().optional(),
   compare_at_ils: NonNeg.nullable().optional(),
   /** Supplier units shipped per unit sold (e.g. a "set of 2" bought as two singles). Default 1. */
   sell_qty: z.number().int().min(1).max(50).nullable().optional(),

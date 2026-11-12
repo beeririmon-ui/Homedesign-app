@@ -29,7 +29,12 @@
   - ‏`mut-s20.sh`: ‏**23/23** ‏(0 פערים, כמו S22);
   - ‏`check:promises`: ‏0 בבנייה עם הדגל (112 דפים) ו-0 בבנייה הציבורית (49 דפים);
   - ‏`check:rights` בציבורית: ‏0 ב-260 קבצים.
-- **`npm run test:all` ירוק:** __TESTALL__
+- **התוספת (QA על S22):**
+  - **ת83:** בכלי של QA, ‏0 אי-התאמות ב-20 טעינות בטלפון וב-20 בדסקטופ (ב-S22: ‏4/10).
+  - **ת84:** ‏`options.spec` מחכה ל-`data-hydrated` של הטופס, ולוחץ פעם אחת.
+  - **ת85:** השער מזהיר על השטיח (SKU שזז מתחת ל-₪1,299) ועל 6 סולמות מידות הפוכים. לא שיניתי מחיר.
+  - הפרטים בפרק משלו למטה.
+- **`npm run test:all` ירוק** (`test-all.log`, ‏19:15): vitest ‏**515/515** (היו 482), ‏e2e ‏**166** ועוד אחת שמדולגת בכוונה (היו 150), ו-a11y ‏**16/16**. הריצה שלפני התוספת (507, ‏164, ‏16) ב-`data/test-all-before-addendum.log`.
 
 ## מה נבנה, לפי פריט
 
@@ -71,7 +76,7 @@
 
 ### ת77: `house.spec` (ת22)
 - **מחכים ל-hydrate,** כלומר שהסל בכותרת כבר לא `aria-busy` (`main.tsx` עושה hydrate, ורק אחריו הסל מוצג). **ואז לחיצה אחת** עם 15 שנ'. לחיצה שאבדה אחרי hydrate נכשלת.
-- **אותו דבר ב-`options.spec`** (התיקון של S22 חזר על הלחיצה באותה צורה).
+- **אותו דבר ב-`options.spec`** (התיקון של S22 חזר על הלחיצה באותה צורה). ב-ת84 שם מחכים עכשיו לסימן של הטופס עצמו (פרק התוספת).
 
 ### ה29: כתיבה שלוקחת יותר מ-4 שנ' (`carrier.ts`, ‏`cart.ts`, ‏`api-cart.ts`)
 - **סימן לכתיבה שבדרך:** כל כתיבה של שורה (בחנות ובסיפור) רושמת ב-`window.name` את השורה שהיא קובעת: וריאנט, סט או יחידה, כמות, ומתי התחילה. כשמגיעה תשובה, הסימן נמחק.
@@ -90,13 +95,13 @@
 ## הבדיקות
 | בדיקה | תוצאה |
 | --- | --- |
-| prepare:data, ‏typecheck, ‏lint, ‏format:check | __T1__ |
-| vitest | __VITEST__. חדש: `web/test/s23-cart.test.ts` (18), ‏`api/test/s23.test.ts` (7) |
+| prepare:data, ‏typecheck, ‏lint, ‏format:check | עוברים (`test-all.log`) |
+| vitest | **515/515** (היו 482). חדש: `web/test/s23-cart.test.ts` (18), ‏`api/test/s23.test.ts` (7), ‏`tools/test/s23.test.ts` (8) |
 | build עם הדגל | עובר. ‏budget עובר. ‏check:rights: ‏0 מחוץ לתיקיות הספק, מרווח 30, ‏0 צורות שטוחות. ‏check:promises: ‏**0** ב-112 דפים, 23 סקריפטים, 9 קובצי טקסט ו-44 קובצי Worker |
 | build ציבורי (`HD_PUBLIC=1`, ‏token דמה, כתובת בדיקה שנוצרה בזמן הריצה) | עובר. ‏check:rights: ‏**0** ב-260 קבצים. ‏check:promises: ‏**0** ב-49 דפים (`data/build-public.log`, הכתובת מוחלפת שם ב-`<generated-test-address>`) |
 | check:config | עובר (`data/check-config.log`) |
-| e2e | __E2E__. חדש: `s23.spec` (14) |
-| a11y | __A11Y__ |
+| e2e | **166 עברו, ואחת דולגה בכוונה** (היו 150). חדש: `s23.spec` (14), ושתיים ב-`options.spec` (ת83) |
+| a11y | **16/16** |
 | encoding | בתוך ה-e2e |
 
 ### הכלים של QA, על הבנייה הזו
@@ -152,6 +157,45 @@
   - `SITE=$PWD/site MUT_TMP=<scratch> bash qa/reports/2026-11-07-site-track/s23/tools/mut-s20.sh`
 - **הבדיקה של QA ל-ת76:** להעתיק את `qa/reports/2026-11-12-site-track-qa-s21/tools/qa-s21-log.test.ts.txt` ל-`site/api/test/qa-s21-log.test.ts`, להריץ לבד, ולמחוק.
 
+## התוספת של המנהל: ת83, ת84 וחלק השער של ת85 (מ-QA על S22)
+המקור: `qa/reports/2026-11-12-site-track-qa-s22.md` ו-`.json`. ת78–ת82 ו-ת86 לא נלקחו (הם ב-`status/backlog-low.md`).
+
+### ת83: בחירה לפני hydrate (`components/OptionPicker.tsx`, ‏`components/PackPicker.tsx`, ‏`pages/Product.tsx`)
+- **הבעיה:** הדף מרונדר מראש. לחיצה על צבע לפני hydrate מסמנת אותו בדפדפן, ו-hydrate משאיר את הסימון, אבל המצב של הדף נשאר על האפשרות שבחדר. הצבע שמסומן אינו הצבע שנכנס לסל.
+- **התיקון, "לקרוא את ה-DOM ב-hydrate":** ב-`useLayoutEffect` של הטופס (מיד אחרי hydrate, לפני הציור), הטופס קורא מה מסומן בכל ציר (radio או select) ולוקח אותו כבחירה. אם הצירוף שמסומן אינו SKU, הטופס מחזיר את הסימון למצב. כך הטופס לא מציג בחירה שהוא לא ישלח. אחר כך הוא מסמן את עצמו `data-hydrated`.
+- **בחירת סט או יחידה** (`PackPicker`): אותו דבר.
+- **הסיבה השנייה, ב-`Product.tsx`:** ה-effect שמחזיר את האפשרות שבחדר כשעוברים למוצר אחר רץ גם בטעינה הראשונה, אחרי hydrate. הוא ביטל בחירה שנעשתה בין hydrate ל-effect, ומכאן ה-1/12 וה-2/20 של QA. עכשיו הוא רץ רק כשהמוצר מתחלף.
+- **הכלי של QA** (`tools/options-early-click-s22qa.mts`, בעותק שהוסיף לו מצב טלפון וספירת אי-התאמות): ‏20 טעינות בכל אחד:
+  - דסקטופ: ‏**0 אי-התאמות**, ‏20/20 הלחיצות נשמרו. ‏7 מהן לפני שהאפליקציה עלתה.
+  - טלפון: ‏**0 אי-התאמות**, ‏20/20 נשמרו. ‏13 לפני שהאפליקציה עלתה.
+  - ב-S22 QA ראה 4/10 אי-התאמות ("אפור" מסומן, "לבן חם" בסל) ו-1/10 שבוטלה.
+  - הנתונים: `data/options-early-click-{desktop,phone}.json` ו-`.log`.
+- **ה-e2e** (`e2e/options.spec.ts`, ‏"S23 ת83"): לחיצה (בטלפון נגיעה) ב-domcontentloaded, ‏3 טעינות בכל אחד. הצבע המסומן, המקרא ושורת הסל אומרים אותו צבע.
+
+### ת84: `options.spec`
+- **מחכים לסימן של הטופס עצמו** (`.opt-picker[data-hydrated]`), ולא לסל שבכותרת, **ואז לחיצת ArrowDown אחת** עם 15 שנ'. בלי ניסיון חוזר, כמו ב-ת77.
+
+### ת85, חלק השער (`tools/lib/price-checks.ts`, חדש; `tools/build-catalog.ts`; `tools/price-anchors.json`, חדש)
+- **לא שיניתי שום מחיר.** השער רק מזהיר, בכל בנייה (בשורות הסיכום של `build-catalog`), וכותב `.generated/<catalog>.price-warnings.json`.
+- **(1) המחיר וה-SKU שלו:** לכל כרטיס עם אפשרויות ומחיר סטודיו, השער בודק אם ה-SKU שבשבילו המחיר נקבע הוא עדיין ה-SKU ברירת המחדל.
+  - **מאיפה ה-SKU:** מהשדה החדש `retail_sku` ברשומת המחיר, אם יש. בסכמה הוא אופציונלי (`shared/src/schema/economics.ts`), ואף רשומה עוד לא כוללת אותו.
+  - **אחרת:** מרשימת העוגנים `site/tools/price-anchors.json`. היא נוצרה ב-`tools/make-price-anchors.py` (כאן): ‏162 מחירים. מחיר שלא השתנה מאז `7b42ddc1` (‏QA ‏S21) מקבל את ה-SKU ברירת המחדל של אז. מחיר שנקבע מאז (רק הווילון, `sku-move-2026-11-12`) מקבל את ה-SKU של היום.
+  - **הוא מזהיר כש:** ה-SKU ברירת המחדל אחר, או כשהמחיר נקבע שוב בלי לומר לאיזה SKU.
+  - **היום:** אזהרה אחת. **השטיח:** ‏₪1,299 נקבע ל-`CJJT211801817QJ` (‏200×300), וברירת המחדל עכשיו `CJJT211801818RI` (‏230×330). הווילון לא מוזהר: ₪269 נקבע ל-SKU החדש.
+- **(2) סולם המידות:** בציר של מידות, כשכל שאר הבחירות שוות, מידה קטנה יותר לא אמורה לעלות יותר ממידה גדולה. היום **6 מוצרים** (לבדיקה של התמחור, לא שלי לשנות):
+
+| מוצר | הקטן | הגדול | זוגות הפוכים |
+| --- | --- | --- | --- |
+| השטיח (`rug-cj-braided-wool-natural`) | ‏160×230 ‏₪5,149 | ‏230×330 ‏₪1,299 | 41 |
+| הווילון (`curtains-cj-japanese-linen-half-shade`) | ‏200×240 punch ‏₪299 | ‏200×260 hook ‏₪269 | 12 |
+| כיסוי הספה (`sofa-cover-cj-cotton-muslin-fringe`) | ‏100×150 ‏₪189 | ‏130×170 ‏₪109 | 20 |
+| הטריפטיך (`framed-art-cj-morandi-triptych-sage`) | ‏40×60 ‏₪619 | ‏50×70 ‏₪379 | 1 |
+| העציץ (`planter-zendrop-seagrass-belly-38x34`) | ‏d36-h32 ‏₪109 | ‏d38-h34 ‏₪89 | 3 |
+| כרית הבוקלה (`cushions-aliexpress-textured-boucle-throw-pillow`) | ‏45×45 ‏₪79 | ‏50×50 ‏₪69 | 3 |
+
+- **שימו לב:** בווילון, ציר ה"מידה" של הספק מערבב מידה וסוג תלייה (punch, ‏hook, ‏rod). חלק מההיפוכים שם הם ההבדל בעלות של סוג התלייה, לא טעות. השער מזהיר, והתמחור מחליט.
+- **הבדיקות:** `tools/test/s23.test.ts` (8), על כרטיסים מומצאים.
+
 ## שאלות, וברירת המחדל שרצה עכשיו
 1. **ת72 (א): הקורא של `#c=` עוד נחוץ?** (למנהל ול-QA)
    - **מה רץ:** לפי הבריף. `#c=` נלקח רק בסל ובקופה, רק בלי אחסון, ורק כשללשונית אין סל משלה. בכל מקום אחר הוא נמחק ולא נלקח.
@@ -171,24 +215,32 @@
    - **מה רץ:** ה-e2e רץ על `@playwright/test` ‏1.56.1. הכלים של QA רצים על `playwright-core` ‏1.64.0, שגם הוא ב-`node_modules`.
    - **ההבדל:** ב-1.56, בקשה שמוחזקת ב-route נקטעת כשהדף עובר, והשגיאה מגיעה לדף. דפדפן לא עושה את זה לבקשת keepalive. לכן ב-e2e של ה29 הבקשה מוחזקת בתוך הדף, והבדיקה שולחת אותה לשרת אחרי 6 שנ'. הכלי של QA ‏(1.64) מחזיק אותה ברשת.
    - **ההמלצה:** ליישר את הגרסאות כשיש רשת להתקנה. זה לא בסמכותי עכשיו.
+6. **ת85: איפה נשמר ה-SKU של מחיר** (למנהל ולתמחור)
+   - **מה רץ:** `retail_sku` ברשומת המחיר, אם יש. אחרת רשימת העוגנים `site/tools/price-anchors.json`, שיצרתי מ-`7b42ddc1`.
+   - **ההמלצה:** שהתמחור יכתוב `retail_sku` בכל רשומה כשהוא קובע מחיר. אחרי זה אפשר למחוק את רשימת העוגנים. לא כתבתי לנתונים (`data/economics`).
+7. **ת85: אזהרה או עצירה בבנייה הציבורית** (למנהל)
+   - **מה רץ:** אזהרה בלבד, בכל בנייה, כמו שהתוספת ביקשה. QA הציע לעצור את הבנייה הציבורית.
+   - **ההמלצה:** לעצור בבנייה הציבורית רק את (1), SKU שזז מתחת למחיר, אחרי שהשטיח יוכרע. את (2), הסולם, להשאיר אזהרה, כי יש בו היפוכים לגיטימיים (סוג תלייה בווילון).
 
 ## הקבצים
 - **חדשים:**
   - `site/web/src/state/carrier.ts`
-  - בדיקות: `site/web/test/s23-cart.test.ts` (18), ‏`site/api/test/s23.test.ts` (7), ‏`site/api/test/external/qa-s21-log-residue.json`, ‏`site/e2e/s23.spec.ts` (14)
+  - `site/tools/lib/price-checks.ts`, ‏`site/tools/price-anchors.json` (ת85)
+  - בדיקות: `site/web/test/s23-cart.test.ts` (18), ‏`site/api/test/s23.test.ts` (7), ‏`site/tools/test/s23.test.ts` (8), ‏`site/api/test/external/qa-s21-log-residue.json`, ‏`site/e2e/s23.spec.ts` (14), ושתי בדיקות ת83 ב-`site/e2e/options.spec.ts`
 - **שונו:**
-  - **web:** `state/cart.ts`, ‏`main.tsx`, ‏`router.ts` (הערות), ‏`components/CartState.tsx`, ‏`story/api-cart.ts`, ‏`story/story.ts`, ‏`story/story.css`
-  - **הבנייה:** `tools/story/page.template.html`, ‏`tools/check-image-rights.ts`, ‏`tools/lib/rights-content.ts`, ‏`package.json` (`check:rights`)
+  - **web:** `state/cart.ts`, ‏`main.tsx`, ‏`router.ts` (הערות), ‏`components/CartState.tsx`, ‏`components/OptionPicker.tsx`, ‏`components/PackPicker.tsx`, ‏`pages/Product.tsx`, ‏`story/api-cart.ts`, ‏`story/story.ts`, ‏`story/story.css`
+  - **הבנייה:** `tools/story/page.template.html`, ‏`tools/check-image-rights.ts`, ‏`tools/lib/rights-content.ts`, ‏`tools/build-catalog.ts` (ת85), ‏`package.json` (`check:rights`)
+  - **shared:** `src/schema/economics.ts` (‏`retail_sku`, אופציונלי)
   - **API:** `api/src/lib/log.ts`
   - **בדיקות ישנות:**
     - `web/test/s21-cart.test.ts`: המזהה עובר ב-`window.name` במקום `#c=`, והוספה אחרי טעינה שנכשלה טוענת שוב (ת73 א).
     - `api/test/s21.test.ts`: ‏"DanaGat" ו-"danagat" הם עכשיו ערך אחד שלם (ת76). ב-S21 הבדיקה תיעדה את "danagat" כשארית.
-    - `e2e/house.spec.ts`, ‏`e2e/options.spec.ts`: לחיצה אחת אחרי hydrate (ת77).
+    - `e2e/house.spec.ts`: לחיצה אחת אחרי hydrate (ת77). `e2e/options.spec.ts`: לחיצה אחת אחרי `data-hydrated` של הטופס (ת84).
     - `playwright.config.ts`: ‏`s23` בפרויקט ה-e2e.
   - **מחוץ ל-site:** `qa/reports/2026-11-10-site-track/launch-checklist.md` (שורות 1.5, ‏6.1 ו-6.2, והערה בראש).
 - **הוכחות:** `qa/reports/2026-11-07-site-track/s23/`:
   - README;
   - `screens/`: הצילומים של `cart-flash.mjs` (הסל והקופה בטעינה ובכישלון, הסל של הסיפור בכישלון) ו-`h30-*` (בלי JS, ב-400 וב-1280);
   - `data/`: היומנים וה-JSON של כל ריצה;
-  - `tools/`: הכלים של QA בעותק (`cart-flash.mjs`, ‏`bfcache.mjs`, ‏`history-db.mjs`, ‏`read-history.py`, ‏`mut-s20.sh`, ‏`noNet.sh`).
+  - `tools/`: הכלים של QA בעותק (`cart-flash.mjs`, ‏`bfcache.mjs`, ‏`history-db.mjs`, ‏`read-history.py`, ‏`mut-s20.sh`, ‏`noNet.sh`, ‏`options-early-click-s22qa.mts`), והכלי שלי `make-price-anchors.py`.
 - **הבא:** QA על S23.
