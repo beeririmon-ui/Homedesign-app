@@ -136,13 +136,13 @@
    "min": 0.728
   },
   "colour": {
-   "fix": "the default vase: R5's a*b* fix re-solved on the re-cut body (post_r5.vase_colour's method and targets: one hue rotation and one     chroma factor for every body pixel, rows >= 935; C* 5.5 on the lit half, the hue of the surfaces beside, L* unchanged); started from     R5's dh and k: with its lit flank back the lit half is lighter and less chromatic than R5 measured it, so R5's k alone gives C* ~3.5",
+   "fix": "the default vase: R5's a*b* fix re-solved on the re-cut body (post_r5.vase_colour's method and targets: one hue rotation and one     chroma factor for every body pixel, rows >= 935; the hue of the surfaces beside, L* unchanged), started from R5's dh and k. With its lit     flank back the lit half is lighter (L* 88 against R5's 79) and R5's k alone gives C* 3.4, under the designer's 4-7 and cooler than     the room's own white (the back wall, C* 4.05): the lit half is set to C* 4.5, inside the range and the nearest to the card's     near-neutral #EEECE8",
    "r5": {
     "dh": 6.335,
     "k": 0.3376
    },
-   "dh_deg": 2.205,
-   "k": 0.5366,
+   "dh_deg": 1.695,
+   "k": 0.441,
    "iterations": [
     {
      "it": 0,
@@ -157,11 +157,21 @@
     {
      "it": 1,
      "dh": 2.205,
-     "k": 0.5366,
-     "L": 88.44,
-     "C": 5.49,
-     "h": 83.14,
-     "C_px_median": 5.56,
+     "k": 0.4391,
+     "L": 88.47,
+     "C": 4.48,
+     "h": 83.79,
+     "C_px_median": 4.56,
+     "px": 2870
+    },
+    {
+     "it": 2,
+     "dh": 1.695,
+     "k": 0.441,
+     "L": 88.47,
+     "C": 4.51,
+     "h": 83.44,
+     "C_px_median": 4.62,
      "px": 2870
     }
    ],
@@ -190,17 +200,17 @@
    },
    "after": {
     "lit_half": {
-     "L": 88.44,
-     "C": 5.49,
-     "h": 83.14,
-     "C_px_median": 5.56,
+     "L": 88.47,
+     "C": 4.51,
+     "h": 83.44,
+     "C_px_median": 4.62,
      "px": 2870
     },
     "body": {
-     "L": 69.18,
-     "C": 10.12,
-     "h": 80.49,
-     "C_px_median": 10.24,
+     "L": 69.19,
+     "C": 8.33,
+     "h": 79.95,
+     "C_px_median": 8.46,
      "px": 5897
     },
     "beside": {
