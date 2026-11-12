@@ -77,8 +77,10 @@ ACCEPTED = list(G5.ACCEPTED)
 
 
 def use_r6_sources():
+    """the R6 sources; a slot whose R6 file is not written yet reads its R5 file (the order of the fixes does not matter for the measures:
+    the slots' regions are disjoint)"""
     G12.SRC.clear()
-    G12.SRC.update(SRC6)
+    G12.SRC.update({k: (v if os.path.exists(D(v[0], f"{k}.png")) else SRC5[k]) for k, v in SRC6.items()})
 
 
 def rel(p):
@@ -375,3 +377,152 @@ def scale_about_foot(rgb, a, sh, sx, sy, ax, ay):
     sh2 = np.clip(1 - cv2.warpAffine(1 - sh, Ms, SIZE, flags=fl), 0, 1)
     sh2 = np.where(a2 >= 0.999, 1.0, sh2)
     return rgb2.astype(np.float32), a2.astype(np.float32), sh2.astype(np.float32), Ml, Ms
+
+
+POINT = R.POINT
+VASE_CARD = {"vase": dict(D=0.16, H=0.32, mouth=0.09, foot=0.10, cm=(16, 32)),       # Large: D16 x H32, mouth 9 (card)
+             "vase-v2": dict(D=0.22, H=0.32, mouth=0.13, foot=0.124, cm=(22, 32))}   # Style B: W22 x H32, mouth ~13 (card)
+SIZE_TOL = 0.05        # QA R5 passed vase 2 at +4.5 %: an axis is brought to the card only beyond 5 %
+
+
+def lip_top(a_cut, axis_x, rim_row, half):
+    """the mouth's far rim: going up from the rim row, the last row whose alpha run round the axis is still >= 70 % of the rim row's"""
+    w0 = float(a_cut[rim_row, int(axis_x - half):int(axis_x + half)].sum())
+    y = rim_row
+    while y > rim_row - 20 and float(a_cut[y - 1, int(axis_x - half):int(axis_x + half)].sum()) >= 0.7 * w0:
+        y -= 1
+    return y
+
+
+def vase_measures(G8, a, body_from):
+    """post_r5.vase_colour's measure: the lit half (left of the body's middle) of the body (alpha 255 eroded 5 px, rows from the rim) and
+    the whole body; the surfaces beside (15-40 px out, L* 50-95)"""
+    m = cv2.erode((a >= 0.999).astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
+    m[:body_from] = False
+    ys, xs = np.nonzero(m)
+    lit = m & (np.arange(m.shape[1])[None, :] < (xs.min() + xs.max()) / 2)
+    LL = lab8(G8)
+    d = cv2.distanceTransform((~(a > 0)).astype(np.uint8), cv2.DIST_L2, 5)
+    beside = (d >= 15) & (d <= 40) & (LL[..., 0] <= 95) & (LL[..., 0] >= 50)
+
+    def s(mm):
+        aa, bb = float(np.median(LL[..., 1][mm])), float(np.median(LL[..., 2][mm]))
+        C = np.hypot(LL[..., 1][mm], LL[..., 2][mm])
+        return dict(L=round(float(np.median(LL[..., 0][mm])), 2), C=round(math.hypot(aa, bb), 2), h=round(math.degrees(math.atan2(bb, aa)) % 360, 2),
+                    C_px_median=round(float(np.median(C)), 2), px=int(mm.sum()))
+    return dict(lit_half=s(lit), body=s(m), beside=s(beside))
+
+
+def _vase(nm, pass_, src_cut, rim, axis0, white, colour):
+    regt = np.load(D(WR5, f"{pass_}-regt.npy")).astype(np.float32)
+    below = PW.load(D(WR5, f"scene-{pass_}.png"))
+    Lc = f32(src_cut)
+    a_cut = Lc[..., 3]
+    prof, info = vase_recut(regt, a_cut, rim, axis0, white)
+    a_src = recut_alpha(a_cut, prof)
+    sh_src, sinfo = vase_shadow(nm, a_src, regt, below, pass_)
+    # the size against the card at the point
+    cc = VASE_CARD[nm]
+    card = F4.card_vase_box(*POINT, D=cc["D"], H=cc["H"], mouth=cc["mouth"], foot=cc["foot"])
+    body = prof["rows"][:-3]
+    wid, wrow = vase_widths(a_src, body)
+    foot_y = F4.vase_measure(a_src, regt)["foot_contact_y"]
+    top = lip_top(a_cut, float(np.median(prof["axis"][:5])), rim, float(prof["r"][0]) + 4)
+    hgt = foot_y - (top - 0.5)
+    rw, rh = wid / card["width"], hgt / card["height"]
+    sx = card["width"] / wid if abs(rw - 1) > SIZE_TOL else 1.0
+    sy = card["height"] / hgt if abs(rh - 1) > SIZE_TOL else 1.0
+    rgb, a, M, ax = straighten_scale(regt, a_src, prof, foot_y, sx, sy)
+    Ms = np.float32([[sx, 0, ax * (1 - sx)], [0, sx, foot_y * (1 - sx)]])
+    sh = np.clip(1 - cv2.warpAffine(1 - sh_src, Ms, SIZE, flags=cv2.INTER_LINEAR), 0, 1)
+    sh = np.where(a >= 0.999, 1.0, sh).astype(np.float32)
+    pc = save_layer(f"{nm}-recut", rgb, a)                 # before the colour fix (for QA)
+    rgb_f, crec = colour(rgb, a, sh)
+    pl = save_layer(nm, rgb_f, a)
+    ps = save_shadow(nm, sh)
+    # after: the size and the axis in the layer
+    mids = []
+    for y in body:
+        xs = np.nonzero(a[y] > 0.5)[0]
+        if len(xs):
+            mids.append((y, (xs.min() + xs.max()) / 2.0))
+    mids = np.array(mids)
+    tilt2 = float(np.polyfit(mids[:, 0], mids[:, 1], 1)[0])
+    info2 = dict(axis=dict(tilt_px_per_row=round(tilt2, 5), tilt_deg=round(math.degrees(math.atan(tilt2)), 2), how="the alpha 0.5 mid-points of the body rows"))
+    wid2, _ = vase_widths(a, body)
+    a_old = a_cut
+    lost = dict(old_cut_width_px_median_body=info["old_cut_width_px_median"],
+                render_width_px_widest=round(wid, 2), layer_width_px_widest=round(wid2, 2))
+    record(nm, dict(
+        what=("re-cut from the raw render (QA R5 3.1: the cut followed R4's placeholder and lost the lit flank)" if nm == "vase" else
+              "re-cut from the raw render, as the default (the brief: both vases)") + "; straightened and sized to the card about the foot; colour",
+        source=dict(render=rel(D(WR5, f"{pass_}-regt.npy")) + " (the registered, tone-matched raw " + rel(D(W.RAW, f"{pass_}-r5-seedream.png")) + ")",
+                    scene_behind=rel(D(WR5, f"scene-{pass_}.png")), old_cut=rel(src_cut)),
+        method=dict(edges=vase_recut.__doc__.replace("\n", " "), alpha=recut_alpha.__doc__.replace("\n", " "),
+                    straighten_and_size=straighten_scale.__doc__.replace("\n", " "),
+                    shadow="extract.shadow_one (frozen, pass_r5.shadow_new) on the re-cut in the render's coordinates; then at the foot's scale "
+                           "(sx both ways about the foot: it lies on the bench), 1 under the full alpha"),
+        recut=info, axis_check_in_layer=info2["axis"], size=dict(card_cm=list(cc["cm"]), card_at_point_px={k: round(v, 2) for k, v in card.items()},
+                                                               render_widest_px=round(wid, 2), render_widest_row=wrow, render_height_px=round(hgt, 2),
+                                                               lip_top_row=int(top), foot_contact_y=round(float(foot_y), 2),
+                                                               render_vs_card=[round(rw, 4), round(rh, 4)],
+                                                               render_cm=[round(cc["cm"][0] * rw, 1), round(cc["cm"][1] * rh, 1)],
+                                                               tolerance=SIZE_TOL, scale=[round(sx, 4), round(sy, 4)],
+                                                               layer_widest_px=round(wid2, 2),
+                                                               layer_cm=[round(cc["cm"][0] * wid2 / card["width"], 1), round(cc["cm"][1] * rh * sy, 1)]),
+        matrix_layer=np.round(M, 5).tolist(), matrix_shadow=np.round(Ms, 5).tolist(), foot_axis_x=round(ax, 2),
+        widths=lost, shadow=dict(recipe=sinfo.get("recipe"), px_below_0_97=int((sh < 0.97).sum()), min=round(float(sh.min()), 3)),
+        colour=crec, files=dict(layer=rel(pl), shadow=rel(ps), recut_before_colour=rel(pc))))
+    return rgb_f, a, sh
+
+
+def vase():
+    """the default vase: R5's a*b* fix (post_r5.vase_colour: dh 6.335, k 0.3376, rows >= 935) on the re-cut body, re-measured"""
+    rec5 = json.load(open(D(WR5, "post-r5.json")))["vase"]
+
+    def colour(rgb, a, sh):
+        body = np.zeros(a.shape, bool)
+        body[935:] = True
+        out = np.where(body[..., None], F5.recolour_ab(rgb, rec5["dh_deg"], rec5["k"]), rgb).astype(np.float32)
+        _, _, G0 = graded(override={"vase": (rgb, a, None, sh)})
+        _, _, G1 = graded(override={"vase": (out, a, None, sh)})
+        b0, b1 = vase_measures(G0, a, 940), vase_measures(G1, a, 940)
+        hb = b1["beside"]["h"]
+        tg = {"C* median 4-7 on the lit half": 4 <= b1["lit_half"]["C"] <= 7,
+              "hue within 10 deg of the surface beside": abs((b1["lit_half"]["h"] - hb + 180) % 360 - 180) <= 10,
+              "not above C 7": b1["lit_half"]["C"] <= 7, "L* unchanged (+-0.5)": abs(b1["lit_half"]["L"] - b0["lit_half"]["L"]) <= 0.5}
+        return out, dict(fix="R5's (post_r5.vase_colour): a*b* only, the same hue rotation and chroma factor (dh %.3f, k %.4f), rows >= 935; the "
+                              "branch keeps its colour" % (rec5["dh_deg"], rec5["k"]), before=b0, after=b1, targets_r5=tg, all_met=all(tg.values()))
+    return _vase("vase", "p4", D(WR5, "layers/vase-cut.png"), 936, 674.0, True, colour)
+
+
+def vase_v2():
+    """vase 2: a*b* toward the card's neutral charcoal (#3B3A38; designer section 6.1): the body only (alpha 255 eroded 5 px, from the
+    rim + 4), one hue rotation and one chroma factor (R5's method), to the median C* between 2.5 and the C* of the surfaces beside
+    (post_r5's 'beside': 15-40 px out, L* 50-95), the hue within 10 deg of theirs, L* within 0.5; the branch keeps its colour"""
+    def colour(rgb, a, sh):
+        body = np.zeros(a.shape, bool)
+        body[944:] = True
+        _, _, G0 = graded(variants={}, override={"vase": (rgb, a, None, sh)})
+        b0 = vase_measures(G0, a, 946)
+        ring = b0["beside"]
+        if b0["body"]["C"] <= 4.5:
+            return rgb, dict(fix="none needed (body median C* <= 4.5)", before=b0)
+        want_C, want_h = (2.5 + ring["C"]) / 2, ring["h"]
+        dh, k = want_h - b0["body"]["h"], want_C / max(b0["body"]["C"], 1e-3)
+        hist = []
+        for it in range(8):
+            out = np.where(body[..., None], F5.recolour_ab(rgb, dh, k), rgb).astype(np.float32)
+            _, _, G1 = graded(override={"vase": (out, a, None, sh)})
+            b1 = vase_measures(G1, a, 946)
+            hist.append(dict(it=it, dh=round(dh, 3), k=round(k, 4), **b1["body"]))
+            if abs(b1["body"]["C"] - want_C) < 0.1 and abs((b1["body"]["h"] - want_h + 180) % 360 - 180) < 1.0:
+                break
+            dh += (want_h - b1["body"]["h"] + 180) % 360 - 180
+            k *= want_C / max(b1["body"]["C"], 1e-3)
+        tg = {"C* median 2.5 .. the surfaces beside": 2.5 <= b1["body"]["C"] <= ring["C"],
+              "hue within 10 deg of the surfaces beside": abs((b1["body"]["h"] - ring["h"] + 180) % 360 - 180) <= 10,
+              "L* within 0.5": abs(b1["body"]["L"] - b0["body"]["L"]) <= 0.5}
+        return out, dict(fix=vase_v2.__doc__.replace("\n", " "), card="#3B3A38 (C 1.4, h 89)", target=dict(C=round(want_C, 2), h=round(want_h, 2)),
+                         dh_deg=round(dh, 3), k=round(k, 4), iterations=hist, before=b0, after=b1, targets=tg, all_met=all(tg.values()))
+    return _vase("vase-v2", "p5", D(WR5, "layers/vase-v2.png"), 942, 670.0, None, colour)
