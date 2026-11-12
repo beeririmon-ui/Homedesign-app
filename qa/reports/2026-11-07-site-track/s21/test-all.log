@@ -179,3 +179,174 @@ product-card.gen.ts is up to date
 > homedesign-site@0.1.0 lint
 > eslint . --max-warnings=0
 
+
+> homedesign-site@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> homedesign-site@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/home/user/homedesign-app/site[39m
+
+ [32m✓[39m tools/test/s17-rights.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 10711[2mms[22m[39m
+     [33m[2m✓[22m[39m R4, the picture inlined as a data: URI: its bytes; re-encoded smaller, its pixels [33m 444[2mms[22m[39m
+     [33m[2m✓[22m[39m R6, the story’s own copies: by the story’s ledger; and without any ledger of them, by pixels at every width [33m 642[2mms[22m[39m
+     [33m[2m✓[22m[39m R0 clean, R1, R2, R3, R4 and R6 through the real check: only the clean copy passes [33m 6450[2mms[22m[39m
+     [33m[2m✓[22m[39m R6 by pixels alone: every copy the story made is found without the story’s ledger [33m 432[2mms[22m[39m
+ [32m✓[39m tools/test/s18.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 12688[2mms[22m[39m
+     [33m[2m✓[22m[39m UNDECIDED: writes the wording without an email, and only it [33m 548[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the wording without a provider stops it [33m 665[2mms[22m[39m
+     [33m[2m✓[22m[39m a mock, a typo or no EMAIL_PROVIDER stops it; the public build reads production [33m 2199[2mms[22m[39m
+     [33m[2m✓[22m[39m a clean site passes; the test page chunk is not the customer’s (listed, not scanned) [33m 2125[2mms[22m[39m
+     [33m[2m✓[22m[39m the order page’s old line in a lazy chunk stops the build [33m 1565[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in a page’s text stops the build [33m 2081[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the Worker’s customer strings stops the build; the owner’s screens are not the customer’s [33m 1384[2mms[22m[39m
+     [33m[2m✓[22m[39m a copy built for another EMAIL_PROVIDER fails: the build’s choice must be this build’s [33m 1514[2mms[22m[39m
+     [33m[2m✓[22m[39m no promise is written in the web’s code (the copy is the one place for these lines); the design test page aside [33m 506[2mms[22m[39m
+ [32m✓[39m tools/test/s19.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 3414[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s near-blank pictures against a thin lamp on white: white, transparent, a dot and a mostly transparent layer find nothing (the S17 rule matched them) [33m 620[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s gate demo on the real set: our four phase-2 layers as house layers in a public build find nothing [33m 1127[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s R9 (flipped), padding onto white 4:3, a grey 3% border, and a crop that cuts only margin: each found [33m 1066[2mms[22m[39m
+ [32m✓[39m tools/test/s14-catalog.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 1880[2mms[22m[39m
+(node:25351) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25410) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s20.test.ts[2m > [22m[2mS20 ת61: the contact details[2m > [22m[2mthe Worker's error line: "כתבו לנו" only with an email to write to; the code either way
+[22m[39m{
+  level: [32m'error'[39m,
+  event: [32m'request.unhandled'[39m,
+  at: [32m'2026-11-12T12:13:21.692Z'[39m,
+  method: [32m'GET'[39m,
+  path: [32m'/api/health'[39m,
+  error_id: [32m'E-8NAYRT8P'[39m,
+  error_name: [32m'Error'[39m,
+  error_code: [32m'Error'[39m,
+  error_message: [32m'boom'[39m
+}
+
+[90mstderr[2m | api/test/s20.test.ts[2m > [22m[2mS20 ת61: the contact details[2m > [22m[2mthe Worker's error line: "כתבו לנו" only with an email to write to; the code either way
+[22m[39m{
+  level: [32m'error'[39m,
+  event: [32m'request.unhandled'[39m,
+  at: [32m'2026-11-12T12:13:21.693Z'[39m,
+  method: [32m'GET'[39m,
+  path: [32m'/api/health'[39m,
+  error_id: [32m'E-PTTTJUQ9'[39m,
+  error_name: [32m'Error'[39m,
+  error_code: [32m'Error'[39m,
+  error_message: [32m'boom'[39m
+}
+
+ [32m✓[39m api/test/s20.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 1358[2mms[22m[39m
+     [33m[2m✓[22m[39m check-config names a malformed contact in production, and passes the repo as it is [33m 902[2mms[22m[39m
+ [32m✓[39m api/test/s14.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 1469[2mms[22m[39m
+(node:25585) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25592) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mQA A4: a cross-site "text/plain; charset=application/json" cancel is refused, and the order is untouched
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.337Z'[39m,
+  path: [32m'/api/admin/orders/5520853084/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.446Z'[39m,
+  path: [32m'/api/admin/orders/2656839781/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.448Z'[39m,
+  path: [32m'/api/admin/orders/2656839781/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.449Z'[39m,
+  path: [32m'/api/admin/orders/2656839781/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.450Z'[39m,
+  path: [32m'/api/admin/orders/2656839781/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.451Z'[39m,
+  path: [32m'/api/admin/orders/2656839781/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.461Z'[39m,
+  path: [32m'/api/admin/orders/2656839781/cancel'[39m,
+  reason: [32m'no_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma service token (the studio): no browser markers needed; the actor names the token; a foreign Origin is still refused
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.512Z'[39m,
+  path: [32m'/api/admin/orders/7805175461/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'service'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mthe screen’s forms: the same rule (a foreign Origin is bad_origin); the local dev token acts without markers
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T12:13:22.532Z'[39m,
+  path: [32m'/api/admin/orders/6826082451/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'dev'[39m
+}
+
+ [32m✓[39m api/test/s17.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 800[2mms[22m[39m
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת35: a submit that may have reached the supplier counts as sent; never a silent full refund[2m > [22m[2ma timeout, then refusals: the order stays "maybe" (a later refusal never clears it)
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'supplier.resend_needs_person'[39m,
+  at: [32m'2026-11-12T12:13:23.021Z'[39m,
+  order_id: [32m'3964865099'[39m,
+  supplier: [32m'mock'[39m,
+  attempt: [33m2[39m
+}
+
