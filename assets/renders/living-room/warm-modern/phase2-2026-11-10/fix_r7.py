@@ -549,7 +549,11 @@ def curtains_v3():
 
 # ================================================================================================= the table group (section 1.5)
 MOVE = {
-    "candle-holders": dict(pieces={"A": (-0.0294, -0.0063, 0.982), "B": (-0.0302, -0.0063, 0.982)}, src="candle-holders"),
+    # A: the designer's -0.0294 / -0.0063 / 0.982 for (0.205, 1.74) measured A x B 0.0191 on the moved RENDERED pieces (< 0.02; the
+    # card clay reads 0.0211): the pre-approved lever of section 1.4 (the gap 8 -> 9 cm, A 1 cm left: (0.195, 1.74)), with P()
+    "candle-holders": dict(pieces={"A": (-0.0317, -0.0067, 0.980), "B": (-0.0302, -0.0063, 0.982)}, src="candle-holders",
+                           lever=dict(A=dict(designer=(-0.0294, -0.0063, 0.982), used=(-0.0317, -0.0067, 0.980), point=(0.195, 1.74),
+                                             why="A x B 0.0191 < 0.02 on the moved rendered layers; section 1.4 lever 'A-B -> 9 cm clear (A 1 cm left)'"))),
     "bowl": dict(pieces={"bowl": (-0.0285, -0.0065, 0.983)}, src="bowl"),
 }
 
@@ -630,7 +634,7 @@ def table():
         sh2, clipped = remask_shadow(k, a2, dfield, moved[other][1])
         lp = save_layer(k, rgb2, a2)
         spth = save_shadow(k, sh2)
-        out[k] = dict(pieces=rec, shadow_px_clipped_by_the_recipe_masks=clipped, files=dict(layer=rel(lp), shadow=rel(spth)),
+        out[k] = dict(pieces=rec, lever=MOVE[k].get("lever"), shadow_px_clipped_by_the_recipe_masks=clipped, files=dict(layer=rel(lp), shadow=rel(spth)),
                       source=dict(layer=rel(D(SRC6[k][0], f"{k}.png")), shadow=rel(D(SRC6[k][1], f"{k}.png"))))
     # the moved layers against the neighbours (frame-width units at 2720: / FW_), F3's 0.02; the soft edges are checked in the crops
     use_r7_sources()
