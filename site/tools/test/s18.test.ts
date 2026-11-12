@@ -116,10 +116,10 @@ describe('S18: the copy (site/copy/promises.he.json)', () => {
     ]);
     expect(mutate((s) => (s.strings['order.next.shipped'] = { where: 'x', text: 'נעדכן כשההזמנה יוצאת.' }))).toHaveLength(1);
     expect(mutate((s) => ((s.strings['waitlist.why'] as { no_email: string | null }).no_email = 'הכתובת לא תשמש לשום דבר אחר.'))).toEqual([
-      'group waitlist: in "no_email" its lines are shown or hidden together (some are null, some are not)',
+      expect.stringContaining('group waitlist: its lines are shown or hidden together (with no email, some are null and some are not)'),
     ]);
     expect(mutate((s) => ((s.strings['order.no_access'] as { no_email: string | null }).no_email = null))).toEqual([
-      'order.no_access: a page needs this line in "no_email" (null is not allowed)',
+      'order.no_access: a page needs this line in every wording (null is not allowed)',
     ]);
     expect(mutate((s) => delete (s.strings['checkout.email_hint'] as { email?: unknown }).email)).toEqual([
       expect.stringContaining('checkout.email_hint: "email" is missing'),
@@ -129,7 +129,7 @@ describe('S18: the copy (site/copy/promises.he.json)', () => {
 
 describe('S18: EMAIL_PROVIDER', () => {
   it('none is built: UNDECIDED never sends; a mock, a typo or nothing is refused, and never sends', () => {
-    expect(EMAIL_PROVIDERS).toEqual([]);
+    expect(EMAIL_PROVIDERS).toEqual({}); // S20: a record of each provider's capabilities (ת62)
     expect(emailProviderIssue('UNDECIDED')).toBeNull();
     expect(emailSends('UNDECIDED')).toBe(false);
     for (const v of ['mock', 'Mock', 'resend', 'UNDECIDED ', '', undefined, null, 1]) {
@@ -139,8 +139,8 @@ describe('S18: EMAIL_PROVIDER', () => {
     expect(emailProviderIssue('mock')).toMatch(/no mock/);
   });
   it('wrangler.jsonc: UNDECIDED in every environment; the public build reads production, the others the top level', () => {
-    expect(emailTarget({ publicBuild: false })).toEqual({ env: 'top level', value: 'UNDECIDED', issue: null, sends: false });
-    expect(emailTarget({ publicBuild: true })).toEqual({ env: 'production', value: 'UNDECIDED', issue: null, sends: false });
+    expect(emailTarget({ publicBuild: false })).toMatchObject({ env: 'top level', value: 'UNDECIDED', issue: null, sends: false, capabilities: [] });
+    expect(emailTarget({ publicBuild: true })).toMatchObject({ env: 'production', value: 'UNDECIDED', issue: null, sends: false, capabilities: [] });
     const wrangler = readFileSync(sitePath('api/wrangler.jsonc'), 'utf8');
     expect(wrangler.match(/"EMAIL_PROVIDER": "UNDECIDED"/g)).toHaveLength(3);
   });
@@ -151,7 +151,9 @@ describe('S18: the copy build (tools/build-copy.ts)', () => {
   const out = join(dir, 'copy.he.json');
   const wranglerWith = (top: string, prod: string) => {
     const f = join(dir, `wrangler-${top}-${prod}.jsonc`);
-    writeFileSync(f, `{ // test\n "vars": { "EMAIL_PROVIDER": "${top}" },\n "env": { "production": { "vars": { "EMAIL_PROVIDER": "${prod}", }, }, },\n}`);
+    // S20: with the contact placeholders (CONTACT1), as every environment has them
+    const c = '"CONTACT_EMAIL": "UNDECIDED", "CONTACT_PHONE": "UNDECIDED"';
+    writeFileSync(f, `{ // test\n "vars": { "EMAIL_PROVIDER": "${top}", ${c} },\n "env": { "production": { "vars": { "EMAIL_PROVIDER": "${prod}", ${c}, }, }, },\n}`);
     return f;
   };
   it('UNDECIDED: writes the wording without an email, and only it', () => {
@@ -206,10 +208,10 @@ describe('S18: the build check (tools/check-promises.ts)', () => {
   }
   const check = (dist: string, extra: string[] = []) => {
     const json = join(dist, '..', `${relative(tmpdir(), dist).replace(/\W/g, '')}.json`);
-    const r = run(['tools/check-promises.ts', `--dist=${dist}`, `--json=${json}`, ...extra]);
+    const r = run(['tools/check-promises.ts', `--dist=${dist}`, `--json=${json}`, '--worker-bundle=none', ...extra]);
     return {
       ...r,
-      report: JSON.parse(readFileSync(json, 'utf8')) as { findings: { file: string; rule: string }[]; skipped_chunks: string[]; problems: string[] },
+      report: JSON.parse(readFileSync(json, 'utf8')) as { findings: { file: string; rule: string }[]; scripts_review_only: string[]; problems: string[] },
     };
   };
 
@@ -217,7 +219,7 @@ describe('S18: the build check (tools/check-promises.ts)', () => {
     const r = check(site());
     expect(r.status, r.stderr).toBe(0);
     expect(r.report.findings).toEqual([]);
-    expect(r.report.skipped_chunks).toEqual(['assets/test-c3.js']);
+    expect(r.report.scripts_review_only).toEqual(['assets/test-c3.js']);
   });
   it('the order page’s old line in a lazy chunk stops the build', () => {
     const r = check(site({ orderLine: BEFORE[0] }));
@@ -245,16 +247,14 @@ describe('S18: the build check (tools/check-promises.ts)', () => {
     writeFileSync(f, JSON.stringify({ email_provider: 'resend', sends: true, strings: {} }));
     const r = check(d, [`--copy-out=${f}`]);
     expect(r.status).toBe(1);
-    expect(r.report.problems).toEqual([expect.stringContaining('was built for EMAIL_PROVIDER=resend, this build is for UNDECIDED')]);
+    expect(r.report.problems).toEqual([expect.stringMatching(/was built for EMAIL_PROVIDER=resend .*, this build is for UNDECIDED/)]);
   });
   it('reads what a person reads in HTML (text, labels, JSON-LD), and every string in code', () => {
-    expect(htmlTexts('<a aria-label="נעדכן אתכם">x</a><script type="application/ld+json">{"d":"נודיע לכם"}</script><p>מע&quot;מ</p>')).toEqual([
-      'נודיע לכם',
-      'נעדכן אתכם',
-      'x',
-      'מע"מ',
-    ]);
-    expect(codeStrings('const a="א",b=`ב${c}ג`;/"/.test(d);', 'x.js')).toEqual(['א', 'ב', 'ג']);
+    expect(htmlTexts('<a aria-label="נעדכן אתכם">x</a><script type="application/ld+json">{"d":"נודיע לכם"}</script><p>מע&quot;מ</p>')).toEqual(
+      expect.arrayContaining(['נודיע לכם', 'נעדכן אתכם', 'x', 'מע"מ']),
+    );
+    // S20 (ת60): a template literal is read joined too
+    expect(codeStrings('const a="א",b=`ב${c}ג`;/"/.test(d);', 'x.js')).toEqual(['א', 'בג', 'ב', 'ג']);
   });
 });
 

@@ -13,6 +13,7 @@ import '../test-page/fonts.css';
 import '../test-page/magazine.css';
 import './story.css';
 import { prefersReducedMotion } from '../motion';
+import { copyHe } from '../copy';
 import { priceHe } from './story-cart';
 import { removedNoteHe } from '@hd/shared/lines';
 import { apiStoryCart, CART_KEY } from './api-cart';
@@ -377,9 +378,12 @@ function fill(it: Item): void {
   const sold = it.status === 'available' && !!it.variant_id;
   addBtn.hidden = !sold;
   whyEl.hidden = sold;
+  // S20 (QA ת56): "אפשר לבקש עדכון" only where the product page has the waiting list, which needs a provider that sends
+  // the back-in-stock message (site/copy, story.unavailable_note, group waitlist); until then the status alone
+  const note = it.href ? copyHe('story.unavailable_note') : null;
   whyEl.textContent =
     it.status === 'unavailable'
-      ? `המלאי אינו זמין כעת.${it.href ? ' בדף המוצר אפשר לבקש עדכון כשהוא חוזר.' : ''}`
+      ? `המלאי אינו זמין כעת.${note ? ` ${note}` : ''}`
       : sold
         ? ''
         : 'המחיר עוד לא נקבע, ולכן המוצר עוד לא במכירה.';

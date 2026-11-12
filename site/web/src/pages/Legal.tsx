@@ -3,6 +3,7 @@
  * review by a lawyer before launch (docs/architecture.md, "רשימת השקה בישראל"). Nothing here is verified.
  */
 import type { ComponentChildren } from 'preact';
+import { ContactBlock } from '../components/Contact';
 import { copyHe } from '../copy';
 
 type Page = 'accessibility' | 'terms' | 'privacy' | 'returns';
@@ -15,7 +16,8 @@ const TITLES: Record<Page, string> = {
 };
 
 function Draft() {
-  return <p class="notice warn">טיוטת עבודה. הנוסח לא נבדק משפטית ולא אומת. שם העסק, הכתובת ופרטי הקשר יושלמו לפני ההשקה.</p>;
+  // S20 (QA ת61): "ופרטי הקשר יושלמו" only while the build has none (site/copy, legal.draft)
+  return <p class="notice warn">{copyHe('legal.draft')}</p>;
 }
 
 export function Legal({ page }: { page: Page }) {
@@ -41,7 +43,9 @@ export function Legal({ page }: { page: Page }) {
           <h2>מגבלות ידועות</h2>
           <p>התמונות באתר זמניות בשלב ההקמה. תיאור חלופי מלא לכל תמונה יתווסף עם התמונות הסופיות.</p>
           <h2>רכז/ת נגישות</h2>
-          <p>שם, טלפון ואימייל יושלמו לפני ההשקה. נשמח לשמוע על כל קושי ונחזור תוך 5 ימי עסקים.</p>
+          {/* S20 (QA ת61): the coordinator's contact, or the honest placeholder (site/copy, legal.accessibility_contact) */}
+          <p>{copyHe('legal.accessibility_contact')}</p>
+          <ContactBlock />
           <p class="small muted">עדכון אחרון של ההצהרה: טיוטה, אוקטובר 2026.</p>
         </>
       );
@@ -56,7 +60,9 @@ export function Legal({ page }: { page: Page }) {
             <li>מוצר שנפגם או שאינו תואם להזמנה: החזר מלא, כולל עלות המשלוח.</li>
             <li>ההחזר הכספי יבוצע תוך 14 יום מקבלת הודעת הביטול, באמצעי התשלום שבו שולם.</li>
           </ul>
-          <p>להודעת ביטול: באימייל או בטלפון של שירות הלקוחות (יושלמו לפני ההשקה). יש לציין את מספר ההזמנה.</p>
+          {/* S20 (QA ת61): how to cancel, with the shop's contact details, or the honest placeholder (legal.returns_notice) */}
+          <p>{copyHe('legal.returns_notice')}</p>
+          <ContactBlock />
         </>
       );
       break;

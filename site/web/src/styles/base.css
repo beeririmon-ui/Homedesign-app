@@ -364,3 +364,24 @@ main {
     scroll-behavior: auto !important;
   }
 }
+/* S20 (QA ת61): the contact block (components/Contact.tsx), only with the shop's contact details */
+.contact-block {
+  margin-block: 8px 0;
+}
+.contact-block .contact-title {
+  margin: 0;
+  font-weight: 600;
+}
+.contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 18px;
+}
+.contact-list a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}

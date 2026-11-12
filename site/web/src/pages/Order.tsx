@@ -13,7 +13,8 @@ import { optionImage as optionPhoto, product as catalogProduct, supplierImage } 
 import { mediaUrl } from '../media';
 import { HOUSES, NORDIC, loadHouse, nordic, type House } from '../house';
 import { optionsOf } from '../variants';
-import { copyHe } from '../copy';
+import { ContactBlock } from '../components/Contact';
+import { contact, copyHe } from '../copy';
 import type { SceneLayerSet } from '../engine/types';
 
 type Line = OrderView['lines'][number];
@@ -245,12 +246,14 @@ function Tracking({ shipments }: { shipments: NonNullable<OrderView['shipments']
 export function OrderPage({ id }: { id: string }) {
   const [order, setOrder] = useState<OrderView | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [noAccess, setNoAccess] = useState(false);
 
   useEffect(() => {
     const token = orderToken(id);
     if (!token) {
       // S18: the order's token lives in the browser that ordered; no email carries the order elsewhere (site/copy)
       setError(copyHe('order.no_access'));
+      setNoAccess(true);
       return;
     }
     let tries = 0;
@@ -301,9 +304,18 @@ export function OrderPage({ id }: { id: string }) {
         </h1>
       </div>
       {error ? (
-        <p class="notice error" role="alert">
-          {error}
-        </p>
+        <>
+          <p class="notice error" role="alert">
+            {error}
+          </p>
+          {/* S20 (QA ת61): with the shop's contact details, the way to ask about the order, by its number */}
+          {noAccess && copyHe('order.no_access_contact') ? (
+            <>
+              <p class="order-no-access-contact">{copyHe('order.no_access_contact')}</p>
+              <ContactBlock />
+            </>
+          ) : null}
+        </>
       ) : !order ? (
         <p role="status">טוען את ההזמנה…</p>
       ) : (
@@ -362,6 +374,8 @@ export function OrderPage({ id }: { id: string }) {
                   : copyHe('order.next.received')}
             </p>
           ) : null}
+          {/* S20 (QA ת61): "כתבו לנו" leads somewhere: the shop's contact details, when the build has them */}
+          {paid && !closed && step === 3 && contact ? <ContactBlock /> : null}
           {order.status === 'payment_failed' ? (
             <p>
               <a href="/cart/">חזרה לסל</a>

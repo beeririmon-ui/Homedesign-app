@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'preact/hooks';
 import { cartCount } from '../state/cart';
 import { announcement } from '../state/ui';
 import type { Route } from '../router';
+import { ContactBlock } from './Contact';
 
 export function Layout({ route, children }: { route: Route; children: ComponentChildren }) {
   const first = useRef(true);
@@ -52,6 +53,8 @@ export function Layout({ route, children }: { route: Route; children: ComponentC
             <a href="/returns/">ביטולים והחזרות</a>
             <a href="/privacy/">פרטיות</a>
           </nav>
+          {/* S20 (QA ת61): the shop's contact details, on every page, only when the build has them */}
+          <ContactBlock title="יצירת קשר" class="site-contact" />
           <p>אתר בהקמה: התמונות, השמות והמחירים זמניים. שם המותג טרם נבחר.</p>
         </div>
       </footer>

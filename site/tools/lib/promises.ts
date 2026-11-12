@@ -4,91 +4,267 @@
  * update or notify, or offer to be updated. The principle is master-designer's (docs/proposals/wm-phase2-r5-eye-2026-11-11.md
  * §7): "לא מבטיחים מה שלא קורה".
  *
- * - **What a promise is** (`promiseFindings`), per sentence of what the customer reads:
- *   - **send:** a verb of sending (נשלח, יישלחו, שלחנו, שולחים…) with what is sent to the customer (an email, an SMS, a
- *     confirmation, an invoice, an update, a message, a link) in the same sentence: "חשבונית מס נשלחת במייל".
- *   - **notify:** we will update or tell (נעדכן, נודיע…), or the customer's ask to be told ("עדכנו אותי"), with no
- *     channel needed: "נעדכן כשההזמנה יוצאת למשלוח" promises contact all the same.
- *   - **receive:** the customer will get an email, an SMS, a message or updates: "תקבלו הודעה", "לקבל עדכונים במייל".
- *   - A negated verb ("האתר לא שולח דיוור") is not a promise. The words alone are not either: a field called "אימייל",
- *     "כתובת האימייל לא תקינה", the customer writing to us ("להודעת ביטול: באימייל"), "ההזמנה נשלחה" (the status).
- * - **The copy** (site/copy/promises.he.json, master-designer's words): `loadCopy` checks it, `selectCopy` picks the
- *   wording for the build. tools/build-copy.ts writes the chosen lines; tools/check-promises.ts scans what ships.
+ * **What a promise is** (`promiseFindings`), per sentence of what the customer reads, after `normalize` (typographic
+ * apostrophes and quotes, niqqud, maqaf, invisible characters). S20 widened it to QA S18's 48 lines (ת58) and made it
+ * pass the honest ones (ת59):
+ * - **send:** a verb of sending by us or the system (נשלח, יישלח, נשלחת, שולחים, לשלוח, שלחנו…) with what is sent (an
+ *   email, an SMS, a confirmation, an invoice, an update, a message, a link, the details) in the sentence. "נשלח אליכם"
+ *   alone is one too (what is sent is implied). A past passive ("נשלחה") is a status, unless a channel is named.
+ *   Not a promise: a negated verb right before it ("האתר לא שולח"), the customer writing to us or the supplier after
+ *   the verb ("שנשלחת אלינו", "נשלחת לספק"), a parcel as its object ("כשהספק ישלח את החבילה").
+ * - **notify:** we will update, tell, remind, contact or get back ("נעדכן", "נודיע", "נזכיר לכם", "ניצור קשר",
+ *   "נחזור אליכם", "תעודכנו", "לעדכן אתכם"), or the customer asks to be told ("עדכנו אותי", "שלחו לי", "לבקש עדכון",
+ *   "היו הראשונים לדעת"). "נעדכן" only with a person or no object: "נעדכן את המדיניות" is not one. "עדכנו אותנו" is the
+ *   customer updating us.
+ * - **receive:** the customer will get, or is invited to get, a message, an update, a confirmation, an invoice or a link
+ *   ("תקבלו חשבונית מס", "קבלו התראה", "לקבלת עדכון"). "מקבלים" (we) is not one, nor "תקבלו את ההזמנה".
+ * - **arrive:** a message on its way to the customer ("ההודעה תגיע", "בדרך אליכם" with an email or a confirmation).
+ * - **signup:** joining a list of updates ("הירשמו לעדכונים", "הצטרפו לרשימת התפוצה").
+ * - **channel:** a sentence that names a channel (email, SMS, WhatsApp, Telegram, a newsletter, a mailing list, a
+ *   mailbox) is a promise ("עדכוני משלוח ב-SMS", "המייל עם האישור כבר בדרך"), unless it negates, it is the way to reach
+ *   us ("כתבו לנו", "שירות הלקוחות", "הודעת ביטול"), or the channel is a field ("כתובת האימייל", "שם, אימייל, טלפון").
+ * - **latin:** the same in English ("We'll email you", "Get notified", "Check your inbox", "Sign up for our newsletter").
+ *
+ * **The copy** (site/copy/promises.he.json, master-designer's words): `loadCopy` reads it, `copyIssues` checks it,
+ * `selectCopy` picks the wording for the build: by what the provider really sends (`needs`, S20 ת62) and by whether the
+ * shop has contact details (`contact` / `no_contact`, S20 ת61). tools/build-copy.ts writes the chosen lines;
+ * tools/check-promises.ts scans what ships.
  */
 import { readFileSync } from 'node:fs';
-import { emailProviderIssue, emailSends } from '@hd/shared/email';
+import { EMAIL_CAPABILITIES, emailCapabilities, emailProviderIssue, type EmailCapability } from '@hd/shared/email';
 import { sitePath } from './paths';
 
-const HE = '\\u05D0-\\u05EA';
-/** a Hebrew word, with the prefixes that attach to it (ו, ש, כ, ל, ב, ה, מ), and nothing Hebrew around it */
-const words = (alts: string[]): string => `(?<![${HE}])[ושכלבהמ]{0,3}(?:${alts.join('|')})(?![${HE}])`;
+// ---------- what a promise is ----------
 
-/** the channels: email, SMS, messaging */
+const HE = '\\u05D0-\\u05EA';
+/** a Hebrew word (or phrase), with the prefixes that attach to it (ו, ש, כ, ל, ב, ה, מ) when asked, and nothing Hebrew around it */
+const words = (alts: string[], prefix = true): string => `(?<![${HE}])${prefix ? '[ושכלבהמ]{0,3}' : ''}(?:${alts.join('|')})(?![${HE}])`;
+const re = (src: string, flags = 'u') => new RegExp(src, flags);
+
+/** The text as a person reads it: typographic apostrophes and quotes, niqqud, maqaf, spaces and invisible characters. */
+export function normalize(text: string): string {
+  return text
+    .normalize('NFC')
+    .replace(/־/g, '-')
+    .replace(/[֑-ׇ]/g, '')
+    .replace(/[‘’‚‛ʼ′´`׳]/g, "'")
+    .replace(/[“”„‟″״]/g, '"')
+    .replace(/[­​-‏‪-‮⁠-⁤﻿]/g, '')
+    .replace(/[   -   　]/g, ' ');
+}
+
+/** the channels: email, SMS, messaging, a newsletter or a mailing list, a mailbox */
 const CHANNEL_HE = [
   'מייל(?:ים)?',
-  'אי[-־]?מייל(?:ים)?',
-  'דוא["״]ל',
+  'אי-?מייל(?:ים)?',
+  'דוא"ל',
   'דואר אלקטרוני',
   'מסרונ(?:ים)?',
   'מסרון',
-  'הודעות? טקסט',
+  'הודע(?:ות|ת) טקסט',
   'ו?ואטסאפ',
   'ווטסאפ',
+  'ו?ואצאפ',
+  'ווצאפ',
+  'טלגרם',
   'ניוזלטר',
   'דיוור',
+  'רשימת (?:ה)?(?:תפוצה|דיוור)',
+  'תיבת (?:ה)?(?:דואר|מייל|אימייל)(?: (?:ה)?נכנס)?',
 ];
-const CHANNEL_LATIN = '\\b(?:e-?mail(?:s|ed)?|SMS|WhatsApp|newsletter)\\b';
+const CHANNEL = re(`${words(CHANNEL_HE)}|\\b(?:e-?mail|sms|whats ?app|telegram|newsletter)\\b`, 'giu');
 /** what is sent to a customer */
-const OBJECT_HE = ['אישור(?:ים)?', 'חשבוני(?:ת|ות)', 'עדכונ(?:ים)?', 'עדכון', 'הודע(?:ה|ות|ת)', 'התרא(?:ה|ות)', 'תזכורת', 'קישור', 'קבלה', 'פרטי ההזמנה'];
-/** sending, by us or to the customer: past, present, future (not the customer's "תשלחו", which is to us) */
-const SEND_HE = ['נשלח(?:ת|ים|ות|ו|ה|נו)?', 'יישלח(?:ו)?', 'ישלח(?:ו)?', 'תישלח', 'שלחנו', 'נשלוח', 'שולח(?:ים|ת)?'];
-/** we will tell, or the customer asks to be told */
-const NOTIFY_HE = ['נעדכן', 'נעדכנכם', 'נעדכנך', 'נודיע', 'נודיעכם', 'נתריע', 'ניידע', 'עדכנו אותי', 'עדכנו אותנו', 'עדכני אותי', 'עדכן אותי', 'הודיעו לי'];
-/** the customer will get */
-const RECEIVE_HE = ['תקבל(?:ו|י)?', 'יקבלו', 'לקבל', 'מקבלים'];
-const RECEIVED_HE = ['הודע(?:ה|ות)', 'עדכונ(?:ים)?', 'עדכון', 'התרא(?:ה|ות)', 'תזכורת'];
-const LATIN_PROMISE =
-  "\\b(?:we(?:'ll| will)? (?:send|e-?mail|notify|text)|will be (?:sent|e-?mailed)|you(?:'ll| will) (?:receive|get) (?:an? )?(?:e-?mail|sms|text|confirmation|invoice|update)|notify me|keep me (?:posted|updated))\\b";
+const OBJECT = re(
+  words([
+    'אישור(?:ים)?',
+    'חשבוני(?:ת|ות)',
+    'עדכונ(?:ים|י)?',
+    'עדכון',
+    'הודע(?:ה|ות|ת)',
+    'התרא(?:ה|ות|ת)',
+    'תזכור(?:ת|ות)',
+    'קישור(?:ים)?',
+    'קבלה',
+    'פרטי(?:ם)?',
+    'מסרונ(?:ים)?',
+    'מסרון',
+  ]),
+);
+/** what the customer gets (receive, arrive) */
+const RECEIVED = re(
+  words(['הודע(?:ה|ות|ת)', 'עדכונ(?:ים|י)?', 'עדכון', 'התרא(?:ה|ות|ת)', 'תזכור(?:ת|ות)', 'אישור(?:ים)?', 'חשבוני(?:ת|ות)', 'קישור(?:ים)?', 'מסרונ(?:ים)?', 'מסרון', 'קבלה']),
+);
+/** sending by us: first person (with "אליכם" alone it is a promise) */
+const SEND_FIRST = re(words(['נשלח', 'נשלוח', 'שלחנו']), 'gu');
+/** sending, present, future, infinitive (not the customer's "תשלחו", which is to us) */
+const SEND_OTHER = re(words(['נשלחת', 'נשלחים', 'נשלחות', 'יישלח(?:ו)?', 'ישלח(?:ו)?', 'תישלח(?:נה)?', 'שולח(?:ים|ת|ות)?', 'לשלוח']), 'gu');
+/** sent, past passive: a status, unless a channel is named */
+const SEND_PAST = re(words(['נשלחה', 'נשלחו']), 'gu');
+const TO_CUSTOMER = re(words(['לכם', 'אליכם', 'לכן', 'אליכן', 'לך', 'אליך', 'אלייך'], false));
+const TO_US = re(`${words(['לנו', 'אלינו', 'אצלנו', 'איתנו', 'עמנו'])}|(?<![${HE}])ו?(?:ל|אל ה)ספק(?:ים)?(?![${HE}])`);
+const SHIP_NOUNS = ['חבילה', 'חבילות', 'הזמנה', 'הזמנות', 'מוצר', 'מוצרים', 'פריט', 'פריטים', 'משלוח', 'משלוחים', 'מארז'];
+const SHIP = re(words(SHIP_NOUNS));
+const SHIP_OBJECT = re(`^\\s+(?:${'לכם|אליכם|לך|אליך'}\\s+)?את\\s+(?:כל\\s+)?ה(?:${SHIP_NOUNS.join('|')})(?![${HE}])`);
 
-const RE = {
-  channel: new RegExp(`${words(CHANNEL_HE)}|${CHANNEL_LATIN}`, 'iu'),
-  object: new RegExp(words(OBJECT_HE), 'u'),
-  send: new RegExp(words(SEND_HE), 'gu'),
-  notify: new RegExp(words(NOTIFY_HE), 'gu'),
-  receive: new RegExp(words(RECEIVE_HE), 'gu'),
-  received: new RegExp(words(RECEIVED_HE), 'u'),
-  latin: new RegExp(LATIN_PROMISE, 'giu'),
-};
-/** "לא", "אין", "בלי" right before the verb: "האתר לא שולח דיוור", "לא נשלח לכם מייל" */
-const NEGATED = /(?:^|[\s(])(?:לא|אין|בלי|אינו|איננו)\s+(?:\S+\s+)?$/u;
+const WE_NOTIFY = re(words(['נעדכן', 'נעדכנכם', 'נעדכנך', 'נודיע', 'נודיעכם', 'נודיעך', 'נתריע', 'ניידע', 'נבשר']), 'gu');
+const REMIND = re(words(['נזכיר']), 'gu');
+const NOTIFY_PHRASE = re(
+  [
+    words(['תעודכנו', 'תעודכני', 'תיודעו']),
+    `${words(['לעדכן', 'ליידע', 'להודיע', 'להתריע', 'להזכיר', 'לבשר'], false)}\\s+(?:אתכם|אותכם|אותך|אתכן|לכם|לכן|לך)(?![${HE}])`,
+    words(['ניצור(?:\\s+\\S+)?\\s+קשר', 'נהיה(?:\\s+\\S+)?\\s+בקשר', 'נחזור\\s+(?:אליכם|אליך|אלייך|אליכן)']),
+    // the customer asks to be told
+    words([
+      'עדכנו אותי',
+      'עדכני אותי',
+      'עדכן אותי',
+      'תעדכנו אותי',
+      'הודיעו לי',
+      'הודיעי לי',
+      'תודיעו לי',
+      'שלחו לי',
+      'שלחי לי',
+      'שלח לי',
+      'תשלחו לי',
+      'הזכירו לי',
+      'תזכירו לי',
+      'צרו (?:איתי|עמי) קשר',
+      'צרו קשר (?:איתי|עמי)',
+      '(?:היו )?(?:ה)?ראשונ(?:ים|ות) לדעת',
+      'לבקש (?:עדכון|עדכונים|התראה|הודעה|תזכורת)',
+      'בקשו (?:עדכון|עדכונים|התראה|הודעה|תזכורת)',
+      'לקבלת (?:עדכון|עדכונים|התראה|התראות|הודעה|הודעות|תזכורת)',
+    ]),
+  ].join('|'),
+  'gu',
+);
+const RECEIVE = re(words(['תקבלו', 'תקבלי', 'תקבל', 'יקבלו', 'לקבל', 'קבלו', 'קבלי']), 'gu');
+const ARRIVE = re(words(['תגיע', 'יגיע', 'יגיעו', 'תגענה', 'תצא', 'יצא', 'יצאו', 'בדרך(?: אליכם| אליך| אלייך)?']), 'gu');
+const SIGNUP = re(words(['הירשמו', 'הרשמו', 'הירשמי', 'הרשמי', 'הצטרפו', 'הצטרפי', 'להירשם', 'להצטרף', 'הרשמה', 'הצטרפות']), 'gu');
+const SIGNUP_TO = re(words(['עדכונים', 'עדכוני', 'התראות', 'ניוזלטר', 'דיוור', 'רשימת (?:ה)?(?:תפוצה|המתנה|דיוור)', 'מועדון']));
+/** the sentence is the way to reach us (the customer writes, calls, cancels) */
+const INBOUND = re(
+  words([
+    'לנו',
+    'אלינו',
+    'אצלנו',
+    'איתנו',
+    'עמנו',
+    'פנו',
+    'פנייה',
+    'פניות',
+    'שירות הלקוחות',
+    'צרו קשר',
+    'יצירת קשר',
+    'פרטי (?:ה)?קשר',
+    'הודע(?:ת|ות) (?:ה)?ביטול',
+    'רכז(?:ת)? (?:ה)?נגישות',
+  ]),
+);
+const NEG_WORD = `(?:לא|אין|בלי|ללא|אינו|אינה|איננו|אינם|אינן|אף פעם|never|not|no|don't|won't)`;
+/** a negation right before the verb, at most one word between them, in the same clause: "האתר לא שולח", "לא נשלח לכם" */
+const NEGATED = re(`(?:^|[\\s(])ו?${NEG_WORD}\\s+(?:[^\\s,;:]+\\s+)?$`, 'iu');
+const NEGATION = re(`(?<![${HE}])ו?${NEG_WORD}(?![${HE}\\w])`, 'iu');
+/** the channel as a field: "כתובת האימייל", "שדה המייל", "האימייל לא תקין", "שם, אימייל, טלפון" */
+const FIELD_BEFORE = re(`(?:כתובת|שדה|בכתובת|בשדה|לכתובת)\\s+$|${words(['שם', 'טלפון', 'נייד', 'כתובת', 'כתובת למשלוח'])}\\s*,?\\s*$`);
+const FIELD_AFTER = re(`^\\s*(?:לא\\s+)?תקינ|^\\s*,?\\s*${words(['שם', 'טלפון', 'נייד', 'כתובת'])}`);
 
-export type PromiseRule = 'send' | 'notify' | 'receive' | 'latin';
+const LATIN: RegExp[] = [
+  /\bwe(?:'ll| will| shall)?\s+(?:send|e-?mail|notify|text|message|remind|contact|let you know|get back to you|be in touch|keep you (?:posted|updated|informed))\b/i,
+  /\b(?:will|'ll) be (?:sent|e-?mailed|notified|texted|messaged)\b/i,
+  /\byou(?:'ll| will) (?:receive|get|be (?:notified|e-?mailed|updated|texted|sent))\b/i,
+  /\b(?:get|be) notified\b/i,
+  /\b(?:e-?mail|text|message|notify|remind) me\b/i,
+  /\bkeep me (?:posted|updated|informed)\b/i,
+  /\blet (?:me|you) know\b/i,
+  /\b(?:sign up|subscribe|join) (?:to|for)\b/i,
+  /\b(?:check|see) your (?:inbox|e-?mail|spam)\b/i,
+  /\b(?:inbox|newsletter|mailing list)\b/i,
+  /\breceive (?:updates|notifications|an? (?:e-?mail|sms|text|confirmation|invoice))\b/i,
+  /\bupdates? (?:by|via) (?:e-?mail|sms|text|whats ?app)\b/i,
+  /\b(?:e-?mail|sms|text|message|confirmation|receipt|invoice)\b.*\bon (?:its|the|their) way\b/i,
+];
+
+export type PromiseRule = 'send' | 'notify' | 'receive' | 'arrive' | 'signup' | 'channel' | 'latin';
 export type PromiseFinding = { rule: PromiseRule; match: string; sentence: string };
 
-/** the sentences of a text: split at . ! ? ; a line break, and the "·" between items */
+/** the sentences of a text: split at . ! ? ; a line break, and the "·" or "•" between items */
 export function sentences(text: string): string[] {
-  return text
-    .split(/[.!?;\n]+|\s[·•]\s/u)
+  return normalize(text)
+    .split(/[.!?;\n]+|\s[·•|]\s/u)
     .map((s) => s.replace(/\s+/g, ' ').trim())
     .filter(Boolean);
 }
+/** the clauses of a sentence: a negation, "לנו" or a parcel speak for their own clause only */
+const clauses = (s: string): string[] => s.split(/[,:،]|\s[-–—]\s/u);
 
-function verbs(re: RegExp, s: string): string[] {
-  const out: string[] = [];
-  for (const m of s.matchAll(re)) if (!NEGATED.test(s.slice(0, m.index))) out.push(m[0].trim());
+type Hit = { match: string; before: string; after: string; clause: string };
+function hits(rx: RegExp, s: string): Hit[] {
+  const out: Hit[] = [];
+  for (const clause of clauses(s))
+    for (const m of clause.matchAll(rx)) {
+      const before = clause.slice(0, m.index);
+      if (!NEGATED.test(before)) out.push({ match: m[0].trim(), before, after: clause.slice(m.index! + m[0].length), clause });
+    }
   return out;
+}
+
+function channelFinding(s: string): string | null {
+  if (!re(`[${HE}]`).test(s) || INBOUND.test(s)) return null;
+  const objects = OBJECT.test(s) || RECEIVED.test(s);
+  for (const m of s.matchAll(CHANNEL)) {
+    const before = s.slice(0, m.index);
+    const after = s.slice(m.index! + m[0].length);
+    // a negation speaks for its own clause
+    const clause = (before.split(/[,:،]|\s[-–—]\s/u).pop() ?? '') + m[0] + (after.split(/[,:،]|\s[-–—]\s/u)[0] ?? '');
+    if (NEGATION.test(clause)) continue;
+    const label = s.split(' ').length <= 2 || (!objects && (FIELD_BEFORE.test(before) || FIELD_AFTER.test(after)));
+    if (!label) return m[0];
+  }
+  return null;
 }
 
 /** Every promise of an email, an SMS, a message or an update in a text the customer reads (see the header). */
 export function promiseFindings(text: string): PromiseFinding[] {
   const out: PromiseFinding[] = [];
   for (const s of sentences(text)) {
-    const sent = verbs(RE.send, s);
-    if (sent.length && (RE.channel.test(s) || RE.object.test(s))) out.push({ rule: 'send', match: sent[0]!, sentence: s });
-    for (const m of verbs(RE.notify, s)) out.push({ rule: 'notify', match: m, sentence: s });
-    const got = verbs(RE.receive, s);
-    if (got.length && (RE.channel.test(s) || RE.received.test(s))) out.push({ rule: 'receive', match: got[0]!, sentence: s });
-    for (const m of s.matchAll(RE.latin)) out.push({ rule: 'latin', match: m[0], sentence: s });
+    const add = (rule: PromiseRule, match: string) => out.push({ rule, match, sentence: s });
+    const channel = CHANNEL.test(s);
+    CHANNEL.lastIndex = 0;
+    const object = OBJECT.test(s);
+    const received = RECEIVED.test(s);
+    // send
+    const sendOk = (h: Hit) => !TO_US.test(h.after) && !SHIP_OBJECT.test(h.after);
+    const send =
+      hits(SEND_FIRST, s).find((h) => sendOk(h) && (channel || object || (TO_CUSTOMER.test(h.after) && !SHIP.test(h.clause)))) ??
+      hits(SEND_OTHER, s).find((h) => sendOk(h) && (channel || object)) ??
+      hits(SEND_PAST, s).find((h) => sendOk(h) && (channel || (object && TO_CUSTOMER.test(h.after))));
+    if (send) add('send', send.match);
+    // notify
+    for (const h of hits(WE_NOTIFY, s)) if (!/^\s+את\s+ה(?!לקוח)/u.test(h.after)) add('notify', h.match);
+    for (const h of hits(REMIND, s)) if (channel || /^\s+(?:לכם|לך|אתכם|אותך|אותכם)(?![א-ת])/u.test(h.after)) add('notify', h.match);
+    for (const h of hits(NOTIFY_PHRASE, s)) add('notify', h.match);
+    // receive, arrive, signup
+    const got = hits(RECEIVE, s)[0];
+    if (got && (channel || received)) add('receive', got.match);
+    // a message on its way, a list to join: when no verb above said so already
+    const said = () => out.some((f) => f.sentence === s);
+    const coming = hits(ARRIVE, s)[0];
+    if (coming && (channel || received) && !said()) add('arrive', coming.match);
+    const signup = hits(SIGNUP, s)[0];
+    if (signup && (channel || SIGNUP_TO.test(s)) && !said()) add('signup', signup.match);
+    // a channel named, with no verb that says so
+    if (!out.some((f) => f.sentence === s)) {
+      const c = channelFinding(s);
+      if (c) add('channel', c);
+    }
+    for (const rx of LATIN) {
+      const m = rx.exec(s);
+      if (m) {
+        add('latin', m[0]);
+        break;
+      }
+    }
   }
   return out;
 }
@@ -97,18 +273,30 @@ export function promiseFindings(text: string): PromiseFinding[] {
 
 export const COPY_FILE = sitePath('copy/promises.he.json');
 export const COPY_OUT = sitePath('.generated/copy.he.json');
-export const WRANGLER_FILE = sitePath('api/wrangler.jsonc');
+/** the config the build reads; HD_WRANGLER points a test build at another file (never the deploy's) */
+export const WRANGLER_FILE = process.env.HD_WRANGLER ? sitePath(process.env.HD_WRANGLER) : sitePath('api/wrangler.jsonc');
 
 type Line = string | null;
-export type CopyEntry = { where: string; group?: string } & ({ text: string } | { email: Line; no_email: Line });
+export type Needs = EmailCapability[] | 'any';
+export type CopyEntry = { where: string; group?: string } & (
+  | { text: string }
+  | { email: Line; no_email: Line; needs: Needs }
+  | { contact: Line; no_contact: Line }
+);
 export type CopySource = { note?: string; strings: Record<string, CopyEntry> };
 export type Mode = 'email' | 'no_email';
+/** what a build has: the capabilities its email provider declares, and whether the shop has contact details */
+export type CopyState = { capabilities: readonly EmailCapability[]; contact: boolean };
 /** the lines a build shows, by key; null: the line (or its control) is not shown */
 export type CopyLines = Record<string, Line>;
 
+export const NO_EMAIL: CopyState = { capabilities: [], contact: false };
+export const ALL_EMAIL: CopyState = { capabilities: EMAIL_CAPABILITIES, contact: false };
+
 const KEY = /^[a-z]+(?:\.[a-z_]+)+$/;
-/** the lines a page cannot do without: a line in both wordings (the order page's line and its error, the checkout's
- * total, the privacy policy's items). The others may be null in a wording: their line or control is then not shown. */
+/** the lines a page cannot do without: a line in every wording (the order page's line and its error, the checkout's
+ * total, the privacy policy's items, the legal pages' contact lines). The others may be null in a wording: their line
+ * or control is then not shown. */
 export const NEEDED = [
   'checkout.total_note',
   'order.next.received',
@@ -118,22 +306,63 @@ export const NEEDED = [
   'order.no_access',
   'privacy.processors',
   'privacy.marketing',
+  'legal.draft',
+  'legal.returns_notice',
+  'legal.accessibility_contact',
 ] as const;
 
-/** The line of an entry in a mode. */
-export function lineOf(e: CopyEntry, mode: Mode): Line {
-  return 'text' in e ? e.text : e[mode];
+const kind = (e: CopyEntry): 'text' | 'email' | 'contact' => ('text' in e ? 'text' : 'contact' in e || 'no_contact' in e ? 'contact' : 'email');
+const asState = (mode: Mode | CopyState): CopyState => (typeof mode === 'string' ? (mode === 'email' ? ALL_EMAIL : NO_EMAIL) : mode);
+
+/** Whether a line's needs are all real in a build. */
+export function needsMet(needs: Needs, capabilities: readonly EmailCapability[]): boolean {
+  if (needs === 'any') return capabilities.length > 0;
+  return Array.isArray(needs) && needs.length > 0 && needs.every((c) => capabilities.includes(c));
 }
 
+/** The line of an entry in a build (a mode stands for every capability, or none, and no contact details). */
+export function lineOf(e: CopyEntry, mode: Mode | CopyState): Line {
+  const st = asState(mode);
+  if ('text' in e) return e.text;
+  if (kind(e) === 'contact') {
+    const c = e as { contact: Line; no_contact: Line };
+    return st.contact ? c.contact : c.no_contact;
+  }
+  const m = e as { email: Line; no_email: Line; needs: Needs };
+  return needsMet(m.needs, st.capabilities) ? m.email : m.no_email;
+}
+
+/** what an email line's promises say they need (QA ת62): the copy check wants them in its `needs` */
+const IMPLIES: [EmailCapability, RegExp][] = [
+  ['invoice_email', /חשבוני/u],
+  ['order_confirmation', /אישור|פרטי ההזמנה/u],
+  ['shipping_update', /משלוח|מעקב|יוצאת/u],
+  ['delay_notice', /מועד המסירה|עיכוב|יתעכב/u],
+  ['back_in_stock', /חוזר|יחזור|למלאי/u],
+  ['marketing', /דיוור|שיווק|מוצרים חדשים|ניוזלטר|מבצע/u],
+];
+export function impliedCapabilities(line: string): EmailCapability[] {
+  const said = new Set(promiseFindings(line).map((f) => f.sentence));
+  return IMPLIES.filter(([, rx]) => [...said].some((s) => rx.test(s))).map(([c]) => c);
+}
+
+/** every state a build can be in, for the checks: no email, each capability alone, all of them; with and without contact */
+export const STATES: CopyState[] = [false, true].flatMap((contact) => [
+  { capabilities: [], contact },
+  ...EMAIL_CAPABILITIES.map((c) => ({ capabilities: [c], contact })),
+  { capabilities: EMAIL_CAPABILITIES, contact },
+]);
+
 /**
- * What is wrong with the copy, whatever the build: its shape; a `no_email` or `text` line that promises (it is what the
- * customer reads while no provider sends); a line of a group shown without the rest of its group.
+ * What is wrong with the copy, whatever the build: its shape; a line shown without a provider that promises (a
+ * `no_email`, `text`, `contact` or `no_contact` line: what the customer reads while no provider sends); an email line
+ * that promises what its `needs` do not cover; a line of a group shown without the rest of its group.
  */
 export function copyIssues(src: unknown): string[] {
   const out: string[] = [];
   const strings = (src as CopySource | null)?.strings;
   if (!strings || typeof strings !== 'object') return ['the copy has no "strings"'];
-  const groups = new Map<string, { email: boolean[]; no_email: boolean[] }>();
+  const groups = new Map<string, string[]>();
   for (const [key, e] of Object.entries(strings)) {
     if (!KEY.test(key)) out.push(`${key}: a key is lowercase words joined by dots (page.line)`);
     if (!e || typeof e !== 'object') {
@@ -141,41 +370,58 @@ export function copyIssues(src: unknown): string[] {
       continue;
     }
     if (typeof e.where !== 'string' || !e.where.trim()) out.push(`${key}: "where" says where the line is shown`);
-    const hasText = 'text' in e;
-    const hasModes = 'email' in e || 'no_email' in e;
-    if (hasText === hasModes) {
-      out.push(`${key}: either "text" (the same line either way) or both "email" and "no_email"`);
+    const has = (k: string) => k in e;
+    const shapes = [has('text'), has('email') || has('no_email') || has('needs'), has('contact') || has('no_contact')].filter(Boolean).length;
+    if (shapes !== 1) {
+      out.push(`${key}: one of "text" (the same line always), "email" + "no_email" + "needs", or "contact" + "no_contact"`);
       continue;
     }
-    if (hasText && (typeof e.text !== 'string' || !e.text.trim())) out.push(`${key}: "text" is a line`);
-    if (!hasText) {
-      const m = e as { email?: unknown; no_email?: unknown };
-      for (const mode of ['email', 'no_email'] as const) {
-        if (!(mode in m)) out.push(`${key}: "${mode}" is missing (null hides the line)`);
-        else if (m[mode] !== null && (typeof m[mode] !== 'string' || !(m[mode] as string).trim())) out.push(`${key}: "${mode}" is a line or null`);
+    const k = kind(e);
+    const pair = k === 'email' ? (['email', 'no_email'] as const) : k === 'contact' ? (['contact', 'no_contact'] as const) : null;
+    if (!pair && (typeof (e as { text: unknown }).text !== 'string' || !(e as { text: string }).text.trim())) out.push(`${key}: "text" is a line`);
+    if (pair) {
+      const m = e as unknown as Record<string, unknown>;
+      for (const w of pair) {
+        if (!(w in m)) out.push(`${key}: "${w}" is missing (null hides the line)`);
+        else if (m[w] !== null && (typeof m[w] !== 'string' || !(m[w] as string).trim())) out.push(`${key}: "${w}" is a line or null`);
       }
     }
-    const shown = lineOf(e, 'no_email');
-    if (typeof shown === 'string')
-      for (const f of promiseFindings(shown)) out.push(`${key}: the line shown without an email provider promises (${f.rule}: "${f.match}"): "${f.sentence}"`);
+    if (k === 'email') {
+      const needs = (e as { needs?: unknown }).needs;
+      const known = (c: unknown) => (EMAIL_CAPABILITIES as readonly unknown[]).includes(c);
+      if (needs !== 'any' && (!Array.isArray(needs) || !needs.length || !needs.every(known)))
+        out.push(`${key}: "needs" is "any" or a list of what the provider must send (${EMAIL_CAPABILITIES.join(', ')})`);
+      else {
+        const line = (e as { email: Line }).email;
+        if (needs !== 'any' && typeof line === 'string')
+          for (const c of impliedCapabilities(line))
+            if (!(needs as string[]).includes(c)) out.push(`${key}: the email line promises ${c}, which its "needs" do not list`);
+      }
+    }
+    // what is read while no provider sends: never a promise
+    const quiet = k === 'text' ? [lineOf(e, NO_EMAIL)] : k === 'contact' ? [(e as { contact: Line }).contact, (e as { no_contact: Line }).no_contact] : [lineOf(e, NO_EMAIL)];
+    for (const shown of quiet)
+      if (typeof shown === 'string')
+        for (const f of promiseFindings(shown))
+          out.push(`${key}: the line shown without an email provider promises (${f.rule}: "${f.match}"): "${f.sentence}"`);
     if (e.group !== undefined) {
       if (typeof e.group !== 'string' || !KEY.test(`${e.group}.x`)) out.push(`${key}: "group" is a lowercase word`);
-      const g = groups.get(e.group) ?? { email: [], no_email: [] };
-      g.email.push(lineOf(e, 'email') !== null);
-      g.no_email.push(lineOf(e, 'no_email') !== null);
-      groups.set(e.group, g);
+      else groups.set(e.group, [...(groups.get(e.group) ?? []), key]);
     }
   }
   for (const key of NEEDED) {
     const e = strings[key];
     if (!e) out.push(`${key}: missing (a page needs this line)`);
-    else
-      for (const mode of ['email', 'no_email'] as const)
-        if (typeof lineOf(e, mode) !== 'string') out.push(`${key}: a page needs this line in "${mode}" (null is not allowed)`);
+    else if (STATES.some((st) => typeof lineOf(e, st) !== 'string')) out.push(`${key}: a page needs this line in every wording (null is not allowed)`);
   }
-  for (const [name, g] of groups)
-    for (const mode of ['email', 'no_email'] as const)
-      if (new Set(g[mode]).size > 1) out.push(`group ${name}: in "${mode}" its lines are shown or hidden together (some are null, some are not)`);
+  for (const [name, keys] of groups)
+    for (const st of STATES) {
+      const shown = new Set(keys.map((k) => lineOf(strings[k]!, st) !== null));
+      if (shown.size > 1) {
+        out.push(`group ${name}: its lines are shown or hidden together (with ${st.capabilities.length ? st.capabilities.join('+') : 'no email'}, some are null and some are not)`);
+        break;
+      }
+    }
   return out;
 }
 
@@ -183,10 +429,22 @@ export function loadCopy(file = COPY_FILE): CopySource {
   return JSON.parse(readFileSync(file, 'utf8')) as CopySource;
 }
 
-/** The lines of a build: `email` only when a provider really sends; `no_email` otherwise. */
-export function selectCopy(src: CopySource, sends: boolean): CopyLines {
-  const mode: Mode = sends ? 'email' : 'no_email';
-  return Object.fromEntries(Object.entries(src.strings).map(([k, e]) => [k, lineOf(e, mode)]));
+/** The lines of a build: each `email` line only when its needs are real; `contact` only with contact details. A
+ * boolean stands for every capability (true) or none (false), without contact details. */
+export function selectCopy(src: CopySource, state: CopyState | boolean): CopyLines {
+  const st: CopyState = typeof state === 'boolean' ? (state ? ALL_EMAIL : NO_EMAIL) : state;
+  return Object.fromEntries(Object.entries(src.strings).map(([k, e]) => [k, lineOf(e, st)]));
+}
+
+/**
+ * S20 (QA ת62): the promises a build may make: the sentences of each `email` line whose needs its provider really
+ * sends. None without a provider. The build check (tools/check-promises.ts) lets these through, and nothing else.
+ */
+export function allowedPromises(src: CopySource, capabilities: readonly EmailCapability[]): Set<string> {
+  const out = new Set<string>();
+  for (const e of Object.values(src.strings))
+    if ('email' in e && e.email && needsMet(e.needs, capabilities)) for (const f of promiseFindings(e.email)) out.add(f.sentence);
+  return out;
 }
 
 // ---------- which environment the build is for, and its EMAIL_PROVIDER ----------
@@ -214,12 +472,20 @@ function parseJsonc(text: string): unknown {
   return JSON.parse(out.replace(/,(\s*[}\]])/g, '$1'));
 }
 
-export type EmailTarget = { env: string; value: unknown; issue: string | null; sends: boolean };
+export type EmailTarget = {
+  env: string;
+  value: unknown;
+  issue: string | null;
+  sends: boolean;
+  capabilities: EmailCapability[];
+  vars: Record<string, unknown>;
+};
 
 /**
  * The EMAIL_PROVIDER of the environment the site is built for: `production` for the public build (HD_PUBLIC=1, the
  * deploy), the top level otherwise (development, the local preview, the e2e suite). A value that is not UNDECIDED or a
- * provider from the closed list stops the build (`issue`).
+ * provider from the closed list stops the build (`issue`). `capabilities`: what that provider declares it sends (S20).
+ * `vars`: the environment's variables (the contact details, S20 ת61).
  */
 export function emailTarget(opts: { publicBuild: boolean; wrangler?: string }): EmailTarget {
   const cfg = parseJsonc(readFileSync(opts.wrangler ?? WRANGLER_FILE, 'utf8')) as {
@@ -228,7 +494,8 @@ export function emailTarget(opts: { publicBuild: boolean; wrangler?: string }): 
   };
   const env = opts.publicBuild ? 'production' : 'top level';
   const vars = opts.publicBuild ? cfg.env?.production?.vars : cfg.vars;
-  if (!vars) return { env, value: undefined, issue: `wrangler.jsonc has no vars for ${env}`, sends: false };
+  if (!vars) return { env, value: undefined, issue: `wrangler.jsonc has no vars for ${env}`, sends: false, capabilities: [], vars: {} };
   const value = vars.EMAIL_PROVIDER;
-  return { env, value, issue: emailProviderIssue(value), sends: emailSends(value) };
+  const capabilities = emailCapabilities(value);
+  return { env, value, issue: emailProviderIssue(value), sends: capabilities.length > 0, capabilities, vars };
 }
