@@ -125,7 +125,8 @@ describe('ת44: no lazy page in the room’s entry, by content', () => {
 describe('ה7: the deploy check cannot be skipped; the exclusions point to their real test', () => {
   it('every wrangler deploy runs check-config first, and `npm run deploy` does too; CI runs it on its own line', () => {
     const wrangler = readFileSync(sitePath('api/wrangler.jsonc'), 'utf8');
-    expect(wrangler).toMatch(/"build":\s*\{\s*"command":\s*"npx tsx scripts\/check-config\.ts"/);
+    // S17 (ת49): tsx by its local path, never a bare `npx tsx` (tools/test/s17.test.ts)
+    expect(wrangler).toMatch(/"build":\s*\{\s*"command":\s*"node \.\.\/node_modules\/tsx\/dist\/cli\.mjs scripts\/check-config\.ts"/);
     const api = JSON.parse(readFileSync(sitePath('api/package.json'), 'utf8')) as { scripts: Record<string, string> };
     expect(api.scripts.deploy).toMatch(/^tsx scripts\/check-config\.ts && wrangler deploy/);
     expect(api.scripts.build).toMatch(/^tsx scripts\/check-config\.ts && /);

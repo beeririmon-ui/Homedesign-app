@@ -6,7 +6,7 @@
  * one resize of both to the display widths (linear, as the GL sampler). Per set: p99.9 and max of the largest channel
  * difference inside the set's region, and outside it.
  *
- *   npx tsx tools/check-house.ts [out.json]
+ *   npx --no-install tsx tools/check-house.ts [out.json]
  */
 import sharp from 'sharp';
 import { readFileSync, writeFileSync } from 'node:fs';

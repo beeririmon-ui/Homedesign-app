@@ -2,7 +2,7 @@
  * S12, QA S8–S10 ת17: the deploy check. Every environment in wrangler.jsonc names its providers exactly, from the closed
  * list (src/lib/config.ts): `mock` only outside production, `UNDECIDED` the one placeholder (it fails closed at run time),
  * and nothing else. Runs before the Worker's build (`npm run build -w @hd/api`), so a typo never reaches a deploy.
- *   npx tsx api/scripts/check-config.ts [path/to/wrangler.jsonc]
+ *   npx --no-install tsx api/scripts/check-config.ts [path/to/wrangler.jsonc]
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';

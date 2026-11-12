@@ -70,6 +70,8 @@
 4. **סודות:** `wrangler secret put …` לכל סוד בטבלה, ל-`preview` קודם.
 5. **העלאה:** `npm run deploy -w @hd/api -- --env preview` מ-`site/`. אחר כך בדיקה ידנית: קנייה מלאה עם התשלום המדומה, ותשלום sandbox כשהסולק מחובר.
    - **S16 (ה7): אין העלאה בלי בדיקת הקונפיגורציה.** ‏`npm run deploy` מריץ את `check-config` לפני `wrangler deploy`, וגם `wrangler deploy` ישיר מריץ אותה קודם (`build.command` ב-`site/api/wrangler.jsonc`). ערך שאינו ספק עוצר את ההעלאה. ‏`wrangler` שמורץ מתיקייה אחרת לא מוצא את הבדיקה, ולכן נעצר גם הוא. ההוכחה: `qa/reports/2026-11-07-site-track/s16/data/deploy-guard-mutation.log`.
+   - **S17 (ת49): הבדיקה לא מורידה דבר מהרשת.** ‏`build.command` מריץ את tsx מ-`site/node_modules` לפי הנתיב שלו, ולא `npx tsx`. מתיקייה אחרת הנתיב חסר, ו-node נעצר לפני כל העלאה, בלי לפנות ל-npm.
+   - **S17 (ת49): ספק לעולם לא נקבע ב-`--var` או כסוד.** ‏`SUPPLIER_PROVIDER`, ‏`PAYMENT_PROVIDER`, ‏`INVOICE_PROVIDER` ו-`NOTIFY_PROVIDER` נקבעים רק ב-`site/api/wrangler.jsonc`, שם `check-config` קורא אותם. ‏`wrangler deploy --var SUPPLIER_PROVIDER:…` או `wrangler secret put SUPPLIER_PROVIDER` עוקפים את הבדיקה של ההעלאה. בזמן ריצה הרשימה הסגורה עדיין מסרבת לערך שגוי (ת17), אבל זה כבר אחרי שההעלאה עברה. ‏`--var` מותר רק לערכים שאינם ספק, ובפיתוח מקומי.
 6. **אותו הדבר ל-production:** רק אחרי אישור הבעלים, ורק כשכל החוסמים ברשימת ההשקה סגורים.
 
 ## 4. מה מוגן כבר היום

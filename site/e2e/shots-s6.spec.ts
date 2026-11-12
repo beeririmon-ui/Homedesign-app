@@ -1,7 +1,7 @@
 /**
  * The evidence of S6 (the shop in the magazine language, art direction §9): screenshots at 400 and 1280 and the
  * opening timings, against the local production build with its API (the cart, the checkout and an order need it).
- * Runs only as `HD_SHOTS_DIR=<dir> npx playwright test --project=evidence`; never part of e2e, never a tracked file
+ * Runs only as `HD_SHOTS_DIR=<dir> npx --no-install playwright test --project=evidence`; never part of e2e, never a tracked file
  * unless the directory given is.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';

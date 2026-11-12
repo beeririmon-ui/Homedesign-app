@@ -3,7 +3,7 @@
  * warm-modern house ("3 סטים", the set names), the Nordic wheel ("3 גרסאות", "כריות ושמיכה"), the list under the room
  * of each house, and a product page (behind the flag: the render and the supplier's photo; in a public build: the
  * render alone). At 400 and 1280, against the local production build with its API.
- * Runs only as `HD_SHOTS_DIR=<dir> [HD_SHOTS_TAG=public] npx playwright test --project=evidence e2e/shots-s15.spec.ts`.
+ * Runs only as `HD_SHOTS_DIR=<dir> [HD_SHOTS_TAG=public] npx --no-install playwright test --project=evidence e2e/shots-s15.spec.ts`.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';

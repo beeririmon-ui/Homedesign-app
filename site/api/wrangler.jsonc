@@ -9,7 +9,10 @@
   // S16 (QA S11–S12 ה2, S13–S14 ה7): every wrangler deploy (and dev) runs the deploy check first; a provider setting
   // that would not run fails it, and the deploy stops. It runs from site/api (as `npm run deploy -w @hd/api` does); run from
   // anywhere else it cannot find the check, and the deploy stops too: it fails closed (docs/ops/deploy-runbook.md §3)
-  "build": { "command": "npx tsx scripts/check-config.ts" },
+  // S17 (QA ת49): tsx from the repo's own node_modules by its path, never `npx tsx`, which from a folder without it
+  // downloads tsx from the registry and runs it. Wrangler 4 runs the command in the shell's folder (`build.cwd` is not
+  // read against this file's folder), so the path is relative: from anywhere but site/api it is missing, and node stops
+  "build": { "command": "node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts" },
   "workers_dev": true,
   "assets": {
     "directory": "../web/dist",

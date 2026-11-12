@@ -4,7 +4,7 @@
  * - the customer's page of an order in supplier_error: "בהכנה" and its line (ה7, ת39; S17 §7: no fifth status);
  * - the stage while the poster is on its way: the inlined placeholder (ה1);
  * - the order page with the server's message and code (ת37).
- * Runs only as `HD_SHOTS_DIR=<dir> npx playwright test --project=evidence e2e/shots-s16.spec.ts`, against the local
+ * Runs only as `HD_SHOTS_DIR=<dir> npx --no-install playwright test --project=evidence e2e/shots-s16.spec.ts`, against the local
  * preview (it marks one order's shipment as failed in the preview's own D1, through wrangler).
  */
 import { execFileSync } from 'node:child_process';
@@ -27,7 +27,7 @@ async function shot(page: Page, name: string, full = true) {
 }
 /** the preview's own D1 (api: wrangler dev --persist-to ../.wrangler-state) */
 function d1(sql: string) {
-  execFileSync('npx', ['wrangler', 'd1', 'execute', 'DB', '--local', '--persist-to', '../.wrangler-state', '--command', sql], {
+  execFileSync('npx', ['--no-install', 'wrangler', 'd1', 'execute', 'DB', '--local', '--persist-to', '../.wrangler-state', '--command', sql], {
     cwd: join(SITE, 'api'),
     stdio: 'pipe',
   });

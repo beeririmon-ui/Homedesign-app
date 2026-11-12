@@ -2,7 +2,7 @@
  * The evidence of S10 (the warm-modern house in the room engine): the stage at 400 and 1280 with each of the three sets,
  * the wheel on each set, the switch between the houses half way, and its timings (press → end, the dissolve itself, at
  * full motion and reduced), against the local production build with its API.
- * Runs only as `HD_SHOTS_DIR=<dir> npx playwright test --project=evidence e2e/shots-s10.spec.ts`; never part of e2e.
+ * Runs only as `HD_SHOTS_DIR=<dir> npx --no-install playwright test --project=evidence e2e/shots-s10.spec.ts`; never part of e2e.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';

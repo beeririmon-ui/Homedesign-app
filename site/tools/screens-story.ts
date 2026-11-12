@@ -778,7 +778,7 @@ function publicBuild(): void {
   const dir = sitePath('.generated/public-check');
   rmSync(dir, { recursive: true, force: true });
   const t = Date.now();
-  execFileSync('npx', ['vite', 'build', '--outDir', dir, '--emptyOutDir'], { cwd: sitePath('web'), env: { ...process.env, HD_PUBLIC: '1' }, stdio: 'pipe' });
+  execFileSync('npx', ['--no-install', 'vite', 'build', '--outDir', dir, '--emptyOutDir'], { cwd: sitePath('web'), env: { ...process.env, HD_PUBLIC: '1' }, stdio: 'pipe' });
   const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)]));
   const all = walk(dir).map((f) => relative(dir, f));
   const leftovers = all.filter((f) => /^(story|test|media\/story|media\/test)\//.test(f) || /^assets\/(story|test)-/.test(f));
@@ -913,7 +913,7 @@ async function axeDetail(): Promise<void> {
 
 // ---------- S4, the shop: the whole look, the cart, the test checkout, PRE1 on the wheel; the designer's §6 ----------
 // S8: the shop's evidence (the story's look, the cart, the real checkout, the order) needs the API: it is shot by
-// e2e/shots-*.spec.ts against the local build with its Worker (`HD_SHOTS_DIR=<dir> npx playwright test --project=evidence`)
+// e2e/shots-*.spec.ts against the local build with its Worker (`HD_SHOTS_DIR=<dir> npx --no-install playwright test --project=evidence`)
 async function wheelPre1(): Promise<void> {
   const ctx = await ctxOf(1280, 800);
   const page = await ctx.newPage();
