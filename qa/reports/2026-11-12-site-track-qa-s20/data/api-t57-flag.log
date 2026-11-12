@@ -1,0 +1,18 @@
+flag: http://127.0.0.1:8820; a product on hold: framed-art-morandi-triptych-sage-mjyac; one for sale: curtains-japanese-linen-half-shade-j35b9
+ok   W1 POST /api/waitlist, a product on hold  | 409 {"error":"waitlist_closed","message_he":"אין כרגע רשימת המתנה למוצר."}
+ok   W2 POST /api/waitlist, a room and a slot  | 409 {"error":"waitlist_closed","message_he":"אין כרגע רשימת המתנה למוצר."}
+ok   W3 POST /api/waitlist, malformed JSON (refused before the body is read)  | 409 {"error":"waitlist_closed","message_he":"אין כרגע רשימת המתנה למוצר."}
+ok   W4 POST /api/waitlist, text/plain  | 409 {"error":"waitlist_closed","message_he":"אין כרגע רשימת המתנה למוצר."}
+ok   W5 POST /api/waitlist, an empty body  | 409 {"error":"waitlist_closed","message_he":"אין כרגע רשימת המתנה למוצר."}
+ok   W6 POST /api/waitlist, a trailing slash  | 404 {"error":"not_found"}
+ok   W7 40 requests from one address  | {"409":40}
+ok   W8 GET /api/waitlist (no reader)  | 404
+ok   W9 rows in waitlist, before and after  | {"before":0,"after":0,"table":{"n":0,"e":0}}
+ok   C1 checkout, marketing: true → 201, the order goes on  | 201 order 1510421459
+ok   C2 the consent stored (want 0)  | {"c":0,"at":null,"s":"pending_payment"}
+ok   C3 after the payment: paid, the consent unchanged  | {"pay":303,"status":"paid","row":{"c":0,"at":null,"s":"paid"}}
+ok   C4 checkout without marketing → 201, 0  | 201
+ok   C5 marketing: "true" (a string) → refused by the schema  | 422 {"error":"invalid_body","message_he":"חלק מהפרטים חסרים או לא תקינים."}
+ok   C6 marketing: 1 → refused by the schema  | 422
+ok   C7 every customer row in this D1: consent 0, no time  | {"n":2,"yes":0,"at":0}
+flag: 16/16

@@ -1,0 +1,127 @@
+{
+ "label": "public-contact",
+ "base": "http://127.0.0.1:8821",
+ "rows": [
+  {
+   "id": "W1",
+   "what": "POST /api/waitlist, a product on hold",
+   "ok": true,
+   "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+  },
+  {
+   "id": "W2",
+   "what": "POST /api/waitlist, a room and a slot",
+   "ok": true,
+   "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+  },
+  {
+   "id": "W3",
+   "what": "POST /api/waitlist, malformed JSON (refused before the body is read)",
+   "ok": true,
+   "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+  },
+  {
+   "id": "W4",
+   "what": "POST /api/waitlist, text/plain",
+   "ok": true,
+   "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+  },
+  {
+   "id": "W5",
+   "what": "POST /api/waitlist, an empty body",
+   "ok": true,
+   "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+  },
+  {
+   "id": "W6",
+   "what": "POST /api/waitlist, a trailing slash",
+   "ok": true,
+   "detail": "404 {\"error\":\"not_found\"}"
+  },
+  {
+   "id": "W7",
+   "what": "40 requests from one address",
+   "ok": true,
+   "detail": {
+    "409": 40
+   }
+  },
+  {
+   "id": "W8",
+   "what": "GET /api/waitlist (no reader)",
+   "ok": true,
+   "detail": "404"
+  },
+  {
+   "id": "W9",
+   "what": "rows in waitlist, before and after",
+   "ok": true,
+   "detail": {
+    "before": 0,
+    "after": 0,
+    "table": {
+     "n": 0,
+     "e": 0
+    }
+   }
+  },
+  {
+   "id": "C1",
+   "what": "checkout, marketing: true → 201, the order goes on",
+   "ok": true,
+   "detail": "201 order 1622902370"
+  },
+  {
+   "id": "C2",
+   "what": "the consent stored (want 0)",
+   "ok": true,
+   "detail": {
+    "c": 0,
+    "at": null,
+    "s": "pending_payment"
+   }
+  },
+  {
+   "id": "C3",
+   "what": "after the payment: paid, the consent unchanged",
+   "ok": true,
+   "detail": {
+    "pay": 303,
+    "status": "paid",
+    "row": {
+     "c": 0,
+     "at": null,
+     "s": "paid"
+    }
+   }
+  },
+  {
+   "id": "C4",
+   "what": "checkout without marketing → 201, 0",
+   "ok": true,
+   "detail": "201"
+  },
+  {
+   "id": "C5",
+   "what": "marketing: \"true\" (a string) → refused by the schema",
+   "ok": true,
+   "detail": "422 {\"error\":\"invalid_body\",\"message_he\":\"חלק מהפרטים חסרים או לא תקינים.\"}"
+  },
+  {
+   "id": "C6",
+   "what": "marketing: 1 → refused by the schema",
+   "ok": true,
+   "detail": "422"
+  },
+  {
+   "id": "C7",
+   "what": "every customer row in this D1: consent 0, no time",
+   "ok": true,
+   "detail": {
+    "n": 2,
+    "yes": 0,
+    "at": 0
+   }
+  }
+ ]
+}

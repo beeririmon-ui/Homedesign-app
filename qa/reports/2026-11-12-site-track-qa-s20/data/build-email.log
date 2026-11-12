@@ -1,0 +1,59 @@
+=== build-copy 11:55:30
+
+> homedesign-site@0.1.0 copy
+> tsx tools/build-copy.ts
+
+build-copy: warning (top level): no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every "כתבו לנו" line is in its wording without contact (CONTACT1). A public build (HD_PUBLIC=1) stops here.
+build-copy (S18, S20): EMAIL_PROVIDER=qa-oc (top level) → the email wording where its needs are real (order_confirmation); contact none: 20 lines, 8 not shown
+capabilities ["order_confirmation"] sends true
+  checkout.email_hint           "לפנייה בנושא ההזמנה, אם יהיה צורך."
+  checkout.marketing_consent    null
+  checkout.total_note           "כולל מע\"מ."
+  order.next.received           "אישור ההזמנה ומצבה מופיעים בדף הזה, כולל היציאה למשלוח. כדאי לשמור את הקישור. הוא נפתח רק בדפדפן הזה."
+  order.next.shipped            "ההזמנה בדרך אליכם. מספר המשלוח למעלה."
+  order.next.shipped_no_number  "ההזמנה בדרך אליכם."
+  order.next.delivered          "ההזמנה נמסרה."
+  order.no_access               "אין לנו גישה להזמנה הזו מהדפדפן הזה. את פרטי ההזמנה שלחנו לאימייל שלכם."
+  order.no_access_contact       null
+  order.delay.followup          null
+  waitlist.offer                null
+  waitlist.why                  null
+  waitlist.submit               null
+  waitlist.done                 null
+  story.unavailable_note        null
+  privacy.processors            "הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים."
+  privacy.marketing             "האתר לא שולח דיוור שיווקי."
+  legal.draft                   "טיוטת עבודה. הנוסח לא נבדק משפטית ולא אומת. שם העסק, הכתובת ופרטי הקשר יושלמו לפני ההשקה."
+  legal.returns_notice          "להודעת ביטול: פרטי הקשר של שירות הלקוחות יושלמו לפני ההשקה. יש לציין את מספר ההזמנה."
+  legal.accessibility_contact   "שם, טלפון ואימייל של רכז/ת הנגישות יושלמו לפני ההשקה."
+=== check-config 11:55:31
+
+> @hd/api@0.1.0 check:config
+> tsx scripts/check-config.ts
+
+check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email qa-oc, contact UNDECIDED); preview preview (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED, contact UNDECIDED); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED, customer email UNDECIDED, contact UNDECIDED)
+check-config exit 0
+=== web build 11:55:32
+=== api build 11:55:38
+=== check-promises 11:55:42
+
+> homedesign-site@0.1.0 check:promises
+> tsx tools/check-promises.ts --json=/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa20/data/check-promises-email-oc.json
+
+check-promises (S18, S20): EMAIL_PROVIDER=qa-oc (top level) sends order_confirmation: 3 promises, all the email wording of lines whose needs are real, in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, not scanned), 9 other text files, 44 Worker files and its bundle (2152 ms)
+check-promises exit 0
+=== the email lines in the bundle 11:55:45
+out  checkout.email_hint            needs ["order_confirmation","invoice_email"]
+out  checkout.marketing_consent     needs ["marketing"]
+out  checkout.total_note            needs ["invoice_email"]
+out  order.next.received            needs ["order_confirmation","invoice_email","shipping_update"]
+IN   order.no_access                needs ["order_confirmation"]
+out  order.delay.followup           needs ["delay_notice"]
+IN   waitlist.offer                 needs ["back_in_stock"]
+out  waitlist.why                   needs ["back_in_stock"]
+IN   waitlist.submit                needs ["back_in_stock"]
+out  waitlist.done                  needs ["back_in_stock"]
+out  story.unavailable_note         needs ["back_in_stock"]
+IN   privacy.processors             needs "any"
+out  privacy.marketing              needs ["marketing"]
+=== done 11:55:45

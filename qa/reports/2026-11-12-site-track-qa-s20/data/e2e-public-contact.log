@@ -1,0 +1,19 @@
+
+Running 12 tests using 1 worker
+
+  ✓   1 [e2e] › e2e/public-scan.spec.ts:31:1 › no supplier name and no listing number in anything the site serves (paths, pages, scripts, data) (21ms)
+  ✓   2 [e2e] › e2e/public-scan.spec.ts:57:1 › no admin code in the public build: no admin route, API call, dev header or admin screen text (10ms)
+  ✓   3 [e2e] › e2e/public-scan.spec.ts:74:1 › S16 (ת41): in a public build, _redirects names no supplier and no listing number (2ms)
+ה5: 39 product pages, 5 without a picture
+  ✓   4 [e2e] › e2e/public-scan.spec.ts:80:1 › S17 (QA ה5): no product page shows a value that says it is unknown, nor a note about a picture it does not have (5ms)
+AN1: the beacon on 45 of 49 pages
+  ✓   5 [e2e] › e2e/public-scan.spec.ts:98:1 › S17 (AN1): the analytics beacon only with a token, only in the public build, never on the cart, checkout, order or 404 (69ms)
+  ✓   6 [e2e] › e2e/s18.spec.ts:39:1 › the build has no email provider: the wording without an email (4ms)
+  ✓   7 [e2e] › e2e/s18.spec.ts:44:1 › the checkout: what the address is for, the total with VAT, no marketing box, no promise (802ms)
+  ✓   8 [e2e] › e2e/s18.spec.ts:62:1 › the order page after payment: the order is on this page, in this browser; no email (2.0s)
+  ✓   9 [e2e] › e2e/s18.spec.ts:76:1 › the delayed order: §7 in two sentences, without the third (the email one) (7.0s)
+  ✓  10 [e2e] › e2e/s18.spec.ts:87:1 › shipped: "מספר המשלוח למעלה" only when there is a number above (2.0s)
+  ✓  11 [e2e] › e2e/s18.spec.ts:99:1 › a product on hold: "המלאי אינו זמין כעת" alone; no form, no address asked for, no promise (731ms)
+  ✓  12 [e2e] › e2e/s18.spec.ts:111:1 › every page in the sitemap, the cart, the empty checkout and 404: no promise of an email (32.0s)
+
+  12 passed (45.8s)

@@ -1,0 +1,35 @@
+
+> @hd/api@0.1.0 build
+> tsx scripts/check-config.ts && wrangler deploy --dry-run --env="" --outdir dist
+
+check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email qa-oc, contact UNDECIDED); preview preview (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED, contact UNDECIDED); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED, customer email UNDECIDED, contact UNDECIDED)
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+
+ ⛅️ wrangler 4.149.0
+────────────────────
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email qa-oc, contact UNDECIDED); preview preview (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED, contact UNDECIDED); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED, customer email UNDECIDED, contact UNDECIDED)
+[custom build] 
+✨ Read 1731 files from the assets directory /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa20/build-s20-email/site/web/dist
+Total Upload: 813.08 KiB / gzip: 139.36 KiB
+Your Worker has access to the following bindings:
+Binding                                           Resource                  
+env.SUPPLIER_QUEUE (supplier-orders-dev)          Queue                     
+env.DB (homedesign-dev)                           D1 Database               
+env.RL_WRITE (60 requests/60s)                    Rate Limit                
+env.RL_CHECKOUT (10 requests/60s)                 Rate Limit                
+env.ASSETS                                        Assets                    
+env.ENVIRONMENT ("development")                   Environment Variable      
+env.PAYMENT_PROVIDER ("mock")                     Environment Variable      
+env.INVOICE_PROVIDER ("mock")                     Environment Variable      
+env.SUPPLIER_PROVIDER ("mock")                    Environment Variable      
+env.NOTIFY_PROVIDER ("mock")                      Environment Variable      
+env.EMAIL_PROVIDER ("qa-oc")                      Environment Variable      
+env.CONTACT_EMAIL ("UNDECIDED")                   Environment Variable      
+env.CONTACT_PHONE ("UNDECIDED")                   Environment Variable      
+env.ACCESS_TEAM_DOMAIN ("")                       Environment Variable      
+env.ACCESS_AUD ("")                               Environment Variable      
+
+--dry-run: exiting now.

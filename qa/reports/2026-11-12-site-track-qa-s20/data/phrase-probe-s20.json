@@ -1,0 +1,890 @@
+{
+ "summary": {
+  "promises": 40,
+  "caught": 25,
+  "missed_tier_a": [
+   "N15",
+   "N16",
+   "N17",
+   "N24"
+  ],
+  "missed_tier_b": [
+   "N25",
+   "N26",
+   "N27",
+   "N28",
+   "N29",
+   "N30",
+   "N31",
+   "N32",
+   "N37",
+   "N38",
+   "N40"
+  ],
+  "honest": 40,
+  "false_positives": [
+   "K34",
+   "K36",
+   "K37"
+  ],
+  "in_fixture": 0
+ },
+ "rows": [
+  {
+   "id": "N01",
+   "tier": "A",
+   "text": "אישור ההזמנה ישלח למייל שלכם.",
+   "why": "ישלח (one yod) + מייל",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "send:ישלח"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N02",
+   "tier": "A",
+   "text": "פרטי המשלוח ישלחו אליכם בהודעה.",
+   "why": "ישלחו + הודעה",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "send:ישלחו"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N03",
+   "tier": "A",
+   "text": "נעדכן בהודעה ברגע שהחבילה יוצאת.",
+   "why": "נעדכן",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "notify:נעדכן"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N04",
+   "tier": "A",
+   "text": "אנחנו נשלח לכם מייל עם קוד הקופון.",
+   "why": "נשלח לכם מייל",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "send:נשלח"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N05",
+   "tier": "A",
+   "text": "מחכה לכם מייל עם כל הפרטים.",
+   "why": "a channel, no verb of ours",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "channel:מייל"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N06",
+   "tier": "A",
+   "text": "הקופון יישלח לכם ב-SMS.",
+   "why": "יישלח + SMS",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "send:יישלח"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N07",
+   "tier": "A",
+   "text": "בקרוב תקבלו מאיתנו עדכון.",
+   "why": "תקבלו עדכון",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "receive:תקבלו"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N08",
+   "tier": "A",
+   "text": "ההתראה תישלח לטלפון הנייד.",
+   "why": "תישלח + התראה",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "send:תישלח"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N09",
+   "tier": "A",
+   "text": "נעדכנכם על כל שינוי.",
+   "why": "נעדכנכם",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "notify:נעדכנכם"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N10",
+   "tier": "A",
+   "text": "עדכון יגיע אליכם כשהמוצר יחזור למלאי.",
+   "why": "יגיע + עדכון",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "arrive:יגיע"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N11",
+   "tier": "A",
+   "text": "נתריע לכם כשהמחיר יורד.",
+   "why": "נתריע",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "notify:נתריע"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N12",
+   "tier": "A",
+   "text": "מספר המעקב יופיע במייל שתקבלו.",
+   "why": "שתקבלו + מייל",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "receive:שתקבלו"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N13",
+   "tier": "A",
+   "text": "You will get an email once it ships.",
+   "why": "you will get",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "latin:You will get"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N14",
+   "tier": "A",
+   "text": "We’ll text you the tracking number.",
+   "why": "we'll text",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "latin:We'll text"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N15",
+   "tier": "A",
+   "text": "עם יציאת החבילה יישלח מספר מעקב.",
+   "why": "יישלח + a tracking number (not in OBJECT)",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N16",
+   "tier": "A",
+   "text": "תקבלו את מספר המעקב ברגע שהחבילה יוצאת.",
+   "why": "תקבלו + a tracking number (not in RECEIVED)",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N17",
+   "tier": "A",
+   "text": "נשמור אתכם מעודכנים.",
+   "why": "\"keep you updated\", the Hebrew idiom",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N18",
+   "tier": "A",
+   "text": "החשבונית תגיע אליכם תוך 24 שעות.",
+   "why": "תגיע + חשבונית",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "arrive:תגיע"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N19",
+   "tier": "A",
+   "text": "נהיה איתכם בקשר לגבי מועד המסירה.",
+   "why": "נהיה בקשר",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "notify:נהיה איתכם בקשר"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N20",
+   "tier": "A",
+   "text": "ניידע אתכם ברגע שהמוצר זמין.",
+   "why": "ניידע",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "notify:ניידע"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N21",
+   "tier": "A",
+   "text": "אנו נודיעך על כל עיכוב.",
+   "why": "נודיעך",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "notify:נודיעך"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N22",
+   "tier": "A",
+   "text": "נשלח קוד אימות ב-SMS.",
+   "why": "נשלח + SMS",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "send:נשלח"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N23",
+   "tier": "A",
+   "text": "Order updates via WhatsApp",
+   "why": "updates via whatsapp",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "latin:updates via WhatsApp"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N24",
+   "tier": "A",
+   "text": "תזכורת תשלח יום לפני המסירה.",
+   "why": "תשלח (defective spelling of תישלח) + תזכורת",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N25",
+   "tier": "B",
+   "text": "לא לשכוח לבדוק גם בתיקיית הספאם.",
+   "why": "the spam folder: an email is coming",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N26",
+   "tier": "B",
+   "text": "נשמח לשלוח לכם את הקטלוג החדש.",
+   "why": "לשלוח לכם, a catalogue (marketing)",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N27",
+   "tier": "B",
+   "text": "רוצים לדעת ראשונים? השאירו פרטים.",
+   "why": "\"לדעת ראשונים\" (S18 had \"היו הראשונים לדעת\")",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N28",
+   "tier": "B",
+   "text": "Expect an email from us shortly.",
+   "why": "expect an email",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N29",
+   "tier": "B",
+   "text": "קוד הקופון ממתין לכם בתיבה.",
+   "why": "\"בתיבה\", the mailbox without \"דואר\"",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N30",
+   "tier": "B",
+   "text": "ננסה לחזור אליכם עוד היום.",
+   "why": "\"לחזור אליכם\", infinitive",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N31",
+   "tier": "B",
+   "text": "Get updates",
+   "why": "get updates",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N32",
+   "tier": "B",
+   "text": "התראות בזמן אמת לטלפון.",
+   "why": "a feature line, no channel word",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N33",
+   "tier": "B",
+   "text": "נודה אם תאשרו את קבלת המייל.",
+   "why": "an email that was sent",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "channel:המייל"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N34",
+   "tier": "B",
+   "text": "המבצעים הבאים יגיעו ישר למייל.",
+   "why": "יגיעו + מייל",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "arrive:יגיעו"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N35",
+   "tier": "B",
+   "text": "קבלו 10% הנחה בהרשמה לניוזלטר.",
+   "why": "ניוזלטר",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "receive:קבלו"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N36",
+   "tier": "B",
+   "text": "נשלח לך לינק למעקב.",
+   "why": "\"לינק\" (not \"קישור\")",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "send:נשלח"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N37",
+   "tier": "B",
+   "text": "תקבלו מאיתנו מסר ברגע שהמוצר מגיע.",
+   "why": "\"מסר\"",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N38",
+   "tier": "B",
+   "text": "הודעת פוש תקפוץ כשההזמנה יוצאת.",
+   "why": "push notification",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "N39",
+   "tier": "B",
+   "text": "נעדכן אתכן.",
+   "why": "נעדכן, feminine plural",
+   "kind": "promise",
+   "caught": true,
+   "rules": [
+    "notify:נעדכן"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "N40",
+   "tier": "B",
+   "text": "האישור יוצא אליכם ברגע שהתשלום עובר.",
+   "why": "\"יוצא אליכם\" + אישור",
+   "kind": "promise",
+   "caught": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K01",
+   "tier": "A",
+   "text": "שלחו לנו את מספר ההזמנה ונבדוק.",
+   "why": "the customer writes to us",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K02",
+   "tier": "A",
+   "text": "הודעת ביטול אפשר לשלוח לנו באימייל או בטלפון.",
+   "why": "cancellation, to us",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K03",
+   "tier": "A",
+   "text": "החבילה נשלחת אליכם ישירות מהספק.",
+   "why": "shipping, not a message",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K04",
+   "tier": "A",
+   "text": "נשלח את ההזמנה תוך 3 ימי עסקים.",
+   "why": "we ship the order",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K05",
+   "tier": "A",
+   "text": "ההזמנה תצא אליכם תוך 3 ימי עסקים.",
+   "why": "shipping",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K06",
+   "tier": "A",
+   "text": "אפשר לעדכן אותנו בכתובת חדשה עד המשלוח.",
+   "why": "the customer updates us",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K07",
+   "tier": "A",
+   "text": "עדכנו את הכתובת בסל לפני התשלום.",
+   "why": "the customer edits the address",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K08",
+   "tier": "A",
+   "text": "תקבלו את החבילה עד הבית.",
+   "why": "delivery",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K09",
+   "tier": "A",
+   "text": "עם קבלת החבילה, בדקו שהיא שלמה.",
+   "why": "delivery",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K10",
+   "tier": "A",
+   "text": "מספר המשלוח יופיע בדף ההזמנה.",
+   "why": "the page shows it",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K11",
+   "tier": "A",
+   "text": "אין צורך להירשם כדי להזמין.",
+   "why": "no sign-up",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K12",
+   "tier": "A",
+   "text": "שם מלא, טלפון ואימייל",
+   "why": "field labels",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K13",
+   "tier": "A",
+   "text": "כתובת האימייל אינה תקינה.",
+   "why": "a field error",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K14",
+   "tier": "A",
+   "text": "אימייל: shop@hd-qa.co.il",
+   "why": "the S20 contact block",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K15",
+   "tier": "A",
+   "text": "אפשר לכתוב לנו עם מספר ההזמנה, ונבדוק אותה.",
+   "why": "S20 order.no_access_contact",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K16",
+   "tier": "A",
+   "text": "להודעת ביטול: פנו אלינו באחת הדרכים שלמטה, וציינו את מספר ההזמנה.",
+   "why": "S20 legal.returns_notice (contact)",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K17",
+   "tier": "A",
+   "text": "נשמח לשמוע על כל קושי. פניות לרכז/ת הנגישות נענות תוך 5 ימי עסקים.",
+   "why": "S20 legal.accessibility_contact (contact)",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K18",
+   "tier": "A",
+   "text": "המוצר נשלח מהמחסן של הספק בסין.",
+   "why": "shipping (נשלח = is shipped)",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K19",
+   "tier": "A",
+   "text": "פרטי ההזמנה נשלחו לספק.",
+   "why": "to the supplier",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K20",
+   "tier": "A",
+   "text": "שינוי בכתובת? שלחו לנו מייל לפני שההזמנה יוצאת.",
+   "why": "the customer writes to us",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K21",
+   "tier": "A",
+   "text": "ההחזר הכספי יבוצע תוך 14 יום מקבלת הודעת הביטול.",
+   "why": "the law, refunds",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K22",
+   "tier": "A",
+   "text": "לא נשלח לכם מיילים שיווקיים.",
+   "why": "negation",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K23",
+   "tier": "A",
+   "text": "נעדכן את המחירים בהתאם לשער הדולר.",
+   "why": "נעדכן + a thing",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K24",
+   "tier": "A",
+   "text": "המייל שלכם לא יועבר לאף אחד.",
+   "why": "negation, privacy",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K25",
+   "tier": "A",
+   "text": "קבלה על התשלום מופיעה בדף ההזמנה.",
+   "why": "the page shows it",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K26",
+   "tier": "A",
+   "text": "הזמנה שנשלחה לא ניתנת לביטול באתר.",
+   "why": "a status",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K27",
+   "tier": "A",
+   "text": "הסכמה לדיוור אינה תנאי לרכישה.",
+   "why": "negation",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K28",
+   "tier": "A",
+   "text": "שמרו את מספר ההזמנה. בלי מייל, הוא הדרך היחידה לזהות אותה.",
+   "why": "negation (בלי)",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K29",
+   "tier": "A",
+   "text": "שירות המשלוחים יעדכן את הסטטוס בדף.",
+   "why": "a third party updates the page",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K30",
+   "tier": "A",
+   "text": "לעדכון כתובת, כתבו לנו.",
+   "why": "to us",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K31",
+   "tier": "A",
+   "text": "אנחנו לא שולחים ולא נשלח מיילים שיווקיים.",
+   "why": "negation twice",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K32",
+   "tier": "A",
+   "text": "מיילים שיווקיים לא נשלחים מהאתר.",
+   "why": "negation, passive",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K33",
+   "tier": "A",
+   "text": "אין מיילים, אין SMS ואין הודעות.",
+   "why": "negation per clause",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K34",
+   "tier": "B",
+   "text": "דיוור שיווקי: האתר לא שולח דיוור.",
+   "why": "a heading \"X: Y\", then a negation",
+   "kind": "honest",
+   "flagged": true,
+   "rules": [
+    "channel:דיוור"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "K35",
+   "tier": "B",
+   "text": "ניוזלטר: אין.",
+   "why": "a heading \"X: Y\", a negation",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K36",
+   "tier": "B",
+   "text": "מדיניות הדיוור: האתר אינו שולח מיילים שיווקיים.",
+   "why": "a heading \"X: Y\", then a negation",
+   "kind": "honest",
+   "flagged": true,
+   "rules": [
+    "channel:הדיוור"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "K37",
+   "tier": "B",
+   "text": "We do not have a newsletter.",
+   "why": "English negation",
+   "kind": "honest",
+   "flagged": true,
+   "rules": [
+    "latin:newsletter"
+   ],
+   "in_fixture": false
+  },
+  {
+   "id": "K38",
+   "tier": "B",
+   "text": "No SMS, no emails: the order page shows everything.",
+   "why": "English negation",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K39",
+   "tier": "B",
+   "text": "הודעה על ביטול תישלח לספק מיד.",
+   "why": "to the supplier",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  },
+  {
+   "id": "K40",
+   "tier": "B",
+   "text": "האתר לא יעדכן אתכם במייל, וגם לא ב-SMS.",
+   "why": "negation, two words before the verb",
+   "kind": "honest",
+   "flagged": false,
+   "rules": [],
+   "in_fixture": false
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+G1   exit 0 contact UNDECIDED
+G3   exit 1 
+G5   exit 0 contact shop@example.com
+G11  exit 1 CONTACT_EMAIL="undecided" is not an email address
+G14  exit 0 contact shop@hd-test.co.il
+G20  exit 1 CONTACT_PHONE without CONTACT_EMAIL: the contact block needs the email
+G21  exit 1 CONTACT_PHONE="12345" is not an Israeli phone number (03-1234
+G22  exit 1 CONTACT_EMAIL="mailto:info@hd-qa.co.il" is not an email address

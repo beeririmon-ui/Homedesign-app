@@ -1,0 +1,1504 @@
+{
+ "report": "QA site track S20 (2026-11-12)",
+ "agent": "qa-agent",
+ "commit": "8828cab9",
+ "brief": "briefs/site-s20-qa-fixes-2026-11-12.md",
+ "evidence_of_frontend_dev": "qa/reports/2026-11-07-site-track/s20/",
+ "previous": "qa/reports/2026-11-12-site-track-qa-s18.md",
+ "tools_data_screens": "qa/reports/2026-11-12-site-track-qa-s20/{tools,data,screens}/",
+ "setup": {
+  "copies": "isolated, session scratchpad: build-s20 (flag), build-s20-pub (public, the repo config), build-s20-pubc (public, a test contact config via HD_WRANGLER), build-s20-email (a test provider that declares only order_confirmation; also qa-bis, qa-mkt for controls)",
+  "data_dir": "hard-linked from the S19 QA copy; data/ unchanged f33cfe42..8828cab9; tar -d: 0 content differences, 17,818 files (data/data-dir-check.txt)",
+  "node_modules": "hard-linked from the S19 QA copy (lockfile unchanged)",
+  "network": "none: npm offline, every npx --no-install, supplier images --offline, proxies pointed at a closed local port",
+  "secrets": "webhook secret a dummy on the wrangler command line only (--var PAYMENT_WEBHOOK_SECRET:qa-dummy-not-a-key-20); api/.dev.vars holds only a dummy ADMIN_DEV_TOKEN; analytics token a dummy 32-hex",
+  "servers": {
+   "flag": 8820,
+   "public_contact": 8821,
+   "email_oc": 8822,
+   "worker_error_no_contact": 8823,
+   "worker_error_contact": 8824
+  },
+  "frontend_dev_scripts": "Q0-Q35 and SM1-SM6 ran with qa/reports/2026-11-07-site-track/s20/tools/mut-qa.sh and srcmut.sh as committed at 8828cab9 (diff empty), copied to the scratchpad so their output went to my data dir",
+  "live_tree": "moved during the round (HEAD 8828cab9 -> 8587d3a6, S21 WIP, R8 assets); the copy read none of it (assets/manifest.json pinned; phase2 renders not read by the build)"
+ },
+ "bottom_line": "S20 passes. t56, t57, t61 and t62 close; t58-t60 close on everything they were built for (Q0-Q35 36/36, SM1-SM6 6/6, 48/26). New, low or low-medium, for later gates: t67-t71.",
+ "verdicts": {
+  "t57": "pass",
+  "t61": "pass",
+  "t56": "pass",
+  "t58_t60": "pass (new gaps t67, t71)",
+  "t62": "pass (guard gaps t68)",
+  "regression": "pass"
+ },
+ "t57": {
+  "flag": {
+   "label": "flag",
+   "ok": 16,
+   "of": 16,
+   "rows": [
+    {
+     "id": "W1",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W2",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W3",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W4",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W5",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W6",
+     "ok": true,
+     "detail": "404 {\"error\":\"not_found\"}"
+    },
+    {
+     "id": "W7",
+     "ok": true,
+     "detail": {
+      "409": 40
+     }
+    },
+    {
+     "id": "W8",
+     "ok": true,
+     "detail": "404"
+    },
+    {
+     "id": "W9",
+     "ok": true,
+     "detail": {
+      "before": 0,
+      "after": 0,
+      "table": {
+       "n": 0,
+       "e": 0
+      }
+     }
+    },
+    {
+     "id": "C1",
+     "ok": true,
+     "detail": "201 order 1510421459"
+    },
+    {
+     "id": "C2",
+     "ok": true,
+     "detail": {
+      "c": 0,
+      "at": null,
+      "s": "pending_payment"
+     }
+    },
+    {
+     "id": "C3",
+     "ok": true,
+     "detail": {
+      "pay": 303,
+      "status": "paid",
+      "row": {
+       "c": 0,
+       "at": null,
+       "s": "paid"
+      }
+     }
+    },
+    {
+     "id": "C4",
+     "ok": true,
+     "detail": "201"
+    },
+    {
+     "id": "C5",
+     "ok": true,
+     "detail": "422 {\"error\":\"invalid_body\",\"message_he\":\"חלק מהפרטים חסרים או לא תקינים.\"}"
+    },
+    {
+     "id": "C6",
+     "ok": true,
+     "detail": "422"
+    },
+    {
+     "id": "C7",
+     "ok": true,
+     "detail": {
+      "n": 2,
+      "yes": 0,
+      "at": 0
+     }
+    }
+   ]
+  },
+  "public_contact": {
+   "label": "public-contact",
+   "ok": 16,
+   "of": 16,
+   "rows": [
+    {
+     "id": "W1",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W2",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W3",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W4",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W5",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W6",
+     "ok": true,
+     "detail": "404 {\"error\":\"not_found\"}"
+    },
+    {
+     "id": "W7",
+     "ok": true,
+     "detail": {
+      "409": 40
+     }
+    },
+    {
+     "id": "W8",
+     "ok": true,
+     "detail": "404"
+    },
+    {
+     "id": "W9",
+     "ok": true,
+     "detail": {
+      "before": 0,
+      "after": 0,
+      "table": {
+       "n": 0,
+       "e": 0
+      }
+     }
+    },
+    {
+     "id": "C1",
+     "ok": true,
+     "detail": "201 order 1622902370"
+    },
+    {
+     "id": "C2",
+     "ok": true,
+     "detail": {
+      "c": 0,
+      "at": null,
+      "s": "pending_payment"
+     }
+    },
+    {
+     "id": "C3",
+     "ok": true,
+     "detail": {
+      "pay": 303,
+      "status": "paid",
+      "row": {
+       "c": 0,
+       "at": null,
+       "s": "paid"
+      }
+     }
+    },
+    {
+     "id": "C4",
+     "ok": true,
+     "detail": "201"
+    },
+    {
+     "id": "C5",
+     "ok": true,
+     "detail": "422 {\"error\":\"invalid_body\",\"message_he\":\"חלק מהפרטים חסרים או לא תקינים.\"}"
+    },
+    {
+     "id": "C6",
+     "ok": true,
+     "detail": "422"
+    },
+    {
+     "id": "C7",
+     "ok": true,
+     "detail": {
+      "n": 2,
+      "yes": 0,
+      "at": 0
+     }
+    }
+   ]
+  },
+  "email_order_confirmation_only": {
+   "label": "email-oc",
+   "ok": 16,
+   "of": 16,
+   "rows": [
+    {
+     "id": "W1",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W2",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W3",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W4",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W5",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W6",
+     "ok": true,
+     "detail": "404 {\"error\":\"not_found\"}"
+    },
+    {
+     "id": "W7",
+     "ok": true,
+     "detail": {
+      "409": 40
+     }
+    },
+    {
+     "id": "W8",
+     "ok": true,
+     "detail": "404"
+    },
+    {
+     "id": "W9",
+     "ok": true,
+     "detail": {
+      "before": 0,
+      "after": 0,
+      "table": {
+       "n": 0,
+       "e": 0
+      }
+     }
+    },
+    {
+     "id": "C1",
+     "ok": true,
+     "detail": "201 order 8806040964"
+    },
+    {
+     "id": "C2",
+     "ok": true,
+     "detail": {
+      "c": 0,
+      "at": null,
+      "s": "pending_payment"
+     }
+    },
+    {
+     "id": "C3",
+     "ok": true,
+     "detail": {
+      "pay": 303,
+      "status": "paid",
+      "row": {
+       "c": 0,
+       "at": null,
+       "s": "paid"
+      }
+     }
+    },
+    {
+     "id": "C4",
+     "ok": true,
+     "detail": "201"
+    },
+    {
+     "id": "C5",
+     "ok": true,
+     "detail": "422 {\"error\":\"invalid_body\",\"message_he\":\"חלק מהפרטים חסרים או לא תקינים.\"}"
+    },
+    {
+     "id": "C6",
+     "ok": true,
+     "detail": "422"
+    },
+    {
+     "id": "C7",
+     "ok": true,
+     "detail": {
+      "n": 2,
+      "yes": 0,
+      "at": 0
+     }
+    }
+   ]
+  },
+  "control_back_in_stock": {
+   "label": "control-qa-bis",
+   "ok": 13,
+   "of": 16,
+   "rows": [
+    {
+     "id": "W1",
+     "ok": true,
+     "detail": "201 {\"ok\":true}"
+    },
+    {
+     "id": "W2",
+     "ok": true,
+     "detail": "201 {\"ok\":true}"
+    },
+    {
+     "id": "W3",
+     "ok": false,
+     "detail": "400 {\"error\":\"invalid_json\"}"
+    },
+    {
+     "id": "W4",
+     "ok": false,
+     "detail": "400 {\"error\":\"expected_json\"}"
+    },
+    {
+     "id": "W5",
+     "ok": false,
+     "detail": "400 {\"error\":\"expected_json\"}"
+    },
+    {
+     "id": "W6",
+     "ok": true,
+     "detail": "404 {\"error\":\"not_found\"}"
+    },
+    {
+     "id": "W7",
+     "ok": true,
+     "detail": {
+      "201": 40
+     }
+    },
+    {
+     "id": "W8",
+     "ok": true,
+     "detail": "404"
+    },
+    {
+     "id": "W9",
+     "ok": true,
+     "detail": {
+      "before": 0,
+      "after": 42,
+      "table": {
+       "n": 42,
+       "e": 2
+      }
+     }
+    },
+    {
+     "id": "C1",
+     "ok": true,
+     "detail": "201 order 9761483310"
+    },
+    {
+     "id": "C2",
+     "ok": true,
+     "detail": {
+      "c": 0,
+      "at": null,
+      "s": "pending_payment"
+     }
+    },
+    {
+     "id": "C3",
+     "ok": true,
+     "detail": {
+      "pay": 303,
+      "status": "paid",
+      "row": {
+       "c": 0,
+       "at": null,
+       "s": "paid"
+      }
+     }
+    },
+    {
+     "id": "C4",
+     "ok": true,
+     "detail": "201"
+    },
+    {
+     "id": "C5",
+     "ok": true,
+     "detail": "422 {\"error\":\"invalid_body\",\"message_he\":\"חלק מהפרטים חסרים או לא תקינים.\"}"
+    },
+    {
+     "id": "C6",
+     "ok": true,
+     "detail": "422"
+    },
+    {
+     "id": "C7",
+     "ok": true,
+     "detail": {
+      "n": 6,
+      "yes": 0,
+      "at": 0
+     }
+    }
+   ]
+  },
+  "control_marketing": {
+   "label": "control-qa-mkt",
+   "ok": 16,
+   "of": 16,
+   "rows": [
+    {
+     "id": "W1",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W2",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W3",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W4",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W5",
+     "ok": true,
+     "detail": "409 {\"error\":\"waitlist_closed\",\"message_he\":\"אין כרגע רשימת המתנה למוצר.\"}"
+    },
+    {
+     "id": "W6",
+     "ok": true,
+     "detail": "404 {\"error\":\"not_found\"}"
+    },
+    {
+     "id": "W7",
+     "ok": true,
+     "detail": {
+      "409": 40
+     }
+    },
+    {
+     "id": "W8",
+     "ok": true,
+     "detail": "404"
+    },
+    {
+     "id": "W9",
+     "ok": true,
+     "detail": {
+      "before": 42,
+      "after": 42,
+      "table": {
+       "n": 42,
+       "e": 2
+      }
+     }
+    },
+    {
+     "id": "C1",
+     "ok": true,
+     "detail": "201 order 6706309131"
+    },
+    {
+     "id": "C2",
+     "ok": true,
+     "detail": {
+      "c": 1,
+      "at": "2026-11-12T12:21:45.523Z",
+      "s": "pending_payment"
+     }
+    },
+    {
+     "id": "C3",
+     "ok": true,
+     "detail": {
+      "pay": 303,
+      "status": "paid",
+      "row": {
+       "c": 1,
+       "at": "2026-11-12T12:21:45.523Z",
+       "s": "paid"
+      }
+     }
+    },
+    {
+     "id": "C4",
+     "ok": true,
+     "detail": "201"
+    },
+    {
+     "id": "C5",
+     "ok": true,
+     "detail": "422 {\"error\":\"invalid_body\",\"message_he\":\"חלק מהפרטים חסרים או לא תקינים.\"}"
+    },
+    {
+     "id": "C6",
+     "ok": true,
+     "detail": "422"
+    },
+    {
+     "id": "C7",
+     "ok": true,
+     "detail": {
+      "n": 8,
+      "yes": 1,
+      "at": 1
+     }
+    }
+   ]
+  },
+  "control_note": "with back_in_stock real the list stores (201, 42 rows); W3-W5 then answer 400 for a malformed body, as designed. With marketing real the consent is stored with its time. The 409 and the 0 depend on the capability"
+ },
+ "t61": {
+  "public_build_repo_config": "HD_PUBLIC=1 npm run build stops at build-copy, exit 1 (public-no-contact.log)",
+  "contact_gate": {
+   "rows": 46,
+   "as_wanted": 41,
+   "gaps": [
+    "G13 public shop@example.co.il",
+    "G14 public shop@hd-test.co.il",
+    "G15 public email@domain.com",
+    "G16 public info@yourdomain.co.il",
+    "G17 public test@test.co.il"
+   ]
+  },
+  "check_config": "refuses malformed values in every env; accepts UNDECIDED and any well-formed address, example.com included (check-config-contact.log)",
+  "render_no_contact": {
+   "pages": 52,
+   "problems": [],
+   "lines": {
+    "received": "אישור ההזמנה ומצבה מופיעים בדף הזה, כולל היציאה למשלוח. כדאי לשמור את הקישור. הוא נפתח רק בדפדפן הזה.",
+    "delivered": "ההזמנה נמסרה.",
+    "afterDelivered": null,
+    "noAccess": "אין גישה להזמנה הזו מהדפדפן הזה. דף ההזמנה נפתח רק בדפדפן שבו הזמנתם, וכל עוד נתוני האתר בו לא נמחקו.",
+    "noAccessNext": [],
+    "want": {
+     "delivered": "ההזמנה נמסרה.",
+     "no_access": "אין גישה להזמנה הזו מהדפדפן הזה. דף ההזמנה נפתח רק בדפדפן שבו הזמנתם, וכל עוד נתוני האתר בו לא נמחקו.",
+     "no_access_contact": null
+    }
+   }
+  },
+  "render_contact": {
+   "pages": 51,
+   "problems": [],
+   "lines": {
+    "received": "אישור ההזמנה ומצבה מופיעים בדף הזה, כולל היציאה למשלוח. כדאי לשמור את הקישור. הוא נפתח רק בדפדפן הזה.",
+    "delivered": "ההזמנה נמסרה. אם משהו לא כפי שציפיתם, כתבו לנו וציינו את מספר ההזמנה.",
+    "afterDelivered": "div.contact-block [data-contact]",
+    "noAccess": "אין גישה להזמנה הזו מהדפדפן הזה. דף ההזמנה נפתח רק בדפדפן שבו הזמנתם, וכל עוד נתוני האתר בו לא נמחקו.",
+    "noAccessNext": [
+     "אפשר לכתוב לנו עם מספר ההזמנה, ונבדוק אותה.",
+     "אימייל: info@hd-qa.co.il טלפון: 04-8123456",
+     "יצירת קשר אימייל: info@hd-qa.co.il טלפון: 04-8123456"
+    ],
+    "want": {
+     "delivered": "ההזמנה נמסרה. אם משהו לא כפי שציפיתם, כתבו לנו וציינו את מספר ההזמנה.",
+     "no_access": "אין גישה להזמנה הזו מהדפדפן הזה. דף ההזמנה נפתח רק בדפדפן שבו הזמנתם, וכל עוד נתוני האתר בו לא נמחקו.",
+     "no_access_contact": "אפשר לכתוב לנו עם מספר ההזמנה, ונבדוק אותה."
+    }
+   }
+  },
+  "worker_error": {
+   "no_contact": "משהו השתבש אצלנו. נסו שוב בעוד רגע. קוד השגיאה: E-….",
+   "contact": "…אם זה חוזר, כתבו לנו ל-info@hd-qa.co.il וציינו את הקוד E-…."
+  },
+  "runbook": "docs/ops/deploy-runbook.md: \"הדרישה החוקית. זה מחקר ולא ייעוץ משפטי.\", with \"לפי הבנתי\" and two \"לבדוק\" items"
+ },
+ "t56": {
+  "flag": {
+   "base": "http://127.0.0.1:8820",
+   "story_pages": 62,
+   "pages_with_sheets": 5,
+   "items": 58,
+   "sheets_opened": 164,
+   "items_reached": 109,
+   "by": {
+    "credit": 58,
+    "mark": 55,
+    "next": 51,
+    "mark: not clickable": 0
+   },
+   "unavailable_sheets": 9,
+   "unavailable_lines": [
+    "המלאי אינו זמין כעת."
+   ],
+   "page_findings": [],
+   "bad": []
+  },
+  "email_order_confirmation_only": {
+   "base": "http://127.0.0.1:8822",
+   "story_pages": 62,
+   "pages_with_sheets": 5,
+   "items": 58,
+   "sheets_opened": 164,
+   "items_reached": 109,
+   "by": {
+    "credit": 58,
+    "mark": 55,
+    "next": 51,
+    "mark: not clickable": 0
+   },
+   "unavailable_sheets": 9,
+   "unavailable_lines": [
+    "המלאי אינו זמין כעת."
+   ],
+   "page_findings": [],
+   "bad": []
+  },
+  "note": "58/58 items opened by a click on their credit, 55 by their mark, the sheet walked with הבא; 9 sheets of items on hold, each exactly \"המלאי אינו זמין כעת.\"; 0 findings in 62 story pages"
+ },
+ "t58_t60": {
+  "q0_q35": {
+   "as_wanted": 36,
+   "of": 36,
+   "rows": [
+    {
+     "id": "Q0",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "clean dist"
+    },
+    {
+     "id": "Q1",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "HTML: verb in a <span>, object outside (privacy page)"
+    },
+    {
+     "id": "Q2",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "HTML: verb in a <strong> (privacy page)"
+    },
+    {
+     "id": "Q3",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "HTML: object in a link, verb after it"
+    },
+    {
+     "id": "Q4",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "attribute aria-label (product on hold)"
+    },
+    {
+     "id": "Q5",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "attribute title"
+    },
+    {
+     "id": "Q6",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "attribute alt"
+    },
+    {
+     "id": "Q7",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "attribute value of a submit input (the button's text)"
+    },
+    {
+     "id": "Q8",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "attribute aria-label in single quotes"
+    },
+    {
+     "id": "Q9",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "attribute aria-roledescription"
+    },
+    {
+     "id": "Q10",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "JSON island type=application/json (story data, an item's detail_he that the sheet shows)"
+    },
+    {
+     "id": "Q11",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "JSON-LD description (product page)"
+    },
+    {
+     "id": "Q12",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "a JSON file in dist (fetched at run time)"
+    },
+    {
+     "id": "Q13",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "lazy chunk (Waitlist), a whole sentence"
+    },
+    {
+     "id": "Q14",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "lazy chunk (Order), JSX split across <b>: \"אישור <b>יישלח</b> לאימייל\""
+    },
+    {
+     "id": "Q15",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "lazy chunk (Order), template literal: object and verb split by ${n}"
+    },
+    {
+     "id": "Q16",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "lazy chunk (Order), \"a\"+\"b\" concatenation"
+    },
+    {
+     "id": "Q17",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "a script outside assets/ that a page loads (/notice.js)"
+    },
+    {
+     "id": "Q18",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "the promise's chunk named by an absolute URL (a CDN base): skipped, listed, not scanned"
+    },
+    {
+     "id": "Q19",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "CSS content: text drawn by a stylesheet"
+    },
+    {
+     "id": "Q20",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "English with a typographic apostrophe (We’ll email you)"
+    },
+    {
+     "id": "Q21",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "indirect: \"את האישור תמצאו בתיבת הדואר שלכם\""
+    },
+    {
+     "id": "Q22",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "indirect: a feature line, \"עדכוני משלוח ב-SMS ובוואטסאפ\""
+    },
+    {
+     "id": "Q23",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "<title>"
+    },
+    {
+     "id": "Q24",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "<noscript>"
+    },
+    {
+     "id": "Q25",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "Worker: a customer message (lib/cancel.ts)"
+    },
+    {
+     "id": "Q26",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "Worker: a .json of messages in api/src"
+    },
+    {
+     "id": "Q27",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "shared/src: ORDER_STATUS_HE.paid (served by the Worker as status_he; in no web chunk)"
+    },
+    {
+     "id": "Q28",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "copy file, no_email: \"כולל מע\\\"מ. תקבלו חשבונית מס.\""
+    },
+    {
+     "id": "Q29",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "copy file, no_email: \"…המייל עם האישור כבר בדרך.\""
+    },
+    {
+     "id": "Q30",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "copy file, a text line (both modes) that promises"
+    },
+    {
+     "id": "Q31",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: the customer writes to us (\"הודעת ביטול שנשלחת אלינו באימייל…\")"
+    },
+    {
+     "id": "Q32",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: legal boilerplate (\"נעדכן את המדיניות מעת לעת…\")"
+    },
+    {
+     "id": "Q33",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: the customer updates us (\"עדכנו אותנו\")"
+    },
+    {
+     "id": "Q34",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: the page will show the link (\"קישור למעקב יופיע כאן כשהספק ישלח את החבילה\")"
+    },
+    {
+     "id": "Q35",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: we accept inquiries (\"אנחנו מקבלים פניות במייל ובטלפון\")"
+    }
+   ]
+  },
+  "sm1_sm6": [
+   "סמ1: assets/Order-CL_zwu74.js send; assets/Order-CL_zwu74.js channel",
+   "סמ2: assets/Order-CL_zwu74.js send",
+   "סמ3: assets/Checkout-DBx2hKrJ.js send",
+   "סמ4: shared/src/constants.ts send",
+   "סמ5: privacy/index.html send; assets/Legal-Dy2Uekge.js send",
+   "סמ6: privacy/index.html channel; assets/Legal-Dy2Uekge.js channel"
+  ],
+  "phrase_probe_s18_lists": {
+   "promises": 48,
+   "caught": 48,
+   "missed_tier_a": [],
+   "missed_tier_b": [],
+   "honest": 26,
+   "false_positives": []
+  },
+  "phrase_probe_fresh": {
+   "promises": 40,
+   "caught": 25,
+   "missed_tier_a": [
+    "N15",
+    "N16",
+    "N17",
+    "N24"
+   ],
+   "missed_tier_b": [
+    "N25",
+    "N26",
+    "N27",
+    "N28",
+    "N29",
+    "N30",
+    "N31",
+    "N32",
+    "N37",
+    "N38",
+    "N40"
+   ],
+   "honest": 40,
+   "false_positives": [
+    "K34",
+    "K36",
+    "K37"
+   ],
+   "in_fixture": 0
+  },
+  "new_mutations": {
+   "as_wanted": 18,
+   "of": 23,
+   "rows": [
+    {
+     "id": "X0",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "clean dist"
+    },
+    {
+     "id": "X1",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "an SVG file in dist (favicon.svg): <title>"
+    },
+    {
+     "id": "X2",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "an inline SVG in a page: <title>"
+    },
+    {
+     "id": "X3",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "an inline SVG in a page: <desc>"
+    },
+    {
+     "id": "X4",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "<noscript> in the <head> of the order shell (a client-only page), numeric entities (\"אישור יישלח לאימייל שלכם.\")"
+    },
+    {
+     "id": "X5",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "<noscript> in 404, split across <b>"
+    },
+    {
+     "id": "X6",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "meta description (home)"
+    },
+    {
+     "id": "X7",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "og:description (home)"
+    },
+    {
+     "id": "X8",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "og:title (home)"
+    },
+    {
+     "id": "X9",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "twitter:description with &quot; entities (home)"
+    },
+    {
+     "id": "X10",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "a second og:description, single quotes"
+    },
+    {
+     "id": "X11",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "a WebP with XMP (dc:description) in dist, shown by a page: binary, never read by a customer (want 0: info only)"
+    },
+    {
+     "id": "X12",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "manifest.json in dist, linked from home: description"
+    },
+    {
+     "id": "X13",
+     "want": 1,
+     "got": 0,
+     "ok": false,
+     "what": "site.webmanifest, not linked: short_name \"עדכונים ב-SMS\" (two words: the definition's label exemption)"
+    },
+    {
+     "id": "X13b",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "site.webmanifest, not linked: short_name \"נעדכן אתכם במייל\" (the file is scanned)"
+    },
+    {
+     "id": "X14",
+     "want": 1,
+     "got": 1,
+     "ok": true,
+     "what": "manifest.webmanifest: a shortcut's name"
+    },
+    {
+     "id": "X15",
+     "want": 1,
+     "got": 0,
+     "ok": false,
+     "what": "lazy chunk (Order): [\"אישור ההזמנה\",\"יישלח\",\"במייל\"].join(\" \")"
+    },
+    {
+     "id": "X16",
+     "want": 1,
+     "got": 0,
+     "ok": false,
+     "what": "lazy chunk (Order): \"האישור \".concat(\"יגיע \",\"לתיבת הדואר\")"
+    },
+    {
+     "id": "X17",
+     "want": 1,
+     "got": 0,
+     "ok": false,
+     "what": "two checkbox labels, two words each: \"חשבונית במייל\", \"עדכונים ב-SMS\""
+    },
+    {
+     "id": "Y1",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: the S20 contact wording (returns, no_access_contact)"
+    },
+    {
+     "id": "Y2",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: the S20 accessibility wording and the contact block (\"אימייל: info@…\")"
+    },
+    {
+     "id": "Y3",
+     "want": 0,
+     "got": 1,
+     "ok": false,
+     "what": "honest: a heading \"X: Y\" then a negation (\"דיוור שיווקי: האתר לא שולח דיוור.\")"
+    },
+    {
+     "id": "Y4",
+     "want": 0,
+     "got": 0,
+     "ok": true,
+     "what": "honest: the customer writes to us (\"שלחו לנו מייל\")"
+    }
+   ]
+  },
+  "render_scan": {
+   "flag": {
+    "base": "http://127.0.0.1:8820",
+    "pages": 49,
+    "sitemap_pages": 46,
+    "non_200": [
+     "/no-such-page/ 404"
+    ],
+    "gate_findings": [],
+    "net_unique_sentences": 15,
+    "leftovers": [
+     "empty live region <div class=\"live-region\" aria-live=polite> (may be intended)"
+    ],
+    "nodes": [
+     "<div class=\"waitlist\"><p class=\"waitlist-status\">המלאי אינו זמין כעת</p></div>"
+    ]
+   },
+   "public_contact": {
+    "base": "http://127.0.0.1:8821",
+    "pages": 48,
+    "sitemap_pages": 45,
+    "non_200": [
+     "/no-such-page/ 404"
+    ],
+    "gate_findings": [],
+    "net_unique_sentences": 39,
+    "leftovers": [
+     "empty live region <div class=\"live-region\" aria-live=polite> (may be intended)"
+    ],
+    "nodes": [
+     "<div class=\"waitlist\"><p class=\"waitlist-status\">המלאי אינו זמין כעת</p></div>"
+    ]
+   }
+  },
+  "check_promises": {
+   "flag": 0,
+   "public_contact": 0,
+   "email_oc": {
+    "findings": 0,
+    "allowed": 3
+   }
+  }
+ },
+ "t62": {
+  "matrix": {
+   "states": 128,
+   "problems": 0,
+   "alone": {
+    "order_confirmation": [
+     "order.no_access",
+     "privacy.processors"
+    ],
+    "shipping_update": [
+     "privacy.processors"
+    ],
+    "delay_notice": [
+     "order.delay.followup",
+     "privacy.processors"
+    ],
+    "invoice_email": [
+     "checkout.total_note",
+     "privacy.processors"
+    ],
+    "back_in_stock": [
+     "waitlist.offer",
+     "waitlist.why",
+     "waitlist.submit",
+     "waitlist.done",
+     "story.unavailable_note",
+     "privacy.processors"
+    ],
+    "marketing": [
+     "checkout.marketing_consent",
+     "privacy.processors",
+     "privacy.marketing"
+    ]
+   }
+  },
+  "needs_guard_mutations": [
+   {
+    "id": "N1",
+    "want": "stop",
+    "got": "stop",
+    "what": "order.no_access.email adds an invoice (needs: order_confirmation)",
+    "extra": ""
+   },
+   {
+    "id": "N2",
+    "want": "stop",
+    "got": "pass",
+    "what": "order.no_access.email adds a delay notice in words outside IMPLIES (\"אם המסירה תתאחר\")",
+    "extra": ""
+   },
+   {
+    "id": "N3",
+    "want": "stop",
+    "got": "stop",
+    "what": "order.no_access.email adds a tracking number (\"מספר המעקב יישלח במייל\")",
+    "extra": ""
+   },
+   {
+    "id": "N4",
+    "want": "stop",
+    "got": "pass",
+    "what": "checkout.email_hint.email adds a receipt (\"קבלה\") with needs order_confirmation only",
+    "extra": ""
+   },
+   {
+    "id": "N5",
+    "want": "stop",
+    "got": "pass",
+    "what": "order.no_access.email adds back in stock in words outside IMPLIES (\"כשיהיה שוב במלאי\")",
+    "extra": ""
+   },
+   {
+    "id": "N6",
+    "want": "stop",
+    "got": "pass",
+    "what": "order.no_access.email adds marketing in words outside IMPLIES (\"הטבות והנחות\")",
+    "extra": ""
+   },
+   {
+    "id": "N7",
+    "want": "stop",
+    "got": "pass",
+    "what": "checkout.total_note.needs = \"any\": the invoice line is shown with a provider that sends only the confirmation",
+    "extra": " | with order_confirmation only: checkout.total_note=\"כולל מע\\\"מ. חשבונית מס נשלחת במייל אחרי התשלום.\"; the gate allows it: true"
+   },
+   {
+    "id": "N8",
+    "want": "stop",
+    "got": "stop",
+    "what": "group waitlist split by two needs: offer needs back_in_stock+marketing, submit needs back_in_stock+order_confirmation",
+    "extra": ""
+   },
+   {
+    "id": "N8b",
+    "want": "stop",
+    "got": "pass",
+    "what": "group waitlist split only by pairs: offer and why need back_in_stock+marketing, submit, done and the story line need back_in_stock+order_confirmation",
+    "extra": " | with back_in_stock+marketing: offer=\"עדכנו אותי כשחוזר\", submit=null"
+   },
+   {
+    "id": "N9",
+    "want": "pass",
+    "got": "pass",
+    "what": "control: the copy file as it is",
+    "extra": ""
+   }
+  ],
+  "order_confirmation_only_rendered": {
+   "capabilities": [
+    "order_confirmation"
+   ],
+   "allowed": [
+    "את פרטי ההזמנה שלחנו לאימייל שלכם",
+    "הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים"
+   ],
+   "O1": {
+    "email_hint": "לפנייה בנושא ההזמנה, אם יהיה צורך.",
+    "checkboxes": 1,
+    "total_note": "כולל מע\"מ."
+   },
+   "O2": {
+    "received": "אישור ההזמנה ומצבה מופיעים בדף הזה, כולל היציאה למשלוח. כדאי לשמור את הקישור. הוא נפתח רק בדפדפן הזה.",
+    "shipped": "ההזמנה בדרך אליכם. מספר המשלוח למעלה.",
+    "noAccess": "אין לנו גישה להזמנה הזו מהדפדפן הזה. את פרטי ההזמנה שלחנו לאימייל שלכם.",
+    "delay": "ההכנה נמשכת יותר מהרגיל. אנחנו כבר מטפלים בזה, ואין צורך לעשות דבר."
+   },
+   "O3": {
+    "product": "framed-art-morandi-triptych-sage-mjyac",
+    "forms": 0,
+    "buttons": 0,
+    "status": "המלאי אינו זמין כעת"
+   },
+   "O4": {
+    "processors_email": true,
+    "marketing_no_email": true
+   },
+   "promises_seen": {
+    "את פרטי ההזמנה שלחנו לאימייל שלכם": 1,
+    "הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים": 1
+   },
+   "problems": []
+  }
+ },
+ "regression": {
+  "prepare_typecheck_lint_format": "pass",
+  "vitest_before_build": "431 + 1 skipped (needs dist)",
+  "vitest_after_build": "432/432",
+  "check_config": "pass",
+  "build_flag": "pass, first load 712.0 KB, room JS 54.6 KB, check:promises 0 in 112 pages",
+  "build_public_contact": "pass, first load 700.2 KB, room JS 50.8 KB, check:rights 0, check:promises 0 in 49 pages",
+  "e2e": "134 passed, 1 skipped by design, 1 failed + 3 not run (SQLITE_BUSY while my own checks wrote to the same D1); s18+s20 alone 12/12 -> 138 + 1 skipped",
+  "a11y": "16/16",
+  "public_e2e": "public-scan 5/5, s18 7/7 on the public contact build",
+  "order_page_ms": {
+   "flag_no_contact": {
+    "label": "flag-no-contact",
+    "order": "8786919550",
+    "w1280": {
+     "median": 149,
+     "max": 265,
+     "all": [
+      121,
+      121,
+      140,
+      149,
+      170,
+      198,
+      265
+     ]
+    },
+    "w400": {
+     "median": 90,
+     "max": 115,
+     "all": [
+      65,
+      73,
+      77,
+      90,
+      91,
+      92,
+      115
+     ]
+    }
+   },
+   "public_contact": {
+    "label": "public-contact",
+    "order": "2627502049",
+    "w1280": {
+     "median": 99,
+     "max": 186,
+     "all": [
+      81,
+      85,
+      87,
+      99,
+      107,
+      132,
+      186
+     ]
+    },
+    "w400": {
+     "median": 129,
+     "max": 179,
+     "all": [
+      90,
+      93,
+      120,
+      129,
+      130,
+      134,
+      179
+     ]
+    }
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "ת67",
+   "severity": "נמוך-בינוני; לפני שהמעצב עורך את קובץ הנוסחים",
+   "what": "the definition generalises partly: a fresh list (none in the fixture) 25/40, tier A 20/24 (N15 יישלח מספר מעקב, N16 תקבלו את מספר המעקב, N17 נשמור אתכם מעודכנים, N24 תשלח); two-word labels pass (חשבונית במייל, עדכונים ב-SMS, אישור במייל, התראות בוואטסאפ: X13, X17); false positives: a heading X: Y before a negation (K34, K36, Y3) and English negation (K37)",
+   "fix": "two-word exemption only when the other word is a field word; a tracking number as an object of send/receive; the מעודכנים idiom; תשלח with a message subject; a heading before a negation is a label; negation in the Latin rules; keep the fresh list as a held-out check",
+   "owner": "frontend-dev"
+  },
+  {
+   "id": "ת68",
+   "severity": "נמוך; עם EMAIL1",
+   "what": "the needs guard: IMPLIES misses תתאחר, קבלה, שוב במלאי, הטבות והנחות (N2, N4, N5, N6); needs \"any\" skips the guard and the gate allows the line with any provider (N7: the invoice line shown with order_confirmation only); a group split only by pairs of needs passes (N8b: the waitlist button without its submit under back_in_stock+marketing)",
+   "fix": "\"any\" only for a line whose promises imply nothing; widen IMPLIES; check groups and lines over all 64 sets",
+   "owner": "frontend-dev"
+  },
+  {
+   "id": "ת69",
+   "severity": "נמוך; לפני HD_PUBLIC=1",
+   "what": "the public build accepts placeholder addresses outside RFC 2606: shop@example.co.il, frontend-dev's own S20 test address shop@hd-test.co.il with 03-1234567 (the example in the error message), email@domain.com, info@yourdomain.co.il, test@test.co.il; behind the flag an example.com address gets no warning",
+   "fix": "a deny list of the team's own test values and common placeholders, an owner confirmation for the public build (CONTACT1), a warning behind the flag",
+   "owner": "frontend-dev; the owner (CONTACT1)"
+  },
+  {
+   "id": "ת70",
+   "severity": "נמוך; עם EMAIL1, לפני שהסיפור ציבורי",
+   "what": "the story sheet links to the story detail page (/story/.../p/<id>/), which never has the waiting-list form (make-story.ts writes none); when back_in_stock is real, story.unavailable_note returns and promises a form that is not on the page it links to",
+   "fix": "the form on the story detail page with the same group, or the note links to /p/<id>/; an e2e with a back_in_stock test provider that follows the link",
+   "owner": "frontend-dev; master-designer (wording)"
+  },
+  {
+   "id": "ת71",
+   "severity": "נמוך",
+   "what": "scanner: an array .join(\" \") and String.concat are not read joined (X15, X16); a WebP's XMP is not read (X11: binary, not read by a customer)",
+   "fix": "rendered() reads .join(<literal>) and .concat(); the gate header lists binary metadata as not covered",
+   "owner": "frontend-dev"
+  }
+ ],
+ "notes": [
+  {
+   "id": "ה21",
+   "text": "e2e: s18 delayed-order failed once on SQLITE_BUSY while my own checks wrote to the same D1; alone 12/12. My load, not S20"
+  },
+  {
+   "id": "ה22",
+   "text": "vitest 431 + 1 skipped before the build, 432/432 after (as ה14)"
+  },
+  {
+   "id": "ה23",
+   "text": "with contact, short pages show the block twice (content and footer); on אין גישה at 400 the contact line sits tight under the error box. For master-designer"
+  },
+  {
+   "id": "ה24",
+   "text": "with order_confirmation only, the checkout hint and the received line stay silent about the confirmation email (their needs include invoice and shipping): honest, under-informing. Wording for EMAIL1"
+  },
+  {
+   "id": "ה25",
+   "text": "check-config accepts an example address; only the public build-copy refuses it"
+  },
+  {
+   "id": "ה26",
+   "text": "README questions: 1-3 agree; 4 the lawyer (4.1); 5 the table is right, with ה23; 6 agree (K37, N28, N31 are English and low)"
+  },
+  {
+   "id": "ה27",
+   "text": "preview:artifact and Lighthouse were not run this round"
+  },
+  {
+   "id": "ה28",
+   "text": "the live tree moved during the round (3 commits, S21 WIP, R8 assets); the copy read none of it"
+  }
+ ],
+ "readiness": {
+  "before_HD_PUBLIC_1": "t57, t61 closed; open: t69, CONTACT1 (owner), the lawyer (4.1), t63 (S19)",
+  "before_story_public": "t56 closed; t70 with EMAIL1",
+  "before_designer_edits_copy": "t67",
+  "with_EMAIL1": "t68, t70, ה24"
+ }
+}
