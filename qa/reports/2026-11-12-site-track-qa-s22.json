@@ -1,0 +1,352 @@
+{
+ "report": "QA S22, site track: fixes from QA S20 (t67-t71, h23, h25) and the manager's addendum (the cards)",
+ "date": "2026-11-12",
+ "agent": "qa-agent",
+ "commit": "9b6c6746",
+ "branch": "claude/agent-system-brand-launch-ax87dv",
+ "brief": "briefs/site-s22-qa-fixes-2026-11-12.md",
+ "evidence_of_frontend_dev": "qa/reports/2026-11-07-site-track/s22/",
+ "folder": "qa/reports/2026-11-12-site-track-qa-s22/{tools,data,screens}",
+ "how": {
+  "copies": "isolated, in the session scratchpad: a flag build in the CI order (8840), a public build (HD_PUBLIC=1) with a test contact made at run time (never in the repo; masked in the evidence) (8841), frontend-dev's scratch site with a back_in_stock test provider (8842, 8843). Nothing read from or written to the live site/.",
+  "data_dir": "hard-linked from the S21 copy, the 7 files changed 7b42ddc1..9b6c6746 replaced from git; git archive | tar -d: 0 content differences in 17,818 files (data/data-dir-check.txt)",
+  "secrets_and_network": "dummy webhook secret only as --var; dummy admin token in the copy's .dev.vars; no network (npm offline, npx --no-install)",
+  "disk": "QA's own old scratch copies (S19, S20, S21) removed; nothing else",
+  "rules_change_during_round": "EFF1 (2026-11-12, owner) landed in the live tree during this round: qa-agent writes its own md (EFF1.5), low findings go to status/backlog-low.md (EFF1.1), rounds scoped to what changed (EFF1.2). This round was briefed before EFF1 and kept its brief (a new fresh list and new mutations were asked for)."
+ },
+ "bottom_line": {
+  "verdict": "S22 passes on condition",
+  "closed": [
+   "t67 for the items it named (QA S20 list 39/40, 0 false positives; X mutations 23/23)",
+   "t69 for the classes the brief named (public stops, flag warns, check-config fails production)",
+   "t70 (real clicks: 6/6 sheets reach the form, 201; no provider: status alone)",
+   "t71 X15/X16 and the header note",
+   "h23",
+   "h25"
+  ],
+  "not_holding": [
+   "t78 the definition does not generalise: a new fresh list 12/50 caught, 20/48 false positives, 4 promises S20 caught are now missed",
+   "t83 (medium) a colour chosen before the product page hydrates is shown but the cart gets the room's option",
+   "t85 (medium) studio prices followed the card to the new default SKU; the rug's size ladder is inverted on its public page"
+  ],
+  "regression": "green: vitest 482/482 after the build (481+1 skipped before it), e2e 148 passed + 1 skipped on purpose (the 2 h23 tests of s22.spec cannot run in QA's harness: ה38), a11y 16/16, public-scan 5/5 and s18 7/7 on the public build, cart-flash 0 empty states in 76 documents, Q0-Q35 36/36, SM1-SM6 6/6, weights unchanged",
+  "hd_public_1": "not yet"
+ },
+ "assets": [
+  {
+   "asset": "t67 definition, the named misses and false positives",
+   "result": "pass",
+   "measure": "QA S20 fresh list 39/40 (only N29), 0/40 false positives; frontend-dev's list 32/40, 0 FP; mut-s20 23/23"
+  },
+  {
+   "asset": "t67 definition, generalisation (QA's NEW fresh list, 50 promises, 48 honest, none in any list)",
+   "result": "fail",
+   "finding": "t78",
+   "measure": "caught 12/50 (A 12/38, B 0/12; near variants of S20 lines 6/18, general 6/32); false positives 20/48 (variants 16/20, general 4/28); 13 FPs are new in S22; 4 promises S20 caught are missed now (PR14-PR17)"
+  },
+  {
+   "asset": "S18 mutations and lists",
+   "result": "pass",
+   "measure": "Q0-Q35 36/36, SM1-SM6 6/6 (real build), S18 lists 48/48 and 26/26"
+  },
+  {
+   "asset": "the site's honest lines, every build",
+   "result": "pass",
+   "measure": "flag 0 in 112 pages/23 scripts/9 text/44 Worker; public 0 in 49 pages/13 scripts/6 text/44 Worker; back_in_stock scratch build 0 findings, 10 allowed (the waiting list)"
+  },
+  {
+   "asset": "t68 needs check",
+   "result": "pass on condition",
+   "finding": "t79",
+   "measure": "STATES 128; S20 caps-matrix 0 problems; N1-N9 + N8b 10/10; QA's new mutations 10/21 as expected: 'any' on a promise outside IMPLIES passes (8), a needs list narrower than its promise passes (3); groups 5/5"
+  },
+  {
+   "asset": "t69/h25 dummy values in the build and check-config",
+   "result": "pass",
+   "measure": "S22's classes: 26/26 rows (public fail, flag warn); check-config production exit 1, top level warning exit 0; frontend-dev's contact-gate-s22 66/66; S20 tool 29/46 = the 17 changes the brief asked"
+  },
+  {
+   "asset": "t69 rule coverage",
+   "result": "pass on condition",
+   "finding": "t80",
+   "measure": "missed: israel.israeli@gmail.com, israel@israeli.co.il, your@email.com, info@mysite.co.il, office@mycompany.co.il, test.user@gmail.com, a Cyrillic-a homograph of example.com (passes even public), 050-000-0001; false stops: 03-555xxxx, 050-555xxxx, *2345"
+  },
+  {
+   "asset": "the dummy list does not ship",
+   "result": "pass",
+   "measure": "11 marker strings: 0 files in web/dist and api/dist, flag and public"
+  },
+  {
+   "asset": "the repo guard (every email/phone in site, briefs, docs/ops is a dummy)",
+   "result": "pass on condition",
+   "finding": "t81",
+   "measure": "planted 16 values in a scratch copy: 7 reported; missed mailto: addresses, +972 (3), 972- without plus, dotted, star and 1-800 numbers, [at], .webmanifest and .yml files"
+  },
+  {
+   "asset": "t70 the story sheet link",
+   "result": "pass",
+   "measure": "back_in_stock scratch site, real clicks: 4 unavailable items x (credit, mark) = 8 openings (2 marks do not exist by design), 6/6 links to /p/<id>/ -> form -> POST 201 -> 'נרשמתם…'; detail page 0 forms; no provider: 62 story pages, 164 sheets by credit/mark/next, 9 unavailable sheets exactly 'המלאי אינו זמין כעת.', 0 findings"
+  },
+  {
+   "asset": "t71 scanner joins and header",
+   "result": "pass on condition",
+   "finding": "t82",
+   "measure": "X15/X16 caught; chained concat, nested and template joins caught; misses: a const-bound array, .filter(Boolean).join, .map().join, Array.of, new Array, spread, reduce, String.prototype.concat.call (10/18 as expected); binary metadata limit written in check-promises.ts and promise-scan.ts headers"
+  },
+  {
+   "asset": "h23 layout",
+   "result": "pass (facts; taste to master-designer)",
+   "measure": "public build with contact: 102 page views (51 addresses x 1280/400): exactly 1 visible contact block, links >= 44 px, ltr; 24 px under 'אין גישה' at 1280 and 400, 8 px line to block; without contact: 104 page views, 0 blocks"
+  },
+  {
+   "asset": "addendum: floor-lamp cards in no catalog, pages and links unchanged",
+   "result": "pass",
+   "measure": "the ids in 0 of 189/188 text files of .generated, web/dist, api/dist (S21/S22); catalogs 39/51/57 and the house 8 unchanged in membership; 114 HTML pages, sitemap (46), _redirects, robots, _headers, story-redirects identical; 298 product links, 0 dangling; 43 named ids all built or hidden with a reason"
+  },
+  {
+   "asset": "addendum: the two guard tests",
+   "result": "pass on condition",
+   "finding": "t86",
+   "measure": "both pass; mutation: a story naming the rejected card builds it into the story catalog (floor-lamp-pleated-walnut-dxyh7); only vitest after prepare:data catches it, npm run build does not run vitest"
+  },
+  {
+   "asset": "addendum: option-price diff and the no-loss gates",
+   "result": "pass",
+   "measure": "QA's own diff = frontend-dev's, 66 per catalog, 0 mismatches; curtain 56/56 down 5.6-14.9%; rug 9 up 80-128%, 230x330 down 64%; no_loss --check 0, --check-derived 7,546/722/0, --check-site 39/443/60/0, 51/659/60/0, 57/538/80/0"
+  },
+  {
+   "asset": "addendum: the prices themselves",
+   "result": "fail",
+   "finding": "t85",
+   "measure": "curtain ₪229 on Linen 200x260 hooks (no-loss ₪219); rug ₪1,299 on 230x330 (break-even ₪3,605), 150x200 ₪4,909; the manager's ₪269 fix is not in 9b6c6746"
+  },
+  {
+   "asset": "regression: typecheck, lint, format:check, check:config, check:rights, check:promises, encoding, budget",
+   "result": "pass"
+  },
+  {
+   "asset": "vitest",
+   "result": "pass",
+   "measure": "481 + 1 skipped (s16, needs dist) in the CI order; 482/482 after the build"
+  },
+  {
+   "asset": "e2e",
+   "result": "pass",
+   "measure": "148 passed + 1 skipped on purpose; the two h23 tests of s22.spec could not run in QA's harness (h38); options.spec passed at load average 7-17"
+  },
+  {
+   "asset": "a11y",
+   "result": "pass",
+   "measure": "16/16"
+  },
+  {
+   "asset": "public-scan and s18 on the public build",
+   "result": "pass",
+   "measure": "5/5 and 7/7 (AN1 with the dummy token: beacon on 45/49 pages)"
+  },
+  {
+   "asset": "cart-flash (S21)",
+   "result": "pass",
+   "measure": "flash, direct, slowjs, warm, keyboard on phone and desktop: 38 documents flag + 38 public, 0 empty states"
+  },
+  {
+   "asset": "weights",
+   "result": "pass",
+   "measure": "flag: room JS 55.4/80 KB, first load 713.1/3072 KB, warm-modern house 1026.2 KB, story JS 9.0 KB; public: 51.6 KB, 701.2 KB"
+  },
+  {
+   "asset": "options.spec flake fix",
+   "result": "fail",
+   "finding": "t84",
+   "measure": "one press after the spec's wait: 11/12 and 18/20 hold (misses: focus on the next value, the room's value checked); a swallowed first key after mount: the spec's retry passes (2 presses), a single press fails"
+  },
+  {
+   "asset": "launch checklist rows 2.3 and 6.6",
+   "result": "pass on condition",
+   "measure": "accurate to S22's own numbers; 6.6 should add QA's new list (t78)"
+  }
+ ],
+ "findings": [
+  {
+   "id": "ת78",
+   "severity": "low-medium (EFF1: backlog; but the designer's copy edit waits for it or QA runs this list on the new copy)",
+   "owner": "frontend-dev",
+   "what": "The promise definition learned the lists it was tested on. QA's new fresh list: 12/50 promises (A 12/38), 20/48 false positives (13 new in S22). Regressions: a heading before a negation now hides a real offer ('ניוזלטר: בלי ספאם, רק השראה.', 'עדכוני משלוח ב-SMS: בלי הרשמה ובלי עלות.', 'התראות לוואטסאפ: אין צורך באפליקציה.'), and the English window hides 'No account needed and we'll email the receipt.' New false positives: a product shipped ('המנורה נשלחת אליכם מפורקת'), the tracking line of the order page ('מספר המעקב יופיע כאן ברגע שהחבילה תצא'), a paper invoice ('החשבונית יוצאת אליכם בתוך החבילה'), a refund ('הכסף אמור לחזור אליכם לכרטיס'), field labels ('אימייל (רשות)', 'אימייל שגוי', 'אימייל *'), 'אנחנו שונאים ספאם', 'התאמה מלאה לטלפון: כל פרטי ההזמנה בדף אחד'. Missed forms of the same kind: נתקשר, יחזור אליכם, יעדכן, תודיע, ייצרו קשר, נכתוב לכם, נעביר לכם, 'תשלח' before its subject, 'מגיע אליכם', 'לינק/מס' מעקב', 'הירשמו לקבלת הטבות', English with a channel and no verb.",
+   "fix": "the heading rule exempts only when the negation negates the heading's channel, and never when the heading itself offers (channel + what is sent); the English negation does not cross 'and'; 'to you' needs a message noun or a channel (product nouns are shipping); TRACKING with a sending/receiving verb only; a two-word label whose second token is punctuation, a parenthesis or an error word is a field; verbs by root and person (נ/י/ת + עדכן, הודיע, חזר, צר קשר, התקשר, כתב, העביר); keep QA's S22 list as a third external file"
+  },
+  {
+   "id": "ת79",
+   "severity": "low (EMAIL1)",
+   "owner": "frontend-dev",
+   "what": "'any' (and a needs list) still pass a promising line whose words fall outside IMPLIES: 8 'any' mutations (a shipping update in other words, a price alert, English 'on its way', inspiration, 'יהיה זמין', 'שינוי בתאריך', 'חשבון המס', 'כל העדכונים על ההזמנה') and 3 needs-list mutations pass copyIssues.",
+   "fix": "a promising sentence (processor names removed) that implies no capability is an issue: name what it needs or rewrite; widen IMPLIES by roots (שליח, זמין, תאריך, חשבון מס, השראה, קולקציה)"
+  },
+  {
+   "id": "ת80",
+   "severity": "low (before the owner enters CONTACT1)",
+   "owner": "frontend-dev",
+   "what": "The dummy rules miss Israeli placeholders and stop real Israeli numbers: israel.israeli@…, israel@israeli.co.il, your@email.com, mysite/mycompany, test.user@, 050-000-0001 pass; a homograph of example.com passes even the public build; 03-555xxxx, 050-555xxxx and *2345 are stopped (555 is a US convention). With no override (README Q1), an owner whose real number is in a 555 block cannot publish.",
+   "fix": "drop the 555 rule for Israeli numbers; add the Hebrew placeholders and my*/your*/test.* templates; refuse a mixed-script domain in contact validation; e2e rows for each"
+  },
+  {
+   "id": "ת81",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "The repo guard misses an address after 'mailto:' (its lookbehind excludes ':'), +972 (3) …, 972-3-…, 03.xxx.xxxx, star and 1-800 numbers, '[at]', and skips .webmanifest and .yml files (7/16 planted values reported).",
+   "fix": "strip mailto:/tel: before matching; widen PHONE (parentheses, 972 without +, dots, *NNNN, 1-700/1-800); add webmanifest, yml/yaml, toml, svg, xml, env examples to TEXT"
+  },
+  {
+   "id": "ת82",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "The scanner reads join/concat only on an array literal or a string receiver: a const-bound array, .filter(Boolean).join(' '), .map().join, Array.of, new Array, spread, reduce and String.prototype.concat.call are missed (10/18), and the gate header lists only binary metadata as a limit.",
+   "fix": "resolve a const-bound array literal and identity chains (filter(Boolean), map(x=>x)); write the remaining forms in the header as a known limit"
+  },
+  {
+   "id": "ת83",
+   "severity": "medium (the customer gets another colour; before HD_PUBLIC=1)",
+   "owner": "frontend-dev",
+   "what": "A choice made before the product page hydrates is shown but not used. options.spec's product, a real click on the next colour at DOMContentLoaded, 10 loads: 4/10 the swatch stays 'אפור' while the legend says 'לבן חם' and 'הוספה לסל' puts 'לבן חם' in the cart; 1/10 the click is undone; 5/10 right. One ArrowDown after the spec's hydration signal also fails 1/12 and 2/20 (focus on the next value, the room's value checked): the header cart's aria-busy is not the options form's hydration.",
+   "fix": "on hydrate, adopt the checked inputs from the DOM as the selection (or keep them inert until hydrated, without breaking no-JS); e2e: an early click, phone and desktop, and the cart line matches the checked swatch"
+  },
+  {
+   "id": "ת84",
+   "severity": "low (test; with t83)",
+   "owner": "frontend-dev",
+   "what": "options.spec's retry hides a lost key, as house.spec (t77): with the first ArrowDown after mount swallowed, the spec's logic passes in 2 presses; a single press fails.",
+   "fix": "a real hydration marker on the options form, then one press with a long timeout, no retry"
+  },
+  {
+   "id": "ת85",
+   "severity": "medium (customer-visible prices; before HD_PUBLIC=1)",
+   "owner": "manager and pricing (prices); frontend-dev (the guard)",
+   "what": "Studio prices are bound to the card, not to the SKU they were set for: when sourcing moved the default SKU, ₪229 (curtain) and ₪1,299 (rug) moved with it. Curtain: 56/56 options down 5.6-14.9%. Rug: ₪1,299 now on 230x330 (break-even ₪3,605) while 150x200 shows ₪4,909 and 160x230 ₪5,149: an inverted size ladder on the public product page (not for sale, PRE1). No gate warns.",
+   "fix": "pricing re-decides both (the curtain's ₪269 fix is in progress; the rug too); store the SKU a studio price was set for and have build-catalog warn (public: stop) when the default SKU differs; a check that price rises with size within an axis"
+  },
+  {
+   "id": "ת86",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "A story or house list that names a rejected card builds it: build-catalog filters 'rejected' only when it picks for a slot. Mutation: the story naming the rejected floor lamp puts floor-lamp-pleated-walnut-dxyh7 in the story catalog. Only the S22 vitest guard (after prepare:data) catches it; npm run build does not run vitest.",
+   "fix": "build-catalog hides a named rejected card with a reason (or stops); keep the guard"
+  }
+ ],
+ "notes": [
+  {
+   "id": "ה38",
+   "what": "s22.spec's h23 tests: the scratch site's checkout answers 503 in QA's harness, because the scratch site takes the webhook secret only from api/.dev.vars and QA keeps it on the command line. In CI .dev.vars has it. scratch-site.ts should pass its own throwaway --var (and not copy .dev.vars into /tmp); its port 8790 is fixed (a parallel run collides). QA's own h23 scan covers the facts."
+  },
+  {
+   "id": "ה39",
+   "what": "s22.test.ts leaves temporary folders in /tmp (hd-s22-contact-*, hd-s22-dist-*; about 8 per run) and never removes them."
+  },
+  {
+   "id": "ה40",
+   "what": "482/482 in test-all.log ran on a dist left from an earlier build; in the CI order vitest is 481 + 1 skipped (s16 needs dist), then 482/482 after the build (as h22)."
+  },
+  {
+   "id": "ה41",
+   "what": "The waiting list records the product only, not the option of the frame (the rug 230x330 is registered as the rug)."
+  },
+  {
+   "id": "ה42",
+   "what": "Test values in the repo include an address at a real provider (ob@gmail.com) and real-format mobile numbers (054-77162xx); the dummy list has to carry them. Tests should use example.com and a documented fake form."
+  },
+  {
+   "id": "ה43",
+   "what": "check-config reads the file only: npm run deploy -- --var CONTACT_EMAIL:… goes to wrangler deploy and skips it. The runbook should say: contact only in wrangler.jsonc."
+  },
+  {
+   "id": "ה44",
+   "what": "The curtain ladder dropped 5.6-14.9% (median about 13%), not 13-15% throughout: 100x200 dropped 5.6%."
+  },
+  {
+   "id": "ה45",
+   "what": "Not run: preview:artifact, Lighthouse, a real phone, Safari."
+  }
+ ],
+ "readme_questions": {
+  "1": "Agree, no switch. QA made a contact at run time (tools/mk-contact-s22qa.mts) and masked it in the evidence; the public build passes with it. Fix t80 before the owner's real values go in (a 555 number would be refused).",
+  "2": "Agree: one word stays a label; the page it leads to is scanned. Add the punctuation/parenthesis cases of t78 to the two-word rule.",
+  "3": "Facts for master-designer: the whole sentence is the link (mag-link) inside the status line; it leads to /p/<id>/ and the form (6/6, 201); two of the eight sheet openings have no mark on the frame (the rug in Nordic A and warm-modern A); the request is per product, not per option (h41).",
+  "4": "Facts for master-designer: one visible block on 102 page views; 24 px under the error box at 1280 and 400; 8 px from the line to the block; screens in screens/ (contact links masked).",
+  "5": "Confirmed to the shekel (66 per catalog, 0 mismatches; 0 losing). At 9b6c6746 the curtain is ₪229 on the new SKU (no-loss ₪219); the manager's ₪269 fix is not in this commit. The rug needs the same decision (t85).",
+  "6": "Agree: do not honour rooms as it is (10 cards from other rooms would compete for living-room slots: verified). An explicit field on merged cards is a sound default; sourcing and the designer decide. See t86 for the explicit lists."
+ },
+ "launch_checklist_lines": {
+  "2.3": "QA 12.11 (S22): t69 passes for the classes in the brief; before the owner's values: t80 (555 numbers refused, Hebrew placeholders pass); t81 low.",
+  "6.6": "QA 12.11 (S22): t70 closed (6/6, 201). QA's new fresh list: 12/50 caught, 20/48 false positives (t78): before the designer edits the copy. t79 with EMAIL1."
+ },
+ "readiness_hd_public_1": {
+  "verdict": "not yet",
+  "from_s22": [
+   "t83",
+   "t85",
+   "t80 (before CONTACT1 values)"
+  ],
+  "carried": [
+   "t72(a) from S21",
+   "CONTACT1 (owner)",
+   "the lawyer (4.1)",
+   "1.5 and the real analytics token"
+  ],
+  "before_designer_copy_edit": [
+   "t78"
+  ],
+  "with_email1": [
+   "t79",
+   "h24"
+  ],
+  "backlog_low_per_EFF1": [
+   "t79",
+   "t81",
+   "t82",
+   "t84 (with t83)",
+   "t86",
+   "t78 unless the designer edits copy first"
+  ]
+ },
+ "numbers": {
+  "my_fresh_list": {
+   "promises": 50,
+   "caught": 12,
+   "tier_a": "12/38",
+   "tier_b": "0/12",
+   "variants": "6/18",
+   "general": "6/32",
+   "honest": 48,
+   "false_positives": 20,
+   "fp_variants": "16/20",
+   "fp_general": "4/28",
+   "new_fp_in_s22": 13,
+   "lost_vs_s20": [
+    "PR14",
+    "PR15",
+    "PR16",
+    "PR17"
+   ],
+   "new_vs_s20": [
+    "PR05",
+    "PR10",
+    "PR11",
+    "PR12",
+    "PR13",
+    "PR33"
+   ],
+   "overlap_with_lists": 0
+  },
+  "e2e": {
+   "passed": 148,
+   "skipped_on_purpose": 1,
+   "not_run_in_qa_harness": 2
+  },
+  "vitest": {
+   "ci_order": "481+1 skipped",
+   "after_build": "482/482"
+  },
+  "cart_flash_documents": 76,
+  "cart_flash_empty_states": 0,
+  "h23_page_views_with_contact": 102,
+  "h23_page_views_without_contact": 104
+ }
+}
