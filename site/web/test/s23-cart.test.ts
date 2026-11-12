@@ -154,6 +154,15 @@ describe('ת72 (b), (c): the id never enters an address', () => {
     await m.addToCart('vase:white', 'אגרטל');
     expect(w.name).toBe('');
   });
+  it('where storage works, a cart id in window.name is never read (a page before, ours or not, cannot plant one)', async () => {
+    const st = storage(true);
+    address('/cart/');
+    tab(`hd1:${JSON.stringify({ c: 'cart-planted-01' })}`);
+    m.cartMounted();
+    await m.loadCart();
+    expect(fake.getCart).not.toHaveBeenCalled();
+    expect([m.cartStatus.value, m.cart.value, st.has('hd.cart')]).toEqual(['ready', null, false]);
+  });
   it('a window name that is not ours is never overwritten (a window opened with a target name)', () => {
     const w = tab('preview-window');
     carrier.carryCartId('cart-new-0077');

@@ -1,0 +1,393 @@
+{
+ "id": "qa-2026-11-12-wm-phase2-r9",
+ "date": "2026-11-12",
+ "author": "qa-agent",
+ "scope": "warm-modern living-room tool, phase 2, R9 (code only, 0 tokens): P2-1 on pendant 2 (alpha only), F1 on curtain 3, F2 / F8 records; plus the R9 baseline of the left inner bands for P2-2 (the manager's addendum; not judged)",
+ "cost": "0 tokens; no var2, no network, no commits; new files only",
+ "verdict": "PASS",
+ "bottom_line": "R9 passes: only the two claimed layers changed, P2-1 meets (a)-(g) where it fitted and holds the top-left arc under the stop rule (closed by the designer), F1 reads 0 in both Labs with the colour lock unchanged, the records and every sha256 match, and the phase-2 acceptance holds over 2,592 compositions. Curtain 3 can go to 'approved for the site' from QA's side; pendant 2 waits only for P2-2.",
+ "items": [
+  {
+   "item": "1 scope: files",
+   "result": "PASS",
+   "numbers": "2 of 51 tool files changed (pendant-v2 layer, curtains-v3 layer); shadows unchanged; git since QA's R8 commit: 23 added, 0 modified, 0 deleted"
+  },
+  {
+   "item": "1 scope: QA's R8 sha256 list",
+   "result": "PASS",
+   "numbers": "84 of 84 byte-identical"
+  },
+  {
+   "item": "1 scope: scenes",
+   "result": "PASS",
+   "numbers": "13 scenes composed by QA (3 defaults + 10 variants, set B): 0 px changed outside the two products; stored truths: 2 new (pendant-v2 2883 px, max 49; curtains-v3 11 px, max 1), 0 outside; 11 identical"
+  },
+  {
+   "item": "2 P2-1 alpha only",
+   "result": "PASS",
+   "numbers": "alpha 3806 px (+1879 / -1927); RGB 298 px, all where alpha rose from > 0, 0 at alpha 255; added colour vs the layer's bleed: median 1.05 levels; all 298 between the old colour and the bleed; cord/canopy rows and collar 0; shadow byte-identical"
+  },
+  {
+   "item": "2 P2-1 (a) the line",
+   "result": "PASS on the fitted sides; top-left arc kept (stop rule, closed by the designer)",
+   "numbers": "QA line vs R9's stored line <= 0.094 px; convex-hull depth: right side 0.017, left flank 0.016 px (R8 0.721 / 1.469); opposite turns (4 phases, max): right 0/48, left flank 0/24 (R8 13 / 6); top-left arc 10/26 (= R8)"
+  },
+  {
+   "item": "2 P2-1 (b) right edge",
+   "result": "PASS",
+   "numbers": "max turn ratio 1.436 over 4 phases (R8 8.505); chords over 2x: 0 (R8 up to 7)"
+  },
+  {
+   "item": "2 P2-1 (c) ramp",
+   "result": "PASS",
+   "numbers": "left 2.915, right 2.901 px vs reference 2.918 (default pendant's flanks); R8 1.367 / 1.307"
+  },
+  {
+   "item": "2 P2-1 (d) size",
+   "result": "PASS",
+   "numbers": "widest row 240.221 -> 239.879 px (-0.342 px, -0.058 cm)"
+  },
+  {
+   "item": "2 P2-1 (e) halos",
+   "result": "PASS",
+   "numbers": "bright on the lantern 0; dark on the lantern 11 -> 13, 0 new places (2 one-pixel extensions of R8 spots, pleat grooves at the top edge); the cord's run unchanged"
+  },
+  {
+   "item": "2 P2-1 (f) integrity",
+   "result": "PASS",
+   "numbers": "swap and empty-swap outside the pendant region 0 (sets A, B, C); region disjoint from every other slot (nearest: framed-art 133.0 px); alone in A/B/C, 3 paths: p99.9 <= 1.0, max <= 4.0"
+  },
+  {
+   "item": "2 P2-1 (g) eye x2 + photo",
+   "result": "PASS (the flank and the right side); the top-left arc closed by the designer",
+   "numbers": "whole-lantern x2: one convex flank left (no ledge) and right (no facet); the 40's photos (scratchpad only): smooth convex silhouette, no ledge low on the left, vertical lobes, no horizontal bands"
+  },
+  {
+   "item": "2 stop rule at the top-left arc",
+   "result": "CONFIRMED",
+   "numbers": "line moved median 0.062, max 0.199 px outside the declared blends (all: max 0.271); ramp 1.376 -> 2.977; convex-hull depth 3.299 px at [1615.0, 216.3] (R8 3.337); RGB there only where alpha rose"
+  },
+  {
+   "item": "3 F1 literal rule",
+   "result": "PASS",
+   "numbers": "R9 graded layer at alpha > 0: 0 (QA Lab), 0 (R8's OpenCV Lab), whole layer; R8: 11 / 11"
+  },
+  {
+   "item": "3 F1 only the 11 px",
+   "result": "PASS",
+   "numbers": "RGB changed on 11 px = R8's literal hits = R9's mask; alpha byte-identical; shadow byte-identical"
+  },
+  {
+   "item": "3 F1 dL* <= 0.03",
+   "result": "PASS in R8's Lab; 1 px over in QA's Lab (quantisation, not visible)",
+   "numbers": "max |dL*| 0.0244 (OpenCV) / 0.1432 (QA; pixel (248,23), alpha 6, above the camera frame; no 8-bit value within +-2 does better than 0.068 in both Labs); scene effect <= 0.0034 L*"
+  },
+  {
+   "item": "3 colour lock",
+   "result": "PASS",
+   "numbers": "L* 73.1, h 83.5, C* 12.5 (raw {'L': 73.0558, 'C': 12.5168, 'h': 83.5314}); mask 262389 px; = R8"
+  },
+  {
+   "item": "3 the 8 soft-edge px",
+   "result": "NOT VISIBLE",
+   "numbers": "alpha 4-16, h 103.9-144.0; scene effect <= 0.92 levels, CIEDE2000 <= 0.84"
+  },
+  {
+   "item": "4 F2 final-pass mask",
+   "result": "PASS",
+   "numbers": "44 px, overlap 0, union 897; a*b* moved on all 44 (7.27-19.59); outside the union p99.9 0.79 (the 4 px over 1 are in R8's bench-break zone); QA R8's 37 px: 36 in the mask, 1 in the bench zone"
+  },
+  {
+   "item": "4 F2 alpha_unchanged correction",
+   "result": "PASS",
+   "numbers": "ungraded and free alpha R7 == R8 (3 curtains); graded alpha changed 7 / 6 / 64 px, max 15 / 20 / 12, 0 where the source is not soft (= fix-r9.json)"
+  },
+  {
+   "item": "4 F8 sha256",
+   "result": "PASS",
+   "numbers": "18 entries (sha256 + bytes), 4 scripts, 64 tool files: all match; assets/manifest.json: R9 entries identical, 18 with sha256, all match; vs R8: +18, 0 removed, 0 changed; written sha256 10/10"
+  },
+  {
+   "item": "5 full cross",
+   "result": "PASS",
+   "numbers": "2592 compositions (432 x 3 sets x 2 paths): worst p99.9 1.0, max 4.0, independence 0.0; swap-diff of the defaults outside 0"
+  },
+  {
+   "item": "5 shell lock",
+   "result": "PASS",
+   "numbers": "worst p90 9.0 px vs 9.6, on 14 files; = R8 line by line"
+  },
+  {
+   "item": "5 one v3c grade",
+   "result": "PASS",
+   "numbers": "residual median 0.0 / 0.0; black point and clip = R8"
+  },
+  {
+   "item": "5 encoding (file test)",
+   "result": "PASS",
+   "numbers": "pendant-v2 R9 and curtains-v3 R9 at 1920 and 2720: p99 2, p99.9 2-3, max 3, dE00 p99 2.44-2.72 (thresholds 6 / 10 / 3.5); base AVIF bytes = R8"
+  },
+  {
+   "item": "6 no supplier image",
+   "result": "PASS",
+   "numbers": "528 repo images vs 392; nearest 28/256 (as R8); R9's new images >= 47"
+  },
+  {
+   "item": "+ six random combinations (seed 912)",
+   "result": "PASS",
+   "numbers": "pendant-v2 in 2, curtains-v3 in 3; all read natural"
+  }
+ ],
+ "bands_baseline_r9": {
+  "method": "data/bands.json (tools/r9_bands.py): 24 visible sectors of 7.5 deg, per-sector L* down the meridian, 4-knot cubic B-spline, both Labs",
+  "left_half": {
+   "band_edges": [
+    {
+     "sectors": [
+      "L3",
+      "L4"
+     ],
+     "y": [
+      285,
+      283
+     ],
+     "jump3": [
+      -3.41,
+      -2.48
+     ],
+     "plateau": [
+      -2.72,
+      -3.08
+     ],
+     "rise_10_90_px": [
+      1.25,
+      2.98
+     ],
+     "steepest_row_change": [
+      -2.33,
+      -1.28
+     ]
+    },
+    {
+     "sectors": [
+      "L4",
+      "L5",
+      "L6"
+     ],
+     "y": [
+      306,
+      329,
+      327
+     ],
+     "jump3": [
+      -5.72,
+      -6.78,
+      -3.4
+     ],
+     "plateau": [
+      -5.03,
+      -5.9,
+      -3.82
+     ],
+     "rise_10_90_px": [
+      2.08,
+      1.85,
+      3.65
+     ],
+     "steepest_row_change": [
+      -2.17,
+      -2.69,
+      -1.69
+     ]
+    },
+    {
+     "sectors": [
+      "L5"
+     ],
+     "y": [
+      340
+     ],
+     "jump3": [
+      2.1
+     ],
+     "plateau": [
+      2.74
+     ],
+     "rise_10_90_px": [
+      4.21
+     ],
+     "steepest_row_change": [
+      1.17
+     ]
+    }
+   ],
+   "residual_max_abs": {
+    "qa": 3.63,
+    "opencv": 3.62
+   },
+   "literal_steps": 64,
+   "plateau_max": 5.9
+  },
+  "right_half": {
+   "band_edges": 0,
+   "residual_max_abs": {
+    "qa": 3.18,
+    "opencv": 3.16
+   },
+   "literal_steps": 48,
+   "plateau_max": 2.34,
+   "sectors_residual_gt1": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10"
+   ]
+  },
+  "noise_floor": {
+   "rule": "|d3| = |(L(y+3)-L(y)) - (F(y+3)-F(y))| over every row of every sector",
+   "left": {
+    "p50": 0.43,
+    "p95": 1.92,
+    "share_gt1": 0.18
+   },
+   "right": {
+    "p50": 0.32,
+    "p95": 1.47,
+    "share_gt1": 0.114
+   }
+  },
+  "p2_2_numbers": {
+   "pleats_hp_std": {
+    "left_half": 2.396,
+    "whole": 2.371
+   },
+   "light": {
+    "left_mean_L": 81.76,
+    "left_median_L": 82.03,
+    "right_mean_L": 64.43,
+    "left_minus_right_mean": 17.34,
+    "left_top_third_minus_bottom_third_median": 8.06,
+    "left_rows": [
+     205,
+     344
+    ]
+   },
+   "colour": {
+    "left_median_a": 0.83,
+    "left_median_b": 5.57,
+    "whole_median_a": 1.16,
+    "whole_median_b": 7.16
+   },
+   "px": {
+    "paper": 24506,
+    "left": 12297,
+    "right": 12209
+   }
+  },
+  "p2_2_numbers_opencv": {
+   "pleats_hp_std": {
+    "left_half": 2.387,
+    "whole": 2.363
+   },
+   "light": {
+    "left_mean_L": 81.66,
+    "left_median_L": 81.93,
+    "right_mean_L": 64.39,
+    "left_minus_right_mean": 17.27,
+    "left_top_third_minus_bottom_third_median": 8.03,
+    "left_rows": [
+     205,
+     344
+    ]
+   },
+   "colour": {
+    "left_median_a": 0.84,
+    "left_median_b": 5.55,
+    "whole_median_a": 1.17,
+    "whole_median_b": 7.14
+   },
+   "px": {
+    "paper": 24506,
+    "left": 12297,
+    "right": 12209
+   }
+  },
+  "r8_equals_r9": true
+ },
+ "findings": [
+  {
+   "id": "F9",
+   "severity": "medium",
+   "owner": "master-designer",
+   "what": "P2-2 (a) as written (the residual of every sector's meridian profile <= 1 L*) cannot be met on this paper even where the designer accepts it: QA's measure of R9 gives a residual over 1 L* in every measured right-half sector (max 3.18), with no band edge there; the pleats and lobes leave ~1.5-3 L* in a single sector's profile",
+   "fix": "before R10 runs, write (a) as a band-edge rule: e.g. no step with a 3-px jump >= 2 L* and a plateau >= 2.5 L* in any sector (R9: 3 in the left half, 0 in the right; the right half tops out at 2.34), or a residual bound relative to the right half; QA measures R10 with tools/r9_bands.py"
+  },
+  {
+   "id": "F10",
+   "severity": "low",
+   "owner": "render-agent",
+   "what": "'L* kept' in fix-r9.json is measured in OpenCV's float Lab, whose sRGB curve is approximate near white: on pixel (248,23) dL* is 0.012 there and 0.143 in QA's exact CIELAB (all other 10 px <= 0.024 in both). No pixel is visible (alpha 3-13; scene effect <= 0.003 L*)",
+   "fix": "0 pixels to change. In later records state dL* in QA's Lab too (or both), as the lock's precision rule already says QA's tool decides"
+  },
+  {
+   "id": "F11",
+   "severity": "info",
+   "owner": "the manager and render-agent",
+   "what": "F8 is closed for R9: its 18 entries in assets/manifest.json carry sha256, and the whole tool (64 files) is recorded in asset-manifest-entries-r9.json tool_set_sha256 (all match). The earlier phase-2 entries in assets/manifest.json still have none (163 of 181)",
+   "fix": "none needed for the tool; if the site build should check against assets/manifest.json itself, merge tool_set_sha256 into the entries"
+  },
+  {
+   "id": "F12",
+   "severity": "info",
+   "owner": "master-designer",
+   "what": "At x2 the right flank reads softer than in R8 (the ramp went 1.29 -> 2.91 px, the default pendant's own, as P2-1 (c) asked). Against the wall the shaded side has more contrast than the lit side, so the soft ramp shows more there",
+   "fix": "none from QA (taste); the designer is already looking at pendant 2 at x2"
+  },
+  {
+   "id": "F13",
+   "severity": "info",
+   "owner": "render-agent",
+   "what": "crops-r9/pendant-2-top-left-stop-x2.png is an x2 crop of the top-left arc only (made before the designer's whole-lantern rule); crops-r9/pendant-2-x2.png and pendant-2-100.png show the whole lantern",
+   "fix": "from R10 every x2 crop of pendant 2 shows the whole lantern (QA's overlays/pendant-2-whole-x2-r8-r9.png and combo-*-pendant-whole-x2.png do)"
+  }
+ ],
+ "per_product": [
+  {
+   "product": "pendant-cj-pleated-pumpkin-lantern-40 (pendant 2)",
+   "r9": "PASS (P2-1 (a)-(g); top-left arc kept by the stop rule, closed by the designer)",
+   "approved_for_site_from_qa": "not yet: only P2-2 (the left inner bands, RGB only, R10) remains; QA's R9 side is done",
+   "remains": "P2-2 in R10 (render-agent); define P2-2 (a) first (F9, master-designer); the buy point: CE + canopy colour (sourcing)"
+  },
+  {
+   "product": "curtains-cj-japanese-linen-half-shade (curtain 3, Linen)",
+   "r9": "PASS (F1, lock, F2)",
+   "approved_for_site_from_qa": "yes",
+   "remains": "the buy point only: shipping of ...946TG (sourcing) and panels per window (the manager)"
+  },
+  {
+   "product": "every other tool layer",
+   "r9": "byte-identical to R8",
+   "approved_for_site_from_qa": "as in QA R8",
+   "remains": "-"
+  }
+ ],
+ "data": {
+  "scope": "qa/reports/2026-11-12-wm-phase2-r9/data/scope.json",
+  "pendant": "qa/reports/2026-11-12-wm-phase2-r9/data/pendant.json",
+  "halo": "qa/reports/2026-11-12-wm-phase2-r9/data/halo.json",
+  "bands": "qa/reports/2026-11-12-wm-phase2-r9/data/bands.json",
+  "curtains": "qa/reports/2026-11-12-wm-phase2-r9/data/curtains.json",
+  "integrity-r9": "qa/reports/2026-11-12-wm-phase2-r9/data/integrity-r9.json",
+  "lock": "qa/reports/2026-11-12-wm-phase2-r9/data/lock.json",
+  "grade": "qa/reports/2026-11-12-wm-phase2-r9/data/grade.json",
+  "encode": "qa/reports/2026-11-12-wm-phase2-r9/data/encode.json",
+  "manifest": "qa/reports/2026-11-12-wm-phase2-r9/data/manifest.json",
+  "combos": "qa/reports/2026-11-12-wm-phase2-r9/data/combos.json"
+ }
+}

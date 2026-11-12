@@ -48,7 +48,9 @@ function usable(): boolean {
   }
 }
 function savedId(): string | null {
-  return stored() ?? memId ?? carriedCartId();
+  // S23 (ת72): what window.name carries is read only by a browser that keeps no storage (where storage works, nothing
+  // a page before may have put in the name, ours or another site's, can stand in for a cart)
+  return stored() ?? memId ?? (usable() ? null : carriedCartId());
 }
 function saveId(id: string | null): void {
   memId = id;

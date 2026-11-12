@@ -1,7 +1,8 @@
 /**
  * S23, QA S21 (qa/reports/2026-11-12-site-track-qa-s21.md), one test or more per item:
  *  ת72 (a) a link's "#c=" plants nothing: storage works and holds no cart (the room, the cart, a product), or storage is
- *          refused on a page that is not the cart or the checkout;
+ *          refused on a page that is not the cart or the checkout; nor does a window.name another page set before
+ *          linking to the cart;
  *  ת72 (b) storage refused, the header's "סל" pressed on the cart page: no "#c=" in the address or the tab's history;
  *  ת72 (c) storage refused, a real profile: the browser's History database holds no cart id (it travels in window.name),
  *          and a navigation to another site clears window.name;
@@ -95,7 +96,7 @@ async function context(browser: Browser, base: string, o: Opt = {}): Promise<Bro
           w.__hdHoldPut(u, String(init.body));
           return new Promise<Response>(() => {});
         }
-        return f.call(this, input, init);
+        return f.call(window, input, init);
       } as typeof fetch;
     });
   }
@@ -114,7 +115,7 @@ async function route(ctx: BrowserContext, o: Opt): Promise<void> {
         contentType: 'application/json',
         body: JSON.stringify({ error: 'unavailable', message_he: 'השרת עמוס כרגע. נסו שוב בעוד רגע. קוד השגיאה: E-S23TEST2' }),
       });
-    if (isGet && o.failGet) return r.fulfill({ status: o.failGet, contentType: 'text/plain', body: 'boom' });
+    if (isGet && typeof o.failGet === 'number') return r.fulfill({ status: o.failGet, contentType: 'text/plain', body: 'boom' });
     if (isGet && o.slowGet) await new Promise((ok) => setTimeout(ok, o.slowGet));
     return r.fallback();
   });
@@ -206,6 +207,29 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
     }
   });
 
+  test('ת72 (a): a page that is not ours names the tab with someone else’s cart, then links to the cart: nothing comes along', async ({
+    browser,
+    baseURL,
+    request,
+  }) => {
+    const other = await savedCart(request, [[VARIANT, 3]]);
+    for (const noStorage of [false, true]) {
+      const ctx = await context(browser, baseURL!, { noStorage });
+      const page = await ctx.newPage();
+      // a page with no COOP of its own, as another site would be
+      const planted = `hd1:${JSON.stringify({ c: other })}`;
+      await page.goto(`data:text/html,<a id="go" href="${baseURL}/cart/">go</a>`);
+      await page.evaluate((n) => (window.name = n), planted);
+      await page.locator('#go').click();
+      await page.waitForURL(/\/cart\/$/);
+      await known(page);
+      expect(await page.evaluate(() => window.name), `storage ${noStorage ? 'refused' : 'works'}`).not.toContain(other);
+      await expect(page.getByRole('heading', { name: 'הסל ריק.' })).toBeVisible();
+      await expect(page.locator('.cart-count')).toHaveText('0');
+      await ctx.close();
+    }
+  });
+
   test('ת72 (b): storage refused, "סל" pressed on the cart page itself: no #c= in the address or the tab’s history; the lines stay', async ({
     browser,
     baseURL,
@@ -219,7 +243,7 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
     await known(page);
     await page.getByRole('button', { name: 'הוספה לסל' }).click();
     await expect(page.locator('.cart-count')).toHaveText('1');
-    expect(await page.evaluate(() => [...document.querySelectorAll('a[href*="c="]')].length)).toBe(0);
+    expect(await page.evaluate(() => document.querySelectorAll('a[href*="c="]').length)).toBe(0);
     await headerCart(page).click();
     await page.waitForURL(/\/cart\/$/);
     await expect(page.locator('.cart-line')).toHaveCount(1);

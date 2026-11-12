@@ -70,7 +70,8 @@ export type ApiStoryCart = StoryCart & {
 
 export function apiStoryCart(api = httpApi): ApiStoryCart {
   let snap: Cart | null = null;
-  let id: string | null = read() ?? carriedCartId();
+  // S23 (ת72): window.name is read only without storage (as the shop's state/cart.ts)
+  let id: string | null = read() ?? (usable() ? null : carriedCartId());
   let state: StoryCartStatus = 'loading';
   let err: string | null = null;
   // S23 (QA ת73 (b)): the load on its way; a write waits for it, so it adds to the saved quantities and never replaces them
