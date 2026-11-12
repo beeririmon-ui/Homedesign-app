@@ -25,7 +25,7 @@
    "unlisted_cached": 31,
    "withheld_files": 433,
    "pictures": 454,
-   "fingerprints": 1084,
+   "fingerprints": 1166,
    "card_picture_hosts": [
     "ae01.alicdn.com",
     "cf.cjdropshipping.com",
@@ -59,14 +59,14 @@
   },
   "found": {
    "bytes": 0,
-   "pixels": 0,
+   "pixels": 1,
    "data-uri bytes": 0,
    "data-uri pixels": 0,
    "host": 0
   },
   "found_outside_supplier_folders": {
    "bytes": 0,
-   "pixels": 0,
+   "pixels": 1,
    "data-uri bytes": 0,
    "data-uri pixels": 0,
    "host": 0
@@ -117,8 +117,9 @@
    {
     "where": "media/journal/border.webp",
     "picture": "products/accent-sconces-indoor-stone-wall-lamp-eavr7/photo",
-    "hamming": 39,
-    "mad32": 3.7
+    "hamming": 34,
+    "mad32": 0.9,
+    "variant": "this trimmed vs the picture plain"
    },
    {
     "where": "media/rooms/living-room/nordic/M0/slots/accent-sconces/2.product.1920.webp",
@@ -195,8 +196,8 @@
    {
     "where": "media/rooms/living-room/nordic/M0/slots/vase/1.product.2752.webp",
     "picture": ".cache/supplier-images/73b9e8ed2a441cf3080b7588.bin",
-    "hamming": 48,
-    "mad32": 77.5,
+    "hamming": 46,
+    "mad32": 77.7,
     "variant": "this trimmed vs the picture trimmed"
    }
   ],
@@ -266,6 +267,22 @@
   ],
   "seconds": 0.5
  },
- "issues": [],
- "findings": []
+ "issues": [
+  {
+   "where": "media/journal/border.webp",
+   "what": "by pixels: looks like products/accent-sconces-indoor-stone-wall-lamp-eavr7/photo (this trimmed vs the picture plain) (accent-sconces-indoor-stone-wall-lamp-eavr7, rights: unclear; dHash 34/256, 32×32 grey 0.9; rule B)"
+  }
+ ],
+ "findings": [
+  {
+   "where": "media/journal/border.webp",
+   "how": "pixels",
+   "what": "looks like products/accent-sconces-indoor-stone-wall-lamp-eavr7/photo (this trimmed vs the picture plain) (accent-sconces-indoor-stone-wall-lamp-eavr7, rights: unclear; dHash 34/256, 32×32 grey 0.9; rule B)",
+   "product": "accent-sconces-indoor-stone-wall-lamp-eavr7",
+   "hamming": 34,
+   "mad32": 0.85,
+   "rule": "B",
+   "variant": "this trimmed vs the picture plain"
+  }
+ ]
 }

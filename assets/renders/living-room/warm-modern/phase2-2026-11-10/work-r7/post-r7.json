@@ -121,9 +121,9 @@
   },
   "colour_graded_set_B": {
    "candle-holders-v2": {
-    "px": 6568,
-    "L": 71.57,
-    "C": 13.5,
+    "px": 6598,
+    "L": 71.45,
+    "C": 13.54,
     "h": 87.5
    },
    "bowl-v2": {
@@ -138,6 +138,130 @@
     "C": 6.5,
     "h": 85.6
    }
+  }
+ },
+ "p7": {
+  "curtains-v3": {
+   "fix": "curtain 3 (Linen): the R5 method (fix_r5.recolour_ab: a*b* only, one hue rotation, one chroma factor, L* unchanged), toward its SKU     photo (median h 83.6, C* 12.85): targets median h within +-5 deg of the photo, median C* within +-1.5, L* within +-0.5 of before; then     the armchair post's line solved as on the other curtains (fix_r5.post_line_fix)",
+   "photo": {
+    "L": 69.7,
+    "C": 12.85,
+    "h": 83.6,
+    "src": "scratchpad r7/refs/curtains-v3.png (refs-dl/curt3/img1.jpg, the Linen SKU's image, crop 0-0.58 x 0-0.50), median Lab"
+   },
+   "before": {
+    "L": 76.48,
+    "C": 13.09,
+    "h": 77.87,
+    "C_px_p95": 21.2,
+    "L_p99": 93.79,
+    "L_max": 94.8,
+    "highpass_std": 4.131,
+    "px": 309607,
+    "clean_ring": {
+     "L": 76.48,
+     "C": 13.09,
+     "h": 77.87,
+     "px": 309607
+    }
+   },
+   "iterations": [
+    {
+     "it": 0,
+     "dh": 5.73,
+     "k": 0.9817,
+     "h": 83.06,
+     "C": 12.8,
+     "L": 76.33
+    }
+   ],
+   "after": {
+    "L": 76.33,
+    "C": 12.8,
+    "h": 83.06,
+    "C_px_p95": 20.92,
+    "L_p99": 93.71,
+    "L_max": 94.78,
+    "highpass_std": 4.132,
+    "px": 309607,
+    "clean_ring": {
+     "L": 76.33,
+     "C": 12.8,
+     "h": 83.06,
+     "px": 309607
+    }
+   },
+   "targets": {
+    "median h within +-5 deg of the photo (83.6)": true,
+    "median C* within +-1.5 of the photo (12.85)": true,
+    "L* within +-0.5 of before": true,
+    "high-pass within +-5 %": true
+   },
+   "all_met": true,
+   "post_line_fringe_px": 2274,
+   "against_180502": "180502 in the same scene: L 80.0, C 5.8, h 90 (curtain 3 is the darker, warmer axis, as the selection wants)"
+  },
+  "bowl-v3": {
+   "status": "FAILED in 7' (not a layer)",
+   "cut": {
+    "slot": "bowl",
+    "variant": "v3",
+    "card": "bowl-cj-speckled-ivory-wide-bowl-21",
+    "sku": "CJCJ241334805EV",
+    "file": "bowl-v3",
+    "alpha_px": 7897,
+    "soft_px": 1282,
+    "box_px": [
+     1846,
+     1254,
+     1997,
+     1326
+    ],
+    "placeholder_px": 6661,
+    "placeholder_covered": 0.967,
+    "outside_placeholder_px": 1057,
+    "shadow_px_below_0_97": 7174,
+    "shadow_min": 0.625,
+    "shadow_edge": {
+     "recipe": "extract.shadow_one as is (frozen)"
+    },
+    "model_change_vs_placeholder_dE": {
+     "median": 60.4,
+     "p90": 74.82
+    }
+   },
+   "finding": "the model drew the bowl ~1.55x the card (rim ~33 cm against 21.3; ~240 px against the placeholder's 154) and ~30 px farther, ~35 px left; the cut (seeded by the placeholder) holds only part of it"
+  },
+  "candle-holders-v3": {
+   "status": "FAILED in 7' (not a layer)",
+   "cut": {
+    "slot": "candle-holders",
+    "variant": "v3",
+    "card": "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+    "sku": "12000057351444960",
+    "file": "candle-holders-v3",
+    "alpha_px": 3261,
+    "soft_px": 1317,
+    "box_px": [
+     1621,
+     1165,
+     1791,
+     1245
+    ],
+    "placeholder_px": 9130,
+    "placeholder_covered": 0.348,
+    "outside_placeholder_px": 22,
+    "shadow_px_below_0_97": 1839,
+    "shadow_min": 0.73,
+    "shadow_edge": {
+     "recipe": "extract.shadow_one as is (frozen)"
+    },
+    "model_change_vs_placeholder_dE": {
+     "median": 24.87,
+     "p90": 44.27
+    }
+   },
+   "finding": "the model moved the pair ~240 px (~0.4 m) left of the placeholders and drew it ~1.25x the card (dish ~13 cm, candles ~9 cm across and ~10 cm tall against 10.5 / 7 / 15-16); the cut covers 35 % of the placeholder"
   }
  }
 }

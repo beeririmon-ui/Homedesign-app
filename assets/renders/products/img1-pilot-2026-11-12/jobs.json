@@ -8,7 +8,7 @@
   "base": 3950,
   "reserve_with_manager_approval": 2000
  },
- "status": "ROUND 4 DONE. 5,650 of 5,950. Throw P2 (nano) fixed in code: colour in, clipped ends recovered; inner fringe gaps kept opaque with evidence. Stone test: no (H/D +21.5%).",
+ "status": "ROUND 4 + throw v2 code fixes. 5,650 of 5,950 (0 this step). Throw P2 v2 waiting for the QA re-check.",
  "tokens_spent": 5650,
  "var2_auth": "no authentication requested (var2_list_models and var2_estimate_cost answered)",
  "estimate_calls": {
@@ -887,6 +887,79 @@
   },
   "code_fixes": {
    "throw": "tools/fix_throw_nano.py, k=0.934; see source-record"
+  }
+ },
+ "throw_v2_code_fixes": {
+  "from": "qa/reports/2026-11-12-img1-throw-fixed.md",
+  "tokens": 0,
+  "tool": "tools/fix_throw_nano_v2.py",
+  "final": "sofa-cover-cj-cotton-muslin-fringe/p2-nano-fixed-v2.png",
+  "file_sha256": "ee131b02f3449f795225ba2298ce361ec92eef79a96d53a4034ecd21872474be",
+  "verify": {
+   "file_sha256_16": "ee131b02f3449f79",
+   "gimg6": {
+    "gimg6_all": {
+     "gaps_vs_background": 10843,
+     "pct_alpha_le_0.5": 82.4,
+     "gaps_over_product": 12433,
+     "pct_over_product_opaque_ge_0.98": 74.5
+    },
+    "gimg6_top_y<560": {
+     "gaps_vs_background": 1673,
+     "pct_alpha_le_0.5": 75.1,
+     "gaps_over_product": 188,
+     "pct_over_product_opaque_ge_0.98": 0.0
+    },
+    "gimg6_mid_560-1800": {
+     "gaps_vs_background": 7018,
+     "pct_alpha_le_0.5": 85.9,
+     "gaps_over_product": 10132,
+     "pct_over_product_opaque_ge_0.98": 76.2
+    },
+    "gimg6_bottom_y>=1800": {
+     "gaps_vs_background": 2152,
+     "pct_alpha_le_0.5": 76.6,
+     "gaps_over_product": 2113,
+     "pct_over_product_opaque_ge_0.98": 73.0
+    }
+   },
+   "tips": {
+    "rows_with_thread_beyond_alpha05": 12,
+    "rows_ge3px": 6,
+    "max_px": 19,
+    "p99_px": 0.0,
+    "max_cells": 0.75
+   },
+   "colour": {
+    "changed_vs_raw_x_k": 596,
+    "rgb_identical_elsewhere": true,
+    "alpha_of_changed": {
+     "min": 0,
+     "max": 244,
+     "p50": 148.5,
+     "n_alpha_ge_250": 0,
+     "n_alpha_0": 16
+    },
+    "moved_away": 590,
+    "moved_toward": 0,
+    "about_unchanged": 6,
+    "pct_away": 99.0,
+    "brighter_than_local_max_px": 0
+   },
+   "specks_final": {
+    "detached_components": 0,
+    "max_alpha_detached": 0,
+    "detached_alpha_lt_8": 0
+   },
+   "fidelity": {
+    "lit_LCh": [
+     93.16,
+     3.81,
+     80.3
+    ],
+    "dE00_vs_sku_lit_QAr3": 1.91,
+    "texture_std_change_pct_vs_removebg": -2.22
+   }
   }
  }
 }

@@ -164,7 +164,11 @@ def compose7(variants=None, items=None, cushion_set="B", override=None):
             fp = D(ld, f"{nm}-free-alpha.png")
             if k in stack.BEHIND and os.path.exists(fp):
                 a = stack.f8(fp, "L")
-            return L[..., :3], a, stack.f8(D(sd, f"{nm}.png"), "L")
+            Sh = stack.f8(D(sd, f"{nm}.png"), "L")
+            if k == "bowl":
+                # as the default bowl (grade_cut_r12.product): the shadow held off the union of the three cushion sets' regions (+1 px)
+                Sh = np.where(G12.cushion_union(), 1.0, Sh).astype(np.float32)
+            return L[..., :3], a, Sh
         return base_product(k, s)
     G12.product = prod
     sp = stack.product

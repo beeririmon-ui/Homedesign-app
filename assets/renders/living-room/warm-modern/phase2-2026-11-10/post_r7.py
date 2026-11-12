@@ -213,12 +213,68 @@ def p6():
     print(json.dumps(out, indent=1, default=float))
 
 
+CURT3_PHOTO = dict(L=69.7, C=12.85, h=83.6, src="scratchpad r7/refs/curtains-v3.png (refs-dl/curt3/img1.jpg, the Linen SKU's image, crop "
+                                                   "0-0.58 x 0-0.50), median Lab")
+
+
+def curtain_v3_colour():
+    """curtain 3 (Linen): the R5 method (fix_r5.recolour_ab: a*b* only, one hue rotation, one chroma factor, L* unchanged), toward its SKU
+    photo (median h 83.6, C* 12.85): targets median h within +-5 deg of the photo, median C* within +-1.5, L* within +-0.5 of before; then
+    the armchair post's line solved as on the other curtains (fix_r5.post_line_fix)"""
+    import fix_r5 as F5
+    import fix_r6 as F6
+    keep_cut("curtains-v3-render")
+    L = F7.f32(os.path.join(WR7, "layers", "curtains-v3-render-cut.png"))
+    rgb, a = L[..., :3], L[..., 3]
+    af = F7.f32(os.path.join(WR7, "layers", "curtains-v3-render-free-alpha-cut.png"), "L")
+    sh = F7.f32(os.path.join(WR7, "shadows", "curtains-v3-render-cut.png"), "L")
+    m = F6.qa_mask(a)
+
+    def meas(rgb_):
+        _, _, G8 = F7.graded(override={"curtains": (rgb_, a, af, sh)})
+        return F6.curtain_stats(G8, m, m), G8
+    b0, _ = meas(rgb)
+    dh, k = CURT3_PHOTO["h"] - b0["h"], CURT3_PHOTO["C"] / max(b0["C"], 1e-3)
+    hist = []
+    for it in range(3):
+        rgb2 = np.where((af > 0)[..., None], F5.recolour_ab(rgb, dh, k), rgb).astype(np.float32)
+        b1, G8 = meas(rgb2)
+        hist.append(dict(it=it, dh=round(dh, 3), k=round(k, 4), h=b1["h"], C=b1["C"], L=b1["L"]))
+        if abs(b1["h"] - CURT3_PHOTO["h"]) <= 1.0 and abs(b1["C"] - CURT3_PHOTO["C"]) <= 0.3:
+            break
+        dh += CURT3_PHOTO["h"] - b1["h"]
+        k *= CURT3_PHOTO["C"] / max(b1["C"], 1e-3)
+    fa = W.furn_alpha()
+    F = F7.f32(os.path.join(F7.F6.F5.HERE if hasattr(F7.F6.F5, "HERE") else HERE, "..", "pilot-phase1-2026-11-07", "fixed-furniture.png"))[..., :3] \
+        if False else np.asarray(Image.open(os.path.join(W.P1, "fixed-furniture.png")).convert("RGB")).astype(np.float32) / 255
+    rgb3, fringe = F5.post_line_fix(rgb2, af, fa, F)
+    b2, _ = meas(rgb3)
+    tg = {"median h within +-5 deg of the photo (83.6)": abs(b2["h"] - CURT3_PHOTO["h"]) <= 5,
+          "median C* within +-1.5 of the photo (12.85)": abs(b2["C"] - CURT3_PHOTO["C"]) <= 1.5,
+          "L* within +-0.5 of before": abs(b2["L"] - b0["L"]) <= 0.5,
+          "high-pass within +-5 %": abs(b2["highpass_std"] / b0["highpass_std"] - 1) <= 0.05}
+    PW.save(os.path.join(WR7, "layers", "curtains-v3-render.png"), rgb3, alpha=a)
+    rec = dict(fix=curtain_v3_colour.__doc__.replace("\n", " "), photo=CURT3_PHOTO, before=b0, iterations=hist, after=b2, targets=tg,
+               all_met=all(tg.values()), post_line_fringe_px=int(fringe.sum()),
+               against_180502="180502 in the same scene: L 80.0, C 5.8, h 90 (curtain 3 is the darker, warmer axis, as the selection wants)")
+    return rec
+
+
 def p7():
     out = {}
-    out["candle-holders-v3"] = table_item("candle-holders-v3", "candle-holders", "p7", balls=False)
-    out["bowl-v3"] = table_item("bowl-v3", "bowl", "p7")
+    out["curtains-v3"] = curtain_v3_colour()
+    sil, _ = P7.load_ph("p7")
+    fr = json.load(open(os.path.join(WR7, "p7-fetch.json")))
+    out["bowl-v3"] = dict(status="FAILED in 7' (not a layer)", cut=fr["cut"]["bowl-v3"],
+                          finding="the model drew the bowl ~1.55x the card (rim ~33 cm against 21.3; ~240 px against the placeholder's 154) and "
+                                  "~30 px farther, ~35 px left; the cut (seeded by the placeholder) holds only part of it")
+    out["candle-holders-v3"] = dict(status="FAILED in 7' (not a layer)", cut=fr["cut"]["candle-holders-v3"],
+                                    finding="the model moved the pair ~240 px (~0.4 m) left of the placeholders and drew it ~1.25x the card "
+                                            "(dish ~13 cm, candles ~9 cm across and ~10 cm tall against 10.5 / 7 / 15-16); the cut "
+                                            "covers 35 % of the placeholder")
     record("p7", out)
-    print(json.dumps(out, indent=1, default=float))
+    print(json.dumps({k: (v if k != "curtains-v3" else {kk: v[kk] for kk in ("before", "after", "targets", "all_met", "iterations")})
+                      for k, v in out.items()}, indent=1, default=float))
 
 
 if __name__ == "__main__":

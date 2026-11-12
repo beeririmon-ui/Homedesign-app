@@ -265,6 +265,14 @@ describe('ת51: mirrored, trimmed, the fixed domains, and a data: URI read as a 
       ),
     ).toBeNull();
     expect(trimBox(new Uint8Array(W * W).fill(255), W, W)).toBeNull();
+    // a margin on three sides only (padding onto a 4:3 canvas, the picture against the top edge)
+    const p3 = new Uint8Array(W * W).fill(255);
+    for (let y = 0; y < 80; y++) for (let x = 20; x < 80; x++) p3[y * W + x] = 60 + ((x * 7 + y * 13) % 90);
+    expect(trimBox(p3, W, W)).toEqual({ left: 20, top: 0, width: 60, height: 80 });
+    // a border near the picture's own background: the trim stops at the picture's first line, never inside it
+    const near = new Uint8Array(W * W).fill(187);
+    for (let y = 6; y < 94; y++) for (let x = 6; x < 94; x++) near[y * W + x] = 192 + Math.round((x / 100) * 20) + (y % 7 === 0 ? 30 : 0);
+    expect(trimBox(near, W, W)).toEqual({ left: 6, top: 6, width: 88, height: 88 });
   });
 
   it('the variants of a picture: the mirror of a picture is the mirrored variant; a picture without margins has no trimmed one', async () => {
@@ -282,6 +290,7 @@ describe('ת51: mirrored, trimmed, the fixed domains, and a data: URI read as a 
     const cases: Record<string, Buffer> = {
       'flip.webp': await sharp(photo).flop().webp().toBuffer(),
       'pad.webp': await sharp(photo).extend({ left: 230, right: 230, top: 30, bottom: 30, background: '#ffffff' }).webp().toBuffer(),
+      'pad-3-sides.jpg': await sharp(photo).extend({ left: 160, right: 160, top: 0, bottom: 80, background: '#ffffff' }).jpeg({ quality: 80 }).toBuffer(),
       'border.webp': await sharp(photo).extend({ left: 24, right: 24, top: 24, bottom: 24, background: '#c8c8c8' }).webp().toBuffer(),
       'crop.webp': await sharp(photo).extract({ left: 80, top: 80, width: 640, height: 640 }).webp().toBuffer(),
       'flip-pad.webp': await sharp(photo).flop().extend({ left: 120, right: 120, top: 0, bottom: 0, background: '#ffffff' }).webp().toBuffer(),
