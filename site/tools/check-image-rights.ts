@@ -9,7 +9,8 @@
  * S17, QA ת45: by content, not only by path (tools/lib/rights-content.ts). In a public build every file is checked:
  *   bytes      the sha256 of a file, or of a data: URI, equals a supplier-derived file's (the shop's and the story's
  *              ledgers, every width) or a cached original's;
- *   pixels     a raster, or an image in a data: URI, within 24 of 256 bits (dHash 16×16) of a supplier picture;
+ *   pixels     a raster, or an image in a data: URI, within 24 of 256 bits (dHash 16×16) of a supplier picture, or a
+ *              near miss (≤ 48) whose 32×32 grey image differs from it by ≤ 3 on average;
  *   hosts      a URL on a host the cards' pictures come from (alicdn.com, cjdropshipping.com, zendrop.com…).
  * Behind the flag the same scan runs as the control: it reports what it finds (the shop's and the story's copies, which
  * the flag build ships) and anything found elsewhere, without failing.
@@ -25,6 +26,8 @@ import {
   DhashCache,
   LEDGER_SHOP,
   LEDGER_STORY,
+  NEAR_MAX_HAMMING,
+  NEAR_MAX_MAD32,
   PIXEL_MAX_HAMMING,
   cardPictureHosts,
   readCards,
@@ -112,11 +115,12 @@ const byHow = (f: ContentFinding[]) => Object.fromEntries(['bytes', 'pixels', 'd
 const elsewhere = scan.findings.filter((f) => !SUPPLIER_FOLDERS.test(f.where));
 const content = {
   supplier_set: { ...set.stats, card_picture_hosts: hosts, domains: [...new Set(hosts.map(registrableDomain))].sort(), story_ledger: !!ledgers[1] },
-  pixel_threshold: `dHash 16×16, Hamming ≤ ${PIXEL_MAX_HAMMING} of 256`,
+  pixel_threshold: `dHash 16×16, Hamming ≤ ${PIXEL_MAX_HAMMING} of 256 (or ≤ ${NEAR_MAX_HAMMING} with a 32×32 grey difference ≤ ${NEAR_MAX_MAD32})`,
   scanned: { files: scan.stats.files, rasters: scan.stats.rasters, data_uris: scan.stats.data_uris, text_files: scan.stats.text_files },
   found: byHow(scan.findings),
   found_outside_supplier_folders: byHow(elsewhere),
   nearest: scan.stats.nearest,
+  nearest_by_grey: scan.stats.nearest_by_grey,
   seconds: Number(((Date.now() - t0) / 1000).toFixed(1)),
 };
 Object.assign(summary, { by_content: content });

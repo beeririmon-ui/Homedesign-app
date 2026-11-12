@@ -44,7 +44,7 @@ export function publicDescription(card: { texture?: string | null }, materialsHe
   return text || fallback;
 }
 
-type PublicTextProduct = { id: string; name_he: string; description_he: string; notes_he?: string[] };
+type PublicTextProduct = { id: string; name_he: string; description_he: string; notes_he?: string[]; materials_he?: string[] };
 export type TextIssue = { product: string; where: string; text: string };
 
 /** Every public name, description and product note with Latin in it: the build check of ת33. */
@@ -54,6 +54,22 @@ export function latinPublicText(products: PublicTextProduct[]): TextIssue[] {
     if (hasLatinText(p.name_he)) out.push({ product: p.id, where: 'name', text: p.name_he });
     if (hasLatinText(p.description_he)) out.push({ product: p.id, where: 'description', text: p.description_he });
     for (const n of p.notes_he ?? []) if (hasLatinText(n)) out.push({ product: p.id, where: 'note', text: n });
+  }
+  return out;
+}
+
+/**
+ * S17, QA ה5: a field whose value is unknown is not shown. Every public name, description, material and note that
+ * says a value is unknown ("לא צוין", "לא ידוע"…): the build check.
+ */
+const SAYS_UNKNOWN = /לא\s+(?:צוין|מצוין|צויין|ידוע|ידועה|הוגדר)|אינו\s+ידוע|\bunknown\b|\bnot stated\b|\bunspecified\b/i;
+export function unknownPublicText(products: PublicTextProduct[]): TextIssue[] {
+  const out: TextIssue[] = [];
+  for (const p of products) {
+    if (SAYS_UNKNOWN.test(p.name_he)) out.push({ product: p.id, where: 'name', text: p.name_he });
+    if (SAYS_UNKNOWN.test(p.description_he)) out.push({ product: p.id, where: 'description', text: p.description_he });
+    for (const m of p.materials_he ?? []) if (SAYS_UNKNOWN.test(m)) out.push({ product: p.id, where: 'material', text: m });
+    for (const n of p.notes_he ?? []) if (SAYS_UNKNOWN.test(n)) out.push({ product: p.id, where: 'note', text: n });
   }
   return out;
 }

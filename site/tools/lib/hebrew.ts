@@ -36,15 +36,29 @@ const MATERIALS: [RegExp, string][] = [
  */
 const HEDGED = /\([^)]*\b(?:possibly|probably|perhaps|maybe|likely|not stated|unclear|unknown|unverified)\b[^)]*\)/gi;
 
+/**
+ * S17, QA ה3: a texture the card denies is no texture: "non-textured print", "smooth print (no texture)", "without
+ * embossing" are a print, never "הדפס במרקם". The denied phrase is left out before the material is read.
+ */
+const NEGATED_TEXTURE = /\b(?:non|un)[-\s]?(?:textured?|embossed)\b|\b(?:no|not|without|zero|free of)\s+(?:any\s+|a\s+)?(?:raised\s+)?(?:textures?|textured|embossing|embossed)\b/gi;
+
+/**
+ * S17, QA ה5: a value that says it is unknown ("לא צוין", "חומר לא צוין", "לא ידוע", "unknown") is not a value: the
+ * field is not shown. A rule for every product (tools/lib/public-text.ts `unknownPublicText` checks the catalog).
+ */
+export const UNKNOWN_VALUE = /^(?:(?:ה?חומר|ערך|צבע|מידה|מידות)\s+)?(?:לא\s+(?:צוין|מצוין|צויין|ידוע|ידועה|ברור|ברורה|מוגדר|הוגדר)|אינו\s+ידוע|לא\s+ידוע\s+עדיין)\.?$|^(?:unknown|n\/?a|not stated|not specified|unspecified|tbd|\?+|[-–—]+)$/i;
+export const isUnknownValue = (s: string | null | undefined): boolean => !s || !s.trim() || UNKNOWN_VALUE.test(s.trim());
+
 export function materialHe(raw: string): string | null {
-  const text = raw.replace(HEDGED, ' ');
+  const text = raw.replace(HEDGED, ' ').replace(NEGATED_TEXTURE, ' ');
   for (const [re, he] of MATERIALS) if (re.test(text)) return he;
   const paren = text.match(/\(([^)]*[֐-׿][^)]*)\)/);
-  return paren?.[1]?.trim() ?? null;
+  const he = paren?.[1]?.trim() ?? null;
+  return isUnknownValue(he) ? null : he;
 }
 
 export function materialsHe(list: string[]): string[] {
-  return [...new Set(list.map(materialHe).filter((m): m is string => !!m))];
+  return [...new Set(list.map(materialHe).filter((m): m is string => !isUnknownValue(m)))];
 }
 
 const ANCHORS: [string, string][] = [
