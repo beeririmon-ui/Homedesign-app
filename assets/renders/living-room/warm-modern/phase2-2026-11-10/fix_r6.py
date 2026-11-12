@@ -420,7 +420,6 @@ def _vase(nm, pass_, src_cut, rim, axis0, white, colour):
     a_cut = Lc[..., 3]
     prof, info = vase_recut(regt, a_cut, rim, axis0, white)
     a_src = recut_alpha(a_cut, prof)
-    sh_src, sinfo = vase_shadow(nm, a_src, regt, below, pass_)
     # the size against the card at the point
     cc = VASE_CARD[nm]
     card = F4.card_vase_box(*POINT, D=cc["D"], H=cc["H"], mouth=cc["mouth"], foot=cc["foot"])
@@ -433,9 +432,10 @@ def _vase(nm, pass_, src_cut, rim, axis0, white, colour):
     sx = card["width"] / wid if abs(rw - 1) > SIZE_TOL else 1.0
     sy = card["height"] / hgt if abs(rh - 1) > SIZE_TOL else 1.0
     rgb, a, M, ax = straighten_scale(regt, a_src, prof, foot_y, sx, sy)
-    Ms = np.float32([[sx, 0, ax * (1 - sx)], [0, sx, foot_y * (1 - sx)]])
-    sh = np.clip(1 - cv2.warpAffine(1 - sh_src, Ms, SIZE, flags=cv2.INTER_LINEAR), 0, 1)
-    sh = np.where(a >= 0.999, 1.0, sh).astype(np.float32)
+    # the contact shadow: the frozen recipe on the FINAL cut, measured on the render carried by the same affine (so the darkening the
+    # model drew round its foot is read where the foot now is; nothing the vase uncovered is left unshadowed next to it)
+    regt_w = np.clip(cv2.warpAffine(regt, M, SIZE, flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE), 0, 1).astype(np.float32)
+    sh, sinfo = vase_shadow(nm, a, regt_w, below, pass_)
     pc = save_layer(f"{nm}-recut", rgb, a)                 # before the colour fix (for QA)
     rgb_f, crec = colour(rgb, a, sh)
     pl = save_layer(nm, rgb_f, a)
@@ -460,8 +460,8 @@ def _vase(nm, pass_, src_cut, rim, axis0, white, colour):
                     scene_behind=rel(D(WR5, f"scene-{pass_}.png")), old_cut=rel(src_cut)),
         method=dict(edges=vase_recut.__doc__.replace("\n", " "), alpha=recut_alpha.__doc__.replace("\n", " "),
                     straighten_and_size=straighten_scale.__doc__.replace("\n", " "),
-                    shadow="extract.shadow_one (frozen, pass_r5.shadow_new) on the re-cut in the render's coordinates; then at the foot's scale "
-                           "(sx both ways about the foot: it lies on the bench), 1 under the full alpha"),
+                    shadow="extract.shadow_one (frozen, pass_r5.shadow_new) on the final cut, against the scene behind, on the render carried "
+                           "by the layer's own affine"),
         recut=info, axis_check_in_layer=info2["axis"], size=dict(card_cm=list(cc["cm"]), card_at_point_px={k: round(v, 2) for k, v in card.items()},
                                                                render_widest_px=round(wid, 2), render_widest_row=wrow, render_height_px=round(hgt, 2),
                                                                lip_top_row=int(top), foot_contact_y=round(float(foot_y), 2),
@@ -470,7 +470,7 @@ def _vase(nm, pass_, src_cut, rim, axis0, white, colour):
                                                                tolerance=SIZE_TOL, scale=[round(sx, 4), round(sy, 4)],
                                                                layer_widest_px=round(wid2, 2),
                                                                layer_cm=[round(cc["cm"][0] * wid2 / card["width"], 1), round(cc["cm"][1] * rh * sy, 1)]),
-        matrix_layer=np.round(M, 5).tolist(), matrix_shadow=np.round(Ms, 5).tolist(), foot_axis_x=round(ax, 2),
+        matrix_layer=np.round(M, 5).tolist(), foot_axis_x=round(ax, 2),
         widths=lost, shadow=dict(recipe=sinfo.get("recipe"), px_below_0_97=int((sh < 0.97).sum()), min=round(float(sh.min()), 3)),
         colour=crec, files=dict(layer=rel(pl), shadow=rel(ps), recut_before_colour=rel(pc))))
     return rgb_f, a, sh
@@ -540,3 +540,182 @@ def vase_v2():
         return out, dict(fix=vase_v2.__doc__.replace("\n", " "), card="#3B3A38 (C 1.4, h 89)", target=dict(C=round(want_C, 2), h=round(want_h, 2)),
                          dh_deg=round(dh, 3), k=round(k, 4), iterations=hist, before=b0, after=b1, targets=tg, all_met=all(tg.values()))
     return _vase("vase-v2", "p5", D(WR5, "layers/vase-v2.png"), 942, 670.0, None, colour)
+
+
+# ================================================================================================= curtains
+def _sha(p):
+    import hashlib
+    return hashlib.sha256(open(p, "rb").read()).hexdigest()
+
+
+def curtains():
+    """180502 becomes the slot's default (the designer, eye section 1; FR-F): its R5 work files, byte for byte, under the default's names"""
+    pairs = [(D(WR5, "layers/curtains-v2.png"), "layers", "curtains.png"), (D(WR5, "layers/curtains-v2-free-alpha.png"), "layers", "curtains-free-alpha.png"),
+             (D(WR5, "shadows/curtains-v2.png"), "shadows", "curtains.png")]
+    out = {}
+    for src, sub, name in pairs:
+        dst = copy_to(src, sub, name)
+        out[rel(dst)] = dict(source=rel(src), same_bytes=_sha(src) == _sha(dst))
+    record("curtains", dict(what="the default flips to 180502 (curtains-aliexpress-linen-blend-s-fold-180502, S-fold 132 x 270, SKU 12000059196236244): "
+                                 "the designer's decision (wm-phase2-r5-eye section 1); 554205 becomes variant 2 (curtains-v2)",
+                            files=out, unchanged="the R5 cut, its R5 colour fix and its shadow; the true length waits for the designer"))
+
+
+def qa_mask(a, rows=(100, 1400)):
+    """QA p2_colour's curtain mask: the layer's alpha 255 (here >= 0.999) eroded 5 x 5, rows 100-1400"""
+    m = cv2.erode((a >= 0.999).astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
+    r = np.zeros_like(m)
+    r[rows[0]:rows[1]] = True
+    return m & r
+
+
+def all_product_alpha():
+    use_r6_sources()
+    A = np.zeros(SIZE[::-1], bool)
+    for k in ACCEPTED:
+        _, a, _ = G12.product(k)
+        A |= a > 0
+    for nm, (ld, _) in VSRC6.items():
+        p = D(ld, f"{nm}.png")
+        if os.path.exists(p):
+            A |= f32(p)[..., 3] > 0
+    for s in "ABC":
+        _, ac, _ = G12._STACK_PRODUCT("cushions", s)
+        A |= ac > 0
+    return A
+
+
+def curtain_stats(G8, m, ring):
+    LL = lab8(G8)
+    L, A_, B_ = LL[..., 0], LL[..., 1], LL[..., 2]
+    C = np.hypot(A_, B_)
+    am, bm = float(np.median(A_[m])), float(np.median(B_[m]))
+    hp = L - cv2.GaussianBlur(L, (0, 0), 3)
+    ra, rb = float(np.median(A_[ring])), float(np.median(B_[ring]))
+    return dict(L=round(float(np.median(L[m])), 2), C=round(math.hypot(am, bm), 2), h=round(math.degrees(math.atan2(bm, am)) % 360, 2),
+                C_px_p95=round(float(np.percentile(C[m], 95)), 2), L_p99=round(float(np.percentile(L[m], 99)), 2), L_max=round(float(L[m].max()), 2),
+                highpass_std=round(float(hp[m].std()), 3), px=int(m.sum()),
+                clean_ring=dict(L=round(float(np.median(L[ring])), 2), C=round(math.hypot(ra, rb), 2), h=round(math.degrees(math.atan2(rb, ra)) % 360, 2),
+                                px=int(ring.sum())))
+
+
+FOLD_PX = 50        # the folds' spacing on both curtains (the autocorrelation of the rows' L* high-pass: 46-53 px)
+
+
+def curtains_v2():
+    """554205 as variant 2 (designer section 1, 'the fix of 554205'): relative to 180502 in the same light and under the same mask (QA
+    p2_colour's mask on each layer, intersected), L* included. (1) The lightness: ONE monotone tone curve on the low frequencies of L*
+    (a normalised blur over the curtain, sigma 1.5 fold spacings = 75 px, i.e. a kernel about 3 spacings wide): the low-frequency L*
+    quantiles of 554205 mapped onto 180502's (the same mask, the ungraded layers), shifted so the graded medians meet; the high
+    frequencies back x g, g = (L*180502 + 16) / (L*554205 + 16) clipped to 1-1.2 (a brighter cloth shows the same folds as larger L*
+    steps), lowered if the high-pass leaves 3.1-4.2. (2) The colour after the lightness: a*b* by R5's method (one hue rotation, one chroma
+    factor for every pixel) to 180502's median C* and h. (3) The armchair post's line solved again (fix_r5.post_line_fix). The free alpha
+    and the shadow layer are 554205's own, unchanged"""
+    Lw = f32(D(WRES, "layers", "curtains.png"))
+    rgb_w, a_in = Lw[..., :3], Lw[..., 3]
+    a_free = f32(D(WRES, "layers", "curtains-free-alpha.png"), "L")
+    sh = f32(D(WRES, "shadows", "curtains.png"), "L")
+    L180 = f32(D(WR6, "layers", "curtains.png"))
+    a180, af180 = L180[..., 3], f32(D(WR6, "layers", "curtains-free-alpha.png"), "L")
+    P = parts()
+    fa, F = P["fa"], P["F"]
+    m554, m180 = qa_mask(a_in), qa_mask(a180)
+    mm = m554 & m180
+    _, _, G180 = graded()
+    LG180 = lab8(G180)[..., 0]
+    allp = all_product_alpha()
+    d = cv2.distanceTransform((~((a_in > 0) | (a180 > 0))).astype(np.uint8), cv2.DIST_L2, 5)
+    ring = (d >= 15) & (d <= 40) & ~allp & (fa <= 0.02) & (LG180 > 80)
+    s180 = curtain_stats(G180, mm, ring)
+    s180_own = curtain_stats(G180, m180, ring)
+    ov = lambda rgb: {"curtains": (rgb, a_in, a_free, sh)}  # noqa: E731
+    _, _, G0 = graded(override=ov(rgb_w))
+    s0 = curtain_stats(G0, mm, ring)
+    _, _, G5 = graded(override=ov(f32(D(WR5, "layers", "curtains.png"))[..., :3]))
+    s5 = curtain_stats(G5, mm, ring)
+    # (1) the tone curve
+    sig = 1.5 * FOLD_PX
+    lab_w = lab(rgb_w)
+    low554, _ = nblur(lab_w[..., 0], (a_free > 0.5).astype(np.float32), sig)
+    low180, _ = nblur(lab(L180[..., :3])[..., 0], (af180 > 0.5).astype(np.float32), sig)
+    qs = np.linspace(0.5, 99.5, 100)
+    qa_, qb_ = np.percentile(low554[mm], qs), np.percentile(low180[mm], qs)
+    qa_ = np.maximum.accumulate(qa_ + np.arange(len(qa_)) * 1e-6)
+    qb_ = np.maximum.accumulate(qb_ + np.arange(len(qb_)) * 1e-6)
+    s_lo = float(np.clip((qb_[5] - qb_[0]) / max(qa_[5] - qa_[0], 1e-3), 0.3, 2.0))
+    s_hi = float(np.clip((qb_[-1] - qb_[-6]) / max(qa_[-1] - qa_[-6], 1e-3), 0.3, 2.0))
+
+    def curve(x, off):
+        y = np.interp(x, qa_, qb_)
+        y = np.where(x < qa_[0], qb_[0] + (x - qa_[0]) * s_lo, y)
+        y = np.where(x > qa_[-1], qb_[-1] + (x - qa_[-1]) * s_hi, y)
+        return y + off
+    high = lab_w[..., 0] - low554
+    g = float(np.clip((s180["L"] + 16) / (s0["L"] + 16), 1.0, 1.2))
+    off = 0.0
+    hist_L = []
+
+    def lightness(off, g):
+        Ln = curve(low554, off) + g * high
+        Ln = np.where(Ln > 92, 92 + 4 * np.tanh((Ln - 92) / 4), Ln)          # a soft shoulder: never a burnt fold (target 5)
+        return rgb_of(np.clip(Ln, 0, 100), lab_w[..., 1], lab_w[..., 2])
+    for it in range(8):
+        rgb_L = lightness(off, g)
+        _, _, G1 = graded(override=ov(rgb_L))
+        s1 = curtain_stats(G1, mm, ring)
+        hist_L.append(dict(it=it, offset=round(off, 3), g=round(g, 3), L=s1["L"], highpass_std=s1["highpass_std"], L_p99=s1["L_p99"]))
+        ok_hp = 3.1 <= s1["highpass_std"] <= 4.2
+        if abs(s1["L"] - s180["L"]) < 0.3 and ok_hp:
+            break
+        off += s180["L"] - s1["L"]
+        if not ok_hp:
+            g = float(np.clip(g * (3.9 if s1["highpass_std"] > 4.2 else 3.4) / max(s1["highpass_std"], 1e-3), 1.0, 1.2))
+    # (2) a*b*, R5's method, to 180502's median C* and h
+    want_C, want_h = s180["C"], float(np.clip(s180["h"], 87, 93))
+    s_ = curtain_stats(G1, mm, ring)
+    dh, k = want_h - s_["h"], want_C / max(s_["C"], 1e-3)
+    hist_ab = []
+    for it in range(10):
+        rgb_n = F5.recolour_ab(rgb_L, dh, k)
+        _, _, G2 = graded(override=ov(rgb_n))
+        s2 = curtain_stats(G2, mm, ring)
+        hist_ab.append(dict(it=it, dh=round(dh, 3), k=round(k, 4), C=s2["C"], h=s2["h"], C_p95=s2["C_px_p95"], L=s2["L"]))
+        if abs(want_h - s2["h"]) < 0.3 and abs(want_C - s2["C"]) < 0.05 and s2["C_px_p95"] <= 10.9:
+            break
+        dh += want_h - s2["h"]
+        k *= (want_C / max(s2["C"], 1e-3)) if s2["C_px_p95"] <= 10.9 else 10.8 / s2["C_px_p95"]
+    rgb_n = F5.recolour_ab(rgb_L, dh, k)
+    # (3) the armchair post's line
+    rgb_f, fringe = F5.post_line_fix(rgb_n, a_free, fa, F)
+    _, _, Gf = graded(override=ov(rgb_f))
+    sf = curtain_stats(Gf, mm, ring)
+    sf_own = curtain_stats(Gf, m554, ring)
+    LLf = lab8(Gf)[..., 0]
+    vis = (a_in > 0.5)
+    burn = dict(L_p99_visible=round(float(np.percentile(LLf[vis], 99)), 2), px_at_100=int((LLf[vis] >= 99.95).sum()))
+    tg = {"1 median L* = 180502's +-2": dict(value=round(sf["L"] - s180["L"], 2), pass_=abs(sf["L"] - s180["L"]) <= 2),
+          "2a median C* = 180502's +-0.8": dict(value=round(sf["C"] - s180["C"], 2), pass_=abs(sf["C"] - s180["C"]) <= 0.8),
+          "2b median C* >= the clean ring's + 0.5": dict(value=round(sf["C"] - sf["clean_ring"]["C"], 2), pass_=sf["C"] >= sf["clean_ring"]["C"] + 0.5),
+          "3 median h 87-93": dict(value=sf["h"], pass_=87 <= sf["h"] <= 93),
+          "4 p95 C* <= 11": dict(value=sf["C_px_p95"], pass_=sf["C_px_p95"] <= 11),
+          "5 no burn: p99 L* <= 94, no pixel at 100": dict(value=burn, pass_=burn["L_p99_visible"] <= 94 and burn["px_at_100"] == 0),
+          "6 folds: high-pass L* std 3.1-4.2": dict(value=sf["highpass_std"], pass_=3.1 <= sf["highpass_std"] <= 4.2)}
+    pl = save_layer("curtains-v2", rgb_f, a_in)
+    copy_to(D(WRES, "layers", "curtains-free-alpha.png"), "layers", "curtains-v2-free-alpha.png")
+    copy_to(D(WRES, "shadows", "curtains.png"), "shadows", "curtains-v2.png")
+    record("curtains-v2", dict(
+        what="554205 (curtains-aliexpress-beige-linen-sheer-curtains-554205, hooks 150 x 270, SKU 12000029601125492), now variant 2: L* and "
+             "a*b* relative to 180502 (designer section 1)", method=curtains_v2.__doc__.replace("\n", " "),
+        source=dict(layer=rel(D(WRES, "layers", "curtains.png")) + " (R1, before R5's fix)", free_alpha=rel(D(WRES, "layers", "curtains-free-alpha.png")),
+                    shadow=rel(D(WRES, "shadows", "curtains.png")) + " (unchanged, copied)"),
+        masks=dict(same_mask="QA p2_colour's mask (alpha 255 eroded 5 x 5, rows 100-1400) of 554205 AND of 180502: %d px" % mm.sum(),
+                   clean_ring="15-40 px out of both curtains, no product (both curtains, every slot and variant, the cushion sets), no "
+                              "furniture, L* > 80 (plaster, not glass): %d px (QA R5: the targets' old ring was 23 %% curtain)" % ring.sum()),
+        reference_180502=dict(same_mask=s180, own_mask=s180_own), before_r1=s0, before_r5=s5,
+        tone_curve=dict(sigma_px=sig, fold_spacing_px=FOLD_PX, quantiles_554205=[round(float(v), 2) for v in qa_[::10]],
+                        quantiles_180502=[round(float(v), 2) for v in qb_[::10]], offset=round(off, 3), high_gain=round(g, 3),
+                        shoulder="L > 92: 92 + 4 tanh((L - 92) / 4)", iterations=hist_L),
+        ab=dict(dh_deg=round(dh, 3), k=round(k, 4), target=dict(C=want_C, h=want_h), iterations=hist_ab),
+        post_line=dict(fringe_px=int(fringe.sum())), after=sf, after_own_mask=sf_own, targets=tg, all_met=all(v["pass_"] for v in tg.values()),
+        file=rel(pl)))
+    print(json.dumps(dict(ref=s180, before=s0, after=sf, targets=tg), indent=1, default=float))

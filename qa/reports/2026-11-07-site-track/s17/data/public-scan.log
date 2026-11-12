@@ -1,0 +1,28 @@
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mScheduled Workers are not automatically triggered during local development.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m  To manually trigger a scheduled event, run:
+[2m[WebServer] [22m    curl "http://localhost:8788/cdn-cgi/local/scheduled"
+[2m[WebServer] [22m  For more details, see [4mhttps://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+
+Running 5 tests using 1 worker
+
+  ✓  1 [e2e] › e2e/public-scan.spec.ts:31:1 › no supplier name and no listing number in anything the site serves (paths, pages, scripts, data) (25ms)
+  ✓  2 [e2e] › e2e/public-scan.spec.ts:57:1 › no admin code in the public build: no admin route, API call, dev header or admin screen text (10ms)
+  ✓  3 [e2e] › e2e/public-scan.spec.ts:74:1 › S16 (ת41): in a public build, _redirects names no supplier and no listing number (2ms)
+ה5: 39 product pages, 5 without a picture
+  ✓  4 [e2e] › e2e/public-scan.spec.ts:80:1 › S17 (QA ה5): no product page shows a value that says it is unknown, nor a note about a picture it does not have (8ms)
+AN1: the beacon on 45 of 49 pages
+  ✓  5 [e2e] › e2e/public-scan.spec.ts:98:1 › S17 (AN1): the analytics beacon only with a token, only in the public build, never on the cart, checkout, order or 404 (76ms)
+
+  5 passed (13.7s)

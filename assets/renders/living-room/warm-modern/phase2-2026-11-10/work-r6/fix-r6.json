@@ -19,7 +19,7 @@
    "edges": "the vase's silhouette as the model drew it, row by row on its body (the rim + 3 to the foot's contact): the edges are the     sub-pixel peaks of the render's own colour gradient (Lab, sigma-0.6 blur; central differences): the right edge within 8 px inside /     3 px outside the old cut's (QA found that side right); the left edge within a window round the right edge's mirror about the     axis. The axis is fitted as a line on the rows where both edges are found (robust: two rounds, residuals over 2 px dropped), the     windows narrowed round it (10 px, then 5 px). The half width r(y) = (right - left) / 2, outliers against a 7-row median (> 1.5 px)     replaced by it, then smoothed (sigma 1.5 rows): a turned body is smooth. Returns per body row the axis and r, and the record",
    "alpha": "the re-cut alpha in the render's own coordinates: the body rows from the profile (the old cut's soft bottom row kept as a vertical     falloff), the old cut above the body (the lip, the branch)",
    "straighten_and_size": "the forward affine (render -> layer): the axis made vertical about the foot (x - tilt (y - foot_y): the camera is level, the     window's mullion is vertical in the same render, so the model's lean is the model's), then the card's size about the foot (sx, sy);     applied premultiplied (bilinear). Returns rgb, alpha, the matrix, the foot's axis x",
-   "shadow": "extract.shadow_one (frozen, pass_r5.shadow_new) on the re-cut in the render's coordinates; then at the foot's scale (sx both ways about the foot: it lies on the bench), 1 under the full alpha"
+   "shadow": "extract.shadow_one (frozen, pass_r5.shadow_new) on the final cut, against the scene behind, on the render carried by the layer's own affine"
   },
   "recut": {
    "body_rows": [
@@ -112,18 +112,6 @@
     0.0
    ]
   ],
-  "matrix_shadow": [
-   [
-    0.8755800127983093,
-    0.0,
-    83.05628204345703
-   ],
-   [
-    0.0,
-    0.8755800127983093,
-    132.7927703857422
-   ]
-  ],
   "foot_axis_x": 667.56,
   "widths": {
    "old_cut_width_px_median_body": 58.0,
@@ -132,8 +120,8 @@
   },
   "shadow": {
    "recipe": "extract.shadow_one as is (frozen)",
-   "px_below_0_97": 250,
-   "min": 0.728
+   "px_below_0_97": 257,
+   "min": 0.745
   },
   "colour": {
    "fix": "the default vase: R5's a*b* fix re-solved on the re-cut body (post_r5.vase_colour's method and targets: one hue rotation and one     chroma factor for every body pixel, rows >= 935; the hue of the surfaces beside, L* unchanged), started from R5's dh and k. With its lit     flank back the lit half is lighter (L* 88 against R5's 79) and R5's k alone gives C* 3.4, under the designer's 4-7 and cooler than     the room's own white (the back wall, C* 4.05): the lit half is set to C* 4.5, inside the range and the nearest to the card's     near-neutral #EEECE8",
@@ -191,7 +179,7 @@
      "px": 5897
     },
     "beside": {
-     "L": 91.93,
+     "L": 91.94,
      "C": 4.14,
      "h": 83.28,
      "C_px_median": 4.21,
@@ -214,7 +202,7 @@
      "px": 5897
     },
     "beside": {
-     "L": 91.93,
+     "L": 91.94,
      "C": 4.14,
      "h": 83.28,
      "C_px_median": 4.21,
@@ -235,5 +223,503 @@
    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/vase.png",
    "recut_before_colour": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/vase-recut.png"
   }
+ },
+ "vase-v2": {
+  "what": "re-cut from the raw render, as the default (the brief: both vases); straightened and sized to the card about the foot; colour",
+  "source": {
+   "render": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/p5-regt.npy (the registered, tone-matched raw assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/p5-r5-seedream.png)",
+   "scene_behind": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/scene-p5.png",
+   "old_cut": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/vase-v2.png"
+  },
+  "method": {
+   "edges": "the vase's silhouette as the model drew it, row by row on its body (the rim + 3 to the foot's contact): the edges are the     sub-pixel peaks of the render's own colour gradient (Lab, sigma-0.6 blur; central differences): the right edge within 8 px inside /     3 px outside the old cut's (QA found that side right); the left edge within a window round the right edge's mirror about the     axis. The axis is fitted as a line on the rows where both edges are found (robust: two rounds, residuals over 2 px dropped), the     windows narrowed round it (10 px, then 5 px). The half width r(y) = (right - left) / 2, outliers against a 7-row median (> 1.5 px)     replaced by it, then smoothed (sigma 1.5 rows): a turned body is smooth. Returns per body row the axis and r, and the record",
+   "alpha": "the re-cut alpha in the render's own coordinates: the body rows from the profile (the old cut's soft bottom row kept as a vertical     falloff), the old cut above the body (the lip, the branch)",
+   "straighten_and_size": "the forward affine (render -> layer): the axis made vertical about the foot (x - tilt (y - foot_y): the camera is level, the     window's mullion is vertical in the same render, so the model's lean is the model's), then the card's size about the foot (sx, sy);     applied premultiplied (bilinear). Returns rgb, alpha, the matrix, the foot's axis x",
+   "shadow": "extract.shadow_one (frozen, pass_r5.shadow_new) on the final cut, against the scene behind, on the render carried by the layer's own affine"
+  },
+  "recut": {
+   "body_rows": [
+    945,
+    1067
+   ],
+   "axis": {
+    "x_at_foot": 670.73,
+    "x_at_top": 668.68,
+    "tilt_px_per_row": 0.01679,
+    "tilt_deg": 0.96
+   },
+   "fit": [
+    {
+     "window_px": 10,
+     "tilt_px_per_row": 0.01679,
+     "rows_used": 86
+    },
+    {
+     "window_px": 5,
+     "tilt_px_per_row": 0.01679,
+     "rows_used": 86
+    },
+    {
+     "window_px": 5,
+     "tilt_px_per_row": 0.01679,
+     "rows_used": 86
+    }
+   ],
+   "rows_left_edge_measured": 86,
+   "rows_from_profile": 37,
+   "widest_px": 92.88,
+   "widest_row": 955,
+   "old_cut_width_px_median": 88.0,
+   "new_width_px_median": 85.92
+  },
+  "axis_check_in_layer": {
+   "tilt_px_per_row": 0.00058,
+   "tilt_deg": 0.03,
+   "how": "the alpha 0.5 mid-points of the body rows"
+  },
+  "size": {
+   "card_cm": [
+    22,
+    32
+   ],
+   "card_at_point_px": {
+    "width": 91.75,
+    "left": 626.18,
+    "right": 717.92,
+    "top": 931.39,
+    "bottom": 1063.8,
+    "height": 132.41,
+    "centre_x": 672.44,
+    "depth": 4.36
+   },
+   "render_widest_px": 92.9,
+   "render_widest_row": 956,
+   "render_height_px": 132.02,
+   "lip_top_row": 936,
+   "foot_contact_y": 1067.52,
+   "render_vs_card": [
+    1.0126,
+    0.9971
+   ],
+   "render_cm": [
+    22.3,
+    31.9
+   ],
+   "tolerance": 0.05,
+   "scale": [
+    1.0,
+    1.0
+   ],
+   "layer_widest_px": 92.9,
+   "layer_cm": [
+    22.3,
+    31.9
+   ]
+  },
+  "matrix_layer": [
+   [
+    1.0,
+    -0.016790000721812248,
+    17.92654037475586
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ],
+  "foot_axis_x": 670.74,
+  "widths": {
+   "old_cut_width_px_median_body": 88.0,
+   "render_width_px_widest": 92.9,
+   "layer_width_px_widest": 92.9
+  },
+  "shadow": {
+   "recipe": "extract.shadow_one as is (frozen)",
+   "px_below_0_97": 711,
+   "min": 0.633
+  },
+  "colour": {
+   "fix": "vase 2: a*b* toward the card's neutral charcoal (#3B3A38; designer section 6.1): the body only (alpha 255 eroded 5 px, from the     rim + 4), one hue rotation and one chroma factor (R5's method), to the median C* between 2.5 and the C* of the surfaces beside     (post_r5's 'beside': 15-40 px out, L* 50-95), the hue within 10 deg of theirs, L* within 0.5; the branch keeps its colour",
+   "card": "#3B3A38 (C 1.4, h 89)",
+   "target": {
+    "C": 3.45,
+    "h": 83.68
+   },
+   "dh_deg": 20.01,
+   "k": 0.5536,
+   "iterations": [
+    {
+     "it": 0,
+     "dh": 19.22,
+     "k": 0.5172,
+     "L": 17.06,
+     "C": 3.3,
+     "h": 84.02,
+     "C_px_median": 3.58,
+     "px": 8742
+    },
+    {
+     "it": 1,
+     "dh": 18.88,
+     "k": 0.5408,
+     "L": 17.06,
+     "C": 3.37,
+     "h": 82.55,
+     "C_px_median": 3.7,
+     "px": 8742
+    },
+    {
+     "it": 2,
+     "dh": 20.01,
+     "k": 0.5536,
+     "L": 17.04,
+     "C": 3.53,
+     "h": 84.67,
+     "C_px_median": 3.84,
+     "px": 8742
+    }
+   ],
+   "before": {
+    "lit_half": {
+     "L": 26.6,
+     "C": 11.13,
+     "h": 64.75,
+     "C_px_median": 11.49,
+     "px": 4278
+    },
+    "body": {
+     "L": 17.11,
+     "C": 6.67,
+     "h": 64.46,
+     "C_px_median": 6.9,
+     "px": 8742
+    },
+    "beside": {
+     "L": 92.06,
+     "C": 4.4,
+     "h": 83.68,
+     "C_px_median": 4.5,
+     "px": 16756
+    }
+   },
+   "after": {
+    "lit_half": {
+     "L": 26.48,
+     "C": 6.18,
+     "h": 84.49,
+     "C_px_median": 6.36,
+     "px": 4278
+    },
+    "body": {
+     "L": 17.04,
+     "C": 3.53,
+     "h": 84.67,
+     "C_px_median": 3.84,
+     "px": 8742
+    },
+    "beside": {
+     "L": 92.06,
+     "C": 4.4,
+     "h": 83.68,
+     "C_px_median": 4.5,
+     "px": 16756
+    }
+   },
+   "targets": {
+    "C* median 2.5 .. the surfaces beside": true,
+    "hue within 10 deg of the surfaces beside": true,
+    "L* within 0.5": true
+   },
+   "all_met": true
+  },
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/vase-v2.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/vase-v2.png",
+   "recut_before_colour": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/vase-v2-recut.png"
+  }
+ },
+ "curtains": {
+  "what": "the default flips to 180502 (curtains-aliexpress-linen-blend-s-fold-180502, S-fold 132 x 270, SKU 12000059196236244): the designer's decision (wm-phase2-r5-eye section 1); 554205 becomes variant 2 (curtains-v2)",
+  "files": {
+   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains.png": {
+    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/curtains-v2.png",
+    "same_bytes": true
+   },
+   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains-free-alpha.png": {
+    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/curtains-v2-free-alpha.png",
+    "same_bytes": true
+   },
+   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/curtains.png": {
+    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/shadows/curtains-v2.png",
+    "same_bytes": true
+   }
+  },
+  "unchanged": "the R5 cut, its R5 colour fix and its shadow; the true length waits for the designer"
+ },
+ "curtains-v2": {
+  "what": "554205 (curtains-aliexpress-beige-linen-sheer-curtains-554205, hooks 150 x 270, SKU 12000029601125492), now variant 2: L* and a*b* relative to 180502 (designer section 1)",
+  "method": "554205 as variant 2 (designer section 1, 'the fix of 554205'): relative to 180502 in the same light and under the same mask (QA     p2_colour's mask on each layer, intersected), L* included. (1) The lightness: ONE monotone tone curve on the low frequencies of L*     (a normalised blur over the curtain, sigma 1.5 fold spacings = 75 px, i.e. a kernel about 3 spacings wide): the low-frequency L*     quantiles of 554205 mapped onto 180502's (the same mask, the ungraded layers), shifted so the graded medians meet; the high     frequencies back x g, g = (L*180502 + 16) / (L*554205 + 16) clipped to 1-1.2 (a brighter cloth shows the same folds as larger L*     steps), lowered if the high-pass leaves 3.1-4.2. (2) The colour after the lightness: a*b* by R5's method (one hue rotation, one chroma     factor for every pixel) to 180502's median C* and h. (3) The armchair post's line solved again (fix_r5.post_line_fix). The free alpha     and the shadow layer are 554205's own, unchanged",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/curtains.png (R1, before R5's fix)",
+   "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/curtains-free-alpha.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/shadows/curtains.png (unchanged, copied)"
+  },
+  "masks": {
+   "same_mask": "QA p2_colour's mask (alpha 255 eroded 5 x 5, rows 100-1400) of 554205 AND of 180502: 305301 px",
+   "clean_ring": "15-40 px out of both curtains, no product (both curtains, every slot and variant, the cushion sets), no furniture, L* > 80 (plaster, not glass): 22846 px (QA R5: the targets' old ring was 23 % curtain)"
+  },
+  "reference_180502": {
+   "same_mask": {
+    "L": 79.57,
+    "C": 5.91,
+    "h": 90.0,
+    "C_px_p95": 10.88,
+    "L_p99": 94.6,
+    "L_max": 94.79,
+    "highpass_std": 2.186,
+    "px": 305301,
+    "clean_ring": {
+     "L": 93.33,
+     "C": 1.45,
+     "h": 90.0,
+     "px": 22846
+    }
+   },
+   "own_mask": {
+    "L": 79.75,
+    "C": 5.88,
+    "h": 90.0,
+    "C_px_p95": 10.86,
+    "L_p99": 94.6,
+    "L_max": 94.79,
+    "highpass_std": 2.182,
+    "px": 309363,
+    "clean_ring": {
+     "L": 93.33,
+     "C": 1.45,
+     "h": 90.0,
+     "px": 22846
+    }
+   }
+  },
+  "before_r1": {
+   "L": 55.62,
+   "C": 15.15,
+   "h": 74.87,
+   "C_px_p95": 21.91,
+   "L_p99": 92.93,
+   "L_max": 94.28,
+   "highpass_std": 3.477,
+   "px": 305301,
+   "clean_ring": {
+    "L": 93.33,
+    "C": 1.45,
+    "h": 90.0,
+    "px": 22846
+   }
+  },
+  "before_r5": {
+   "L": 55.62,
+   "C": 6.55,
+   "h": 90.0,
+   "C_px_p95": 9.5,
+   "L_p99": 92.86,
+   "L_max": 94.32,
+   "highpass_std": 3.482,
+   "px": 305301,
+   "clean_ring": {
+    "L": 93.33,
+    "C": 1.45,
+    "h": 90.0,
+    "px": 22846
+   }
+  },
+  "tone_curve": {
+   "sigma_px": 75.0,
+   "fold_spacing_px": 50,
+   "quantiles_554205": [
+    28.63,
+    45.66,
+    51.6,
+    54.05,
+    56.21,
+    58.34,
+    61.37,
+    64.85,
+    68.58,
+    72.69
+   ],
+   "quantiles_180502": [
+    43.52,
+    66.67,
+    71.91,
+    74.56,
+    76.89,
+    78.66,
+    80.9,
+    83.23,
+    85.46,
+    87.73
+   ],
+   "offset": 4.43,
+   "high_gain": 1.2,
+   "shoulder": "L > 92: 92 + 4 tanh((L - 92) / 4)",
+   "iterations": [
+    {
+     "it": 0,
+     "offset": 0.0,
+     "g": 1.2,
+     "L": 75.13,
+     "highpass_std": 3.289,
+     "L_p99": 93.4
+    },
+    {
+     "it": 1,
+     "offset": 4.44,
+     "g": 1.2,
+     "L": 79.58,
+     "highpass_std": 3.033,
+     "L_p99": 93.4
+    },
+    {
+     "it": 2,
+     "offset": 4.43,
+     "g": 1.2,
+     "L": 79.57,
+     "highpass_std": 3.034,
+     "L_p99": 93.4
+    },
+    {
+     "it": 3,
+     "offset": 4.43,
+     "g": 1.2,
+     "L": 79.57,
+     "highpass_std": 3.034,
+     "L_p99": 93.4
+    },
+    {
+     "it": 4,
+     "offset": 4.43,
+     "g": 1.2,
+     "L": 79.57,
+     "highpass_std": 3.034,
+     "L_p99": 93.4
+    },
+    {
+     "it": 5,
+     "offset": 4.43,
+     "g": 1.2,
+     "L": 79.57,
+     "highpass_std": 3.034,
+     "L_p99": 93.4
+    },
+    {
+     "it": 6,
+     "offset": 4.43,
+     "g": 1.2,
+     "L": 79.57,
+     "highpass_std": 3.034,
+     "L_p99": 93.4
+    },
+    {
+     "it": 7,
+     "offset": 4.43,
+     "g": 1.2,
+     "L": 79.57,
+     "highpass_std": 3.034,
+     "L_p99": 93.4
+    }
+   ]
+  },
+  "ab": {
+   "dh_deg": 14.23,
+   "k": 0.3956,
+   "target": {
+    "C": 5.91,
+    "h": 90.0
+   },
+   "iterations": [
+    {
+     "it": 0,
+     "dh": 14.23,
+     "k": 0.3956,
+     "C": 5.92,
+     "h": 90.15,
+     "C_p95": 8.62,
+     "L": 79.49
+    }
+   ]
+  },
+  "post_line": {
+   "fringe_px": 2126
+  },
+  "after": {
+   "L": 79.49,
+   "C": 5.92,
+   "h": 90.15,
+   "C_px_p95": 8.62,
+   "L_p99": 93.33,
+   "L_max": 93.43,
+   "highpass_std": 3.038,
+   "px": 305301,
+   "clean_ring": {
+    "L": 93.33,
+    "C": 1.45,
+    "h": 90.0,
+    "px": 22846
+   }
+  },
+  "after_own_mask": {
+   "L": 79.54,
+   "C": 5.92,
+   "h": 90.15,
+   "C_px_p95": 8.62,
+   "L_p99": 93.33,
+   "L_max": 93.43,
+   "highpass_std": 3.035,
+   "px": 306080,
+   "clean_ring": {
+    "L": 93.33,
+    "C": 1.45,
+    "h": 90.0,
+    "px": 22846
+   }
+  },
+  "targets": {
+   "1 median L* = 180502's +-2": {
+    "value": -0.08,
+    "pass_": true
+   },
+   "2a median C* = 180502's +-0.8": {
+    "value": 0.01,
+    "pass_": true
+   },
+   "2b median C* >= the clean ring's + 0.5": {
+    "value": 4.47,
+    "pass_": true
+   },
+   "3 median h 87-93": {
+    "value": 90.15,
+    "pass_": true
+   },
+   "4 p95 C* <= 11": {
+    "value": 8.62,
+    "pass_": true
+   },
+   "5 no burn: p99 L* <= 94, no pixel at 100": {
+    "value": {
+     "L_p99_visible": 93.33,
+     "px_at_100": 0
+    },
+    "pass_": true
+   },
+   "6 folds: high-pass L* std 3.1-4.2": {
+    "value": 3.038,
+    "pass_": false
+   }
+  },
+  "all_met": false,
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains-v2.png"
  }
 }

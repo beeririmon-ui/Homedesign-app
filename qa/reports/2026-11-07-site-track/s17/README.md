@@ -7,7 +7,14 @@
 > - **הכול מאחורי `HD_PUBLIC=0`, כמו קודם.**
 
 ## השורה התחתונה
-__BOTTOM__
+- **ת45–ת49, ה1, ה3 ו-ה5 תוקנו, ונוסח העיכוב של המעצב נכנס.** לכל אחד מהם יש בדיקה.
+- **`check:rights` לפי תוכן:** כל המוטציות של QA (R1–R4 ו-R6) נכשלות עכשיו. גם הסריקה של QA מוצאת אותן. R6 נמצא בפיקסלים בלבד: 321 מתוך 321 (`data/mut-rights.log`).
+- **AN1, אנליטיקס:** נבנה מאחורי `CF_ANALYTICS_TOKEN`, ורק בבנייה הציבורית.
+- **`npm run test:all` ירוק** (`test-all.log`, ‏13:43):
+  - vitest ‏**306/306** (היו 266);
+  - e2e ‏**124**, ועוד אחת שמדולגת בכוונה;
+  - a11y ‏**16/16**.
+- **הבנייה הציבורית, עם token מדומה:** עוברת. ‏public-scan ‏5/5 (`data/public-scan.log`).
 
 ## מה נבנה
 
@@ -99,16 +106,80 @@ __BOTTOM__
 - **רשימת ההשקה 6.1 עודכנה.** המדריך: שורה בפרק 1 (הצעד של הבעלים: האתר ב-Cloudflare, התקנה ידנית ולא אוטומטית, וה-token), ופרק 3 צעד 2.
 
 ## איך בודקים
-__HOWTO__
+- **הכול:** `cd site && npm run test:all`.
+- **הבדיקות החדשות:** `npx --no-install vitest run tools/test/s17-rights.test.ts tools/test/s17.test.ts api/test/s17.test.ts shared/test/s17-analytics.test.ts web/test/s17-notes.test.ts tools/test/s15-rights.test.ts`.
+- **הבנייה הציבורית והאנליטיקס:** `CF_ANALYTICS_TOKEN=0123456789abcdef0123456789abcdef HD_PUBLIC=1 npm run build`, ואחר כך `CF_ANALYTICS_TOKEN=… npx --no-install playwright test --project=e2e e2e/public-scan.spec.ts`. ה-token הוא דמה בצורה הנכונה, לא token אמיתי. בסוף חוזרים ל-`npm run build`.
+- **המוטציות של ת45, אחרי הבנייה הציבורית:** `STORY_COPIES=<עותק של web/public/media/story/products מבנייה עם הדגל> bash ../qa/reports/2026-11-07-site-track/s17/tools/mut-rights.sh`. הסקריפט רץ על עותק של dist, ולא נוגע ב-`web/dist`.
+- **`check:rights` על בנייה אחרת:** `HD_PUBLIC=1 npx --no-install tsx tools/check-image-rights.ts --dist=<תיקייה> --json=<out.json>`.
+- **הצילומים:** `HD_SHOTS_DIR=../qa/reports/2026-11-07-site-track/s17 npx --no-install playwright test --project=evidence e2e/shots-s17.spec.ts`.
 
 ## הבדיקות
-__CHECKS__
+| בדיקה | תוצאה |
+| --- | --- |
+| prepare:data, ‏typecheck, ‏lint, ‏format:check | עוברים |
+| vitest | **306/306** (היו 266). חדשים:<br>• `tools/test/s17-rights.test.ts` (14): ת45. החלקים, המוטציות של QA על תמונות שנוצרות בבדיקה, ואותן מוטציות על תמונות הספק האמיתיות דרך ה-CLI. R6 נבדק בפיקסלים בלבד, בלי ה-ledger של הסיפור.<br>• `api/test/s17.test.ts` (15): ת46 (המקרה של QA בלטינית, דרך בקשה וקריאת התור; ‏production; ‏`PHONE_RE`; ‏`errorCode`), ת47, ת48 (7 מסלולים, כולל B4d), ו-AN1 ב-admin ובדף ההזמנה.<br>• `tools/test/s17.test.ts` (4): ת49.<br>• `shared/test/s17-analytics.test.ts` (3): AN1.<br>• `web/test/s17-notes.test.ts` (2): ה5.<br>• `tools/test/s15-rights.test.ts` (+2): ה3, שלילה, ו-ה5 בחומרים.<br>**עודכנו:** `shared.test.ts` (אין סטטוס חמישי), ‏`s16.test.ts` ו-`s14.test.ts` (ספק שמתועד כמונע כפילות, כדי שהבדיקה תשלח שוב כמו קודם; הנתיב של הקוד לא השתנה), ו-`s16.test.ts` (הפקודה של ת49) |
+| build | עובר. ‏`check:rights` מאחורי הדגל, כבקרה: מצא 542 (בבתים), ו-0 מחוץ לתיקיות הספק (`data/rights-flag-control.json`) |
+| e2e | **124 עברו, ואחת דולגה בכוונה** (היו 122). חדשים ב-`public-scan.spec`: ה5 (אין "לא צוין" בשום דף מוצר, ואין "בתמונה" בדף בלי תמונה) ו-AN1 (מאחורי הדגל: אין סקריפט באף דף) |
+| a11y | **16/16** |
+| הבנייה הציבורית | `data/build-public.log`. ‏`check:rights` ‏0 ממצאים. הסיפור: ‏"the public rule withheld the photos of 18 products", ו-0 עותקים. ‏public-scan ‏5/5: ‏39 דפי מוצר, מהם 5 בלי תמונה, ‏0 ממצאים. הסקריפט ב-45 מתוך 49 דפים |
+| מוטציות ת45 | `data/mut-rights.log`: ‏R0 עובר. ‏R1 (נתיב ובתים), ‏R2 (בתים), ‏R3 (שרת), ‏R4 (‏data: URI בבתים) ו-R6 (‏321/321 בפיקסלים, 9 מהם בהחמצה קרובה) נכשלים ביציאה 1. הסריקה של QA מוצאת כל אחת. הממצאים: `data/rights-r*.json` ו-`data/qa-scan-r*.json` |
+| הצילומים | `shots-s17.spec`, ‏4/4, כולל axe בדף ההזמנה ב-1280 וב-400: ‏0 הפרות |
 
 ## המשקלות
-__WEIGHTS__
+- **בבנייה עם הדגל, בלי שינוי מ-S16:**
+  - JS של החדר 54.4 KB מתוך 80. ‏CSS ‏8.9 KB מתוך 15.
+  - טעינה ראשונה בטלפון: 711.8 KB. בלי AVIF: 1,274.6 KB.
+  - הבית המודרני החם: 1,025.0 KB.
+- **בבנייה הציבורית, עם הסקריפט:**
+  - JS של החדר 49.7 KB.
+  - טעינה ראשונה 698.9 KB, כולל 8.0 KB של הסקריפט (הערכה). בלי AVIF: 1,261.7 KB.
+- **`check:rights`:**
+  - הפעם הראשונה במכונה: כ-26 שנ' בבנייה עם הדגל (1,483 קבצים).
+  - אחר כך: כ-1.5 שנ' עם הדגל, ו-0.4 שנ' בבנייה הציבורית (260 קבצים).
+- **הזמנים:** ‏`test:all` ‏13:43. ה-e2e: ‏11.3 דק'. ‏a11y: ‏55 שנ'.
 
 ## שאלות, וברירת המחדל שרצה עכשיו
-__QUESTIONS__
+1. **הסף של הפיקסלים** (QA):
+   - **רץ עכשיו:** dHash ≤ 24, או החמצה קרובה (≤ 48) עם הפרש ממוצע 32×32 ≤ 3.
+   - **הסיבה:** ‏dHash לבדו מחמיץ 9 מ-321 העותקים של הסיפור. גם אצל QA הם נמצאו רק בזכות המבחן השני.
+   - **המרווח:** הכי קרוב מבין התמונות שאינן של ספק, 18.3, מול סף של 3.
+   - **ההמלצה:** ש-QA יאשר את הכלל, או יחמיר אותו.
+2. **הזמנה שנשארת לאדם (ת48) עוברת מיד ל-`supplier_error`** (המנהל).
+   - **רץ עכשיו:** כך. ההזמנה ב"דורש טיפול", הלקוח רואה "בהכנה" והשורה, ו-`/healthz` מתריע אחרי 30 דקות.
+   - **החלופה:** להשאיר אותה "שולמה". אבל אז הלקוח לא רואה את השורה, ולא קורה כלום עד שמישהו בודק.
+   - **ההמלצה:** להשאיר כך.
+3. **CJ:** אין `findOrder`, ואין תיעוד של מניעת כפילות. ולכן היום כל שליחה שאולי הגיעה ל-CJ עוברת לאדם. זה נכנס לרשימת התיעוד של 3.1.
+4. **הבטחות מייל בדף ההזמנה** (master-designer, לפי אותו עיקרון של §7):
+   - **הבעיה:** הדף אומר היום "אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח." (רואים את זה ב-`screens/order-delayed-400.png`). בלי token בדפדפן הוא גם אומר "את פרטי ההזמנה שלחנו לאימייל שלכם.". אבל האתר לא שולח היום שום מייל ללקוח.
+   - **רץ עכשיו:** בלי שינוי. זה נוסח קיים, ולא חלק מהבריף.
+   - **ההמלצה:** נוסח בלי הבטחה, עד שיש דיוור.
+5. **AN1, מה שלא אומת מול התיעוד של Cloudflare** (בלי רשת):
+   - **(א)** האם הדיווח האחרון של הסקריפט, ביציאה מהדף אחרי מעבר בתוך האתר עם `spa: false`, נושא את הכתובת החדשה (למשל `/checkout/`).
+   - **(ב)** שה-token הוא 32 תווים הקסדצימליים. אם לא, הבנייה נעצרת בקול, ומעדכנים את `ANALYTICS_TOKEN`.
+   - **רץ עכשיו:** ההגנות שבידינו: הסקריפט לא בדפים האלה, וה-CSP של הסל, הקופה, ההזמנה וה-admin לא מתיר אותו.
+   - **ההמלצה:** הבעלים בודק בלוח אחרי ההעלאה (המדריך, פרק 3 צעד 2).
+6. **IMG1 (לידיעה):** תמונה שלנו שנכנסת לאתר עוברת את `check:rights` לפי תוכן. תמונה שקרובה מדי לתמונת הספק תיתפס. זה הכלל עצמו, אבל אולי צריך לראות את זה בעין.
 
 ## הקבצים
-__FILES__
+- **חדשים:**
+  - `site/tools/lib/rights-content.ts`
+  - `site/shared/src/analytics.ts`
+  - `site/web/src/pages/productNotes.ts`
+  - בדיקות: `site/tools/test/s17-rights.test.ts`, ‏`site/tools/test/s17.test.ts`, ‏`site/api/test/s17.test.ts`, ‏`site/shared/test/s17-analytics.test.ts`, ‏`site/web/test/s17-notes.test.ts`
+  - הוכחות בלבד: `site/e2e/shots-s17.spec.ts`
+- **שונו:**
+  - **tools:** `check-image-rights.ts`, ‏`supplier-images.ts`, ‏`make-story.ts`, ‏`build-catalog.ts`, ‏`check-budget.ts`, ‏`lib/hebrew.ts`, ‏`lib/public-text.ts`, ‏`screens-story.ts` ו-`check-house.ts` (‏`--no-install`)
+  - **API:** `lib/log.ts`, ‏`lib/fulfillment.ts`, ‏`lib/cancel.ts`, ‏`lib/suppliers/types.ts`, ‏`lib/http.ts`, ‏`lib/notify/index.ts`, ‏`lib/shipments.ts`, ‏`routes/health.ts`, ‏`routes/admin-ui.ts`, ‏`app.ts`, ‏`index.ts`, ‏`wrangler.jsonc`, ‏`scripts/check-config.ts` (הערה), ‏`.dev.vars.example`
+  - **shared:** `constants.ts`, ‏`api.ts`
+  - **web:** `pages/Order.tsx`, ‏`pages/Product.tsx`, ‏`styles/pages.css`, ‏`public/_headers`, ‏`scripts/prerender.ts`
+  - **בדיקות:** `api/test/s14.test.ts`, ‏`api/test/s16.test.ts`, ‏`tools/test/s16.test.ts`, ‏`tools/test/s15-rights.test.ts`, ‏`shared/test/shared.test.ts`, ‏`e2e/public-scan.spec.ts`, ‏`e2e/shots-s{6,10,15,16}.spec.ts` (‏`--no-install`)
+  - **מחוץ ל-site:**
+    - `.github/workflows/site-ci.yml` (‏`--no-install`)
+    - `docs/ops/deploy-runbook.md` (ת49 ו-AN1)
+    - `qa/reports/2026-11-10-site-track/launch-checklist.md` (שורה 6.1)
+    - `qa/reports/2026-11-07-site-track/s16/README.md` (ה1)
+- **לא שלי:** הקבצים החדשים ב-`assets/renders/` (‏R6 ופיילוט IMG1) הם של סוכנים שרצו במקביל.
+- **הבא:** QA על S17. בעיקר:
+  - המוטציות של ת45 על בנייה ציבורית משלו;
+  - ת48 מול מתאם עם `findOrder`;
+  - AN1 בלוח של Cloudflare, אחרי שיש token.

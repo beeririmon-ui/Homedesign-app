@@ -1,0 +1,488 @@
+{
+ "date": "2026-11-12",
+ "by": "render-agent",
+ "plan": "docs/proposals/own-product-images-2026-11-11.md 2.6",
+ "decision": "IMG1 (owner); option D (manager, 2026-11-12)",
+ "policy": "supplier images are internal references only: scratchpad and var2, never image_url, never in the repo; references recorded by card index",
+ "deviations_approved": [
+  {
+   "n": 1,
+   "what": "gpt-image-2-5 has no 4:5: generated at 3:4 (1776x2368), cropped to 4:5 in code, then re-framed to 80% of the limiting dimension on 1638x2048 (downscale only, premultiplied alpha)",
+   "approved": "manager, 2026-11-12 (option D)"
+  },
+  {
+   "n": 2,
+   "what": "P2 image_url = our empty transparent canvas (bases/canvas-transparent-1638x2048.png, no content); the reference sheet only in image_refs. No supplier image as image_url in any call",
+   "approved": "manager, 2026-11-12"
+  },
+  {
+   "n": 3,
+   "what": "lamp references re-chosen for the 16 cm SKU: R1 = images.urls[9] (the in-room SKU image) cut to the product only (no text/arrows); R2 = the lit lower end of images.urls[0] without the plate. urls[0]/[2]/[3] show the 28/32 cm SKUs (cylinder ~5:1, plate ~0.6) and were not used whole",
+   "approved": "manager, 2026-11-12"
+  },
+  {
+   "n": 4,
+   "what": "vase: R1 = images.urls[4] (SKU Large); R2 = shoulder/rim/mouth of the Large in images.urls[2]; R3 = an interior relief patch of images.urls[1] only (that vase is the Medium). urls[1]/[5] whole vases not used",
+   "approved": "manager, 2026-11-12"
+  },
+  {
+   "n": 5,
+   "what": "throw: every supplier image carries a sewn label with text; it was excluded by crop only, nothing painted out. images.urls[3] (folded on white) left out entirely",
+   "approved": "manager, 2026-11-12"
+  },
+  {
+   "n": 6,
+   "what": "detail references (all but R1) at luminance only (a*=b*=0, median L* matched to R1) and at R1's scale (cm or grid cell), not stretched to the same height",
+   "approved": "manager, 2026-11-12"
+  }
+ ],
+ "lit_side_definition": "median Lab of product pixels (alpha>=0.9) between the 90th and 99th L* percentile, the same for SKU photos and our images",
+ "images": [
+  {
+   "card": "sofa-cover-cj-cotton-muslin-fringe",
+   "type": "P2",
+   "sku": "CJYD205807526ZA",
+   "model": "gpt-image-2-5 i2i 2K, background=transparent, quality=sunburst, aspect 3:4",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-a-throw.txt",
+    "sha256_16": "de1fa25fa9275599"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/canvas-transparent-1638x2048.png (empty)",
+   "references_by_card_index": {
+    "sheet": "throw-white (session scratchpad + var2 only)",
+    "R1": "images.urls[0] (SKU White) crop [0,330,790,705]",
+    "R2": "images.urls[2] crop [330,0,800,540], L*-only",
+    "R3": "images.urls[4] crop [420,100,800,560], L*-only",
+    "swatch": "median of R1 lit side (p90-99) RGB [233,226,220]"
+   },
+   "tokens": 600,
+   "file": "assets/renders/products/img1-pilot-2026-11-12/sofa-cover-cj-cotton-muslin-fringe/p2.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-throw-raw.png",
+   "reframe": {
+    "raw_bbox": [
+     33,
+     374,
+     1754,
+     1999
+    ],
+    "scale": 0.7614,
+    "limiting": "width",
+    "placed": [
+     164,
+     405,
+     1310,
+     1237
+    ]
+   },
+   "render_agent": {
+    "C1_inputs": "image_url = own empty canvas; refs = throw-white sheet",
+    "measured": {
+     "count": 1,
+     "label": "none visible at 100%",
+     "fringe": "on the turned-back corner and the right edge, ~5% of the fold width (target 4-8%), tips soft (alpha 0.1-0.95 px: 20,559)",
+     "lit_LCh": [
+      90.62,
+      5.0,
+      82.6
+     ],
+     "dL_vs_sku_lit": 0.27,
+     "lit_LCh_p75_98": [
+      87.77,
+      5.86,
+      81.4
+     ],
+     "halo_dE00_median_paper_dark": [
+      1.64,
+      2.01
+     ],
+     "alpha_max_1_4px_outside": 7,
+     "native": "1776x2368 (model 2K), downscaled x0.761",
+     "weave_at_100pct": "FAIL: a nubby slub/chenille-like weave, no waffle grid; the crinkle does not read as the SKU gauze"
+    },
+    "render_agent_read": "NO (material). Colour, count, label, fringe and alpha pass; the waffle-grid muslin is not there. Not a base for P3/P4.",
+    "C2_risk": "vs urls[3] (folded on white): framing, background, soft light match = 3/5; fold differs"
+   }
+  },
+  {
+   "card": "vase-cj-textured-white-stoneware",
+   "type": "P2",
+   "sku": "CJJT312391803CX",
+   "model": "gpt-image-2-5 i2i 2K, background=transparent, quality=sunburst, aspect 3:4",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-a-vase.txt",
+    "sha256_16": "967f4fa5c6dd916a"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/canvas-transparent-1638x2048.png (empty)",
+   "references_by_card_index": {
+    "sheet": "vase-large (session scratchpad + var2 only)",
+    "R1": "images.urls[4] (SKU Large) crop [0,0,800,662]",
+    "R2": "images.urls[2] crop [430,290,650,466] (Large shoulder/mouth), L*-only",
+    "R3": "images.urls[1] patch [320,420,480,640], L*-only",
+    "swatch": "RGB [235,234,232]"
+   },
+   "tokens": 600,
+   "file": "assets/renders/products/img1-pilot-2026-11-12/vase-cj-textured-white-stoneware/p2.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-vase-raw.png",
+   "reframe": {
+    "raw_bbox": [
+     359,
+     133,
+     1419,
+     2234
+    ],
+    "scale": 0.7798,
+    "limiting": "height",
+    "placed": [
+     405,
+     205,
+     827,
+     1638
+    ]
+   },
+   "render_agent": {
+    "C1_inputs": "image_url = own empty canvas; refs = vase-large sheet",
+    "measured": {
+     "count": "1, empty",
+     "H_over_D": 1.984,
+     "mouth_over_D": 0.594,
+     "shoulder_from_top": [
+      0.268,
+      "SKU",
+      0.26
+     ],
+     "rim": "smooth at 100%",
+     "crease_scale": {
+      "p2_peak_centroid_pct_H": [
+       6.25,
+       2.02
+      ],
+      "sku_same_method": [
+       7.13,
+       2.45
+      ],
+      "read": "the same scale as the SKU photo (a little finer); the peak method gives 6-7% for both, so the 3-6% target needs QA calibration"
+     },
+     "lit_LCh": [
+      92.22,
+      3.52,
+      85.1
+     ],
+     "not_blue": true,
+     "axis_tilt_deg": -0.08,
+     "halo_dE00_median_paper_dark": [
+      1.13,
+      1.51
+     ],
+     "alpha_max_1_4px_outside": 7
+    },
+    "render_agent_read": "YES on every 5.5 number. Relief strongest on the lower body, finer on the shoulder, as in the SKU photo.",
+    "C2_risk": "vs urls[4]: angle, framing, background and light match = 4/5. A frontal studio packshot of a symmetric vase is generic; C2 (<=2/5) needs D4 calibration for P2"
+   }
+  },
+  {
+   "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+   "type": "P2",
+   "sku": "12000043242375290",
+   "model": "gpt-image-2-5 i2i 2K, background=transparent, quality=sunburst, aspect 3:4",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-a-lamp.txt",
+    "sha256_16": "93c77641442e8759"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/canvas-transparent-1638x2048.png (empty)",
+   "references_by_card_index": {
+    "sheet": "lamp-16 (session scratchpad + var2 only)",
+    "R1": "images.urls[9] (SKU 16 cm) crop [120,40,365,458], product only",
+    "R2": "images.urls[0] crop [360,512,510,592] (lit end), L*-only",
+    "swatch": "RGB [224,208,181]"
+   },
+   "tokens": 600,
+   "file": "assets/renders/products/img1-pilot-2026-11-12/accent-sconces-aliexpress-indoor-stone-wall-lamp/p2.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-lamp-raw.png",
+   "reframe": {
+    "raw_bbox": [
+     86,
+     473,
+     1686,
+     1870
+    ],
+    "scale": 0.819,
+    "limiting": "width",
+    "placed": [
+     164,
+     452,
+     1310,
+     1144
+    ]
+   },
+   "render_agent": {
+    "C1_inputs": "image_url = own empty canvas; refs = lamp-16 sheet",
+    "measured": {
+     "units": 2,
+     "per_unit": [
+      {
+       "cyl_w": 498,
+       "sil_h": 1368,
+       "H_over_D_sil": 2.747,
+       "H_over_D_between_ellipse_centres": 2.687,
+       "plate_h": 1025,
+       "plate_w": 217,
+       "plate_over_sil": 0.749,
+       "plate_w_over_cyl_w": 0.436,
+       "plate_bottom_above_cyl_bottom_over_D": 0.205,
+       "plate_top_below_cyl_top_over_D": 0.484
+      },
+      {
+       "cyl_w": 499,
+       "sil_h": 1366,
+       "H_over_D_sil": 2.737,
+       "H_over_D_between_ellipse_centres": 2.677,
+       "plate_h": 1057,
+       "plate_w": 216,
+       "plate_over_sil": 0.774,
+       "plate_w_over_cyl_w": 0.433,
+       "plate_bottom_above_cyl_bottom_over_D": 0.136,
+       "plate_top_below_cyl_top_over_D": 0.483
+      }
+     ],
+     "sku_u9_same_method": {
+      "cyl_w": 148,
+      "sil_h": 390,
+      "H_over_D_sil": 2.635,
+      "H_over_D_between_ellipse_centres": 2.547,
+      "plate_h": 298,
+      "plate_w": 66,
+      "plate_over_sil": 0.764,
+      "plate_w_over_cyl_w": 0.446,
+      "plate_bottom_above_cyl_bottom_over_D": 0.182,
+      "plate_top_below_cyl_top_over_D": 0.439
+     },
+     "card_H_over_D": 2.46,
+     "lit_LCh_stone": [
+      [
+       85.95,
+       14.32,
+       81.3
+      ],
+      [
+       85.61,
+       14.34,
+       81.2
+      ]
+     ],
+     "lit_LCh_p75_98": [
+      81.93,
+      16.43,
+      80.1
+     ],
+     "halo_dE00_median_paper_dark": [
+      1.48,
+      1.74
+     ],
+     "bulb_cable": "no bulb, no cable; a recessed lens ring in the bottom opening, as in the SKU photo",
+     "gap_cm": 2.1
+    },
+    "render_agent_read": "PARTIAL: geometry matches the SKU photo (H/D 2.68-2.74 vs 2.55-2.64; plate 0.75-0.77 vs 0.76), but vs the card 2.46 the silhouette is +11% (between ellipse centres +9%); lit L* 86.0 is 1.0 over the 76-85 window (SKU 84.1); both end faces are visible at once (top from above, bottom from below), a perspective inconsistency; the gap is ~2 cm, not 10",
+    "C2_risk": "vs urls[9]: angle matches; pair, no wall, off = <=2/5"
+   }
+  },
+  {
+   "card": "sofa-cover-cj-cotton-muslin-fringe",
+   "type": "P1",
+   "sku": "CJYD205807526ZA",
+   "model": "nano-banana-2 i2i 4K, 4:5",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p1-throw.txt",
+    "sha256_16": "c04ae4c78a90a892"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-throw-nordic-A-ed4-1650-450-2450-1450.png",
+   "references_by_card_index": {
+    "sheet": "throw-white (session scratchpad + var2 only)",
+    "R1": "images.urls[0] (SKU White) crop [0,330,790,705]",
+    "R2": "images.urls[2] crop [330,0,800,540], L*-only",
+    "R3": "images.urls[4] crop [420,100,800,560], L*-only",
+    "swatch": "median of R1 lit side (p90-99) RGB [233,226,220]"
+   },
+   "tokens": 450,
+   "file": "assets/renders/products/img1-pilot-2026-11-12/raw/p1-throw-raw.jpg",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "render_agent": {
+    "base": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-throw-nordic-A-ed4-1650-450-2450-1450.png",
+    "framing": "as generated, not re-framed",
+    "guard": {
+     "p1": {
+      "burnt_pct": 0.062,
+      "L_p1": 9.75,
+      "L_p50": 57.03
+     },
+     "base": {
+      "burnt_pct": 0.0,
+      "L_p1": 6.58,
+      "L_p50": 56.84
+     }
+    },
+    "render_agent_read": "NO: the model kept the frame's own throw (long twisted tassel fringe ~8-10 cm, not 2-4 cm frayed; no waffle grid); the framed print top-left changed colour (a product changed); G4.16 fails (throw ~37% of the height, centred)"
+   }
+  },
+  {
+   "card": "vase-cj-textured-white-stoneware",
+   "type": "P1",
+   "sku": "CJJT312391803CX",
+   "model": "nano-banana-2 i2i 4K, 4:5",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p1-vase.txt",
+    "sha256_16": "6bdaec2496d691a7"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-vase-warm-modern-A-ed9-1600-560-2160-1260.png",
+   "references_by_card_index": {
+    "sheet": "vase-large (session scratchpad + var2 only)",
+    "R1": "images.urls[4] (SKU Large) crop [0,0,800,662]",
+    "R2": "images.urls[2] crop [430,290,650,466] (Large shoulder/mouth), L*-only",
+    "R3": "images.urls[1] patch [320,420,480,640], L*-only",
+    "swatch": "RGB [235,234,232]"
+   },
+   "tokens": 450,
+   "file": "assets/renders/products/img1-pilot-2026-11-12/vase-cj-textured-white-stoneware/p1.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p1-vase-raw.jpg",
+   "render_agent": {
+    "base": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-vase-warm-modern-A-ed9-1600-560-2160-1260.png",
+    "reframe": {
+     "crop": [
+      1076,
+      1041,
+      3503,
+      4075
+     ],
+     "product_box_4k": [
+      1390,
+      1890,
+      2380,
+      3650
+     ],
+     "fill_h": 0.58,
+     "centre_x_frac": 0.333,
+     "out": [
+      1638,
+      2048
+     ]
+    },
+    "guard": {
+     "p1": {
+      "burnt_pct": 0.26,
+      "L_p1": 12.56,
+      "L_p50": 53.19
+     },
+     "base": {
+      "burnt_pct": 0.0,
+      "L_p1": 9.6,
+      "L_p50": 52.44
+     }
+    },
+    "measured": {
+     "H_over_D": 1.78,
+     "vs_card": "-11%",
+     "vs_sku_photo": "-14.5% (the base frame ed9 already has ~1.73)",
+     "mouth_over_D": 0.62
+    },
+    "render_agent_read": "YES for the product (within P1 +-15%), relief reads; G4.16 met only by the code re-frame (58%, left third, 1638x2048 from 2427x3034); golden evening light kept; the mug and the open book on the table were dropped by the model"
+   }
+  },
+  {
+   "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+   "type": "P1",
+   "sku": "12000043242375290",
+   "model": "nano-banana-2 i2i 4K, 4:5",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p1-lamp.txt",
+    "sha256_16": "9ad1cc64d07ff0cd"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-lamp-nordic-A-ed4-900-230-1460-930.png",
+   "references_by_card_index": {
+    "sheet": "lamp-16 (session scratchpad + var2 only)",
+    "R1": "images.urls[9] (SKU 16 cm) crop [120,40,365,458], product only",
+    "R2": "images.urls[0] crop [360,512,510,592] (lit end), L*-only",
+    "swatch": "RGB [224,208,181]"
+   },
+   "tokens": 450,
+   "file": "assets/renders/products/img1-pilot-2026-11-12/accent-sconces-aliexpress-indoor-stone-wall-lamp/p1.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p1-lamp-raw.jpg",
+   "render_agent": {
+    "base": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-lamp-nordic-A-ed4-900-230-1460-930.png",
+    "reframe": {
+     "crop": [
+      897,
+      740,
+      2257,
+      2440
+     ],
+     "product_box_4k": [
+      1195,
+      1165,
+      1505,
+      2015
+     ],
+     "fill_h": 0.5,
+     "centre_x_frac": 0.333,
+     "out": [
+      1360,
+      1700
+     ],
+     "note": "native, below the 2K spec; not enlarged"
+    },
+    "guard": {
+     "p1": {
+      "burnt_pct": 0.028,
+      "L_p1": 15.53,
+      "L_p50": 66.94
+     },
+     "base": {
+      "burnt_pct": 0.0,
+      "L_p1": 12.77,
+      "L_p50": 63.94
+     }
+    },
+    "measured": {
+     "H_over_D_silhouette": 2.75,
+     "plate_over_body": 0.67,
+     "beams": {
+      "up_len_x_body": 0.7,
+      "down_len_x_body": 0.75,
+      "width_x_body": 0.69,
+      "bible_max": [
+       1.9,
+       1.25
+      ]
+     },
+     "stone_px_ge_254": 0,
+     "left_third": true
+    },
+    "render_agent_read": "PARTIAL: lit, two soft beams within the Bible, stone not burnt, proportions within +-15%; G4.16 reachable only by a code crop at 50% and that is 1360x1700 native (below 2K, not enlarged); the room reads as the same wall (olive, print, cushions, candles in the raw)"
+   }
+  }
+ ],
+ "not_made": {
+  "P3 throw (400) and P4 Pecan (400)": "held: their base, the throw P2, fails on material (no waffle grid). 2.4/5.6: P3/P4 are edits of the approved P2; building them now would carry the wrong weave. 800 of the base unspent."
+ },
+ "pecan_precheck": {
+  "verdict": "construction looks the same (P4 by edit allowed, manager 2026-11-12)",
+  "price_gap": "Pecan 150x200 (CJYD205807508HS) $16.25 vs White 150x200 (CJYD205807526ZA) $11.64; the photos do not explain it (dye or weight)",
+  "G2.11": "the \"same SKU\" verdict (QA + designer, side by side) is still due after P4 exists"
+ },
+ "internal_evidence_not_in_repo": "the C2 side-by-side with supplier photos was built in the session scratchpad only; rebuild from jobs.json references"
+}

@@ -53,13 +53,13 @@ for (const w of WIDTHS)
     expect(await line.getAttribute('role')).toBeNull();
     await expect(page.locator('.order-steps')).toHaveAttribute('aria-label', 'מצב ההזמנה: בהכנה');
     await expect(page.locator('.order-steps li[aria-current="step"]')).toHaveText('בהכנה');
-    const text = await page.locator('.order-sheet').innerText();
-    expect(text).not.toMatch(/מתעכבת|מייל|ספק/);
+    // the status and its line: no fifth status, no supplier, no email promise (the rest of the sheet is the order's lines)
+    const text = `${await page.locator('.order-steps').innerText()} ${await line.innerText()}`;
+    expect(text).not.toMatch(/מתעכבת|מייל|ספק|תקלה/);
+    expect(await page.locator('.order-sheet').innerText()).not.toMatch(/מתעכבת|נעדכן אותך במייל/);
     await expect
       .poll(() =>
-        page
-          .locator('figure.your-room img')
-          .evaluateAll((is) => is.every((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0)),
+        page.locator('figure.your-room img').evaluateAll((is) => is.every((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0)),
       )
       .toBe(true);
     const axe = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0])
@@ -71,7 +71,9 @@ for (const w of WIDTHS)
   });
 
 test('once it is sent, the line goes, with no "resolved" message', async ({ browser }) => {
-  d1(`UPDATE orders SET status = 'sent_to_supplier' WHERE id = '${stuck.id}'; UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = 'MOCK-${stuck.id}' WHERE order_id = '${stuck.id}';`);
+  d1(
+    `UPDATE orders SET status = 'sent_to_supplier' WHERE id = '${stuck.id}'; UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = 'MOCK-${stuck.id}' WHERE order_id = '${stuck.id}';`,
+  );
   const ctx = await browser.newContext({ viewport: { width: 400, height: 900 }, locale: 'he-IL' });
   const page = await ctx.newPage();
   await openCustomerOrder(page, stuck);
