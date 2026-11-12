@@ -109,7 +109,11 @@ async function route(ctx: BrowserContext, o: Opt): Promise<void> {
     const isGet = m === 'GET' && /^\/api\/cart\/[^/]+\/?$/.test(u);
     if (isGet && o.failGet === 'abort') return r.abort('internetdisconnected');
     if (isGet && o.failGet === 503)
-      return r.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'unavailable', message_he: 'השרת עמוס כרגע. נסו שוב בעוד רגע. קוד השגיאה: E-S23TEST2' }) });
+      return r.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'unavailable', message_he: 'השרת עמוס כרגע. נסו שוב בעוד רגע. קוד השגיאה: E-S23TEST2' }),
+      });
     if (isGet && o.failGet) return r.fulfill({ status: o.failGet, contentType: 'text/plain', body: 'boom' });
     if (isGet && o.slowGet) await new Promise((ok) => setTimeout(ok, o.slowGet));
     return r.fallback();
@@ -158,7 +162,11 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
     await ctx.close();
   });
 
-  test('ת72 (a): storage works and holds no cart: a link with someone else’s #c= plants nothing (room, cart, product)', async ({ browser, baseURL, request }) => {
+  test('ת72 (a): storage works and holds no cart: a link with someone else’s #c= plants nothing (room, cart, product)', async ({
+    browser,
+    baseURL,
+    request,
+  }) => {
     const other = await savedCart(request, [[VARIANT, 3]]);
     for (const p of [`/rooms/living-room/#c=${other}`, `/cart/#c=${other}`, `/p/${VASE}/#c=${other}`]) {
       const ctx = await context(browser, baseURL!);
@@ -267,7 +275,9 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
       const rows = db.prepare('SELECT url FROM urls').all() as { url: string }[];
       db.close();
       const urls = rows.map((r) => r.url);
-      test.info().annotations.push({ type: 'history', description: JSON.stringify({ urls: urls.map((u) => u.replace(baseURL!, '')), name_on_another_site: there }) });
+      test
+        .info()
+        .annotations.push({ type: 'history', description: JSON.stringify({ urls: urls.map((u) => u.replace(baseURL!, '')), name_on_another_site: there }) });
       expect(urls.some((u) => u.includes('/checkout/'))).toBe(true);
       expect(urls.filter((u) => u.includes(id!) || /[#&?]c=/.test(u))).toEqual([]);
       expect(there).toBe('');

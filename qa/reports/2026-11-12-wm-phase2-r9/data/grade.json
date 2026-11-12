@@ -1,0 +1,73 @@
+{
+ "curve_samples": {
+  "5": 6.29,
+  "10": 3.952,
+  "12": 2.939,
+  "15": 1.852,
+  "20": 0.452,
+  "25": 0.0,
+  "50": 0.0,
+  "80": 0.0,
+  "90": -0.354,
+  "95": -2.087
+ },
+ "r9": {
+  "pendant-v2": {
+   "file": "pendant/pendant-cj-pleated-pumpkin-lantern-40-r9.png",
+   "px": 28322,
+   "L_src_p1_p50_p99": [
+    57.5,
+    71.5,
+    95.2
+   ],
+   "residual_median": 0.0,
+   "residual_p95_abs": 0.0
+  },
+  "curtains-v3": {
+   "file": "curtains/curtains-cj-japanese-linen-half-shade-r9.png",
+   "px": 321097,
+   "L_src_p1_p50_p99": [
+    25.5,
+    70.0,
+    90.0
+   ],
+   "residual_median": 0.0,
+   "residual_p95_abs": 0.0,
+   "toe_px": 2856,
+   "toe_expected_lift": 0.0,
+   "toe_observed_lift": 0.0
+  }
+ },
+ "rule": "one grade if |residual median| <= 0.5 and, in the toe, observed lift within +-1 of the expected (a second toe adds ~+3..+6, a missing one -3..-6)",
+ "one_grade_pass": true,
+ "black_point_and_clip": {
+  "r9 default A": {
+   "L_p0_5": 11.37,
+   "clipped_254_pct": 0.0012
+  },
+  "r9 default B": {
+   "L_p0_5": 10.91,
+   "clipped_254_pct": 0.0014
+  },
+  "r9 default C": {
+   "L_p0_5": 9.72,
+   "clipped_254_pct": 0.0011
+  },
+  "r9 truth curtains-v3": {
+   "L_p0_5": 10.91,
+   "clipped_254_pct": 0.0014
+  },
+  "r9 truth pendant-v2": {
+   "L_p0_5": 10.91,
+   "clipped_254_pct": 0.0014
+  },
+  "r8 truth pendant-v2": {
+   "L_p0_5": 10.91,
+   "clipped_254_pct": 0.0014
+  },
+  "r8 truth curtains-v3": {
+   "L_p0_5": 10.91,
+   "clipped_254_pct": 0.0014
+  }
+ }
+}

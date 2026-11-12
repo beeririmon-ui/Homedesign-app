@@ -1,0 +1,78 @@
+{
+ "L latin": {
+  "probes": 24,
+  "leaks": {}
+ },
+ "L hebrew": {
+  "probes": 13,
+  "leaks": {}
+ },
+ "L mixed": {
+  "probes": 5,
+  "leaks": {}
+ },
+ "L cyrillic": {
+  "probes": 3,
+  "leaks": {}
+ },
+ "O": [
+  [
+   "TelAvivian",
+   "[customer]Avivian"
+  ]
+ ],
+ "O ids": {
+  "error_id": "E-DANA2345",
+  "order_id": "1234567890"
+ },
+ "W": {
+  "max_retries": "[customer]_retries",
+  "maxAge": "[customer]Age",
+  "pageSize": "[customer]Size",
+  "page_id": "[customer]_id",
+  "Maximum": "Maximum",
+  "pages": "pages",
+  "markPaid": "[customer]Paid",
+  "mark_shipped": "[customer]_shipped",
+  "bookmark": "bookmark",
+  "rose_gold": "[customer]_gold",
+  "valley2": "[customer]2"
+ },
+ "C1": {
+  "E_DANA": "Error / Error",
+  "E_CONSIGNEE_DANA_GAT": "Error / Error",
+  "EDANA": "Error / Error",
+  "ECONNRESET_DANA": "Error / Error",
+  "DANA_ECONNRESET": "Error / Error",
+  "ECONNRESET + trailing space": "Error / Error",
+  "ECONNRESET + newline": "Error / Error",
+  "econnreset (lower)": "Error / Error",
+  "Cyrillic Е + CONNRESET": "Error / Error",
+  "ECONNRESET + zero-width": "Error / Error",
+  "ERR_DANA (Node style)": "Error / Error",
+  "UND_ERR_CONNECT_TIMEOUT (undici)": "Error / Error",
+  "EPROTO (system, not listed)": "Error / Error",
+  "code as a String object": "Error / Error",
+  "code as an array": "Error / Error",
+  "E_DANA with status 502": "http_502 / Error",
+  "E_DANA with name Dana": "Error / Error",
+  "class DanaError code E_DANA": "Error / Error",
+  "plain object {code:E_DANA}": "Error / Error",
+  "plain object {code:ECONNRESET}": "ECONNRESET / Error",
+  "ECONNRESET": "ECONNRESET / Error",
+  "ETIMEDOUT": "ETIMEDOUT / Error",
+  "EAI_AGAIN": "EAI_AGAIN / Error",
+  "EPIPE": "EPIPE / Error",
+  "ours CodedError": "set_composition_missing / CodedError",
+  "ours SupplierRefused": "cj_line_without_sku / SupplierRefused",
+  "TimeoutError": "aborted / TimeoutError"
+ },
+ "C2": {
+  "code E_<NAME>": "clean code=Error",
+  "code E_CONSIGNEE_<NAME>_<SURNAME>": "clean code=Error",
+  "code ECONNRESET_<NAME>": "clean code=Error",
+  "code ECONNRESET (real)": "clean code=ECONNRESET",
+  "message <name>_rejected, camel": "clean code=Error",
+  "thrown string": "clean code=unknown"
+ }
+}
