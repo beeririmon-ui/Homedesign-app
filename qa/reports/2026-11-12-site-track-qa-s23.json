@@ -1,0 +1,295 @@
+{
+ "report": "QA S23, site track: fixes from QA S21 (t72-t77, h29, h30, h32, h33) and the manager's addendum from QA S22 (t83, t84, the gate part of t85)",
+ "date": "2026-11-12",
+ "agent": "qa-agent",
+ "commit": "bd5ac86a",
+ "branch": "claude/agent-system-brand-launch-ax87dv",
+ "brief": "briefs/site-s23-qa-fixes-2026-11-12.md",
+ "evidence_of_frontend_dev": "qa/reports/2026-11-07-site-track/s23/",
+ "folder": "qa/reports/2026-11-12-site-track-qa-s23/{tools,data,screens}",
+ "scope": "EFF1.2: the repo's checks, plus an independent check of only what changed, with QA's existing tools (S21 cart-flash, bfcache, history-db, log test; S22 options-early-click). No new phrase lists, no mutation suites. Small new probes only for the claims themselves: window.name from another site, the noscript line, and three data checks of the price gate.",
+ "how": {
+  "copies": "isolated, in the session scratchpad: a flag build in the CI order (server 8850) and a public build (HD_PUBLIC=1) with a test contact made at run time (never in the repo; masked in the evidence). Nothing read from or written to the live site/.",
+  "data": "hard-linked from the S22 QA copy; the 2 files changed 9b6c6746..bd5ac86a replaced from git; tar -d: 0 content differences in 17,818 files",
+  "secrets_network": "dummy webhook secret on the command line only; dummy admin token in the copy's .dev.vars; npm offline, every npx --no-install, proxies pointed at a closed port"
+ },
+ "bottom_line": {
+  "verdict": "S23 passes",
+  "confirmed": [
+   "cart-flash: 93 documents, 0 in each empty state (story included)",
+   "t72 (a) 0/3 planted; (b) 0 c= in links, history, requests; (c) History DB: 0 #c= (storage refused and kept); window.name from another site: 0/10 ways read (assign, window.open with a name, <a target>; cross-site and same-site other port; storage refused and kept)",
+   "t73 (a) x2 stays x2; (b) 5/5 lines unchanged, x3 stays x3",
+   "t74 6/6: blank count, the error and 'לנסות שוב'; never '0' or 'הסל ריק.'",
+   "t75: persisted true, header 'סל (2)'",
+   "h29: PUT 6 s, move after 4,206/4,245 ms, cart loading then the line at 2,277/2,299 ms, 0 empty states",
+   "t76: 0 leaks in 45 probes; 35/36 ordinary words whole (TelAvivian)",
+   "t77, t84: one press after the hydrate sign, no retry; 40/40 over 5 repeats",
+   "t83: 0/20 mismatches on desktop and 0/20 on the phone; 40/40 presses kept, 23 before the app mounted",
+   "t85 gate: the rug's SKU warning and 6 inverted ladders; my independent reading finds the same 6 with the same pair counts; no price changed by S23",
+   "h30, h32, h33"
+  ],
+  "new_findings": [
+   "t87 (low): the table runner's price anchor names the wrong SKU (161/162 right)"
+  ],
+  "repo_checks": "typecheck, lint, format, check:config pass; vitest 514+1 skipped before the build (h40), 515/515 after; e2e 164 passed + 1 skipped, the 2 h23 tests of s22.spec cannot run in QA's environment (h38) = 166+1 as claimed; a11y 16/16; both builds pass"
+ },
+ "assets": [
+  {
+   "asset": "typecheck, lint, format:check, check:config",
+   "result": "pass"
+  },
+  {
+   "asset": "vitest",
+   "result": "pass",
+   "measure": "before the build 514 + 1 skipped (s16 needs dist, h40); after the build 515/515"
+  },
+  {
+   "asset": "flag build",
+   "result": "pass",
+   "measure": "budget, check:rights (control), check:promises 0 in 112 pages"
+  },
+  {
+   "asset": "public build (HD_PUBLIC=1, test contact)",
+   "result": "pass",
+   "measure": "check:rights 0 in 260 files; check:promises 0 in 49 pages; beacon on 45 pages"
+  },
+  {
+   "asset": "e2e",
+   "result": "pass",
+   "measure": "164 passed + 1 skipped; s22.spec h23 x2: 503 on the scratch site (h38, QA environment)"
+  },
+  {
+   "asset": "a11y",
+   "result": "pass",
+   "measure": "16/16; axe in cart-flash: 0 violations in 8 states"
+  },
+  {
+   "asset": "t72 (a) planting, storage works",
+   "result": "pass",
+   "measure": "0/3 adopted; the other cart stays x3"
+  },
+  {
+   "asset": "t72 (b) storage refused",
+   "result": "pass",
+   "measure": "0 ids in DOM links, 0 history entries with c=, 0 requests with a fragment or c=; 'סל' on the cart: /cart/, the line stays; story 'לתשלום': 6 lines"
+  },
+  {
+   "asset": "t72 (c) History database",
+   "result": "pass",
+   "measure": "storage refused and kept: /p/…, /cart/, /checkout/; 0 with #c="
+  },
+  {
+   "asset": "t72 window.name from another site",
+   "result": "pass",
+   "measure": "0/10 (assign+link, window.open with a name, <a target>, cross-site; assign and window.open from another port of the same site; each with storage refused and kept); the name is empty at the cart's first script; COOP same-origin on every page type; frame-ancestors 'none'"
+  },
+  {
+   "asset": "t73 (a)",
+   "result": "pass",
+   "measure": "x2 stays x2 (S21: x1); header 'סל' without a number"
+  },
+  {
+   "asset": "t73 (b)",
+   "result": "pass",
+   "measure": "5/5 lines unchanged; x3 stays x3"
+  },
+  {
+   "asset": "t74",
+   "result": "pass",
+   "measure": "6/6 (500, 503, no network; phone, desktop): blank count, error, 'לנסות שוב'; retry brings the line"
+  },
+  {
+   "asset": "t75",
+   "result": "pass",
+   "measure": "persisted true; 'סל (2)' (S21: 'סל (1)')"
+  },
+  {
+   "asset": "h29",
+   "result": "pass",
+   "measure": "PUT 6 s: move at 4,206/4,245 ms; cart re-reads about every 720 ms; the line at 2,277/2,299 ms; 0 empty states"
+  },
+  {
+   "asset": "cart-flash, every case",
+   "result": "pass",
+   "measure": "93 documents: 0 'הסל ריק.', 0 'הסל ריק, אין מה לשלם.', 0 'סל (0)', 0 story '0'"
+  },
+  {
+   "asset": "t63 (S21), no regression",
+   "result": "pass",
+   "measure": "first line in the cart at GET 0/800/2000 ms: phone 140/875/2080, desktop 111/900/2091"
+  },
+  {
+   "asset": "t76",
+   "result": "pass",
+   "measure": "QA S21 log test: 0 leaks in 45 probes (field and message); 35/36 ordinary words whole"
+  },
+  {
+   "asset": "t77, t84",
+   "result": "pass",
+   "measure": "one press after the sign, no retry; a lost press fails; 40/40 over 5 repeats (options keyboard, t83 x2, house t22 x5)"
+  },
+  {
+   "asset": "t83",
+   "result": "pass",
+   "measure": "desktop 0/20 mismatches, phone 0/20 (S22: 4/10); 40/40 kept; 11 and 12 presses while the header's cart was still busy"
+  },
+  {
+   "asset": "t83 second cause (Product.tsx)",
+   "result": "pass",
+   "measure": "code read: the reset effect skips the first render; PackPicker adopts like OptionPicker; the qty buttons have no pre-hydrate state"
+  },
+  {
+   "asset": "t85 SKU warning",
+   "result": "pass",
+   "measure": "1 warning: the rug (₪1,299 set for …817QJ, default now …818RI), in every catalog and the public build"
+  },
+  {
+   "asset": "t85 size ladders",
+   "result": "pass",
+   "measure": "6 products; my independent reading: the same 6 and the same pairs (12, 1, 41, 3, 20, 3); no size value unread"
+  },
+  {
+   "asset": "t85 anchors file",
+   "result": "pass on condition",
+   "measure": "161/162 anchors are the default SKU when the price was set; the table runner is not (t87)"
+  },
+  {
+   "asset": "t85 no price changed",
+   "result": "pass",
+   "measure": "every product, variant and option price in 4 catalogs vs S22: only the curtain (57 prices), from the manager's pricing commit 0f900def (229 -> 269), not S23"
+  },
+  {
+   "asset": "h30",
+   "result": "pass",
+   "measure": "noscript line visible 4/4 (cart, checkout; phone, desktop); no 'הסל ריק.'"
+  },
+  {
+   "asset": "h32, h33",
+   "result": "pass",
+   "measure": "known limits incl. the negative in the console line and the JSON (not_caught); npm run check:rights writes its JSON; flat fingerprints 0/1422 (flag), 0/1166 (public)"
+  },
+  {
+   "asset": "weights",
+   "result": "pass",
+   "measure": "flag: room JS 56.3 KB, first load 714.0 KB, story JS 10.3 KB; public: 52.4 KB and 702.0 KB (+0.1 vs frontend-dev: the test contact's length)"
+  }
+ ],
+ "findings": [
+  {
+   "id": "ת87",
+   "severity": "low (not blocking; the customer sees a sound price, no loss, the ladder is consistent)",
+   "owner": "frontend-dev (the anchor), pricing (the price)",
+   "what": "site/tools/price-anchors.json anchors table-runner-cj-linen-look-sage-fringe to CJYD242507909IR (33x122). Its ₪79 (initial-2026-10-11; price_note '33×183') was set for CJYD242507912LO (33x183, $3.68); the designer moved the default to 33x122 on 2026-11-07 (d69679d1), before 7b42ddc1, and make-price-anchors.py takes the default at 7b42ddc1. So the gate is silent. Today 92-153 cm ₪79, 183 and 228 ₪89, 275 ₪99 (183 was priced ₪79). The other 161/162 anchors are right.",
+   "fix": "anchor -> CJYD242507912LO (or retail_sku on the entry, S23-ש6); then the gate warns and pricing decides (₪79 for the 122, or another price), with the rug. If the anchor tool runs again: the SKU of the price's day, not of 7b42ddc1."
+  }
+ ],
+ "notes": [
+  {
+   "id": "ה47",
+   "what": "README: 'with storage, window.name stays empty'. The h29 marks (w) are written to the name with storage too while a write is on its way, and go to the next page when it is left mid-write. By design; wording only. The marks carry no cart id."
+  },
+  {
+   "id": "ה48",
+   "what": "h38 (S22) still open: s22.spec's scratch site takes the webhook secret only from .dev.vars, so it answers 503 in QA's environment. Proposed for the backlog."
+  },
+  {
+   "id": "ה49",
+   "what": "The first add, when the cart's own POST takes over 4 s: the page leaves without an id, the add is lost and the cart says 'הסל ריק.' (true to the server; in the README). Not measured."
+  },
+  {
+   "id": "ה50",
+   "what": "e2e/encoding-capture.ts still repeats its press (S21 h17, accepted); not part of t77/t84."
+  },
+  {
+   "id": "ה51",
+   "what": "My 503 mock nests its error ({error:{...}}); the API's shape is flat, so both the shop and the story showed the general line. Consistent; not a finding."
+  },
+  {
+   "id": "ה52",
+   "what": "The tools ran on an idle machine after the e2e; the t63 times are lower than frontend-dev's (measured under load)."
+  }
+ ],
+ "readme_questions": {
+  "1": "agree with the manager: delete the #c= reader (S23-ש1); with storage it plants nothing (0/3)",
+  "2,4-7": "no remarks beyond the manager's decisions",
+  "3": "master-designer"
+ },
+ "readiness_hd_public_1": {
+  "from_s23": "no new blocker",
+  "to_backlog_low": [
+   "ת87",
+   "ה38 (ה48) if the manager wants"
+  ],
+  "still_open": [
+   "rug price (owner)",
+   "S23-ש1 delete the #c= reader",
+   "ת80 before CONTACT1",
+   "ת78 before the copy edit",
+   "CONTACT1, lawyer, line 1.5, the real token (owner)"
+  ]
+ },
+ "numbers": {
+  "cart_flash": {
+   "documents": 93,
+   "empty": 0,
+   "pay_empty": 0,
+   "zero": 0,
+   "story_zero": 0,
+   "axe_violations": 0,
+   "axe_states": 8
+  },
+  "t72": {
+   "planted": "0/3",
+   "other_cart_qty": 3,
+   "history_db_with_c": 0,
+   "session_history_with_c": 0,
+   "requests_with_fragment_or_c": 0,
+   "window_name_foreign_read": "0/10"
+  },
+  "t76": {
+   "probes": 45,
+   "leaks": 0,
+   "ordinary_words_whole": "35/36"
+  },
+  "t83": {
+   "desktop_mismatch": "0/20",
+   "phone_mismatch": "0/20",
+   "kept": "40/40",
+   "presses_while_header_busy": 23
+  },
+  "t77_t84_repeat": "40/40",
+  "t85": {
+   "sku_warnings": 1,
+   "ladder_products": 6,
+   "ladder_pairs": [
+    12,
+    1,
+    41,
+    3,
+    20,
+    3
+   ],
+   "anchors_right": "161/162",
+   "prices_changed_vs_s22": {
+    "curtain_only": 57
+   }
+  },
+  "vitest": {
+   "before_build": "514 + 1 skipped",
+   "after_build": "515/515"
+  },
+  "e2e": {
+   "passed": 164,
+   "skipped": 1,
+   "qa_env_h38": 2
+  },
+  "a11y": "16/16",
+  "weights_kb": {
+   "flag_room_js": 56.3,
+   "flag_first_load": 714.0,
+   "public_room_js": 52.4,
+   "public_first_load": 702.0,
+   "story_js": 10.3
+  }
+ }
+}
