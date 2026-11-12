@@ -1,0 +1,536 @@
+{
+ "id": "qa-2026-11-12-wm-phase2-r8",
+ "date": "2026-11-12",
+ "author": "qa-agent",
+ "scope": "warm-modern living-room tool, phase 2, R8 (0-token code fixes on the R7 layers) + the WM-T3 clay + the designer's open R7 checks (3.2.1-3.2.3, 3.3.2, 3.4; the coordinator's addendum) + curtain 3 against the designer's lock (docs/proposals/wm-r8-eye-2026-11-12.md)",
+ "cost": "0 tokens; no var2, no network, no commits; new files only",
+ "verdict": "PASS",
+ "bottom_line": "R8 passes: the four fixes do what fix-r8.json says, only the claimed products changed, and the phase-2 acceptance holds over the full cross (2,592 compositions). No layer fails before the tool. WM-T3 passes in QA's own clay for the in-tool pieces. Open items are records and rules, not pixels (findings).",
+ "items": [
+  {
+   "item": "1 scope: files",
+   "result": "PASS",
+   "numbers": "8 of 51 tool files changed (candle-holders, curtains 180502, 554205, Linen: layer + shadow each); 43 byte-identical to R7"
+  },
+  {
+   "item": "1 scope: composites",
+   "result": "PASS",
+   "numbers": "changed px outside the changed products' regions: 0 in all 13 scenes (3 defaults + 10 variant truths); 180502 / 554205 changed only in the bench zone x 130-240, y 1178-1213"
+  },
+  {
+   "item": "2 holders: nothing outside the mark box",
+   "result": "PASS",
+   "numbers": "806 px changed, box [1710, 1247, 1749, 1282], outside R8's box 0"
+  },
+  {
+   "item": "2 holders: nothing added",
+   "result": "PASS",
+   "numbers": "darker px: ungraded 0, graded 0"
+  },
+  {
+   "item": "2 holders: <= 2/255 between the feet",
+   "result": "PASS (with F4)",
+   "numbers": "the gap (x >= 1718): max 2/255, 0 px > 2; scene dL* min -0.51; A's own fan faded over x 1710-1717: max 19/255"
+  },
+  {
+   "item": "2 holders: each foot's own shadow = the frozen recipe",
+   "result": "PASS",
+   "numbers": "B identical (1101 px); A identical except 8 px at its shoulder column x 1710 (<= 7/255 lighter); recipe fingerprint min 0.616, direction [18.8, 55.8] vs [17.1, 54.3]"
+  },
+  {
+   "item": "3 curtain 3: specks, literal rule",
+   "result": "PASS in the scene / letter: 11 soft-edge px (F1)",
+   "numbers": "ungraded 0, graded alpha 255 0, set-B truth 0; graded alpha > 0: [3, 13] alpha, x [248, 261], composite effect <= 0.77 level"
+  },
+  {
+   "item": "3 curtain 3: specks, R8's wide rule",
+   "result": "PASS (0 in R8's Lab; 3 at the threshold in QA's)",
+   "numbers": "{\"107,33\": {\"qa_lab_a_minus_med\": -8.05, \"opencv_lab_a_minus_med\": -7.984, \"threshold\": -8.0}, \"74,333\": {\"qa_lab_a_minus_med\": -8.035, \"opencv_lab_a_minus_med\": -7.969, \"threshold\": -8.0}, \"152,1141\": {\"qa_lab_a_minus_med\": -8.025, \"opencv_lab_a_minus_med\": -7.984, \"threshold\": -8.0}}"
+  },
+  {
+   "item": "3 curtain 3: L* kept on the fixed px, nothing else changed",
+   "result": "PASS (with F2)",
+   "numbers": "dL vs the global factor on the specks max 0.53; a*b* outside the specks p99.9 0.79 except the final pass's 37 px (not in the mask file)"
+  },
+  {
+   "item": "3 curtain 3: lit fabric L*",
+   "result": "REPORTED",
+   "numbers": "same mask 73.06 (OpenCV 72.99; R8 73.0); lit (> p25) 78.57; card Linen L* 82.85; card-ratio expectation 72.97; in-room Y ratio to 180502 0.773 vs card 0.7708"
+  },
+  {
+   "item": "3 curtain 3 vs the designer's lock",
+   "result": "L* PASS, h PASS, C* on the upper edge (F3)",
+   "numbers": "{\"L\": {\"value\": 73.06, \"range\": [71.5, 74.5], \"pass_\": true}, \"h\": {\"value\": 83.53, \"range\": [81.0, 87.0], \"pass_\": true}, \"C\": {\"value\": 12.52, \"range\": [10.5, 12.5], \"pass_\": false}}"
+  },
+  {
+   "item": "3 true length 12 / 22 cm",
+   "result": "PASS",
+   "numbers": {
+    "default": [
+     11.95,
+     0.36
+    ],
+    "curtains-v2": [
+     11.95,
+     0.36
+    ],
+    "curtains-v3": [
+     22.02,
+     0.22
+    ]
+   }
+  },
+  {
+   "item": "4 bench break and contact",
+   "result": "PASS",
+   "numbers": {
+    "default": {
+     "r7": [
+      -0.12,
+      -0.18,
+      0.9686,
+      -2.9
+     ],
+     "r8": [
+      -3.97,
+      -4.01,
+      0.9255,
+      -2.9
+     ]
+    },
+    "curtains-v2": {
+     "r7": [
+      -0.68,
+      -0.51,
+      0.9686,
+      -2.92
+     ],
+     "r8": [
+      -3.81,
+      -4.06,
+      0.9255,
+      -2.92
+     ]
+    },
+    "curtains-v3": {
+     "r7": [
+      -0.53,
+      -0.43,
+      0.9686,
+      -1.52
+     ],
+     "r8": [
+      -4.0,
+      -4.49,
+      0.9255,
+      -1.36
+     ]
+    }
+   }
+  },
+  {
+   "item": "5 swap-diff over the full cross",
+   "result": "PASS",
+   "numbers": "432 x 3 sets x 2 paths = 2592; worst {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}; swap-diff outside 0 (0 over 42 toggles)"
+  },
+  {
+   "item": "5 recomposite p99.9 <= 2, max <= 6",
+   "result": "PASS",
+   "numbers": {
+    "A": {
+     "P1": [
+      0.0,
+      3.0
+     ],
+     "P2": [
+      0.0,
+      3.0
+     ],
+     "P4": [
+      1.0,
+      3.0
+     ]
+    },
+    "B": {
+     "P1": [
+      0.0,
+      4.0
+     ],
+     "P2": [
+      0.0,
+      4.0
+     ],
+     "P4": [
+      1.0,
+      4.0
+     ]
+    },
+    "C": {
+     "P1": [
+      0.0,
+      4.0
+     ],
+     "P2": [
+      0.0,
+      4.0
+     ],
+     "P4": [
+      1.0,
+      4.0
+     ]
+    }
+   }
+  },
+  {
+   "item": "5 shell lock",
+   "result": "PASS",
+   "numbers": "worst p90 9.0 (<= 9.6) on 17 files; R8 = R7"
+  },
+  {
+   "item": "5 one v3c grade",
+   "result": "PASS",
+   "numbers": {
+    "curtains": 0.0,
+    "candle-holders": 0.0,
+    "curtains-v2": 0.0,
+    "curtains-v3": 0.0
+   }
+  },
+  {
+   "item": "5 encoding gate",
+   "result": "PASS as a file proxy (F7)",
+   "numbers": {
+    "curtains (180502, default)": {
+     "1920": [
+      2,
+      2,
+      0,
+      2.52
+     ],
+     "2720": [
+      2,
+      2,
+      0,
+      2.5
+     ]
+    },
+    "candle-holders (travertine, default)": {
+     "1920": [
+      2,
+      3,
+      0,
+      1.81
+     ],
+     "2720": [
+      2,
+      3,
+      0,
+      1.76
+     ]
+    },
+    "curtains-v2 (554205)": {
+     "1920": [
+      2,
+      2,
+      0,
+      2.49
+     ],
+     "2720": [
+      2,
+      2,
+      0,
+      2.48
+     ]
+    },
+    "curtains-v3 (Linen)": {
+     "1920": [
+      2,
+      2,
+      0,
+      2.54
+     ],
+     "2720": [
+      2,
+      2,
+      0,
+      2.54
+     ]
+    }
+   }
+  },
+  {
+   "item": "6 manifest integrity",
+   "result": "PASS (with F8)",
+   "numbers": "manifest-r8: 71 paths, missing 0, recorded sha256 1 (base, matches); assets/manifest.json: 25 R8 entries present and identical, sha256 recorded 0"
+  },
+  {
+   "item": "6 no supplier image",
+   "result": "PASS",
+   "numbers": "487 repo images vs 392 supplier images, min dHash 28/256 (only near-white full-canvas layers)"
+  },
+  {
+   "item": "7 WM-T3 clay",
+   "result": "PASS (with F5)",
+   "numbers": {
+    "qa_in_tool_min": 0.0195,
+    "at": "ceramic trays (in tool): A x B",
+    "moves": {
+     "travertine": {
+      "dA": -0.18,
+      "dB": -0.18,
+      "B_right_edge": 0.21
+     },
+     "ceramic": {
+      "dA": -0.18,
+      "dB": -0.18,
+      "B_right_edge": 0.21
+     },
+     "iron": {
+      "dA": -0.18,
+      "dB": -0.18,
+      "B_right_edge": 0.2125
+     }
+    },
+    "bowl": [
+     0.46,
+     1.94
+    ],
+    "render_agent": {
+     "A x B": 0.0208,
+     "bowl inside front edge (m)": 0.024,
+     "bowl x candle-holders": 0.023,
+     "bowl x curtains (R7 layers)": 0.5841,
+     "bowl x curtains (placeholder)": 0.5831,
+     "bowl x cushion set (F3)": 0.0243,
+     "bowl x cushion set (vertical)": 0.0531,
+     "bowl x cushions-set-X": 0.0243,
+     "bowl x floor lamp (R7 layers)": 0.1849,
+     "bowl x floor lamp (placeholder)": 0.1844,
+     "candle-holders x cushions-set-X": 0.0206,
+     "candle-holders x fixed:sofa": 0.0603,
+     "candles x cushion set": 0.0206,
+     "holders x curtains (R7 layers)": 0.4621,
+     "holders x curtains (placeholder)": 0.4664,
+     "holders x floor lamp (R7 layers)": 0.268,
+     "holders x floor lamp (placeholder)": 0.2672,
+     "rug x candle-holders": 0.0333
+    }
+   }
+  },
+  {
+   "item": "addendum 3.2.1 554205 bottom hue",
+   "result": "PASS",
+   "numbers": {
+    "x 0-129": {
+     "bottom_120": {
+      "L": 51.37,
+      "C": 4.25,
+      "h": 87.3,
+      "px": 14979
+     },
+     "body_above": {
+      "L": 76.27,
+      "C": 6.34,
+      "h": 89.0,
+      "px": 124196
+     },
+     "dh": -1.7,
+     "pass_": true
+    },
+    "in frame x 78-129": {
+     "bottom_120": {
+      "L": 51.94,
+      "C": 4.36,
+      "h": 87.0,
+      "px": 5775
+     },
+     "body_above": {
+      "L": 77.82,
+      "C": 6.65,
+      "h": 88.9,
+      "px": 49484
+     },
+     "dh": -1.9,
+     "pass_": true
+    }
+   }
+  },
+  {
+   "item": "addendum 3.2.2 Linen band under the hem",
+   "result": "PASS (in base.png: the bench facet; outside the camera frame)",
+   "numbers": {
+    "v3_alpha_gt0_px": 0,
+    "v3_shadow_min": 241,
+    "truth_minus_base_L_max_abs": 1.72,
+    "band_in_base": true
+   }
+  },
+  {
+   "item": "addendum 3.2.3 Linen weave vs SKU photo",
+   "result": "PASS (the photo has the crosshatch too)",
+   "numbers": {
+    "render, R8 Linen, x 80-250 y 300-700": {
+     "vertical_thread_share": 0.574,
+     "horizontal_threads_peak_to_median": 7.7,
+     "horizontal_threads_period_px": 8.0,
+     "vertical_threads_peak_to_median": 15.3,
+     "vertical_threads_period_px": 21.2,
+     "hp_std": 3.68
+    },
+    "render, R8 Linen, x 80-250 y 700-1100": {
+     "vertical_thread_share": 0.554,
+     "horizontal_threads_peak_to_median": 11.9,
+     "horizontal_threads_period_px": 5.1,
+     "vertical_threads_peak_to_median": 13.2,
+     "vertical_threads_period_px": 24.3,
+     "hp_std": 3.43
+    },
+    "SKU photo (CJYD218713946TG image), cloth x 0.03-0.55, y 0.02-0.50": {
+     "vertical_thread_share": 0.505,
+     "horizontal_threads_peak_to_median": 27.5,
+     "horizontal_threads_period_px": 13.8,
+     "vertical_threads_peak_to_median": 35.5,
+     "vertical_threads_period_px": 9.8,
+     "hp_std": 2.5
+    },
+    "SKU photo, cloth x 0.03-0.55, y 0.72-0.98 (below the shadow band)": {
+     "vertical_thread_share": 0.516,
+     "horizontal_threads_peak_to_median": 44.8,
+     "horizontal_threads_period_px": 16.2,
+     "vertical_threads_peak_to_median": 34.8,
+     "vertical_threads_period_px": 15.6,
+     "hp_std": 2.55
+    }
+   }
+  },
+  {
+   "item": "addendum 3.3.2 cup B soft edge",
+   "result": "PASS (the cup's own lit edge; no dragged boucle)",
+   "numbers": {
+    "box": [
+     1744,
+     1200,
+     1756,
+     1218
+    ],
+    "soft_alpha_px": 58,
+    "soft_alpha_max": 254,
+    "layer_rgb_vs_base_here_median": 85.0,
+    "layer_rgb_vs_base_at_r6_place_median": 96.0,
+    "composite_minus_base_L_alpha0_max": 0.0,
+    "composite_minus_base_L_alpha0_min": 0.0,
+    "composite_minus_base_L_soft_max": 51.38,
+    "base_L_in_box_p90": 74.4,
+    "composite_L_in_box_p90": 94.4
+   }
+  },
+  {
+   "item": "addendum 3.4a bowl edge halo",
+   "result": "PASS",
+   "numbers": {
+    "rule": "dL (1-3 px out minus 6-10 px out) > 2 = halo",
+    "dL_max_1269_1289": 1.73,
+    "dL_median_1269_1289": -0.61,
+    "rows_over_2": 0,
+    "base_dL_median": 0.38
+   }
+  },
+  {
+   "item": "addendum 3.4b table-edge dots",
+   "result": "RECORDED (in base.png, the approved phase-1 cut; untouched)",
+   "numbers": {
+    "box": [
+     2040,
+     1180,
+     2105,
+     1260
+    ],
+    "bright_dots_composite": 860,
+    "of_them_also_in_base": 372,
+    "bright_dots_base": 1507,
+    "composite_dots_under_set_B_alpha": 747,
+    "composite_dots_where_set_B_alpha0": 113,
+    "composite_eq_base_x_shadow_where_alpha0_maxdiff": 1
+   }
+  },
+  {
+   "item": "combinations (6, seed 812)",
+   "result": "PASS",
+   "numbers": "overlays/combos-r8-sheet.jpg; all natural"
+  }
+ ],
+ "findings": [
+  {
+   "id": "F1",
+   "severity": "low",
+   "owner": "render-agent",
+   "title": "curtain 3: 11 literal-rule pixels at the room-side soft edge (alpha 3-13, x 248-261) of the graded layer",
+   "fix": "0 tokens: neutralise a*b* on alpha < 255 edge pixels too (or the designer limits the rule to alpha 255); invisible today (<= 0.77 level, 0 in the scene)"
+  },
+  {
+   "id": "F2",
+   "severity": "low",
+   "owner": "render-agent",
+   "title": "records: the speck mask file lacks the 44-px final pass; 'alpha_unchanged' holds for the ungraded sources only (graded alpha moved at 7 / 6 / 64 soft-edge px, <= 20 levels)",
+   "fix": "save the final-pass mask; word the record"
+  },
+  {
+   "id": "F3",
+   "severity": "low",
+   "owner": "master-designer",
+   "title": "curtain 3 C* 12.52 (QA) / 12.503 (OpenCV) sits on the lock's upper edge 12.5",
+   "fix": "state the method and precision of the lock, or 12.6; no pixel change"
+  },
+  {
+   "id": "F4",
+   "severity": "low",
+   "owner": "master-designer",
+   "title": "the WM-T3 between-the-feet rule as written reads 94/255 on R8 itself (A's own fan lies inside the box zone)",
+   "fix": "define the zone (e.g. from 8 px past A's own field, or R8's x 1718-1752 moved with the pair) before the WM-T3 QA"
+  },
+  {
+   "id": "F5",
+   "severity": "medium",
+   "owner": "master-designer + the coordinator",
+   "title": "WM-T3 owner question: 'all clearances 0.023 and up' is not what the clay reads",
+   "fix": "send the measured floor: A x B and candles x set C 0.0206-0.0207 (both clays); ceramic A x B 0.0195 (D17 cylinder) / 0.0211 (card shape); bowl x rug 0.015 across the table's front edge (0.020-0.021 at 1.9.4), a 'hidden overlap' pair in the slots file: confirm in 1.9.5"
+  },
+  {
+   "id": "F6",
+   "severity": "info",
+   "owner": "master-designer",
+   "title": "180502 break: its top edge steps 2.8 L* per row against the cloth's 0.27 (a visible band at x4; 100% reads one line)",
+   "fix": "taste: the designer's call; numbers only"
+  },
+  {
+   "id": "F7",
+   "severity": "info",
+   "owner": "frontend-dev + qa-agent",
+   "title": "the phase-2 layers have no site encodes yet (make-house builds the cushions only)",
+   "fix": "when phase 2 is wired, run e2e/encoding.spec.ts on them; the file proxy passes with room (p99 2, p99.9 <= 3, 0 %, dE00 p99 <= 2.6)"
+  },
+  {
+   "id": "F8",
+   "severity": "info",
+   "owner": "the coordinator / render-agent",
+   "title": "no sha256 in assets/manifest.json (0 of 1,233) and only base's in manifest-r8",
+   "fix": "QA recorded sha256 for every R8 file (data/manifest.json); add sha256 to the entries if hashes are to be checked against a record"
+  }
+ ],
+ "closed_by_the_way": "the designer's wm-r8-eye 4.1 in_room note: both cards already carry in_room on the rendered SKU (CJYD218713946TG; 12000029601125492), commit 6737e3aa",
+ "data": {
+  "scope": "qa/reports/2026-11-12-wm-phase2-r8/data/scope.json",
+  "holders": "qa/reports/2026-11-12-wm-phase2-r8/data/holders.json",
+  "curtains": "qa/reports/2026-11-12-wm-phase2-r8/data/curtains.json",
+  "specks-detail": "qa/reports/2026-11-12-wm-phase2-r8/data/specks-detail.json",
+  "integrity-r8": "qa/reports/2026-11-12-wm-phase2-r8/data/integrity-r8.json",
+  "grade": "qa/reports/2026-11-12-wm-phase2-r8/data/grade.json",
+  "lock": "qa/reports/2026-11-12-wm-phase2-r8/data/lock.json",
+  "shadow": "qa/reports/2026-11-12-wm-phase2-r8/data/shadow.json",
+  "encode": "qa/reports/2026-11-12-wm-phase2-r8/data/encode.json",
+  "manifest": "qa/reports/2026-11-12-wm-phase2-r8/data/manifest.json",
+  "wmt3": "qa/reports/2026-11-12-wm-phase2-r8/data/wmt3.json",
+  "designer-checks": "qa/reports/2026-11-12-wm-phase2-r8/data/designer-checks.json",
+  "combos": "qa/reports/2026-11-12-wm-phase2-r8/data/combos.json"
+ }
+}
