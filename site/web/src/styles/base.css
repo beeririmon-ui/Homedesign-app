@@ -385,3 +385,15 @@ main {
   display: inline-flex;
   align-items: center;
 }
+/*
+ * S22 (QA ה23, a default for master-designer): one contact block per page. Where the page's own content shows it (the
+ * order page under "אין גישה" or after "נמסרה", the cancellation and accessibility pages), the footer's copy is not
+ * shown: on a short page both were on the screen at once. A browser without :has() shows both, as before.
+ */
+body:has(main .contact-block) .site-footer .site-contact {
+  display: none;
+}
+/* S22 (QA ה23): the line under the "אין גישה" box takes the system's space after a box (--s-5), not 0 */
+.notice + .order-no-access-contact {
+  margin-top: var(--s-5);
+}

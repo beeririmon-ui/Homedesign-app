@@ -31,7 +31,7 @@ import sharp from 'sharp';
 import { formatIls } from '@hd/shared/money';
 import { expandOptions, type FullCatalog, type FullProduct, type PublicCatalog } from '@hd/shared';
 import { availableValues, selectionOf } from '@hd/shared/picker';
-import { productSlug, publicId, slugIndex } from '@hd/shared/product-url';
+import { productSlug, publicId, shopPath, slugIndex } from '@hd/shared/product-url';
 import { colorNameHe, materialsHe } from './lib/hebrew';
 import { hasLatin } from './lib/lines';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
@@ -139,6 +139,11 @@ type Item = {
   swatch: string;
   /** the detail page (layer 2) of this product in this house */
   href: string | null;
+  /**
+   * S22 (QA ת70): the shop's product page (/p/<id>/), where the waiting list is, when the shop lists this product; null
+   * otherwise. "בדף המוצר אפשר לבקש עדכון" links here, never to the detail page, which has no form.
+   */
+  shop_href: string | null;
   try_href: string | null;
   /** the values of the SKU the frame shows (the card's default with the point's option), or null without options */
   values: Record<string, string> | null;
@@ -210,6 +215,8 @@ for (const p of ['.generated/catalog.story.full.json', '.generated/catalog.publi
   }
 const catalog = read<FullCatalog>(sitePath('.generated/catalog.story.full.json'));
 const site = read<PublicCatalog>(sitePath('.generated/catalog.public.json'));
+/** S22 (QA ת70): the products that have a shop page (/p/<id>/, with the waiting list when one is real) */
+const shopIds = new Set(site.products.map((p) => p.id));
 const OUT = join(MEDIA_OUT, 'story');
 // S7: the product photos are re-made every build (cached sources), under public ids: an old card-id folder goes
 rmSync(join(OUT, 'products'), { recursive: true, force: true });
@@ -565,6 +572,7 @@ async function itemOf(
     // a draft card (DS API) has no colour yet: the rule's hairline grey
     swatch: hexOf(card) ?? '#d9d6d0',
     href: null,
+    shop_href: shopIds.has(publicId(pt.product)) ? shopPath(publicId(pt.product)) : null,
     try_href: tryHref(tool, roomId, pt.product, pt.option),
     values,
     in_frame_he: inFrame,

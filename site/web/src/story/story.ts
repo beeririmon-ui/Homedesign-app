@@ -41,6 +41,8 @@ type Item = {
   thumb: string | null;
   swatch: string;
   href: string | null;
+  /** S22 (QA ת70): the shop's product page, where the waiting list is */
+  shop_href?: string | null;
   try_href: string | null;
 };
 type FrameData = { id: string; u0: number; v0: number; aspect: number; crop: [number, number]; title_he: string; items: string[] };
@@ -389,10 +391,18 @@ function fill(it: Item): void {
   addBtn.hidden = !sold;
   whyEl.hidden = sold;
   // S20 (QA ת56): "אפשר לבקש עדכון" only where the product page has the waiting list, which needs a provider that sends
-  // the back-in-stock message (site/copy, story.unavailable_note, group waitlist); until then the status alone
-  const note = it.href ? copyHe('story.unavailable_note') : null;
-  whyEl.textContent =
-    it.status === 'unavailable' ? `המלאי אינו זמין כעת.${note ? ` ${note}` : ''}` : sold ? '' : 'המחיר עוד לא נקבע, ולכן המוצר עוד לא במכירה.';
+  // the back-in-stock message (site/copy, story.unavailable_note, group waitlist); until then the status alone.
+  // S22 (QA ת70): the line is a link to the shop's product page (/p/<id>/), which has the form; the story's detail page
+  // has none. A product the shop does not list gets the status alone.
+  const note = it.status === 'unavailable' && it.shop_href ? copyHe('story.unavailable_note') : null;
+  whyEl.textContent = it.status === 'unavailable' ? `המלאי אינו זמין כעת.${note ? ' ' : ''}` : sold ? '' : 'המחיר עוד לא נקבע, ולכן המוצר עוד לא במכירה.';
+  if (note && it.shop_href) {
+    const a = document.createElement('a');
+    a.className = 'mag-link st-why-link';
+    a.href = it.shop_href;
+    a.textContent = note;
+    whyEl.append(a);
+  }
   pageLink.hidden = !it.href;
   if (it.href) pageLink.href = it.href;
   tryLink.hidden = !it.try_href;

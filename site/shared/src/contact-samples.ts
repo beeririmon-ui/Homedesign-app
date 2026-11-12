@@ -18,7 +18,15 @@
  */
 
 /** our own sample addresses, from the tests, fixtures, docs and QA's tools (lower case) */
-export const SAMPLE_EMAILS: readonly string[] = ['shop@hd-test.co.il', 'shop@hd-qa.co.il', 'info@hd-qa.co.il', 'shop@hd.co.il', 'a@b.co'];
+export const SAMPLE_EMAILS: readonly string[] = [
+  'shop@hd-test.co.il',
+  'shop@hd-qa.co.il',
+  'info@hd-qa.co.il',
+  'shop@hd.co.il',
+  'a@b.co',
+  // a customer's address in the log tests (api/test/s19.test.ts)
+  'ob@gmail.com',
+];
 /** our own test domains: any address there is a sample */
 export const SAMPLE_EMAIL_DOMAINS: readonly string[] = ['hd-test.co.il', 'hd-qa.co.il'];
 /**

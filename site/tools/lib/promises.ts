@@ -214,10 +214,7 @@ const FIELD_AFTER = re(`^\\s*(?:לא\\s+)?תקינ|^\\s*,?\\s*${words(['שם', '
  * S22 (QA ת67): a label of two words is a field's only when its second word names a field ("כתובת אימייל", "אימייל
  * וטלפון", "שם ומייל"). "חשבונית במייל", "עדכונים ב-SMS", "אישור במייל" offer what is sent, by a channel.
  */
-const FIELD_NAME = re(
-  `^ו?(?:שם|שם מלא|טלפון|נייד|כתובת|אימייל|אי-?מייל|מייל|דוא"ל|e-?mail|email|phone|name|address)[:.]?$`,
-  'iu',
-);
+const FIELD_NAME = re(`^ו?(?:שם|שם מלא|טלפון|נייד|כתובת|אימייל|אי-?מייל|מייל|דוא"ל|e-?mail|email|phone|name|address)[:.]?$`, 'iu');
 /** S22 (QA ת67): "X: Y", a heading before its line; with a negation in the line, the heading is a label */
 const HEADING = /^([^:]{1,40}):\s*(\S.*)$/u;
 
@@ -248,7 +245,11 @@ const LATIN_NEGATED = /(?:^|[\s(])(?:not|no|never|without|nor|cannot|\w+n't)\s+(
 function latinFinding(s: string): string | null {
   for (const rx of LATIN)
     for (const m of s.matchAll(new RegExp(rx.source, `${rx.flags}g`))) {
-      const clause = s.slice(0, m.index).split(/[,;:!?]|\s[-–—]\s/u).pop() ?? '';
+      const clause =
+        s
+          .slice(0, m.index)
+          .split(/[,;:!?]|\s[-–—]\s/u)
+          .pop() ?? '';
       if (!LATIN_NEGATED.test(clause)) return m[0];
     }
   return null;
@@ -491,8 +492,7 @@ export function copyIssues(src: unknown): string[] {
         if (typeof line === 'string') {
           const caps = impliedCapabilities(line);
           // S22 (QA ת68, N7): "any" is for a line that implies no capability; one that does names what it needs
-          if (needs === 'any' && caps.length)
-            out.push(`${key}: "needs" is "any", but the email line promises ${caps.join(', ')}: list what it needs`);
+          if (needs === 'any' && caps.length) out.push(`${key}: "needs" is "any", but the email line promises ${caps.join(', ')}: list what it needs`);
           if (needs !== 'any')
             for (const c of caps) if (!(needs as string[]).includes(c)) out.push(`${key}: the email line promises ${c}, which its "needs" do not list`);
         }
@@ -539,7 +539,10 @@ export function copyIssues(src: unknown): string[] {
         if (!isEmail) return promiseFindings(shown).length > 0;
         return impliedCapabilities(shown).some((c) => !st.capabilities.includes(c));
       });
-      if (bad) out.push(`${key}: with ${bad.capabilities.join('+') || 'no email'}${bad.contact ? ' and contact details' : ''}, the line it shows promises what that provider does not send`);
+      if (bad)
+        out.push(
+          `${key}: with ${bad.capabilities.join('+') || 'no email'}${bad.contact ? ' and contact details' : ''}, the line it shows promises what that provider does not send`,
+        );
     }
   return out;
 }

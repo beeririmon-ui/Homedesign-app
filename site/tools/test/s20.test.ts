@@ -343,17 +343,19 @@ describe('S20 ת61: the contact block’s config', () => {
     expect(built.strings['order.no_access_contact']).toBeNull();
     expect(JSON.stringify(built.strings)).not.toMatch(/כתבו לנו|פנו אלינו/);
   });
-  it('the public build stops without them, or with an address reserved for examples; it passes with real ones', () => {
+  it('the public build stops without them, or with an address reserved for examples; it passes with real ones (S22: made at run time)', () => {
     const none = run(['tools/build-copy.ts', `--wrangler=${wrangler('UNDECIDED')}`, `--out=${out}`], { HD_PUBLIC: '1' });
     expect(none.status).toBe(1);
     expect(none.stderr).toMatch(/production: no business contact.*The public build needs the shop's contact details/);
     const example = run(['tools/build-copy.ts', `--wrangler=${wrangler('hello@example.com')}`, `--out=${out}`], { HD_PUBLIC: '1' });
     expect(example.status).toBe(1);
     expect(example.stderr).toMatch(/reserved for examples/);
-    const ok = run(['tools/build-copy.ts', `--wrangler=${wrangler('shop@hd-test.co.il', '03-1234567')}`, `--out=${out}`], { HD_PUBLIC: '1' });
+    // S22 (QA ת69): the repo's own test values are samples now; the address and phone that pass are made at run time
+    const good = { email: `shop@hd${Date.now().toString(36)}r.co.il`, phone: `03-7${String(Date.now()).slice(-6)}` };
+    const ok = run(['tools/build-copy.ts', `--wrangler=${wrangler(good.email, good.phone)}`, `--out=${out}`], { HD_PUBLIC: '1' });
     expect(ok.status, ok.stderr).toBe(0);
     const built = JSON.parse(readFileSync(out, 'utf8')) as { contact: unknown; strings: Record<string, string | null> };
-    expect(built.contact).toEqual({ email: 'shop@hd-test.co.il', phone: '03-1234567', phone_href: '+97231234567' });
+    expect(built.contact).toEqual({ email: good.email, phone: good.phone, phone_href: `+9723${good.phone.slice(3)}` });
     expect(built.strings['order.next.delivered']).toMatch(/כתבו לנו/);
     expect(built.strings['legal.draft']).not.toMatch(/פרטי הקשר יושלמו/);
   });

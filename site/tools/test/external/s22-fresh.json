@@ -1,87 +1,488 @@
 {
- "note": "S22 (frontend-dev, 2026-11-12), t67: a second fresh list, written BEFORE the S22 changes to tools/lib/promises.ts and never used to tune them. It is the evidence of whether the definition generalises; the numbers are reported as they come out (qa/reports/2026-11-07-site-track/s22/README.md). None of these lines is in fixtures/promise-phrases.json or in QA's lists. promises: each promises the customer a message, an update or contact back that the shop does not send (tier A: the same kinds as the briefs named; B: indirect or colloquial). honest: each promises nothing (the customer writes to us, shipping, the page shows it, field labels, negations, a heading before a negation).",
- "promises": [
-  { "id": "F01", "tier": "A", "text": "אישור על ההזמנה יישלח אליכם מיד.", "why": "יישלח + אישור" },
-  { "id": "F02", "tier": "A", "text": "נשלח לכם מספר מעקב ברגע שהחבילה בדרך.", "why": "נשלח לכם + a tracking number" },
-  { "id": "F03", "tier": "A", "text": "תקבלו מאיתנו הודעה כשההזמנה נארזת.", "why": "תקבלו הודעה" },
-  { "id": "F04", "tier": "A", "text": "נעדכן אתכם בכל שלב של המשלוח.", "why": "נעדכן אתכם" },
-  { "id": "F05", "tier": "A", "text": "קישור למעקב יישלח ב-SMS.", "why": "יישלח + קישור + SMS" },
-  { "id": "F06", "tier": "A", "text": "החשבונית תישלח לכתובת המייל שמסרתם.", "why": "תישלח + חשבונית" },
-  { "id": "F07", "tier": "A", "text": "נודיע לכם אם יש עיכוב באספקה.", "why": "נודיע לכם" },
-  { "id": "F08", "tier": "A", "text": "תקבלו התראה כשהמחיר יורד.", "why": "תקבלו התראה" },
-  { "id": "F09", "tier": "A", "text": "אנחנו נשאיר אתכם מעודכנים לגבי ההזמנה.", "why": "keep you updated (נשאיר)" },
-  { "id": "F10", "tier": "A", "text": "מספר המעקב יישלח אליכם בהודעה.", "why": "יישלח + a tracking number + הודעה" },
-  { "id": "F11", "tier": "A", "text": "נשלח תזכורת לפני שההנחה נגמרת.", "why": "נשלח + תזכורת" },
-  { "id": "F12", "tier": "A", "text": "ניצור איתכם קשר לתיאום המסירה.", "why": "ניצור קשר" },
-  { "id": "F13", "tier": "A", "text": "עדכונים על ההזמנה יגיעו לוואטסאפ.", "why": "יגיעו + WhatsApp" },
-  { "id": "F14", "tier": "A", "text": "אפשר לקבל את הקבלה גם במייל.", "why": "לקבל + קבלה + מייל" },
-  { "id": "F15", "tier": "A", "text": "We will email you when your order ships.", "why": "we will email" },
-  { "id": "F16", "tier": "A", "text": "You'll receive a text when the courier is close.", "why": "you'll receive" },
-  { "id": "F17", "tier": "A", "text": "הודעה תישלח אליכם כשהמוצר חוזר.", "why": "תישלח + הודעה" },
-  { "id": "F18", "tier": "A", "text": "נחזור אליכם תוך יום עסקים.", "why": "נחזור אליכם" },
-  { "id": "F19", "tier": "A", "text": "תעודכנו במייל על כל שינוי.", "why": "תעודכנו" },
-  { "id": "F20", "tier": "A", "text": "שלחו לי הודעה כשהמוצר חוזר למלאי", "why": "the customer asks to be told" },
-  { "id": "F21", "tier": "A", "text": "מספר מעקב ישלח אליכם אחרי האריזה.", "why": "ישלח + a tracking number" },
-  { "id": "F22", "tier": "A", "text": "נשמור אותך מעודכן.", "why": "keep you updated, singular" },
-  { "id": "F23", "tier": "A", "text": "התזכורת תשלח אליכם בבוקר המסירה.", "why": "תשלח (defective spelling) + תזכורת" },
-  { "id": "F24", "tier": "A", "text": "קבלה בוואטסאפ", "why": "a two-word label: the second word is a channel, not a field" },
-  { "id": "F25", "tier": "A", "text": "תזכורת ב-SMS", "why": "a two-word label" },
-  { "id": "F26", "tier": "B", "text": "בדקו גם את תיקיית דואר הזבל.", "why": "the junk folder: an email is coming" },
-  { "id": "F27", "tier": "B", "text": "הצטרפו למועדון וקבלו הטבות.", "why": "a club, perks (marketing)" },
-  { "id": "F28", "tier": "B", "text": "Stay in the loop.", "why": "an idiom" },
-  { "id": "F29", "tier": "B", "text": "Subscribe", "why": "one word, a button" },
-  { "id": "F30", "tier": "B", "text": "הפרטים כבר בדרך לתיבה שלכם.", "why": "בדרך + the mailbox without a channel word" },
-  { "id": "F31", "tier": "B", "text": "התראה תקפוץ לכם בנייד.", "why": "a notification pops up" },
-  { "id": "F32", "tier": "B", "text": "פוש על כל מבצע.", "why": "push" },
-  { "id": "F33", "tier": "B", "text": "נשלח לך משהו קטן ביום ההולדת.", "why": "נשלח לך + no object word" },
-  { "id": "F34", "tier": "B", "text": "Don't miss out, join our list.", "why": "join our list" },
-  { "id": "F35", "tier": "B", "text": "SMS עם קוד ההנחה.", "why": "a channel and a code, no verb" },
-  { "id": "F36", "tier": "B", "text": "מבצעים במייל", "why": "a two-word label, marketing" },
-  { "id": "F37", "tier": "B", "text": "תהיו הראשונים לשמוע על קולקציה חדשה.", "why": "the first to hear" },
-  { "id": "F38", "tier": "B", "text": "השאירו מספר ונחזור עם הצעה.", "why": "נחזור without אליכם" },
-  { "id": "F39", "tier": "B", "text": "We'll ping you when it's back.", "why": "ping" },
-  { "id": "F40", "tier": "B", "text": "הקופון שלכם ממתין במייל.", "why": "a channel, a coupon waiting" }
- ],
- "honest": [
-  { "id": "H01", "tier": "A", "text": "שלחו לנו מייל עם מספר ההזמנה.", "why": "the customer writes to us" },
-  { "id": "H02", "tier": "A", "text": "את מספר המעקב תמצאו בדף ההזמנה.", "why": "the page shows it" },
-  { "id": "H03", "tier": "A", "text": "החבילה נשלחת בדואר רשום.", "why": "shipping by post" },
-  { "id": "H04", "tier": "A", "text": "כתובת המייל משמשת רק לפנייה בנושא ההזמנה.", "why": "the field, what it is for" },
-  { "id": "H05", "tier": "A", "text": "אימייל וטלפון לפנייה", "why": "field labels" },
-  { "id": "H06", "tier": "A", "text": "שדה האימייל הוא חובה.", "why": "a field" },
-  { "id": "H07", "tier": "A", "text": "האתר אינו שולח הודעות SMS.", "why": "negation" },
-  { "id": "H08", "tier": "A", "text": "אין לנו ניוזלטר.", "why": "negation" },
-  { "id": "H09", "tier": "A", "text": "לא נעביר את כתובת המייל לאף גורם.", "why": "negation, privacy" },
-  { "id": "H10", "tier": "A", "text": "דף ההזמנה מתעדכן כשהספק מוסר מספר משלוח.", "why": "the page updates" },
-  { "id": "H11", "tier": "A", "text": "ההזמנה תגיע אליכם תוך 12–30 ימים.", "why": "delivery" },
-  { "id": "H12", "tier": "A", "text": "נשלח את החבילה מהמחסן של הספק.", "why": "we ship the parcel" },
-  { "id": "H13", "tier": "A", "text": "קבלו את החבילה עד דלת הבית.", "why": "delivery" },
-  { "id": "H14", "tier": "A", "text": "תקבלו את המוצר עטוף ומוגן.", "why": "delivery" },
-  { "id": "H15", "tier": "A", "text": "הודעת הביטול צריכה לכלול את מספר ההזמנה.", "why": "cancellation, to us" },
-  { "id": "H16", "tier": "A", "text": "יצירת קשר: אימייל וטלפון למטה.", "why": "the contact block" },
-  { "id": "H17", "tier": "A", "text": "Your email address is used only for this order.", "why": "English, a field" },
-  { "id": "H18", "tier": "A", "text": "We do not send marketing emails.", "why": "English negation" },
-  { "id": "H19", "tier": "A", "text": "No newsletter, no spam.", "why": "English negation" },
-  { "id": "H20", "tier": "A", "text": "סטטוס: נשלחה", "why": "a status" },
-  { "id": "H21", "tier": "A", "text": "תאריך המשלוח המשוער מופיע למעלה.", "why": "the page shows it" },
-  { "id": "H22", "tier": "A", "text": "עדכון כתובת אפשרי עד היציאה למשלוח.", "why": "the customer updates the address" },
-  { "id": "H23", "tier": "A", "text": "מחיר המשלוח מחושב בקופה.", "why": "shipping price" },
-  { "id": "H24", "tier": "A", "text": "הוראות ניקוי: כביסה עדינה ב-30 מעלות.", "why": "care, a heading" },
-  { "id": "H25", "tier": "B", "text": "מדיניות פרטיות: הכתובת לא תשמש לדיוור.", "why": "a heading, then a negation" },
-  { "id": "H26", "tier": "B", "text": "SMS: אין.", "why": "a heading, a negation" },
-  { "id": "H27", "tier": "B", "text": "דיוור: האתר לא שולח.", "why": "a heading, then a negation" },
-  { "id": "H28", "tier": "B", "text": "הודעות: לא נשלחות הודעות מהאתר.", "why": "a heading, then a negation" },
-  { "id": "H29", "tier": "A", "text": "המוצר נשלח ארוז בקרטון כפול.", "why": "shipping" },
-  { "id": "H30", "tier": "A", "text": "הספק ישלח את המוצר ישירות אליכם.", "why": "the supplier ships the product" },
-  { "id": "H31", "tier": "A", "text": "Sent from the supplier's warehouse.", "why": "English shipping" },
-  { "id": "H32", "tier": "A", "text": "Shipping updates appear on your order page.", "why": "the page shows them" },
-  { "id": "H33", "tier": "A", "text": "המשלוח יוצא תוך 3 ימי עסקים.", "why": "shipping" },
-  { "id": "H34", "tier": "A", "text": "לביטול עסקה פנו לשירות הלקוחות.", "why": "to us" },
-  { "id": "H35", "tier": "A", "text": "שם, נייד ואימייל", "why": "field labels" },
-  { "id": "H36", "tier": "A", "text": "אימייל לא תקין", "why": "a field error" },
-  { "id": "H37", "tier": "B", "text": "האתר לא ישלח לכם מיילים, גם לא אחרי ההזמנה.", "why": "negation" },
-  { "id": "H38", "tier": "A", "text": "את הקבלה אפשר להוריד מדף ההזמנה.", "why": "the page" },
-  { "id": "H39", "tier": "B", "text": "We never email you, the order page says it all.", "why": "English negation" },
-  { "id": "H40", "tier": "B", "text": "ניוזלטר: לא קיים.", "why": "a heading, a negation" }
- ]
+  "note": "S22 (frontend-dev, 2026-11-12), t67: a second fresh list, written BEFORE the S22 changes to tools/lib/promises.ts and never used to tune them. It is the evidence of whether the definition generalises; the numbers are reported as they come out (qa/reports/2026-11-07-site-track/s22/README.md). None of these lines is in fixtures/promise-phrases.json or in QA's lists. promises: each promises the customer a message, an update or contact back that the shop does not send (tier A: the same kinds as the briefs named; B: indirect or colloquial). honest: each promises nothing (the customer writes to us, shipping, the page shows it, field labels, negations, a heading before a negation). One honest line, H01, turned out to be in the fixture too (QA S18 wrote the same sentence): it was written without looking, and it is counted as it is (`in_fixture`).",
+  "promises": [
+    {
+      "id": "F01",
+      "tier": "A",
+      "text": "אישור על ההזמנה יישלח אליכם מיד.",
+      "why": "יישלח + אישור"
+    },
+    {
+      "id": "F02",
+      "tier": "A",
+      "text": "נשלח לכם מספר מעקב ברגע שהחבילה בדרך.",
+      "why": "נשלח לכם + a tracking number"
+    },
+    {
+      "id": "F03",
+      "tier": "A",
+      "text": "תקבלו מאיתנו הודעה כשההזמנה נארזת.",
+      "why": "תקבלו הודעה"
+    },
+    {
+      "id": "F04",
+      "tier": "A",
+      "text": "נעדכן אתכם בכל שלב של המשלוח.",
+      "why": "נעדכן אתכם"
+    },
+    {
+      "id": "F05",
+      "tier": "A",
+      "text": "קישור למעקב יישלח ב-SMS.",
+      "why": "יישלח + קישור + SMS"
+    },
+    {
+      "id": "F06",
+      "tier": "A",
+      "text": "החשבונית תישלח לכתובת המייל שמסרתם.",
+      "why": "תישלח + חשבונית"
+    },
+    {
+      "id": "F07",
+      "tier": "A",
+      "text": "נודיע לכם אם יש עיכוב באספקה.",
+      "why": "נודיע לכם"
+    },
+    {
+      "id": "F08",
+      "tier": "A",
+      "text": "תקבלו התראה כשהמחיר יורד.",
+      "why": "תקבלו התראה"
+    },
+    {
+      "id": "F09",
+      "tier": "A",
+      "text": "אנחנו נשאיר אתכם מעודכנים לגבי ההזמנה.",
+      "why": "keep you updated (נשאיר)"
+    },
+    {
+      "id": "F10",
+      "tier": "A",
+      "text": "מספר המעקב יישלח אליכם בהודעה.",
+      "why": "יישלח + a tracking number + הודעה"
+    },
+    {
+      "id": "F11",
+      "tier": "A",
+      "text": "נשלח תזכורת לפני שההנחה נגמרת.",
+      "why": "נשלח + תזכורת"
+    },
+    {
+      "id": "F12",
+      "tier": "A",
+      "text": "ניצור איתכם קשר לתיאום המסירה.",
+      "why": "ניצור קשר"
+    },
+    {
+      "id": "F13",
+      "tier": "A",
+      "text": "עדכונים על ההזמנה יגיעו לוואטסאפ.",
+      "why": "יגיעו + WhatsApp"
+    },
+    {
+      "id": "F14",
+      "tier": "A",
+      "text": "אפשר לקבל את הקבלה גם במייל.",
+      "why": "לקבל + קבלה + מייל"
+    },
+    {
+      "id": "F15",
+      "tier": "A",
+      "text": "We will email you when your order ships.",
+      "why": "we will email"
+    },
+    {
+      "id": "F16",
+      "tier": "A",
+      "text": "You'll receive a text when the courier is close.",
+      "why": "you'll receive"
+    },
+    {
+      "id": "F17",
+      "tier": "A",
+      "text": "הודעה תישלח אליכם כשהמוצר חוזר.",
+      "why": "תישלח + הודעה"
+    },
+    {
+      "id": "F18",
+      "tier": "A",
+      "text": "נחזור אליכם תוך יום עסקים.",
+      "why": "נחזור אליכם"
+    },
+    {
+      "id": "F19",
+      "tier": "A",
+      "text": "תעודכנו במייל על כל שינוי.",
+      "why": "תעודכנו"
+    },
+    {
+      "id": "F20",
+      "tier": "A",
+      "text": "שלחו לי הודעה כשהמוצר חוזר למלאי",
+      "why": "the customer asks to be told"
+    },
+    {
+      "id": "F21",
+      "tier": "A",
+      "text": "מספר מעקב ישלח אליכם אחרי האריזה.",
+      "why": "ישלח + a tracking number"
+    },
+    {
+      "id": "F22",
+      "tier": "A",
+      "text": "נשמור אותך מעודכן.",
+      "why": "keep you updated, singular"
+    },
+    {
+      "id": "F23",
+      "tier": "A",
+      "text": "התזכורת תשלח אליכם בבוקר המסירה.",
+      "why": "תשלח (defective spelling) + תזכורת"
+    },
+    {
+      "id": "F24",
+      "tier": "A",
+      "text": "קבלה בוואטסאפ",
+      "why": "a two-word label: the second word is a channel, not a field"
+    },
+    {
+      "id": "F25",
+      "tier": "A",
+      "text": "תזכורת ב-SMS",
+      "why": "a two-word label"
+    },
+    {
+      "id": "F26",
+      "tier": "B",
+      "text": "בדקו גם את תיקיית דואר הזבל.",
+      "why": "the junk folder: an email is coming"
+    },
+    {
+      "id": "F27",
+      "tier": "B",
+      "text": "הצטרפו למועדון וקבלו הטבות.",
+      "why": "a club, perks (marketing)"
+    },
+    {
+      "id": "F28",
+      "tier": "B",
+      "text": "Stay in the loop.",
+      "why": "an idiom"
+    },
+    {
+      "id": "F29",
+      "tier": "B",
+      "text": "Subscribe",
+      "why": "one word, a button"
+    },
+    {
+      "id": "F30",
+      "tier": "B",
+      "text": "הפרטים כבר בדרך לתיבה שלכם.",
+      "why": "בדרך + the mailbox without a channel word"
+    },
+    {
+      "id": "F31",
+      "tier": "B",
+      "text": "התראה תקפוץ לכם בנייד.",
+      "why": "a notification pops up"
+    },
+    {
+      "id": "F32",
+      "tier": "B",
+      "text": "פוש על כל מבצע.",
+      "why": "push"
+    },
+    {
+      "id": "F33",
+      "tier": "B",
+      "text": "נשלח לך משהו קטן ביום ההולדת.",
+      "why": "נשלח לך + no object word"
+    },
+    {
+      "id": "F34",
+      "tier": "B",
+      "text": "Don't miss out, join our list.",
+      "why": "join our list"
+    },
+    {
+      "id": "F35",
+      "tier": "B",
+      "text": "SMS עם קוד ההנחה.",
+      "why": "a channel and a code, no verb"
+    },
+    {
+      "id": "F36",
+      "tier": "B",
+      "text": "מבצעים במייל",
+      "why": "a two-word label, marketing"
+    },
+    {
+      "id": "F37",
+      "tier": "B",
+      "text": "תהיו הראשונים לשמוע על קולקציה חדשה.",
+      "why": "the first to hear"
+    },
+    {
+      "id": "F38",
+      "tier": "B",
+      "text": "השאירו מספר ונחזור עם הצעה.",
+      "why": "נחזור without אליכם"
+    },
+    {
+      "id": "F39",
+      "tier": "B",
+      "text": "We'll ping you when it's back.",
+      "why": "ping"
+    },
+    {
+      "id": "F40",
+      "tier": "B",
+      "text": "הקופון שלכם ממתין במייל.",
+      "why": "a channel, a coupon waiting"
+    }
+  ],
+  "honest": [
+    {
+      "id": "H01",
+      "tier": "A",
+      "text": "שלחו לנו מייל עם מספר ההזמנה.",
+      "why": "the customer writes to us"
+    },
+    {
+      "id": "H02",
+      "tier": "A",
+      "text": "את מספר המעקב תמצאו בדף ההזמנה.",
+      "why": "the page shows it"
+    },
+    {
+      "id": "H03",
+      "tier": "A",
+      "text": "החבילה נשלחת בדואר רשום.",
+      "why": "shipping by post"
+    },
+    {
+      "id": "H04",
+      "tier": "A",
+      "text": "כתובת המייל משמשת רק לפנייה בנושא ההזמנה.",
+      "why": "the field, what it is for"
+    },
+    {
+      "id": "H05",
+      "tier": "A",
+      "text": "אימייל וטלפון לפנייה",
+      "why": "field labels"
+    },
+    {
+      "id": "H06",
+      "tier": "A",
+      "text": "שדה האימייל הוא חובה.",
+      "why": "a field"
+    },
+    {
+      "id": "H07",
+      "tier": "A",
+      "text": "האתר אינו שולח הודעות SMS.",
+      "why": "negation"
+    },
+    {
+      "id": "H08",
+      "tier": "A",
+      "text": "אין לנו ניוזלטר.",
+      "why": "negation"
+    },
+    {
+      "id": "H09",
+      "tier": "A",
+      "text": "לא נעביר את כתובת המייל לאף גורם.",
+      "why": "negation, privacy"
+    },
+    {
+      "id": "H10",
+      "tier": "A",
+      "text": "דף ההזמנה מתעדכן כשהספק מוסר מספר משלוח.",
+      "why": "the page updates"
+    },
+    {
+      "id": "H11",
+      "tier": "A",
+      "text": "ההזמנה תגיע אליכם תוך 12–30 ימים.",
+      "why": "delivery"
+    },
+    {
+      "id": "H12",
+      "tier": "A",
+      "text": "נשלח את החבילה מהמחסן של הספק.",
+      "why": "we ship the parcel"
+    },
+    {
+      "id": "H13",
+      "tier": "A",
+      "text": "קבלו את החבילה עד דלת הבית.",
+      "why": "delivery"
+    },
+    {
+      "id": "H14",
+      "tier": "A",
+      "text": "תקבלו את המוצר עטוף ומוגן.",
+      "why": "delivery"
+    },
+    {
+      "id": "H15",
+      "tier": "A",
+      "text": "הודעת הביטול צריכה לכלול את מספר ההזמנה.",
+      "why": "cancellation, to us"
+    },
+    {
+      "id": "H16",
+      "tier": "A",
+      "text": "יצירת קשר: אימייל וטלפון למטה.",
+      "why": "the contact block"
+    },
+    {
+      "id": "H17",
+      "tier": "A",
+      "text": "Your email address is used only for this order.",
+      "why": "English, a field"
+    },
+    {
+      "id": "H18",
+      "tier": "A",
+      "text": "We do not send marketing emails.",
+      "why": "English negation"
+    },
+    {
+      "id": "H19",
+      "tier": "A",
+      "text": "No newsletter, no spam.",
+      "why": "English negation"
+    },
+    {
+      "id": "H20",
+      "tier": "A",
+      "text": "סטטוס: נשלחה",
+      "why": "a status"
+    },
+    {
+      "id": "H21",
+      "tier": "A",
+      "text": "תאריך המשלוח המשוער מופיע למעלה.",
+      "why": "the page shows it"
+    },
+    {
+      "id": "H22",
+      "tier": "A",
+      "text": "עדכון כתובת אפשרי עד היציאה למשלוח.",
+      "why": "the customer updates the address"
+    },
+    {
+      "id": "H23",
+      "tier": "A",
+      "text": "מחיר המשלוח מחושב בקופה.",
+      "why": "shipping price"
+    },
+    {
+      "id": "H24",
+      "tier": "A",
+      "text": "הוראות ניקוי: כביסה עדינה ב-30 מעלות.",
+      "why": "care, a heading"
+    },
+    {
+      "id": "H25",
+      "tier": "B",
+      "text": "מדיניות פרטיות: הכתובת לא תשמש לדיוור.",
+      "why": "a heading, then a negation"
+    },
+    {
+      "id": "H26",
+      "tier": "B",
+      "text": "SMS: אין.",
+      "why": "a heading, a negation"
+    },
+    {
+      "id": "H27",
+      "tier": "B",
+      "text": "דיוור: האתר לא שולח.",
+      "why": "a heading, then a negation"
+    },
+    {
+      "id": "H28",
+      "tier": "B",
+      "text": "הודעות: לא נשלחות הודעות מהאתר.",
+      "why": "a heading, then a negation"
+    },
+    {
+      "id": "H29",
+      "tier": "A",
+      "text": "המוצר נשלח ארוז בקרטון כפול.",
+      "why": "shipping"
+    },
+    {
+      "id": "H30",
+      "tier": "A",
+      "text": "הספק ישלח את המוצר ישירות אליכם.",
+      "why": "the supplier ships the product"
+    },
+    {
+      "id": "H31",
+      "tier": "A",
+      "text": "Sent from the supplier's warehouse.",
+      "why": "English shipping"
+    },
+    {
+      "id": "H32",
+      "tier": "A",
+      "text": "Shipping updates appear on your order page.",
+      "why": "the page shows them"
+    },
+    {
+      "id": "H33",
+      "tier": "A",
+      "text": "המשלוח יוצא תוך 3 ימי עסקים.",
+      "why": "shipping"
+    },
+    {
+      "id": "H34",
+      "tier": "A",
+      "text": "לביטול עסקה פנו לשירות הלקוחות.",
+      "why": "to us"
+    },
+    {
+      "id": "H35",
+      "tier": "A",
+      "text": "שם, נייד ואימייל",
+      "why": "field labels"
+    },
+    {
+      "id": "H36",
+      "tier": "A",
+      "text": "אימייל לא תקין",
+      "why": "a field error"
+    },
+    {
+      "id": "H37",
+      "tier": "B",
+      "text": "האתר לא ישלח לכם מיילים, גם לא אחרי ההזמנה.",
+      "why": "negation"
+    },
+    {
+      "id": "H38",
+      "tier": "A",
+      "text": "את הקבלה אפשר להוריד מדף ההזמנה.",
+      "why": "the page"
+    },
+    {
+      "id": "H39",
+      "tier": "B",
+      "text": "We never email you, the order page says it all.",
+      "why": "English negation"
+    },
+    {
+      "id": "H40",
+      "tier": "B",
+      "text": "ניוזלטר: לא קיים.",
+      "why": "a heading, a negation"
+    }
+  ],
+  "in_fixture": ["H01"]
 }
