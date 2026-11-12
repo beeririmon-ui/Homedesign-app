@@ -3,6 +3,7 @@
  * review by a lawyer before launch (docs/architecture.md, "רשימת השקה בישראל"). Nothing here is verified.
  */
 import type { ComponentChildren } from 'preact';
+import { copyHe } from '../copy';
 
 type Page = 'accessibility' | 'terms' | 'privacy' | 'returns';
 
@@ -65,8 +66,9 @@ export function Legal({ page }: { page: Page }) {
           <p>אנחנו אוספים רק מה שצריך כדי לספק את ההזמנה: שם, אימייל, טלפון וכתובת למשלוח.</p>
           <ul>
             <li>פרטי אשראי לא נשמרים אצלנו ולא עוברים דרך האתר: התשלום מתבצע בדף של חברת הסליקה.</li>
-            <li>הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה ושירות החשבוניות.</li>
-            <li>דיוור שיווקי נשלח רק אם סימנתם הסכמה, ואפשר להסיר בכל עת.</li>
+            {/* S18: the email service is named, and marketing email promised, only where a provider sends (site/copy) */}
+            <li>{copyHe('privacy.processors')}</li>
+            <li>{copyHe('privacy.marketing')}</li>
             <li>אפשר לבקש לעיין במידע, לתקן אותו או למחוק אותו, לפי חוק הגנת הפרטיות ותיקון 13.</li>
             <li>האתר לא משתמש בעוגיות פרסום. נשמרים בדפדפן רק הסל וההעדפה של ערכת הצבע.</li>
           </ul>

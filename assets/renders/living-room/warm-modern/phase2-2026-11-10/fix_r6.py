@@ -809,14 +809,14 @@ def _signed_inside(lines, X, Y):
 
 def framed_art_v2():
     """framed-art v2 (QA R5 3.5; the designer section 5): the seam between the default's walnut band and the variant's prints, along all
-    six rails, anti-aliased. Each print area's four sides are ONE sub-pixel line each (fitted through R5's integer staircase, which
-    followed the moulding's measured offset from the frame's outer edge); per pixel the coverage (8 x 8 samples) of three zones: the print
-    (inside the lines), the default's inner line (the 1.2 px just outside them: the dark shadow line the default's top mouldings end
-    with; its colour from the default's own whole pixels there, sigma 1.5 along the rail) and the moulding (beyond: the default's own
-    pixels, unchanged wherever a pixel is fully moulding). Each line is fitted on the default's own moulding -> print edge where the
-    default's print beside it is light (_default_edge_lines), else through R5's staircase. The print's colour next to the line is carried from 2.5 px inside (a normalised blur,
-    sigma 1.5: the render's light-oak frame was wider than the walnut band, as R5). R5's black lift on the prints, the same lift. Then the
-    isolated light specks in the prints' black (QA: L* > the neighbours' + 25 with 7 of 8 neighbours black) take their neighbours' median"""
+    six rails, anti-aliased. Each print area's four sides are ONE sub-pixel line each: fitted on the default's own moulding -> print edge
+    where the default's print beside it is light (_default_edge_lines), else through R5's integer staircase. Per pixel the coverage (8 x 8
+    samples) of three zones: the print (inside the lines), the default's inner line (the 1.2 px just outside them: the dark shadow line the
+    default's top mouldings end with; its colour from the default's own whole pixels there) and the moulding (beyond: the default's own
+    pixels, unchanged wherever a pixel is fully moulding). The print's colour next to the line is carried from 2.5 px inside it and 2 px
+    inside R5's print area (a normalised blur, sigma 1.5, else 4: the render's light-oak frame was wider than the walnut band, as R5).
+    R5's black lift on the prints, the same lift. Then the isolated light specks in the prints' black (L* > the 8 neighbours' median + 25
+    with 7 of 8 neighbours black) take their neighbours' median colour"""
     Lc = f32(D(WR5, "layers", "framed-art-v2-cut.png"))
     Dd = f32(D(W.WORK, "layers", "framed-art.png"))
     ph = f32(D(WR5, "ph-p4", "layers", "framed-art.png"))
@@ -850,7 +850,7 @@ def framed_art_v2():
         dist_in[by0:by1, bx0:bx1] = _signed_inside(lines, xs_ + 0.5, ys_ + 0.5)
         recs[f"print area {len(recs) + 1} (x {x0}-{x1})"] = {k: dict(slope=round(v["k"], 5), offset=round(v["b"], 3), r5_staircase_steps=v["staircase_steps"],
                                                                       r5_staircase_rms_px=v["staircase_rms"], fit=edge_info[k]) for k, v in lines.items()}
-    core = dist_in >= 2.5
+    core = (dist_in >= 2.5) & X.ero(inner, 2)            # 2.5 px inside the new line AND 2 px inside R5's area (the render's oak frame)
     P, den = nblur(rgb_c, core.astype(np.float32), 1.5)
     P5, _ = nblur(rgb_c, core.astype(np.float32), 4.0)
     P = np.where((den > 1e-3)[..., None], P, P5)
@@ -874,14 +874,14 @@ def framed_art_v2():
     sy_, sx_ = np.nonzero(speck)
     # the default's own colours next to the line: the inner line (the pixels whose centre is 0.5-1.7 px outside it: whole pixels of the
     # default's band, its dark shadow line on the top rails, its moulding elsewhere) and the moulding beyond (centres 1.7+ px out)
-    lin_px = (dist_in <= -0.5) & (dist_in >= -1.7) & (Dd[..., 3] > 0.98)
+    lin_px = (dist_in <= -0.5) & (dist_in >= -1.7) & (Dd[..., 3] > 0.3)       # straight alpha: the soft outer edge's colour is the moulding's
     Dk, dden = nblur(Dd[..., :3], lin_px.astype(np.float32), 1.5)
-    Dk4, _ = nblur(Dd[..., :3], lin_px.astype(np.float32), 4.0)
-    Dk = np.where((dden > 0.05)[..., None], Dk, Dk4)
-    pure = (dist_in < -1.7) & (Dd[..., 3] > 0.98)
+    Dk4, dden4 = nblur(Dd[..., :3], lin_px.astype(np.float32), 4.0)
+    Dk = np.where((dden > 0.05)[..., None], Dk, np.where((dden4 > 1e-3)[..., None], Dk4, Dd[..., :3]))
+    pure = (dist_in < -1.7) & (Dd[..., 3] > 0.3)
     M, mden = nblur(Dd[..., :3], pure.astype(np.float32), 1.0)
-    M3, _ = nblur(Dd[..., :3], pure.astype(np.float32), 3.0)
-    M = np.where((mden > 0.02)[..., None], M, M3)
+    M3, mden3 = nblur(Dd[..., :3], pure.astype(np.float32), 3.0)
+    M = np.where((mden > 0.02)[..., None], M, np.where((mden3 > 1e-3)[..., None], M3, Dk))
     w_band = np.clip(1 - w_print - w_line, 0, 1)
     full_band = (w_band >= 0.999) & (dist_in > -98)
     mix = (w_band[..., None] * np.where(full_band[..., None], Dd[..., :3], M) + w_line[..., None] * Dk + w_print[..., None] * P)
@@ -907,10 +907,12 @@ ART_RAILS = [("print 1 top", 1525, 1690, 528, 552), ("print 2 top", 1735, 1910, 
              ("print 1 bottom", 1525, 1690, 772, 796), ("print 2 bottom", 1735, 1910, 772, 796), ("print 3 bottom", 1965, 2160, 776, 802)]
 
 
-def _rail_profile(L, x0, x1, y0, y1, top):
-    """QA's r5_art_seam.rail_profile: per column the strongest frame -> print step, sub-pixel; a line fit; the residual and the jumps"""
+def _rail_profile(L, x0, x1, y0, y1, top, cols=None):
+    """QA's r5_art_seam.rail_profile: per column the strongest frame -> print step, sub-pixel; a line fit; the residual and the jumps.
+    cols: only these columns (the light-print ones: where the print beside the rail is black there is no frame -> print step to find)"""
     ys = []
-    for x in range(x0, x1):
+    xs_used = [x for x in range(x0, x1) if cols is None or x in cols]
+    for x in xs_used:
         col = L[y0:y1, x].astype(np.float64)
         g = np.diff(col) if top else -np.diff(col)
         i = int(np.argmax(g))
@@ -922,7 +924,7 @@ def _rail_profile(L, x0, x1, y0, y1, top):
             o = 0.0
         ys.append(y0 + i + 0.5 + float(np.clip(o, -0.5, 0.5)))
     ys = np.array(ys)
-    xs = np.arange(x0, x1)
+    xs = np.array(xs_used)
     k, b = np.polyfit(xs, ys, 1)
     r = ys - (k * xs + b)
     j = np.abs(np.diff(ys))
@@ -936,6 +938,11 @@ def art_measures(Gv):
     LV = cv2.cvtColor(Gv.astype(np.uint8), cv2.COLOR_RGB2LAB).astype(np.float32) * [100 / 255, 1, 1] - [0, 128, 128]
     LV = LV[..., 0]
     rails = {nm: _rail_profile(LV, x0, x1, y0, y1, "top" in nm) for nm, x0, x1, y0, y1 in ART_RAILS}
+    rails_light = {}
+    for nm, x0, x1, y0, y1 in ART_RAILS:
+        yin = y1 + 6 if "top" in nm else y0 - 6                 # a row inside the print, past the rail's window
+        cols = {x for x in range(x0, x1) if LV[yin, x] > 60 and LV[min(yin + (4 if "top" in nm else -4), LV.shape[0] - 1), x] > 60}
+        rails_light[nm] = dict(_rail_profile(LV, x0, x1, y0, y1, "top" in nm, cols), columns=len(cols)) if len(cols) >= 20 else None
     Lp = f32(D(WR6, "layers", "framed-art-v2.png"))
     # the specks as QA counts them, on the graded scene inside the variant's alpha 255
     a = Lp[..., 3] >= 0.999
@@ -948,6 +955,561 @@ def art_measures(Gv):
     nb = cv2.filter2D(black.astype(np.float32), -1, k8, borderType=cv2.BORDER_CONSTANT)
     iso = spk & (nb >= 7)
     inner_b = cv2.erode(black.astype(np.uint8), np.ones((7, 7), np.uint8)).astype(bool)
-    return dict(rails=rails, specks_isolated=int(iso.sum()), light_px_inside_black=int(spk.sum()),
+    return dict(rails_qa_as_is=rails, rails_light_print_columns=rails_light, specks_isolated=int(iso.sum()), light_px_inside_black=int(spk.sum()),
                 light_px_inside_black_list=[[int(x), int(y)] for y, x in zip(*np.nonzero(spk))][:40],
                 black_median_L=round(float(np.median(LV[inner_b])), 2))
+
+
+# ================================================================================================= pendant 2
+def latlong_map(cx, cy, z0, prof, nz=900, nt=2400, ss=2):
+    """the clay lantern's surface coordinates per work pixel (the front surface, z-buffered): its height on the lantern (m from its
+    bottom) and its angle; NaN off the lantern. The same projection as pass_r5.revolve (step 0's camera)"""
+    Hs, Ws = SIZE[1] * ss, SIZE[0] * ss
+    zb = np.full((Hs, Ws), np.inf, np.float32)
+    zm = np.full((Hs, Ws), np.nan, np.float32)
+    tm = np.full((Hs, Ws), np.nan, np.float32)
+    dz = np.array([p[0] for p in prof], np.float32)
+    rr = np.array([p[1] for p in prof], np.float32)
+    zs = np.linspace(dz.min(), dz.max(), nz)
+    ts = np.linspace(0, 2 * math.pi, nt)
+    T, Zr = np.meshgrid(ts, zs)
+    Rr = np.interp(Zr, dz, rr)
+    drdz = np.gradient(np.interp(zs, dz, rr), zs)
+    Dd = np.interp(Zr, zs, drdz)
+    X_, Y_, Z_ = cx + Rr * np.cos(T), cy + Rr * np.sin(T), z0 + Zr
+    nrm = np.stack([np.cos(T), np.sin(T), -Dd], -1)
+    cam = np.array(S0.CAM["loc"], np.float32)
+    view = cam[None, None, :] - np.stack([X_, Y_, Z_], -1)
+    front = (nrm * view).sum(-1) > 0
+    pts = [S0.P(float(x), float(y), float(z)) for x, y, z in zip(X_[front], Y_[front], Z_[front])]
+    u = np.array([p[0] for p in pts]); v = np.array([p[1] for p in pts]); d = np.array([p[2] for p in pts])
+    px = ((S0.CX + u * S0.CW) / S0.GW * Ws).astype(np.int32)
+    py = ((S0.CY + v * S0.CH) / S0.GH * Hs).astype(np.int32)
+    zz, tt = Zr[front], T[front]
+    ok = (px >= 0) & (px < Ws) & (py >= 0) & (py < Hs)
+    px, py, d, zz, tt = px[ok], py[ok], d[ok], zz[ok], tt[ok]
+    order = np.argsort(-d)
+    zb[py[order], px[order]] = d[order]
+    zm[py[order], px[order]] = zz[order]
+    tm[py[order], px[order]] = tt[order]
+    # down to the work size: the mean of the samples that hit each pixel
+    def down(m):
+        v_ = np.where(np.isfinite(m), m, 0).reshape(SIZE[1], ss, SIZE[0], ss).sum((1, 3))
+        n_ = np.isfinite(m).reshape(SIZE[1], ss, SIZE[0], ss).sum((1, 3))
+        return np.where(n_ > 0, v_ / np.maximum(n_, 1), np.nan).astype(np.float32)
+    return down(zm), down(tm)
+
+
+def _nan_blur1d(M, w, sig, axis):
+    """a normalised Gaussian blur of M (NaN where w == 0) along one axis"""
+    k = int(max(3, round(3 * sig)))
+    x = np.arange(-k, k + 1)
+    g = np.exp(-0.5 * (x / max(sig, 1e-6)) ** 2)
+    Mv = np.where(w > 0, M, 0.0)
+    cv = lambda r: np.convolve(r, g, mode="full")[k:k + len(r)]  # noqa: E731  (zero padding; normalised by the weights)
+    num = np.apply_along_axis(cv, axis, Mv * w)
+    den = np.apply_along_axis(cv, axis, w)
+    return np.where(den > 1e-6, num / np.maximum(den, 1e-6), np.nan), den
+
+
+def ring_profile(Lst, m, zm, tm, nb=120, ns=48, zmax=0.25):
+    """the paper's L* per (sector, latitude bin): the median over the pixels of each cell (>= 6 px), and the cells' counts"""
+    th0 = tm[m]
+    tc = math.atan2(float(np.nanmean(np.sin(th0))), float(np.nanmean(np.cos(th0))))
+    th = (th0 - tc + math.pi) % (2 * math.pi)                # the visible arc, contiguous (it may cross 0)
+    t0, t1 = np.nanpercentile(th, 0.5), np.nanpercentile(th, 99.5)
+    ti = np.clip(((th - t0) / max(t1 - t0, 1e-6) * ns).astype(int), 0, ns - 1)
+    zi = np.clip((zm[m] / zmax * nb).astype(int), 0, nb - 1)
+    M = np.full((ns, nb), np.nan)
+    N = np.zeros((ns, nb))
+    vals = Lst[m]
+    key = ti * nb + zi
+    order = np.argsort(key)
+    ks, starts = np.unique(key[order], return_index=True)
+    ends = list(starts[1:]) + [len(order)]
+    for k_, s_, e_ in zip(ks, starts, ends):
+        if e_ - s_ >= 6:
+            M[k_ // nb, k_ % nb] = np.median(vals[order[s_:e_]])
+            N[k_ // nb, k_ % nb] = e_ - s_
+    tf = np.clip((th - t0) / max(t1 - t0, 1e-6) * ns - 0.5, 0, ns - 1)
+    zf = np.clip(zm[m] / zmax * nb - 0.5, 0, nb - 1)
+    return M, N, (t0, t1), ti, zi, tf, zf
+
+
+def ring_residual(M, N, sig_z_bins, sig_t=1.5):
+    """per sector the latitude profile's deviation from its own smooth course (sigma ~3 ring spacings along the latitude), smoothed
+    across the sectors, its linear trend in z removed per sector (the light's top-to-bottom gradient stays)"""
+    w = (N > 0).astype(np.float64)
+    S, _ = _nan_blur1d(M, w, sig_z_bins, axis=1)
+    R = np.where(w > 0, M - S, np.nan)
+    Rs, den = _nan_blur1d(np.nan_to_num(R), w, sig_t, axis=0)
+    zc = np.arange(M.shape[1], dtype=np.float64)
+    for t in range(M.shape[0]):
+        ok = (w[t] > 0) & np.isfinite(Rs[t])
+        if ok.sum() >= 6:
+            p = np.polyfit(zc[ok], Rs[t, ok], 1, w=N[t, ok])
+            Rs[t] = Rs[t] - np.polyval(p, zc)
+    return np.nan_to_num(Rs), S
+
+
+def contour_snap(a, Lst, sel_fn, search=4.0, min_grad=2.5, smooth=3.0):
+    """the alpha's 0.5 outline (at 4 x) moved along its normals to the render's own edge (the strongest L* step within +-search px,
+    where it is at least min_grad L*/px) for the outline points sel_fn(x, y) selects; the offsets smoothed along the outline, then the
+    outline itself (sigma `smooth` points); re-rasterised at 8 x and area-averaged (anti-aliased)"""
+    up = cv2.resize(a.astype(np.float32), (SIZE[0] * 4, SIZE[1] * 4), interpolation=cv2.INTER_LINEAR)
+    cs, _ = cv2.findContours((up > 0.5).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    c = max(cs, key=len)[:, 0, :].astype(np.float64) / 4.0 + 0.5 / 4 - 0.5      # pixel-centre coordinates
+    c = c[::2]
+    n = len(c)
+    k = 7
+    tx = np.roll(c[:, 0], -k) - np.roll(c[:, 0], k)
+    ty = np.roll(c[:, 1], -k) - np.roll(c[:, 1], k)
+    nrm = np.stack([ty, -tx], 1)
+    nrm /= np.maximum(np.linalg.norm(nrm, axis=1, keepdims=True), 1e-9)
+    # outward: the alpha falls along the normal
+    probe = c + 1.5 * nrm
+    av = cv2.remap(a.astype(np.float32), probe[:, 0].astype(np.float32).reshape(1, -1), probe[:, 1].astype(np.float32).reshape(1, -1), cv2.INTER_LINEAR).ravel()
+    av0 = cv2.remap(a.astype(np.float32), (c[:, 0] - 1.5 * nrm[:, 0]).astype(np.float32).reshape(1, -1),
+                    (c[:, 1] - 1.5 * nrm[:, 1]).astype(np.float32).reshape(1, -1), cv2.INTER_LINEAR).ravel()
+    nrm[av > av0] *= -1
+    ss = np.arange(-search, search + 1e-6, 0.25)
+    off = np.zeros(n)
+    used = np.zeros(n, bool)
+    Lb = cv2.GaussianBlur(Lst.astype(np.float32), (0, 0), 0.7)
+    for i in range(n):
+        if not sel_fn(c[i, 0], c[i, 1]):
+            continue
+        px = (c[i, 0] + ss * nrm[i, 0]).astype(np.float32).reshape(1, -1)
+        py = (c[i, 1] + ss * nrm[i, 1]).astype(np.float32).reshape(1, -1)
+        prof = cv2.remap(Lb, px, py, cv2.INTER_LINEAR).ravel()
+        g = np.abs(np.gradient(prof, 0.25))
+        j = int(np.argmax(g))
+        if g[j] >= min_grad:
+            off[i], used[i] = ss[j], True
+    w = used.astype(np.float64)
+    k_ = int(3 * 4)
+    x = np.arange(-k_, k_ + 1)
+    gk = np.exp(-0.5 * (x / 4.0) ** 2)
+    num = np.convolve(np.concatenate([off * w] * 3), gk, mode="same")[n:2 * n]
+    den = np.convolve(np.concatenate([w] * 3), gk, mode="same")[n:2 * n]
+    offs = np.where(den > 0.2, num / np.maximum(den, 1e-6), 0.0) * np.clip(den / 0.6, 0, 1)
+    c2 = c + offs[:, None] * nrm
+    ks = int(3 * smooth)
+    x = np.arange(-ks, ks + 1)
+    gs = np.exp(-0.5 * (x / smooth) ** 2)
+    gs /= gs.sum()
+    c3 = np.stack([np.convolve(np.concatenate([c2[:, j]] * 3), gs, mode="same")[n:2 * n] for j in (0, 1)], 1)
+    S8 = 8
+    canvas = np.zeros((SIZE[1] * S8, SIZE[0] * S8), np.uint8)
+    cv2.fillPoly(canvas, [np.round((c3 + 0.5) * S8 - 0.5).astype(np.int32).reshape(-1, 1, 2)], 255)
+    a2 = cv2.resize(canvas.astype(np.float32) / 255, SIZE, interpolation=cv2.INTER_AREA)
+    return a2.astype(np.float32), dict(points=int(n), snapped=int(used.sum()), offset_px=dict(median=round(float(np.median(off[used])), 2) if used.any() else None,
+                                                                                          p90_abs=round(float(np.percentile(np.abs(off[used]), 90)), 2) if used.any() else None))
+
+
+RING_SPACING_M = 0.035        # the tiers the model drew: steps every ~3.5 cm of the lantern's height (the latitude profile)
+OPEN_Z = 0.014                # the bottom opening (the clay's radius < 8.5 cm: the ring of the lamp holder the model drew)
+
+
+def pendant_measures(G8, a_lan, zm, tm, top):
+    """on the graded scene: the rings (the latitude profile's residual, the median over the sectors, per bin: its largest |value|),
+    the pleats (the high-pass of L* across them, sigma 3 along the rows, std), the light (the paper's top third against its bottom
+    third, median L*), the colour (median a*, b*), the opening (its brightest 1 % and median against the bottom third of the paper)"""
+    LL = lab8(G8)
+    m = (a_lan >= 0.999) & np.isfinite(zm) & (np.arange(a_lan.shape[0])[:, None] >= top + 3)
+    m = cv2.erode(m.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
+    paper = m & (np.nan_to_num(zm) >= OPEN_Z + 0.004)
+    M, N = ring_profile(LL[..., 0], paper, zm, tm)[:2]
+    zc = (np.arange(M.shape[1]) + 0.5) * 0.25 / M.shape[1]
+    zks, Hs, _ = tier_fit(M, N, zc, thr=0.25)
+    steps = {round(zk, 4): round(float(np.median(np.abs(Hs[Hs[:, k] != 0, k]))), 2) for k, zk in enumerate(zks) if (Hs[:, k] != 0).any()}
+    for zk in TIER_Z:                                                   # the boundaries the R5 render had, measured there too
+        zks2, Hs2, _ = [zk], *tier_fit_at(M, N, zc, zk)
+        steps.setdefault(round(zk, 4), round(float(np.median(np.abs(Hs2[Hs2 != 0]))), 2) if (Hs2 != 0).any() else 0.0)
+    rz = np.array(list(steps.values()) or [0.0])
+    hp = LL[..., 0] - cv2.GaussianBlur(LL[..., 0], (0, 0), sigmaX=3.0, sigmaY=0.01)
+    ys = np.nonzero(paper.any(1))[0]
+    y0, y1 = ys.min(), ys.max() + 1
+    third = (y1 - y0) / 3
+    topm, botm = paper.copy(), paper.copy()
+    topm[int(y0 + third):] = False
+    botm[:int(y1 - third)] = False
+    opening = m & (np.nan_to_num(zm, nan=1.0) < OPEN_Z)
+    return dict(rings_max_abs_L=round(float(np.nanmax(np.abs(rz))), 2), ring_steps_L=steps,
+                pleats_hp_std=round(float(hp[paper].std()), 3), light_top_minus_bottom_third=round(float(np.median(LL[..., 0][topm]) - np.median(LL[..., 0][botm])), 2),
+                paper_a=round(float(np.median(LL[..., 1][paper])), 2), paper_b=round(float(np.median(LL[..., 2][paper])), 2),
+                bottom_third_L=round(float(np.median(LL[..., 0][botm])), 2),
+                opening=dict(px=int(opening.sum()), L_median=round(float(np.median(LL[..., 0][opening])), 2) if opening.any() else None,
+                             L_p99=round(float(np.percentile(LL[..., 0][opening], 99)), 2) if opening.any() else None,
+                             C_p99=round(float(np.percentile(np.hypot(LL[..., 1], LL[..., 2])[opening], 99)), 2) if opening.any() else None),
+                paper_px=int(paper.sum()))
+
+
+def pendant_v2():
+    """pendant 2 (QA R5 3.6; the designer section 4, step 1). (1) The ceiling canopy re-cut whole: what differs from the ceiling (dE >
+    3.5, closed), the largest piece, its convex hull, an ellipse fitted to it (a disc seen from below), rasterised at 8 x (fix_r4.
+    canopy_cut's rule, with the shaded half of the disc kept: at dE > 6 only the lit two thirds passed). (2) The cord: one plumb line
+    from the canopy's centre into the lantern's collar at the cord's own measured column, its alpha the cord's own cross-profile
+    (R5's cut, the rows where it hangs alone); BLACK as the card ('black thin cord'): neutral, L* 15 with a soft highlight on the window
+    side; the brown speck and anything else off the line are gone. (3) The lantern's outline snapped to the render's own edge (contour_snap)
+    where the step is clear, then smoothed: the clay's facets out. (4) The rings: on the clay lantern's latitude lines (latlong_map) the
+    paper's L* profile per sector, its deviation from its own course smoothed at ~3 ring spacings, smoothed across the sectors and with
+    its linear trend kept out (the light's gradient stays), taken off L* (a*b* unchanged). (5) The bottom opening (rendered off): not
+    brighter than the paper's bottom third; the lamp holder's specks neutral"""
+    regt = np.load(D(WR5, "p5-regt.npy")).astype(np.float32)
+    below = PW.load(D(WR5, "scene-p5.png"))
+    L5 = f32(D(WR5, "layers", "pendant-v2.png"))
+    rgb5, a5 = L5[..., :3], L5[..., 3]
+    top = int(json.load(open(D(WR5, "post-r5.json")))["pendant-v2"]["lantern_top_row"])
+    # (1) the canopy
+    bl = lambda x: cv2.GaussianBlur(np.clip(x, 0, 1).astype(np.float32), (0, 0), 0.8)  # noqa: E731
+    dE = np.sqrt(((cv2.cvtColor(bl(regt), cv2.COLOR_RGB2LAB) - cv2.cvtColor(bl(below), cv2.COLOR_RGB2LAB)) ** 2).sum(2))
+    box = np.zeros(a5.shape, bool)
+    box[2:42, 1625:1735] = True
+    cand = cv2.morphologyEx((box & (dE > 3.5)).astype(np.uint8), cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7)))
+    n, lbl, st, _ = cv2.connectedComponentsWithStats(cand, connectivity=8)
+    big = lbl == 1 + int(np.argmax(st[1:, 4]))
+    hull_pts = cv2.convexHull(cv2.findNonZero(big.astype(np.uint8)))
+    (ecx, ecy), (ew, eh), eang = cv2.fitEllipse(hull_pts)
+    S8 = 8
+    canv = np.zeros((SIZE[1] * S8, SIZE[0] * S8), np.uint8)
+    cv2.ellipse(canv, ((ecx * S8 + (S8 - 1) / 2, ecy * S8 + (S8 - 1) / 2), (ew * S8, eh * S8), eang), 255, -1)
+    a_can = cv2.resize(canv.astype(np.float32) / 255, SIZE, interpolation=cv2.INTER_AREA)
+    # (2) the cord: its column and cross-profile from R5's cut where it hangs alone (rows 45-85, under the canopy, over the old sleeve)
+    rows = range(45, 86)
+    cx_ = float(np.median([(np.nonzero(a5[y] > 0.5)[0].min() + np.nonzero(a5[y] > 0.5)[0].max()) / 2.0 for y in rows]))
+    c0, c1 = int(math.floor(cx_ - 6)), int(math.ceil(cx_ + 7))
+    prof = np.median(a5[45:86, c0:c1], axis=0)
+    xs_p = np.arange(c0, c1)
+    cen = float((prof * xs_p).sum() / max(prof.sum(), 1e-6))
+    hw = max(0.5 * float((prof > 0.5).sum()), 1.0)
+    # the canopy's lower edge at the cord, the lantern's collar
+    col = a_can[:, int(round(cen))]
+    can_bot = int(np.nonzero(col > 0.5)[0].max())
+    y_cord0, y_cord1 = can_bot - 3, top + 4
+    a_cord = np.zeros(a5.shape, np.float32)
+    a_cord[y_cord0:y_cord1, c0:c1] = prof[None, :]
+    t = (xs_p + 0.5 - (cen + 0.5)) / hw
+    Lc = 15.0 + 7.0 * np.exp(-((t + 0.35) / 0.35) ** 2)
+    cord_rgb = rgb_of(np.repeat(Lc[None, :], 1, 0).astype(np.float32), np.zeros((1, len(xs_p)), np.float32), np.zeros((1, len(xs_p)), np.float32))[0]
+    # (3) the lantern's outline
+    a_lan = a5.copy()
+    a_lan[:top] = 0
+    Lst = lab(regt)[..., 0]
+    zm, tm = latlong_map(0.20, 1.72, 1.90, R.PROF_PUMPKIN)
+    a_lan2, snap = contour_snap(a_lan, Lst, lambda x, y: y >= top + 2)
+    a_lan2[:top] = 0
+    # (4) the rings
+    lab_r = lab(regt)
+    m = (a_lan2 > 0.5) & np.isfinite(zm) & (np.arange(a5.shape[0])[:, None] >= top)
+    paper = m & (np.nan_to_num(zm) >= OPEN_Z)
+    Lwork = lab_r[..., 0].astype(np.float64).copy()
+    corr = np.zeros(a5.shape, np.float64)
+    zpx = zm[paper].astype(np.float64)
+    tiers = []
+    for rnd in range(3):
+        M, N, (t0, t1), ti, zi, tf, zf = ring_profile(Lwork, paper, zm, tm)
+        zc = (np.arange(M.shape[1]) + 0.5) * 0.25 / M.shape[1]
+        zks, Hs, Zs = tier_fit(M, N, zc, thr=0.5 if rnd == 0 else 0.25)
+        keep = [k for k in range(len(zks)) if (Hs[:, k] != 0).any() and np.median(np.abs(Hs[Hs[:, k] != 0, k])) >= (0.5 if rnd == 0 else 0.3)]
+        if not keep:
+            break
+        c = tier_correction(zpx, tf, [zks[k] for k in keep], Hs[:, keep], Zs[:, keep], TIER_LINES[0][:, keep])
+        Lwork[paper] -= c
+        corr[paper] += c
+        tiers.append(dict(round=rnd, boundaries_z_m=[round(zks[k], 4) for k in keep],
+                          step_L_median=[round(float(np.median(Hs[Hs[:, k] != 0, k])), 2) for k in keep]))
+    # the light's course kept: the paper's top and bottom thirds (rows) back to their medians, by one linear ramp over the rows
+    ys_ = np.nonzero(paper.any(1))[0]
+    y0p, y1p = ys_.min(), ys_.max() + 1
+    th_ = (y1p - y0p) / 3
+    rows_px = np.nonzero(paper)[0].astype(np.float64)
+    topm_, botm_ = rows_px < y0p + th_, rows_px >= y1p - th_
+    L0p, L1p = lab_r[..., 0][paper].astype(np.float64), Lwork[paper]
+    d_top = float(np.median(L1p[topm_]) - np.median(L0p[topm_]))
+    d_bot = float(np.median(L1p[botm_]) - np.median(L0p[botm_]))
+    yt, yb_ = y0p + th_ / 2, y1p - th_ / 2
+    ramp = d_top + (d_bot - d_top) * np.clip((rows_px - yt) / max(yb_ - yt, 1), -0.5, 1.5)
+    corr[paper] += ramp
+    Lwork[paper] -= ramp
+    corr = corr.astype(np.float32)
+    cw = paper.astype(np.float32)
+    ce, cden = nblur(corr, cw, 2.0)
+    corr_f = np.where(paper, corr, np.where((cden > 0.02) & (a_lan2 > 0), ce, 0.0)).astype(np.float32)
+    Ln = lab_r[..., 0] - corr_f
+    An, Bn = lab_r[..., 1].copy(), lab_r[..., 2].copy()
+    # (5) the opening: not brighter than the paper's bottom third; the holder's specks neutral
+    ys = np.nonzero(paper.any(1))[0]
+    y0p, y1p = ys.min(), ys.max() + 1
+    botm = paper.copy()
+    botm[:int(y1p - (y1p - y0p) / 3)] = False
+    cap = float(np.median(Ln[botm])) - 1.5                           # a margin for the grade
+    opening = (a_lan2 > 0) & (np.nan_to_num(zm, nan=1.0) < OPEN_Z) & (np.arange(a5.shape[0])[:, None] >= top + 20)
+    opening = X.dil(opening, 1) & (a_lan2 > 0) & ~paper
+    hot = opening & (lab_r[..., 0] > cap + 6.0)                      # the holder's specks: clearly brighter than the paper
+    soft = np.where(Ln > cap, cap + 0.8 * np.tanh((Ln - cap) / 0.8), Ln)    # a soft cap: never above the paper's bottom third
+    Ln = np.where(opening, soft, Ln)                                  # under it the opening keeps its own shading
+    hot_s = cv2.GaussianBlur(X.dil(hot, 1).astype(np.float32), (0, 0), 0.7) * opening
+    An = An * (1 - 0.8 * hot_s)
+    Bn = Bn * (1 - 0.8 * hot_s)
+    rgb_lan = rgb_of(np.clip(Ln, 0, 100), An, Bn)
+    # the layer: the canopy, the cord over it, the lantern over the cord
+    rgb = regt.copy()
+    a = a_can.copy()
+    rgb[y_cord0:y_cord1, c0:c1] = np.where((a_cord[y_cord0:y_cord1, c0:c1] > 0)[..., None],
+                                           (cord_rgb[None, :, :] * a_cord[y_cord0:y_cord1, c0:c1, None] +
+                                            rgb[y_cord0:y_cord1, c0:c1] * (a[y_cord0:y_cord1, c0:c1, None] * (1 - a_cord[y_cord0:y_cord1, c0:c1, None]))) /
+                                           np.maximum(a_cord[y_cord0:y_cord1, c0:c1, None] + a[y_cord0:y_cord1, c0:c1, None] * (1 - a_cord[y_cord0:y_cord1, c0:c1, None]), 1e-4),
+                                           rgb[y_cord0:y_cord1, c0:c1])
+    a = a_cord + a * (1 - a_cord)
+    al = a_lan2
+    rgb = np.where((al > 0)[..., None], (rgb_lan * al[..., None] + rgb * (a * (1 - al))[..., None]) / np.maximum(al + a * (1 - al), 1e-4)[..., None], rgb)
+    a = al + a * (1 - al)
+    pl = save_layer("pendant-v2", rgb, a)
+    # measures: R5 against R6, on the graded scene with the variant
+    sh = f32(D(WR5, "shadows", "pendant-v2.png"), "L")
+    _, _, G5 = graded(variants={"pendant": "pendant-v2"}, override={"pendant": (rgb5, a5, None, sh)})
+    _, _, G6 = graded(override={"pendant": (rgb, a, None, sh)})
+    m5, m6 = pendant_measures(G5, a_lan2, zm, tm, top), pendant_measures(G6, a_lan2, zm, tm, top)
+    LL6 = lab8(G6)
+    hot_m = hot & (a >= 0.999)
+    spk5 = round(float(np.median(np.hypot(lab8(G5)[..., 1], lab8(G5)[..., 2])[hot_m])), 2) if hot_m.any() else 0.0
+    spk6 = round(float(np.median(np.hypot(lab8(G6)[..., 1], lab8(G6)[..., 2])[hot_m])), 2) if hot_m.any() else 0.0
+    cordm = (a_cord >= 0.99) & (a_lan2 < 0.01) & (a_can < 0.01)
+    cord_meas = dict(L_median=round(float(np.median(LL6[..., 0][cordm])), 2), C_median=round(float(np.median(np.hypot(LL6[..., 1], LL6[..., 2])[cordm])), 2),
+                     px=int(cordm.sum()))
+    # the canopy against the cord
+    tg = {"rings: the latitude profile's residual <= 1 L* end to end": dict(value=m6["rings_max_abs_L"], before=m5["rings_max_abs_L"], pass_=m6["rings_max_abs_L"] <= 1.0),
+          "pleats: high-pass std within +-10 %": dict(value=round(m6["pleats_hp_std"] / m5["pleats_hp_std"] - 1, 4), pass_=abs(m6["pleats_hp_std"] / m5["pleats_hp_std"] - 1) <= 0.10),
+          "light: top third - bottom third within +-1 L*": dict(value=round(m6["light_top_minus_bottom_third"] - m5["light_top_minus_bottom_third"], 2),
+                                                                 pass_=abs(m6["light_top_minus_bottom_third"] - m5["light_top_minus_bottom_third"]) <= 1.0),
+          "colour: a*b* unchanged (+-0.5)": dict(value=[round(m6["paper_a"] - m5["paper_a"], 2), round(m6["paper_b"] - m5["paper_b"], 2)],
+                                                  pass_=abs(m6["paper_a"] - m5["paper_a"]) <= 0.5 and abs(m6["paper_b"] - m5["paper_b"]) <= 0.5),
+          "opening: not brighter than the paper's bottom third": dict(value=dict(opening_L_p99=m6["opening"]["L_p99"], bottom_third_L=m6["bottom_third_L"]),
+                                                                      pass_=(m6["opening"]["L_p99"] or 0) <= m6["bottom_third_L"] + 0.5),
+          "opening: the holder's specks neutral (their C* median <= 3)": dict(value=dict(r5=spk5, r6=spk6), pass_=spk6 <= 3.0),
+          "cord: black (L* <= 25, C* <= 3)": dict(value=cord_meas, pass_=cord_meas["L_median"] <= 25 and cord_meas["C_median"] <= 3)}
+    record("pendant-v2", dict(
+        what="the canopy re-cut whole and centred, the right outline snapped, the cord's speck out, the cord black, the paper's rings out",
+        method=pendant_v2.__doc__.replace("\n", " "), source=dict(render=rel(D(WR5, "p5-regt.npy")), r5_layer=rel(D(WR5, "layers", "pendant-v2.png"))),
+        canopy=dict(ellipse_centre_px=[round(ecx, 2), round(ecy, 2)], ellipse_axes_px=[round(ew, 2), round(eh, 2)], angle_deg=round(eang, 2),
+                    cord_x_px=round(cen, 2), centre_minus_cord_px=round(ecx - cen, 2), hull_px=int(big.sum()),
+                    box_px=[int(np.nonzero(a_can > 0.5)[1].min()), int(np.nonzero(a_can > 0.5)[0].min()),
+                            int(np.nonzero(a_can > 0.5)[1].max()) + 1, int(np.nonzero(a_can > 0.5)[0].max()) + 1]),
+        cord=dict(column_px=round(cen, 2), half_width_px=round(hw, 2), rows=[y_cord0, y_cord1], L_profile=[round(float(v), 1) for v in Lc],
+                  measured_graded=cord_meas, card="black thin cord"),
+        outline=snap, rings=dict(model="tier_fit / tier_correction: each step the model drew on a latitude line, per sector, replaced by the same "
+                                       "rise spread over ~2 ring spacings (0.5 (1 + tanh((z - zk) / %.3f)))" % STEP_SOFT, tiers=tiers,
+                                 sectors=48, latitude_bins=120,
+                                 correction_L=dict(p5=round(float(np.percentile(corr[paper], 5)), 2), p95=round(float(np.percentile(corr[paper], 95)), 2))),
+        opening=dict(cap_L_ungraded=round(cap, 2), px=int(opening.sum()), hot_px=int(hot.sum())),
+        measured_r5=m5, measured_r6=m6, targets=tg, all_met=all(v["pass_"] for v in tg.values()), file=rel(pl)))
+    print(json.dumps(dict(canopy=dict(c=[ecx, ecy], ax=[ew, eh], cord=cen), r5=m5, r6=m6, targets=tg), indent=1, default=float))
+
+
+STEP_W = 0.0015        # a tier's step in the render: ~1 px across (m of the lantern's height)
+LINE_W = 0.0025        # the seam line the model drew along a tier's edge (a Gaussian, m of the height)
+TIER_LINES = []        # tier_fit's seam-line amplitudes (sectors x boundaries) of its last call
+STEP_SOFT = 0.03       # the same step spread over ~2 ring spacings (0.5 (1 + tanh((z - zk) / 0.03)))
+
+
+def _sstep(z, zk, w):
+    return 0.5 * (1 + np.tanh((z - zk) / w))
+
+
+def tier_fit(M, N, zc, win=8, thr=0.5):
+    """the tiers in the latitude profiles. The boundaries zk: where the sectors' median derivative peaks, at least thr L* per bin and
+    8 bins apart. Then per sector and boundary a local least squares on +-win bins (>= 4 measured bins each side): L(z) = a +
+    b (z - zk) + hk step(z - zk), zk refined within +-2 bins; |hk| <= 15; the hk smoothed across the sectors (normalised, sigma 1.5)"""
+    w = (N > 0) & np.isfinite(M)
+    dM = np.diff(M, axis=1)
+    g = np.array([np.nanmedian(dM[:, j]) if np.isfinite(dM[:, j]).sum() >= 0.4 * M.shape[0] else 0.0 for j in range(dM.shape[1])])
+    g = np.convolve(np.nan_to_num(g), [0.25, 0.5, 0.25], mode="same")
+    order = np.argsort(-np.abs(g))
+    picked = []
+    for j in order:
+        if abs(g[j]) < thr:
+            break
+        if all(abs(j - p) >= 8 for p in picked):
+            picked.append(int(j))
+    zks = sorted(float((zc[j] + zc[j + 1]) / 2) for j in picked)
+    dz = zc[1] - zc[0]
+    H = np.zeros((M.shape[0], len(zks)))
+    Hw = np.zeros((M.shape[0], len(zks)))
+    Ln_ = np.zeros((M.shape[0], len(zks)))
+    Z = np.tile(np.array(zks, np.float64), (M.shape[0], 1))
+    for t in range(M.shape[0]):
+        for k, zk0 in enumerate(zks):
+            best = None
+            for sh in np.linspace(-2, 2, 9) * dz:
+                zk = zk0 + sh
+                sel = w[t] & (np.abs(zc - zk) <= win * dz)
+                lo, hi = sel & (zc < zk - 0.5 * dz), sel & (zc > zk + 0.5 * dz)
+                if lo.sum() < 4 or hi.sum() < 4:
+                    continue
+                z, y, wt = zc[sel] - zk, M[t, sel], np.sqrt(N[t, sel])
+                A = np.stack([np.ones_like(z), z, _sstep(z, 0.0, STEP_W), np.exp(-(z / LINE_W) ** 2)], 1)
+                sol, *_ = np.linalg.lstsq(A * wt[:, None], y * wt, rcond=None)
+                r = float((((A @ sol) - y) ** 2 * wt ** 2).sum())
+                if best is None or r < best[0]:
+                    best = (r, float(np.clip(sol[2], -15, 15)), zk, float(np.clip(sol[3], -15, 15)))
+            if best is not None:
+                H[t, k], Hw[t, k], Z[t, k], Ln_[t, k] = best[1], 1.0, best[2], best[3]
+    kk = np.exp(-0.5 * (np.arange(-4, 5) / 1.5) ** 2)
+    Hs, Ls = np.zeros_like(H), np.zeros_like(H)
+    for k in range(len(zks)):
+        den = np.convolve(Hw[:, k], kk, mode="same")
+        Hs[:, k] = np.where(Hw[:, k] > 0, np.convolve(H[:, k] * Hw[:, k], kk, mode="same") / np.maximum(den, 1e-6), 0.0)
+        Ls[:, k] = np.where(Hw[:, k] > 0, np.convolve(Ln_[:, k] * Hw[:, k], kk, mode="same") / np.maximum(den, 1e-6), 0.0)
+    TIER_LINES.clear()
+    TIER_LINES.append(Ls)
+    return zks, Hs, Z
+
+
+def tier_correction(zpx, tpx, zks, Hs, Zs, Ls=None):
+    """per pixel: each sharp step replaced by the same step spread over ~2 ring spacings (no overshoot, the top-to-bottom light kept),
+    and the seam line along it taken off"""
+    ns = Hs.shape[0]
+    t0 = np.clip(np.floor(tpx).astype(int), 0, ns - 1)
+    t1 = np.clip(t0 + 1, 0, ns - 1)
+    ft = np.clip(tpx - t0, 0, 1)
+    c = np.zeros_like(zpx)
+    for k in range(len(zks)):
+        h = Hs[t0, k] * (1 - ft) + Hs[t1, k] * ft
+        zk = Zs[t0, k] * (1 - ft) + Zs[t1, k] * ft
+        c += h * (_sstep(zpx, zk, STEP_W) - _sstep(zpx, zk, STEP_SOFT))
+        if Ls is not None:
+            ln = Ls[t0, k] * (1 - ft) + Ls[t1, k] * ft
+            c += ln * np.exp(-((zpx - zk) / LINE_W) ** 2)
+    return c
+
+
+TIER_Z = (0.0365, 0.0688, 0.1042)    # the tiers' boundaries in the R5 render (tier_fit on p5-regt; the measure checks them by name)
+
+
+def tier_fit_at(M, N, zc, zk0, win=8):
+    """one boundary's step per sector (tier_fit's local least squares, zk within +-2 bins)"""
+    w = (N > 0) & np.isfinite(M)
+    dz = zc[1] - zc[0]
+    H = np.zeros(M.shape[0])
+    Z = np.full(M.shape[0], zk0)
+    for t in range(M.shape[0]):
+        best = None
+        for sh in np.linspace(-2, 2, 9) * dz:
+            zk = zk0 + sh
+            sel = w[t] & (np.abs(zc - zk) <= win * dz)
+            lo, hi = sel & (zc < zk - 0.5 * dz), sel & (zc > zk + 0.5 * dz)
+            if lo.sum() < 4 or hi.sum() < 4:
+                continue
+            z, y, wt = zc[sel] - zk, M[t, sel], np.sqrt(N[t, sel])
+            A = np.stack([np.ones_like(z), z, _sstep(z, 0.0, STEP_W), np.exp(-(z / LINE_W) ** 2)], 1)
+            sol, *_ = np.linalg.lstsq(A * wt[:, None], y * wt, rcond=None)
+            r = float((((A @ sol) - y) ** 2 * wt ** 2).sum())
+            if best is None or r < best[0]:
+                best = (r, float(np.clip(sol[2], -15, 15)), zk)
+        if best is not None:
+            H[t], Z[t] = best[1], best[2]
+    return H, Z
+
+
+# ================================================================================================= the magazine holder's rods
+def rods_edge():
+    """the rods' soft edge (the designer's pre-approved fix, eye section 8; QA R5 4). R5 recoloured each rod's pixels within its half
+    width + 1.5 px of the fitted line, but only those of C* <= 14: where the black rod meets the leather, the edge pixels (part rod,
+    part cognac leather) were left black-and-leather, the dark broken line under the front rod at x 2. Here each rod's two edges are
+    measured on its R1 render (per column, off the tubes: the sub-pixel crossing of half way between the rod's core L* and the
+    neighbour's 4 px beyond; the median over the columns), so each pixel's rod share f is geometric: f = clip(E - |d| + 0.5, 0, 1) (d
+    its distance from the line, E that side's edge). In the edge band (|d| from E - 1 to E + 1.5, off the tubes) the rod's black is
+    replaced by R5's satin silver S of the nearest full rod pixel, in linear RGB: c' = c_R1 + f (S - K), K the R1 rod's black (its
+    core's median). Alpha, the tubes, the leather beyond, the rest of R5's rods and the shadow: unchanged"""
+    L1 = f32(F5.MH_LAYER)
+    rgb1, a = L1[..., :3], L1[..., 3]
+    L5 = f32(D(WR5, "layers", "magazine-holder.png"))
+    rgb5 = L5[..., :3]
+    Mk, info = F5.rod_masks(rgb1, a)
+    lin1, lin5 = PW.s2l(rgb1).astype(np.float64), PW.s2l(rgb5).astype(np.float64)
+    out = lin5.copy()
+    H, Wd = a.shape
+    yy, xx = np.mgrid[0:H, 0:Wd].astype(np.float64)
+    Lw = lab(rgb1)
+    Cw = np.hypot(Lw[..., 1], Lw[..., 2])
+    dark = (a > 0.3) & (Lw[..., 0] < 34) & (Cw < 12)
+    rec = {}
+    changed = np.zeros(a.shape, bool)
+    for nm, r in Mk.items():
+        k_, b_ = info[nm]["line_y_eq_ax_plus_b"]
+        hw = info[nm]["half_width_px"]
+        x0, x1 = info[nm]["x_span"]
+        cosn = 1.0 / math.hypot(k_, 1.0)
+        dist = (yy - (k_ * xx + b_)) * cosn
+        tube = dark & (np.abs(dist) > hw + 2)
+        tube = cv2.morphologyEx(tube.astype(np.uint8), cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT, (1, int(2 * hw + 9)))) > 0
+        tube = X.dil(tube, 2)
+        core = r["mask"] & (np.abs(dist) <= hw - 1.0) & (a >= 0.999) & ~tube
+        K = np.median(lin1[core], 0)
+        Lcore = float(np.median(Lw[..., 0][core]))
+        # the edges, per side: along each column, the crossing of half way between the core and the neighbour 4 px beyond
+        E = {}
+        for side in (-1, 1):
+            es = []
+            for x in range(x0 + 3, x1 - 3, 1):
+                yc = k_ * x + b_
+                ys = np.arange(int(yc - side * 1) if side > 0 else int(yc + 1), int(yc + side * (hw + 7)), side)
+                if ys.min() < 0 or ys.max() >= H or tube[ys, x].any():
+                    continue
+                prof = Lw[..., 0][ys, x]
+                dd = (ys - yc) * cosn * side
+                out_i = np.argmin(np.abs(dd - (hw + 4)))
+                thr = 0.5 * (Lcore + prof[out_i])
+                if prof[out_i] - Lcore < 8:
+                    continue
+                j = next((i for i in range(1, len(prof)) if prof[i - 1] < thr <= prof[i] and dd[i] > hw - 2.5), None)
+                if j is None:
+                    continue
+                es.append(dd[j - 1] + (thr - prof[j - 1]) / max(prof[j] - prof[j - 1], 1e-6) * (dd[j] - dd[j - 1]))
+            E[side] = float(np.median(es)) if len(es) >= 10 else hw + 0.5
+            rec.setdefault(nm, {})[f"edge_{'upper' if side < 0 else 'lower'}_px"] = dict(value=round(E[side], 3), columns=len(es))
+        Ed = np.where(dist < 0, E[-1], E[1])
+        f = np.clip(Ed - np.abs(dist) + 0.5, 0, 1)
+        band = (np.abs(dist) >= Ed - 1.0) & (np.abs(dist) <= Ed + 1.5) & (a > 0.02) & ~tube & (xx >= x0) & (xx <= x1) & (f > 0)
+        full = r["mask"] & (np.abs(dist) <= Ed - 1.0)
+        _, lbl = cv2.distanceTransformWithLabels((~full).astype(np.uint8), cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
+        ry, rx = np.nonzero(full)
+        lut = np.zeros((lbl.max() + 1, 2), np.int64)
+        lut[lbl[ry, rx]] = np.stack([ry, rx], 1)
+        cy_, cx_ = np.nonzero(band)
+        nr = lut[lbl[cy_, cx_]]
+        S = lin5[nr[:, 0], nr[:, 1]]
+        newc = np.clip(lin1[cy_, cx_] + f[cy_, cx_][:, None] * (S - K[None, :]), 0, 1)
+        out[cy_, cx_] = newc
+        changed[cy_, cx_] = True
+        rec[nm].update(edge_band_px=int(band.sum()), rod_share_median=round(float(np.median(f[band])), 3) if band.any() else None,
+                       black_K_srgb=[round(float(v), 4) for v in PW.l2s(K.reshape(1, 1, 3).astype(np.float32)).ravel()], core_L=round(Lcore, 2))
+    rgb_n = np.clip(PW.l2s(out.astype(np.float32)), 0, 1).astype(np.float32)
+    pl = save_layer("magazine-holder", rgb_n, a)
+    # the black left on the rods' edges, before and after (graded set-B scene): within 3 px of a rod's R5 pixels (off the tubes), the
+    # near-black neutral pixels (L* < 24, C* < 10: the R1 rod's black; the leather is L* 28-34 and chromatic, the satin edge >= 35)
+    tubes_all = np.zeros(a.shape, bool)
+    for nm, r in Mk.items():
+        k_, b_ = info[nm]["line_y_eq_ax_plus_b"]
+        hw = info[nm]["half_width_px"]
+        dist_ = (yy - (k_ * xx + b_)) / math.hypot(k_, 1.0)
+        tb = dark & (np.abs(dist_) > hw + 2)
+        tb = cv2.morphologyEx(tb.astype(np.uint8), cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT, (1, int(2 * hw + 9)))) > 0
+        tubes_all |= X.dil(tb, 2)
+
+    def dark_line(G8):
+        LL = lab8(G8)
+        C_ = np.hypot(LL[..., 1], LL[..., 2])
+        n_ = 0
+        for nm, r in Mk.items():
+            ring = X.dil(r["mask"], 3) & (a > 0.02) & ~tubes_all
+            n_ += int((ring & (LL[..., 0] < 24) & (C_ < 10)).sum())
+        return n_
+    _, _, G5 = graded(override={"magazine-holder": (rgb5, a, None, f32(D(WR5, "shadows", "magazine-holder.png"), "L"))})
+    _, _, G6 = graded(override={"magazine-holder": (rgb_n, a, None, f32(D(WR5, "shadows", "magazine-holder.png"), "L"))})
+    record("magazine-holder", dict(what="the rods' satin silver carried into their soft edge (the dark line under the front rod)",
+                                   method=rods_edge.__doc__.replace("\n", " "), source=dict(r1=rel(F5.MH_LAYER), r5=rel(D(WR5, "layers", "magazine-holder.png")),
+                                                                                       shadow=rel(D(WR5, "shadows", "magazine-holder.png")) + " (unchanged)"),
+                                   rods=rec, dark_line_px=dict(r5=dark_line(G5), r6=dark_line(G6)), changed_px=int(changed.sum()), file=rel(pl)))
+    print(json.dumps(dict(rods=rec, dark_line=json.load(open(REC))["magazine-holder"]["dark_line_px"]), indent=1))

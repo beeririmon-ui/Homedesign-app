@@ -20,6 +20,7 @@
 | **Access** (ה-admin) | Zero Trust. ‏S13: האפליקציה מכסה **שני נתיבים**: ‏`/api/admin/*` ו-`/admin/*` (המסך). ‏**S16 (ת34): בהגדרות העוגייה של האפליקציה, `SameSite` = ‏`Lax`** (או `Strict`), ו-`HTTP Only` דלוק; ראו "בקשה מאתר אחר" בפרק 5. לסקריפטים של הסטודיו: **Service Token** ומדיניות Service Auth | ‏`ACCESS_TEAM_DOMAIN`, ‏`ACCESS_AUD` (vars) | ה-Client ID וה-Secret של ה-Service Token נשארים אצל הבעלים |
 | **שעון זמינות** (S13, ‏6.2) | שירות חיצוני לבחירת הבעלים (למשל UptimeRobot או Better Stack, **לא אומת**) | — | — |
 | **ערוץ ההתראה על הזמנה חדשה** (S13, ‏6.3) | החלטה של הבעלים: אימייל או טלגרם. עד אז `NOTIFY_PROVIDER=UNDECIDED` ב-production | — | המפתח של הערוץ, כשייבנה |
+| **מייל ללקוח** (S18: אישור הזמנה, חשבונית, עדכון משלוח) | החלטה של הבעלים: שירות שליחת מיילים. עד אז `EMAIL_PROVIDER=UNDECIDED` בכל הסביבות, והאתר לא מבטיח שום מייל | — | המפתח של השירות, כשייבנה |
 | **דומיין ‎.co.il** (W3, אחרי שם המותג) | רשם, ואז Cloudflare DNS | ‏`ORIGIN` ב-`web/src/head.ts`, ו-`routes` ב-wrangler | — |
 | **Webhook של התשלום** | אצל הסולק | — | `PAYMENT_WEBHOOK_SECRET` (או מה שהסולק נותן) |
 | **Grow** (W1) | חשבון סוחר | — | `GROW_USER_ID`, ‏`GROW_PAGE_CODE`, ‏`GROW_API_KEY` |
@@ -76,7 +77,7 @@
 5. **העלאה:** `npm run deploy -w @hd/api -- --env preview` מ-`site/`. אחר כך בדיקה ידנית: קנייה מלאה עם התשלום המדומה, ותשלום sandbox כשהסולק מחובר.
    - **S16 (ה7): אין העלאה בלי בדיקת הקונפיגורציה.** ‏`npm run deploy` מריץ את `check-config` לפני `wrangler deploy`, וגם `wrangler deploy` ישיר מריץ אותה קודם (`build.command` ב-`site/api/wrangler.jsonc`). ערך שאינו ספק עוצר את ההעלאה. ‏`wrangler` שמורץ מתיקייה אחרת לא מוצא את הבדיקה, ולכן נעצר גם הוא. ההוכחה: `qa/reports/2026-11-07-site-track/s16/data/deploy-guard-mutation.log`.
    - **S17 (ת49): הבדיקה לא מורידה דבר מהרשת.** ‏`build.command` מריץ את tsx מ-`site/node_modules` לפי הנתיב שלו, ולא `npx tsx`. מתיקייה אחרת הנתיב חסר, ו-node נעצר לפני כל העלאה, בלי לפנות ל-npm.
-   - **S17 (ת49): ספק לעולם לא נקבע ב-`--var` או כסוד.** ‏`SUPPLIER_PROVIDER`, ‏`PAYMENT_PROVIDER`, ‏`INVOICE_PROVIDER` ו-`NOTIFY_PROVIDER` נקבעים רק ב-`site/api/wrangler.jsonc`, שם `check-config` קורא אותם. ‏`wrangler deploy --var SUPPLIER_PROVIDER:…` או `wrangler secret put SUPPLIER_PROVIDER` עוקפים את הבדיקה של ההעלאה. בזמן ריצה הרשימה הסגורה עדיין מסרבת לערך שגוי (ת17), אבל זה כבר אחרי שההעלאה עברה. ‏`--var` מותר רק לערכים שאינם ספק, ובפיתוח מקומי.
+   - **S17 (ת49): ספק לעולם לא נקבע ב-`--var` או כסוד.** ‏`SUPPLIER_PROVIDER`, ‏`PAYMENT_PROVIDER`, ‏`INVOICE_PROVIDER`, ‏`NOTIFY_PROVIDER` ו-`EMAIL_PROVIDER` (S18) נקבעים רק ב-`site/api/wrangler.jsonc`, שם `check-config` קורא אותם. ‏`wrangler deploy --var SUPPLIER_PROVIDER:…` או `wrangler secret put SUPPLIER_PROVIDER` עוקפים את הבדיקה של ההעלאה. בזמן ריצה הרשימה הסגורה עדיין מסרבת לערך שגוי (ת17), אבל זה כבר אחרי שההעלאה עברה. ‏`--var` מותר רק לערכים שאינם ספק, ובפיתוח מקומי.
 6. **אותו הדבר ל-production:** רק אחרי אישור הבעלים, ורק כשכל החוסמים ברשימת ההשקה סגורים.
 
 ## 4. מה מוגן כבר היום
@@ -141,6 +142,12 @@
 - **התוכן:** מספר ההזמנה, הסכום, מספר הפריטים והקישור ל-admin. בלי שם, טלפון, אימייל או כתובת.
 - **ב-production:** `UNDECIDED`. ההתראה מדולגת עם אזהרה, וההזמנה ממשיכה כרגיל.
 - **צעד של הבעלים:** לבחור אימייל או טלגרם. אז בונים את המתאם ומוסיפים אותו לרשימה הסגורה ב-`config.ts`.
+
+### מייל ללקוח (S18)
+- **היום האתר לא שולח ללקוח שום מייל.** ‏`EMAIL_PROVIDER=UNDECIDED` בכל הסביבות של wrangler.jsonc, ואין לו mock.
+- **מה הלקוח קורא:** הנוסח בלי מייל (`site/copy/promises.he.json`, ‏`no_email`): ההזמנה ומצבה בדף ההזמנה, בדפדפן שבו הזמינו. אין תיבת הסכמה לדיוור, ואין טופס "עדכנו אותי כשחוזר".
+- **הבדיקה בבנייה:** ‏`build-copy` בוחר את הנוסח לפי `EMAIL_PROVIDER` של הסביבה שהבנייה בשבילה: ‏production עם `HD_PUBLIC=1`, והרמה העליונה בלי. ‏`check:promises` סורק את הדפים, את ה-JS ואת המחרוזות של ה-Worker, ועוצר את הבנייה על כל הבטחה של מייל, SMS או עדכון.
+- **כשנבחר שירות:** בונים את המתאם (ה-job ששולח באמת), מוסיפים אותו ל-`EMAIL_PROVIDERS` ב-`site/shared/src/email.ts`, וקובעים אותו ב-wrangler.jsonc. בבנייה הבאה שורות המייל חוזרות לבד. ‏mock או ערך אחר עוצרים את `check-config` ואת הבנייה.
 
 ### ניטור
 - **`/healthz`:** בודק שה-D1 עונה, שה-binding של התור קיים, ושאין הזמנה ששולמה ומחכה בתור יותר מ-30 דקות.

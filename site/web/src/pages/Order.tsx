@@ -13,6 +13,7 @@ import { optionImage as optionPhoto, product as catalogProduct, supplierImage } 
 import { mediaUrl } from '../media';
 import { HOUSES, NORDIC, loadHouse, nordic, type House } from '../house';
 import { optionsOf } from '../variants';
+import { copyHe } from '../copy';
 import type { SceneLayerSet } from '../engine/types';
 
 type Line = OrderView['lines'][number];
@@ -248,7 +249,8 @@ export function OrderPage({ id }: { id: string }) {
   useEffect(() => {
     const token = orderToken(id);
     if (!token) {
-      setError('אין לנו גישה להזמנה הזו מהדפדפן הזה. את פרטי ההזמנה שלחנו לאימייל שלכם.');
+      // S18: the order's token lives in the browser that ordered; no email carries the order elsewhere (site/copy)
+      setError(copyHe('order.no_access'));
       return;
     }
     let tries = 0;
@@ -286,7 +288,9 @@ export function OrderPage({ id }: { id: string }) {
       setDelayLine('');
       return;
     }
-    const t = setTimeout(() => setDelayLine(ORDER_DELAY_HE), 60);
+    // S18: §7's third sentence ("…נעדכן אותך במייל") only where an email provider really sends it (site/copy)
+    const followup = copyHe('order.delay.followup');
+    const t = setTimeout(() => setDelayLine(followup ? `${ORDER_DELAY_HE} ${followup}` : ORDER_DELAY_HE), 60);
     return () => clearTimeout(t);
   }, [delayed]);
   return (
@@ -348,12 +352,14 @@ export function OrderPage({ id }: { id: string }) {
             </dd>
           </dl>
           {paid && !closed ? (
+            // S18 (site/copy, master-designer's words): what this page gives, never an email it does not send; "מספר
+            // המשלוח למעלה" only when the supplier gave one
             <p class="small muted">
               {step === 3
-                ? 'ההזמנה נמסרה. אם משהו לא כפי שציפיתם, כתבו לנו.'
+                ? copyHe('order.next.delivered')
                 : step === 2
-                  ? 'ההזמנה בדרך אליכם. מספר המשלוח למעלה.'
-                  : 'אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח.'}
+                  ? copyHe(order.shipments?.some((s) => s.tracking_number) ? 'order.next.shipped' : 'order.next.shipped_no_number')
+                  : copyHe('order.next.received')}
             </p>
           ) : null}
           {order.status === 'payment_failed' ? (

@@ -9,6 +9,7 @@
  * - **The same rules check the deploy** (api/scripts/check-config.ts, run by `npm run build`): a value in wrangler.jsonc
  *   that is not a provider fails the build; `UNDECIDED` is the one placeholder allowed there, and it fails closed at run time.
  */
+import { emailProviderIssue } from '@hd/shared/email';
 import { log } from './log';
 
 export const NON_PRODUCTION = ['development', 'preview', 'preview-local', 'test'] as const;
@@ -61,6 +62,17 @@ export function configIssues(vars: Record<string, unknown>): string[] {
     if (!c.ok) out.push(c.reason);
   }
   return out;
+}
+
+/**
+ * S18: the customer's email (`EMAIL_PROVIDER`, @hd/shared/email). It is not a job's provider: nothing sends the customer
+ * an email today, and no job reads it. The copy build reads it (tools/build-copy.ts) to choose the lines that promise an
+ * email only when a provider really sends them. The deploy check (api/scripts/check-config.ts) wants it in every
+ * environment: `UNDECIDED`, or a provider from the closed list (none yet). It has no mock, in any environment.
+ */
+export function emailConfigIssues(vars: Record<string, unknown>): string[] {
+  const issue = emailProviderIssue(vars.EMAIL_PROVIDER);
+  return issue ? [issue] : [];
 }
 
 /** Loud, once per call: the operator reads it in the Worker's logs (observability is on). S13: a structured row. */

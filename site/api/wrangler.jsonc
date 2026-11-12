@@ -54,6 +54,9 @@
     "SUPPLIER_PROVIDER": "mock",
     // S13 (6.3): the new-order alert; a log row outside production until the owner chooses email or Telegram
     "NOTIFY_PROVIDER": "mock",
+    // S18: the customer's email (@hd/shared/email). None is built and it has no mock, so UNDECIDED in every environment.
+    // The copy build reads it: a page promises an email only where a provider really sends it (tools/build-copy.ts)
+    "EMAIL_PROVIDER": "UNDECIDED",
     "ACCESS_TEAM_DOMAIN": "",
     "ACCESS_AUD": "",
   },
@@ -92,6 +95,7 @@
         "INVOICE_PROVIDER": "mock",
         "SUPPLIER_PROVIDER": "mock",
         "NOTIFY_PROVIDER": "mock",
+        "EMAIL_PROVIDER": "UNDECIDED",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",
       },
@@ -130,6 +134,7 @@
         "SUPPLIER_PROVIDER": "cj",
         // S13: no channel is built; the owner chooses (email or Telegram). The alert is skipped, never the order
         "NOTIFY_PROVIDER": "UNDECIDED",
+        "EMAIL_PROVIDER": "UNDECIDED",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",
       },

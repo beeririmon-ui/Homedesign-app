@@ -835,14 +835,14 @@
   "measured": {
    "rails": {
     "print 1 top": {
-     "residual_rms": 0.168,
-     "residual_max": 1.46,
-     "jumps_ge_0_6": 1,
-     "jumps_ge_1_0": 1
+     "residual_rms": 0.116,
+     "residual_max": 0.21,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0
     },
     "print 2 top": {
-     "residual_rms": 2.405,
-     "residual_max": 9.93,
+     "residual_rms": 2.411,
+     "residual_max": 9.92,
      "jumps_ge_0_6": 6,
      "jumps_ge_1_0": 6
     },
@@ -853,8 +853,8 @@
      "jumps_ge_1_0": 0
     },
     "print 1 bottom": {
-     "residual_rms": 0.431,
-     "residual_max": 5.03,
+     "residual_rms": 0.43,
+     "residual_max": 5.02,
      "jumps_ge_0_6": 3,
      "jumps_ge_1_0": 3
     },
@@ -934,5 +934,269 @@
    "black_median_L": 14.9
   },
   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/framed-art-v2.png"
+ },
+ "pendant-v2": {
+  "what": "the canopy re-cut whole and centred, the right outline snapped, the cord's speck out, the cord black, the paper's rings out",
+  "method": "pendant 2 (QA R5 3.6; the designer section 4, step 1). (1) The ceiling canopy re-cut whole: what differs from the ceiling (dE >     3.5, closed), the largest piece, its convex hull, an ellipse fitted to it (a disc seen from below), rasterised at 8 x (fix_r4.     canopy_cut's rule, with the shaded half of the disc kept: at dE > 6 only the lit two thirds passed). (2) The cord: one plumb line     from the canopy's centre into the lantern's collar at the cord's own measured column, its alpha the cord's own cross-profile     (R5's cut, the rows where it hangs alone); BLACK as the card ('black thin cord'): neutral, L* 15 with a soft highlight on the window     side; the brown speck and anything else off the line are gone. (3) The lantern's outline snapped to the render's own edge (contour_snap)     where the step is clear, then smoothed: the clay's facets out. (4) The rings: on the clay lantern's latitude lines (latlong_map) the     paper's L* profile per sector, its deviation from its own course smoothed at ~3 ring spacings, smoothed across the sectors and with     its linear trend kept out (the light's gradient stays), taken off L* (a*b* unchanged). (5) The bottom opening (rendered off): not     brighter than the paper's bottom third; the lamp holder's specks neutral",
+  "source": {
+   "render": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/p5-regt.npy",
+   "r5_layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/pendant-v2.png"
+  },
+  "canopy": {
+   "ellipse_centre_px": [
+    1679.94,
+    22.4
+   ],
+   "ellipse_axes_px": [
+    36.24,
+    72.23
+   ],
+   "angle_deg": 84.67,
+   "cord_x_px": 1676.05,
+   "centre_minus_cord_px": 3.89,
+   "hull_px": 1684,
+   "box_px": [
+    1644,
+    5,
+    1716,
+    41
+   ]
+  },
+  "cord": {
+   "column_px": 1676.05,
+   "half_width_px": 1.5,
+   "rows": [
+    37,
+    202
+   ],
+   "L_profile": [
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    17.5,
+    18.1,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0,
+    15.0
+   ],
+   "measured_graded": {
+    "L_median": 18.88,
+    "C_median": 0.07,
+    "px": 156
+   },
+   "card": "black thin cord"
+  },
+  "outline": {
+   "points": 1174,
+   "snapped": 837,
+   "offset_px": {
+    "median": -1.25,
+    "p90_abs": 2.0
+   }
+  },
+  "rings": {
+   "model": "tier_fit / tier_correction: each step the model drew on a latitude line, per sector, replaced by the same rise spread over ~2 ring spacings (0.5 (1 + tanh((z - zk) / 0.030)))",
+   "tiers": [
+    {
+     "round": 0,
+     "boundaries_z_m": [
+      0.0354,
+      0.0688,
+      0.1042,
+      0.125,
+      0.1437
+     ],
+     "step_L_median": [
+      2.44,
+      4.57,
+      5.82,
+      1.88,
+      2.4
+     ]
+    },
+    {
+     "round": 1,
+     "boundaries_z_m": [
+      0.0875,
+      0.125,
+      0.1437
+     ],
+     "step_L_median": [
+      0.36,
+      0.28,
+      0.46
+     ]
+    },
+    {
+     "round": 2,
+     "boundaries_z_m": [
+      0.125
+     ],
+     "step_L_median": [
+      0.14
+     ]
+    }
+   ],
+   "sectors": 48,
+   "latitude_bins": 120,
+   "correction_L": {
+    "p5": -2.05,
+    "p95": 2.25
+   }
+  },
+  "opening": {
+   "cap_L_ungraded": 68.35,
+   "px": 2166,
+   "hot_px": 256
+  },
+  "measured_r5": {
+   "rings_max_abs_L": 4.99,
+   "ring_steps_L": {
+    "0.0354": 1.52,
+    "0.0688": 4.99,
+    "0.1042": 4.86,
+    "0.1271": 1.76,
+    "0.1437": 2.52,
+    "0.0365": 1.65
+   },
+   "pleats_hp_std": 2.34,
+   "light_top_minus_bottom_third": 7.41,
+   "paper_a": 1.14,
+   "paper_b": 7.12,
+   "bottom_third_L": 69.27,
+   "opening": {
+    "px": 1769,
+    "L_median": 69.41,
+    "L_p99": 85.21,
+    "C_p99": 16.76
+   },
+   "paper_px": 25852
+  },
+  "measured_r6": {
+   "rings_max_abs_L": 0.93,
+   "ring_steps_L": {
+    "0.0688": 0.33,
+    "0.1042": 0.45,
+    "0.1437": 0.93,
+    "0.1729": 0.48,
+    "0.0365": 0.72
+   },
+   "pleats_hp_std": 2.362,
+   "light_top_minus_bottom_third": 7.12,
+   "paper_a": 1.17,
+   "paper_b": 7.14,
+   "bottom_third_L": 69.37,
+   "opening": {
+    "px": 1769,
+    "L_median": 68.82,
+    "L_p99": 69.13,
+    "C_p99": 16.44
+   },
+   "paper_px": 25852
+  },
+  "targets": {
+   "rings: the latitude profile's residual <= 1 L* end to end": {
+    "value": 0.93,
+    "before": 4.99,
+    "pass_": true
+   },
+   "pleats: high-pass std within +-10 %": {
+    "value": 0.0094,
+    "pass_": true
+   },
+   "light: top third - bottom third within +-1 L*": {
+    "value": -0.29,
+    "pass_": true
+   },
+   "colour: a*b* unchanged (+-0.5)": {
+    "value": [
+     0.03,
+     0.02
+    ],
+    "pass_": true
+   },
+   "opening: not brighter than the paper's bottom third": {
+    "value": {
+     "opening_L_p99": 69.13,
+     "bottom_third_L": 69.37
+    },
+    "pass_": true
+   },
+   "opening: the holder's specks neutral (their C* median <= 3)": {
+    "value": {
+     "r5": 7.98,
+     "r6": 1.99
+    },
+    "pass_": true
+   },
+   "cord: black (L* <= 25, C* <= 3)": {
+    "value": {
+     "L_median": 18.88,
+     "C_median": 0.07,
+     "px": 156
+    },
+    "pass_": true
+   }
+  },
+  "all_met": true,
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/pendant-v2.png"
+ },
+ "magazine-holder": {
+  "what": "the rods' satin silver carried into their soft edge (the dark line under the front rod)",
+  "method": "the rods' soft edge (the designer's pre-approved fix, eye section 8; QA R5 4). R5 recoloured each rod's pixels within its half     width + 1.5 px of the fitted line, but only those of C* <= 14: where the black rod meets the leather, the edge pixels (part rod,     part cognac leather) were left black-and-leather, the dark broken line under the front rod at x 2. Here each rod's two edges are     measured on its R1 render (per column, off the tubes: the sub-pixel crossing of half way between the rod's core L* and the     neighbour's 4 px beyond; the median over the columns), so each pixel's rod share f is geometric: f = clip(E - |d| + 0.5, 0, 1) (d     its distance from the line, E that side's edge). In the edge band (|d| from E - 1 to E + 1.5, off the tubes) the rod's black is     replaced by R5's satin silver S of the nearest full rod pixel, in linear RGB: c' = c_R1 + f (S - K), K the R1 rod's black (its     core's median). Alpha, the tubes, the leather beyond, the rest of R5's rods and the shadow: unchanged",
+  "source": {
+   "r1": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/magazine-holder.png",
+   "r5": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/magazine-holder.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/shadows/magazine-holder.png (unchanged)"
+  },
+  "rods": {
+   "back": {
+    "edge_upper_px": {
+     "value": 2.955,
+     "columns": 146
+    },
+    "edge_lower_px": {
+     "value": 4.366,
+     "columns": 53
+    },
+    "edge_band_px": 400,
+    "rod_share_median": 0.849,
+    "black_K_srgb": [
+     0.1647,
+     0.1451,
+     0.1333
+    ],
+    "core_L": 15.23
+   },
+   "front": {
+    "edge_upper_px": {
+     "value": 3.496,
+     "columns": 158
+    },
+    "edge_lower_px": {
+     "value": 5.126,
+     "columns": 151
+    },
+    "edge_band_px": 558,
+    "rod_share_median": 0.756,
+    "black_K_srgb": [
+     0.1255,
+     0.1176,
+     0.1137
+    ],
+    "core_L": 11.41
+   }
+  },
+  "dark_line_px": {
+   "r5": 0,
+   "r6": 0
+  },
+  "changed_px": 958,
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/magazine-holder.png"
  }
 }

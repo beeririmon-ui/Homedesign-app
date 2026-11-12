@@ -1,0 +1,81 @@
+{
+  "note": "S18 (2026-11-12): every line where the site could promise the customer an email, an SMS or an update, in one place. master-designer words them here, without touching code. `no_email` is shown while EMAIL_PROVIDER is UNDECIDED (today: the shop sends the customer no email); `email` only once a provider that really sends is connected (@hd/shared/email). null: the line, or the whole control, is not shown. `text`: the same line either way. A `no_email` or `text` line that promises an email, an SMS, a message or an update stops the build (tools/build-copy.ts, tools/lib/promises.ts). Lines in one `group` are shown or hidden together.",
+  "strings": {
+    "checkout.email_hint": {
+      "where": "הקופה, מתחת לשדה האימייל",
+      "no_email": "לפנייה בנושא ההזמנה, אם יהיה צורך.",
+      "email": "לשם נשלחים אישור ההזמנה והחשבונית."
+    },
+    "checkout.marketing_consent": {
+      "where": "הקופה, תיבת הסימון (רשות) מתחת לאישור התקנון. null: אין תיבה",
+      "no_email": null,
+      "email": "אשמח לקבל עדכונים על מוצרים חדשים במייל (רשות, אפשר להסיר בכל עת)."
+    },
+    "checkout.total_note": {
+      "where": "הקופה, מתחת לסכום לתשלום",
+      "no_email": "כולל מע\"מ.",
+      "email": "כולל מע\"מ. חשבונית מס נשלחת במייל אחרי התשלום."
+    },
+    "order.next.received": {
+      "where": "דף ההזמנה, מתחת לסה\"כ: אחרי התשלום, עד שההזמנה יוצאת למשלוח",
+      "no_email": "אישור ההזמנה ומצבה מופיעים בדף הזה, כולל היציאה למשלוח. כדאי לשמור את הקישור. הוא נפתח רק בדפדפן הזה.",
+      "email": "אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח."
+    },
+    "order.next.shipped": {
+      "where": "דף ההזמנה, מתחת לסה\"כ: ההזמנה נשלחה, ויש מספר משלוח",
+      "text": "ההזמנה בדרך אליכם. מספר המשלוח למעלה."
+    },
+    "order.next.shipped_no_number": {
+      "where": "דף ההזמנה, מתחת לסה\"כ: ההזמנה נשלחה, והספק לא מסר מספר משלוח",
+      "text": "ההזמנה בדרך אליכם."
+    },
+    "order.next.delivered": {
+      "where": "דף ההזמנה, מתחת לסה\"כ: ההזמנה נמסרה",
+      "text": "ההזמנה נמסרה. אם משהו לא כפי שציפיתם, כתבו לנו."
+    },
+    "order.no_access": {
+      "where": "דף ההזמנה, כשהוא נפתח בדפדפן אחר מזה שבו הזמינו",
+      "no_email": "אין לנו גישה להזמנה הזו מהדפדפן הזה. דף ההזמנה נפתח רק בדפדפן שבו הזמנתם.",
+      "email": "אין לנו גישה להזמנה הזו מהדפדפן הזה. את פרטי ההזמנה שלחנו לאימייל שלכם."
+    },
+    "order.delay.followup": {
+      "where": "דף ההזמנה, המשפט השלישי אחרי שורת העיכוב (master-designer §7). null: רק שני המשפטים",
+      "no_email": null,
+      "email": "אם מועד המסירה ישתנה, נעדכן אותך במייל."
+    },
+    "waitlist.offer": {
+      "where": "\"המלאי אינו זמין כעת\": הכפתור שפותח את הטופס (דף המוצר והגלגל). null: אין טופס, רק השורה \"המלאי אינו זמין כעת\"",
+      "group": "waitlist",
+      "no_email": null,
+      "email": "עדכנו אותי כשחוזר"
+    },
+    "waitlist.why": {
+      "where": "\"המלאי אינו זמין כעת\": מתחת לשדה האימייל, לשם מה הכתובת",
+      "group": "waitlist",
+      "no_email": null,
+      "email": "נשלח הודעה אחת כשהמוצר חוזר למלאי. הכתובת לא תשמש לשום דבר אחר."
+    },
+    "waitlist.submit": {
+      "where": "\"המלאי אינו זמין כעת\": כפתור השליחה של הטופס",
+      "group": "waitlist",
+      "no_email": null,
+      "email": "עדכנו אותי"
+    },
+    "waitlist.done": {
+      "where": "\"המלאי אינו זמין כעת\": אחרי ההרשמה",
+      "group": "waitlist",
+      "no_email": null,
+      "email": "נרשמתם. נשלח הודעה אחת כשהמוצר חוזר."
+    },
+    "privacy.processors": {
+      "where": "מדיניות הפרטיות: למי מועברים הפרטים",
+      "no_email": "הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה ושירות החשבוניות.",
+      "email": "הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים."
+    },
+    "privacy.marketing": {
+      "where": "מדיניות הפרטיות: דיוור שיווקי",
+      "no_email": "האתר לא שולח דיוור שיווקי.",
+      "email": "דיוור שיווקי נשלח רק אם סימנתם הסכמה, ואפשר להסיר בכל עת."
+    }
+  }
+}

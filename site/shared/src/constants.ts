@@ -44,7 +44,8 @@ export const ORDER_STATUS_HE: Record<OrderStatus, string> = {
  * S17 (§7): the line under the progress line of an order in supplier_error: no supplier, no fault, nothing asked of the
  * customer. The designer's third sentence ("אם מועד המסירה ישתנה, נעדכן אותך במייל.") is a promise: it goes in only
  * when the shop really sends that email. Today it sends the customer none (lib/notify is the owner's new-order alert
- * only), so it is left out.
+ * only), so it is left out. S18: the sentence is in site/copy/promises.he.json (`order.delay.followup`), and the order
+ * page adds it only in a build whose EMAIL_PROVIDER really sends (@hd/shared/email).
  */
 export const ORDER_DELAY_HE = 'ההכנה נמשכת יותר מהרגיל. אנחנו כבר מטפלים בזה, ואין צורך לעשות דבר.';
 /** S17 (§7): the short form, only where the line has no room (a row of a list of orders, an alert) */

@@ -13,6 +13,7 @@ import { api, ApiError } from '../api';
 import { cart, forgetCart, loadCart, saveOrderToken } from '../state/cart';
 import { navigate } from '../router';
 import { validateCheckout, type FieldErrors } from '../validate';
+import { copyHe } from '../copy';
 
 const FIELDS: { k: keyof FieldErrors; label: string }[] = [
   { k: 'full_name', label: 'שם מלא' },
@@ -108,6 +109,7 @@ export function Checkout({ failed }: { failed: boolean }) {
   );
 
   const errList = FIELDS.filter((x) => errors[x.k]);
+  const consentHe = copyHe('checkout.marketing_consent');
   return (
     <div class="wrap page">
       <div class="page-head">
@@ -171,7 +173,8 @@ export function Checkout({ failed }: { failed: boolean }) {
                   'email',
                   'אימייל',
                   { type: 'email', autocomplete: 'email', inputMode: 'email', dir: 'ltr', required: true },
-                  'לשם נשלחים אישור ההזמנה והחשבונית.',
+                  // S18: what the address is for, in words that promise no email while none is sent (site/copy)
+                  copyHe('checkout.email_hint') ?? undefined,
                 )}
                 {field('phone', 'טלפון', { type: 'tel', autocomplete: 'tel', inputMode: 'tel', dir: 'ltr', required: true }, 'לשליח, למשל 050-1234567.')}
               </div>
@@ -241,10 +244,15 @@ export function Checkout({ failed }: { failed: boolean }) {
                 </span>
               ) : null}
             </div>
-            <label class="check">
-              <input type="checkbox" checked={marketing} onChange={(e) => setMarketing(e.currentTarget.checked)} />
-              <span>אשמח לקבל עדכונים על מוצרים חדשים במייל (רשות, אפשר להסיר בכל עת).</span>
-            </label>
+            {
+              // S18: the consent to marketing email is asked only where a provider can send it; until then, no box
+              consentHe ? (
+                <label class="check">
+                  <input type="checkbox" checked={marketing} onChange={(e) => setMarketing(e.currentTarget.checked)} />
+                  <span>{consentHe}</span>
+                </label>
+              ) : null
+            }
             <button type="submit" class="btn btn-primary" disabled={busy} aria-busy={busy}>
               {busy ? 'יוצרים את ההזמנה…' : 'מעבר לתשלום מאובטח'}
             </button>
@@ -270,7 +278,7 @@ export function Checkout({ failed }: { failed: boolean }) {
                 <Price agorot={subtotal + shipping} />
               </dd>
             </dl>
-            <p class="small muted">כולל מע"מ. חשבונית מס נשלחת במייל אחרי התשלום.</p>
+            <p class="small muted">{copyHe('checkout.total_note')}</p>
           </aside>
         </div>
       )}

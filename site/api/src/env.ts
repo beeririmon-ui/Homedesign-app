@@ -41,6 +41,11 @@ export type Env = {
   ADMIN_DEV_TOKEN?: string;
   /** S13 (6.3): the new-order alert's provider; `mock` (a log row) outside production; none is built yet */
   NOTIFY_PROVIDER?: string;
+  /**
+   * S18: the customer's email (@hd/shared/email). `UNDECIDED` everywhere: none is built, and no job reads it. The copy
+   * build reads it from wrangler.jsonc, so a page promises an email only where a provider really sends it.
+   */
+  EMAIL_PROVIDER?: string;
 };
 
 /** `adminKind` (S16, ת34): how the admin was let in: a person's Access login, an Access service token, or a local dev path */
