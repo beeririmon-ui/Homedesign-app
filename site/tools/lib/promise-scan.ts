@@ -12,6 +12,14 @@
  *   <style> and style attribute (CSS `content`).
  * - **Every file:** HTML, JS anywhere in the build (not only assets/), CSS, JSON, SVG, XML and other text (`fileTexts`).
  * - **The Worker:** api/src, the shared modules it imports (`workerSources`), and its bundle (api/dist), but the owner's.
+ *
+ * S22, QA ת71:
+ * - **Joins in code:** `["אישור ההזמנה","יישלח","במייל"].join(" ")` with a fixed separator (a literal; none is ","; any
+ *   other separator is read as a space) and `"האישור ".concat("יגיע ", …)` are read as the text they make.
+ * - **Not covered, on purpose: binary files' metadata** (a WebP's or a JPEG's XMP and EXIF, a font's name table, a PDF's
+ *   info). `fileTexts` skips binaries. The customer never reads it: no browser shows an image's or a font's metadata on
+ *   the page, and the site never prints it. What a page shows of an image is its alt text and caption, which are scanned
+ *   with the page. QA's X11 (a WebP with an XMP description) is kept as a known, accepted limit.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
@@ -106,7 +114,22 @@ export function htmlTexts(html: string): string[] {
 
 const isStr = (n: ts.Node): n is ts.StringLiteralLike => ts.isStringLiteralLike(n);
 
-/** the text an expression renders, when it is made of strings: literals, templates, "+", JSX children; '' for the rest */
+/** S22 (QA ת71): `[…].join(sep)` and `x.concat(…)` as the text they make; null for any other call */
+function joined(n: ts.CallExpression): string | null {
+  if (!ts.isPropertyAccessExpression(n.expression)) return null;
+  const name = n.expression.name.text;
+  const target = n.expression.expression;
+  if (name === 'join' && ts.isArrayLiteralExpression(target)) {
+    const a = n.arguments[0];
+    const sep = a === undefined ? ',' : isStr(a) ? a.text : ' ';
+    return target.elements.map(rendered).join(sep);
+  }
+  if (name === 'concat' && n.arguments.length) return rendered(target) + n.arguments.map(rendered).join('');
+  return null;
+}
+
+/** the text an expression renders, when it is made of strings: literals, templates, "+", JSX children, join and
+ * concat (S22); '' for the rest */
 function rendered(n: ts.Node): string {
   if (isStr(n)) return n.text;
   if (ts.isTemplateExpression(n)) return n.head.text + n.templateSpans.map((s) => rendered(s.expression) + s.literal.text).join('');
@@ -114,6 +137,10 @@ function rendered(n: ts.Node): string {
   if (ts.isBinaryExpression(n) && n.operatorToken.kind === ts.SyntaxKind.PlusToken) return rendered(n.left) + rendered(n.right);
   if (ts.isConditionalExpression(n)) return '';
   if (ts.isArrayLiteralExpression(n)) return n.elements.map(rendered).join('');
+  if (ts.isCallExpression(n)) {
+    const j = joined(n);
+    if (j !== null) return j;
+  }
   // a compiled JSX element: h("b", { children: … }) / jsx(…)
   if (ts.isCallExpression(n))
     for (const a of n.arguments)
@@ -130,7 +157,8 @@ function rendered(n: ts.Node): string {
 /**
  * Every string in a script (literals and the parts of template literals), as TypeScript reads it; and (S20) the text
  * that strings render together: an array of JSX children, a template literal with its parts joined, "a" + "b", a
- * JSX element's children. A string that is HTML is read as a page; one that is JSON, as JSON.
+ * JSX element's children; (S22) an array's `.join(sep)` and a string's `.concat(…)`. A string that is HTML is read as
+ * a page; one that is JSON, as JSON.
  */
 export function codeStrings(code: string, file: string): string[] {
   const kind = file.endsWith('.ts')
@@ -154,6 +182,7 @@ export function codeStrings(code: string, file: string): string[] {
     else if (ts.isTemplateExpression(n) || ts.isJsxElement(n) || ts.isJsxFragment(n)) push(rendered(n));
     else if (ts.isBinaryExpression(n) && n.operatorToken.kind === ts.SyntaxKind.PlusToken && !ts.isBinaryExpression(n.parent)) push(rendered(n));
     else if (ts.isArrayLiteralExpression(n) && n.elements.length > 1) push(rendered(n));
+    else if (ts.isCallExpression(n) && joined(n) !== null) push(rendered(n));
     n.forEachChild(visit);
   };
   visit(sf);

@@ -8,7 +8,11 @@
  *   inline elements joined, every attribute, every JSON island (the story's data), inline scripts and styles.
  * - **The code:** every script anywhere in dist, by any URL, but the ones only the review pages load; strings, and the
  *   text they render together (JSX children, templates, "+").
- * - **Every other file in dist** that is text: stylesheets (CSS `content`), JSON, SVG, XML, robots, headers.
+ * - **Every other file in dist** that is text: stylesheets (CSS `content`), JSON, SVG, XML, robots, headers, web
+ *   manifests. S22 (QA ת71): in code, an array's `.join(" ")` (any fixed separator) and `.concat()` are read joined.
+ * - **Not covered, on purpose: the metadata inside binary files** (a WebP's XMP, as QA's X11; EXIF; a font's names). The
+ *   customer never reads it: no page shows it, and an image reaches the reader only as pixels, its alt text and its
+ *   caption, which are scanned with the page.
  * - **The Worker:** every string in api/src (.ts and .json) and in the shared modules it imports (ORDER_STATUS_HE is
  *   served as `status_he`), and in its bundle (api/dist/index.js, when built), but the owner's screens and alerts
  *   (OWNER_ONLY) and the strings that come from them.

@@ -1,0 +1,18 @@
+64 sets × 2 (contact or not) = 128 states; problems: 0
+  order_confirmation alone → email lines: order.no_access, privacy.processors
+  shipping_update alone → email lines: privacy.processors
+  delay_notice alone → email lines: order.delay.followup, privacy.processors
+  invoice_email alone → email lines: checkout.total_note, privacy.processors
+  back_in_stock alone → email lines: waitlist.offer, waitlist.why, waitlist.submit, waitlist.done, story.unavailable_note, privacy.processors
+  marketing alone → email lines: checkout.marketing_consent, privacy.processors, privacy.marketing
+  all six → email lines: checkout.email_hint, checkout.marketing_consent, checkout.total_note, order.next.received, order.no_access, order.delay.followup, waitlist.offer, waitlist.why, waitlist.submit, waitlist.done, story.unavailable_note, privacy.processors, privacy.marketing
+ok   N1 want stop got stop  order.no_access.email adds an invoice (needs: order_confirmation)  | order.no_access: the email line promises invoice_email, which its "needs" do not list
+ok   N2 want stop got stop  order.no_access.email adds a delay notice in words outside IMPLIES ("אם המסירה תתאחר")  | order.no_access: the email line promises delay_notice, which its "needs" do not list
+ok   N3 want stop got stop  order.no_access.email adds a tracking number ("מספר המעקב יישלח במייל")  | order.no_access: the email line promises shipping_update, which its "needs" do not list
+ok   N4 want stop got stop  checkout.email_hint.email adds a receipt ("קבלה") with needs order_confirmation only  | checkout.email_hint: the email line promises invoice_email, which its "needs" do not list
+ok   N5 want stop got stop  order.no_access.email adds back in stock in words outside IMPLIES ("כשיהיה שוב במלאי")  | order.no_access: the email line promises back_in_stock, which its "needs" do not list
+ok   N6 want stop got stop  order.no_access.email adds marketing in words outside IMPLIES ("הטבות והנחות")  | order.no_access: the email line promises marketing, which its "needs" do not list
+ok   N7 want stop got stop  checkout.total_note.needs = "any": the invoice line is shown with a provider that sends only the confirmation  | checkout.total_note: "needs" is "any", but the email line promises invoice_email: list what it needs
+ok   N8 want stop got stop  group waitlist split by two needs: offer needs back_in_stock+marketing, submit needs back_in_stock+order_confirmation  | group waitlist: its lines are shown or hidden together (with back_in_stock, some are null and some are not)
+ok   N8b want stop got stop  group waitlist split only by pairs: offer and why need back_in_stock+marketing, submit, done and the story line need back_in_stock+order_confirmation  | group waitlist: its lines are shown or hidden together (with order_confirmation+back_in_stock, some are null and some are not)
+ok   N9 want pass got pass  control: the copy file as it is

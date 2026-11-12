@@ -71,8 +71,14 @@ const CHANNEL_HE = [
   'דיוור',
   'רשימת (?:ה)?(?:תפוצה|דיוור)',
   'תיבת (?:ה)?(?:דואר|מייל|אימייל)(?: (?:ה)?נכנס)?',
+  // S22 (QA ת67, B): the spam folder (an email is on its way), a push notification
+  'ספאם',
+  'דואר (?:ה)?זבל',
+  'פוש',
 ];
-const CHANNEL = re(`${words(CHANNEL_HE)}|\\b(?:e-?mail|sms|whats ?app|telegram|newsletter)\\b`, 'giu');
+const CHANNEL = re(`${words(CHANNEL_HE)}|\\b(?:e-?mail|sms|whats ?app|telegram|newsletter|push notifications?)\\b`, 'giu');
+/** S22 (QA ת67): a tracking number, code or link is sent as a message too ("יישלח מספר מעקב", "תקבלו את מספר המעקב") */
+const TRACKING = ['(?:מספר|קוד|קישור)(?:י)? (?:ה)?מעקב', 'קוד(?:י)? (?:ה)?(?:הנחה|קופון|אימות)'];
 /** what is sent to a customer */
 const OBJECT = re(
   words([
@@ -88,6 +94,11 @@ const OBJECT = re(
     'פרטי(?:ם)?',
     'מסרונ(?:ים)?',
     'מסרון',
+    // S22 (QA ת67): a tracking number, a code; a message ("מסר"), a coupon, a catalogue (B)
+    ...TRACKING,
+    'מסר(?:ים)?',
+    'קופו(?:ן|נים)',
+    'קטלוג(?:ים)?',
   ]),
 );
 /** what the customer gets (receive, arrive) */
@@ -104,6 +115,8 @@ const RECEIVED = re(
     'מסרונ(?:ים)?',
     'מסרון',
     'קבלה',
+    ...TRACKING,
+    'מסר(?:ים)?',
   ]),
 );
 /** sending by us: first person (with "אליכם" alone it is a promise) */
@@ -112,6 +125,12 @@ const SEND_FIRST = re(words(['נשלח', 'נשלוח', 'שלחנו']), 'gu');
 const SEND_OTHER = re(words(['נשלחת', 'נשלחים', 'נשלחות', 'יישלח(?:ו)?', 'ישלח(?:ו)?', 'תישלח(?:נה)?', 'שולח(?:ים|ת|ות)?', 'לשלוח']), 'gu');
 /** sent, past passive: a status, unless a channel is named */
 const SEND_PAST = re(words(['נשלחה', 'נשלחו']), 'gu');
+/**
+ * S22 (QA ת67, N24): "תשלח" is the customer's "you will send" ("תשלח לנו"), or the defective spelling of "תישלח". It is
+ * a promise only when what is sent is its subject: a message, a reminder, a confirmation before it in the clause
+ * ("תזכורת תשלח יום לפני", "ההודעה תשלח אליכם").
+ */
+const SEND_DEFECTIVE = re(words(['תשלח', 'תשלחנה']), 'gu');
 const TO_CUSTOMER = re(words(['לכם', 'אליכם', 'לכן', 'אליכן', 'לך', 'אליך', 'אלייך'], false));
 const TO_US = re(`${words(['לנו', 'אלינו', 'אצלנו', 'איתנו', 'עמנו'])}|(?<![${HE}])ו?(?:ל|אל ה)ספק(?:ים)?(?![${HE}])`);
 const SHIP_NOUNS = ['חבילה', 'חבילות', 'הזמנה', 'הזמנות', 'מוצר', 'מוצרים', 'פריט', 'פריטים', 'משלוח', 'משלוחים', 'מארז'];
@@ -125,6 +144,10 @@ const NOTIFY_PHRASE = re(
     words(['תעודכנו', 'תעודכני', 'תיודעו']),
     `${words(['לעדכן', 'ליידע', 'להודיע', 'להתריע', 'להזכיר', 'לבשר'], false)}\\s+(?:אתכם|אותכם|אותך|אתכן|לכם|לכן|לך)(?![${HE}])`,
     words(['ניצור(?:\\s+\\S+)?\\s+קשר', 'נהיה(?:\\s+\\S+)?\\s+בקשר', 'נחזור\\s+(?:אליכם|אליך|אלייך|אליכן)']),
+    // S22 (QA ת67): "keep you updated" ("נשמור אתכם מעודכנים", "נשאיר אותך מעודכן"), and getting back, infinitive (B)
+    `${words(['נשמור', 'נשאיר', 'לשמור', 'להשאיר'], false)}\\s+(?:אתכם|אותכם|אותך|אתכן|אותכן|אתך)\\s+מעודכ(?:ן|נים|נות|נת)(?![${HE}])`,
+    `${words(['תישארו', 'תישארי', 'הישארו', 'הישארי', 'תהיו', 'תהיי'], false)}\\s+מעודכ(?:ן|נים|נות|נת)(?![${HE}])`,
+    words(['לחזור\\s+(?:אליכם|אליך|אלייך|אליכן)'], false),
     // the customer asks to be told
     words([
       'עדכנו אותי',
@@ -143,6 +166,8 @@ const NOTIFY_PHRASE = re(
       'צרו (?:איתי|עמי) קשר',
       'צרו קשר (?:איתי|עמי)',
       '(?:היו )?(?:ה)?ראשונ(?:ים|ות) לדעת',
+      // S22 (QA ת67, B): the same, reversed ("רוצים לדעת ראשונים?")
+      'לדעת (?:ה)?ראשונ(?:ים|ות)',
       'לבקש (?:עדכון|עדכונים|התראה|הודעה|תזכורת)',
       'בקשו (?:עדכון|עדכונים|התראה|הודעה|תזכורת)',
       'לקבלת (?:עדכון|עדכונים|התראה|התראות|הודעה|הודעות|תזכורת)',
@@ -152,6 +177,10 @@ const NOTIFY_PHRASE = re(
 );
 const RECEIVE = re(words(['תקבלו', 'תקבלי', 'תקבל', 'יקבלו', 'לקבל', 'קבלו', 'קבלי']), 'gu');
 const ARRIVE = re(words(['תגיע', 'יגיע', 'יגיעו', 'תגענה', 'תצא', 'יצא', 'יצאו', 'בדרך(?: אליכם| אליך| אלייך)?']), 'gu');
+/** S22 (QA ת67, B): present, on its way to you ("האישור יוצא אליכם"): only with what is received in the same clause */
+const ARRIVE_NOW = re(words(['יוצא', 'יוצאת', 'יוצאים', 'יוצאות']), 'gu');
+/** S22 (QA ת67, B): a message to the customer's phone ("התראות בזמן אמת לטלפון"): a channel when a message is named */
+const TO_PHONE = re(`(?<![${HE}])ל(?:טלפון|נייד|סלולרי)(?: (?:ה)?(?:נייד|שלכם|שלך))?(?![${HE}])`, 'u');
 const SIGNUP = re(words(['הירשמו', 'הרשמו', 'הירשמי', 'הרשמי', 'הצטרפו', 'הצטרפי', 'להירשם', 'להצטרף', 'הרשמה', 'הצטרפות']), 'gu');
 const SIGNUP_TO = re(words(['עדכונים', 'עדכוני', 'התראות', 'ניוזלטר', 'דיוור', 'רשימת (?:ה)?(?:תפוצה|המתנה|דיוור)', 'מועדון']));
 /** the sentence is the way to reach us (the customer writes, calls, cancels) */
@@ -173,13 +202,24 @@ const INBOUND = re(
     'רכז(?:ת)? (?:ה)?נגישות',
   ]),
 );
-const NEG_WORD = `(?:לא|אין|בלי|ללא|אינו|אינה|איננו|אינם|אינן|אף פעם|never|not|no|don't|won't)`;
+/** a negation; S22 (QA ת67, N25): "לא לשכוח", "לא לפספס" ask the reader to do it, they negate nothing */
+const NEG_WORD = `(?:(?:לא|אין|בלי|ללא|אינו|אינה|איננו|אינם|אינן|אף פעם|never|not|no|don't|won't)(?!\\s+(?:לשכוח|תשכחו|תשכחי|תשכח|לפספס|תפספסו|תפספסי|להחמיץ|תחמיצו)(?![${HE}])))`;
 /** a negation right before the verb, at most one word between them, in the same clause: "האתר לא שולח", "לא נשלח לכם" */
 const NEGATED = re(`(?:^|[\\s(])ו?${NEG_WORD}\\s+(?:[^\\s,;:]+\\s+)?$`, 'iu');
 const NEGATION = re(`(?<![${HE}])ו?${NEG_WORD}(?![${HE}\\w])`, 'iu');
 /** the channel as a field: "כתובת האימייל", "שדה המייל", "האימייל לא תקין", "שם, אימייל, טלפון" */
 const FIELD_BEFORE = re(`(?:כתובת|שדה|בכתובת|בשדה|לכתובת)\\s+$|${words(['שם', 'טלפון', 'נייד', 'כתובת', 'כתובת למשלוח'])}\\s*,?\\s*$`);
 const FIELD_AFTER = re(`^\\s*(?:לא\\s+)?תקינ|^\\s*,?\\s*${words(['שם', 'טלפון', 'נייד', 'כתובת'])}`);
+/**
+ * S22 (QA ת67): a label of two words is a field's only when its second word names a field ("כתובת אימייל", "אימייל
+ * וטלפון", "שם ומייל"). "חשבונית במייל", "עדכונים ב-SMS", "אישור במייל" offer what is sent, by a channel.
+ */
+const FIELD_NAME = re(
+  `^ו?(?:שם|שם מלא|טלפון|נייד|כתובת|אימייל|אי-?מייל|מייל|דוא"ל|e-?mail|email|phone|name|address)[:.]?$`,
+  'iu',
+);
+/** S22 (QA ת67): "X: Y", a heading before its line; with a negation in the line, the heading is a label */
+const HEADING = /^([^:]{1,40}):\s*(\S.*)$/u;
 
 const LATIN: RegExp[] = [
   /\bwe(?:'ll| will| shall)?\s+(?:send|e-?mail|notify|text|message|remind|contact|let you know|get back to you|be in touch|keep you (?:posted|updated|informed))\b/i,
@@ -195,7 +235,24 @@ const LATIN: RegExp[] = [
   /\breceive (?:updates|notifications|an? (?:e-?mail|sms|text|confirmation|invoice))\b/i,
   /\bupdates? (?:by|via) (?:e-?mail|sms|text|whats ?app)\b/i,
   /\b(?:e-?mail|sms|text|message|confirmation|receipt|invoice)\b.*\bon (?:its|the|their) way\b/i,
+  // S22 (QA ת67, B): "Expect an email", "Get updates"
+  /\bexpect (?:an? |our )?(?:e-?mail|text|message|sms|confirmation|update)s?\b/i,
+  /\bget (?:updates|notifications|alerts)\b/i,
 ];
+/**
+ * S22 (QA ת67, K37): a negation in the same clause, at most three words before the English rule's match, speaks for it
+ * ("We do not have a newsletter", "No newsletter"). "Don't forget to check your inbox" is not one: a negated forget,
+ * miss, hesitate or fail asks the reader to do it.
+ */
+const LATIN_NEGATED = /(?:^|[\s(])(?:not|no|never|without|nor|cannot|\w+n't)\s+(?!(?:forget|miss|hesitate|fail)\b)(?:\S+\s+){0,3}$/i;
+function latinFinding(s: string): string | null {
+  for (const rx of LATIN)
+    for (const m of s.matchAll(new RegExp(rx.source, `${rx.flags}g`))) {
+      const clause = s.slice(0, m.index).split(/[,;:!?]|\s[-–—]\s/u).pop() ?? '';
+      if (!LATIN_NEGATED.test(clause)) return m[0];
+    }
+  return null;
+}
 
 export type PromiseRule = 'send' | 'notify' | 'receive' | 'arrive' | 'signup' | 'channel' | 'latin';
 export type PromiseFinding = { rule: PromiseRule; match: string; sentence: string };
@@ -224,15 +281,26 @@ function hits(rx: RegExp, s: string): Hit[] {
 function channelFinding(s: string): string | null {
   if (!re(`[${HE}]`).test(s) || INBOUND.test(s)) return null;
   const objects = OBJECT.test(s) || RECEIVED.test(s);
+  const words2 = s.split(' ');
+  // S22 (QA ת67): one word is a label; two words only when the second names a field ("כתובת אימייל", "אימייל וטלפון")
+  const shortLabel = words2.length === 1 || (words2.length === 2 && FIELD_NAME.test(words2[1]!));
+  // S22 (QA ת67, K34): "דיוור שיווקי: האתר לא שולח דיוור": the heading of a line that negates is a label
+  const heading = HEADING.exec(s);
+  // and a heading that is a field's name ("אימייל: shop@…", the contact block) is a label whatever follows it
+  const headingEnd = heading && (NEGATION.test(heading[2]!) || FIELD_NAME.test(heading[1]!.trim())) ? heading[1]!.length : -1;
   for (const m of s.matchAll(CHANNEL)) {
+    if (m.index! < headingEnd) continue;
     const before = s.slice(0, m.index);
     const after = s.slice(m.index! + m[0].length);
     // a negation speaks for its own clause
     const clause = (before.split(/[,:،]|\s[-–—]\s/u).pop() ?? '') + m[0] + (after.split(/[,:،]|\s[-–—]\s/u)[0] ?? '');
     if (NEGATION.test(clause)) continue;
-    const label = s.split(' ').length <= 2 || (!objects && (FIELD_BEFORE.test(before) || FIELD_AFTER.test(after)));
+    const label = shortLabel || (!objects && (FIELD_BEFORE.test(before) || FIELD_AFTER.test(after)));
     if (!label) return m[0];
   }
+  // S22 (QA ת67, B): a message to the phone ("התראות בזמן אמת לטלפון"), not negated
+  const phone = TO_PHONE.exec(s);
+  if (phone && objects && headingEnd < 0 && !NEGATION.test(s)) return phone[0];
   return null;
 }
 
@@ -247,10 +315,13 @@ export function promiseFindings(text: string): PromiseFinding[] {
     const received = RECEIVED.test(s);
     // send
     const sendOk = (h: Hit) => !TO_US.test(h.after) && !SHIP_OBJECT.test(h.after);
+    // S22 (QA ת67, B): "לשלוח לכם", "יישלח אליכם" with no parcel in the clause is sending to the customer, like "נשלח לכם"
+    const toYou = (h: Hit) => TO_CUSTOMER.test(h.after) && !SHIP.test(h.clause);
     const send =
-      hits(SEND_FIRST, s).find((h) => sendOk(h) && (channel || object || (TO_CUSTOMER.test(h.after) && !SHIP.test(h.clause)))) ??
-      hits(SEND_OTHER, s).find((h) => sendOk(h) && (channel || object)) ??
-      hits(SEND_PAST, s).find((h) => sendOk(h) && (channel || (object && TO_CUSTOMER.test(h.after))));
+      hits(SEND_FIRST, s).find((h) => sendOk(h) && (channel || object || toYou(h))) ??
+      hits(SEND_OTHER, s).find((h) => sendOk(h) && (channel || object || toYou(h))) ??
+      hits(SEND_PAST, s).find((h) => sendOk(h) && (channel || (object && TO_CUSTOMER.test(h.after)))) ??
+      hits(SEND_DEFECTIVE, s).find((h) => sendOk(h) && (OBJECT.test(h.before) || RECEIVED.test(h.before)));
     if (send) add('send', send.match);
     // notify
     for (const h of hits(WE_NOTIFY, s)) if (!/^\s+את\s+ה(?!לקוח)/u.test(h.after)) add('notify', h.match);
@@ -263,6 +334,8 @@ export function promiseFindings(text: string): PromiseFinding[] {
     const said = () => out.some((f) => f.sentence === s);
     const coming = hits(ARRIVE, s)[0];
     if (coming && (channel || received) && !said()) add('arrive', coming.match);
+    const now = hits(ARRIVE_NOW, s).find((h) => RECEIVED.test(h.clause) && TO_CUSTOMER.test(h.after));
+    if (now && !said()) add('arrive', now.match);
     const signup = hits(SIGNUP, s)[0];
     if (signup && (channel || SIGNUP_TO.test(s)) && !said()) add('signup', signup.match);
     // a channel named, with no verb that says so
@@ -270,13 +343,8 @@ export function promiseFindings(text: string): PromiseFinding[] {
       const c = channelFinding(s);
       if (c) add('channel', c);
     }
-    for (const rx of LATIN) {
-      const m = rx.exec(s);
-      if (m) {
-        add('latin', m[0]);
-        break;
-      }
-    }
+    const latin = latinFinding(s);
+    if (latin) add('latin', latin);
   }
   return out;
 }
@@ -345,25 +413,40 @@ export function lineOf(e: CopyEntry, mode: Mode | CopyState): Line {
 }
 
 /** what an email line's promises say they need (QA ת62): the copy check wants them in its `needs` */
+/**
+ * What an email line's promises say they need (QA ת62): the copy check wants them in its `needs`. S22 (QA ת68): wider
+ * (a late delivery, a receipt, back in stock, perks and discounts; and in English), and a processor's name ("שירות
+ * החשבוניות", "חברת הסליקה") is who handles the data, not what is sent: it implies nothing.
+ */
 const IMPLIES: [EmailCapability, RegExp][] = [
-  ['invoice_email', /חשבוני/u],
-  ['order_confirmation', /אישור|פרטי ההזמנה/u],
-  ['shipping_update', /משלוח|מעקב|יוצאת/u],
-  ['delay_notice', /מועד המסירה|עיכוב|יתעכב/u],
-  ['back_in_stock', /חוזר|יחזור|למלאי/u],
-  ['marketing', /דיוור|שיווק|מוצרים חדשים|ניוזלטר|מבצע/u],
+  ['invoice_email', /חשבוני|(?<![א-ת])[ושכלבהמ]{0,2}קבלה(?![א-ת])|קבלות|invoice|receipt/iu],
+  ['order_confirmation', /אישור|פרטי ההזמנה|confirmation|order details/iu],
+  ['shipping_update', /משלוח|מעקב|יוצאת|יצאה|נשלחה|החבילה|shipp|tracking|dispatch/iu],
+  ['delay_notice', /מועד המסירה|עיכוב|יתעכב|תתעכב|מתעכב|איחור|יתאחר|תתאחר|יתאחרו|מאחר|delay|\blate\b/iu],
+  ['back_in_stock', /חוזר|יחזור|יחזרו|למלאי|במלאי|שוב זמין|back in stock|restock/iu],
+  ['marketing', /דיוור|שיווק|מוצרים חדשים|ניוזלטר|מבצע|הטב|הנח|קופו|newsletter|offers|discount|promo/iu],
 ];
+const PROCESSOR = /(?:שירות|חברת|ספק)\s+ה\S+/gu;
+const implied = new Map<string, EmailCapability[]>();
 export function impliedCapabilities(line: string): EmailCapability[] {
-  const said = new Set(promiseFindings(line).map((f) => f.sentence));
-  return IMPLIES.filter(([, rx]) => [...said].some((s) => rx.test(s))).map(([c]) => c);
+  const known = implied.get(line);
+  if (known) return known;
+  const said = [...new Set(promiseFindings(line).map((f) => f.sentence.replace(PROCESSOR, '')))];
+  const caps = IMPLIES.filter(([, rx]) => said.some((s) => rx.test(s))).map(([c]) => c);
+  implied.set(line, caps);
+  return caps;
 }
 
-/** every state a build can be in, for the checks: no email, each capability alone, all of them; with and without contact */
-export const STATES: CopyState[] = [false, true].flatMap((contact) => [
-  { capabilities: [], contact },
-  ...EMAIL_CAPABILITIES.map((c) => ({ capabilities: [c], contact })),
-  { capabilities: EMAIL_CAPABILITIES, contact },
-]);
+/**
+ * Every state a build can be in, for the checks. S22 (QA ת68): every set of capabilities a provider could declare (all
+ * 2^6 = 64, so a group split only by a pair is caught), each with and without contact details: 128 states.
+ */
+export const STATES: CopyState[] = [false, true].flatMap((contact) =>
+  Array.from({ length: 1 << EMAIL_CAPABILITIES.length }, (_, m) => ({
+    capabilities: EMAIL_CAPABILITIES.filter((_c, i) => m & (1 << i)),
+    contact,
+  })),
+);
 
 /**
  * What is wrong with the copy, whatever the build: its shape; a line shown without a provider that promises (a
@@ -405,9 +488,14 @@ export function copyIssues(src: unknown): string[] {
         out.push(`${key}: "needs" is "any" or a list of what the provider must send (${EMAIL_CAPABILITIES.join(', ')})`);
       else {
         const line = (e as { email: Line }).email;
-        if (needs !== 'any' && typeof line === 'string')
-          for (const c of impliedCapabilities(line))
-            if (!(needs as string[]).includes(c)) out.push(`${key}: the email line promises ${c}, which its "needs" do not list`);
+        if (typeof line === 'string') {
+          const caps = impliedCapabilities(line);
+          // S22 (QA ת68, N7): "any" is for a line that implies no capability; one that does names what it needs
+          if (needs === 'any' && caps.length)
+            out.push(`${key}: "needs" is "any", but the email line promises ${caps.join(', ')}: list what it needs`);
+          if (needs !== 'any')
+            for (const c of caps) if (!(needs as string[]).includes(c)) out.push(`${key}: the email line promises ${c}, which its "needs" do not list`);
+        }
       }
     }
     // what is read while no provider sends: never a promise
@@ -440,6 +528,18 @@ export function copyIssues(src: unknown): string[] {
         );
         break;
       }
+    }
+  // S22 (QA ת68): every line, in every one of the 128 states: what it shows promises only what that state sends
+  if (!out.length)
+    for (const [key, e] of Object.entries(strings)) {
+      const bad = STATES.find((st) => {
+        const shown = lineOf(e, st);
+        if (typeof shown !== 'string') return false;
+        const isEmail = 'email' in e && shown === e.email && needsMet(e.needs, st.capabilities);
+        if (!isEmail) return promiseFindings(shown).length > 0;
+        return impliedCapabilities(shown).some((c) => !st.capabilities.includes(c));
+      });
+      if (bad) out.push(`${key}: with ${bad.capabilities.join('+') || 'no email'}${bad.contact ? ' and contact details' : ''}, the line it shows promises what that provider does not send`);
     }
   return out;
 }
