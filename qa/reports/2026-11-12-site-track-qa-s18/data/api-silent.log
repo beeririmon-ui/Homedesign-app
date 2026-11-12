@@ -1,0 +1,15 @@
+== POST /api/waitlist (product on hold: framed-art-morandi-triptych-sage-mjyac), as a script would, with EMAIL_PROVIDER=UNDECIDED
+{"ok":true} HTTP 201
+== POST /api/checkout with consents.marketing=true (the box is not on the page)
+add item HTTP 200
+{"order_id":"5882738751","order_token":"(hidden)","redirect_url":"http://127.0.0.1:8798/mock-pay/ms_B9WuB1Oazp-e7NeBlhCSdSuI"} HTTP 201
+== D1 (the copy's own): what was stored
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+waitlist rows: [{'email': 'qa18.waitlist@example.com', 'product_id': 'framed-art-morandi-triptych-sage-mjyac', 'created_at': '2026-11-12T05:22:45.528Z'}]
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+customers rows: [{'email': 'qa18.marketing@example.com', 'marketing_consent': 1, 'has_ts': 1}]
+{"ok":true} HTTP 201

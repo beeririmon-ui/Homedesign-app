@@ -1,0 +1,38 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [e2e] › e2e/s18.spec.ts:120:1 › every page in the sitemap, the cart, the empty checkout and 404: no promise of an email (39.2s)
+
+
+  1) [e2e] › e2e/s18.spec.ts:120:1 › every page in the sitemap, the cart, the empty checkout and 404: no promise of an email 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "/privacy/ send: \"חשבונית מס נשלחת במייל (סמ5)\"",[39m
+    [31m+ ][39m
+
+      131 |     for (const f of await promisesOn(page)) found.push(`${path} ${f}`);
+      132 |   }
+    > 133 |   expect(found).toEqual([]);
+          |                 ^
+      134 | });
+      135 |
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa18/build-s18-email/site/e2e/s18.spec.ts:133:17
+
+    Error Context: test-results/s18-every-page-in-the-site-e2917--404-no-promise-of-an-email-e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s18-every-page-in-the-site-e2917--404-no-promise-of-an-email-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s18-every-page-in-the-site-e2917--404-no-promise-of-an-email-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [e2e] › e2e/s18.spec.ts:120:1 › every page in the sitemap, the cart, the empty checkout and 404: no promise of an email 

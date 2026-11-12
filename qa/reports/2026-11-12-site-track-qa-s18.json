@@ -1,0 +1,283 @@
+{
+ "id": "2026-11-12-site-track-qa-s18",
+ "by": "qa-agent",
+ "date": "2026-11-12",
+ "scope": "Site track S18: no email/SMS/update promise without an email provider (EMAIL_PROVIDER=UNDECIDED); check:promises; the honest replacements; the EMAIL_PROVIDER gate; the hidden PRE1 form and marketing consent; full regression",
+ "inputs": [
+  "briefs/site-s18-honest-email-copy-2026-11-12.md",
+  "qa/reports/2026-11-07-site-track/s18/ (README, data, tools/mut-promises.sh)",
+  "site/copy/promises.he.json",
+  "site/tools/check-promises.ts, site/tools/lib/promises.ts, site/tools/lib/promise-scan.ts, site/tools/build-copy.ts, site/shared/src/email.ts",
+  "docs/studio-rules.md",
+  "status/board.md"
+ ],
+ "measured": {
+  "commit": "3013d630",
+  "copy": "isolated, outside the live tree (session scratchpad): git archive of site/, data/, status/, docs/, .github/ and the S18 evidence at 3013d630; assets/manifest.json pinned; other assets dirs linked read-only (the build reads pilot-phase1-2026-11-07/layers-v3c and the story frames; the 80 tracked asset files that changed in the live tree during the round are under phase2-2026-11-10 work dirs and the IMG1 pilot, not read by the build: data/live-tree-at-*.txt); node_modules and the supplier-image cache hard-linked from the live tree (clean at 3013d630 at the start)",
+  "copies": {
+   "build-s18": "flag build: CI-order regression, my server on 8798, e2e/a11y, render scan, flows",
+   "build-s18-pub": "public build (HD_PUBLIC=1, CF_ANALYTICS_TOKEN = a dummy of the right shape, 32 hex): server on 8797, render scan, public-scan + s18",
+   "build-s18-email": "email-mode test build (a test provider qa-test added to EMAIL_PROVIDERS and wrangler.jsonc in this copy only), then restored to UNDECIDED and used for the source-level mutation build (SM1–SM6)"
+  },
+  "server": "wrangler dev from each copy under a private name (qasrv18.js), own D1 (migrate + seed), ENVIRONMENT=preview-local, dummy PAYMENT_WEBHOOK_SECRET as --var on the command line only; api/.dev.vars holds only a dummy ADMIN_DEV_TOKEN",
+  "network": "none: every proxy-aware tool pointed at a closed local port (tools/noNet.sh), npm offline, every npx --no-install, supplier images --offline",
+  "machine": "4 cores shared with render-agent's Python jobs and frontend-dev's S19 run in the live tree (load 6–13 during the e2e)"
+ },
+ "verdict": "passes with conditions",
+ "bottom_line": [
+  "The public build promises nothing: 0 gate findings in 49 pages, 14 chunks and 22 Worker files; my broader net and a browser render of all 45 sitemap pages, cart, checkout and 404 found no promise.",
+  "The flag build has one false line, in the story sheet: 'בדף המוצר אפשר לבקש עדכון כשהוא חוזר' for 4 items on hold; the product page has no way to ask (ת56). The gate and the e2e pass it.",
+  "The honest replacements are true as a customer meets them (F1, F3, F5), with ת61 on 'כתבו לנו' and the no-access line.",
+  "The EMAIL_PROVIDER gate holds: check-config and build-copy refuse mock, invalid, missing, empty, null, lowercase and padded values (G0–G12); with a test provider the email lines and the waitlist form come back (E1–E4).",
+  "The hidden form and the consent box leave nothing behind in the UI, but both API routes still accept: /api/waitlist stores emails (201) and /api/checkout records marketing_consent=1 (ת57).",
+  "check:promises catches what it was built for (frontend-dev's M0–M7 reproduced 9/9), but 12 of my 36 mutations end as wanted: 19 promise forms pass and 5 honest lines stop the build (ת58–ת60). The rendered e2e backstops the structural splits where it renders that state (SM1, SM2, SM4, SM5).",
+  "Regression green: vitest 331/331, e2e 131 + 1 intentional skip (5 load flakes, 24/24 on rerun), a11y 16/16, public-scan 5/5, s18 7/7 on the public build."
+ ],
+ "q1_no_promise": {
+  "gate_flag": {
+   "pages": 112,
+   "chunks": 23,
+   "skipped": [
+    "assets/test-z9wwrDKC.js"
+   ],
+   "worker_files": 22,
+   "findings": 0
+  },
+  "gate_public": {
+   "pages": 49,
+   "chunks": 14,
+   "worker_files": 22,
+   "findings": 0
+  },
+  "net_scan_static": {
+   "flag": "69 sentences hit my net (114 HTML, 24 JS anywhere in dist, 8 other text files, api/src and shared/src all strings, seed.sql); all reviewed: honest except the story sheet line (ת56) and the /test/ page's dummy link (not shipped)",
+   "public": "45 sentences, a subset of the flag build's, no public-only line"
+  },
+  "render_scan": {
+   "flag": "56 pages (46 sitemap + cart, checkout, 404, 6 story pages, the warm-modern house): 0 gate findings; 25 net sentences, all honest",
+   "public": "50 pages (45 sitemap + cart, checkout, 404; /test/ and /story/ 404): 0 gate findings; 14 net sentences, all honest"
+  },
+  "flows": "checkout through the form, the mock payment page, the order page in every state (received, delayed, shipped with/without number, delivered, canceled, refunded, failed, pending), another browser: 0 promises (data/qa-s18-flows.json)",
+  "story_sheet": "F6: nordic A-12, B-5, boho A-8, warm-modern A-12: 'המלאי אינו זמין כעת. בדף המוצר אפשר לבקש עדכון כשהוא חוזר.' The linked story product pages: no form, no button (shots/story-*). ת56",
+  "phrase_list": {
+   "promises": 48,
+   "caught": 9,
+   "missed_tier_a": [
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09",
+    "P11",
+    "P13",
+    "P14"
+   ],
+   "missed_tier_b": [
+    "P17",
+    "P18",
+    "P19",
+    "P20",
+    "P21",
+    "P22",
+    "P23",
+    "P24",
+    "P25",
+    "P27",
+    "P28",
+    "P29",
+    "P30",
+    "P31",
+    "P32",
+    "P33",
+    "P34",
+    "P35",
+    "P36",
+    "P37",
+    "P38",
+    "P39",
+    "P40",
+    "P41",
+    "P42",
+    "P43",
+    "P44",
+    "P45",
+    "P46",
+    "P47",
+    "P48"
+   ],
+   "honest": 26,
+   "false_positives": [
+    "H07",
+    "H08",
+    "H09",
+    "H10",
+    "H11",
+    "H12",
+    "H13"
+   ]
+  }
+ },
+ "q2_check_promises": {
+  "frontend_dev_mutations_reproduced": "M0–M7 9/9 as wanted (data/mut-promises-fd-repro.log)",
+  "qa_mutations": "data/mut-qa.log: 36 rows, 12 as wanted, 24 gaps",
+  "caught": [
+   "Q2 <strong> split",
+   "Q3 object in a link",
+   "Q4 aria-label",
+   "Q5 title",
+   "Q6 alt",
+   "Q11 JSON-LD",
+   "Q13 lazy chunk sentence",
+   "Q23 <title>",
+   "Q24 <noscript>",
+   "Q25 Worker message",
+   "Q30 copy text line"
+  ],
+  "missed": {
+   "Q1": "<span> split (HTML)",
+   "Q7": "value of a submit input",
+   "Q8": "single-quoted aria-label",
+   "Q9": "aria-roledescription",
+   "Q10": "JSON island type=application/json (story st-data)",
+   "Q12": "JSON file in dist",
+   "Q14": "JSX split across <b> in a lazy chunk",
+   "Q15": "template literal split by ${}",
+   "Q16": "'a'+'b' (dist only; esbuild folds it in a real build: SM3 caught, not a real gap)",
+   "Q17": "script outside assets/",
+   "Q18": "chunk named by an absolute URL: listed as skipped, check passes",
+   "Q19": "CSS content",
+   "Q20": "We’ll email (U+2019)",
+   "Q21": "בתיבת הדואר",
+   "Q22": "SMS/WhatsApp feature line",
+   "Q26": ".json in api/src",
+   "Q27": "shared/src ORDER_STATUS_HE served by the Worker",
+   "Q28": "copy no_email 'תקבלו חשבונית מס.'",
+   "Q29": "copy no_email 'המייל עם האישור כבר בדרך.'"
+  },
+  "false_positives": {
+   "Q31": "הודעת ביטול שנשלחת אלינו באימייל",
+   "Q32": "נעדכן את המדיניות מעת לעת",
+   "Q33": "עדכנו אותנו",
+   "Q34": "קישור למעקב יופיע כאן כשהספק ישלח את החבילה",
+   "Q35": "אנחנו מקבלים פניות במייל ובטלפון"
+  },
+  "source_level_build": {
+   "what": "SM1–SM6 written in source and built by the real build (data/build-srcmut.log)",
+   "gate": "stopped on SM3 only ('a'+'b' folded); SM1 (JSX <b> split), SM2 (template), SM4 (shared ORDER_STATUS_HE, in no chunk), SM5 (<span> split in HTML and chunk), SM6 (תיבת הדואר) passed",
+   "e2e_s18": "caught SM1, SM2, SM4 (order page aria-label), SM5 (/privacy/ in the sitemap test); missed SM6 (definition)"
+  }
+ },
+ "q3_honest_lines": {
+  "order.next.received": "true: the page shows the order number, the progress line and shipments; a new tab in the same browser opens it; another browser does not; the URL carries no token (F1)",
+  "order.no_access": "true for another browser; not for the same browser after its site data is cleared (ת61)",
+  "order.next.shipped": "only with a number: IL20682694TRK listed above the line (DOM order, y 708 < 926); without a number 'ההזמנה בדרך אליכם.' and no 'למעלה' (F3, both widths)",
+  "order.next.delivered": "'כתבו לנו': no mailto, phone or contact link anywhere on the site (F4, ת61)",
+  "other_states": "delayed: received line + the two §7 sentences; canceled, refunded, failed, pending: no next line (F5)",
+  "checkout": "email hint 'לפנייה בנושא ההזמנה, אם יהיה צורך.', one checkbox (terms), total 'כולל מע\"מ.'",
+  "privacy": "'האתר לא שולח דיוור שיווקי.' true of the site; the server can still store a consent (ת57)"
+ },
+ "q4_gate": {
+  "config_cases": "data/gate-config.log: G0–G12, 14/14 as wanted",
+  "email_mode": "data/qa-s18-email.json E1–E4 4/4: checkout hint, marketing box, invoice note; received, no_access and §7 third sentence; the waitlist form posts ('נרשמתם…'); privacy lines",
+  "note": "all email lines return together on one switch (ת62)"
+ },
+ "q5_hidden": {
+  "ui": "waitlist: only <p class=waitlist-status> in a .waitlist div; no form, no button, no dangling aria in the render scan; checkout: no consent wrapper; aria-describedby resolve",
+  "api": "POST /api/waitlist 201 and stored (flag and public); POST /api/checkout consents.marketing=true → customers.marketing_consent=1 with a timestamp (ת57)"
+ },
+ "regression": {
+  "typecheck": "ok",
+  "lint": "ok",
+  "format": "ok",
+  "vitest": "330 + 1 skipped in CI order on a clean copy (s16 'the last real build' needs a dist); 331/331 after the build",
+  "check_config": "ok",
+  "build": "ok (flag: budget 711.8 KB first load; check:rights; check:promises 0)",
+  "public_build": "ok (698.9 KB; check:promises 0)",
+  "e2e": "126 + 5 failed + 1 skipped in the first run (encoding ×3, house ת22 ×2: timeouts and a capture under load 10–13); encoding.spec + house.spec rerun 24/24 → 131 + 1 intentional skip",
+  "a11y": "16/16",
+  "public_scan": "5/5",
+  "s18_public": "7/7"
+ },
+ "findings": [
+  {
+   "id": "ת56",
+   "severity": "medium; before the story layer leaves the flag",
+   "what": "The story sheet says 'המלאי אינו זמין כעת. בדף המוצר אפשר לבקש עדכון כשהוא חוזר.' (web/src/story/story.ts:382) for 4 items on hold; since S18 the product page has no way to ask. A false line and an indirect update promise; the gate and the e2e pass it.",
+   "fix": "Move the sentence into site/copy/promises.he.json (e.g. story.unavailable_hint, group waitlist: no_email null, email the line); add the form 'לבקש עדכון' to the definition.",
+   "owner": "frontend-dev; wording master-designer"
+  },
+  {
+   "id": "ת57",
+   "severity": "medium; before HD_PUBLIC=1",
+   "what": "The API still accepts what the UI hides: POST /api/waitlist stores an email (201) and POST /api/checkout stores marketing_consent=1 with a timestamp, with EMAIL_PROVIDER=UNDECIDED, in both builds.",
+   "fix": "In the Worker, emailSends(env.EMAIL_PROVIDER): otherwise /api/waitlist refuses with a code (e.g. 404 waitlist_closed) and checkout stores marketing=false (or 422); tests in api/test.",
+   "owner": "frontend-dev"
+  },
+  {
+   "id": "ת58",
+   "severity": "medium; before master-designer edits the copy file",
+   "what": "The definition of a promise is narrow: of my 48 promise lines it catches 9; 8 of the 16 forms the task names are missed (נשלח אליכם elliptical, תיבת הדואר ×2, SMS/WhatsApp feature lines, We’ll with U+2019, notified, get notified), and 31 of 32 indirect forms. The same definition guards the copy file: 'תקבלו חשבונית מס.' and 'המייל עם האישור כבר בדרך.' pass build-copy as no_email lines.",
+   "fix": "A channel rule (a sentence naming מייל/SMS/וואטסאפ/תיבת הדואר/ניוזלטר/דיוור/רשימת תפוצה/inbox/newsletter is a promise unless negated, addressed to us, or a label/error); passive and infinitive forms (תעודכנו, לעדכן, להודיע), ניצור קשר/נחזור אליכם/נזכיר, תגיע/יגיע/בדרך with a message noun, imperatives קבלו/הירשמו/הצטרפו/שלחו לי; receive objects חשבונית/קישור/אישור/פרטים; normalize ’ to '; English notified/let you know/inbox/on its way/sign up/subscribe/email me. Keep tools/phrase-probe.mts lists as fixtures.",
+   "owner": "frontend-dev"
+  },
+  {
+   "id": "ת59",
+   "severity": "low; before the lawyer's legal pages (launch checklist 4.1)",
+   "what": "False positives stop the build on honest lines: 'הודעת ביטול שנשלחת אלינו באימייל', 'נעדכן את המדיניות מעת לעת', 'עדכנו אותנו' (in NOTIFY_HE: the customer updating us), 'קישור למעקב יופיע כאן כשהספק ישלח את החבילה', 'אנחנו מקבלים פניות במייל ובטלפון' (5 through the real check, 7 of 26 in the probe).",
+   "fix": "Drop 'עדכנו אותנו'; לנו/אלינו after the verb is the customer writing to us; notify only with a person object or none (not 'את המדיניות'); a third-party subject (הספק) with a parcel is shipping; RECEIVE only in the second person.",
+   "owner": "frontend-dev"
+  },
+  {
+   "id": "ת60",
+   "severity": "low-medium",
+   "what": "Structural blind spots of the scanner: <span>/<a> split a sentence (Q1, SM5); JSX children split by inline elements (Q14, SM1) and template literals split by ${} (Q15, SM2); attributes: value, single quotes, aria-roledescription (Q7–Q9); JSON islands other than ld+json, incl. the story's st-data (Q10), JSON files in dist (Q12); CSS content (Q19), scripts outside assets/ (Q17); a chunk the reference regex misses is listed and the check passes (Q18); the Worker: only api/src/*.ts (Q26) and none of the shared/src strings it serves (Q27, SM4). The rendered e2e catches SM1, SM2, SM4, SM5 where it renders that state.",
+   "fix": "Glue inline elements, split at blocks only; join adjacent JSX text children and template parts with a placeholder; read all attributes with text; parse every application/json island; scan every text file and every .js in dist; fail on any skipped chunk not referenced only by /test/; scan the Worker bundle (api/dist/index.js) minus owner-only modules.",
+   "owner": "frontend-dev"
+  },
+  {
+   "id": "ת61",
+   "severity": "low; before HD_PUBLIC=1",
+   "what": "'כתבו לנו' (order.next.delivered) and the no-access line lead nowhere: no mailto, phone or contact link on the site (details 'יושלמו לפני ההשקה'). With no email the order page is the customer's only record, kept in this browser's storage; once it is cleared, the same browser is told 'דף ההזמנה נפתח רק בדפדפן שבו הזמנתם' and has no way back.",
+   "fix": "Contact details on the site and 'כתבו לנו' as a link (owner, frontend-dev). Wording (master-designer): the received line asks to keep the order number; no_access does not assert the cause and points to contact with the number. Context for EMAIL1/Q3.",
+   "owner": "owner (contact details), frontend-dev, master-designer"
+  },
+  {
+   "id": "ת62",
+   "severity": "low; before EMAIL1",
+   "what": "One switch brings back every email line at once: a provider that sends only order confirmations would make 'נעדכן כשההזמנה יוצאת למשלוח', the §7 delay email, the back-in-stock message and the invoice email false. In email mode check:promises checks nothing but the choice.",
+   "fix": "Each email line names the job it needs (confirmation, shipped, delay, back-in-stock, invoice, marketing); build-copy shows it only when the provider's adapter declares that job; a test per line.",
+   "owner": "frontend-dev; manager (EMAIL1)"
+  }
+ ],
+ "notes": [
+  {
+   "id": "ה14",
+   "text": "vitest in CI order on a clean copy is 330 + 1 skipped (s16 'the last real build' needs a dist); 331/331 after the build. Not a regression."
+  },
+  {
+   "id": "ה15",
+   "text": "The 5 e2e failures of the first run were timing under load 10–13 (other agents' Python jobs); encoding.spec + house.spec 24/24 on rerun."
+  },
+  {
+   "id": "ה16",
+   "text": "G11: EMAIL_PROVIDER=mock in preview passes build-copy (it reads production or the top level), but check-config in the API build stops the build."
+  },
+  {
+   "id": "ה17",
+   "text": "'נחזור תוך 5 ימי עסקים' (accessibility statement) is the coordinator's commitment, not a message system; true once the details are filled in (ת61)."
+  },
+  {
+   "id": "ה18",
+   "text": "privacy.processors says 'רק' supplier, shipping, PSP and invoices; hosting (Cloudflare, D1) and analytics (AN1) are processors too. For the lawyer (4.1)."
+  },
+  {
+   "id": "ה19",
+   "text": "With all site storage blocked, 'add to cart' seems to work and the checkout says 'הסל ריק' after a page load (F2). Pre-existing, out of S18; ת55's full page loads will make it constant in such browsers."
+  },
+  {
+   "id": "ה20",
+   "text": "README questions: Q1 and Q2 agreed, with ת57 and ת56; Q3 true in a normal browser (F1), wording in ת61; Q4 agreed; Q6 confirmed: /test/ and /story/ are 404 in the public build."
+  }
+ ],
+ "hd_public_readiness": "from S18: ת57 and ת61 before HD_PUBLIC=1; ת56 before the story layer is public; ת58–ת60 before master-designer edits the copy file; ת62 with EMAIL1"
+}

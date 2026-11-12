@@ -1,0 +1,38 @@
+QA S18 mutations of check:promises, 2026-11-12T05:20:05Z, commit 3013d630 (flag build)
+ok   Q0   want 0 got 0  clean dist  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q1   want 1 got 0  HTML: verb in a <span>, object outside (privacy page)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+ok   Q2   want 1 got 1  HTML: verb in a <strong> (privacy page)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   Q3   want 1 got 1  HTML: object in a link, verb after it  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   Q4   want 1 got 1  attribute aria-label (product on hold)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   Q5   want 1 got 1  attribute title  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   Q6   want 1 got 1  attribute alt  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q7   want 1 got 0  attribute value of a submit input (the button's text)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q8   want 1 got 0  attribute aria-label in single quotes  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q9   want 1 got 0  attribute aria-roledescription  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q10  want 1 got 0  JSON island type=application/json (story data, an item's detail_he that the sheet shows)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+ok   Q11  want 1 got 1  JSON-LD description (product page)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q12  want 1 got 0  a JSON file in dist (fetched at run time)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+ok   Q13  want 1 got 1  lazy chunk (Waitlist), a whole sentence  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q14  want 1 got 0  lazy chunk (Order), JSX split across <b>: "אישור <b>יישלח</b> לאימייל"  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q15  want 1 got 0  lazy chunk (Order), template literal: object and verb split by ${n}  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q16  want 1 got 0  lazy chunk (Order), "a"+"b" concatenation  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q17  want 1 got 0  a script outside assets/ that a page loads (/notice.js)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q18  want 1 got 0  the promise's chunk named by an absolute URL (a CDN base): skipped, listed, not scanned  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 22 chunks (not loaded by them, not scanned: assets/Wa
+GAP  Q19  want 1 got 0  CSS content: text drawn by a stylesheet  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q20  want 1 got 0  English with a typographic apostrophe (We’ll email you)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q21  want 1 got 0  indirect: "את האישור תמצאו בתיבת הדואר שלכם"  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q22  want 1 got 0  indirect: a feature line, "עדכוני משלוח ב-SMS ובוואטסאפ"  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+ok   Q23  want 1 got 1  <title>  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   Q24  want 1 got 1  <noscript>  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   Q25  want 1 got 1  Worker: a customer message (lib/cancel.ts)  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q26  want 1 got 0  Worker: a .json of messages in api/src  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q27  want 1 got 0  shared/src: ORDER_STATUS_HE.paid (served by the Worker as status_he; in no web chunk): the gate has no input for it  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/te
+GAP  Q28  want 1 got 0  copy file, no_email: "כולל מע\"מ. תקבלו חשבונית מס."  | 
+GAP  Q29  want 1 got 0  copy file, no_email: "…המייל עם האישור כבר בדרך."  | 
+ok   Q30  want 1 got 1  copy file, a text line (both modes) that promises  | build-copy: 1 problem(s) in the copy (/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa18/tmp-mut-OmJX/c3.jso
+GAP  Q31  want 0 got 1  honest: the customer writes to us ("הודעת ביטול שנשלחת אלינו באימייל…")  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q32  want 0 got 1  honest: legal boilerplate ("נעדכן את המדיניות מעת לעת…")  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q33  want 0 got 1  honest: the customer updates us ("עדכנו אותנו")  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q34  want 0 got 1  honest: the page will show the link ("קישור למעקב יופיע כאן כשהספק ישלח את החבילה")  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+GAP  Q35  want 0 got 1  honest: we accept inquiries ("אנחנו מקבלים פניות במייל ובטלפון")  | check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+rows as wanted: 12, gaps: 24

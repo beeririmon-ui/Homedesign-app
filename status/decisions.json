@@ -6670,6 +6670,39 @@
       "source": "docs/proposals/own-product-images-v2-2026-11-12.md",
       "asked": "2026-11-12",
       "status": "open"
+    },
+    {
+      "id": "CONTACT1",
+      "group": "השקה",
+      "title": "פרטי קשר של העסק באתר",
+      "question": "לאתר אין היום פרטי קשר, ו'כתבו לנו' לא מוביל לשום מקום. חנות אונליין בישראל צריכה להציג פרטי קשר של העסק. מה יופיע באתר? ההמלצה: כתובת מייל עסקית על הדומיין של המותג, כשיהיה דומיין, ואופציונלית טלפון או וואטסאפ עסקי. את הפרטים עצמם מגדירים בהגדרות הסביבה, לא בצ'אט.",
+      "context": "QA S18 ת61 (qa/reports/2026-11-12-site-track-qa-s18.md). S20 בונה בלוק קשר שמוגדר בקונפיג (CONTACT_EMAIL, ‏CONTACT_PHONE). מחקר, לא ייעוץ משפטי: לבדוק מול עורך הדין (4.4).",
+      "options": [
+        {
+          "id": "brand-email",
+          "label": "מייל עסקי על הדומיין",
+          "desc": "אחרי בחירת שם ודומיין",
+          "recommended": true
+        },
+        {
+          "id": "email-phone",
+          "label": "מייל וטלפון/וואטסאפ עסקי",
+          "desc": "",
+          "recommended": false
+        },
+        {
+          "id": "lawyer",
+          "label": "לפי עורך הדין",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": [
+        "HD_PUBLIC=1"
+      ],
+      "source": "qa/reports/2026-11-12-site-track-qa-s18.md",
+      "asked": "2026-11-12",
+      "status": "open"
     }
   ]
 }

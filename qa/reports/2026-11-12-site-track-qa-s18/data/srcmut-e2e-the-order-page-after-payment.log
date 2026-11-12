@@ -1,0 +1,41 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [e2e] › e2e/s18.spec.ts:71:1 › the order page after payment: the order is on this page, in this browser; no email (1.8s)
+
+
+  1) [e2e] › e2e/s18.spec.ts:71:1 › the order page after payment: the order is on this page, in this browser; no email 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 5[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "send: \"אישור יישלח לאימייל שלכם (סמ1)\"",[39m
+    [31m+   "send: \"האישור על 1 פריטים יישלח אליכם (סמ2)\"",[39m
+    [31m+   "send: \"אישור יישלח במייל (סמ4)\"",[39m
+    [31m+ ][39m
+
+      73 |   await openCustomerOrder(page, paid);
+      74 |   await expect(page.locator('.order-sheet > p.small.muted')).toHaveText(line('order.next.received'));
+    > 75 |   expect(await promisesOn(page)).toEqual([]);
+         |                                  ^
+      76 |   // in another browser (no token here): the honest reason, no "we emailed you"
+      77 |   const other = await page.context().browser()!.newContext({ locale: 'he-IL' });
+      78 |   const p2 = await other.newPage();
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa18/build-s18-email/site/e2e/s18.spec.ts:75:34
+
+    Error Context: test-results/s18-the-order-page-after-p-feb48-ge-in-this-browser-no-email-e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s18-the-order-page-after-p-feb48-ge-in-this-browser-no-email-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s18-the-order-page-after-p-feb48-ge-in-this-browser-no-email-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [e2e] › e2e/s18.spec.ts:71:1 › the order page after payment: the order is on this page, in this browser; no email 

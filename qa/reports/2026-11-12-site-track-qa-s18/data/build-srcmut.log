@@ -1,0 +1,38 @@
+=== build-copy 05:29:10
+
+> homedesign-site@0.1.0 copy
+> tsx tools/build-copy.ts
+
+build-copy (S18): EMAIL_PROVIDER=UNDECIDED (top level) → the wording without an email: 15 lines, 6 not shown
+=== web build 05:29:11
+=== check-promises 05:29:21
+
+> homedesign-site@0.1.0 check:promises
+> tsx tools/check-promises.ts --json=/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa18/data/check-promises-srcmut.json
+
+check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+  assets/Checkout-CkMFt3Om.js: promises (send: "יישלח"): "אישור ההזמנה יישלח בקרוב (סמ3)"
+  scanned: 112 pages, 23 chunks (not loaded by them, not scanned: assets/test-z9wwrDKC.js), 22 Worker files
+check-promises exit 1
+=== where the markers landed 05:29:23
+-- סמ1
+assets/Order-B9HNbeVq.js
+qa-sm1",children:["אישור ",s("b",{children:"יישלח"})," לאימייל שלכם (סמ1)."]}),s("
+-- סמ2
+assets/Order-B9HNbeVq.js
+qa-sm2",children:`האישור על ${n.lines.length} פריטים יישלח אליכם (סמ2).`})]}):n
+-- סמ3
+assets/Checkout-CkMFt3Om.js
+l_note")}),e("p",{class:"qa-sm3",children:"אישור ההזמנה יישלח בקרוב (סמ3)."})]})]}
+-- סמ4
+-- סמ5
+assets/Legal-D8Yv28il.js
+privacy/index.html
+"qa-sm5",children:["חשבונית מס ",l("span",{children:"נשלחת"})," במייל (סמ5)."]}),l("
+�ווקי.</li><li class="qa-sm5">חשבונית מס <span>נשלחת</span> במייל (סמ5).</li><li
+-- סמ6
+assets/Legal-D8Yv28il.js
+privacy/index.html
+i",{class:"qa-sm6",children:"את האישור תמצאו בתיבת הדואר שלכם (סמ6)."}),l("l
+מ5).</li><li class="qa-sm6">את האישור תמצאו בתיבת הדואר שלכם (סמ6).</li><li
+=== done 05:29:23

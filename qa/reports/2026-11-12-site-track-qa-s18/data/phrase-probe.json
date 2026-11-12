@@ -1,0 +1,725 @@
+{
+ "summary": {
+  "promises": 48,
+  "caught": 9,
+  "missed_tier_a": [
+   "P05",
+   "P06",
+   "P07",
+   "P08",
+   "P09",
+   "P11",
+   "P13",
+   "P14"
+  ],
+  "missed_tier_b": [
+   "P17",
+   "P18",
+   "P19",
+   "P20",
+   "P21",
+   "P22",
+   "P23",
+   "P24",
+   "P25",
+   "P27",
+   "P28",
+   "P29",
+   "P30",
+   "P31",
+   "P32",
+   "P33",
+   "P34",
+   "P35",
+   "P36",
+   "P37",
+   "P38",
+   "P39",
+   "P40",
+   "P41",
+   "P42",
+   "P43",
+   "P44",
+   "P45",
+   "P46",
+   "P47",
+   "P48"
+  ],
+  "honest": 26,
+  "false_positives": [
+   "H07",
+   "H08",
+   "H09",
+   "H10",
+   "H11",
+   "H12",
+   "H13"
+  ]
+ },
+ "promises": [
+  {
+   "id": "P01",
+   "tier": "A",
+   "text": "נעדכן אתכם כשההזמנה יוצאת למשלוח.",
+   "why": "נעדכן",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "notify",
+     "match": "נעדכן",
+     "sentence": "נעדכן אתכם כשההזמנה יוצאת למשלוח"
+    }
+   ]
+  },
+  {
+   "id": "P02",
+   "tier": "A",
+   "text": "תקבלו אישור במייל.",
+   "why": "תקבלו + מייל",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "receive",
+     "match": "תקבלו",
+     "sentence": "תקבלו אישור במייל"
+    }
+   ]
+  },
+  {
+   "id": "P03",
+   "tier": "A",
+   "text": "האישור יישלח אליכם בהקדם.",
+   "why": "יישלח + אישור",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "יישלח",
+     "sentence": "האישור יישלח אליכם בהקדם"
+    }
+   ]
+  },
+  {
+   "id": "P04",
+   "tier": "A",
+   "text": "נשלח אליכם הודעה כשהמוצר חוזר.",
+   "why": "נשלח אליכם + הודעה",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "נשלח",
+     "sentence": "נשלח אליכם הודעה כשהמוצר חוזר"
+    }
+   ]
+  },
+  {
+   "id": "P05",
+   "tier": "A",
+   "text": "כשהמוצר יחזור, נשלח אליכם.",
+   "why": "נשלח אליכם, elliptical (what is sent is implied)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P06",
+   "tier": "A",
+   "text": "את האישור תמצאו בתיבת הדואר שלכם.",
+   "why": "בתיבת הדואר",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P07",
+   "tier": "A",
+   "text": "בדקו את תיבת הדואר הנכנס.",
+   "why": "תיבת הדואר, imperative",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P08",
+   "tier": "A",
+   "text": "עדכוני משלוח ב-SMS.",
+   "why": "SMS, a feature line with no verb",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P09",
+   "tier": "A",
+   "text": "מעקב משלוח בוואטסאפ.",
+   "why": "וואטסאפ, a feature line with no verb",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P10",
+   "tier": "A",
+   "text": "We'll email you when it ships.",
+   "why": "we'll email",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "latin",
+     "match": "We'll email",
+     "sentence": "We'll email you when it ships"
+    }
+   ]
+  },
+  {
+   "id": "P11",
+   "tier": "A",
+   "text": "We’ll email you when it ships.",
+   "why": "we'll email, typographic apostrophe (U+2019)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P12",
+   "tier": "A",
+   "text": "Notify me",
+   "why": "notify",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "latin",
+     "match": "Notify me",
+     "sentence": "Notify me"
+    }
+   ]
+  },
+  {
+   "id": "P13",
+   "tier": "A",
+   "text": "You'll be notified when it's back in stock.",
+   "why": "notified (passive)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P14",
+   "tier": "A",
+   "text": "Get notified when it is back.",
+   "why": "get notified",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P15",
+   "tier": "A",
+   "text": "נשלח לכם SMS כשהשליח בדרך.",
+   "why": "נשלח + SMS",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "נשלח",
+     "sentence": "נשלח לכם SMS כשהשליח בדרך"
+    }
+   ]
+  },
+  {
+   "id": "P16",
+   "tier": "A",
+   "text": "תקבלו הודעה בוואטסאפ עם מספר המשלוח.",
+   "why": "תקבלו + וואטסאפ",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "receive",
+     "match": "תקבלו",
+     "sentence": "תקבלו הודעה בוואטסאפ עם מספר המשלוח"
+    }
+   ]
+  },
+  {
+   "id": "P17",
+   "tier": "B",
+   "text": "תעודכנו במייל כשההזמנה יוצאת.",
+   "why": "תעודכנו (passive future)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P18",
+   "tier": "B",
+   "text": "נשמח לעדכן אתכם כשהמוצר חוזר.",
+   "why": "לעדכן (infinitive after נשמח)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P19",
+   "tier": "B",
+   "text": "נדאג לעדכן אתכם בכל שלב.",
+   "why": "נדאג לעדכן",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P20",
+   "tier": "B",
+   "text": "נחזור אליכם במייל תוך יום עסקים.",
+   "why": "נחזור אליכם במייל",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P21",
+   "tier": "B",
+   "text": "ניצור איתכם קשר בוואטסאפ לתיאום המשלוח.",
+   "why": "ניצור קשר + וואטסאפ",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P22",
+   "tier": "B",
+   "text": "הירשמו לניוזלטר שלנו.",
+   "why": "newsletter sign-up",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P23",
+   "tier": "B",
+   "text": "הצטרפו לרשימת התפוצה.",
+   "why": "mailing list sign-up",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P24",
+   "tier": "B",
+   "text": "SMS עם מספר המעקב יגיע ברגע שהחבילה יוצאת.",
+   "why": "יגיע + SMS",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P25",
+   "tier": "B",
+   "text": "מייל אישור בדרך אליכם.",
+   "why": "בדרך אליכם + מייל, no verb",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P26",
+   "tier": "B",
+   "text": "אם לא תשלמו תוך שעה, נשלח לכם תזכורת במייל.",
+   "why": "a conditional \"לא\" one word before the verb",
+   "caught": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "נשלח",
+     "sentence": "אם לא תשלמו תוך שעה, נשלח לכם תזכורת במייל"
+    }
+   ]
+  },
+  {
+   "id": "P27",
+   "tier": "B",
+   "text": "בלי לחכות, נשלח לכם אישור במייל.",
+   "why": "\"בלי\" one word before the verb",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P28",
+   "tier": "B",
+   "text": "תקבלו חשבונית מס.",
+   "why": "תקבלו + חשבונית (no channel)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P29",
+   "tier": "B",
+   "text": "תקבלו קישור למעקב.",
+   "why": "תקבלו + קישור (no channel)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P30",
+   "tier": "B",
+   "text": "נזכיר לכם במייל לפני שהמבצע נגמר.",
+   "why": "נזכיר + מייל",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P31",
+   "tier": "B",
+   "text": "היו הראשונים לדעת כשהמוצר חוזר.",
+   "why": "waitlist idiom",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P32",
+   "tier": "B",
+   "text": "שלחנו לכם את כל הפרטים.",
+   "why": "שלחנו + הפרטים",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P33",
+   "tier": "B",
+   "text": "ההודעה תגיע לנייד שלכם.",
+   "why": "תגיע + הודעה",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P34",
+   "tier": "B",
+   "text": "השאירו מייל ונחזור אליכם.",
+   "why": "leave your email and we will get back",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P35",
+   "tier": "B",
+   "text": "השאירו כתובת אימייל לקבלת עדכון כשהמוצר חוזר.",
+   "why": "לקבלת עדכון",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P36",
+   "tier": "B",
+   "text": "קבלו התראה כשהמוצר חוזר למלאי.",
+   "why": "קבלו (imperative) + התראה",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P37",
+   "tier": "B",
+   "text": "שלחו לי הודעה כשהמוצר חוזר.",
+   "why": "the customer asks us to send (like עדכנו אותי)",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P38",
+   "tier": "B",
+   "text": "בהזמנה תקבלו חשבונית מס דיגיטלית.",
+   "why": "תקבלו + חשבונית",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P39",
+   "tier": "B",
+   "text": "הודעה במייל תצא אליכם כשהמשלוח יוצא.",
+   "why": "תצא + מייל",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P40",
+   "tier": "B",
+   "text": "המייל עם האישור כבר בדרך.",
+   "why": "בדרך + מייל",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P41",
+   "tier": "B",
+   "text": "Email me when available",
+   "why": "email me",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P42",
+   "tier": "B",
+   "text": "Check your inbox for the confirmation.",
+   "why": "inbox",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P43",
+   "tier": "B",
+   "text": "A confirmation email is on its way.",
+   "why": "on its way",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P44",
+   "tier": "B",
+   "text": "Sign up for our newsletter.",
+   "why": "newsletter",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P45",
+   "tier": "B",
+   "text": "We'll let you know when it ships.",
+   "why": "let you know",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P46",
+   "tier": "B",
+   "text": "Receive updates by email.",
+   "why": "receive updates",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P47",
+   "tier": "B",
+   "text": "Subscribe for updates",
+   "why": "subscribe",
+   "caught": false,
+   "findings": []
+  },
+  {
+   "id": "P48",
+   "tier": "B",
+   "text": "You’ll receive an SMS with the tracking number.",
+   "why": "you'll receive, typographic apostrophe",
+   "caught": false,
+   "findings": []
+  }
+ ],
+ "honest": [
+  {
+   "id": "H01",
+   "text": "ההזמנה נשלחה.",
+   "why": "status",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H02",
+   "text": "ההזמנה נשלחה אליכם בשליחות עד הבית.",
+   "why": "shipping, not a message",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H03",
+   "text": "אישור ההזמנה ומצבה מופיעים בדף הזה.",
+   "why": "the page shows it",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H04",
+   "text": "חשבונית מס תופיע בדף ההזמנה אחרי שתונפק.",
+   "why": "the page shows it",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H05",
+   "text": "שלחו לנו מייל עם מספר ההזמנה.",
+   "why": "the customer writes to us",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H06",
+   "text": "אפשר לשלוח לנו הודעה בוואטסאפ.",
+   "why": "the customer writes to us",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H07",
+   "text": "שולחים לנו מייל? ציינו את מספר ההזמנה.",
+   "why": "the customer writes to us (שולחים, present)",
+   "flagged": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "שולחים",
+     "sentence": "שולחים לנו מייל"
+    }
+   ]
+  },
+  {
+   "id": "H08",
+   "text": "הודעת ביטול שנשלחת אלינו באימייל תטופל תוך 3 ימי עסקים.",
+   "why": "the customer writes to us (terms / cancellation)",
+   "flagged": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "שנשלחת",
+     "sentence": "הודעת ביטול שנשלחת אלינו באימייל תטופל תוך 3 ימי עסקים"
+    }
+   ]
+  },
+  {
+   "id": "H09",
+   "text": "ההודעה שלכם נשלחה. נקרא אותה בהקדם.",
+   "why": "a contact form confirmation: the customer wrote to us",
+   "flagged": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "נשלחה",
+     "sentence": "ההודעה שלכם נשלחה"
+    }
+   ]
+  },
+  {
+   "id": "H10",
+   "text": "קישור למעקב יופיע כאן כשהספק ישלח את החבילה.",
+   "why": "the page shows it; the supplier ships the parcel",
+   "flagged": true,
+   "findings": [
+    {
+     "rule": "send",
+     "match": "ישלח",
+     "sentence": "קישור למעקב יופיע כאן כשהספק ישלח את החבילה"
+    }
+   ]
+  },
+  {
+   "id": "H11",
+   "text": "נעדכן את המדיניות מעת לעת, והנוסח המעודכן יופיע בדף הזה.",
+   "why": "legal boilerplate: we update the page, not the customer",
+   "flagged": true,
+   "findings": [
+    {
+     "rule": "notify",
+     "match": "נעדכן",
+     "sentence": "נעדכן את המדיניות מעת לעת, והנוסח המעודכן יופיע בדף הזה"
+    }
+   ]
+  },
+  {
+   "id": "H12",
+   "text": "עדכנו אותנו אם הכתובת השתנתה.",
+   "why": "the customer updates us",
+   "flagged": true,
+   "findings": [
+    {
+     "rule": "notify",
+     "match": "עדכנו אותנו",
+     "sentence": "עדכנו אותנו אם הכתובת השתנתה"
+    }
+   ]
+  },
+  {
+   "id": "H13",
+   "text": "אנחנו מקבלים פניות במייל ובוואטסאפ.",
+   "why": "we accept inquiries (מקבלים = we)",
+   "flagged": true,
+   "findings": [
+    {
+     "rule": "receive",
+     "match": "מקבלים",
+     "sentence": "אנחנו מקבלים פניות במייל ובוואטסאפ"
+    }
+   ]
+  },
+  {
+   "id": "H14",
+   "text": "תקבלו את ההזמנה תוך 7–14 ימי עסקים.",
+   "why": "delivery time",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H15",
+   "text": "האתר לא שולח דיוור שיווקי.",
+   "why": "negation",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H16",
+   "text": "אנחנו לא שולחים מיילים בשלב הזה.",
+   "why": "negation",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H17",
+   "text": "שימו לב: לא נשלח אישור במייל. האישור מופיע בדף הזה.",
+   "why": "negation, then the page",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H18",
+   "text": "עודכן לאחרונה: 12.11.2026",
+   "why": "legal date",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H19",
+   "text": "המחירים מתעדכנים מדי יום.",
+   "why": "prices",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H20",
+   "text": "בקשת הביטול נשלחה לספק.",
+   "why": "a request to the supplier",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H21",
+   "text": "המוצרים נשלחים ישירות מהספק.",
+   "why": "shipping",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H22",
+   "text": "אימייל",
+   "why": "a field label",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H23",
+   "text": "לפנייה בנושא ההזמנה, אם יהיה צורך.",
+   "why": "S18 line",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H24",
+   "text": "ההזמנה בדרך אליכם. מספר המשלוח למעלה.",
+   "why": "S18 line",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H25",
+   "text": "Your order was sent to the supplier.",
+   "why": "status, English",
+   "flagged": false,
+   "findings": []
+  },
+  {
+   "id": "H26",
+   "text": "שירות הלקוחות זמין באימייל ובטלפון.",
+   "why": "a contact channel, no promise of sending",
+   "flagged": false,
+   "findings": []
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+EMAIL_PROVIDER gate, 2026-11-12T05:13:39Z, commit 3013d630
+G0 as committed (UNDECIDED)        check-config exit 0 | build-copy(HD_PUBLIC=1) exit 0 | check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED); preview preview (payment mo
+build-copy (S18): EMAIL_PROVIDER=UNDECIDED (production) → the wording without an email: 15 lines, 6 not shown
+G0b as committed, flag build       check-config exit 0 | build-copy(HD_PUBLIC=0) exit 0 | check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED); preview preview (payment mo
+build-copy (S18): EMAIL_PROVIDER=UNDECIDED (top level) → the wording without an email: 15 lines, 6 not shown
+G1 production mock                 check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER=mock is refused: the customer email has no mock, and a page would promise an email nobody sends
+production: EMAIL_PROVIDER=mock is refused: the customer email has no mock, and a page would promise an email nobody sends
+G2 production Resend (not built)   check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER="resend" is not a provider (none is built yet: UNDECIDED)
+production: EMAIL_PROVIDER="resend" is not a provider (none is built yet: UNDECIDED)
+G3 production missing (line out)   check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+G4 production empty string         check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+G5 production lowercase undecided  check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER="undecided" is not a provider (none is built yet: UNDECIDED)
+production: EMAIL_PROVIDER="undecided" is not a provider (none is built yet: UNDECIDED)
+G6 production ' UNDECIDED'         check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER=" UNDECIDED" is not a provider (none is built yet: UNDECIDED)
+production: EMAIL_PROVIDER=" UNDECIDED" is not a provider (none is built yet: UNDECIDED)
+G7 production null                 check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+G8 production true                 check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+production: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+G9 production MOCK                 check-config exit 1 | build-copy(HD_PUBLIC=1) exit 1 | production: EMAIL_PROVIDER="MOCK" is not a provider (none is built yet: UNDECIDED)
+production: EMAIL_PROVIDER="MOCK" is not a provider (none is built yet: UNDECIDED)
+G10 top level mock, flag build     check-config exit 1 | build-copy(HD_PUBLIC=0) exit 1 | (top level): EMAIL_PROVIDER=mock is refused: the customer email has no mock, and a page would promise an email nobody sends
+top level: EMAIL_PROVIDER=mock is refused: the customer email has no mock, and a page would promise an email nobody sends
+G11 preview mock                   check-config exit 1 | build-copy(HD_PUBLIC=0) exit 0 | preview: EMAIL_PROVIDER=mock is refused: the customer email has no mock, and a page would promise an email nobody sends
+build-copy (S18): EMAIL_PROVIDER=UNDECIDED (top level) → the wording without an email: 15 lines, 6 not shown
+G12 top level missing, flag build  check-config exit 1 | build-copy(HD_PUBLIC=0) exit 1 | (top level): EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)
+top level: EMAIL_PROVIDER is not set (it is UNDECIDED until a customer email is built)

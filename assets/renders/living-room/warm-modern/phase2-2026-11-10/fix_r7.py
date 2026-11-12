@@ -656,12 +656,25 @@ def recut_holders(rgb, a):
             xs_ = np.arange(x - 3, x + w + 3, dtype=np.float32)
             cv_ = np.clip(np.minimum(xs_ + 0.5, R_ + 0.5) - np.maximum(xs_ - 0.5, L_ - 0.5), 0, 1)
             cov[r, x - 3:x + w + 3] = np.minimum(cov[r, x - 3:x + w + 3], cv_)
-        rec[f"piece_{len(rec) + 1}"] = dict(box=[int(x), int(y), int(w), int(h)], axis_x=round(xc, 2), cup_top_row=int(cup_top),
+        rec[f"piece_{len([q for q in rec if q.startswith('piece')]) + 1}"] = dict(box=[int(x), int(y), int(w), int(h)], axis_x=round(xc, 2), cup_top_row=int(cup_top),
                                             cup_underside_row=int(under), cone_line=dict(slope=round(m, 4), at_underside=round(m * (under + 2) + c, 2),
                                                                                          at_bottom=round(m * (bottom - 4) + c, 2), inliers=ninl, rows=len(cone)),
                                             candle_left_x=None if cl is None else round(cl, 2),
                                             cup_bottom_ellipse=dict(a_px=round(a_, 2), b_px=round(b_, 2), centre_row=round(yce, 2)))
     a2 = np.minimum(a, cov).astype(np.float32)
+    # the shaded (right) side's outer pixels under the cup that are LIGHT are the old place's boucle (the travertine's shaded flank
+    # reads L* 35-55 there): out, with a 1 px feather
+    light = np.zeros(a.shape, bool)
+    for k_, pc in rec.items():
+        x, y, w, h = pc["box"]
+        xc, under = pc["axis_x"], pc["cup_underside_row"]
+        half = w / 2.0
+        sub = np.zeros(a.shape, bool)
+        sub[under - 6:under + 22, int(xc + 0.45 * half):x + w + 3] = True
+        light |= sub & (Ls > 58) & (a2 > 0)
+    rec["light_boucle_px_removed"] = int(light.sum())
+    soft = cv2.GaussianBlur(light.astype(np.float32), (0, 0), 0.6)
+    a2 = (a2 * (1 - np.clip(soft * 1.5, 0, 1))).astype(np.float32)
     rec["alpha_removed_px"] = int(((a > 0.5) & (a2 <= 0.5)).sum())
     return a2, rec
 
