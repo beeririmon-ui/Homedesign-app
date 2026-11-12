@@ -121,14 +121,16 @@ export async function fingerprint(buf: Buffer | Uint8Array): Promise<Fingerprint
 export const dhash = async (buf: Buffer | Uint8Array): Promise<string | null> => (await fingerprint(buf))?.dhash ?? null;
 
 /** S19 (ת51): a margin pixel differs from the margin's colour by at most this much (JPEG noise on white) */
-const TRIM_THRESHOLD = 16;
+const TRIM_THRESHOLD = 8;
 /** the version of the trim and the variants, in the cache's keys */
-const TRIM_VERSION = 't3';
+const TRIM_VERSION = 't5';
 /**
- * S19, QA ת51: the box inside a grey picture's uniform margins, or null when there is nothing to trim (no margin, or
- * less than 2% of the area) or nothing left (a blank picture, or a dot: under 12 px or 4% of a side). A pass trims what
- * matches the colour at the corner of what is left, and only when that colour runs round the box (90% of its edge): a
- * frame or a border, then the white inside it; never the inside of the product itself. Up to three passes.
+ * S19, QA ת51: the box inside a grey picture's uniform margins, or null when there is nothing to trim (less than 2% of
+ * the area) or nothing left (a blank picture, a dot under 12 px or 4% of a side, or what is left carries no ink).
+ * As an image editor trims: from each side inward, a row or a column goes while it is the colour at the corner of what
+ * is left (99.5% of its pixels within 8 of it), so the trim stops at the first line with content in it and never cuts
+ * into a picture whose own background is near the frame's colour. Up to three passes, each from the new corner: a frame
+ * or a border, then the white inside it. A margin on some sides only (padding onto a 4:3 canvas, a letterbox) goes too.
  */
 export function trimBox(g: Uint8Array, w: number, h: number): { left: number; top: number; width: number; height: number } | null {
   let x0 = 0;
@@ -136,41 +138,32 @@ export function trimBox(g: Uint8Array, w: number, h: number): { left: number; to
   let x1 = w - 1;
   let y1 = h - 1;
   const near = (v: number, bg: number) => v - bg <= TRIM_THRESHOLD && bg - v <= TRIM_THRESHOLD;
+  const row = (y: number, bg: number) => {
+    let off = 0;
+    const most = Math.floor((x1 - x0 + 1) * 0.005);
+    for (let x = x0; x <= x1; x++) if (!near(g[y * w + x]!, bg) && ++off > most) return false;
+    return true;
+  };
+  const col = (x: number, bg: number) => {
+    let off = 0;
+    const most = Math.floor((y1 - y0 + 1) * 0.005);
+    for (let y = y0; y <= y1; y++) if (!near(g[y * w + x]!, bg) && ++off > most) return false;
+    return true;
+  };
   for (let pass = 0; pass < 3; pass++) {
     const bg = g[y0 * w + x0]!;
-    // the colour must run round the box: a margin, not a pixel of a picture that fills its frame
-    let edge = 0;
-    let same = 0;
-    for (let x = x0; x <= x1; x++) {
-      edge += 2;
-      same += (near(g[y0 * w + x]!, bg) ? 1 : 0) + (near(g[y1 * w + x]!, bg) ? 1 : 0);
-    }
-    for (let y = y0 + 1; y < y1; y++) {
-      edge += 2;
-      same += (near(g[y * w + x0]!, bg) ? 1 : 0) + (near(g[y * w + x1]!, bg) ? 1 : 0);
-    }
-    if (same < 0.9 * edge) break;
-    let nx0 = x1 + 1;
-    let ny0 = y1 + 1;
-    let nx1 = x0 - 1;
-    let ny1 = y0 - 1;
-    for (let y = y0; y <= y1; y++) {
-      const row = y * w;
-      for (let x = x0; x <= x1; x++)
-        if (!near(g[row + x]!, bg)) {
-          if (x < nx0) nx0 = x;
-          if (x > nx1) nx1 = x;
-          if (y < ny0) ny0 = y;
-          if (y > ny1) ny1 = y;
-        }
-    }
+    const before = [x0, y0, x1, y1];
+    while (y0 <= y1 && row(y0, bg)) y0++;
+    while (y1 >= y0 && row(y1, bg)) y1--;
+    while (x0 <= x1 && y0 <= y1 && col(x0, bg)) x0++;
+    while (x1 >= x0 && y0 <= y1 && col(x1, bg)) x1--;
     // all of it one colour: on the first pass a blank picture; later, a box of one colour (what is left is the box)
-    if (nx1 < nx0 || ny1 < ny0) {
+    if (y0 > y1 || x0 > x1) {
       if (pass === 0) return null;
+      [x0, y0, x1, y1] = before as [number, number, number, number];
       break;
     }
-    if (nx0 === x0 && ny0 === y0 && nx1 === x1 && ny1 === y1) break;
-    [x0, y0, x1, y1] = [nx0, ny0, nx1, ny1];
+    if (x0 === before[0] && y0 === before[1] && x1 === before[2] && y1 === before[3]) break;
   }
   const width = x1 - x0 + 1;
   const height = y1 - y0 + 1;
