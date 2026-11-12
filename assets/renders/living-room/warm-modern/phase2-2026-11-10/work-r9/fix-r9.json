@@ -1,0 +1,891 @@
+{
+ "date": "2026-11-12",
+ "author": "render-agent",
+ "tokens": 0,
+ "round": "R9 (code only)",
+ "sources": {
+  "pendant2": "docs/proposals/wm-pendant2-eye-2026-11-12.md section 4 (P2-1)",
+  "curtain3_and_records": "qa/reports/2026-11-12-wm-phase2-r8.md section 8 (F1, F2, F8)"
+ },
+ "note": "both fixes on the graded (cut) layers, after the one v3c grade: no re-grade, no shadow file changes; the variants' truths are recomposed over the graded scene under them (recompose_r9.py), not graded",
+ "pendant2": {
+  "what": "P2-1: the ledge low on the left, the step and the facet on the right, on one convex fit per side; the ramp widened to the reference everywhere on the lantern; alpha only (+ the bleed colour where the alpha rises)",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/pendant/pendant-cj-pleated-pumpkin-lantern-40-r6.png",
+   "sha256": "ac0aae7b23dc71d28204ab747ddd4ab4f2b84a5af49669e40199284008e15553"
+  },
+  "geometry": {
+   "centre_px": [
+    1674.587,
+    277.612
+   ],
+   "polar_bin_spread_max_px": 0.894,
+   "bottom_arc": {
+    "theta_deg": [
+     20.375,
+     154.875
+    ],
+    "rows_from": {
+     "right": 315.2,
+     "left": 325.9
+    },
+    "rule": "the lower half from where the outline's tangent is under 45 deg from horizontal: exempt, keeps its own points"
+   },
+   "right_side": {
+    "theta_deg": [
+     -90,
+     20.375
+    ],
+    "note": "from the collar to the bottom arc (its top arc included: within the limits)"
+   },
+   "left_flank": {
+    "theta_deg": [
+     154.875,
+     199.375
+    ],
+    "rows": [
+     241.4,
+     325.9
+    ],
+    "note": "from the bottom arc to where the top-left arc starts (tangent under 45 deg); holds the ledge"
+   },
+   "top_left_arc": {
+    "theta_deg": [
+     199.375,
+     270
+    ],
+    "note": "KEPT: the stop rule (see stop_rule.top_left_arc)"
+   },
+   "collar": {
+    "kept": "|x - 1676.5| <= 9, y <= 203",
+    "fade_px": 4
+   },
+   "blends": {
+    "bottom_deg": 6.0,
+    "top_left_deg": 6.0,
+    "top_centre_deg": 12.0,
+    "how": "the old outline points moved radially toward the fit (smoothstep): seamless at both ends"
+   }
+  },
+  "fit": {
+   "model": "u = 1/r on a clamped cubic B-spline in theta, knots every ~25 deg; least squares in r (weights r^4); convex by construction (u + u'' >= 0.0005); the stop limits less 0.1 px as bounds on every old outline point (inactive if the least-squares fit is inside them)",
+   "convexity": {
+    "right": {
+     "convex": true,
+     "curvature_min": 0.00306,
+     "radius_of_curvature_max_px": 327.2,
+     "knots_deg": [
+      -96.0,
+      -71.525,
+      -47.05,
+      -22.575,
+      1.9,
+      26.375
+     ]
+    },
+    "left": {
+     "convex": true,
+     "curvature_min": 0.01425,
+     "radius_of_curvature_max_px": 70.2,
+     "knots_deg": [
+      148.875,
+      177.125,
+      205.375
+     ]
+    }
+   },
+   "iterations": [
+    {
+     "fill_max": 1.612,
+     "cut_max": 1.025,
+     "act": {
+      "right": {
+       "convexity": 0,
+       "cut_bound": 0,
+       "fill_bound": 0,
+       "max_violation": 0.0
+      },
+      "left": {
+       "convexity": 0,
+       "cut_bound": 0,
+       "fill_bound": 0,
+       "max_violation": 0.0
+      }
+     }
+    }
+   ],
+   "least_squares_need": {
+    "right_side": {
+     "cut": 1.025,
+     "fill": 1.198
+    },
+    "left_flank": {
+     "cut": 0.85,
+     "fill": 1.612
+    },
+    "active": {
+     "right": {
+      "convexity": 0,
+      "cut_bound": 0,
+      "fill_bound": 0,
+      "max_violation": 0.0
+     },
+     "left": {
+      "convexity": 0,
+      "cut_bound": 0,
+      "fill_bound": 0,
+      "max_violation": 0.0
+     }
+    }
+   }
+  },
+  "stop_rule": {
+   "limits": {
+    "cut": 3.0,
+    "fill": 2.0
+   },
+   "applied": {
+    "right_side": {
+     "cut": 1.025,
+     "fill": 1.198
+    },
+    "left_flank": {
+     "cut": 0.85,
+     "fill": 1.612
+    },
+    "kept_arcs_max_abs": 0.0616
+   },
+   "where": {
+    "left_fill": [
+     1563.4,
+     312.7
+    ],
+    "left_cut": [
+     1554.8,
+     298.7
+    ],
+    "right_fill": [
+     1786.7,
+     296.6
+    ],
+    "right_cut": [
+     1779.2,
+     311.8
+    ]
+   },
+   "triggered_on_what_was_changed": false,
+   "top_left_arc": {
+    "whole_left_side_least_squares": {
+     "cut": 1.536,
+     "fill": 2.248,
+     "fill_at": [
+      1614.8,
+      216.4
+     ],
+     "on_the_top_left_arc": true,
+     "top_left_arc_fill": 2.248,
+     "left_flank_fill": 1.6
+    },
+    "triggered": true,
+    "decision": "NOT CHANGED (only its ramp): one convex line over the whole left side needs 2.25 px of fill at (1614.8, 216.4), a tier step the model drew on the top-left arc; a fit held to 2 px there flattens the shoulder (a new facet). Per the stop rule: left as it is, the x 2 crop to the designer (crops-r9/pendant-2-top-left-stop-x2.png)"
+   },
+   "ledge_rows_left": {
+    "290": {
+     "x_old": 1554.06,
+     "moved_px": 0.02
+    },
+    "300": {
+     "x_old": 1555.31,
+     "moved_px": 0.7
+    },
+    "305": {
+     "x_old": 1557.44,
+     "moved_px": 0.31
+    },
+    "310": {
+     "x_old": 1560.69,
+     "moved_px": -0.57
+    },
+    "313": {
+     "x_old": 1563.56,
+     "moved_px": -1.59
+    },
+    "316": {
+     "x_old": 1564.56,
+     "moved_px": -0.78
+    },
+    "320": {
+     "x_old": 1565.94,
+     "moved_px": 0.5
+    },
+    "324": {
+     "x_old": 1569.31,
+     "moved_px": 0.58
+    },
+    "327": {
+     "x_old": 1572.94,
+     "moved_px": 0.17
+    }
+   }
+  },
+  "result": "written",
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/pendant/pendant-cj-pleated-pumpkin-lantern-40-r9.png",
+   "layer_sha256": "182a41c00ab65161ea9fe35798f553f6bf56c670750f6bd8cefa322c81434fb0",
+   "outline": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r9/pendant2-outline-r9.npy",
+   "outline_sha256": "c4bb2c6a6995e6878b8a10f9c90523a53c389d02c3b24a43d663c1fe94299aa0"
+  },
+  "alpha_and_colour": {
+   "alpha_px_changed": 3806,
+   "raised": 1879,
+   "lowered": 1927,
+   "rgb_px_changed": 298,
+   "rgb_changed_where_alpha_did_not_rise": 0,
+   "rgb_changed_at_alpha_255_both": 0,
+   "changed_outside_box": 0,
+   "collar_zone_changed": 0,
+   "bleed_formula_equals_stored_bleed": {
+    "px": 5390,
+    "of": 5390
+   },
+   "cord_and_canopy_rows_below_190_changed": 0
+  },
+  "ramp": {
+   "reference": {
+    "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/pendant/pendant-cj-tiered-fabric-drum-r4.png",
+    "drum_top_row": 171,
+    "flanks": 2.91,
+    "whole_outline": 2.778,
+    "flanks_p25_p75": [
+     2.818,
+     3.062
+    ],
+    "top_bottom": 2.331,
+    "points": 6416
+   },
+   "r6_unsnapped": {
+    "r6_points": 1174,
+    "r6_snapped": 837,
+    "record_says": "1174 / 837 (work-r6/fix-r6.json pendant-v2.outline)",
+    "ramp_unsnapped": 1.365,
+    "ramp_snapped": 1.279,
+    "reading": "the unsnapped points carry the same re-rasterised 1-px ramp as the snapped ones (contour_snap re-rasterises the whole outline at 8 x): they are the placeholder's (clay) geometry, so the designer's fallback applies: the default pendant"
+   },
+   "target_flanks": 2.91,
+   "sigma_px": 1.0573,
+   "bisection": [
+    [
+     1.2,
+     3.273,
+     3.256
+    ],
+    [
+     0.8,
+     2.309,
+     2.336
+    ],
+    [
+     1.0,
+     2.777,
+     2.766
+    ],
+    [
+     1.1,
+     3.02,
+     3.01
+    ],
+    [
+     1.05,
+     2.9,
+     2.886
+    ],
+    [
+     1.075,
+     2.958,
+     2.945
+    ],
+    [
+     1.0625,
+     2.928,
+     2.917
+    ],
+    [
+     1.0562,
+     2.915,
+     2.899
+    ],
+    [
+     1.0594,
+     2.92,
+     2.906
+    ],
+    [
+     1.0578,
+     2.917,
+     2.903
+    ],
+    [
+     1.057,
+     2.917,
+     2.902
+    ],
+    [
+     1.0574,
+     2.917,
+     2.903
+    ],
+    [
+     1.0572,
+     2.917,
+     2.902
+    ],
+    [
+     1.0573,
+     2.917,
+     2.903
+    ]
+   ],
+   "before": {
+    "left": 1.379,
+    "right": 1.281,
+    "top_bottom": 1.308,
+    "px": {
+     "left": 647,
+     "right": 709
+    }
+   },
+   "after": {
+    "left": 2.917,
+    "right": 2.902,
+    "top_bottom": 2.942,
+    "px": {
+     "left": 678,
+     "right": 741
+    }
+   },
+   "profile": "alpha = Phi(d / sigma) of the signed distance d to the new outline (erf), point-sampled at the pixel centres",
+   "measure": "median 10-90 % width along the outward normal (bilinear, 0.05 px) on the flanks (normal within 45 deg of horizontal)"
+  },
+  "line_50pct": {
+   "bottom_arc": {
+    "moved_px_median": 0.037,
+    "moved_px_max": 0.121,
+    "points": 1448
+   },
+   "top_left_arc": {
+    "moved_px_median": 0.045,
+    "moved_px_max": 0.124,
+    "points": 632
+   },
+   "rule": "on the kept arcs the ramp widening keeps the 50 % line (+-0.3 px); old line = the R8 file's marching-squares points"
+  },
+  "geometry_after": {
+   "line_vs_fit_px": {
+    "right_side_max_abs": 0.044,
+    "left_flank_max_abs": 0.018,
+    "rule": "<= 1 px where fitted"
+   },
+   "turns_4px": {
+    "right_side_opposite": 0,
+    "right_side_n": 47,
+    "left_flank_opposite": 0,
+    "left_flank_n": 23,
+    "top_left_arc_opposite": 9,
+    "top_left_arc_n": 23,
+    "rule": "one sign where fitted (convex); |turn| < 0.1 deg counts as straight; the top-left arc is kept (stop rule)"
+   },
+   "right_edge_corner": {
+    "max_turn_over_neighbours": 1.292,
+    "at": [
+     1794.4,
+     274.4
+    ],
+    "turn_deg": -4.68,
+    "chords_over_2x": 0,
+    "chords": 34,
+    "rule": "no 4-px chord turns more than 2 x the mean of its two neighbours (theta -45 deg .. the bottom arc)"
+   },
+   "widest_row": {
+    "width_px": 239.879,
+    "row": 277
+   }
+  },
+  "geometry_before": {
+   "turns_4px": {
+    "right_side_opposite": 11,
+    "right_side_n": 47,
+    "left_flank_opposite": 6,
+    "left_flank_n": 24,
+    "top_left_arc_opposite": 9,
+    "top_left_arc_n": 23,
+    "rule": "one sign where fitted (convex); |turn| < 0.1 deg counts as straight; the top-left arc is kept (stop rule)"
+   },
+   "right_edge_corner": {
+    "max_turn_over_neighbours": 15.637,
+    "at": [
+     1746.3,
+     207.6
+    ],
+    "turn_deg": -10.92,
+    "chords_over_2x": 6,
+    "chords": 34,
+    "rule": "no 4-px chord turns more than 2 x the mean of its two neighbours (theta -45 deg .. the bottom arc)"
+   },
+   "widest_row": {
+    "width_px": 240.221,
+    "row": 278
+   }
+  },
+  "width_change_px": -0.342,
+  "shadow": "unchanged: pendant/pendant-cj-pleated-pumpkin-lantern-40-r5-shadow.png (empty; the frozen recipe does not run)",
+  "not_touched": "the canopy, the cord, the collar, the paper's RGB at alpha 255 (pleats, opening): byte-equal"
+ },
+ "curtain3": {
+  "what": "QA R8 F1: the 11 soft-edge pixels the designer's literal rule still flagged on the graded layer (alpha 3-13, x 248-261)",
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/curtains/curtains-cj-japanese-linen-half-shade-r8.png",
+   "sha256": "bace7b7b42b058e4e65f3e09d80ad9b584f6c0786251e6ab1ae55c57e994b8b0"
+  },
+  "method": "fix_r8.neutralise on the graded layer: a*, b* -> the median of the radius-3 pixels that are neither flagged nor transparent (R8's OpenCV Lab); L* kept; the 8-bit value among the 27 nearest that keeps L* closest and passes the literal rule in both Labs",
+  "flagged": {
+   "r8_lab": 11,
+   "qa_lab": 11,
+   "union": 11,
+   "same_set_in_both_labs": true
+  },
+  "before": {
+   "literal_alpha_gt0": {
+    "r8_lab": 11,
+    "qa_lab": 11
+   },
+   "wide_visible_alpha_ge128": {
+    "r8_lab": 0,
+    "qa_lab": 3
+   },
+   "wide_soft_edge_alpha_lt128": {
+    "r8_lab": 16,
+    "qa_lab": 16
+   }
+  },
+  "after": {
+   "literal_alpha_gt0": {
+    "r8_lab": 0,
+    "qa_lab": 0
+   },
+   "wide_visible_alpha_ge128": {
+    "r8_lab": 0,
+    "qa_lab": 3
+   },
+   "wide_soft_edge_alpha_lt128": {
+    "r8_lab": 8,
+    "qa_lab": 8
+   }
+  },
+  "pixels": [
+   {
+    "x": 248,
+    "y": 23,
+    "alpha": 6,
+    "neighbours": 19,
+    "lab_before": [
+     97.13,
+     -12.17,
+     -1.67
+    ],
+    "median_ab": [
+     0.5,
+     3.62
+    ],
+    "lab_after": [
+     97.14,
+     -0.03,
+     3.22
+    ],
+    "dL": 0.012,
+    "rgb_before": [
+     219,
+     254,
+     250
+    ],
+    "rgb_after": [
+     250,
+     247,
+     241
+    ]
+   },
+   {
+    "x": 251,
+    "y": 85,
+    "alpha": 10,
+    "neighbours": 20,
+    "lab_before": [
+     92.9,
+     -8.11,
+     -2.77
+    ],
+    "median_ab": [
+     0.16,
+     2.39
+    ],
+    "lab_after": [
+     92.88,
+     -0.36,
+     2.05
+    ],
+    "dL": -0.012,
+    "rgb_before": [
+     215,
+     240,
+     240
+    ],
+    "rgb_after": [
+     236,
+     235,
+     231
+    ]
+   },
+   {
+    "x": 260,
+    "y": 620,
+    "alpha": 12,
+    "neighbours": 17,
+    "lab_before": [
+     92.88,
+     -6.52,
+     -2.23
+    ],
+    "median_ab": [
+     -0.16,
+     0.5
+    ],
+    "lab_after": [
+     92.88,
+     -0.16,
+     0.48
+    ],
+    "dL": 0.0,
+    "rgb_before": [
+     219,
+     239,
+     239
+    ],
+    "rgb_after": [
+     235,
+     235,
+     234
+    ]
+   },
+   {
+    "x": 260,
+    "y": 677,
+    "alpha": 3,
+    "neighbours": 16,
+    "lab_before": [
+     88.55,
+     -25.2,
+     -7.48
+    ],
+    "median_ab": [
+     0.26,
+     3.98
+    ],
+    "lab_after": [
+     88.55,
+     0.48,
+     4.02
+    ],
+    "dL": 0.0,
+    "rgb_before": [
+     154,
+     237,
+     236
+    ],
+    "rgb_after": [
+     227,
+     222,
+     215
+    ]
+   },
+   {
+    "x": 260,
+    "y": 680,
+    "alpha": 11,
+    "neighbours": 16,
+    "lab_before": [
+     91.74,
+     -7.03,
+     -1.86
+    ],
+    "median_ab": [
+     0.18,
+     3.32
+    ],
+    "lab_after": [
+     91.74,
+     0.66,
+     3.5
+    ],
+    "dL": -0.006,
+    "rgb_before": [
+     215,
+     236,
+     235
+    ],
+    "rgb_after": [
+     236,
+     231,
+     225
+    ]
+   },
+   {
+    "x": 260,
+    "y": 690,
+    "alpha": 9,
+    "neighbours": 17,
+    "lab_before": [
+     91.09,
+     -8.52,
+     -1.8
+    ],
+    "median_ab": [
+     0.22,
+     1.2
+    ],
+    "lab_after": [
+     91.11,
+     -0.34,
+     0.97
+    ],
+    "dL": 0.012,
+    "rgb_before": [
+     210,
+     235,
+     233
+    ],
+    "rgb_after": [
+     230,
+     230,
+     228
+    ]
+   },
+   {
+    "x": 260,
+    "y": 691,
+    "alpha": 9,
+    "neighbours": 18,
+    "lab_before": [
+     91.06,
+     -8.64,
+     -2.39
+    ],
+    "median_ab": [
+     0.07,
+     1.28
+    ],
+    "lab_after": [
+     91.08,
+     -0.52,
+     1.45
+    ],
+    "dL": 0.024,
+    "rgb_before": [
+     209,
+     235,
+     234
+    ],
+    "rgb_after": [
+     230,
+     230,
+     227
+    ]
+   },
+   {
+    "x": 260,
+    "y": 809,
+    "alpha": 12,
+    "neighbours": 17,
+    "lab_before": [
+     88.11,
+     -6.44,
+     2.19
+    ],
+    "median_ab": [
+     0.33,
+     4.05
+    ],
+    "lab_after": [
+     88.12,
+     0.14,
+     3.89
+    ],
+    "dL": 0.006,
+    "rgb_before": [
+     210,
+     225,
+     217
+    ],
+    "rgb_after": [
+     225,
+     221,
+     214
+    ]
+   },
+   {
+    "x": 253,
+    "y": 997,
+    "alpha": 10,
+    "neighbours": 16,
+    "lab_before": [
+     84.31,
+     -8.09,
+     4.45
+    ],
+    "median_ab": [
+     1.2,
+     5.29
+    ],
+    "lab_after": [
+     84.33,
+     0.5,
+     5.17
+    ],
+    "dL": 0.018,
+    "rgb_before": [
+     198,
+     215,
+     202
+    ],
+    "rgb_after": [
+     216,
+     210,
+     201
+    ]
+   },
+   {
+    "x": 259,
+    "y": 1032,
+    "alpha": 7,
+    "neighbours": 13,
+    "lab_before": [
+     91.17,
+     -11.81,
+     -0.7
+    ],
+    "median_ab": [
+     -0.52,
+     2.64
+    ],
+    "lab_after": [
+     91.18,
+     -0.19,
+     2.66
+    ],
+    "dL": 0.006,
+    "rgb_before": [
+     204,
+     237,
+     231
+    ],
+    "rgb_after": [
+     232,
+     230,
+     225
+    ]
+   },
+   {
+    "x": 261,
+    "y": 1070,
+    "alpha": 13,
+    "neighbours": 17,
+    "lab_before": [
+     89.62,
+     -5.91,
+     1.8
+    ],
+    "median_ab": [
+     0.66,
+     4.11
+    ],
+    "lab_after": [
+     89.61,
+     0.48,
+     4.0
+    ],
+    "dL": -0.012,
+    "rgb_before": [
+     215,
+     229,
+     222
+    ],
+    "rgb_after": [
+     230,
+     225,
+     218
+    ]
+   }
+  ],
+  "dL_max_abs": 0.024,
+  "px_changed": 11,
+  "px_changed_outside_flagged": 0,
+  "new_wide_rule_px": 0,
+  "alpha": "unchanged (same bytes)",
+  "shadow": "unchanged: curtains/curtains-cj-japanese-linen-half-shade-r8-shadow.png",
+  "wide_rule_soft_edge_note": "the wide rule (R8's own detector, a neighbourhood rule) still flags 8 soft-edge pixels (alpha < 128, h 100-150: yellow-green, not in the designer's window); the brief limits this fix to the literal pixels, so they are left; 0 at alpha >= 128 in R8's Lab, as in R8",
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/curtains/curtains-cj-japanese-linen-half-shade-r9.png",
+   "layer_sha256": "2030352fb64b11e0ed6f390d490ce3510a052590093047c2ed4d94c7f672ea6a",
+   "mask": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r9/curtain3-soft-edge-mask-r9.npy",
+   "mask_sha256": "1a31a658e92b65f2e03c6768d69e677ef41b792cb3ee446fe642cdd1c47d3080"
+  }
+ },
+ "r8_record_corrections": {
+  "final_pass_mask": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/curtain3-speck-mask-final-pass.npy",
+   "sha256": "df14a31ddd15b50d09cadf4909ade59e243b4cb03ce3aa78022721896d2da2e6",
+   "px": 44,
+   "overlap_with_speck_mask": 0,
+   "speck_mask": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/curtain3-speck-mask.npy",
+   "speck_mask_px": 853,
+   "union_px": 897,
+   "how": "fix_r8.curtain3() re-run in memory (writes to a temporary folder); its third and last neutralise() mask; the run reproduced work-r8's curtain-3 layer and shadow byte for byte and the speck mask exactly: {\"layers/curtains-v3.png\": true, \"shadows/curtains-v3.png\": true, \"curtain3-speck-mask.npy\": true}",
+   "naming": "fix-r8.json names this pass 'final_pass' (44 px); its 'pass_2' (4 px) is the second speck pass, already in the speck mask (pass_1 849 + pass_2 4 = 853)",
+   "all_r8_changes": "the speck mask (853) + this mask (44) = every pixel whose a*b* R8's speck steps changed (897)"
+  },
+  "alpha_unchanged": {
+   "r8_said": {
+    "curtains_bench.curtains.alpha_unchanged": true,
+    "curtains_bench.curtains-v2.alpha_unchanged": true,
+    "curtain3.alpha_unchanged": true,
+    "manifest-r8 curtains-v3.r8.alpha": "unchanged (layer alpha and free alpha: the R7 sources)"
+   },
+   "correct": "TRUE for the UNGRADED sources only (work-r8/layers/<name>.png alpha and <name>-free-alpha.png are the R7 bytes). FALSE for the graded layers in layers/: cut() raises a soft-edge alpha where the scene under it changed (soft_edge_alpha_raised), so the graded alpha moved on 7 / 6 / 64 soft-edge pixels (180502 / 554205 / Linen), max 15 / 20 / 12 levels, and on 0 pixels where the source is not soft",
+   "per_curtain": {
+    "curtains": {
+     "ungraded_alpha_and_free_alpha_same_bytes": true,
+     "graded_alpha_px_changed": 7,
+     "graded_alpha_max_diff": 15,
+     "changed_where_source_not_soft": 0,
+     "r7": "curtains/curtains-aliexpress-linen-blend-s-fold-180502-r7.png",
+     "r8": "curtains/curtains-aliexpress-linen-blend-s-fold-180502-r8.png"
+    },
+    "curtains-v2": {
+     "ungraded_alpha_and_free_alpha_same_bytes": true,
+     "graded_alpha_px_changed": 6,
+     "graded_alpha_max_diff": 20,
+     "changed_where_source_not_soft": 0,
+     "r7": "curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-r7.png",
+     "r8": "curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-r8.png"
+    },
+    "curtains-v3": {
+     "ungraded_alpha_and_free_alpha_same_bytes": true,
+     "graded_alpha_px_changed": 64,
+     "graded_alpha_max_diff": 12,
+     "changed_where_source_not_soft": 0,
+     "r7": "curtains/curtains-cj-japanese-linen-half-shade-r7.png",
+     "r8": "curtains/curtains-cj-japanese-linen-half-shade-r8.png"
+    }
+   },
+   "r8_files": "not edited (this record carries the correction)"
+  }
+ }
+}
