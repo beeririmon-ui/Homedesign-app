@@ -68,7 +68,7 @@ import { materialsHe, colorNameHe } from './lib/hebrew';
 import { loadLeadRecords } from './lib/leads';
 import { cachedFreight } from './lib/freight-cache';
 import { latinLabels, lineName, lineOf, loadLineData, optionLabel, saleOf, setComposition } from './lib/lines';
-import { latinPublicText, publicDescription } from './lib/public-text';
+import { latinPublicText, publicDescription, unknownPublicText } from './lib/public-text';
 import { cjProductOf, singleSku, supplierSkuIssues } from './lib/supplier-skus';
 import { publicId, publicVariantId, slugIndex } from '@hd/shared/product-url';
 
@@ -1084,6 +1084,15 @@ console.log(
   `  public text (ת33): Latin in ${latinText.length} names, descriptions or notes · supplier SKUs (ת27): ${skuIssues.length} issues; ` +
     `a single variant's SKU in place of the card's product-level code: ${resolvedSkus.map((p) => `${p.card_id} → ${p.variants_full?.[0]?.supplier_sku}`).join(', ') || 'none'}`,
 );
+// S17, QA ה5: a field whose value is unknown is not shown ("חומרים: …, לא צוין"): no public text says a value is unknown
+const unknownText = unknownPublicText(publicCatalog.products);
+console.log(`  public text (ה5): ${unknownText.length} fields that say their value is unknown`);
+if (unknownText.length) {
+  console.error(
+    `build-catalog: ${unknownText.length} public fields say their value is unknown (ה5: leave the field out):\n${unknownText.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,
+  );
+  process.exit(1);
+}
 if (latinText.length) {
   console.error(
     `build-catalog: ${latinText.length} public texts carry Latin letters (ת33):\n${latinText.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,

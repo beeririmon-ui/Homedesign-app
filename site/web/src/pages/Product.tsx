@@ -13,6 +13,7 @@ import { SafetyRow } from '../components/SafetyRow';
 import { OptionPicker } from '../components/OptionPicker';
 import { Waitlist } from '../components/Waitlist';
 import { defaultVariantId, variantPackPrice, variantView } from '../variants';
+import { knownValues, visibleNotes } from './productNotes';
 
 const WALK = ['hall', 'living-room', 'dining-room', 'work', 'corridor', 'boy', 'girl', 'bath', 'master'];
 
@@ -30,6 +31,9 @@ export function Product({ p }: { p: PublicProduct }) {
   const estimated = pack === 'unit' && v.unit_price_estimated;
   const where = slotOf(p)!;
   const images = galleryImages(p, v.variant_id);
+  // S17 (QA ה5): a field whose value is unknown is not shown; a note about the picture only beside a picture
+  const materials = knownValues(p.materials_he);
+  const notes = visibleNotes(p.notes_he, images.length > 0);
   const dims = [p.dimensions_cm.width, p.dimensions_cm.depth, p.dimensions_cm.height].filter((x): x is number => typeof x === 'number');
   // §9.1, the phone: the paper band with "הוספה לסל" appears once the page's own button has left the screen
   const buy = useRef<HTMLDivElement>(null);
@@ -126,7 +130,7 @@ export function Product({ p }: { p: PublicProduct }) {
                           <a href={shopPath(op.id)}>{op.name_he}</a>
                         )}
                         <span class="detail">
-                          {[op.materials_he[0], op.id === p.id ? 'הדף הזה' : null].filter(Boolean).join(' · ')} · <Price agorot={op.price_agorot} />
+                          {[knownValues(op.materials_he)[0], op.id === p.id ? 'הדף הזה' : null].filter(Boolean).join(' · ')} · <Price agorot={op.price_agorot} />
                         </span>
                       </span>
                     ) : (
@@ -138,10 +142,10 @@ export function Product({ p }: { p: PublicProduct }) {
             </ol>
           </section>
           <dl class="specs-list">
-            {p.materials_he.length ? (
+            {materials.length ? (
               <>
                 <dt>חומרים</dt>
-                <dd>{p.materials_he.join(', ')}</dd>
+                <dd>{materials.join(', ')}</dd>
               </>
             ) : null}
             {dims.length ? (
@@ -162,9 +166,9 @@ export function Product({ p }: { p: PublicProduct }) {
             ) : null}
             <SafetyRow safety={p.safety} />
           </dl>
-          {p.notes_he.length ? (
+          {notes.length ? (
             <ul class="notes-list">
-              {p.notes_he.map((n) => (
+              {notes.map((n) => (
                 <li key={n}>{n}</li>
               ))}
             </ul>
