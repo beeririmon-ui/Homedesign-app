@@ -64,7 +64,7 @@ import {
   type PublicOptions,
 } from '@hd/shared';
 import { REPO, GENERATED, repoPath, sitePath } from './lib/paths';
-import { materialsHe, colorNameHe } from './lib/hebrew';
+import { materialsHe, colorNameHe, textureClaimSources } from './lib/hebrew';
 import { loadLeadRecords } from './lib/leads';
 import { cachedFreight } from './lib/freight-cache';
 import { latinLabels, lineName, lineOf, loadLineData, optionLabel, saleOf, setComposition } from './lib/lines';
@@ -1083,6 +1083,18 @@ const resolvedSkus = fullCatalog.products.filter((p) => {
 console.log(
   `  public text (ת33): Latin in ${latinText.length} names, descriptions or notes · supplier SKUs (ת27): ${skuIssues.length} issues; ` +
     `a single variant's SKU in place of the card's product-level code: ${resolvedSkus.map((p) => `${p.card_id} → ${p.variants_full?.[0]?.supplier_sku}`).join(', ') || 'none'}`,
+);
+// S19, QA ה8: every "הדפס במרקם" the build reads, with the card's own text it was read from, for the designer's eye.
+// A texture is claimed only in a clause with no negation word (tools/lib/hebrew.ts `claimsTexture`).
+const textureClaims = fullProducts
+  .filter((p) => p.materials_he.includes('הדפס במרקם'))
+  .map((p) => ({ product: p.id, card: p.card_id ?? p.id, from: textureClaimSources(cardById.get(p.card_id ?? p.id)?.materials ?? []) }));
+writeFileSync(
+  join(GENERATED, `${outName}.texture-claims.json`),
+  JSON.stringify({ built_at: new Date().toISOString(), rule: 'a texture word in a clause with no negation word (ה8)', claims: textureClaims }, null, 1),
+);
+console.log(
+  `  "הדפס במרקם" (ה8): ${textureClaims.length} products${textureClaims.length ? ' · ' + textureClaims.map((c) => `${c.product} ← ${c.from.map((x) => JSON.stringify(x)).join(' | ')}`).join('; ') : ''}`,
 );
 // S17, QA ה5: a field whose value is unknown is not shown ("חומרים: …, לא צוין"): no public text says a value is unknown
 const unknownText = unknownPublicText(publicCatalog.products);

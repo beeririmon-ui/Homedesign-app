@@ -12,6 +12,9 @@
  *   pixels     a raster, or an image in a data: URI, within 24 of 256 bits (dHash 16×16) of a supplier picture, or a
  *              near miss (≤ 48) whose 32×32 grey image differs from it by ≤ 3 on average;
  *   hosts      a URL on a host the cards' pictures come from (alicdn.com, cjdropshipping.com, zendrop.com…).
+ * S19, QA S17: the near miss only when both pictures carry ink (ת50); each supplier picture mirrored as well, every
+ *   picture with its uniform margins trimmed as well, a fixed list of supplier picture domains beside the cards', and a
+ *   data: URI read as a browser reads it (ת51). The nearest picture outside the supplier folders is printed every build.
  * Behind the flag the same scan runs as the control: it reports what it finds (the shop's and the story's copies, which
  * the flag build ships) and anything found elsewhere, without failing.
  *
@@ -28,8 +31,11 @@ import {
   LEDGER_STORY,
   NEAR_MAX_HAMMING,
   NEAR_MAX_MAD32,
+  NEAR_MIN_INK,
   PIXEL_MAX_HAMMING,
+  SUPPLIER_IMAGE_DOMAINS,
   cardPictureHosts,
+  pictureHosts,
   readCards,
   readLedger,
   registrableDomain,
@@ -104,24 +110,33 @@ if (!ledgers[0]) {
   console.error(`check-image-rights: .generated/${LEDGER_SHOP} is missing: run \`npm run assets:supplier\` first.`);
   process.exit(1);
 }
-const hosts = cardPictureHosts(readCards(repoPath('data/products')));
+const cards = readCards(repoPath('data/products'));
+const hosts = pictureHosts(cards);
 const dhashes = new DhashCache(sitePath('.cache/rights-dhash.json'));
 const set = await supplierSet({ site: SITE, ledgers: ledgers.filter((l) => l !== null), cacheDir: sitePath('.cache/supplier-images'), hosts, dhashes });
-const scan = await scanBuild(DIST, set, dhashes, { files });
-dhashes.save();
 /** behind the flag the shop's and the story's copies ship by design; anything else the scan finds is said */
 const SUPPLIER_FOLDERS = /^media\/(?:products|story\/products)\//;
+const scan = await scanBuild(DIST, set, dhashes, { files, elsewhere: (where) => PUBLIC || !SUPPLIER_FOLDERS.test(where) });
+dhashes.save();
 const byHow = (f: ContentFinding[]) =>
   Object.fromEntries(['bytes', 'pixels', 'data-uri bytes', 'data-uri pixels', 'host'].map((h) => [h, f.filter((x) => x.how === h).length]));
 const elsewhere = scan.findings.filter((f) => !SUPPLIER_FOLDERS.test(f.where));
 const content = {
-  supplier_set: { ...set.stats, card_picture_hosts: hosts, domains: [...new Set(hosts.map(registrableDomain))].sort(), story_ledger: !!ledgers[1] },
-  pixel_threshold: `dHash 16×16, Hamming ≤ ${PIXEL_MAX_HAMMING} of 256 (or ≤ ${NEAR_MAX_HAMMING} with a 32×32 grey difference ≤ ${NEAR_MAX_MAD32})`,
+  supplier_set: {
+    ...set.stats,
+    card_picture_hosts: cardPictureHosts(cards),
+    fixed_domains: SUPPLIER_IMAGE_DOMAINS,
+    domains: [...new Set(hosts.map(registrableDomain))].sort(),
+    story_ledger: !!ledgers[1],
+  },
+  pixel_threshold: `dHash 16×16, Hamming ≤ ${PIXEL_MAX_HAMMING} of 256 (or ≤ ${NEAR_MAX_HAMMING} with a 32×32 grey difference ≤ ${NEAR_MAX_MAD32} when both carry ink ≥ ${NEAR_MIN_INK}); plain and mirrored, and trimmed of margins`,
   scanned: { files: scan.stats.files, rasters: scan.stats.rasters, data_uris: scan.stats.data_uris, text_files: scan.stats.text_files },
   found: byHow(scan.findings),
   found_outside_supplier_folders: byHow(elsewhere),
   nearest: scan.stats.nearest,
   nearest_by_grey: scan.stats.nearest_by_grey,
+  nearest_outside_supplier_folders: scan.stats.nearest_elsewhere,
+  nearest_by_grey_outside_supplier_folders: scan.stats.nearest_by_grey_elsewhere,
   seconds: Number(((Date.now() - t0) / 1000).toFixed(1)),
 };
 Object.assign(summary, { by_content: content });
@@ -141,11 +156,18 @@ const said = (o: Record<string, number>) =>
     .join(', ');
 console.log(
   `image rights by content (S17): ${scan.stats.files} files, ${scan.stats.rasters} pictures (${scan.stats.data_uris} data: URIs) against ` +
-    `${set.stats.withheld_files} supplier files by sha256 and ${set.stats.pictures} pictures by pixels (${content.pixel_threshold}), hosts ${content.supplier_set.domains.join(', ')} ` +
+    `${set.stats.withheld_files} supplier files by sha256 and ${set.stats.pictures} pictures (${set.stats.fingerprints} fingerprints) by pixels (${content.pixel_threshold}), hosts ${content.supplier_set.domains.join(', ')} ` +
     `(${content.seconds}s): ` +
     (PUBLIC
       ? `found ${scan.findings.length} (${said(content.found)})`
       : `behind the flag, the control: found ${scan.findings.length} (${said(content.found)}), ${elsewhere.length} outside media/products and media/story/products`),
+);
+// S19 (QA S17, ת50): the margin, every build: the nearest picture that is not a supplier copy by design
+const n0 = scan.stats.nearest_elsewhere[0];
+const g0 = scan.stats.nearest_by_grey_elsewhere[0];
+console.log(
+  `  nearest outside the supplier folders: ${n0 ? `${n0.where} dHash ${n0.hamming}/256 from ${n0.picture}${n0.variant ? ` (${n0.variant})` : ''} (rule A at ${PIXEL_MAX_HAMMING})` : 'none'}; ` +
+    `by grey: ${g0 ? `${g0.where} ${g0.mad32} (rule B at ${NEAR_MAX_MAD32}, with ink)` : 'none'}`,
 );
 if (!PUBLIC) for (const f of elsewhere.slice(0, 10)) console.warn(`  behind the flag, outside the supplier folders: ${f.where}: by ${f.how}: ${f.what}`);
 if (issues.length) {

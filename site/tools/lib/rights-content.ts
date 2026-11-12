@@ -19,6 +19,16 @@
  * - **Hosts:** the hosts the cards' pictures come from (`images.urls`, an option's `image`) and their registrable domains
  *   (alicdn.com, cjdropshipping.com, zendrop.com): a URL on one anywhere in the build is a hotlink.
  *
+ * S19, QA S17:
+ * - **ת50, the ink guard:** the near miss is a match only when both 32×32 grey images carry ink (mean of 255 − grey ≥ 4).
+ *   Without it a near-blank picture (a layer that is mostly transparent, a white canvas, a thin lamp on white) is 2–3
+ *   from another near-blank picture: 124 of our own warm-modern layers matched one supplier photo of a thin floor lamp.
+ * - **ת51:** each supplier picture is also hashed mirrored (left-right), and every picture, ours and theirs, is also
+ *   hashed with its uniform margins trimmed (a padded copy, a copy in a frame or a border, a letterboxed card, a crop
+ *   that only cuts margin). A fixed list of supplier picture domains (`SUPPLIER_IMAGE_DOMAINS`) stands beside the cards'
+ *   hosts (aliexpress-media.com, which no card names). A data: URI is read as a browser reads it: CSS escapes and line
+ *   continuations, percent escapes, character references and whitespace inside it are removed before it is decoded.
+ *
  * A picture whose card's rights are `confirmed` may ship; every other one (unclear, none, or a cached file no ledger
  * names) may not. dHashes are cached by sha256 in .cache/rights-dhash.json, so a second build hashes only new files.
  */
@@ -64,11 +74,37 @@ export function readLedger(file: string): Ledger | null {
 export const PIXEL_MAX_HAMMING = 24;
 /** a near miss of the dHash … */
 export const NEAR_MAX_HAMMING = 48;
-/** … is a match when the 32×32 grey images differ by at most this much on average (0–255) */
+/** … is a match when the 32×32 grey images differ by at most this much on average (0–255) … */
 export const NEAR_MAX_MAD32 = 3;
+/** … and (S19, QA ת50) both carry at least this much ink: the mean of 255 − grey over the 32×32 image */
+export const NEAR_MIN_INK = 4;
 
 /** what the pixel check compares: the dHash (64 hex) and the 32×32 grey image (1024 bytes) */
 export type Fingerprint = { dhash: string; grey: Buffer };
+/**
+ * S19, QA ת51: the forms a picture is hashed in. `mirrored` is flipped left-right; `trimmed` has its uniform margins
+ * (white, transparent, a border of one colour, then the white inside it) cut away first. A picture without margins has
+ * no trimmed form (null): its plain form is its trimmed form.
+ */
+export type Variant = 'plain' | 'mirrored' | 'trimmed' | 'trimmed-mirrored';
+export const VARIANTS: readonly Variant[] = ['plain', 'mirrored', 'trimmed', 'trimmed-mirrored'];
+
+/** the dHash and the 32×32 grey image of a grey picture already decoded (raw, one channel) */
+async function hashRaw(img: sharp.Sharp): Promise<Fingerprint | null> {
+  // greyscale on the way out too: a one-channel raw input would otherwise come out as three channels (sRGB)
+  const [g, grey] = await Promise.all([
+    img.clone().resize(17, 16, { fit: 'fill' }).greyscale().raw().toBuffer(),
+    img.clone().resize(32, 32, { fit: 'fill' }).greyscale().raw().toBuffer(),
+  ]);
+  if (g.length < 17 * 16 || grey.length < 1024) return null;
+  const bytes = new Uint8Array(32);
+  for (let y = 0; y < 16; y++)
+    for (let x = 0; x < 16; x++) {
+      const i = y * 16 + x;
+      if (g[y * 17 + x]! < g[y * 17 + x + 1]!) bytes[i >> 3]! |= 1 << (7 - (i & 7));
+    }
+  return { dhash: Buffer.from(bytes).toString('hex'), grey: grey.subarray(0, 1024) };
+}
 
 /**
  * The fingerprint of an image (null: not an image sharp can read). Oriented as the pipelines orient (EXIF), flattened
@@ -76,19 +112,7 @@ export type Fingerprint = { dhash: string; grey: Buffer };
  */
 export async function fingerprint(buf: Buffer | Uint8Array): Promise<Fingerprint | null> {
   try {
-    const base = sharp(buf, { failOn: 'none', animated: false }).rotate().flatten({ background: '#ffffff' }).greyscale();
-    const [g, grey] = await Promise.all([
-      base.clone().resize(17, 16, { fit: 'fill' }).raw().toBuffer(),
-      base.clone().resize(32, 32, { fit: 'fill' }).raw().toBuffer(),
-    ]);
-    if (g.length < 17 * 16 || grey.length < 1024) return null;
-    const bytes = new Uint8Array(32);
-    for (let y = 0; y < 16; y++)
-      for (let x = 0; x < 16; x++) {
-        const i = y * 16 + x;
-        if (g[y * 17 + x]! < g[y * 17 + x + 1]!) bytes[i >> 3]! |= 1 << (7 - (i & 7));
-      }
-    return { dhash: Buffer.from(bytes).toString('hex'), grey: grey.subarray(0, 1024) };
+    return await hashRaw(sharp(buf, { failOn: 'none', animated: false }).rotate().flatten({ background: '#ffffff' }).greyscale());
   } catch {
     return null;
   }
@@ -96,10 +120,103 @@ export async function fingerprint(buf: Buffer | Uint8Array): Promise<Fingerprint
 /** the dHash alone */
 export const dhash = async (buf: Buffer | Uint8Array): Promise<string | null> => (await fingerprint(buf))?.dhash ?? null;
 
+/** S19 (ת51): a margin pixel differs from the margin's colour by at most this much (JPEG noise on white) */
+const TRIM_THRESHOLD = 16;
+/** the version of the trim and the variants, in the cache's keys */
+const TRIM_VERSION = 't1';
+/**
+ * S19, QA ת51: the box inside a grey picture's uniform margins, or null when there is nothing to trim (no margin, or
+ * less than 2% of the area) or nothing left (a blank picture, or a dot: under 12 px or 4% of a side). Up to three
+ * passes, each from the colour at the corner of what is left: a frame or a border, then the white inside it.
+ */
+export function trimBox(g: Uint8Array, w: number, h: number): { left: number; top: number; width: number; height: number } | null {
+  let x0 = 0;
+  let y0 = 0;
+  let x1 = w - 1;
+  let y1 = h - 1;
+  for (let pass = 0; pass < 3; pass++) {
+    const bg = g[y0 * w + x0]!;
+    let nx0 = x1 + 1;
+    let ny0 = y1 + 1;
+    let nx1 = x0 - 1;
+    let ny1 = y0 - 1;
+    for (let y = y0; y <= y1; y++) {
+      const row = y * w;
+      for (let x = x0; x <= x1; x++) {
+        const v = g[row + x]!;
+        if (v - bg > TRIM_THRESHOLD || bg - v > TRIM_THRESHOLD) {
+          if (x < nx0) nx0 = x;
+          if (x > nx1) nx1 = x;
+          if (y < ny0) ny0 = y;
+          if (y > ny1) ny1 = y;
+        }
+      }
+    }
+    if (nx1 < nx0 || ny1 < ny0) return null; // all margin: a blank picture
+    if (nx0 === x0 && ny0 === y0 && nx1 === x1 && ny1 === y1) break;
+    [x0, y0, x1, y1] = [nx0, ny0, nx1, ny1];
+  }
+  const width = x1 - x0 + 1;
+  const height = y1 - y0 + 1;
+  if (width * height >= 0.98 * w * h) return null;
+  if (width < Math.max(12, w * 0.04) || height < Math.max(12, h * 0.04)) return null;
+  return { left: x0, top: y0, width, height };
+}
+
+/** S19 (ת51): the variants of an image, from one decode (null: not an image, or a variant it does not have) */
+export async function fingerprintVariants(buf: Buffer | Uint8Array, want: readonly Variant[]): Promise<Partial<Record<Variant, Fingerprint | null>>> {
+  const out: Partial<Record<Variant, Fingerprint | null>> = {};
+  if (want.includes('plain')) out.plain = await fingerprint(buf);
+  const rest = want.filter((v) => v !== 'plain');
+  if (!rest.length) return out;
+  try {
+    const { data, info } = await sharp(buf, { failOn: 'none', animated: false })
+      .rotate()
+      .flatten({ background: '#ffffff' })
+      .greyscale()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    const c = info.channels;
+    const W = info.width;
+    const H = info.height;
+    const g = c === 1 ? new Uint8Array(data.buffer, data.byteOffset, W * H) : Uint8Array.from({ length: W * H }, (_, i) => data[i * c]!);
+    const box = rest.some((v) => v.startsWith('trimmed')) ? trimBox(g, W, H) : null;
+    // the crop and the mirror on the grey pixels themselves, then the same resizes as the plain fingerprint
+    const crop = (b: NonNullable<typeof box>) => {
+      const o = new Uint8Array(b.width * b.height);
+      for (let y = 0; y < b.height; y++) o.set(g.subarray((b.top + y) * W + b.left, (b.top + y) * W + b.left + b.width), y * b.width);
+      return o;
+    };
+    const mirror = (x: Uint8Array, w: number, h: number) => {
+      const o = new Uint8Array(w * h);
+      for (let y = 0; y < h; y++) for (let i = 0; i < w; i++) o[y * w + i] = x[y * w + (w - 1 - i)]!;
+      return o;
+    };
+    const hash = (x: Uint8Array, w: number, h: number) => hashRaw(sharp(Buffer.from(x.buffer, x.byteOffset, x.byteLength), { raw: { width: w, height: h, channels: 1 } }));
+    for (const v of rest) {
+      if (v === 'mirrored') out[v] = await hash(mirror(g, W, H), W, H);
+      else if (!box) out[v] = null;
+      else {
+        const t = crop(box);
+        out[v] = await hash(v === 'trimmed' ? t : mirror(t, box.width, box.height), box.width, box.height);
+      }
+    }
+  } catch {
+    for (const v of rest) out[v] = null;
+  }
+  return out;
+}
+
 /** the mean absolute difference of two 32×32 grey images (0–255) */
 export function mad32(a: Buffer, b: Buffer): number {
   let s = 0;
   for (let i = 0; i < 1024; i++) s += Math.abs(a[i]! - b[i]!);
+  return s / 1024;
+}
+/** S19 (ת50): the ink of a 32×32 grey image: the mean of 255 − grey (0 on white, 255 on black) */
+export function inkOf(grey: Buffer): number {
+  let s = 0;
+  for (let i = 0; i < 1024; i++) s += 255 - grey[i]!;
   return s / 1024;
 }
 
@@ -113,6 +230,28 @@ export function hamming(a: string, b: string): number {
   let d = 0;
   for (let i = 0; i < a.length; i += 2) d += POP[parseInt(a.slice(i, i + 2), 16) ^ parseInt(b.slice(i, i + 2), 16)]!;
   return d;
+}
+/** the same on bytes (the scan compares thousands of pairs per picture) */
+export function hammingBytes(a: Uint8Array, b: Uint8Array): number {
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d += POP[a[i]! ^ b[i]!]!;
+  return d;
+}
+
+/** a fingerprint ready to compare: its dHash as bytes and its ink */
+export type Prepared = Fingerprint & { bits: Uint8Array; ink: number };
+export const prepare = (f: Fingerprint): Prepared => ({ ...f, bits: Uint8Array.from(Buffer.from(f.dhash, 'hex')), ink: inkOf(f.grey) });
+
+/**
+ * The pixel rule (S17, ת45; S19, ת50) on two fingerprints: A, within the dHash threshold; B, a near miss whose 32×32 grey
+ * images differ by at most 3 on average, when both carry ink (a near-blank picture is no evidence of anything).
+ */
+export function pixelRule(a: Prepared, b: Prepared, max = PIXEL_MAX_HAMMING): { d: number; m: number | null; rule: 'A' | 'B' | null } {
+  const d = hammingBytes(a.bits, b.bits);
+  const m = d <= NEAR_MAX_HAMMING ? mad32(a.grey, b.grey) : null;
+  if (d <= max) return { d, m, rule: 'A' };
+  if (m !== null && m <= NEAR_MAX_MAD32 && a.ink >= NEAR_MIN_INK && b.ink >= NEAR_MIN_INK) return { d, m, rule: 'B' };
+  return { d, m, rule: null };
 }
 
 /** fingerprints by sha256, kept between builds (.cache/rights-dhash.json) */
@@ -140,6 +279,21 @@ export class DhashCache {
     this.map.set(sha, f);
     this.dirty = true;
     return f;
+  }
+  /**
+   * S19 (ת51): the variants of a picture, computed together when any is missing. The plain one keeps its old key (the
+   * sha256), so the fingerprints of earlier builds stay; the others are keyed by the sha256, the variant and the version
+   * of the trim (a change to the trim computes them again).
+   */
+  async variants(buf: Buffer | Uint8Array, sha: string, want: readonly Variant[]): Promise<Partial<Record<Variant, Fingerprint | null>>> {
+    const key = (v: Variant) => (v === 'plain' ? sha : `${sha}:${v}:${TRIM_VERSION}`);
+    const missing = want.filter((v) => !this.map.has(key(v)));
+    if (missing.length) {
+      const got = await fingerprintVariants(buf, missing);
+      for (const v of missing) this.map.set(key(v), got[v] ?? null);
+      this.dirty = true;
+    }
+    return Object.fromEntries(want.map((v) => [v, this.map.get(key(v)) ?? null]));
   }
   save(): void {
     if (!this.file || !this.dirty) return;
@@ -179,6 +333,15 @@ export function cardPictureHosts(cards: unknown[]): string[] {
   return [...hosts].sort();
 }
 
+/**
+ * S19, QA ת51: the supplier picture domains the gate knows whatever the cards name. A card names the host of its own
+ * pictures (ae01.alicdn.com…), but a supplier serves the same picture from other hosts: QA's hotlink to
+ * ae-pic-a1.aliexpress-media.com passed, because no card names that domain (it appears 290k times in data/).
+ */
+export const SUPPLIER_IMAGE_DOMAINS: readonly string[] = ['alicdn.com', 'aliexpress-media.com', 'aliexpress.com', 'cjdropshipping.com', 'zendrop.com'];
+/** the hosts the gate looks for: the cards' picture hosts and the fixed supplier domains */
+export const pictureHosts = (cards: unknown[]): string[] => [...new Set([...cardPictureHosts(cards), ...SUPPLIER_IMAGE_DOMAINS])].sort();
+
 /** every card under data/products (a slot's folder of cards) */
 export function readCards(dir: string): unknown[] {
   const out: unknown[] = [];
@@ -208,14 +371,29 @@ export function hostPattern(hosts: string[]): RegExp | null {
 
 // ---------------------------------------------------------------- the supplier set
 
-export type SupplierPicture = { picture: string; product: string; rights: Rights | 'unknown'; file: string; dhash: string; grey: Buffer };
+export type SupplierPicture = Prepared & {
+  picture: string;
+  product: string;
+  rights: Rights | 'unknown';
+  file: string;
+  /** S19 (ת51): the form of the picture this fingerprint is of (plain, mirrored, trimmed, trimmed and mirrored) */
+  variant: Variant;
+};
 export type SupplierSet = {
   /** sha256 → what it is (a file that may not ship wins over one that may) */
   bySha: Map<string, { file: string; product: string; rights: Rights | 'unknown'; source: LedgerSource }>;
-  /** one dHash per picture that may not ship */
+  /** one fingerprint per picture that may not ship, and per variant of it (S19, ת51) */
   pixels: SupplierPicture[];
   hosts: string[];
-  stats: { ledger_entries: number; cached_originals: number; unlisted_cached: number; withheld_files: number; pictures: number };
+  stats: {
+    ledger_entries: number;
+    cached_originals: number;
+    unlisted_cached: number;
+    withheld_files: number;
+    pictures: number;
+    /** S19 (ת51): the fingerprints compared: each picture plain and mirrored, and trimmed when it has margins */
+    fingerprints: number;
+  };
 };
 
 const RASTER = new Set(['.webp', '.avif', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tif', '.tiff', '.bin']);
@@ -257,17 +435,25 @@ export async function supplierSet(o: { site: string; ledgers: Ledger[]; cacheDir
     if (!have || (have.width ?? 0) < (e.width ?? 0)) largest.set(e.picture, e);
   }
   const pixels: SupplierPicture[] = [];
+  let pictures = 0;
+  const add = async (buf: Buffer, sha: string, p: { picture: string; product: string; rights: Rights | 'unknown'; file: string }) => {
+    const v = await o.dhashes.variants(buf, sha, VARIANTS);
+    if (!v.plain) return;
+    pictures++;
+    for (const k of VARIANTS) {
+      const f = v[k];
+      if (f) pixels.push({ ...p, ...prepare(f), variant: k });
+    }
+  };
   for (const e of largest.values()) {
     const path = join(o.site, e.file);
     if (!existsSync(path)) continue;
-    const h = await o.dhashes.of(readFileSync(path), e.sha256);
-    if (h) pixels.push({ picture: e.picture, product: e.product, rights: e.rights, file: e.file, ...h });
+    await add(readFileSync(path), e.sha256, { picture: e.picture, product: e.product, rights: e.rights, file: e.file });
   }
   for (const c of cacheRows) {
     const what = bySha.get(c.sha)!;
     if (shipsPublicly(what.rights as Rights)) continue;
-    const h = await o.dhashes.of(c.buf, c.sha);
-    if (h) pixels.push({ picture: c.file, product: what.product, rights: what.rights, file: c.file, ...h });
+    await add(c.buf, c.sha, { picture: c.file, product: what.product, rights: what.rights, file: c.file });
   }
   return {
     bySha,
@@ -278,7 +464,8 @@ export async function supplierSet(o: { site: string; ledgers: Ledger[]; cacheDir
       cached_originals: cached,
       unlisted_cached: unlisted,
       withheld_files: [...bySha.values()].filter((v) => !shipsPublicly(v.rights as Rights)).length,
-      pictures: pixels.length,
+      pictures,
+      fingerprints: pixels.length,
     },
   };
 }
@@ -293,21 +480,97 @@ export type ContentFinding = {
   product?: string;
   hamming?: number;
   mad32?: number;
+  /** S19: the rule that matched (A: the dHash; B: the near miss with ink), and the forms compared */
+  rule?: 'A' | 'B';
+  variant?: string;
 };
+type Near = { where: string; picture: string; hamming: number; mad32: number | null; variant?: string };
 export type ScanStats = {
   files: number;
   rasters: number;
   data_uris: number;
   text_files: number;
-  nearest: { where: string; picture: string; hamming: number; mad32: number | null }[];
+  nearest: Near[];
   /** the smallest 32×32 grey difference of a near miss that is not a match (the margin of the second test) */
-  nearest_by_grey: { where: string; picture: string; hamming: number; mad32: number }[];
+  nearest_by_grey: (Near & { mad32: number })[];
+  /** S19 (QA S17): the same two, over the files `opts.elsewhere` says are not supplier copies by design */
+  nearest_elsewhere: Near[];
+  nearest_by_grey_elsewhere: (Near & { mad32: number })[];
 };
 
 const TEXT_EXT = /\.(?:html?|js|mjs|cjs|css|json|xml|txt|webmanifest|svg|map|md)$/i;
 /** extensionless files a static host reads (_headers, _redirects) are text too */
 const isText = (rel: string) => TEXT_EXT.test(rel) || !extname(rel);
-const DATA_URI = /data:([a-z0-9.+/-]*)((?:;[a-z0-9=._-]+)*);base64,([A-Za-z0-9+/]{16,}={0,2})/gi;
+
+/** a data: URI's head; its body is read by `dataUris` */
+const DATA_URI_HEAD = /data:([a-z0-9.+/-]*)((?:;[a-z0-9=._-]+)*);base64,/gi;
+/** the body as the file holds it: base64, and what a browser removes before decoding (S19, ת51) */
+const BODY_LOOSE =
+  /(?:[A-Za-z0-9+/=]|\\(?:\r\n|[\n\r\f])|\\[0-9a-fA-F]{1,6}(?:\r\n|[ \t\n\r\f])?|\\[^\n\r\f0-9a-fA-F]|%[0-9a-fA-F]{2}|&#[xX][0-9a-fA-F]{1,6};|&#\d{1,7};|&(?:plus|sol|equals);|[ \t\n\r\f])*/y;
+const BASE64_RUN = /^[A-Za-z0-9+/]{16,}={0,2}/;
+/**
+ * S19, QA ת51: every data: URI of a text, its base64 as a browser decodes it. R15 split a data: URI in CSS with escaped
+ * line breaks ("\" and a newline: a line continuation inside a CSS string), and the gate's pattern stopped at the first
+ * break. Now the body is read past CSS escapes and line continuations, percent escapes (a data: URL is percent-decoded
+ * first), numeric character references and whitespace (forgiving base64), and then decoded. The strict run (the body up
+ * to the first other character) is kept as well, so nothing the gate found before is lost to a word after the URI.
+ */
+export function dataUris(text: string): { mime: string; b64: string; index: number }[] {
+  const out: { mime: string; b64: string; index: number }[] = [];
+  for (const m of text.matchAll(DATA_URI_HEAD)) {
+    const at = m.index + m[0].length;
+    BODY_LOOSE.lastIndex = at;
+    const loose = BODY_LOOSE.exec(text)?.[0] ?? '';
+    const strict = /^[A-Za-z0-9+/]*={0,2}/.exec(loose)?.[0] ?? '';
+    const decoded = loose
+      .replace(/\\(?:\r\n|[\n\r\f])/g, '')
+      .replace(/\\([0-9a-fA-F]{1,6})(?:\r\n|[ \t\n\r\f])?/g, (_, h: string) => String.fromCodePoint(Math.min(parseInt(h, 16), 0x10ffff)))
+      .replace(/\\([^\n\r\f0-9a-fA-F])/g, '$1')
+      .replace(/%([0-9a-fA-F]{2})/g, (_, h: string) => String.fromCharCode(parseInt(h, 16)))
+      .replace(/&#[xX]([0-9a-fA-F]{1,6});/g, (_, h: string) => String.fromCodePoint(Math.min(parseInt(h, 16), 0x10ffff)))
+      .replace(/&#(\d{1,7});/g, (_, d: string) => String.fromCodePoint(Math.min(Number(d), 0x10ffff)))
+      .replace(/&plus;/g, '+')
+      .replace(/&sol;/g, '/')
+      .replace(/&equals;/g, '=')
+      .replace(/[ \t\n\r\f]/g, '');
+    const read = BASE64_RUN.exec(decoded)?.[0];
+    const bodies = new Set([BASE64_RUN.exec(strict)?.[0], read].filter((x): x is string => !!x));
+    for (const b64 of bodies) out.push({ mime: m[1]!, b64, index: m.index });
+  }
+  return out;
+}
+
+/** the gate's fingerprints of a picture of the build: plain, and trimmed when it has margins (S19, ת51) */
+export type Mine = { plain: Prepared; trimmed: Prepared | null };
+export type PixelVerdict = { d: number; m: number | null; rule: 'A' | 'B' | null; p: SupplierPicture; mine: 'plain' | 'trimmed' };
+/**
+ * S19: a picture against the supplier fingerprints, every form of it against every form of each: the best match (the
+ * nearest by dHash among the matches), else the nearest; and the smallest grey difference of a near miss that is not a
+ * match (the margin of rule B). Exported so QA's scans read the gate's own rule.
+ */
+export function nearestPicture(
+  mine: Mine,
+  pixels: SupplierPicture[],
+  max = PIXEL_MAX_HAMMING,
+  only?: (p: SupplierPicture) => boolean,
+): { best: PixelVerdict | null; grey: PixelVerdict | null } {
+  let best: PixelVerdict | null = null;
+  let grey: PixelVerdict | null = null;
+  const forms: ['plain' | 'trimmed', Prepared][] = [['plain', mine.plain]];
+  if (mine.trimmed) forms.push(['trimmed', mine.trimmed]);
+  for (const p of pixels) {
+    if (only && !only(p)) continue;
+    for (const [k, f] of forms) {
+      const r = pixelRule(f, p, max);
+      const v: PixelVerdict = { ...r, p, mine: k };
+      if (!r.rule && r.m !== null && (!grey || r.m < grey.m!)) grey = v;
+      if (!best || (r.rule && !best.rule) || (!!r.rule === !!best.rule && r.d < best.d)) best = v;
+    }
+  }
+  return { best, grey };
+}
+const formsOf = (v: PixelVerdict) =>
+  v.mine === 'plain' && v.p.variant === 'plain' ? undefined : `${v.mine === 'trimmed' ? 'this trimmed' : 'this'} vs the picture ${v.p.variant}`;
 
 /**
  * Every file of a build against the supplier set: equal bytes, a raster or a data: URI within the pixel threshold of a
@@ -317,44 +580,53 @@ export async function scanBuild(
   dist: string,
   set: SupplierSet,
   dhashes: DhashCache,
-  opts: { files?: string[]; maxHamming?: number } = {},
+  opts: { files?: string[]; maxHamming?: number; elsewhere?: (where: string) => boolean } = {},
 ): Promise<{ findings: ContentFinding[]; stats: ScanStats }> {
   const max = opts.maxHamming ?? PIXEL_MAX_HAMMING;
   const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)]));
   const files = (opts.files ?? walk(dist).map((f) => relative(dist, f))).map((f) => f.split('\\').join('/')).sort();
   const hostRe = hostPattern(set.hosts);
   const findings: ContentFinding[] = [];
-  const stats: ScanStats = { files: files.length, rasters: 0, data_uris: 0, text_files: 0, nearest: [], nearest_by_grey: [] };
+  const stats: ScanStats = {
+    files: files.length,
+    rasters: 0,
+    data_uris: 0,
+    text_files: 0,
+    nearest: [],
+    nearest_by_grey: [],
+    nearest_elsewhere: [],
+    nearest_by_grey_elsewhere: [],
+  };
+  const elsewhere = opts.elsewhere ?? (() => true);
   const withheld = (sha: string) => {
     const v = set.bySha.get(sha);
     return v && !shipsPublicly(v.rights as Rights) ? v : null;
   };
   const near = async (where: string, buf: Buffer, sha: string, how: 'pixels' | 'data-uri pixels') => {
-    const h = await dhashes.of(buf, sha);
-    if (!h) return;
+    const v = await dhashes.variants(buf, sha, ['plain', 'trimmed']);
+    if (!v.plain) return;
     stats.rasters++;
-    // the nearest by dHash; a near miss confirmed by the 32×32 grey difference is a match too
-    let best: { d: number; p: SupplierPicture; m: number | null } | null = null;
-    let grey: { d: number; p: SupplierPicture; m: number } | null = null;
-    for (const p of set.pixels) {
-      const d = hamming(h.dhash, p.dhash);
-      const m = d <= NEAR_MAX_HAMMING ? mad32(h.grey, p.grey) : null;
-      const match = d <= max || (m !== null && m <= NEAR_MAX_MAD32);
-      if (!match && m !== null && (!grey || m < grey.m)) grey = { d, p, m };
-      const bestMatch = best && (best.d <= max || (best.m !== null && best.m <= NEAR_MAX_MAD32));
-      if (!best || (match && !bestMatch) || (match === !!bestMatch && d < best.d)) best = { d, p, m };
-    }
+    const { best, grey } = nearestPicture({ plain: prepare(v.plain), trimmed: v.trimmed ? prepare(v.trimmed) : null }, set.pixels, max);
     if (!best) return;
-    if (grey) stats.nearest_by_grey.push({ where, picture: grey.p.picture, hamming: grey.d, mad32: Number(grey.m.toFixed(1)) });
-    stats.nearest.push({ where, picture: best.p.picture, hamming: best.d, mad32: best.m === null ? null : Number(best.m.toFixed(1)) });
-    if (best.d <= max || (best.m !== null && best.m <= NEAR_MAX_MAD32))
+    const variant = formsOf(best);
+    const g = grey ? { where, picture: grey.p.picture, hamming: grey.d, mad32: Number(grey.m!.toFixed(1)), variant: formsOf(grey) } : null;
+    const n = { where, picture: best.p.picture, hamming: best.d, mad32: best.m === null ? null : Number(best.m.toFixed(1)), variant };
+    if (g) stats.nearest_by_grey.push(g);
+    stats.nearest.push(n);
+    if (elsewhere(where)) {
+      if (g) stats.nearest_by_grey_elsewhere.push(g);
+      stats.nearest_elsewhere.push(n);
+    }
+    if (best.rule)
       findings.push({
         where,
         how,
-        what: `looks like ${best.p.picture} (${best.p.product}, rights: ${best.p.rights}; dHash ${best.d}/256${best.m === null ? '' : `, 32×32 grey ${best.m.toFixed(1)}`})`,
+        what: `looks like ${best.p.picture}${variant ? ` (${variant})` : ''} (${best.p.product}, rights: ${best.p.rights}; dHash ${best.d}/256${best.m === null ? '' : `, 32×32 grey ${best.m.toFixed(1)}`}; rule ${best.rule})`,
         product: best.p.product,
         hamming: best.d,
         mad32: best.m === null ? undefined : Number(best.m.toFixed(2)),
+        rule: best.rule,
+        ...(variant ? { variant } : {}),
       });
   };
   for (const rel of files) {
@@ -375,10 +647,10 @@ export async function scanBuild(
         });
       }
     let k = 0;
-    for (const m of text.matchAll(DATA_URI)) {
+    for (const d of dataUris(text)) {
       k++;
       stats.data_uris++;
-      const bytes = Buffer.from(m[3]!, 'base64');
+      const bytes = Buffer.from(d.b64, 'base64');
       const where = `${rel} (data: URI #${k}, ${bytes.length} B)`;
       const s = sha256(bytes);
       const wd = withheld(s);
@@ -387,13 +659,13 @@ export async function scanBuild(
         continue;
       }
       // an inlined SVG may itself carry a picture or a hotlink: one level down
-      if (/svg/i.test(m[1]!)) {
+      if (/svg/i.test(d.mime)) {
         const inner = bytes.toString('utf8');
         if (hostRe)
           for (const x of inner.matchAll(hostRe))
             findings.push({ where, how: 'host', what: `a URL on a supplier picture host inside an inlined SVG: ${x[0]}` });
-        for (const x of inner.matchAll(DATA_URI)) {
-          const b = Buffer.from(x[3]!, 'base64');
+        for (const x of dataUris(inner)) {
+          const b = Buffer.from(x.b64, 'base64');
           if (withheld(sha256(b))) findings.push({ where, how: 'data-uri bytes', what: 'a supplier picture inside an inlined SVG' });
           else await near(`${where} (inner)`, b, sha256(b), 'data-uri pixels');
         }
@@ -402,10 +674,10 @@ export async function scanBuild(
       await near(where, bytes, s, 'data-uri pixels');
     }
   }
-  stats.nearest.sort((a, b) => a.hamming - b.hamming);
-  stats.nearest = stats.nearest.slice(0, 10);
-  stats.nearest_by_grey.sort((a, b) => a.mad32 - b.mad32);
-  stats.nearest_by_grey = stats.nearest_by_grey.slice(0, 10);
+  stats.nearest = stats.nearest.sort((a, b) => a.hamming - b.hamming).slice(0, 10);
+  stats.nearest_by_grey = stats.nearest_by_grey.sort((a, b) => a.mad32 - b.mad32).slice(0, 10);
+  stats.nearest_elsewhere = stats.nearest_elsewhere.sort((a, b) => a.hamming - b.hamming).slice(0, 5);
+  stats.nearest_by_grey_elsewhere = stats.nearest_by_grey_elsewhere.sort((a, b) => a.mad32 - b.mad32).slice(0, 5);
   return { findings, stats };
 }
 

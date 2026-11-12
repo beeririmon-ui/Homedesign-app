@@ -21,8 +21,9 @@ const MATERIALS: [RegExp, string][] = [
   [/cotton/i, 'כותנה'],
   [/polyester/i, 'אריג סינתטי'],
   // S15 (master-designer §5): "במרקם" only when the card says the print is embossed or textured; any other print is
-  // "הדפס", and a canvas the card does not call a print is "קנבס" (a flat canvas print never claims a texture)
-  [/^(?=.*\b(?:print(?:ed)?|painting)\b)(?=.*\b(?:embossed|textured?)\b)/i, 'הדפס במרקם'],
+  // "הדפס", and a canvas the card does not call a print is "קנבס" (a flat canvas print never claims a texture).
+  // S19 (QA ה8): and the texture word stands in a clause with no negation word (`claimsTexture`, read in materialHe)
+  [/\b(?:print(?:ed)?|painting)\b/i, 'הדפס במרקם'],
   [/\bprint(?:ed)?\b/i, 'הדפס'],
   [/\bcanvas\b/i, 'קנבס'],
   [/iron|metal|steel/i, 'מתכת'],
@@ -44,6 +45,28 @@ const NEGATED_TEXTURE =
   /\b(?:non|un)[-\s]?(?:textured?|embossed)\b|\b(?:no|not|without|zero|free of)\s+(?:any\s+|a\s+)?(?:raised\s+)?(?:textures?|textured|embossing|embossed)\b/gi;
 
 /**
+ * S19, QA ה8: the safer default. A texture word ("embossed", "textured", "texture", "embossing") is a claim only in a
+ * clause with no negation word in it. QA's ten denials the S17 pattern did not know ("no raised or embossed texture",
+ * "neither textured nor embossed", "isn't textured", "texture: none", "texture-free", "lacks texture"…) all carry one.
+ * A clause ends at a comma, a semicolon, a full stop, a slash, a bracket or a dash between spaces; not at a colon
+ * ("texture: none" is one clause). So "textured print, no gloss" keeps its texture, and "non-slip textured print" loses
+ * it: when a clause both claims and denies, the shop says the less.
+ */
+export const TEXTURE_WORD = /\b(?:embossed|embossing|textured?|textures)\b/i;
+export const NEGATION_WORD =
+  /\b(?:no|not|non|none|never|neither|nor|without|lacks?|lacking|zero|free|minus)\b|n['’]t\b|(?:^|[^\u0590-\u05ff])(?:לא|ללא|בלי|אין|אינו|אינה)(?=$|[^\u0590-\u05ff])/i;
+const CLAUSE = /[,;.!?()[\]{}/|·•]+|\s[-–—]+\s/;
+/** the clauses of a material text that claim a texture (none: the text claims none) */
+export function textureClauses(raw: string): string[] {
+  return raw
+    .replace(HEDGED, ' ')
+    .split(CLAUSE)
+    .map((c) => c.trim())
+    .filter((c) => TEXTURE_WORD.test(c) && !NEGATION_WORD.test(c));
+}
+export const claimsTexture = (raw: string): boolean => textureClauses(raw).length > 0;
+
+/**
  * S17, QA ה5: a value that says it is unknown ("לא צוין", "חומר לא צוין", "לא ידוע", "unknown") is not a value: the
  * field is not shown. A rule for every product (tools/lib/public-text.ts `unknownPublicText` checks the catalog).
  */
@@ -53,11 +76,15 @@ export const isUnknownValue = (s: string | null | undefined): boolean => !s || !
 
 export function materialHe(raw: string): string | null {
   const text = raw.replace(HEDGED, ' ').replace(NEGATED_TEXTURE, ' ');
-  for (const [re, he] of MATERIALS) if (re.test(text)) return he;
+  // S19 (ה8): "הדפס במרקם" only when a clause claims the texture with no negation word in it
+  for (const [re, he] of MATERIALS) if (re.test(text) && (he !== 'הדפס במרקם' || claimsTexture(raw))) return he;
   const paren = text.match(/\(([^)]*[֐-׿][^)]*)\)/);
   const he = paren?.[1]?.trim() ?? null;
   return isUnknownValue(he) ? null : he;
 }
+
+/** S19 (QA ה8): the material texts of a card that read as "הדפס במרקם", for the build's list */
+export const textureClaimSources = (list: string[]): string[] => list.filter((m) => materialHe(m) === 'הדפס במרקם');
 
 export function materialsHe(list: string[]): string[] {
   return [...new Set(list.map(materialHe).filter((m): m is string => !isUnknownValue(m)))];

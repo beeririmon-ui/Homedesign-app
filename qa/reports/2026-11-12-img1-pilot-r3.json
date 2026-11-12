@@ -1,0 +1,250 @@
+{
+  "report": "qa/reports/2026-11-12-img1-pilot-r3.md",
+  "date": "2026-11-12",
+  "agent": "qa-agent",
+  "scope": "IMG1 pilot round 3: throw P2 nano-banana-2 + remove-background method test; lamp P2 retake R2 vs round-1 P2; vase P2 alpha clamp; pilot closing verdict",
+  "follows": ["qa/reports/2026-11-12-img1-pilot.md", "qa/reports/2026-11-12-img1-pilot.json"],
+  "rules_kept": "new files only; no commit; no var2; no network; supplier images read only from the session scratchpad cache and only with python3.12 -I (pure PIL); no supplier image or derivative written to the repo",
+  "inputs": {
+    "plan": "docs/proposals/own-product-images-2026-11-11.md (2.3, 5.4, 5.5, 5.6, 6)",
+    "records": ["assets/renders/products/img1-pilot-2026-11-12/jobs.json (round3)", "assets/renders/products/img1-pilot-2026-11-12/source-record.json"],
+    "files_sha256_16": {
+      "throw_p2_nano_test": {"path": "sofa-cover-cj-cotton-muslin-fringe/p2-nano-test.png", "sha": "e3f2c00792675bb2", "size": [1638, 2048]},
+      "throw_raw": {"path": "raw/p2-throw-nano-test-raw.png", "sha": "90b8aa6bf75d2248", "size": [1856, 2304]},
+      "throw_nobg": {"path": "raw/p2-throw-nano-test-nobg.png", "sha": "f85bfd13d6a49553"},
+      "lamp_p2_r2": {"path": "accent-sconces-aliexpress-indoor-stone-wall-lamp/p2-r2.png", "sha": "c3c9d9cd4d592db6"},
+      "lamp_p2_r2_raw": {"path": "raw/p2-lamp-r2-raw.png", "sha": "c68a65339f96af35", "size": [1776, 2368]},
+      "lamp_p2_round1": {"path": "accent-sconces-aliexpress-indoor-stone-wall-lamp/p2.png", "sha": "397057d89f9e7186"},
+      "vase_p2_after_clamp": {"path": "vase-cj-textured-white-stoneware/p2.png", "sha": "2b50d6694b2013e5"},
+      "vase_p2_before_clamp": {"path": "vase-cj-textured-white-stoneware/p2-before-alpha-clamp.png", "sha": "061cb653f59739ca"}
+    },
+    "supplier_cache_scratchpad_only": ["supplier/throw/u0..u4.jpg", "supplier/throw/sku-pecan.jpg", "supplier/lamp/u9.jpg", "sheets/throw-white.png", "sheets/throw-waffle-u0-280-300-480-500.png", "sheets/lamp-16.png"]
+  },
+
+  "bottom_line": {
+    "throw_p2_nano_test": "PARTIAL (not to the site as is). Material passes for the first time: waffle grid + crinkle at 100%, fringe 4-5 cells, the flat woven band is the SKU's construction (seen in urls[2], urls[3]). Open: lit L* 95.5 (window 89-95; dE00 3.24 vs the SKU lit side) - fixable in code (k=0.934 -> 93.0); fringe matte not thread-resolved (96% of between-thread gaps opaque, tips cut in 7% of rows by <=19 px raw) - invisible on paper at 1280, visible on dark; camera ~60-65 deg down and frontal vs the house 35/30 (designer eye / D5, not a fidelity fail). C1-C5 pass.",
+    "textile_route": "YES: nano-banana-2 2K + remove-background is the P2 textile route, with 4 conditions (house angle enforced and measured; colour no brighter than the swatch; fringe matte step for light textiles; the true-scale fabric square is mandatory).",
+    "lamp_p2_r2": "NO - render-agent confirmed. One viewpoint now, but from below (~9 deg; bottom face visible); H/D between ellipse centres 2.81-2.85 (+14-16% vs card 2.46); travertine smoother than the SKU (pore density x0.25-0.35 of the SKU photo). Colour is not the blocker (dE00 1.0 vs SKU lit). Code fix verified (no redraw).",
+    "lamp_partial_behind_flag": "Only the round-1 P2 (397057d8...), as 'partial', on the owner's flagged test page, labelled, never public. R2 not even behind the flag.",
+    "vase_alpha_clamp": "CLEAN: alpha-only (RGB unchanged, 0 px), exact rule clip(round(a*255/251)), 0 px appear/disappear, composite dE00 max 0.96 paper / 0.66 dark. The QA 1.1 'yes' carries to sha 2b50d669...",
+    "routes": {"ceramic": "gpt-image-2-5 2K transparent (P2) + nano-banana-2 4K (P1 from a frame where the product is already faithful); confirmed", "stone": "OPEN: gpt failed twice (inherits the reference camera height); nano + remove-bg untested for P2", "textile": "nano-banana-2 2K + remove-background (P2); conditional yes"}
+  },
+
+  "assets": [
+    {"asset": "throw P2 nano test", "file_sha": "e3f2c00792675bb2", "fidelity_5_5": "partial", "qa": "fail as is", "to_site": false,
+     "why": "lit L* 95.5 > 95 (dE00 3.24 vs SKU); fringe matte opaque between threads (G2.5 on dark); composition off the house angle",
+     "fix": "0 tokens: exposure gain k=0.934 (logged) + fringe re-matte from the raw, if the designer accepts the angle (D5); otherwise a new P2 at the house angle on a mid-tone palette (450)",
+     "owner": "master-designer (angle, eye), manager (approve the code fix), render-agent (code fix), qa-agent (re-check)"},
+    {"asset": "lamp P2 R2", "file_sha": "c3c9d9cd4d592db6", "fidelity_5_5": "no", "qa": "fail", "to_site": false,
+     "why": "H/D +14-16% vs card; camera ~9 deg below centre (bottom face shown); stone smoother than SKU",
+     "fix": "none in code (non-uniform scale forbidden). Retake limit used. Stone route needs a method test (see routes)", "owner": "manager"},
+    {"asset": "lamp P2 round 1 (gap fixed)", "file_sha": "397057d89f9e7186", "fidelity_5_5": "partial (unchanged)", "qa": "fail", "to_site": false,
+     "why": "two viewpoints in one cylinder (QA r1 sec 3); proportions +6.5-9% (inside +-10%); material closest to the SKU",
+     "fix": "behind the flag only, labelled 'partial', for the owner's review", "owner": "frontend-dev (flag page), manager"},
+    {"asset": "vase P2 after alpha clamp", "file_sha": "2b50d6694b2013e5", "fidelity_5_5": "yes (carried from QA r1 1.1)", "qa": "pass", "to_site": "after the designer's written eye",
+     "why": "alpha-only change, verified", "fix": "record: bind the verdict to the new sha", "owner": "render-agent (record), master-designer (eye)"}
+  ],
+
+  "throw_p2_nano_test": {
+    "count": {"components_alpha_ge_0.5": 1, "stray_specks": 0, "alpha_on_canvas_border": 0},
+    "label_text_watermark": "none at 100% (crops throw-texture-100.png, throw-top-edge-100.png)",
+    "waffle": {
+      "method_qa": "averaged 1D spectra of high-passed L on 6 raw patches (waffle2.py)",
+      "Tx_px": [23.85, 25.41, 26.08, 25.97, 25.83, 20.95],
+      "Ty_px": [21.6, 25.2, 23.96, 22.51, 21.04, 22.61],
+      "Ty_over_Tx": [0.906, 0.992, 0.919, 0.867, 0.815, 1.079],
+      "render_agent_radial": [24.9, 25.0, 27.2, 25.0, 25.0],
+      "read": "one consistent grid, 24-26 px across x in 5 of 6 patches (the 6th is the flap, rotated); the spread follows perspective. Confirms render-agent.",
+      "tile_repeat_autocorr": {"one_period": 0.359, "lag_60_150": 0.21, "lag_150_400": 0.132, "lag_400_600": 0.06, "read": "no tiled copy of the reference square; scale x5.4 of the reference period"}
+    },
+    "camera_estimate": {"elevation_deg": "~60-65 (Ty/Tx median 0.91; render-agent 55-65)", "yaw": "~0 (edges parallel to the frame)", "house": "35 deg down, turned 30 deg", "verdict": "composition off the house angle; designer eye / D5; not toward any supplier composition (u3 is ~30-40 deg, turned)"},
+    "fringe": {
+      "length_cells": "4-5 (right edge 95-120 px raw / Tx 25.5; flap edge 90-110 px / Ty 22.6)",
+      "sku_cells": "~5 (u0 4.3-6; u3 5-7 in oblique view)",
+      "pct_of_fold_width": "7.3-8.8 (window 4-8, upper edge; the window assumed the house fold of 50 cm; ~59 cells across implies ~0.85 cm cells, consistent)",
+      "edges": "right edge and both legs of the turned-back flap (the free top and right edges): correct for a fringe-on-all-edges SKU",
+      "upper_edge_clarification": "render-agent's 'fringe at the upper edge' means the length is at the top of the 4-8% window, not fringe on the top edge",
+      "fold_plausibility_note": "the flap has two fringed legs (a free corner), yet the top edge left of the flap is a clean rounded fold: one straight edge cannot be both. Low severity; designer eye; in a house-angle regeneration QA checks fringe continuity along each free edge"
+    },
+    "flat_woven_band": {"present": true, "width": "~1 cell", "sku": "present in urls[3] (bottom and right edges) and urls[2] (right edge) - same construction, other colourway; urls[0] (White) does not show the edge flat", "verdict": "faithful, not invented"},
+    "colour": {
+      "definition": "median Lab of product pixels (alpha>=0.9) between the 90th and 99th L* percentile",
+      "final_lit_LCh": [95.5, 3.78, 80.3],
+      "top_layer_lit_LCh": [95.74, 3.78, 80.3],
+      "p75_98_LCh": [94.02, 4.17, 78.8],
+      "window": {"L": [89, 95], "C": [3, 9], "h": [70, 100]},
+      "sku_lit_LCh": [90.35, 3.93, 72.3],
+      "dL_vs_sku": 5.15,
+      "dE00_vs_sku_lit": 3.24,
+      "card_hex_EEE8DD_LCh": [92.18, 6.06, 88.6],
+      "paper_calibration": {"palette_LCh": [95.25, 2.77, 87.2], "raw_paper_median_LCh": [95.07, 2.77, 87.2], "read": "the model kept the palette's exposure (-0.18 L*); the throw itself is drawn brighter than the SKU and brighter than the paper"},
+      "clipped_px_pct": {"raw_any_channel_ge_254": 0.264, "final": 0.445, "all_channels_ge_254_px": 236, "read": "scattered single-channel highlights, largest cluster 33 px; not a defect"},
+      "verdict": "L* fails the window by 0.5 (C*, h, dL* pass)",
+      "code_fix_simulation": {"tool": "throw_exposure_sim.py", "linear_gain_k": {"94.0": 0.9603, "93.0": 0.9344, "92.2": 0.9139}, "at_93": {"lit_LCh": [93.0, 3.7, 80.3], "dE00_vs_sku": 1.83, "texture_hp_std_change_pct": -2.2, "clipped_px": 0}, "preview": "qa/reports/2026-11-12-img1-pilot-r3/SIM-throw-exposure-k0934-before-after-1280.jpg (simulation, not an asset)"}
+    },
+    "alpha": {
+      "interior": {"p0.1": 255, "p1": 255, "frac_lt_255": 0.0001, "interior_px_lt_250": 1320, "where": "2-3 px lines just inside the top edge (alpha 0.92-0.95) and between fringe threads: invisible"},
+      "halo_band_1_4px_dE00_median": {"paper": 0.93, "dark": 2.03},
+      "edge_vs_clean_edge_dE00_median": {"paper": 1.68, "dark": 2.05, "dL_median": -0.04},
+      "soft_edge_mean_width_px": 5.8,
+      "alpha_skirt_px": {"max": 10.2, "p99": 5.0},
+      "fold_edges": "clean on paper and dark: no shadow remnant, no rim (throw-fold-edges-x3-paper-dark-alpha.png)",
+      "fringe_matte": {
+        "outer_fringe_lines": {"segments": 170, "luminance_crossings": 1650, "alpha_crossings": 8},
+        "gap_px_opaque": "957 of 1000 between-thread gap pixels have alpha >= 0.98 (the raw's shadowed paper baked in)",
+        "tips_lost": {"rows_with_thread_beyond_alpha": "99 of 1400", "max_extent_px_raw": 19, "about": "0.75 cell, ~0.6 cm"},
+        "smooth_boundary_run_rows": 480,
+        "visibility": "paper #F4F1EC at 1280: not visible (reads as soft shadow between threads); dark #3A3A3A: the fringe reads as one mass with a smooth outline and short straight segments",
+        "verdict": "fails G2.5 ('semi-transparent fibres preserved') at 400% on dark; meets the site background (paper)"
+      },
+      "verdict": "partial: fold edges pass; fringe matte fails on dark"
+    },
+    "resolution": {"native": [1856, 2304], "scale": 0.8866, "upscaled": false, "sharp_at_100": true},
+    "C1": {"image_url": "bases/palette-F4F1EC-1638x2048.png (verified single colour 244,241,236)", "refs": "throw-white sheet (product cut-outs on #808080, label excluded by crop, no text) + waffle square urls[0] [280,300,480,500] (fabric only, no label)", "remove_background_input": "our raw", "supplier_urls_in_records": 0, "verdict": "pass"},
+    "C2": {
+      "rule_as_written": "<=2 of 5 per supplier image; (5) never matches for textile",
+      "per_image": {
+        "urls[0] (SKU White; R1 and the waffle square)": {"angle": false, "framing": false, "background": false, "light": false, "styling": false, "score": "0/5"},
+        "urls[1]": {"score": "0/5", "why": "bed, pillows, cup; ~40 deg three-quarter"},
+        "urls[2] (R2, L*-only)": {"score": "0/5", "why": "crumpled close-up on a black chair"},
+        "urls[3] (not used; folded on white)": {"angle": "no (~30-40 deg, turned ~10-15 deg vs ours ~60-65 deg frontal)", "framing": "yes as written (centre dx 5.7%, dy 7.1%; size w -9%, h +7%)", "background": "as written: both plain without a horizon (yes); clarified rule: house element, not counted", "light": "no (u3 brighter right/top 147/141; ours left 89.9 vs 88.3 L*)", "styling": "no (no turned-back corner; label shown; fringe along the front edge)", "score": "2/5 as written, 0 counted under the round-1 clarification", "u3_box": {"bbox": [97, 204, 793, 709], "w_frac": 0.87, "h_frac": 0.631, "centre": [0.556, 0.571]}, "ours_box": {"bbox": [168, 334, 1467, 1715], "w_frac": 0.793, "h_frac": 0.674, "centre": [0.499, 0.5]}},
+        "urls[4] (R3, L*-only)": {"score": "0/5", "why": "draped on a black chair"},
+        "Pecan SKU image": {"score": "0/5", "why": "draped on a chair"}
+      },
+      "verdict": "pass"
+    },
+    "C2b_texture": {"method": "non-periodic surfaces: high-pass NCC (round 1); periodic textures: tile-repeat autocorrelation + period ratio vs the reference", "result": "period x5.4 the reference's; no repeat peak beyond 3 periods (max 0.13 at 150-400 px)", "verdict": "pass"},
+    "C3": {
+      "method": "c3_inside_pil.py: product box aligned and resized to 256; edges INSIDE the product only (mask eroded 9 px, silhouette excluded); Gaussian blur 3 (kills the waffle); Sobel; top 15%; dilation 5; IoU in the mask overlap. 'search' = max over scale 0.9-1.1, shift +-6%, mirror",
+      "ours_vs_supplier": {"u0": [0.135, 0.193], "u1": [0.127, 0.247], "u2": [0.136, 0.234], "u3": [0.08, 0.258], "u4": [0.179, 0.249], "pecan": [0.16, 0.245], "format": "[aligned, search]"},
+      "supplier_pairs_15": {"aligned": {"min": 0.057, "median": 0.237, "max": 0.314}, "search": {"min": 0.127, "median": 0.242, "max": 0.366}},
+      "positive_control_copy": {"what": "u3 vs u3 with the box off by 5-10%", "aligned": [0.435, 0.444], "search": [0.513, 0.589]},
+      "other_own_throws": {"gpt_round1_max": [0.171, 0.259], "gpt_R1_max": [0.201, 0.362], "note": "gpt R1 vs u3 0.362 with search: the house textile angle (35/30) is close to u3's genre"},
+      "rule_as_written": "IoU < 0.35 vs every supplier image and <= median of supplier pairs",
+      "result": "aligned max 0.179 (< 0.35, <= 0.237)",
+      "verdict": "pass",
+      "first_metric_rejected": "edge IoU over the whole box (silhouette included) scored unrelated folded-on-plain images 0.6-0.7: it measures the silhouette, not the fold. Not used."
+    },
+    "C4": {"verdict": "pass", "checked": "no label, text, watermark ghost, hand, packaging or supplier prop at 100%"},
+    "C5": {"verdict": "pass with notes", "notes": ["prompt sha256_16 fd5b76f4bac40eeb verified (convention: text without the trailing newline)", "qa_verdict/qa_report still 'pending': fill from this report", "add the final file sha256 to every record (verdicts bind to a hash)"]}
+  },
+
+  "lamp_p2": {
+    "r2_code_fix_verification": {"tool": "lamp_r2_reconstruct.py", "raw_alpha_at_split_column_889": 0, "alpha_iou_rebuilt_vs_final": 0.9978, "rgb_absdiff_mean": 3.27, "rgb_absdiff_p99": 16.9, "read": "cut in an empty column, shift 651 px, uniform x0.5768 downscale; differences are the resampling kernel. No redraw.", "interior_alpha_after": [254, 255, 255], "gap_cm": 10.04, "pair_width_frac": 0.799},
+    "geometry_same_tool": {
+      "tool": "lamp_geom3.py (stone segmented by hue; D from the stone's left edge to the alpha right edge; bulges from the axis column apex to the first full-width row)",
+      "r2": {"D_px": [299, 298], "H_over_D_silhouette": [3.017, 3.027], "H_over_D_between_ellipse_centres": [2.849, 2.856], "b_over_a_top": [0.214, 0.221], "b_over_a_bottom": [0.114, 0.114], "plate_h_over_silhouette": [0.734, 0.731]},
+      "round1": {"D_px": [295, 295], "H_over_D_silhouette": [2.817, 2.817], "H_over_D_between_ellipse_centres": [2.627, 2.624], "b_over_a_top": [0.176, 0.176], "b_over_a_bottom": [0.197, 0.203], "plate_h_over_silhouette": [0.72, 0.716]},
+      "render_agent_r2": {"H_over_D_silhouette": 2.90, "body_between_full_width_rows": 2.81},
+      "qa_round1_report": {"between_ellipse_centres": [2.68, 2.69], "silhouette": [2.72, 2.75]},
+      "card_H_over_D": 2.46,
+      "sku_u9_render_agent_method": {"silhouette": 2.635, "between_centres": 2.547},
+      "r2_vs_card": "+14 to +16% (centres) - outside +-10%",
+      "round1_vs_card": "+6.5 to +9% (centres) - inside +-10%",
+      "r2_vs_round1": "+5 to +9% taller/slimmer"
+    },
+    "r2_viewpoint": {"read": "one consistent viewpoint: the top arc convex with its face hidden, the bottom face visible; b/a 0.21 top > 0.11 bottom puts the camera below the bottom end: ~6.5 deg to the bottom, ~12 deg to the top, ~9 deg below the centre, ~1.5 m", "house": "centre height, level: both ends edge-on (b/a ~0.05), no face visible", "two_viewpoint_error": "fixed", "low_camera": "not fixed (inherited from urls[9])"},
+    "material_pores": {
+      "tool": "pores_pil.py (dark blobs in high-pass L per D^2, normalised to D=150 px)",
+      "thresholds": [10, 14, 20],
+      "sku_u9": [491.9, 284.1, 164.0],
+      "round1": [747.7, 551.5, 319.6],
+      "r2": [168.6, 72.2, 37.4],
+      "read": "R2 has x0.25-0.35 the SKU's pore density (fewer, larger pores; smoother stone); round 1 x1.5-1.9 (denser). The SKU sits between them, closer to round 1. u9 is upsampled JPEG, so its true density is if anything higher"
+    },
+    "colour": {
+      "house_definition_whole_product": {"r2": [83.93, 16.25, 82.2], "round1": [84.55, 14.36, 80.6]},
+      "stone_mask_qa": {"r2": [84.35, 84.54], "round1": [85.13, 85.43]},
+      "render_agent_stone": {"r2": [85.48, 85.75]},
+      "sku_R1_lit_LCh": [84.08, 15.5, 84.9],
+      "dE00_vs_sku_lit": {"r2": 1.05, "round1": 1.56},
+      "window_L": [76, 85],
+      "read": "the window verdict swings by 1.8 L* with the mask choice; both are within dE00 1.6 of the SKU lit side. Not a blocker for either; G-IMG must fix the mask"
+    },
+    "alpha_r2": {"components": 2, "stray": 0, "border": 0, "interior_min": 0.988, "edge_vs_clean_dE00_median": {"paper": 3.27, "dark": 4.03, "dL": 2.44}, "eye_400pct": "no halo, no light or dark rim (lamp-r2-edges-x4-paper-dark-alpha.png)", "verdict": "clean"},
+    "C2_r2_vs_urls9": {"angle": "counted (from below, same yaw - deviation from the house spec toward the supplier's choice)", "framing": false, "background": false, "light": false, "styling": false, "score": "1/5", "verdict": "pass"},
+    "verdict_r2": "no - confirmed",
+    "verdict_round1": "partial - unchanged; the more faithful of the two",
+    "behind_the_flag": "round-1 P2 only, labelled 'partial - not for publication', owner's test page only; check:rights must keep it out of public builds (qa_verdict is not 'passed'). R2 nowhere."
+  },
+
+  "vase_p2_alpha_clamp": {
+    "tool": "vase_clamp_check.py",
+    "rgb_changed_px": 0,
+    "alpha_rule": "clip(round(a*255/251))",
+    "alpha_rule_mismatch_px": 0,
+    "zero_to_nonzero_px": 0,
+    "nonzero_to_zero_px": 0,
+    "alpha_change_levels": [0, 4],
+    "monotonic": true,
+    "interior_after_p0.1_p1_p50": [254, 255, 255],
+    "interior_frac_lt_255": 0.0015,
+    "composite_dE00_before_vs_after": {"paper": {"max": 0.957, "p99": 0.443, "px_gt_1": 0}, "dark": {"max": 0.661, "p99": 0.595, "px_gt_1": 0}},
+    "stray": 0, "border": 0,
+    "verdict": "clean; the QA r1 'yes' carries to sha 2b50d6694b2013e5",
+    "record_note": "source-record says the edge moved <=3 levels; measured max +4, at former 251-252 interior pixels. Harmless; correct the number"
+  },
+
+  "pilot_closing": {
+    "D1_P2_model_per_material": {
+      "ceramic": {"route": "gpt-image-2-5 2K transparent (600)", "evidence": "vase P2 yes on the first call", "post": "interior alpha clamp (/251) as a standard 0-token step"},
+      "stone": {"route": "open", "evidence": "gpt twice: round 1 two viewpoints; R2 one low viewpoint, H/D +14-16%, smoother stone. gpt copies the camera height of the main reference even against explicit prompt lines", "next": "if the manager approves: one nano-banana-2 2K + remove-background method test (450 of the 700 left) with an R1 cropped between the ends (no end face shown) and the dimension numbers in text; accept per 5.5 plus end b/a <= 0.08 at both ends"},
+      "textile": {"route": "nano-banana-2 2K + remove-background (450)", "evidence": "first waffle in the pilot; gpt failed twice even with the true-scale square", "conditions": ["house angle stated and measured (the test drifted to ~60-65 deg frontal)", "colour: 'no brighter than the swatch' in the prompt; a logged code gain within +-10% allowed", "light textiles with fringe: a mid-tone palette or a code re-matte from the raw, and the fringe-matte check", "the true-scale fabric square is mandatory (the decisive input)"]}
+    },
+    "D2_P1_model": "nano-banana-2 4K works where the product is already faithful and large enough in our frame (vase); fails for small products (lamp x1.8-2.05, or invented room from a tiny base)",
+    "D3_P4_by_edit": "not tested (P3/P4 need 800, 700 left). Risk found: the opaque fringe gaps would carry the P2's paper into a P4 made on #808080; re-matte the fringe before any P4",
+    "D4_C3_thresholds_proposed": {"method": "c3_inside_pil.py as above", "pass": "aligned < 0.30 and search < 0.40 vs every supplier image", "eye": "aligned 0.30-0.44 or search 0.40-0.50: QA + designer side by side", "fail": "aligned >= 0.44 or search >= 0.50", "drop": "the '<= median of supplier pairs' clause (unrelated pairs reach 0.31/0.37; our non-copied gpt R1 reaches 0.36 with search)", "recalibrate": "on the second textile product"},
+    "D5_house_spec_notes": ["throw angle: keep 35/30 or adopt the near-top-down view the test produced (designer, then owner)", "lit side measured on a material mask", "palette tone for light textiles", "small-product P1 resolution vs G4.16 (see lessons)"],
+    "budget": {"spent": 5250, "cap": 5950, "left": 700, "not_possible_in_cap": "P3 + P4 (800)"},
+    "g_img_needs": [
+      "Verdicts bound to the file sha256; any code fix makes a new hash and needs a QA re-confirm (the vase clamp is the model case)",
+      "Allowed 0-token code fixes: uniform downscale, translate/gap, interior alpha clamp, global linear exposure gain <= 10% (logged k), re-matte from the raw. Forbidden: non-uniform scale, warp, retouch/paint, recolour (P4, G2.11). Each verified by a rebuild from the raw (alpha IoU >= 0.995, mean RGB diff <= 5 apart from the declared operation)",
+      "Colour: lit side on a material mask (stone, fabric, ceramic), not the whole product; primary dE00 vs the SKU lit side <= 3; the absolute window as a flag",
+      "Geometry: proportion between ellipse centres with one fixed tool; a single-viewpoint check (both end ellipses consistent with one camera; edge-on b/a <= 0.08 where the house angle is level)",
+      "Material per category: waffle - one period peak, spread <= 10% after perspective, fringe/cell +-20% vs the SKU; stone - pore density x0.5-x2 of the SKU photo, same tool; ceramic - crease spacing +-25% vs the SKU (round-1 D4)",
+      "Alpha: interior 255, border 0, no specks; edge colour vs a clean edge; fibre/fringe matte: in the outer fringe band >= 50% of between-thread gaps at alpha <= 0.5 and tip loss <= 0.5 cell vs the raw, checked on paper and dark",
+      "C2 with the round-1 clarification (house elements not counted unless measured within spec; a deviation toward a supplier's choice counts)",
+      "C2b: high-pass NCC for non-periodic surfaces; tile-repeat autocorrelation for periodic textures",
+      "C3 per D4 above",
+      "House angle measured and reported (texture foreshortening for flat textiles, end ellipses for cylinders, rim ellipse for vessels); a deviation goes to the designer / D5, not a fidelity fail, unless it moves toward a supplier composition",
+      "Inputs from render-agent per job: raw and no-bg files, the palette used, code-fix parameters, final sha256, reference sheet by card index"
+    ],
+    "p1_lessons": [
+      "P1 works when the product is already faithful in our frame and large enough (vase ~260 px in the base): nano keeps scale; the room drifts a little warm and loses unsold fill - acceptable, designer eye",
+      "Small products: a loose base inflates them (lamp x1.8-2.05); a tiny base (100x125) lets the model invent the room",
+      "Arithmetic conflict: native 2K at 50% fill needs the product >= 1024 px in the 4K raw, i.e. >= 22% of the base height. The ed4 lamp (75 px) would need a base <= ~270x340, which contradicts QA's 400x500 anchor base. For products under ~25 cm, G4.16 + native 2K cannot both hold from today's frames: owner decision (accept native >= 1360x1700, or 35-40% fill, or a dedicated close-up render)",
+      "Textile P1: nano kept the frame's own throw; run P1 only after P2 passes, with the true-scale fabric square and an explicit replace line",
+      "Run P1 only on materials whose P2 route is proven (ceramic, textile; not stone yet)",
+      "Always measure against an anchor on the raw before any crop (unchanged from round 1)"
+    ]
+  },
+
+  "fix_list": [
+    {"n": 1, "what": "Designer: written eye on the throw test (angle accept/reject as D5; fold plausibility; fringe on paper) and on the vase P2/P1 (still due from round 1)", "owner": "master-designer", "cost": 0},
+    {"n": 2, "what": "If the angle is accepted: exposure gain k=0.934 + fringe re-matte from the raw, then QA re-check", "owner": "manager (approve), render-agent", "cost": 0},
+    {"n": 3, "what": "If not: a new throw P2 at the house angle on a mid-tone palette", "owner": "manager, render-agent", "cost": 450},
+    {"n": 4, "what": "Stone route: one nano + remove-bg lamp method test, R1 cropped between the ends", "owner": "manager, render-agent, qa-agent", "cost": 450},
+    {"n": 5, "what": "Fill qa_verdict/qa_report for the round-3 items; bind the vase verdict to sha 2b50d669...; correct 'max_edge_change' to 4; add final sha256 fields", "owner": "render-agent", "cost": 0},
+    {"n": 6, "what": "Flag page: lamp round-1 P2 only, labelled 'partial'; check:rights keeps it out of public builds", "owner": "frontend-dev", "cost": 0},
+    {"n": 7, "what": "G-IMG draft text from 'g_img_needs' and D4, for IMG1b", "owner": "master-designer (text), qa-agent (numbers), manager (to owner)", "cost": 0}
+  ],
+
+  "not_checked": ["P1/P3/P4 of the throw (not made)", "the live product page (not built)", "G-ED.18 coverage table (after the designer's eye)"],
+
+  "repo_files_written": {
+    "crops_our_images_only": [
+      "qa/reports/2026-11-12-img1-pilot-r3/throw-texture-100.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/throw-top-edge-100.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/throw-fringe-edges-x3-paper-dark-alpha.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/throw-fold-edges-x3-paper-dark-alpha.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/throw-fringe-raw-vs-cutout-x4.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/throw-1280-fringe-paper-dark.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/throw-400-paper-dark.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/SIM-throw-exposure-k0934-before-after-1280.jpg",
+      "qa/reports/2026-11-12-img1-pilot-r3/lamp-r1-vs-r2-1280-one-unit.png",
+      "qa/reports/2026-11-12-img1-pilot-r3/lamp-r2-edges-x4-paper-dark-alpha.png"
+    ],
+    "tools": "qa/reports/2026-11-12-img1-pilot-r3/tools/ (the *_pil.py tools read supplier images and run only under python3.12 -I; the rest read our images)",
+    "scratchpad_only": "supplier zooms (u0/u2/u3/u4 hems, u3 full, u9 cylinder), contact sheets, C3 runs"
+  }
+}
