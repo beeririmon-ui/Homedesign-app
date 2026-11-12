@@ -18,6 +18,7 @@
  *   parts), and never from `error_id`, `order_id`, the event or the path: the id the customer quotes finds its row.
  * - **S19, QA ת53:** `errorCode` and the row's error name come from our own error classes only (lib/errors.ts).
  */
+import { contactOf } from '@hd/shared/contact';
 import { OwnError } from './errors';
 
 export type LogLevel = 'info' | 'warn' | 'error';
@@ -290,5 +291,14 @@ export async function orderLog(db: D1Database | undefined, orderId: unknown): Pr
 /** an order number in a request's path (/api/orders/<id>, /admin/orders/<id>…) */
 export const orderIdInPath = (path: string): string | null => /\/orders\/(\d{6,20})(?:\/|$)/.exec(path)?.[1] ?? null;
 
-/** The customer's short message for an error they cannot fix, with the id of its log row. */
-export const errorMessageHe = (errorId: string): string => `משהו השתבש אצלנו. נסו שוב בעוד רגע. אם זה חוזר, כתבו לנו וציינו את הקוד ${errorId}.`;
+/**
+ * The customer's short message for an error they cannot fix, with the id of its log row. S20 (QA ת61): "כתבו לנו" only
+ * with the shop's email (CONTACT_EMAIL, @hd/shared/contact); without it, the code alone, and no contact it does not have.
+ * Both wordings are master-designer's to review (qa/reports/2026-11-07-site-track/s20/README.md).
+ */
+export const errorMessageHe = (errorId: string, env: { CONTACT_EMAIL?: string; CONTACT_PHONE?: string } = {}): string => {
+  const contact = contactOf(env);
+  return contact
+    ? `משהו השתבש אצלנו. נסו שוב בעוד רגע. אם זה חוזר, כתבו לנו ל-${contact.email} וציינו את הקוד ${errorId}.`
+    : `משהו השתבש אצלנו. נסו שוב בעוד רגע. קוד השגיאה: ${errorId}.`;
+};

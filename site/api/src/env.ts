@@ -46,6 +46,12 @@ export type Env = {
    * build reads it from wrangler.jsonc, so a page promises an email only where a provider really sends it.
    */
   EMAIL_PROVIDER?: string;
+  /**
+   * S20 (QA ת61): the shop's contact details (@hd/shared/contact), `UNDECIDED` until the owner decides (CONTACT1). The
+   * copy build shows them on the site; the Worker names the email in its one "כתבו לנו" line (lib/log.ts).
+   */
+  CONTACT_EMAIL?: string;
+  CONTACT_PHONE?: string;
 };
 
 /** `adminKind` (S16, ת34): how the admin was let in: a person's Access login, an Access service token, or a local dev path */

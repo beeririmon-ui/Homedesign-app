@@ -98,17 +98,15 @@ describe('public api', () => {
     expect(body.order_id).toMatch(ORDER_ID);
   });
 
-  it('the waiting list (PRE1) takes one email for a product or a slot, nothing else', async () => {
-    expect((await req('/api/waitlist', json({ email: 'buyer@example.com', product_id: 'vase-a' }))).status).toBe(201);
-    expect((await req('/api/waitlist', json({ email: 'buyer@example.com', room: 'living-room', slot: 'vase' }))).status).toBe(201);
-    expect((await req('/api/waitlist', json({ email: 'buyer@example.com', product_id: 'nope' }))).status).toBe(404);
-    expect((await req('/api/waitlist', json({ email: 'not-an-email', product_id: 'vase-a' }))).status).toBe(422);
-    expect((await req('/api/waitlist', json({ email: 'buyer@example.com' }))).status).toBe(422);
-    const rows = await env.DB.prepare('SELECT email, product_id, room_id, slot_id FROM waitlist ORDER BY created_at').all();
-    expect(rows.results).toEqual([
-      { email: 'buyer@example.com', product_id: 'vase-a', room_id: null, slot_id: null },
-      { email: 'buyer@example.com', product_id: null, room_id: 'living-room', slot_id: 'vase' },
-    ]);
+  it('the waiting list (PRE1) is closed while no provider sends the back-in-stock message (S20, ת57): nothing is stored', async () => {
+    // the list itself (one email for a product or a slot) is tested with a provider that sends it: api/test/s20.test.ts
+    for (const body of [{ email: 'buyer@example.com', product_id: 'vase-a' }, { email: 'buyer@example.com', room: 'living-room', slot: 'vase' }]) {
+      const r = await req('/api/waitlist', json(body));
+      expect(r.status).toBe(409);
+      expect(await r.json()).toEqual({ error: 'waitlist_closed', message_he: 'אין כרגע רשימת המתנה למוצר.' });
+    }
+    const rows = await env.DB.prepare('SELECT COUNT(*) AS n FROM waitlist').first<{ n: number }>();
+    expect(rows?.n).toBe(0);
   });
 
   it('a product that is not sold (PRE1: NL2 or a slot on hold) never enters a cart', async () => {

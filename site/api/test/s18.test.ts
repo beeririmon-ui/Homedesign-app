@@ -45,6 +45,6 @@ describe('S18: EMAIL_PROVIDER in the deploy check', () => {
     expect(bad.stderr).toMatch(/production: EMAIL_PROVIDER=mock is refused/);
     const ok = spawnSync(process.execPath, [TSX, 'scripts/check-config.ts'], { cwd: API, encoding: 'utf8', timeout: 60_000 });
     expect(ok.status, ok.stderr).toBe(0);
-    expect(ok.stdout).toMatch(/production production \(.*customer email UNDECIDED\)/);
+    expect(ok.stdout).toMatch(/production production \(.*customer email UNDECIDED[,)]/);
   });
 });

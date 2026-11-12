@@ -9,6 +9,7 @@
  * - **The same rules check the deploy** (api/scripts/check-config.ts, run by `npm run build`): a value in wrangler.jsonc
  *   that is not a provider fails the build; `UNDECIDED` is the one placeholder allowed there, and it fails closed at run time.
  */
+import { contactIssues } from '@hd/shared/contact';
 import { emailProviderIssue } from '@hd/shared/email';
 import { log } from './log';
 
@@ -74,6 +75,12 @@ export function emailConfigIssues(vars: Record<string, unknown>): string[] {
   const issue = emailProviderIssue(vars.EMAIL_PROVIDER);
   return issue ? [issue] : [];
 }
+
+/**
+ * S20 (QA ת61): the shop's contact details in every environment: `UNDECIDED` until the owner decides (CONTACT1), or a
+ * well-formed email (and, optionally, an Israeli phone). The public build's own check (tools/build-copy.ts) wants them set.
+ */
+export const contactConfigIssues = (vars: Record<string, unknown>): string[] => contactIssues(vars);
 
 /** Loud, once per call: the operator reads it in the Worker's logs (observability is on). S13: a structured row. */
 export function refuseLoudly(what: string, reason: string, subject?: string): void {

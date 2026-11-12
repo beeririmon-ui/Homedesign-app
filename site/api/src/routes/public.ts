@@ -15,6 +15,7 @@ import {
   ORDER_ID,
   WaitlistRequestSchema,
 } from '@hd/shared';
+import { canEmail } from '@hd/shared/email';
 import { lineName, removedHe } from '@hd/shared/lines';
 import type { AppEnv } from '../env';
 import { HttpError, clientKey, nowIso, orderId, rateLimit, readJson } from '../lib/http';
@@ -73,7 +74,13 @@ publicApi.get('/catalog/prices', async (c) => {
 });
 
 // ---------- waiting list (PRE1: "עדכנו אותי כשחוזר") ----------
+/**
+ * S20, QA ת57: the list exists only where a provider really sends the one message it promises (`back_in_stock`,
+ * @hd/shared/email). Until then the site has no form (S18), and the API refuses too, before it reads or stores anything:
+ * 409 `waitlist_closed`, in every environment and both builds.
+ */
 publicApi.post('/waitlist', async (c) => {
+  if (!canEmail(c.env.EMAIL_PROVIDER, 'back_in_stock')) throw new HttpError(409, 'waitlist_closed', 'אין כרגע רשימת המתנה למוצר.');
   await rateLimit(c.env.RL_WRITE, `waitlist:${clientKey(c)}`);
   const body = await readJson(c, WaitlistRequestSchema);
   if (body.product_id) {
@@ -213,6 +220,9 @@ publicApi.post('/checkout', async (c) => {
     webhook_url: `${origin}/api/webhooks/payment/${provider.id}`,
   });
 
+  // S20, QA ת57: a consent to marketing email is recorded only where a provider really sends it (`marketing`). The
+  // checkout shows no box until then (S18); a request that says yes all the same is stored as no, and the order goes on.
+  const marketing = req.consents.marketing === true && canEmail(c.env.EMAIL_PROVIDER, 'marketing');
   const stmts = [
     c.env.DB.prepare(
       'INSERT INTO customers (id, email, phone, full_name, marketing_consent, marketing_consent_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -221,8 +231,8 @@ publicApi.post('/checkout', async (c) => {
       req.customer.email,
       req.customer.phone,
       req.customer.full_name,
-      req.consents.marketing ? 1 : 0,
-      req.consents.marketing ? now : null,
+      marketing ? 1 : 0,
+      marketing ? now : null,
       now,
     ),
     c.env.DB.prepare(

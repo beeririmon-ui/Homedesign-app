@@ -76,7 +76,7 @@ app.onError(async (err, c) => {
   // S17 (ת46): an order in the path is a known order: its customer's values leave the row
   const l = await orderLog(c.env.DB, orderIdInPath(url.pathname));
   const error_id = l.error('request.unhandled', { method: c.req.method, path: url.pathname.slice(0, 120) }, err);
-  return c.json({ error: 'internal_error', error_id, message_he: errorMessageHe(error_id) }, 500);
+  return c.json({ error: 'internal_error', error_id, message_he: errorMessageHe(error_id, c.env) }, 500);
 });
 
 app.notFound((c) => (c.env.ASSETS ? c.env.ASSETS.fetch(c.req.raw) : c.json({ error: 'not_found' }, 404)));

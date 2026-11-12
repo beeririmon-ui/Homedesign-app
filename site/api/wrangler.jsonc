@@ -57,6 +57,10 @@
     // S18: the customer's email (@hd/shared/email). None is built and it has no mock, so UNDECIDED in every environment.
     // The copy build reads it: a page promises an email only where a provider really sends it (tools/build-copy.ts)
     "EMAIL_PROVIDER": "UNDECIDED",
+    // S20 (QA ת61): the shop's contact details (@hd/shared/contact), UNDECIDED until the owner decides (CONTACT1). The copy
+    // build shows the contact block only with CONTACT_EMAIL, and the public build (HD_PUBLIC=1) stops without it
+    "CONTACT_EMAIL": "UNDECIDED",
+    "CONTACT_PHONE": "UNDECIDED",
     "ACCESS_TEAM_DOMAIN": "",
     "ACCESS_AUD": "",
   },
@@ -96,6 +100,8 @@
         "SUPPLIER_PROVIDER": "mock",
         "NOTIFY_PROVIDER": "mock",
         "EMAIL_PROVIDER": "UNDECIDED",
+        "CONTACT_EMAIL": "UNDECIDED",
+        "CONTACT_PHONE": "UNDECIDED",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",
       },
@@ -135,6 +141,8 @@
         // S13: no channel is built; the owner chooses (email or Telegram). The alert is skipped, never the order
         "NOTIFY_PROVIDER": "UNDECIDED",
         "EMAIL_PROVIDER": "UNDECIDED",
+        "CONTACT_EMAIL": "UNDECIDED",
+        "CONTACT_PHONE": "UNDECIDED",
         "ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
         "ACCESS_AUD": "REPLACE_WITH_ACCESS_APP_AUD",
       },

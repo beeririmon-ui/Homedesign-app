@@ -212,7 +212,7 @@ print("swap defaults: toggles", len(sw), "outside", res["swap_diff_defaults_outs
 # ---------------------------------------------------------------- 4. tag vs prev scenes
 layp, shdp = load_man(mp, bp)
 regp = {k: region_of(layp[k], shdp[k]) for k in layp}
-changed_products = sorted({k.split(" ")[0] for k in res["files_changed"] if not k.startswith("cushions") and "-v" not in k.split(" ")[0]})
+changed_products = sorted({k.split(" ")[0].replace("-shadow", "") for k in res["files_changed"] if not k.startswith("cushions") and "-v" not in k.split(" ")[0]})
 cu = np.zeros((H, W), bool)
 for k in changed_products:
     cu |= reg[k] | regp[k]

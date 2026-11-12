@@ -8,7 +8,7 @@
   "base": 3950,
   "reserve_with_manager_approval": 2000
  },
- "status": "ROUND 4 + throw v2 code fixes. 5,650 of 5,950 (0 this step). Throw P2 v2 waiting for the QA re-check.",
+ "status": "ROUND 4 + throw v3 code fix. 5,650 of 5,950 (0 this step). Throw P2 v3 waiting for the QA re-check.",
  "tokens_spent": 5650,
  "var2_auth": "no authentication requested (var2_list_models and var2_estimate_cost answered)",
  "estimate_calls": {
@@ -961,5 +961,284 @@
     "texture_std_change_pct_vs_removebg": -2.22
    }
   }
+ },
+ "throw_v3_code_fixes": {
+  "from": "qa/reports/2026-11-12-img1-throw-fixed-v2.md",
+  "brief": "briefs/render-img1-throw-v3-2026-11-12.md",
+  "tokens": 0,
+  "tool": "tools/fix_throw_nano_v3.py",
+  "tool_sha256": "73b25d863e35c362a23e9be52ead1371731bd7f0eac55735de818693a8ef535c",
+  "final": "sofa-cover-cj-cotton-muslin-fringe/p2-nano-fixed-v3.png",
+  "file_sha256": "3359ae03399d9026e22eab1141f3cab8dde82a75276c6e5279758c1712b8fe3d",
+  "fullres_sha256": "f574942fd5b379b0e28328338e229ffa92da24ddd359c607065b316521b64f4a",
+  "rebuild_identical_two_runs": true,
+  "verify": {
+   "how": "QA throw-fixed-v2 tools, unmodified, run on the delivered files (edge_loss_2d.py, gimg6_segments.py, decontam_v2.py, specks_v2.py, box_edges.py, throw_fidelity.py, waffle2.py); box_edges/specks read fixed names, so the file under test was linked under the v2 names in a scratch copy",
+   "edge_loss_product_ge_paper+5": {
+    "top_corner_y<560": {
+     "lost_product_px": 57,
+     "per_edge_position_p99_max_px": [
+      2.0,
+      3.6
+     ],
+     "per_row_p99_max_px": [
+      11.25,
+      12.0
+     ],
+     "rows_gt_half_cell": 0
+    },
+    "mid_third1_560-973": {
+     "lost_product_px": 149,
+     "per_edge_position_p99_max_px": [
+      1.0,
+      1.4
+     ],
+     "per_row_p99_max_px": [
+      2.88,
+      18.0
+     ],
+     "rows_gt_half_cell": 1
+    },
+    "mid_third2_973-1387": {
+     "lost_product_px": 147,
+     "per_edge_position_p99_max_px": [
+      1.0,
+      1.4
+     ],
+     "per_row_p99_max_px": [
+      1.0,
+      8.0
+     ],
+     "rows_gt_half_cell": 0
+    },
+    "mid_third3_1387-1800": {
+     "lost_product_px": 183,
+     "per_edge_position_p99_max_px": [
+      1.4,
+      2.2
+     ],
+     "per_row_p99_max_px": [
+      3.88,
+      13.0
+     ],
+     "rows_gt_half_cell": 1
+    },
+    "bottom_corner_y>=1800": {
+     "lost_product_px": 166,
+     "per_edge_position_p99_max_px": [
+      2.0,
+      2.0
+     ],
+     "per_row_p99_max_px": [
+      10.0,
+      15.0
+     ],
+     "rows_gt_half_cell": 1
+    }
+   },
+   "edge_loss_top_corner_sensitivity_any_ridge_upper_bound": {
+    "per_edge_position_p99_max_px": [
+     13.88,
+     17.79
+    ],
+    "per_row_p99_max_px": [
+     21.25,
+     22.0
+    ],
+    "v2": [
+     [
+      15.58,
+      20.59
+     ],
+     [
+      22.26,
+      23.0
+     ]
+    ],
+    "read": "not the criterion: includes the low-contrast tips above raw y 470 that item 1 calls background (QA fix 9, designer)"
+   },
+   "gimg6_segments": {
+    "top_corner_y<560": {
+     "vs_background_px": 1827,
+     "pct_alpha_le_0.5": 71.4,
+     "over_product_px": 188,
+     "over_product_pct_opaque": 0.0,
+     "opaque_over_product_dE00_to_fabric_p50": null,
+     "item4_ge_50": true,
+     "item3": null
+    },
+    "mid_third1_560-973": {
+     "vs_background_px": 2956,
+     "pct_alpha_le_0.5": 76.2,
+     "over_product_px": 3721,
+     "over_product_pct_opaque": 77.6,
+     "opaque_over_product_dE00_to_fabric_p50": 2.59,
+     "item4_ge_50": true,
+     "item3": true
+    },
+    "mid_third2_973-1387": {
+     "vs_background_px": 3279,
+     "pct_alpha_le_0.5": 63.4,
+     "over_product_px": 2923,
+     "over_product_pct_opaque": 78.8,
+     "opaque_over_product_dE00_to_fabric_p50": 2.3,
+     "item4_ge_50": true,
+     "item3": true
+    },
+    "mid_third3_1387-1800": {
+     "vs_background_px": 3282,
+     "pct_alpha_le_0.5": 79.5,
+     "over_product_px": 3488,
+     "over_product_pct_opaque": 73.5,
+     "opaque_over_product_dE00_to_fabric_p50": 2.57,
+     "item4_ge_50": true,
+     "item3": true
+    },
+    "bottom_corner_y>=1800": {
+     "vs_background_px": 2883,
+     "pct_alpha_le_0.5": 69.5,
+     "over_product_px": 2113,
+     "over_product_pct_opaque": 73.0,
+     "opaque_over_product_dE00_to_fabric_p50": 2.37,
+     "item4_ge_50": true,
+     "item3": true
+    }
+   },
+   "item3_top_corner": {
+    "over_product_gaps": 188,
+    "opaque_ge_0.98": 0,
+    "alpha_p10_p50_p90": [
+     0.461,
+     0.912,
+     0.961
+    ],
+    "alpha_ge_0.5": 165,
+    "read": "half-open, not opaque (QA option); the 23 below 0.5 had pre-cut alpha below 0.5 (as in v1)"
+   },
+   "decontamination": {
+    "changed_vs_raw_x_k": 566,
+    "rgb_identical_elsewhere": true,
+    "a_semi_transparent": {
+     "alpha255_min": 1,
+     "max": 244,
+     "p50": 157.0,
+     "n_alpha_0": 0,
+     "n_alpha_ge_250": 0,
+     "n_alpha_255": 0,
+     "pass": true
+    },
+    "b_mask_px_final_alpha_lt_0.04": 0,
+    "b_pass": true,
+    "c_brighter_than_local_product_max_px": 0,
+    "c_pass_by_the_letter": true,
+    "d_direction": {
+     "moved_away": 560,
+     "moved_toward": 0,
+     "about_unchanged": 6,
+     "pct_away_all": 98.9,
+     "pass_ge_95": true
+    },
+    "composite_dE00_replaced_vs_kept_paper_dark_p50_p95_max": [
+     [
+      2.71,
+      4.67,
+      10.17
+     ],
+     [
+      3.76,
+      7.71,
+      14.16
+     ]
+    ]
+   },
+   "specks": {
+    "final_detached_components": 0,
+    "zeroed_by_speck_step": {
+     "px": 110,
+     "components": 32,
+     "max_alpha": 5,
+     "components_alpha_ge_8": 0,
+     "other_px_differing_from_rebuilt_canvas": 0
+    }
+   },
+   "box_edges": {
+    "top_contour_max_column_jump_x1488-1500_px": {
+     "v1": 1,
+     "v2": 5,
+     "v3": 1
+    },
+    "box_bottom_y535-580_x1540-1620": {
+     "soft_px_v1_v3": [
+      204,
+      198
+     ],
+     "soft_width_per_row_p50_v1_v3": [
+      3.0,
+      3.0
+     ],
+     "px_alpha_lower_than_v1_by_gt_0.3_v2_v3": [
+      296,
+      53
+     ]
+    },
+    "box_top_y360-395_soft_px_v1_v2_v3": [
+     449,
+     368,
+     213
+    ]
+   },
+   "fidelity": {
+    "lit_p90_99_LCh": [
+     93.06,
+     3.81,
+     80.3
+    ],
+    "top_layer_lit_LCh": [
+     93.3,
+     3.8,
+     80.3
+    ],
+    "dE00_vs_sku_lit": 1.84,
+    "dL_vs_sku": 2.71,
+    "top_layer_dE00_vs_sku": 1.98,
+    "hp_std_L_sigma8": 5.636,
+    "texture_hp_std_change_pct": -2.2,
+    "window_pass": {
+     "L": true,
+     "C": true,
+     "h": true,
+     "dL_le_6": true,
+     "dE00_le_3_GIMG": true
+    },
+    "waffle_Tx_Ty": [
+     [
+      21.37,
+      20.33
+     ],
+     [
+      22.84,
+      23.94
+     ],
+     [
+      23.56,
+      18.73
+     ],
+     [
+      22.83,
+      20.94
+     ],
+     [
+      22.83,
+      18.9
+     ],
+     [
+      22.16,
+      18.93
+     ]
+    ],
+    "waffle_same_as_v2_within_px": 0.04
+   }
+  },
+  "next": "QA short re-check on this sha"
  }
 }

@@ -1,10 +1,16 @@
 changed: ['curtains', 'curtains-shadow', 'curtains-v2 layer', 'curtains-v2 shadow', 'framed-art-v2 layer', 'framed-art-v2 shadow', 'magazine-holder', 'pendant-v2 layer', 'vase', 'vase-shadow', 'vase-v2 layer', 'vase-v2 shadow'] | base ok: True
-recomposite A {'P1': (0.0, 3.0, 14), 'P2': (0.0, 3.0, 14), 'P4': (1.0, 3.0, 14)} 16
-recomposite B {'P1': (0.0, 4.0, 25), 'P2': (0.0, 4.0, 25), 'P4': (1.0, 4.0, 25)} 27
-recomposite C {'P1': (0.0, 4.0, 27), 'P2': (0.0, 4.0, 27), 'P4': (1.0, 4.0, 27)} 39
-swap defaults: toggles 42 outside 0 153
-Traceback (most recent call last):
-  File "/home/user/homedesign-app/qa/reports/2026-11-12-wm-tool-phase2-r6-r7/tools/r67_integrity.py", line 218, in <module>
-    cu |= reg[k] | regp[k]
-          ~~~^^^
-KeyError: 'curtains-shadow'
+recomposite A {'P1': (0.0, 3.0, 14), 'P2': (0.0, 3.0, 14), 'P4': (1.0, 3.0, 14)} 19
+recomposite B {'P1': (0.0, 4.0, 25), 'P2': (0.0, 4.0, 25), 'P4': (1.0, 4.0, 25)} 29
+recomposite C {'P1': (0.0, 4.0, 27), 'P2': (0.0, 4.0, 27), 'P4': (1.0, 4.0, 27)} 40
+swap defaults: toggles 42 outside 0 140
+scenes vs prev ['curtains', 'magazine-holder', 'vase'] {'A': (385508, 1), 'B': (385508, 1), 'C': (385508, 1)}
+detail {"curtains": {"alpha_changed_px": 13035, "alpha_changed_box": [0, 0, 273, 1530], "alpha_max_change": 255, "rgb_changed_under_alpha_px": 366956, "rgb_changed_at_alpha255_both": 352912, "rgb_max_change_alpha255": 157, "shadow_changed_px": 7065, "shadow_changed_box": [12, 0, 307, 1530], "rgb_changed_box": [0, 0, 273, 1530]}, "magazine-holder": {"alpha_changed_px": 9, "alpha_changed_box": [1051, 1450, 1150, 1527], "alpha_max_change": 27, "rgb_changed_under_alpha_px": 947, "rgb_changed_at_alpha255_both": 858, "rgb_max_change_alpha255": 195, "shadow_changed_px": 0, "shadow_changed_box": null, "rgb_changed_box": [948, 1443, 1190, 1530]}, "vase": {"alpha_changed_px": 6530, "alpha_changed_box": [619, 866, 716, 1070], "alpha_max_change": 255, "rgb_changed_under_alpha_px": 13481, "rgb_changed_at_alpha255_both": 6965, "rgb_max_change_alpha255": 218, "shadow_changed_px": 883, "shadow_changed_box": [671, 1029, 730, 1075], "rgb_changed_box": [619, 866, 716, 1070]}}
+disjoint {} {'accent-sconces': {'framed-art': 23.0, 'floor-lamp': 64.3, 'pendant': 208.0, 'set-A': 253.0}, 'curtains': {'rug': 237.5, 'vase': 349.8, 'planter': 627.3, 'basket': 657.0}, 'framed-art': {'accent-sconces': 23.0, 'set-B': 50.0, 'set-C': 53.0, 'set-A': 64.2}, 'pendant': {'framed-art': 133.0, 'accent-sconces': 208.0, 'set-A': 487.0, 'set-C': 490.4}, 'vase': {'planter': 210.6, 'basket': 230.4, 'rug': 283.6, 'curtains': 349.8}}
+variant curtains-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 1 190
+variant framed-art-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 0 231
+variant accent-sconces-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 0 275
+variant accent-sconces-v3 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 0 310
+variant vase-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 0 344
+variant pendant-v2 {'A P1': (0.0, 3.0), 'A P2': (0.0, 3.0), 'A P4': (1.0, 3.0), 'B P1': (0.0, 4.0), 'B P2': (0.0, 4.0), 'B P4': (1.0, 4.0), 'C P1': (0.0, 4.0), 'C P2': (0.0, 4.0), 'C P4': (1.0, 4.0)} 0 0 0 380
+full cross: union px 658311
+combo 0 / 48 385 {'p999': 1.0, 'max': 4.0, 'indep_max': 0.0}
