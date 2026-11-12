@@ -36,7 +36,7 @@ import { cancelOrder, recordSupplierCheck } from '../lib/cancel';
 import { requestRefund } from '../lib/refunds';
 import { applySupplierUpdate } from '../lib/shipments';
 import { MOCK_SUPPLIER_EVENTS, mockSupplierOpen, mockUpdate } from './admin';
-import { log } from '../lib/log';
+import { orderLog } from '../lib/log';
 
 export const adminUi = new Hono<AppEnv>();
 adminUi.use('*', requireAdmin);
@@ -433,7 +433,8 @@ adminUi.post('/orders/:id/:action', async (c) => {
       return back(c, id, r === 'applied' ? 'done=mock_applied' : 'done=mock_unchanged');
     }
   } catch (err) {
-    const error_id = log.error('admin.action_failed', { order_id: id, action }, err);
+    // S17 (ת46): the order is known: its customer's values leave the row
+    const error_id = (await orderLog(c.env.DB, id)).error('admin.action_failed', { order_id: id, action }, err);
     return page(
       c,
       'שגיאה',

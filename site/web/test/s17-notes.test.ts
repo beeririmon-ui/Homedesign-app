@@ -9,8 +9,7 @@ describe('ה5: the product page’s fields and notes', () => {
     expect(visibleNotes(notes, true)).toEqual(notes);
   });
   it('a value that says it is unknown is no value; a list of them hides the field', () => {
-    for (const v of ['לא צוין', 'חומר לא צוין', 'לא ידוע', 'החומר לא מצוין.', 'unknown', 'N/A', '—', '', '  '])
-      expect(isKnown(v), v).toBe(false);
+    for (const v of ['לא צוין', 'חומר לא צוין', 'לא ידוע', 'החומר לא מצוין.', 'unknown', 'N/A', '—', '', '  ']) expect(isKnown(v), v).toBe(false);
     for (const v of ['לבד', 'מתכת', 'הדפס במרקם', 'עור (לא אמיתי)']) expect(isKnown(v), v).toBe(true);
     expect(knownValues(['לבד', 'חומר לא צוין', 'מתכת'])).toEqual(['לבד', 'מתכת']);
     expect(knownValues(['לא צוין'])).toEqual([]);

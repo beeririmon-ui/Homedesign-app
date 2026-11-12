@@ -10,7 +10,7 @@
  *   duplicate job does not).
  */
 import { providerOf } from '../config';
-import { log } from '../log';
+import { errorCode, log } from '../log';
 
 export type NewOrderAlert = { order_id: string; total_agorot: number; items: number; admin_path: string; paid_at: string };
 
@@ -74,7 +74,8 @@ export async function processNotifyJob(
     await env.DB.prepare("UPDATE notifications SET state = 'failed', last_error = ? WHERE kind = 'new_order' AND order_id = ?")
       .bind((err instanceof Error ? err.message : String(err)).slice(0, 300), orderId)
       .run();
-    log.error('notify.failed', { order_id: orderId, provider: n.id, attempt }, err);
+    // S17 (ת46): a provider's error by its code only (its text, which may echo the order, stays in D1)
+    log.error('notify.failed', { order_id: orderId, provider: n.id, attempt, code: errorCode(err) });
     return attempt >= NOTIFY_MAX_ATTEMPTS ? 'skipped' : 'retry';
   }
   await env.DB.prepare("UPDATE notifications SET state = 'sent', sent_at = ?, last_error = NULL WHERE kind = 'new_order' AND order_id = ?")

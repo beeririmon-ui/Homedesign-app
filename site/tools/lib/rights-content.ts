@@ -389,7 +389,9 @@ export async function scanBuild(
       // an inlined SVG may itself carry a picture or a hotlink: one level down
       if (/svg/i.test(m[1]!)) {
         const inner = bytes.toString('utf8');
-        if (hostRe) for (const x of inner.matchAll(hostRe)) findings.push({ where, how: 'host', what: `a URL on a supplier picture host inside an inlined SVG: ${x[0]}` });
+        if (hostRe)
+          for (const x of inner.matchAll(hostRe))
+            findings.push({ where, how: 'host', what: `a URL on a supplier picture host inside an inlined SVG: ${x[0]}` });
         for (const x of inner.matchAll(DATA_URI)) {
           const b = Buffer.from(x[3]!, 'base64');
           if (withheld(sha256(b))) findings.push({ where, how: 'data-uri bytes', what: 'a supplier picture inside an inlined SVG' });

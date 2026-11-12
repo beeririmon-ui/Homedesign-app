@@ -3,6 +3,11 @@
 # The providers themselves are vars in wrangler.jsonc (PAYMENT_PROVIDER, INVOICE_PROVIDER, SUPPLIER_PROVIDER), exact ids
 # from a closed list (api/src/lib/config.ts); `mock` runs only outside production. A local override goes here too.
 
+# S17 (AN1): Cloudflare Web Analytics is NOT a Worker var: the public build reads CF_ANALYTICS_TOKEN from its own
+# environment (`CF_ANALYTICS_TOKEN=<the site token> HD_PUBLIC=1 npm run build`, docs/ops/deploy-runbook.md). Never set it
+# here or commit it. A placeholder of its shape, for the record only:
+# CF_ANALYTICS_TOKEN=00000000000000000000000000000000
+
 # HMAC secret for the mock payment's webhook (locally any long random string: `openssl rand -hex 24`)
 PAYMENT_WEBHOOK_SECRET=
 # Grow (W1): the account values; GROW_DOCS_CONFIRMED=1 only once its documentation is in the repo and the adapter is done

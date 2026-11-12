@@ -7,7 +7,8 @@
  *   drops such values (tools/lib/hebrew.ts, and the build check in tools/build-catalog.ts); the page does it again, for
  *   every field it shows.
  */
-const UNKNOWN = /^(?:(?:ה?חומר|ערך|צבע|מידה|מידות)\s+)?(?:לא\s+(?:צוין|מצוין|צויין|ידוע|ידועה|ברור|ברורה|מוגדר|הוגדר)|אינו\s+ידוע)\.?$|^(?:unknown|n\/?a|not stated|unspecified|\?+|[-–—]+)$/i;
+const UNKNOWN =
+  /^(?:(?:ה?חומר|ערך|צבע|מידה|מידות)\s+)?(?:לא\s+(?:צוין|מצוין|צויין|ידוע|ידועה|ברור|ברורה|מוגדר|הוגדר)|אינו\s+ידוע)\.?$|^(?:unknown|n\/?a|not stated|unspecified|\?+|[-–—]+)$/i;
 
 /** a value worth a line: not empty, and not a value that says it is unknown */
 export const isKnown = (v: string | null | undefined): v is string => !!v && !!v.trim() && !UNKNOWN.test(v.trim());

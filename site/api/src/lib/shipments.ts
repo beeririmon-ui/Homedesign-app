@@ -14,7 +14,7 @@
 import type { Env } from '../env';
 import type { SupplierClient, SupplierUpdate } from './suppliers/types';
 import { settleCanceled } from './cancel';
-import { log } from './log';
+import { errorCode, log } from './log';
 
 /** generic trackers a customer may be sent to: they track any carrier's number and name no seller */
 const GENERIC_TRACKERS = new Set([
@@ -162,7 +162,8 @@ export async function syncShipments(env: Env, client: SupplierClient, limit = 50
       if (u && (await applySupplierUpdate(env, { orderId: s.order_id, supplier: client.id, update: u, actor: `supplier:${client.id}` })) === 'applied')
         applied++;
     } catch (err) {
-      log.error('shipment.sync_failed', { order_id: s.order_id, supplier: client.id }, err);
+      // S17 (ת46): a supplier's error by its code only
+      log.error('shipment.sync_failed', { order_id: s.order_id, supplier: client.id, code: errorCode(err) });
     }
   }
   return { asked: results.length, applied };

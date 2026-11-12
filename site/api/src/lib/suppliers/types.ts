@@ -39,6 +39,12 @@ export class SupplierRefused extends Error {
 
 export interface SupplierClient {
   readonly id: string;
+  /**
+   * S17, QA ת48: true only when the adapter's documentation says the supplier refuses a second order with our order
+   * number (or returns the first one). Then a send that may have reached it is sent again; otherwise it is asked first
+   * (`findOrder`), or, when it cannot be asked, left to a person.
+   */
+  readonly dedupesByOrderId?: boolean;
   /** S14 (ת31): `signal` fires at the call's deadline; a client that calls out passes it to fetch */
   submitOrder(input: SupplierOrderInput, opts?: { signal?: AbortSignal }): Promise<{ supplier_order_id: string; raw: unknown }>;
   /** S13: asks the supplier to cancel an order it has; absent when the supplier has no such call (a person does it) */

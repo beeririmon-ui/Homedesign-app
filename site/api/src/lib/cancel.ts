@@ -19,6 +19,8 @@
  *   it holds the order → the after-supplier path; it holds none → the before-supplier path. A supplier that cannot be
  *   asked leaves it to a person (409 `supplier_check_needed`): they check at the supplier and record what they found
  *   (`recordSupplierCheck`, the admin's "בדיקה אצל הספק"), and the cancellation then takes the matching path.
+ * - **S17, QA ת48:** the same check closes a send the supplier job left to a person (lib/fulfillment.ts): "found" records
+ *   it as submitted, "none" queues the send again (unless a cancellation waits on that check).
  */
 import type { Env } from '../env';
 import { requestRefund, refundTotals, type RefundResult } from './refunds';
@@ -305,6 +307,27 @@ export async function recordSupplierCheck(
       at,
       check.note.slice(0, 300),
     );
+  // S17, QA ת48: the supplier job left this order to a person (a send that may have reached the supplier, which cannot be
+  // asked): "none" there means it was never created, so it is sent again. A cancellation waiting on the same check
+  // (its "order.cancel_needs_person" is the later of the two) goes on instead, and nothing is sent.
+  if (check.outcome === 'none') {
+    const last = await env.DB.prepare(
+      "SELECT action FROM audit_log WHERE subject = ? AND action IN ('supplier.resend_needs_person', 'order.cancel_needs_person') ORDER BY rowid DESC LIMIT 1",
+    )
+      .bind(orderId)
+      .first<{ action: string }>();
+    if (last?.action === 'supplier.resend_needs_person') {
+      const back = await env.DB.prepare(
+        "UPDATE orders SET status = 'paid', updated_at = ? WHERE id = ? AND status IN ('paid', 'supplier_error') AND NOT EXISTS (SELECT 1 FROM cancellations WHERE order_id = ?)",
+      )
+        .bind(at, orderId, orderId)
+        .run();
+      if (back.meta.changes) {
+        await env.SUPPLIER_QUEUE.send({ kind: 'submit-order', order_id: orderId });
+        await audit(env.DB, at, actor, 'supplier.resend_queued', orderId, { why: 'a person found no order at the supplier' }).run();
+      }
+    }
+  }
   return { ok: true };
 }
 

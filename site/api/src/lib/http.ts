@@ -14,7 +14,12 @@ export class HttpError extends Error {
 
 /** The page CSP (same as web/public/_headers) for HTML the Worker serves itself. */
 export const SITE_CSP =
-  "default-src 'self'; script-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+  "default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+/**
+ * S17 (AN1): the order page's policy: the site's, without Cloudflare's analytics hosts (the beacon is never on it, and
+ * an injected one could not load). SITE_CSP allows them for the pages that may carry the beacon (@hd/shared/analytics).
+ */
+export const PRIVATE_PAGE_CSP = SITE_CSP.replace(' https://static.cloudflareinsights.com', '').replace(' https://cloudflareinsights.com', '');
 
 export const nowIso = (): string => new Date().toISOString();
 

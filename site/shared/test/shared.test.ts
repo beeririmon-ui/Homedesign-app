@@ -39,6 +39,7 @@ import {
   ORDER_STATUS_HE,
   ORDER_DELAY_HE,
   ORDER_DELAY_SHORT_HE,
+  ORDER_STEPS_HE,
   orderStep,
 } from '../src';
 import { loadLeadRecords } from '../../tools/lib/leads';

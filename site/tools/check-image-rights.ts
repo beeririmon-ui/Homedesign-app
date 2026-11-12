@@ -111,7 +111,8 @@ const scan = await scanBuild(DIST, set, dhashes, { files });
 dhashes.save();
 /** behind the flag the shop's and the story's copies ship by design; anything else the scan finds is said */
 const SUPPLIER_FOLDERS = /^media\/(?:products|story\/products)\//;
-const byHow = (f: ContentFinding[]) => Object.fromEntries(['bytes', 'pixels', 'data-uri bytes', 'data-uri pixels', 'host'].map((h) => [h, f.filter((x) => x.how === h).length]));
+const byHow = (f: ContentFinding[]) =>
+  Object.fromEntries(['bytes', 'pixels', 'data-uri bytes', 'data-uri pixels', 'host'].map((h) => [h, f.filter((x) => x.how === h).length]));
 const elsewhere = scan.findings.filter((f) => !SUPPLIER_FOLDERS.test(f.where));
 const content = {
   supplier_set: { ...set.stats, card_picture_hosts: hosts, domains: [...new Set(hosts.map(registrableDomain))].sort(), story_ledger: !!ledgers[1] },

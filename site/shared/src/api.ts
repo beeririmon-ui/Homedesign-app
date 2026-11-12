@@ -3,7 +3,17 @@ import { z } from 'zod';
 import { IL_PHONE, ORDER_STATUSES } from './constants';
 import { PACKS } from './packs';
 
-export { IL_PHONE, ORDER_DELAY_HE, ORDER_DELAY_SHORT_HE, ORDER_ID, ORDER_STATUSES, ORDER_STATUS_HE, ORDER_STEPS_HE, orderStep, type OrderStatus } from './constants';
+export {
+  IL_PHONE,
+  ORDER_DELAY_HE,
+  ORDER_DELAY_SHORT_HE,
+  ORDER_ID,
+  ORDER_STATUSES,
+  ORDER_STATUS_HE,
+  ORDER_STEPS_HE,
+  orderStep,
+  type OrderStatus,
+} from './constants';
 
 /** a house of the room engine: a style id (S12, ת21) */
 export const HOUSE_ID = z.string().regex(/^[a-z][a-z-]{0,39}$/);

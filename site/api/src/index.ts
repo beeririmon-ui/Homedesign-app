@@ -1,7 +1,7 @@
 import type { Env, SupplierJob } from './env';
 import { app } from './app';
 import { processSupplierJob } from './lib/fulfillment';
-import { log } from './lib/log';
+import { configureLog, log, orderLog } from './lib/log';
 import { supplierClient } from './lib/suppliers';
 import { syncShipments } from './lib/shipments';
 
@@ -12,12 +12,18 @@ export default {
    * retries), loudly; the messages after it in the batch are processed as usual. S13: the row is structured, no PII.
    */
   async queue(batch: MessageBatch<SupplierJob>, env: Env): Promise<void> {
+    configureLog(env);
     for (const msg of batch.messages) {
       let result: Awaited<ReturnType<typeof processSupplierJob>>;
       try {
         result = await processSupplierJob(env, msg.body, msg.attempts);
       } catch (err) {
-        log.error('queue.job_failed', { kind: msg.body?.kind ?? 'message', order_id: msg.body?.order_id ?? null, attempt: msg.attempts }, err);
+        // S17 (ת46): the job's order is known: its customer's values leave the row
+        (await orderLog(env.DB, msg.body?.order_id)).error(
+          'queue.job_failed',
+          { kind: msg.body?.kind ?? 'message', order_id: msg.body?.order_id ?? null, attempt: msg.attempts },
+          err,
+        );
         result = 'retry';
       }
       if (result === 'retry') msg.retry({ delaySeconds: Math.min(600, 30 * 2 ** msg.attempts) });
@@ -29,6 +35,7 @@ export default {
    * client has a tracking call (CJ's is not in the repo's documentation yet, and the mock never reports on its own).
    */
   async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
+    configureLog(env);
     const c = supplierClient(env);
     if (!c.ok || !c.client.tracking) return;
     const r = await syncShipments(env, c.client);

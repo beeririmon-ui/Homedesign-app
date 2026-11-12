@@ -92,9 +92,9 @@ describe('ת45: the pieces', () => {
 
 describe('ת45: QA’s mutations on pictures made here', () => {
   let site = '';
-  let supplier = Buffer.alloc(0);
-  let story480 = Buffer.alloc(0);
-  let render = Buffer.alloc(0);
+  let supplier: Buffer = Buffer.alloc(0);
+  let story480: Buffer = Buffer.alloc(0);
+  let render: Buffer = Buffer.alloc(0);
   let ledgers: Ledger[] = [];
   const hosts = ['ae01.alicdn.com'];
   beforeAll(async () => {
@@ -108,7 +108,15 @@ describe('ת45: QA’s mutations on pictures made here', () => {
     put(site, 'web/public/media/story/products/holder-x/0123456789.480.webp', story480);
     const confirmed = await webp(await picture(5), 800);
     put(site, 'web/public/media/products/vase-ok/photo.800.webp', confirmed);
-    const e = (file: string, b: Buffer, rights: 'unclear' | 'confirmed', source: 'shop' | 'story' | 'cache', picture: string, product = 'holder-x', width?: number) => ({
+    const e = (
+      file: string,
+      b: Buffer,
+      rights: 'unclear' | 'confirmed',
+      source: 'shop' | 'story' | 'cache',
+      picture: string,
+      product = 'holder-x',
+      width?: number,
+    ) => ({
       file,
       sha256: sha256(b),
       product,
@@ -130,7 +138,17 @@ describe('ת45: QA’s mutations on pictures made here', () => {
       {
         generated_at: 'now',
         source: 'story',
-        entries: [e('web/public/media/story/products/holder-x/0123456789.480.webp', story480, 'unclear', 'story', 'story/products/holder-x/0123456789', 'holder-x', 480)],
+        entries: [
+          e(
+            'web/public/media/story/products/holder-x/0123456789.480.webp',
+            story480,
+            'unclear',
+            'story',
+            'story/products/holder-x/0123456789',
+            'holder-x',
+            480,
+          ),
+        ],
       },
     ];
   });
@@ -141,7 +159,13 @@ describe('ת45: QA’s mutations on pictures made here', () => {
     put(dist, 'media/rooms/living-room/nordic/base.1280.webp', render);
     await mutate(dist);
     const dh = new DhashCache();
-    const set = await supplierSet({ site, ledgers: o.story === false ? [ledgers[0]!] : ledgers, cacheDir: join(site, '.cache/supplier-images'), hosts, dhashes: dh });
+    const set = await supplierSet({
+      site,
+      ledgers: o.story === false ? [ledgers[0]!] : ledgers,
+      cacheDir: join(site, '.cache/supplier-images'),
+      hosts,
+      dhashes: dh,
+    });
     const r = await scanBuild(dist, set, dh);
     rmSync(dist, { recursive: true, force: true });
     return r.findings;
@@ -267,10 +291,19 @@ describe.skipIf(!REAL)('ת45: QA’s mutations on the real supplier pictures (th
         },
         /media\/og\/look-1\.webp: by bytes/,
       ],
-      ['R3', (d) => writeFileSync(join(d, 'p/holder/index.html'), withHead(PAGE, `<meta property="og:image" content="${cardUrl()}">`)), /by host: a URL on a supplier picture host: ae01\.alicdn\.com/],
-      ['R4', (d) => writeFileSync(join(d, 'p/holder/index.html'), withBody(PAGE, `<img alt="" src="data:image/webp;base64,${bytes.toString('base64')}">`)), /by data-uri bytes/],
+      [
+        'R3',
+        (d) => writeFileSync(join(d, 'p/holder/index.html'), withHead(PAGE, `<meta property="og:image" content="${cardUrl()}">`)),
+        /by host: a URL on a supplier picture host: ae01\.alicdn\.com/,
+      ],
+      [
+        'R4',
+        (d) => writeFileSync(join(d, 'p/holder/index.html'), withBody(PAGE, `<img alt="" src="data:image/webp;base64,${bytes.toString('base64')}">`)),
+        /by data-uri bytes/,
+      ],
     ];
-    if (existsSync(STORY_DIR)) cases.push(['R6', (d) => cpSync(STORY_DIR, join(d, 'media/story/products'), { recursive: true }), /media\/story\/products\/.*by bytes/]);
+    if (existsSync(STORY_DIR))
+      cases.push(['R6', (d) => cpSync(STORY_DIR, join(d, 'media/story/products'), { recursive: true }), /media\/story\/products\/.*by bytes/]);
     for (const [name, mutate, expected] of cases) {
       const d = dist(mutate);
       const r = cli(d);

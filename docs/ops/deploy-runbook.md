@@ -25,6 +25,7 @@
 | **Grow** (W1) | חשבון סוחר | — | `GROW_USER_ID`, ‏`GROW_PAGE_CODE`, ‏`GROW_API_KEY` |
 | **חשבוניות** (W2: המודול של Grow, או Morning) | אצל השירות | — | `INVOICE_API_KEY` |
 | **CJ** | חשבון CJ, ‏API key | — | `CJ_API_KEY` |
+| **אנליטיקס: Cloudflare Web Analytics** (AN1, ‏2026-11-12; רשימת ההשקה 6.1) | Cloudflare, ‏Analytics & Logs, ‏Web Analytics, ‏Add a site: שם המארח של האתר. **בוחרים בהתקנה הידנית (JS snippet), לא באוטומטית**: ההתקנה האוטומטית מזריקה את הסקריפט לכל דף HTML, כולל הקופה, ההזמנה וה-admin. מהקטע שמתקבל מעתיקים רק את ה-token | — | ‏`CF_ANALYTICS_TOKEN` בסביבה שבה רצה הבנייה הציבורית, ולא ב-wrangler: `CF_ANALYTICS_TOKEN=<token> HD_PUBLIC=1 npm run build` (פרק 3, צעד 2). זה לא סוד (הוא מופיע בדפים), אבל לא נכנס לריפו |
 
 ## 2. התיעוד שחסר בריפו (אף נקודת קצה לא נוחשה)
 - **Grow** (`site/api/src/lib/payments/grow.ts`):
@@ -66,6 +67,10 @@
 
 1. **בדיקות:** `npm ci && npm run test:all` ב-`site/`. ה-CI מריץ את אותן בדיקות, ובנוסף Lighthouse ובניית ה-Artifact. מקומית, ‏e2e צריך `site/api/.dev.vars` עם `PAYMENT_WEBHOOK_SECRET` (כל מחרוזת אקראית).
 2. **בנייה ציבורית:** `HD_PUBLIC=1 npm run build`. בלי `/test/` ובלי `/story/`, עד שיש פריימים במצב "מאושר לאתר".
+   - **S17 (AN1), אנליטיקס:** `CF_ANALYTICS_TOKEN=<token> HD_PUBLIC=1 npm run build`. בלי token אין סקריפט בשום דף. עם token, הסקריפט של Cloudflare נכנס לדף הבית, לחדרים, למוצרים ולדפים המשפטיים, ולא לסל, לקופה, לדף ההזמנה, ל-404 או ל-admin. token שאינו 32 תווים הקסדצימליים עוצר את הבנייה. ‏`prerender` מדפיס בכמה דפים הסקריפט נכנס.
+   - **בלי עוגיות ובלי פרטים אישיים:** הסקריפט שולח כתובת דף, מקור הגעה, דפדפן ותזמונים. אנחנו לא מוסיפים לו דבר. ‏`spa: false`: מעבר בתוך האתר (למשל לסל) לא נספר כצפייה בדף.
+   - **ה-CSP:** מדיניות האתר מתירה את `static.cloudflareinsights.com` (הסקריפט) ואת `cloudflareinsights.com` (הדיווח). בסל ובקופה (`_headers`) יש מדיניות שנייה שלא מתירה אותם, וכך גם בדף ההזמנה (`PRIVATE_PAGE_CSP`) וב-admin.
+   - **לבדוק בלוח של Cloudflare אחרי ההעלאה:** שאין דוחות מנתיבי `/cart/`, ‏`/checkout/` ו-`/order/`. לא אומת מול התיעוד של Cloudflare (בלי רשת): האם הדיווח האחרון של הסקריפט, ביציאה מהדף, נושא את הכתובת שאליה עבר הלקוח בתוך האתר.
 3. **D1:** `npx wrangler d1 migrations apply DB --env preview --remote`, ואחר כך `npm run seed:sql -w @hd/api` ו-`npx wrangler d1 execute DB --env preview --remote --file ../.generated/seed.sql`. ה-seed עושה upsert, ולכן אפשר להריץ אותו שוב.
 4. **סודות:** `wrangler secret put …` לכל סוד בטבלה, ל-`preview` קודם.
 5. **העלאה:** `npm run deploy -w @hd/api -- --env preview` מ-`site/`. אחר כך בדיקה ידנית: קנייה מלאה עם התשלום המדומה, ותשלום sandbox כשהסולק מחובר.

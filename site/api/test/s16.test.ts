@@ -571,7 +571,9 @@ describe('ת38: no customer value in any log row, whatever the error says', () =
 describe('ת39: a failing supplier is seen: a row per failed send, /healthz, and the customer’s page', () => {
   it('QA E2: five failed sends → five rows by code; /healthz degraded past 30 minutes; ok again once a send succeeds', async () => {
     const o = await paidOrder();
-    const failing = supplier({ failWith: () => new Error(`cj: the create-order call refused for ${BUYER.full_name}`) });
+    // S17 (ת48): a supplier documented to deduplicate by our order number is sent again after a failure that may have
+    // reached it (one that cannot be asked and does not deduplicate is left to a person: api/test/s17.test.ts)
+    const failing = { ...supplier({ failWith: () => new Error(`cj: the create-order call refused for ${BUYER.full_name}`) }), dedupesByOrderId: true };
     const rows = await logged(async () => {
       for (let a = 1; a <= 5; a++) await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, a, { client: failing });
     });

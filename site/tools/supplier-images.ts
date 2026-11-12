@@ -208,7 +208,9 @@ async function main() {
         .map(([r, k]) => `${r} ${k}`)
         .join(', ')}) → ${PUBLIC_MANIFEST}`,
   );
-  console.log(`rights ledger (S17): ${ledger.length} files by sha256 (shop ${ledger.filter((e) => e.source === 'shop').length}, cached originals ${ledger.filter((e) => e.source === 'cache').length}) → .generated/${LEDGER_SHOP}`);
+  console.log(
+    `rights ledger (S17): ${ledger.length} files by sha256 (shop ${ledger.filter((e) => e.source === 'shop').length}, cached originals ${ledger.filter((e) => e.source === 'cache').length}) → .generated/${LEDGER_SHOP}`,
+  );
   for (const m of manifest.missing) console.warn(`  missing: ${m.id}: ${m.reason}`);
 }
 
@@ -221,7 +223,15 @@ function shopLedger(manifest: SupplierImageManifest, used: Map<string, string>):
   const entries: LedgerEntry[] = [];
   const add = (file: string, product: string, picture: string, source: LedgerEntry['source'], width?: number) => {
     if (!existsSync(file)) return;
-    entries.push({ file: relative(SITE, file).split('\\').join('/'), sha256: sha256(readFileSync(file)), product, rights: rights.get(product) ?? 'none', source, picture, width });
+    entries.push({
+      file: relative(SITE, file).split('\\').join('/'),
+      sha256: sha256(readFileSync(file)),
+      product,
+      rights: rights.get(product) ?? 'none',
+      source,
+      picture,
+      width,
+    });
   };
   for (const [id, p] of Object.entries(manifest.products)) add(join(MEDIA_OUT, `${p.src}.webp`), id, p.src.replace(/\.\d+$/, ''), 'shop', p.width);
   for (const [id, o] of Object.entries(manifest.options ?? {}))

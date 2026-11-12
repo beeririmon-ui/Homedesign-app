@@ -6,6 +6,7 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { cardRedirects, shopPath } from '@hd/shared/product-url';
+import { ANALYTICS_TOKEN, analyticsTag } from '@hd/shared/analytics';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
@@ -38,9 +39,23 @@ const routes = [
   '/checkout/',
 ];
 
+/**
+ * S17 (AN1): Cloudflare Web Analytics, only in the public build and only with the site's token (CF_ANALYTICS_TOKEN, set
+ * where the public build runs): on the pages people read, never the cart, checkout, order page or 404
+ * (@hd/shared/analytics). A token that is not one stops the build: a beacon that silently never loads measures nothing.
+ */
+const PUBLIC = process.env.HD_PUBLIC === '1';
+const TOKEN = process.env.CF_ANALYTICS_TOKEN?.trim() || null;
+if (PUBLIC && TOKEN && !ANALYTICS_TOKEN.test(TOKEN)) {
+  console.error('prerender: CF_ANALYTICS_TOKEN is not a Cloudflare Web Analytics site token (32 hex characters): the build stops.');
+  process.exit(1);
+}
+let beacons = 0;
 function page(url: string): string {
   const { html, head } = render(url);
-  return template.replace('<!--app-head-->', head).replace('<!--app-html-->', html);
+  const tag = analyticsTag({ publicBuild: PUBLIC, token: TOKEN, path: new URL(url, 'https://x').pathname });
+  if (tag) beacons++;
+  return template.replace('<!--app-head-->', head + tag).replace('<!--app-html-->', html);
 }
 
 for (const url of routes) {
@@ -98,4 +113,6 @@ writeFileSync(
   ].join('\n'),
 );
 rmSync(ssrDir, { recursive: true, force: true });
-console.log(`prerendered ${routes.length} pages + ${houses.length} house page(s) + order shell + 404`);
+console.log(
+  `prerendered ${routes.length} pages + ${houses.length} house page(s) + order shell + 404; analytics beacon (S17): ${beacons ? `${beacons} pages` : PUBLIC ? 'none (no CF_ANALYTICS_TOKEN)' : 'none (behind the flag)'}`,
+);

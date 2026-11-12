@@ -9,6 +9,16 @@
  * - **The sets (S11 question 2):** a line of a set of distinct SKUs (the triptych) goes to the supplier as its component
  *   SKUs, one of each per set sold (the composition snapshotted at checkout, `supplier_lines_json`), never as N × the set's
  *   own SKU. A set line without a composition is refused before anything is sent.
+ *
+ * S17, QA ת48: a send that may have reached the supplier (`reach = 'maybe'`: an earlier call timed out or failed on the
+ * way, or a claim whose run died mid-call is taken over) is never repeated blindly. QA's B4d had two orders at the
+ * supplier for one of ours (a timeout, a 503, a success). Now, before sending again:
+ * - **a supplier that can be asked** (`findOrder`, by our order number): it holds the order → recorded as submitted,
+ *   nothing sent; it holds none → sent; no answer → retried later, nothing sent;
+ * - **a supplier that cannot be asked:** sent again only when its adapter documents that it deduplicates by our order
+ *   number (`dedupesByOrderId`); otherwise nothing is sent: the order goes to supplier_error ("דורש טיפול" in the admin),
+ *   and a person checks at the supplier ("בדיקה אצל הספק", lib/cancel.ts `recordSupplierCheck`): "found" records it as
+ *   submitted, "none" sends it again (unless a cancellation is waiting on that check).
  */
 import type { Env, SupplierJob } from '../env';
 import { nowIso } from './http';
@@ -131,12 +141,21 @@ export async function processSupplierJob(
       .first<{ status: string; updated_at: string }>();
     // a claim left by a crash is taken over (compare-and-swap); the supplier must deduplicate by our order number
     if (row?.status !== 'submitting' || Date.now() - Date.parse(row.updated_at) < SUBMIT_LEASE_MS) return 'skipped';
+    // S17 (ת48): the run that died may have reached the supplier: the takeover counts as a send that may have reached it
     const take = await env.DB.prepare(
-      "UPDATE supplier_shipments SET attempts = ?, updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?",
+      "UPDATE supplier_shipments SET attempts = ?, reach = 'maybe', updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?",
     )
       .bind(attempt, now, order.id, client.id, row.updated_at)
       .run();
     if (!take.meta.changes) return 'skipped';
+  }
+  // S17, QA ת48: a send that may have reached the supplier is never repeated blindly
+  const held = await env.DB.prepare('SELECT reach FROM supplier_shipments WHERE order_id = ? AND supplier = ?')
+    .bind(order.id, client.id)
+    .first<{ reach: string }>();
+  if (held?.reach === 'maybe') {
+    const r = await beforeSendingAgain(env, order.id, client, attempt, now, opts.callTimeoutMs ?? SUBMIT_CALL_TIMEOUT_MS);
+    if (r !== 'send') return r;
   }
   const customer = await env.DB.prepare('SELECT full_name, phone, email FROM customers WHERE id = ?')
     .bind(order.customer_id)
@@ -214,4 +233,88 @@ export async function processSupplierJob(
       await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, order.id).run();
     return 'retry';
   }
+}
+
+const audit = (env: Env, at: string, actor: string, action: string, subject: string, detail: object) =>
+  env.DB.prepare('INSERT INTO audit_log (at, actor, action, subject, detail) VALUES (?, ?, ?, ?, ?)').bind(at, actor, action, subject, JSON.stringify(detail));
+
+/**
+ * S17, QA ת48: before a shipment that may be at the supplier is sent again. The claim (`submitting`, `updated_at = now`)
+ * is this run's; every write below holds it (compare-and-swap on `updated_at`).
+ */
+async function beforeSendingAgain(
+  env: Env,
+  orderId: string,
+  client: SupplierClient,
+  attempt: number,
+  now: string,
+  timeoutMs: number,
+): Promise<'send' | 'submitted' | 'skipped' | 'retry'> {
+  const mine = "WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?";
+  if (client.findOrder) {
+    const find = client.findOrder.bind(client);
+    let found: { supplier_order_id: string } | null;
+    try {
+      found = await withDeadline(`${client.id} findOrder`, timeoutMs, (signal) => find(orderId, { signal }));
+    } catch (err) {
+      // not answered: nothing is sent; the claim goes back (still maybe), and the queue asks again
+      await env.DB.prepare(
+        `UPDATE supplier_shipments SET status = 'failed', last_error = ?, failing_since = COALESCE(failing_since, ?), updated_at = ? ${mine}`,
+      )
+        .bind(`findOrder failed: ${errorCode(err)}`, now, now, orderId, client.id, now)
+        .run();
+      log.error('supplier.find_failed', { order_id: orderId, supplier: client.id, attempt, code: errorCode(err) });
+      if (attempt >= 5)
+        await env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, orderId).run();
+      return 'retry';
+    }
+    if (found) {
+      const id = found.supplier_order_id.slice(0, 120);
+      const [rec] = await env.DB.batch([
+        env.DB.prepare(
+          `UPDATE supplier_shipments SET status = 'submitted', supplier_order_id = ?, attempts = ?, reach = 'none', last_error = NULL, failing_since = NULL, updated_at = ? ${mine}`,
+        ).bind(id, attempt, now, orderId, client.id, now),
+        env.DB.prepare(
+          "UPDATE orders SET status = 'sent_to_supplier', updated_at = ? WHERE id = ? AND status = 'paid' AND EXISTS (SELECT 1 FROM supplier_shipments WHERE order_id = ? AND supplier = ? AND status = 'submitted' AND supplier_order_id = ?)",
+        ).bind(now, orderId, orderId, client.id, id),
+        env.DB.prepare(
+          "INSERT INTO audit_log (at, actor, action, subject, detail) SELECT ?, ?, 'supplier.found_by_order', ?, ? WHERE EXISTS (SELECT 1 FROM supplier_shipments WHERE order_id = ? AND supplier = ? AND status = 'submitted' AND supplier_order_id = ? AND updated_at = ?)",
+        ).bind(
+          now,
+          `supplier:${client.id}`,
+          orderId,
+          JSON.stringify({ supplier: client.id, supplier_order: id, by: 'the supplier job' }),
+          orderId,
+          client.id,
+          id,
+          now,
+        ),
+      ]);
+      log.info('supplier.found_by_order', { order_id: orderId, supplier: client.id, attempt });
+      return rec?.meta.changes ? 'submitted' : 'skipped';
+    }
+    // it holds none: the earlier send created nothing, and this one goes
+    await env.DB.batch([
+      env.DB.prepare(`UPDATE supplier_shipments SET reach = 'checked' ${mine}`).bind(orderId, client.id, now),
+      audit(env, now, `supplier:${client.id}`, 'supplier.none_by_order', orderId, { supplier: client.id, by: 'the supplier job' }),
+    ]);
+    return 'send';
+  }
+  if (client.dedupesByOrderId) {
+    log.info('supplier.resend_deduplicated', { order_id: orderId, supplier: client.id, attempt });
+    return 'send';
+  }
+  // neither asked nor deduplicating: nothing is sent; a person checks at the supplier
+  await env.DB.batch([
+    env.DB.prepare(
+      `UPDATE supplier_shipments SET status = 'failed', reach = 'maybe', failing_since = COALESCE(failing_since, ?), last_error = COALESCE(last_error, ?), updated_at = ? ${mine}`,
+    ).bind(now, 'a send that may have reached the supplier: a person checks there', now, orderId, client.id, now),
+    env.DB.prepare("UPDATE orders SET status = 'supplier_error', updated_at = ? WHERE id = ? AND status = 'paid'").bind(now, orderId),
+    audit(env, now, 'queue', 'supplier.resend_needs_person', orderId, {
+      supplier: client.id,
+      why: 'a send that may have reached the supplier, which cannot be asked',
+    }),
+  ]);
+  log.warn('supplier.resend_needs_person', { order_id: orderId, supplier: client.id, attempt });
+  return 'skipped';
 }

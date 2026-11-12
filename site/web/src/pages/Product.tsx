@@ -130,7 +130,8 @@ export function Product({ p }: { p: PublicProduct }) {
                           <a href={shopPath(op.id)}>{op.name_he}</a>
                         )}
                         <span class="detail">
-                          {[knownValues(op.materials_he)[0], op.id === p.id ? 'הדף הזה' : null].filter(Boolean).join(' · ')} · <Price agorot={op.price_agorot} />
+                          {[knownValues(op.materials_he)[0], op.id === p.id ? 'הדף הזה' : null].filter(Boolean).join(' · ')} ·{' '}
+                          <Price agorot={op.price_agorot} />
                         </span>
                       </span>
                     ) : (

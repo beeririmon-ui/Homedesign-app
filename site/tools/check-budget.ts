@@ -51,6 +51,14 @@ const otherCss = assets.filter((f) => f.endsWith('.css') && !referenced.has(f)).
 // one woff2 per weight for the Hebrew subset and one for Latin (unicode-range: a Hebrew page needs both)
 const fonts = assets.filter((f) => /-(hebrew|latin)-\d{3}-normal-.*\.woff2$/.test(f)).reduce((s, f) => s + statSync(join(DIST, 'assets', f)).size, 0);
 const html = gz(join(DIST, 'rooms/living-room/index.html'));
+/**
+ * S17 (AN1): the Cloudflare Web Analytics beacon, when the public build carries it (CF_ANALYTICS_TOKEN): one deferred
+ * script from Cloudflare, counted at an estimate of its gzip size (it is not in the build, and the build does not fetch it)
+ */
+const BEACON_GZ_ESTIMATE = 8 * 1024;
+const beacon = /static\.cloudflareinsights\.com\/beacon\.min\.js/.test(readFileSync(join(DIST, 'rooms/living-room/index.html'), 'utf8'))
+  ? BEACON_GZ_ESTIMATE
+  : 0;
 
 // phone: 412×915 CSS px, DPR 2, header 60 px; the stage is cover-fitted to the 16:9 frame
 const vw = 412;
@@ -91,7 +99,7 @@ const { bytes: layers, files: count } = roomMedia(['avif', 'webp']);
 const layersNoAvif = roomMedia(['webp']).bytes;
 
 const sum = (a: number[]) => a.reduce((s, x) => s + x, 0);
-const total = html + sum(js) + sum(css) + fonts + layers;
+const total = html + sum(js) + sum(css) + fonts + layers + beacon;
 const kb = (n: number) => `${(n / 1024).toFixed(1)} KB`;
 const rows: [string, number, number | null][] = [
   ['JS (gzip), the room page entry', sum(js), BUDGET.jsGz],
@@ -99,6 +107,7 @@ const rows: [string, number, number | null][] = [
   // S13: the pages off the room's first paint (product, cart, checkout, order, legal) are chunks loaded on their route
   [`lazy chunks + test page: JS ${otherJs.length} files, CSS ${otherCss.length}`, sum(otherJs) + sum(otherCss), null],
   ['fonts (woff2, he+latin)', fonts, null],
+  ...(beacon ? [['analytics beacon (Cloudflare, deferred; an estimate)', beacon, null] as [string, number, null]] : []),
   [`room media (${count} files, shell @${posterW}, layers @${res})`, layers, null],
   ['first load, living room, mobile', total, BUDGET.firstLoad],
   // S16, QA ת43: a browser without AVIF loads every WebP fallback instead

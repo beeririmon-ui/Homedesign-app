@@ -94,3 +94,22 @@ test('S17 (QA ה5): no product page shows a value that says it is unknown, nor a
   console.log(`ה5: ${pages.length} product pages, ${withoutPicture} without a picture`);
   expect(found).toEqual([]);
 });
+
+test('S17 (AN1): the analytics beacon only with a token, only in the public build, never on the cart, checkout, order or 404', () => {
+  const token = process.env.CF_ANALYTICS_TOKEN?.trim();
+  const isPublic = !existsSync(join(DIST, 'test'));
+  const html = [...files(DIST)].filter((f) => f.endsWith('.html')).map((f) => ({ rel: relative(DIST, f), text: readFileSync(f, 'utf8') }));
+  const carrying = html.filter((p) => /cloudflareinsights\.com\/beacon\.min\.js/.test(p.text)).map((p) => p.rel);
+  if (!token || !isPublic) {
+    expect(carrying).toEqual([]);
+    return;
+  }
+  for (const p of ['index.html', 'rooms/living-room/index.html', 'privacy/index.html']) expect(carrying, p).toContain(p);
+  expect(carrying.filter((p) => /^(?:cart|checkout|order)\//.test(p) || p === '404.html')).toEqual([]);
+  for (const p of carrying) {
+    const text = html.find((x) => x.rel === p)!.text;
+    expect(text.match(/data-cf-beacon/g)?.length, p).toBe(1);
+    expect(text).toContain(`data-cf-beacon='{"token":"${token.toLowerCase()}","spa":false}'`);
+  }
+  console.log(`AN1: the beacon on ${carrying.length} of ${html.length} pages`);
+});

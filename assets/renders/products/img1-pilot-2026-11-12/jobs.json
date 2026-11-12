@@ -1,0 +1,468 @@
+{
+ "date": "2026-11-12",
+ "agent": "render-agent",
+ "brief": "briefs/render-img1-pilot-2026-11-12.md",
+ "plan": "docs/proposals/own-product-images-2026-11-11.md (sections 2 and 5)",
+ "decision": "IMG1 (owner, 2026-11-12): 'כן רק שיהיה נאמן למקור'",
+ "budget": {
+  "base": 3950,
+  "reserve_with_manager_approval": 2000
+ },
+ "status": "STOPPED BEFORE ANY SPEND: var2_estimate_cost is off by more than 10% (brief: 'If an estimate is off by more than 10%, stop and report')",
+ "tokens_spent": 0,
+ "var2_auth": "no authentication requested (var2_list_models and var2_estimate_cost answered)",
+ "estimate_calls": {
+  "tool": "var2_estimate_cost (live lookup, 2026-11-12)",
+  "live_unit_prices": {
+   "gpt-image-2-5 i2i 2K, background=transparent, quality=sunburst": 600,
+   "gpt-image-2-5 4K": 700,
+   "nano-banana-pro i2i or t2i 2K": 480,
+   "remove-background": 50,
+   "nano-banana-2 1K/2K/4K": [
+    350,
+    400,
+    450
+   ],
+   "seedream-5-pro 2K": 650,
+   "gpt-image-2 2K": 600
+  },
+  "note": "var2_list_models shows nano-banana-pro fallbackTokens 250, but the live pricing (fromLiveLookup) is 480; docs/var2-models.md already says 480. The plan took 250 from the list."
+ },
+ "deviation_per_job": [
+  {
+   "jobs": "1-3 P2-A, gpt-image-2-5 2K transparent",
+   "plan_each": 600,
+   "live_each": 600,
+   "deviation_pct": 0.0,
+   "verdict": "confirmed (the designer's assumption holds)"
+  },
+  {
+   "jobs": "4-6 P2-B, nano-banana-pro + remove-background",
+   "plan_each": 300,
+   "live_each": 530,
+   "deviation_pct": 76.7,
+   "verdict": "over 10%: stop"
+  },
+  {
+   "jobs": "7-9 P1, nano-banana-pro",
+   "plan_each": 250,
+   "live_each": 480,
+   "deviation_pct": 92.0,
+   "verdict": "over 10%: stop"
+  },
+  {
+   "jobs": "10 P3, nano-banana-pro",
+   "plan_each": 250,
+   "live_each": 480,
+   "deviation_pct": 92.0,
+   "verdict": "over 10%: stop"
+  },
+  {
+   "jobs": "11 P4 Pecan, nano-banana-pro",
+   "plan_each": 250,
+   "live_each": 480,
+   "deviation_pct": 92.0,
+   "verdict": "over 10%: stop"
+  }
+ ],
+ "pilot_total": {
+  "plan": 3950,
+  "live_as_planned": 5790,
+  "over_by": 1840,
+  "over_pct": 46.6,
+  "batch_step2_A_B": {
+   "plan": 2700,
+   "live": 3390,
+   "over_pct": 25.6
+  }
+ },
+ "options_for_manager": [
+  {
+   "id": "A",
+   "what": "as planned: A/B (gpt vs nano-banana-pro + remove-bg), P1 x3, P3, P4 on nano-banana-pro",
+   "tokens": 5790,
+   "needs": "1,840 of the 2,000 reserve; 160 left for fixes"
+  },
+  {
+   "id": "B",
+   "what": "A/B kept, but nano-banana-2 instead of nano-banana-pro: P2-B 2K + remove-bg (450), P1 4K (450, the recipe's close-up model and the plan's P1 fallback), P3/P4 2K (400)",
+   "tokens": 5300,
+   "needs": "1,350 of the reserve; changes the model under test in arm B and D2"
+  },
+  {
+   "id": "C",
+   "what": "drop the nano P2 arm (its premise was half price; live it is 530 vs 600, -12%), gpt P2 x3; P1/P3/P4 on nano-banana-pro as planned",
+   "tokens": 4200,
+   "needs": "250 of the reserve; D1 decided without A/B evidence"
+  },
+  {
+   "id": "D",
+   "what": "C, with nano-banana-2 4K for P1 (450) and nano-banana-2 2K for P3/P4 (400)",
+   "tokens": 3950,
+   "needs": "exactly the base; reserve untouched; changes D2 to the recipe's close-up model (4K, cheaper than the plan's primary)"
+  }
+ ],
+ "program_effect": "Plan section 4 used 250 for P1/P3/P4 and 300 for a nano P2. At live prices the Nordic 39 products (gpt path) are about 52,200 with nano-banana-pro (plan: 38,400), or about 49,350 with nano-banana-2 (P1 4K 450, P3/P4 2K 400). Section 4 needs recomputing by master-designer before IMG1f.",
+ "prep_done_0_tokens": {
+  "reference_sheets": "built in the session scratchpad only (contain supplier cut-outs; never in the repo); rebuild with tools/ and the recipe below",
+  "own_bases_in_repo": {
+   "palette_P2B": "assets/renders/products/img1-pilot-2026-11-12/bases/palette-F4F1EC-1638x2048.png",
+   "empty_canvas_P2A": "assets/renders/products/img1-pilot-2026-11-12/bases/canvas-transparent-1638x2048.png",
+   "p1_throw": {
+    "path": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-throw-nordic-A-ed4-1650-450-2450-1450.png",
+    "frame": "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+    "box": [
+     1650,
+     450,
+     2450,
+     1450
+    ],
+    "adjust_pct": 0,
+    "ged_r13": "nordic-A-ed4: sofa-cover-cj-cotton-muslin-fringe faithful=yes"
+   },
+   "p1_vase": {
+    "path": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-vase-warm-modern-A-ed9-1600-560-2160-1260.png",
+    "frame": "assets/renders/editorial-phase-b-2026-11-06/warm-modern-A-ed9.png",
+    "box": [
+     1600,
+     560,
+     2160,
+     1260
+    ],
+    "adjust_pct": 0,
+    "ged_r13": "warm-modern-A-ed9: vase-cj-textured-white-stoneware faithful=yes"
+   },
+   "p1_lamp": {
+    "path": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-lamp-nordic-A-ed4-900-230-1460-930.png",
+    "frame": "assets/renders/editorial-phase-b-2026-11-06/nordic-A-ed4.png",
+    "box": [
+     900,
+     230,
+     1460,
+     930
+    ],
+    "adjust_pct": 0,
+    "note": "the block lamp there is replaced (the product is in no frame)"
+   }
+  },
+  "prompts": {
+   "p2-a-throw": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-a-throw.txt",
+    "chars": 1519,
+    "sha256_16": "de1fa25fa9275599"
+   },
+   "p2-a-vase": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-a-vase.txt",
+    "chars": 1416,
+    "sha256_16": "967f4fa5c6dd916a"
+   },
+   "p2-a-lamp": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-a-lamp.txt",
+    "chars": 1520,
+    "sha256_16": "93c77641442e8759"
+   },
+   "p2-b-throw": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-b-throw.txt",
+    "chars": 1559,
+    "sha256_16": "9107567124a6b688"
+   },
+   "p2-b-vase": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-b-vase.txt",
+    "chars": 1447,
+    "sha256_16": "c0de58d5b74f5866"
+   },
+   "p2-b-lamp": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-b-lamp.txt",
+    "chars": 1598,
+    "sha256_16": "6105aabc57dba9e4"
+   },
+   "p1-throw": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p1-throw.txt",
+    "chars": 1180,
+    "sha256_16": "c04ae4c78a90a892"
+   },
+   "p1-vase": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p1-vase.txt",
+    "chars": 1050,
+    "sha256_16": "6bdaec2496d691a7"
+   },
+   "p1-lamp": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p1-lamp.txt",
+    "chars": 1281,
+    "sha256_16": "9ad1cc64d07ff0cd"
+   },
+   "p3-throw": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p3-throw.txt",
+    "chars": 582,
+    "sha256_16": "e407d7f74a946319"
+   },
+   "p4-throw-pecan": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p4-throw-pecan.txt",
+    "chars": 439,
+    "sha256_16": "72700b6a492b9ed7"
+   }
+  },
+  "prompts_note": "extracted programmatically from the plan's 5.4 code blocks; [STUDIO] substituted; P2-B first line per 5.4 ('exactly one cotton muslin throw / stoneware vase / pair of wall lamps'), lamp with 'as if hung on an invisible wall; no shadow'; P3 [N]=5"
+ },
+ "references": {
+  "policy": "supplier images: scratchpad and var2 only, never committed, never image_url; recorded here by card index only, no URLs",
+  "sheet_format": "each cut on flat #808080, 16 px gaps, no captions; R1 (the SKU image) in colour at height 640; the other references L*-only (a*=b*=0, median L* matched to R1) at R1's scale; swatch 256 px = median of R1's lit side",
+  "throw": {
+   "card": "sofa-cover-cj-cotton-muslin-fringe",
+   "sku_in_room": "CJYD205807526ZA (White 150x200)",
+   "R1": {
+    "index": "images.urls[0] (= SKU White image)",
+    "crop": [
+     0,
+     330,
+     790,
+     705
+    ],
+    "cut": "threshold L*>22, minus low-chroma floor bottom-right; pillow box [738,30,790,135] removed",
+    "excluded_by_crop": "the person (above y 330) and the sewn label (~[220,715,260,760], below y 705)"
+   },
+   "R2": {
+    "index": "images.urls[2]",
+    "crop": [
+     330,
+     0,
+     800,
+     540
+    ],
+    "cut": "L*>24 & b*>4",
+    "why": "clearest waffle crinkle + fringe",
+    "excluded_by_crop": "label ~[290,590,350,670], picture frame"
+   },
+   "R3": {
+    "index": "images.urls[4]",
+    "crop": [
+     420,
+     100,
+     800,
+     560
+    ],
+    "cut": "L*>28 & b*>6",
+    "why": "fringe along two edges",
+    "excluded_by_crop": "label ~[415,760,500,780], cup, books, frame"
+   },
+   "detail_scales": "grid cell matched to R1: u0 ~5 px, urls[2] ~11 px, urls[4] ~6.2 px per cell",
+   "not_used": "urls[1] (bed scene, label), urls[3] (folded on white: the closest to a studio fold; left out to avoid any C2/C3 copy risk)",
+   "every_image_has_a_sewn_label_with_text": "excluded by cropping only; nothing painted out (research 5, rec. 4)",
+   "R2_R3_luminance_only_reason": "they show a beige colourway; the only White image is R1"
+  },
+  "pecan_P4": {
+   "index": "options.skus[CJYD205807508HS].image",
+   "crop": [
+    110,
+    240,
+    800,
+    705
+   ],
+   "cut": "L*>6 & b*>5",
+   "excluded_by_crop": "label ~[380,720,420,770], cup, books, frame"
+  },
+  "vase": {
+   "card": "vase-cj-textured-white-stoneware",
+   "sku_in_room": "CJJT312391803CX (Large 32x16)",
+   "R1": {
+    "index": "images.urls[4] (= SKU Large image, 02d028bc..._trans)",
+    "crop": [
+     0,
+     0,
+     800,
+     662
+    ],
+    "cut": "GrabCut, foot at the contact line y~620",
+    "excluded_by_crop": "the text band (y>=662)",
+    "measured": {
+     "H_over_D": 2.08,
+     "mouth_over_D": "~0.59"
+    }
+   },
+   "R2": {
+    "index": "images.urls[2]",
+    "crop": [
+     430,
+     290,
+     650,
+     466
+    ],
+    "what": "the tall (Large, H/D 2.12) vase: shoulder, rim and mouth; flowers/stems masked (L*<62)",
+    "excluded": "the small round vase occludes its lower left (below the crop)"
+   },
+   "R3": {
+    "index": "images.urls[1]",
+    "patch": [
+     320,
+     420,
+     480,
+     640
+    ],
+    "what": "interior relief patch only, no silhouette (that vase is the Medium, H/D ~1.6)"
+   },
+   "not_used": "urls[1] and urls[5] as whole vases: both are the Medium (H/D ~1.6), they would mislead the Large proportion; urls[3]/[6]: Small/Medium SKU images with text; urls[0]/[7]: other sizes"
+  },
+  "lamp": {
+   "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+   "sku_in_room": "12000043242375290 (16 cm, 3000K)",
+   "R1": {
+    "index": "images.urls[9] (= the in-room SKU image)",
+    "crop": [
+     120,
+     40,
+     365,
+     458
+    ],
+    "cut": "GrabCut, product only; the H16cm/D6.5cm arrows and text are outside the cut",
+    "measured": {
+     "cylinder_H_over_D": 2.6,
+     "plate_height_over_cylinder": 0.75
+    }
+   },
+   "R2": {
+    "index": "images.urls[0]",
+    "crop": [
+     360,
+     512,
+     510,
+     592
+    ],
+    "what": "the lit lower end of the cylinder only (below the plate's end), at R1's cm scale"
+   },
+   "deviation_from_5_3": "5.3 asks for front, side with plate, and lit, and excludes the two dimension tables. Measured: urls[0], [2], [3] show the 28/32 cm SKUs (cylinder ~5:1, plate ~0.6 of the cylinder vs 0.75 in the 16 cm). Only urls[9] (the SKU image, a dimension image) and urls[1] (tiny) show the 16 cm. Fidelity first: R1 = urls[9] cut to the product only (no text), R2 = the lit end of urls[0] without the plate. 2 images (2.2 allows 2-4).",
+   "not_used": "urls[4] (grey, cold light: per 5.3), urls[6]/[7]/[8] (23/28/32 cm dimension images), urls[2]/[3] (32 cm), urls[5] (lying, cable/switch), urls[1] (16 cm but ~54x134 px)"
+  }
+ },
+ "measurements": {
+  "lit_side_definition": "median Lab of product pixels (alpha>=0.9) between the 90th and 99th L* percentile; the same definition is meant for our P2/P4. (75-98th gives White L* 83.5: with 'dL*<=6' that would leave an 89-89.5 window, so the 90-99th is the consistent one.)",
+  "sku_lit_side_LCh": {
+   "throw_white": [
+    90.35,
+    3.93,
+    72.3
+   ],
+   "vase_large": [
+    92.72,
+    1.09,
+    91.0
+   ],
+   "lamp_16": [
+    84.08,
+    15.5,
+    84.9
+   ],
+   "throw_pecan": [
+    69.93,
+    18.78,
+    61.5
+   ]
+  },
+  "vs_5_5_targets": "White inside L* 89-95 / C* 3-9 / h 70-100; vase inside L* 90-95 / C*<=5 / h 60-100; lamp inside L* 76-85 / C* 11-20 / h 70-95",
+  "swatch_rgb": {
+   "throw_white": [
+    233,
+    226,
+    220
+   ],
+   "vase": [
+    235,
+    234,
+    232
+   ],
+   "lamp": [
+    224,
+    208,
+    181
+   ],
+   "pecan": [
+    198,
+    164,
+    142
+   ]
+  },
+  "p3_N": {
+   "value": 5,
+   "how": "fringe length in waffle cells on urls[0]: ~4 on the hanging (foreshortened) edge, ~6 on the front edge"
+  }
+ },
+ "pecan_precheck_0_tokens": {
+  "verdict": "construction looks the same: P4 by edit is allowed under 2.4",
+  "evidence": "SKU Pecan vs SKU White (urls[0]): same multi-layer waffle muslin with crinkle, same self-coloured frayed fringe (~5-6 cells in both), same sewn label type; thickness reads the same",
+  "open": "Pecan 150x200 is $16.25 vs White $11.64; the photos do not explain it (dye or weight). G2.11 still needs the side-by-side and the written QA + designer verdict 'same SKU'."
+ },
+ "planned_calls_when_released": [
+  {
+   "n": "1-3",
+   "what": "P2-A",
+   "model": "gpt-image-2-5",
+   "type": "image-to-image",
+   "params": {
+    "resolution": "2K",
+    "aspect_ratio": "3:4",
+    "background": "transparent",
+    "quality": "sunburst"
+   },
+   "image_url": "assets/renders/products/img1-pilot-2026-11-12/bases/canvas-transparent-1638x2048.png (our empty canvas)",
+   "image_refs": [
+    "the product's sheet"
+   ],
+   "post": "crop 3:4 -> 4:5 in code, centred (1536x1920)",
+   "approval_needed": [
+    "gpt-image-2-5 has no 4:5 (var2_list_models: avoid 4:5); 3:4 then crop",
+    "the API needs an image_url to attach refs; the plan says 'no base': our empty transparent canvas carries no content"
+   ]
+  },
+  {
+   "n": "4-6",
+   "what": "P2-B",
+   "model": "nano-banana-pro (or per option)",
+   "type": "image-to-image",
+   "params": {
+    "resolution": "2K",
+    "aspect_ratio": "4:5"
+   },
+   "image_url": "assets/renders/products/img1-pilot-2026-11-12/bases/palette-F4F1EC-1638x2048.png",
+   "image_refs": [
+    "the product's sheet"
+   ],
+   "post": "remove-background (50)"
+  },
+  {
+   "n": "7-9",
+   "what": "P1",
+   "model": "nano-banana-pro (or nano-banana-2 4K per option)",
+   "type": "image-to-image",
+   "params": {
+    "aspect_ratio": "4:5"
+   },
+   "image_url": "the P1 base crop (bases/)",
+   "image_refs": [
+    "the product's sheet"
+   ]
+  },
+  {
+   "n": "10",
+   "what": "P3 throw",
+   "base": "1:1 crop at 100% of the chosen P2 corner, on #F4F1EC",
+   "image_refs": [
+    "a texture square from urls[0]"
+   ]
+  },
+  {
+   "n": "11",
+   "what": "P4 Pecan",
+   "base": "the chosen P2 throw on #808080",
+   "image_refs": [
+    "the Pecan cut + swatch"
+   ],
+   "post": "re-apply the P2 alpha"
+  }
+ ],
+ "not_created_and_why": {
+  "images": "no var2 job run (stop rule)",
+  "source-record.json": "no image to record yet",
+  "A/B sheet and 100% crops": "no images yet",
+  "assets/manifest.json": "not touched: no new render asset; new files only"
+ },
+ "idempotency_prefix": "img1-pilot-20261112-"
+}

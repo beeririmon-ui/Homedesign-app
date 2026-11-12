@@ -778,7 +778,11 @@ function publicBuild(): void {
   const dir = sitePath('.generated/public-check');
   rmSync(dir, { recursive: true, force: true });
   const t = Date.now();
-  execFileSync('npx', ['--no-install', 'vite', 'build', '--outDir', dir, '--emptyOutDir'], { cwd: sitePath('web'), env: { ...process.env, HD_PUBLIC: '1' }, stdio: 'pipe' });
+  execFileSync('npx', ['--no-install', 'vite', 'build', '--outDir', dir, '--emptyOutDir'], {
+    cwd: sitePath('web'),
+    env: { ...process.env, HD_PUBLIC: '1' },
+    stdio: 'pipe',
+  });
   const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)]));
   const all = walk(dir).map((f) => relative(dir, f));
   const leftovers = all.filter((f) => /^(story|test|media\/story|media\/test)\//.test(f) || /^assets\/(story|test)-/.test(f));

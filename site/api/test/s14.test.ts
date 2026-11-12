@@ -320,8 +320,10 @@ describe('ת31: a provider call never outlives its claim, and only the claim’s
       last_error: expect.stringMatching(/no answer within/),
     });
     expect((await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', orderId)).status).toBe('paid');
+    // S17 (ת48): after the hung call the shipment may be at the supplier; this one is documented to deduplicate, so it is sent
     const late = {
       id: 'mock',
+      dedupesByOrderId: true,
       async submitOrder(input: { order_id: string }) {
         // another run took the claim over while this call ran
         await env.DB.prepare("UPDATE supplier_shipments SET updated_at = '2099-01-01T00:00:00.000Z' WHERE order_id = ?").bind(input.order_id).run();

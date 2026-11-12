@@ -1,16 +1,21 @@
 import { Hono } from 'hono';
 import type { AppEnv } from './env';
-import { HttpError, SITE_CSP, securityHeaders } from './lib/http';
+import { HttpError, PRIVATE_PAGE_CSP, SITE_CSP, securityHeaders } from './lib/http';
 import { publicApi } from './routes/public';
 import { webhooks, mockPay } from './routes/payments';
 import { admin } from './routes/admin';
 import { adminList, adminUi } from './routes/admin-ui';
 import { requireAdmin } from './lib/access';
 import { health } from './routes/health';
-import { errorMessageHe, log } from './lib/log';
+import { configureLog, errorMessageHe, orderIdInPath, orderLog } from './lib/log';
 
 export const app = new Hono<AppEnv>();
 
+// S17 (QA ת46): the log's rule for this environment (production: an error of an unknown order by name and code only)
+app.use('*', async (c, next) => {
+  configureLog(c.env);
+  await next();
+});
 app.use('*', securityHeaders);
 app.route('/api', publicApi);
 app.route('/api/webhooks', webhooks);
@@ -32,7 +37,8 @@ app.get('/order/*', async (c) => {
       'content-type': 'text/html; charset=utf-8',
       'cache-control': 'no-store',
       'x-robots-tag': 'noindex',
-      'content-security-policy': SITE_CSP,
+      // S17 (AN1): never the analytics beacon on the order page
+      'content-security-policy': PRIVATE_PAGE_CSP,
     },
   });
 });
@@ -64,10 +70,12 @@ app.all('/api/*', () => {
  * S13 (6.2): an error the request cannot recover from is a structured row (lib/log.ts: an error id, no PII), and the
  * customer gets a short message with that id, so a message to the shop finds the row.
  */
-app.onError((err, c) => {
+app.onError(async (err, c) => {
   if (err instanceof HttpError) return c.json({ error: err.code, message_he: err.messageHe }, err.status);
   const url = new URL(c.req.url);
-  const error_id = log.error('request.unhandled', { method: c.req.method, path: url.pathname.slice(0, 120) }, err);
+  // S17 (ת46): an order in the path is a known order: its customer's values leave the row
+  const l = await orderLog(c.env.DB, orderIdInPath(url.pathname));
+  const error_id = l.error('request.unhandled', { method: c.req.method, path: url.pathname.slice(0, 120) }, err);
   return c.json({ error: 'internal_error', error_id, message_he: errorMessageHe(error_id) }, 500);
 });
 

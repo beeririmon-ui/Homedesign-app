@@ -1,6 +1,8 @@
 # Workers Static Assets headers (responses from the Worker set their own in api/src/lib/http.ts).
+# S17 (AN1): the site's policy allows Cloudflare Web Analytics (static.cloudflareinsights.com, cloudflareinsights.com) for
+# the pages that may carry its beacon; the cart and the checkout add a second policy that does not (both are enforced).
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
@@ -12,3 +14,9 @@
 
 /media/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/cart/*
+  Content-Security-Policy: script-src 'self'; connect-src 'self'
+
+/checkout/*
+  Content-Security-Policy: script-src 'self'; connect-src 'self'
