@@ -1,0 +1,283 @@
+{
+ "id": "2026-11-12-site-track-qa-s17",
+ "by": "qa-agent",
+ "date": "2026-11-12",
+ "scope": "Site track S17 (fixes of QA S15–S16: ת45–ת49, notes ה1/ה3/ה5, the designer's delay copy) and the AN1 analytics add-on; full regression; HD_PUBLIC=1 readiness",
+ "inputs": [
+  "briefs/site-s17-qa-fixes-2026-11-11.md",
+  "qa/reports/2026-11-07-site-track/s17/README.md and data/",
+  "qa/reports/2026-11-11-site-track-qa-s15-s16.md and .json (ת45–ת49, ה1–ה7)",
+  "docs/proposals/wm-phase2-r5-eye-2026-11-11.md §7",
+  "docs/ops/deploy-runbook.md (AN1, ת49)",
+  "docs/studio-rules.md (AN1, IMG1)"
+ ],
+ "measured": {
+  "commit": "a988b099",
+  "copy": "isolated, outside the live tree (session scratchpad): git archive of site/, data/, status/, docs/, .github/ at a988b099; assets/manifest.json pinned; the other assets dirs linked read-only (the four render dirs the build reads did not change during the round); qa/reports frozen as links; node_modules hard-linked from the S15–S16 copy (package-lock.json unchanged since 43cee016); supplier-image cache hard-linked, builds --offline",
+  "copies": {
+   "build-s17": "flag build: CI-order regression, my server on 8799, e2e/a11y, my vitest file, delay-copy browser check, the false-positive scans",
+   "build-s17-pub": "public build (HD_PUBLIC=1, CF_ANALYTICS_TOKEN = a dummy of the right shape, 32 hex, not a real token): rights mutations on copies of its dist, R5 and token rebuilds, ת49 dry runs, my public server on 8796, AN1 browser check, public-scan"
+  },
+  "server": "wrangler dev from the copy under a private name (qasrv17.js), own D1 (migrate + seed), ENVIRONMENT=preview-local, dummy PAYMENT_WEBHOOK_SECRET as --var on the command line only; api/.dev.vars holds only a dummy ADMIN_DEV_TOKEN",
+  "network": "none: every proxy-aware tool pointed at a closed local port (tools/noNet.sh), npm offline, every npx --no-install; ~/.npm/_npx empty before and after ת49. wrangler's 'update available' line came from the shared /tmp/update-check cache written at 00:45, before the round.",
+  "live_tree_moved_during_round": [
+   "7f7d7a5f, 8cea301c, fb9ee8f1, c9ac0f82 (manager WIP: S18, R6, IMG1)",
+   "abdea362 (IMG1 round 3)",
+   "render-agent's untracked/modified files under assets/renders/living-room/warm-modern/phase2-2026-11-10 and products/img1-pilot-2026-11-12 (not read by the build)"
+  ],
+  "machine": "CPU shared with frontend-dev's typecheck and render-agent's fix_r6.py (load up to 10 on 4 cores) during the e2e; perf specs passed. The container restarted after the e2e; the copies and files survived and were checked; the servers were restarted.",
+  "evidence": "qa/reports/2026-11-12-site-track-qa-s17/{tools,data,overlays}/"
+ },
+ "bottom_line": {
+  "s17": "PASSES. ת45–ת49, ה1, ה3 (the brief's phrasings), ה5 and the delay copy hold on my own cases; the public build ships 0 supplier pictures and 0 analytics tags behind the flag or without a token.",
+  "near_miss_rule": "APPROVED WITH A CHANGE (ת50): needed (it alone catches a half-size JPEG of a supplier photo, a 96 px inline copy and 9 of the story's 321 copies) but, as written, it matches near-blank images: 125 of our own 273 warm-modern phase-2 layer/work files and a blank IMG1 canvas match one supplier photo of a thin floor lamp on white. With an ink guard (B only when both 32×32 images have mean ink ≥ 4): 321/321 story copies and 10/10 true references still caught, 0/126 false positives.",
+  "an1": "PASSES for the tag, the token, the CSP, cookies (0) and the budget; ת55: on the site's own links the beacon stays loaded through the cart and the checkout (same document).",
+  "new_findings": "ת50–ת55 (ת50 medium, ת55 low-medium, the rest low)",
+  "hd_public": "not yet (unchanged owner items; from QA: ת55 before a real token, ת50 before the warm-modern house or any small-product layer goes public)"
+ },
+ "t45": {
+  "mutations": {
+   "R0 clean public build": "gate pass, my scan clean (260 files)",
+   "R1 option picture at its own path": "gate FAIL (bytes)",
+   "R2 same bytes as og:image": "gate FAIL (bytes)",
+   "R3 og:image hotlink ae01.alicdn.com": "gate FAIL (host)",
+   "R4 data: URI in a page": "gate FAIL (data-uri bytes)",
+   "R5 public build reads the full manifest (rebuilt)": "gate FAIL (path names)",
+   "R6 the story's 321 copies": "gate FAIL: 321/321 by pixels, 9 by the near-miss rule (dHash 25–40, MAD 0.24–1.91)",
+   "R7 original at 50%, JPEG q60, as og:image": "gate FAIL by the near-miss rule only (dHash 43, MAD 0.9)",
+   "R8a crop 10% each side": "PASSES (miss); my scan misses too",
+   "R8b left third off": "PASSES (miss)",
+   "R9 flip left-right": "PASSES (miss)",
+   "R10 brightness +6%, hue +12°, saturation ×1.1": "gate FAIL (pixels, dHash 23)",
+   "R11a CSS data: URI background": "gate FAIL (data-uri pixels)",
+   "R11b CSS background file named .dat": "gate FAIL (pixels, by sniffing); my scan misses it",
+   "R11c CSS image-set() on ae04.alicdn.com": "gate FAIL (host)",
+   "R12 original bytes as readme.txt": "gate FAIL (bytes)",
+   "R13 SVG file framing a data: URI copy": "gate FAIL (data-uri pixels)",
+   "R14 hotlink to ae-pic-a1.aliexpress-media.com": "PASSES (miss): no card names that host; my scan misses too",
+   "R15 data: URI in CSS split by escaped line breaks": "PASSES (miss)",
+   "R16 96 px copy inlined in a JS chunk": "gate FAIL by the near-miss rule (dHash 47, MAD 1.0)"
+  },
+  "pixel_study": {
+   "originals": "78 (every third withheld original in the cache), against the public set (454 pictures), caught = A or B on the same product",
+   "rows": {
+    "resize 50% webp": "77/78",
+    "resize 25% jpeg q60": "63/78",
+    "thumbnail 160 px": "77/78",
+    "thumbnail 96 px jpeg q50": "74/78",
+    "recompress jpeg q35": "75/78",
+    "recompress avif q30": "76/78",
+    "crop 5% each side": "2/78",
+    "crop 10% each side": "1/78",
+    "crop left third": "0/78",
+    "crop top half": "1/78",
+    "centre square 60%": "1/78",
+    "pad onto white 4:3": "1/78",
+    "grey 3% border": "1/78",
+    "flip left-right": "0/78",
+    "flip upside-down": "2/78",
+    "rotate 3°": "2/78",
+    "brightness +8%": "76/78",
+    "brightness −10%": "78/78",
+    "hue +20°": "78/78",
+    "saturation ×1.3": "78/78",
+    "warm tint": "78/78",
+    "grayscale": "78/78",
+    "gamma 1.4": "78/78",
+    "blur 1.5": "78/78",
+    "text watermark": "78/78"
+   }
+  },
+  "false_positive_scan": {
+   "files": "2,789 rasters: every image under assets/renders (2,024 incl. render-agent's work files at the time) and the flag dist outside the supplier folders, plus synthetic flat images",
+   "rule_A_hits": "8, all downloaded supplier photos kept as render references (assets/renders/house-nordic-2026-10-25/refs): true copies, never shipped",
+   "rule_B_hits": "127: 2 more references (true), 124 warm-modern phase-2 layers and work files (75 shadow, 49 product) and the blank IMG1 canvas, 124 of them against products/floor-lamp-black-drum-linen-uaeow/opt-06334f443d (a thin floor lamp on white: mean ink 2.2 of 255)",
+   "synthetic": "white and transparent 1000×1000 match by B (dHash 30, MAD 2.23); a 40 px dot on white matches by B",
+   "flag_dist_outside_supplier_folders": "0 matches (519 files); nearest by grey MAD 18.3",
+   "img1_pilot": "42 files, 0 matches except the blank canvas; nearest real picture: our vase P2 at dHash 40, MAD 10.95",
+   "gate_demo": "4 of our phase-2 layers encoded as house layers in a public dist → check:rights exit 1, 4 'pixels' findings, all 'looks like' the floor-lamp option picture (data/fp-gate-demo.log)",
+   "variants": {
+    "ink guard (B only when both 32×32 images have mean ink ≥ 4)": "story 321/321, true references 10/10, phase-2 125→0, IMG1 1→0, dist 0; R16 kept (ink 53)",
+    "masked MAD (≤ 6 over the inked pixels, area ≥ 3%)": "same numbers"
+   },
+   "rule_A_margin": "our nearest layer: 28 bits (the bowl's shadow layer vs the thin floor lamp), 4 bits from the threshold"
+  },
+  "ruling": "ת45 closed. The near-miss rule is approved with the ink guard of ת50."
+ },
+ "h5": {
+  "public": "39 product pages, 5 without a picture (the 3 magazine holders and 2 macramé wall pieces), 0 fields that say a value is unknown, 0 'בתמונה' notes without a picture; holders' materials: 'לבד, מתכת', 'לבד, עץ', 'מתכת'",
+  "flag": "39 pages, all with a picture, 0 unknown values",
+  "catalog_diff_vs_S16": "only the two intended changes (the holders' materials and descriptions lose 'לא צוין' / 'חומר לא צוין')",
+  "notes_beside_renders": "13 public pages keep a 'בתמונה' note beside the room's render; the notes come from the room's own props (build-catalog productNotes), so they are true of the render",
+  "public_scan_e2e": "5/5 on my public server"
+ },
+ "h3": {
+  "brief_phrasings": "6/6 read as 'הדפס'",
+  "claims_kept": "6/6 stay 'הדפס במרקם'",
+  "my_new_denials": "0/10 read right (see note ה8)"
+ },
+ "delay_copy": {
+  "api_status_he": "supplier_error → 'בהכנה'; shipped → 'נשלחה'",
+  "progress_line": "התקבלה · בהכנה · נשלחה · נמסרה, current 'בהכנה', aria-label 'מצב ההזמנה: בהכנה'",
+  "line": "'ההכנה נמשכת יותר מהרגיל. אנחנו כבר מטפלים בזה, ואין צורך לעשות דבר.' exactly; same ink rgb(58,58,58) and font 17px/400 as the body; no border, background or icon",
+  "live_region": "<p aria-live='polite'>, no role=alert anywhere; the region is in the DOM 84 ms (1280) / 71 ms (400) before its text",
+  "third_sentence": "absent",
+  "old_word_מתעכבת": "absent",
+  "after_shipped": "line empty, no message, no alert",
+  "normal_order": "line empty",
+  "other_mail_promises_on_the_page": "'אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח.' (S18, note ה10)"
+ },
+ "t46": {
+  "known_order": "0 needles in every row: request.unhandled (Latin mixed case, 972, 00972, +972 (0)…, no prefix, dots, upper-case email, local part) and queue.job_failed via src/index.ts, in production and test",
+  "unknown_order": "production: name and code only; preview/test: Latin names and a phone without its prefix stay in the message (note ה9)",
+  "codes": "a provider `code` property is ignored; but a snake_case message prefix ('consignee_orna_rejected') and an error name ('Orna') reach the code-only rows (ת53)",
+  "over_redaction": "'commit'→'[customer]mit', 'hotel'→'ho[customer]', path '/complete'→'/[customer]plete', a planted error_id E-DANA2345→'E-[customer]2345', 'invalid' from the e-mail's domain (ת52)",
+  "live": "flag server 14,512 lines, 28 rows, 0 of 24 needles; public server 1 row, 0"
+ },
+ "t47": {
+  "retry_died_after_a_failure": "T0+5m 200, +10.5m 200, +29.5m 200, +30.5m 503 degraded, +90m 503 degraded",
+  "first_claim_died": "T1+11m 200, +29.5m 200, +30.5m 503 degraded",
+  "takeover_at_T1+31m": "left to a person (supplier_error, failed/maybe) and /healthz back to 200 ok (ת54)"
+ },
+ "t48": {
+  "askable": "timeout that created it, then retries: asked → found → recorded; 1 order at the supplier, 1 call",
+  "cannot_be_asked": "left to a person: supplier_error, failed/maybe, 1 audit row, 1 order; the customer reads 'בהכנה'",
+  "dedupes": "sent again, the supplier returns the first order: 1 order, 2 calls",
+  "holds_none": "asked → none → sent once",
+  "lookup_fails": "5 retries, 4 lookups, never sent again; supplier_error at attempt 5; a person's 'found' records it",
+  "refusal_after_maybe": "reach 'checked' kept; the next send goes without asking",
+  "through_the_queue_and_admin": "queue consumer (src/index.ts) acks and leaves it to a person; 'none' queues 1 send, a second 'none' is 409, 'found' queues none"
+ },
+ "t49": {
+  "from_site_api": "check-config runs, dry run passes",
+  "from_site/, the copy root, /, site/web, site/tools": "node stops at once (module not found), exit 1, no npm",
+  "mutated_production_CJ": "stopped from site/api, by npm run deploy, and from /",
+  "--var SUPPLIER_PROVIDER:CJ": "still passes the check (runbook rule only, as the brief asked)",
+  "npx_cache": "~/.npm/_npx 0 entries before and after",
+  "config_restored": "identical to the clean copy"
+ },
+ "an1": {
+  "build": {
+   "public, no token": "0 of 49 pages",
+   "behind the flag, dummy token": "0 of 114",
+   "public, dummy token": "45 of 49 (all but cart, checkout, order shell, 404)",
+   "bad tokens (31, 33 chars, non-hex, quote injection, trailing ';')": "5/5 stop the build (exit 1, after the client build)",
+   "upper-case with spaces": "trimmed and lower-cased"
+  },
+  "browser": {
+   "tag": "/, /rooms/living-room/, 4 legal pages, 39 product pages; not on /cart/, /checkout/, 404, /order/…, /admin/",
+   "stub_without_tag": "never ran",
+   "csp": "cart and checkout get two policies (both enforced), the order page PRIVATE_PAGE_CSP, the admin default-src 'none'",
+   "injected_beacon": "blocked on cart, checkout, order and admin (script-src-elem and connect-src violations, 0 reports reached); allowed on / (control)",
+   "cookies": "0; Set-Cookie headers 0; storage: only our own hd.order.<id>",
+   "journey": "room → product → cart → checkout in ONE document with the beacon loaded (client-side links); mock payment and the order page are new documents without it; order page → home is client-side, no beacon, so no order number in a referrer",
+   "pii_in_worst_case_reports": "0 (paths only: /rooms/living-room/, /p/…/, /cart/, /checkout/)"
+  },
+  "budget": "698.9 KB of 3,072 KB with an 8.0 KB estimate for the beacon; no AVIF 1,261.7 KB",
+  "assumption": "The token format (32 hex characters) is ASSUMED, not verified (no network, no Cloudflare docs here). If it is wrong the public build stops loudly (fail closed). Also unverified: that spa:false stops page views on in-site moves, that the script sets no cookie, and what it reports when the page is left."
+ },
+ "regression": {
+  "ci_order": "prepare:data, typecheck, lint, format:check, vitest 305 + 1 skipped (before the build, as ה2), check:config, build (web, api, budget, check:rights): all pass",
+  "vitest_after_build": "306/306",
+  "my_vitest": "qa-s17.test.ts 8/8 (run in the copy only)",
+  "e2e": "124 passed, 1 skipped by design (14.8 min)",
+  "a11y": "16/16",
+  "public_build": "exit 0; check:rights 0 findings over 260 files; public-scan 5/5",
+  "flag_build_control": "check:rights 542 in the supplier folders, 0 outside",
+  "budget_flag": "room JS 54.4 KB, CSS 8.9 KB, first load 711.8 KB, no AVIF 1,274.6 KB, warm-modern house 1,025.0 KB"
+ },
+ "findings": [
+  {
+   "id": "ת50",
+   "severity": "medium: before the warm-modern house, or any small-product layer, reaches a public build; noise in the flag build's control as soon as the phase-2 layers enter media/house",
+   "owner": "frontend-dev",
+   "what": "The near-miss rule (dHash ≤ 48 and 32×32 grey MAD ≤ 3) matches near-blank images: 124 of our own warm-modern phase-2 layer and work files (75 shadow, 49 product) and the blank IMG1 canvas match products/floor-lamp-black-drum-linen-uaeow/opt-06334f443d (a thin floor lamp on white, mean ink 2.2), and so do white or transparent images. Placed as house layers in a public dist, 4 of them fail check:rights (exit 1). The public dist ships no media/house today, so today's public build passes.",
+   "fix": "Apply B only when both 32×32 images carry ink (mean of 255 − grey ≥ 4). Tested: story copies 321/321, true references 10/10, R7 and R16 kept; false positives 126 → 0. (A masked MAD gives the same numbers.) Keep printing the nearest non-supplier image per build: our nearest layer is 28 bits from rule A's 24."
+  },
+  {
+   "id": "ת51",
+   "severity": "low; known limits, not blocking",
+   "owner": "frontend-dev",
+   "what": "What the gate does not see (pixel study, 78 originals; and the CLI): a crop (0–2/78), padding onto a canvas (1/78), a border (1/78), a flip (0–2/78), a 3° rotation (2/78), a quarter-size JPEG (63/78); a hotlink to an image host no card names (ae-pic-a1.aliexpress-media.com, which appears 290k times in data/ but in no card); a data: URI split by CSS line continuations. The README names crop and flip only.",
+   "fix": "Cheap ones: also hash each supplier picture mirrored; trim white/transparent margins before hashing (padding, border, letterboxed social cards); a fixed base list of supplier image domains beside the cards' (alicdn.com, aliexpress-media.com, aliexpress.com, cjdropshipping.com, zendrop.com); remove CSS escapes and whitespace inside a data: URI before decoding. Any future image generator (social cards) writes its outputs to the ledger."
+  },
+  {
+   "id": "ת52",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "The known-order strip has no word boundaries and adds the e-mail's domain parts as words, so it removes pieces of ordinary words and of our own fields: 'commit' → '[customer]mit', 'hotel' → 'ho[customer]', path '/complete' → '/[customer]plete', 'invalid' (from example.invalid). An error_id that contains a customer word of 3+ letters from its alphabet is mangled in the row (planted: E-DANA2345 → E-[customer]2345), so the id the customer quotes does not find the row.",
+   "fix": "Unicode word boundaries; never strip error_id, order_id, event or path; add only the e-mail's local part and the whole address, not its domain parts."
+  },
+  {
+   "id": "ת53",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "errorCode still takes provider text through two doors: a non-own error's snake_case message prefix ('consignee_orna_rejected: …' → code 'consignee_orna_rejected') and a non-own error's name ('Orna' → error_name and code 'Orna'). Rows written with the plain logger (supplier.submit_failed, cancel.*, refund.*, notify.failed, shipment.sync_failed) do not get the known-order strip.",
+   "fix": "Message prefix and name only from our own classes (others: their HTTP status, a system code or 'Error'), or write those rows with orderLog."
+  },
+  {
+   "id": "ת54",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "/healthz goes from degraded back to ok when a dead first claim is taken over and left to a person: degraded at T1+30.5 min, the takeover at T1+31 sets failing_since to now, and /healthz says 200 ok until about T1+61, while the order waits for a person.",
+   "fix": "On takeover set failing_since = COALESCE(failing_since, the dead claim's updated_at); or count supplier_error with reach 'maybe' as degraded at once."
+  },
+  {
+   "id": "ת55",
+   "severity": "low-medium: before HD_PUBLIC=1 with a real token",
+   "owner": "frontend-dev (the owner decides whether it matters)",
+   "what": "'Not on the cart or the checkout' holds for a direct load only. On the site's own links the room, the product, the cart and the checkout are one document: the beacon loaded on the room keeps running while the customer types name, phone and address, under the room's CSP. (Cloudflare's script does not read forms as documented; spa:false should stop page views; both unverified here.)",
+   "fix": "Make the move into /checkout/ (and /cart/) a full page load, so those pages get their own document, no tag and their strict CSP; or accept it explicitly and say so in the runbook."
+  }
+ ],
+ "notes": [
+  {
+   "id": "ה8",
+   "what": "ה3, negation: the brief's phrasings and the claims hold, but 10 of my 10 new denials still read 'הדפס במרקם' ('no embossed texture', 'no raised or embossed texture', 'neither textured nor embossed', 'isn't textured', 'texture: none', 'texture-free', 'no 3D texture', 'no visible texture', 'lacks texture', 'without embossed or textured finish'). No card says any of them today. Safer default: claim the texture only when no negation word is in the same clause, and list every 'הדפס במרקם' with its source text at build time."
+  },
+  {
+   "id": "ה9",
+   "what": "An error of an unknown order outside production (preview, test, local) keeps the scrubbed message: a Latin name and a phone without its prefix ('54-771-6204') stay. By design; matters only if the preview environment ever sees real customers."
+  },
+  {
+   "id": "ה10",
+   "what": "Confirmed frontend-dev's S18 item: under the delay line the order page still says 'אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח.', and without a token 'את פרטי ההזמנה שלחנו לאימייל שלכם.'. No e-mail is sent today."
+  },
+  {
+   "id": "ה11",
+   "what": "The delay line's live region is in the DOM 71–84 ms before its text. Correct in the DOM; not tested with a real screen reader (NVDA, VoiceOver)."
+  },
+  {
+   "id": "ה12",
+   "what": "AN1 assumptions to check in the Cloudflare dashboard after upload (runbook ch. 3 step 2): the 32-hex token format, spa:false, cookieless, the report on leaving the page."
+  },
+  {
+   "id": "ה13",
+   "what": "IMG1 (README question 6): 42 pilot files, none matches a supplier picture (nearest real picture: our vase P2 at dHash 40, MAD 10.95). The gate will not block IMG1 images on today's numbers."
+  },
+  {
+   "id": "ה14",
+   "what": "The near-miss rule is necessary, not cosmetic: it alone caught R7 (a half-size JPEG of a supplier photo, dHash 43), R16 (a 96 px inline copy, dHash 47) and 9 of the 321 story copies."
+  }
+ ],
+ "hd_public_readiness": {
+  "verdict": "not yet",
+  "from_qa": [
+   "ת55 before a real token",
+   "ת50 before the warm-modern house or any small-product layer goes public",
+   "1.1 and 1.4: assets not approved for the site"
+  ],
+  "owner": [
+   "1.5 rights of the supplier pictures or IMG1",
+   "2.1–2.4",
+   "3.1 documentation and keys",
+   "3.4",
+   "4.1, 4.2, 4.4",
+   "5.1–5.3, 5.5, 5.6",
+   "6.5",
+   "Access SameSite=Lax, the alert channel, the uptime clock",
+   "AN1: the real token, then the dashboard check"
+  ],
+  "launch_checklist": "not edited (new files only). Suggested lines: 6.1 (AN1 passes QA; ת55; the token-format assumption), 1.5 (the content gate passes; ת50, ת51), 6.2 (ת52–ת54)."
+ }
+}

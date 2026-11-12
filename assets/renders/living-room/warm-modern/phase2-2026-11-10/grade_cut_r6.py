@@ -83,6 +83,8 @@ def write_or_reuse(d, stem, arr, mode, cache):
     if key not in cache:
         cache[key] = None
     found = same_file(d, arr, mode, stem)
+    if found and "-r6" in os.path.basename(found):
+        return found, "new -r6 file"                     # this build's own file (a re-run): new in R6
     if found:
         return found, "existing file, same bytes (" + os.path.basename(found) + ")"
     p = os.path.join(d, f"{stem}-r6{'-shadow' if mode == 'RGB' else ''}.png")

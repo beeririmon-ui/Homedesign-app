@@ -1042,7 +1042,7 @@
  },
  "pendant-v2": {
   "what": "the canopy re-cut whole and centred, the right outline snapped, the cord's speck out, the cord black, the paper's rings out",
-  "method": "pendant 2 (QA R5 3.6; the designer section 4, step 1). (1) The ceiling canopy re-cut whole: what differs from the ceiling (dE >     3.5, closed), the largest piece, its convex hull, an ellipse fitted to it (a disc seen from below), rasterised at 8 x (fix_r4.     canopy_cut's rule, with the shaded half of the disc kept: at dE > 6 only the lit two thirds passed). (2) The cord: one plumb line     from the canopy's centre into the lantern's collar at the cord's own measured column, its alpha the cord's own cross-profile     (R5's cut, the rows where it hangs alone); BLACK as the card ('black thin cord'): neutral, L* 15 with a soft highlight on the window     side; the brown speck and anything else off the line are gone. (3) The lantern's outline snapped to the render's own edge (contour_snap)     where the step is clear, then smoothed: the clay's facets out. (4) The rings: on the clay lantern's latitude lines (latlong_map) the     paper's L* profile per sector, its deviation from its own course smoothed at ~3 ring spacings, smoothed across the sectors and with     its linear trend kept out (the light's gradient stays), taken off L* (a*b* unchanged). (5) The bottom opening (rendered off): not     brighter than the paper's bottom third; the lamp holder's specks neutral",
+  "method": "pendant 2 (QA R5 3.6; the designer section 4, step 1). (1) The ceiling canopy re-cut whole: what differs from the ceiling (dE >     3.5, closed), the largest piece, its convex hull, an ellipse fitted to it (a disc seen from below), rasterised at 8 x (fix_r4.     canopy_cut's rule, with the shaded half of the disc kept: at dE > 6 only the lit two thirds passed). (2) The cord: one plumb line     from the canopy's centre into the lantern's collar at the cord's own measured column, its alpha the cord's own cross-profile     (R5's cut, the rows where it hangs alone); BLACK as the card ('black thin cord'): neutral, L* 15 with a soft highlight on the window     side; the brown speck and anything else off the line are gone. (3) The lantern's outline snapped to the render's own edge (contour_snap)     where the step is clear, then smoothed: the clay's facets out. (4) The rings: on the clay lantern's latitude lines (latlong_map) the     paper's L* profile per sector; each step the model drew there (tier_fit: per sector a local fit of a step and its seam line at each     boundary) replaced by the same rise spread over ~2 ring spacings and the seam line taken off (tier_correction), up to 3 rounds; then     one linear ramp over the rows puts the paper's top and bottom thirds back to their medians (the light's course stays); L* only, a*b*     unchanged. (5) The bottom opening (rendered off): not brighter than the paper's bottom third (a soft cap); the lamp holder's specks     (over 6 L* above the opening round them) down to that surround and near-neutral",
   "source": {
    "render": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/p5-regt.npy",
    "r5_layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/pendant-v2.png"
@@ -1157,7 +1157,7 @@
   "opening": {
    "cap_L_ungraded": 68.35,
    "px": 2166,
-   "hot_px": 256
+   "hot_px": 205
   },
   "measured_r5": {
    "rings_max_abs_L": 4.99,
@@ -1198,9 +1198,9 @@
    "bottom_third_L": 69.37,
    "opening": {
     "px": 1769,
-    "L_median": 68.82,
+    "L_median": 68.78,
     "L_p99": 69.13,
-    "C_p99": 16.44
+    "C_p99": 16.78
    },
    "paper_px": 25852
   },
@@ -1234,7 +1234,7 @@
    },
    "opening: the holder's specks neutral (their C* median <= 3)": {
     "value": {
-     "r5": 7.98,
+     "r5": 7.37,
      "r6": 1.99
     },
     "pass_": true

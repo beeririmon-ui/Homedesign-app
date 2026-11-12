@@ -1,0 +1,60 @@
+=== R5 the public build reads the full supplier manifest (the alias removed), rebuilt
+1
+prerendered 47 pages + 0 house page(s) + order shell + 404; analytics beacon (S17): 45 pages
+web build exit 0
+check:rights exit 1
+image rights by content (S17): 260 files, 169 pictures (1 data: URIs) against 433 supplier files by sha256 and 454 pictures by pixels (dHash 16×16, Hamming ≤ 24 of 256 (or ≤ 48 with a 32×32 grey difference ≤ 3)), hosts alicdn.com, cjdropshipping.com, r
+  p/accent-sconces-indoor-stone-wall-lamp-eavr7/index.html: names products/accent-sconces-indoor-stone-wall-lamp-eavr7/photo.800.webp (rights: unclear)
+  p/accent-sconces-indoor-stone-wall-lamp-eavr7/index.html: names products/accent-sconces-indoor-stone-wall-lamp-eavr7/photo.800.webp (rights: unclear)
+rights-scan web/dist: SUPPLIER PICTURE FOUND
+vite.config.ts restored, identical to the clean copy
+=== T-none: HD_PUBLIC=1, no token
+prerendered 47 pages + 0 house page(s) + order shell + 404; analytics beacon (S17): none (no CF_ANALYTICS_TOKEN)
+web build exit 0
+beacon tags in dist: 0 of 49 html files
+=== T-flag: behind the flag, with the dummy token
+prerendered 47 pages + 1 house page(s) + order shell + 404; analytics beacon (S17): none (behind the flag)
+web build exit 0
+beacon tags in dist: 0 of 114 html files
+=== T-bad: 'a17a17a17a17a17a17a17a17a17a17a' (31 chars)
+prerender: CF_ANALYTICS_TOKEN is not a Cloudflare Web Analytics site token (32 hex characters): the build stops.
+web build exit 1
+=== T-bad: 'a17a17a17a17a17a17a17a17a17a17a17' (33 chars)
+prerender: CF_ANALYTICS_TOKEN is not a Cloudflare Web Analytics site token (32 hex characters): the build stops.
+web build exit 1
+=== T-bad: 'g17a17a17a17a17a17a17a17a17a17a1' (32 chars)
+prerender: CF_ANALYTICS_TOKEN is not a Cloudflare Web Analytics site token (32 hex characters): the build stops.
+web build exit 1
+=== T-bad: 'a17a17a17a17a17a17a17a17a17a17a1'><scrip' (59 chars)
+prerender: CF_ANALYTICS_TOKEN is not a Cloudflare Web Analytics site token (32 hex characters): the build stops.
+web build exit 1
+=== T-bad: 'a17a17a17a17a17a17a17a17a17a17a1;' (33 chars)
+prerender: CF_ANALYTICS_TOKEN is not a Cloudflare Web Analytics site token (32 hex characters): the build stops.
+web build exit 1
+=== T-upper: upper-case hex, with spaces around
+prerendered 47 pages + 0 house page(s) + order shell + 404; analytics beacon (S17): 45 pages
+web build exit 0
+beacon tags in dist: 45 of 49 html files
+data-cf-beacon='{"token":"a17a17a17a17a17a17a17a17a17a17a1","spa":false}'
+=== the clean public build with the dummy token, rebuilt (web, then the API build, the budget, check:rights)
+prerendered 47 pages + 0 house page(s) + order shell + 404; analytics beacon (S17): 45 pages
+web build exit 0
+beacon tags in dist: 45 of 49 html files
+api build exit 0
+
+> homedesign-site@0.1.0 budget
+> tsx tools/check-budget.ts
+
+ok    no lazy page's code in the room's entry (by content: 1 entry chunk(s) and their static imports)
+ok    JS (gzip), the room page entry                              49.7 KB  / 80.0 KB
+ok    CSS (gzip), the room page entry                              8.9 KB  / 15.0 KB
+ok    lazy chunks + test page: JS 12 files, CSS 0                 21.5 KB
+ok    fonts (woff2, he+latin)                                     74.0 KB
+ok    analytics beacon (Cloudflare, deferred; an estimate)         8.0 KB
+ok    room media (18 files, shell @2752, layers @1920)           548.9 KB
+ok    first load, living room, mobile                            698.9 KB  / 3072.0 KB
+ok    first load, living room, mobile, no AVIF                  1261.7 KB  / 3072.0 KB
+image rights (S15, public (HD_PUBLIC=1)): 39/39 public products lose the supplier's picture in a public build (39 photos, 182 option pictures withheld: unclear 39); shipped publicly: 0; web/dist: 0 supplier files
+image rights by content (S17): 260 files, 169 pictures (1 data: URIs) against 433 supplier files by sha256 and 454 pictures by pixels (dHash 16×16, Hamming ≤ 24 of 256 (or ≤ 48 with a 32×32 grey difference ≤ 3)), hosts alicdn.com, cjdropshipping.com, rihut-express.co.il, zendrop.com (0.5s): found 0 (bytes 0, pixels 0, data-uri bytes 0, data-uri pixels 0, host 0)
+check:rights exit 0
+exit 0

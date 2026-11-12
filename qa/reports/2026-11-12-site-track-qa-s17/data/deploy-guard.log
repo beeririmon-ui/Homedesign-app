@@ -1,0 +1,106 @@
+~/.npm/_npx: 0 entries
+--- 0. as committed, from site/api: wrangler deploy --dry-run --env production (cwd: <qa>/build-s17-pub/site/api)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock); preview preview (payment mock, invoices mock, supplier mock, alerts mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED)
+[custom build] 
+Total Upload: 806.77 KiB / gzip: 137.57 KiB
+env.SUPPLIER_PROVIDER ("cj")                                           Environment Variable      
+--dry-run: exiting now.
+exit 0
+--- 1. as committed, from site/: wrangler deploy -c api/wrangler.jsonc --dry-run --env production (cwd: <qa>/build-s17-pub/site/api/..)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] node:internal/modules/cjs/loader:1386
+[custom build]   throw err;
+[custom build]   ^
+[custom build] 
+[custom build] Error: Cannot find module '<qa>/build-s17-pub/node_modules/tsx/dist/cli.mjs'
+[custom build]     at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+[custom build]     at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+exit 1
+--- 2. as committed, from the copy's root: -c site/api/wrangler.jsonc (cwd: <qa>/build-s17-pub/site/api/../..)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] node:internal/modules/cjs/loader:1386
+[custom build]   throw err;
+[custom build]   ^
+[custom build] 
+[custom build] Error: Cannot find module '<qa>/node_modules/tsx/dist/cli.mjs'
+[custom build]     at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+[custom build]     at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+exit 1
+--- 3. as committed, from /: -c <abs> (cwd: /)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] node:internal/modules/cjs/loader:1386
+[custom build]   throw err;
+[custom build]   ^
+[custom build] 
+[custom build] Error: Cannot find module '/node_modules/tsx/dist/cli.mjs'
+[custom build]     at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+[custom build]     at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+exit 1
+--- 4. as committed, from site/web (../node_modules/tsx exists there): -c ../api/wrangler.jsonc (cwd: <qa>/build-s17-pub/site/api/../web)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] 
+[custom build] node:internal/modules/run_main:123
+[custom build]     triggerUncaughtException(
+[custom build]     ^
+[custom build] 
+[custom build] Error [ERR_MODULE_NOT_FOUND]: Cannot find module '<qa>/build-s17-pub/site/web/scripts/check-config.ts' imported from <qa>/build-s17-pub/site/web/
+[custom build]     at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+exit 1
+--- 5. as committed, from site/tools: -c ../api/wrangler.jsonc (cwd: <qa>/build-s17-pub/site/api/../tools)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] 
+[custom build] node:internal/modules/run_main:123
+[custom build]     triggerUncaughtException(
+[custom build]     ^
+[custom build] 
+[custom build] Error [ERR_MODULE_NOT_FOUND]: Cannot find module '<qa>/build-s17-pub/site/tools/scripts/check-config.ts' imported from <qa>/build-s17-pub/site/tools/
+[custom build]     at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+exit 1
+--- 6. as committed, from site/api: wrangler versions upload --dry-run --env production (cwd: <qa>/build-s17-pub/site/api)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock); preview preview (payment mock, invoices mock, supplier mock, alerts mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED)
+[custom build] 
+Total Upload: 806.77 KiB / gzip: 137.57 KiB
+env.SUPPLIER_PROVIDER ("cj")                                           Environment Variable      
+--dry-run: exiting now.
+exit 0
+mutated: 1 line with "CJ"
+--- 7. mutated (production SUPPLIER_PROVIDER CJ), from site/api: wrangler deploy --dry-run --env production (cwd: <qa>/build-s17-pub/site/api)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] check-config: 1 provider settings would not run:
+[custom build]   production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)
+[custom build] 
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mk [Error]: Process exited with non-zero status (1)[0m
+      _command: 'node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts',
+      stderr: 'check-config: 1 provider settings would not run:\n' +
+        '  production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)\n',
+exit 1
+--- 8. mutated, from site/api: npm run deploy -w @hd/api -- --dry-run --env production (the runbook's way) (cwd: <qa>/build-s17-pub/site/api/..)
+> tsx scripts/check-config.ts && wrangler deploy --dry-run --env production --outdir <qa>/s17-tmp/deploy/wd8
+check-config: 1 provider settings would not run:
+  production: SUPPLIER_PROVIDER="CJ" is not a provider (cj, mock)
+npm error command sh -c tsx scripts/check-config.ts && wrangler deploy --dry-run --env production --outdir /tmp/claude-0/-home-user-homedesign-app/***/scratchpad/qa/s17-tmp/deploy/wd8
+exit 1
+--- 9. mutated, from /: -c <abs> (cwd: /)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] node:internal/modules/cjs/loader:1386
+[custom build]   throw err;
+[custom build]   ^
+[custom build] 
+[custom build] Error: Cannot find module '/node_modules/tsx/dist/cli.mjs'
+[custom build]     at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+[custom build]     at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+exit 1
+restored: 0 CJ left; identical to the clean copy: yes
+--- 10. as committed, --var SUPPLIER_PROVIDER:CJ on the command line (ת49b, the runbook's rule) (cwd: <qa>/build-s17-pub/site/api)
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock); preview preview (payment mock, invoices mock, supplier mock, alerts mock); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED)
+[custom build] 
+Total Upload: 806.77 KiB / gzip: 137.57 KiB
+env.SUPPLIER_PROVIDER ("(hidden)")                                     Environment Variable      
+--dry-run: exiting now.
+exit 0
+"SUPPLIER_PROVIDER");
+"SUPPLIER_PROVIDER");
+~/.npm/_npx: 0 entries

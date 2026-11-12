@@ -11,10 +11,12 @@ layers and shadows, the same form as work-r5/) and work-r6/fix-r6.json; grade_cu
               both layers, intersected), L* included: ONE monotone tone curve on the low-frequency L* (a normalised blur of ~3 fold
               spacings), the high frequencies back x g (1 <= g <= 1.2); then a*b* by R5's method (one hue rotation, one chroma factor);
               then the armchair post's line solved again (fix_r5.post_line_fix); the shadow and the free alpha unchanged
-  vase        the default (4'): re-cut from the registered raw render (work-r5/p4-regt.npy): a difference matte against the scene behind
-              (known: work-r5/scene-p4.png), and, the vase being a solid of revolution, its left (lit) flank checked against the mirror
-              of its right edge about the axis; then the size against the card at the point; then R5's a*b* fix (the same dh and k);
-              the contact shadow by the frozen recipe (extract.shadow_one) on the new cut
+  vase        the default (4'): re-cut from the registered raw render (work-r5/p4-regt.npy): per body row the render's own edges (its
+              colour gradient; the lit flank's outermost step into its white band), and, the vase being a solid of revolution, an
+              axis line and a smooth half-width profile; its left (lit) flank checked against the mirror
+              of its right edge about the axis; straightened (the model drew it leaning 3.9 deg; the camera is level) and its width
+              brought to the card (D16) about the foot; R5's a*b* fix re-solved on the whole body (lit half C* 4.5); the contact
+              shadow by the frozen recipe (extract.shadow_one) on the final cut
   vase-v2     5': the same re-cut from work-r5/p5-regt.npy; a*b* toward the card's neutral charcoal (designer section 6.1)
   pendant-v2  5': the canopy re-cut whole (fix_r4.canopy_cut, centred on the cord), the right contour snapped to the render's own edge,
               the brown speck on the cord out, the cord black (the card: "black thin cord"), the paper's horizontal rings removed along
@@ -1153,9 +1155,11 @@ def pendant_v2():
     (R5's cut, the rows where it hangs alone); BLACK as the card ('black thin cord'): neutral, L* 15 with a soft highlight on the window
     side; the brown speck and anything else off the line are gone. (3) The lantern's outline snapped to the render's own edge (contour_snap)
     where the step is clear, then smoothed: the clay's facets out. (4) The rings: on the clay lantern's latitude lines (latlong_map) the
-    paper's L* profile per sector, its deviation from its own course smoothed at ~3 ring spacings, smoothed across the sectors and with
-    its linear trend kept out (the light's gradient stays), taken off L* (a*b* unchanged). (5) The bottom opening (rendered off): not
-    brighter than the paper's bottom third; the lamp holder's specks neutral"""
+    paper's L* profile per sector; each step the model drew there (tier_fit: per sector a local fit of a step and its seam line at each
+    boundary) replaced by the same rise spread over ~2 ring spacings and the seam line taken off (tier_correction), up to 3 rounds; then
+    one linear ramp over the rows puts the paper's top and bottom thirds back to their medians (the light's course stays); L* only, a*b*
+    unchanged. (5) The bottom opening (rendered off): not brighter than the paper's bottom third (a soft cap); the lamp holder's specks
+    (over 6 L* above the opening round them) down to that surround and near-neutral"""
     regt = np.load(D(WR5, "p5-regt.npy")).astype(np.float32)
     below = PW.load(D(WR5, "scene-p5.png"))
     L5 = f32(D(WR5, "layers", "pendant-v2.png"))
@@ -1246,12 +1250,17 @@ def pendant_v2():
     cap = float(np.median(Ln[botm])) - 1.5                           # a margin for the grade
     opening = (a_lan2 > 0) & (np.nan_to_num(zm, nan=1.0) < OPEN_Z) & (np.arange(a5.shape[0])[:, None] >= top + 20)
     opening = X.dil(opening, 1) & (a_lan2 > 0) & ~paper
-    hot = opening & (lab_r[..., 0] > cap + 6.0)                      # the holder's specks: clearly brighter than the paper
+    # the holder's specks: brighter than the opening round them (a normalised blur, sigma 4) by more than 6 L*: down to that
+    # surround - 2 (the holder is in the lantern's shade) and near-neutral, with a soft weight (3-6 L* over it) so no hard rim
+    loc, _ = nblur(Ln, opening.astype(np.float32), 4.0)
+    dd = np.where(opening, Ln - loc, 0.0)
+    w_hot = np.clip((dd - 3.0) / 3.0, 0, 1) * opening
+    hot = w_hot > 0.5
+    Ln = Ln * (1 - w_hot) + (loc - 2.0) * w_hot
+    An = An * (1 - 0.75 * w_hot)
+    Bn = Bn * (1 - 0.75 * w_hot)
     soft = np.where(Ln > cap, cap + 0.8 * np.tanh((Ln - cap) / 0.8), Ln)    # a soft cap: never above the paper's bottom third
     Ln = np.where(opening, soft, Ln)                                  # under it the opening keeps its own shading
-    hot_s = cv2.GaussianBlur(X.dil(hot, 1).astype(np.float32), (0, 0), 0.7) * opening
-    An = An * (1 - 0.8 * hot_s)
-    Bn = Bn * (1 - 0.8 * hot_s)
     rgb_lan = rgb_of(np.clip(Ln, 0, 100), An, Bn)
     # the layer: the canopy, the cord over it, the lantern over the cord
     rgb = regt.copy()

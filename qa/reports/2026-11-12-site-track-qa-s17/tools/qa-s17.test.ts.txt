@@ -1,0 +1,496 @@
+/**
+ * qa-agent, 2026-11-12 (S17 at a988b099): my own reproduction of ת46, ת47 and ת48 at the Worker, on the REAL seed the
+ * build made (.generated/seed.sql: the shop's catalog plus the story's), not frontend-dev's fixture (vase-a). Copied into
+ * the isolated copy as site/api/test/qa-s17.test.ts and run there only (never in the live tree). Every line printed with
+ * "QA " is quoted in the report.
+ *
+ *  D  ת46: my S15–S16 case again (a Latin customer, 972/00972 phones, a provider `code`), through the request, the queue
+ *     consumer (src/index.ts) and the admin; production and test; my new variants: a phone without its prefix, "(0)",
+ *     dots; the name upper/lower case; a provider message whose snake_case prefix carries the name; JSON-escaped Hebrew;
+ *     over-redaction (what else the strip removes).
+ *  E  ת47: my S15–S16 edge again (a retry that dies mid-call after an earlier failure), on the clock: 29 and 31 minutes,
+ *     inside and past the lease; a first claim that died with no failure before it.
+ *  B  ת48: B4d again (a timeout that created the order, then a retry) for three suppliers: one that can be asked, one
+ *     that cannot, one that dedupes by our order number; the queue's own retries through src/index.ts; a person's
+ *     "found"/"none" through the admin API; a lookup that fails five times; a refusal after a maybe.
+ */
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { signWebhook } from '@hd/shared';
+import { app } from '../src/app';
+import worker from '../src/index';
+import type { Env, SupplierJob } from '../src/env';
+import { createD1, migrate } from './d1-shim';
+import { processSupplierJob, SUBMIT_LEASE_MS } from '../src/lib/fulfillment';
+import { configureLog, errorCode, knownValues, logRow, orderLog, stripKnown } from '../src/lib/log';
+import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from '../src/lib/suppliers/types';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const SITE = resolve(here, '../..');
+const GEN = resolve(SITE, '.generated');
+const SEED = readFileSync(resolve(GEN, 'seed.sql'), 'utf8');
+const SECRET = 'qa-dummy-webhook-secret-not-a-key-17';
+const DEV_TOKEN = 'qa-dummy-admin-token-not-a-key-17-0123456789abcdef';
+
+type Full = { products: { id: string; price_agorot: number | null; availability: { status: string }; pack: unknown; variants: { id: string }[] }[] };
+const shop = JSON.parse(readFileSync(resolve(GEN, 'catalog.full.json'), 'utf8')) as Full;
+const plain = shop.products.find((p) => p.availability.status === 'available' && p.price_agorot && !p.pack && p.variants.length === 1)!;
+const PLAIN = plain.variants[0]!.id;
+
+// distinct personal details, Hebrew and Latin (my S15–S16 customers): any of these in a log row is a leak
+const HE = { full_name: 'אורנה טל־בודקת', email: 'orna.qa17@example.invalid', phone: '054-7716203', city: 'מצפה־בדיקה', street: 'שדרות הבודקים', house: '41', apartment: '12', zip: '7711223', notes: 'בדלת האחורית' };
+const LA = { full_name: 'Orna Tal-Bodeket', email: 'orna.latin17@example.invalid', phone: '+972 54 771 6204', city: 'Mitzpe Bdika', street: 'Sderot HaBodkim', house: '41', apartment: '12', zip: '7711224', notes: 'back door' };
+const NEEDLES = [
+  'אורנה',
+  'בודקת',
+  'מצפה',
+  'הבודקים',
+  'orna.qa17',
+  '7716203',
+  'Orna',
+  'orna',
+  'ORNA',
+  'Bodeket',
+  'bodeket',
+  'BODEKET',
+  'Mitzpe',
+  'Bdika',
+  'Sderot',
+  'HaBodkim',
+  'habodkim',
+  'orna.latin17',
+  '7716204',
+  '771 6204',
+  '771-6204',
+  '7711224',
+  '\\u05d0\\u05d5\\u05e8\\u05e0\\u05d4',
+];
+const leaksIn = (text: string) => NEEDLES.filter((n) => text.includes(n));
+
+let env: Env;
+let sent: SupplierJob[];
+beforeEach(() => {
+  const DB = createD1();
+  migrate(DB, SEED);
+  sent = [];
+  env = {
+    DB,
+    SUPPLIER_QUEUE: { send: vi.fn(async (m: SupplierJob) => void sent.push(m)), sendBatch: vi.fn() } as unknown as Queue<SupplierJob>,
+    ENVIRONMENT: 'test',
+    PAYMENT_PROVIDER: 'mock',
+    SUPPLIER_PROVIDER: 'mock',
+    INVOICE_PROVIDER: 'mock',
+    NOTIFY_PROVIDER: 'mock',
+    ACCESS_TEAM_DOMAIN: '',
+    ACCESS_AUD: '',
+    PAYMENT_WEBHOOK_SECRET: SECRET,
+    ADMIN_DEV_TOKEN: DEV_TOKEN,
+  };
+  configureLog(env);
+});
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+  configureLog({ ENVIRONMENT: 'production' });
+});
+
+const req = (path: string, init?: RequestInit, e: Env = env) => app.request(`http://localhost${path}`, init, e);
+const json = (body: unknown, method = 'POST', headers: Record<string, string> = {}): RequestInit => ({
+  method,
+  headers: { 'content-type': 'application/json', ...headers },
+  body: JSON.stringify(body),
+});
+const admin = { 'x-hd-dev-admin': DEV_TOKEN };
+const one = async <T>(sql: string, ...b: unknown[]) =>
+  (await env.DB.prepare(sql)
+    .bind(...b)
+    .first<T>())!;
+const count = async (sql: string, ...b: unknown[]) => (await one<{ n: number }>(sql, ...b)).n;
+const status = async (id: string) => (await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', id)).status;
+const ship = async (id: string) =>
+  one<{ status: string; reach: string; failing_since: string | null; supplier_order_id: string | null; last_error: string | null }>(
+    'SELECT status, reach, failing_since, supplier_order_id, last_error FROM supplier_shipments WHERE order_id = ?',
+    id,
+  );
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+async function captured(fn: () => Promise<unknown>): Promise<string[]> {
+  const rows: string[] = [];
+  for (const m of ['log', 'info', 'warn', 'error', 'debug'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push(JSON.stringify(a)));
+  try {
+    await fn();
+  } finally {
+    for (const m of ['log', 'info', 'warn', 'error', 'debug'] as const) (console[m] as unknown as { mockRestore?: () => void }).mockRestore?.();
+  }
+  return rows;
+}
+
+async function cart(items: { variant_id: string; qty?: number }[]) {
+  const { id } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+  for (const i of items) {
+    const r = await req(`/api/cart/${id}/items`, json({ qty: 1, ...i }, 'PUT'));
+    expect(r.status, `${i.variant_id}: ${await r.clone().text()}`).toBe(200);
+  }
+  return id;
+}
+async function paid(who: typeof HE = HE) {
+  const body = {
+    cart_id: await cart([{ variant_id: PLAIN }]),
+    customer: { full_name: who.full_name, email: who.email, phone: who.phone },
+    address: { city: who.city, street: who.street, house: who.house, apartment: who.apartment, zip: who.zip, notes: who.notes },
+    shipping_method: 'economy',
+    consents: { terms: true, marketing: false },
+  };
+  const r = await req('/api/checkout', json(body));
+  expect(r.status, await r.clone().text()).toBe(201);
+  const c = (await r.json()) as { order_id: string; order_token: string };
+  const o = await one<{ payment_session_id: string; total_agorot: number }>('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?', c.order_id);
+  const ev = JSON.stringify({ id: `qa17_${c.order_id}_${Math.random().toString(36).slice(2, 8)}`, type: 'payment.succeeded', session_id: o.payment_session_id, amount_agorot: o.total_agorot });
+  const p = await req('/api/webhooks/payment/mock', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(SECRET, ev, Math.floor(Date.now() / 1000)) },
+    body: ev,
+  });
+  expect(((await p.json()) as { outcome: string }).outcome).toBe('paid');
+  sent.length = 0;
+  return { id: c.order_id, token: c.order_token, total: o.total_agorot };
+}
+
+/**
+ * a supplier like a network one: creates the order the moment it receives it (a timed-out call still creates it); may
+ * hang, fail, be asked (findOrder), dedupe by our order number (returns the first order), or neither
+ */
+function supplier(o: { hangMs?: number; failWith?: (i: SupplierOrderInput) => Error; failTimes?: number; find?: 'yes' | 'fails'; dedupes?: boolean } = {}) {
+  const orders: string[] = [];
+  const finds: string[] = [];
+  let fails = o.failTimes ?? Infinity;
+  const c: SupplierClient & { orders: string[]; finds: string[]; calls: number } = {
+    id: 'mock',
+    orders,
+    finds,
+    calls: 0,
+    ...(o.dedupes ? { dedupesByOrderId: true } : {}),
+    async submitOrder(input) {
+      c.calls++;
+      if (o.failWith && fails-- > 0) throw o.failWith(input);
+      if (o.dedupes && orders.includes(input.order_id)) return { supplier_order_id: `QA-SUP-${input.order_id}-1`, raw: { deduplicated: true } };
+      orders.push(input.order_id);
+      const n = orders.length;
+      if (o.hangMs) await sleep(o.hangMs);
+      return { supplier_order_id: `QA-SUP-${input.order_id}-${n}`, raw: {} };
+    },
+  };
+  if (o.find)
+    c.findOrder = async (our) => {
+      finds.push(our);
+      if (o.find === 'fails') throw Object.assign(new Error(`lookup 502 for consignee ${LA.full_name}`), { status: 502 });
+      const i = orders.indexOf(our);
+      return i < 0 ? null : { supplier_order_id: `QA-SUP-${our}-${i + 1}` };
+    };
+  return c;
+}
+
+/** a DB whose every query but orderLog's own lookup fails with the customer's values in the text */
+const brokenDb = (leak: string) =>
+  new Proxy(env.DB, {
+    get(t, k) {
+      if (k !== 'prepare') return Reflect.get(t, k);
+      return (sql: string) => {
+        if (/LEFT JOIN customers c ON c\.id = o\.customer_id WHERE o\.id/.test(sql)) return t.prepare(sql);
+        throw new Error(leak);
+      };
+    },
+  }) as unknown as D1Database;
+
+// ---------------------------------------------------------------- D. ת46
+describe('QA D (ת46): customer values in log rows', () => {
+  it('D1 a known order: Latin, any case, phones in every form, through the request, the queue consumer and the admin; production and test', async () => {
+    const out: Record<string, { rows: number; leaks: string[]; sample: string }> = {};
+    for (const ENV of ['production', 'test'] as const) {
+      // the order is placed and paid under the test config (production refuses the mock payment), then the requests run as ENV
+      env.ENVIRONMENT = 'test';
+      const o = await paid(LA);
+      env.ENVIRONMENT = ENV;
+      const variants: Record<string, string> = {
+        'latin-mixed-case': `failed for ORNA tal-bodeket at sderot habodkim 41, MITZPE BDIKA; zip 7711224`,
+        'phone-972': 'invalid phone 972547716204',
+        'phone-00972': 'invalid phone 00972-54-771-6204',
+        'phone-plus-0': 'invalid phone +972 (0)54 771 6204',
+        'phone-no-prefix': 'invalid phone 54-771-6204',
+        'phone-dots': 'invalid phone 054.771.6204',
+        'email-upper': 'bounced ORNA.LATIN17@EXAMPLE.INVALID',
+        'email-local': 'user orna.latin17 unknown',
+      };
+      for (const [k, msg] of Object.entries(variants)) {
+        const rows = await captured(async () => {
+          const r = await req(`/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } }, { ...env, DB: brokenDb(msg) });
+          expect(r.status).toBe(500);
+        });
+        const text = rows.join('\n');
+        out[`${ENV}/request.unhandled/${k}`] = { rows: rows.length, leaks: leaksIn(text), sample: (/"error_message":"([^"]*)"/.exec(text)?.[1] ?? '(no message)').slice(0, 120) };
+      }
+      // the queue consumer: an exception outside the supplier call (its customer query fails) → queue.job_failed
+      {
+        const msg = `D1_ERROR: no such row for ${LA.full_name} / ${LA.street}`;
+        const acks: string[] = [];
+        const rows = await captured(async () => {
+          await worker.queue!(
+            {
+              queue: 'q',
+              messages: [
+                {
+                  id: 'm1',
+                  timestamp: new Date(),
+                  body: { kind: 'submit-order', order_id: o.id } as SupplierJob,
+                  attempts: 1,
+                  ack: () => void acks.push('ack'),
+                  retry: () => void acks.push('retry'),
+                },
+              ],
+              ackAll() {},
+              retryAll() {},
+            } as unknown as MessageBatch<SupplierJob>,
+            {
+              ...env,
+              // production refuses the mock supplier before any query: the production supplier (cj) reaches the customer query
+              SUPPLIER_PROVIDER: ENV === 'production' ? 'cj' : 'mock',
+              DB: new Proxy(env.DB, {
+                get(t, k) {
+                  if (k !== 'prepare') return Reflect.get(t, k);
+                  return (sql: string) => {
+                    if (/FROM customers WHERE id = \?/.test(sql)) throw new Error(msg);
+                    return t.prepare(sql);
+                  };
+                },
+              }) as unknown as D1Database,
+            },
+          );
+        });
+        const text = rows.join('\n');
+        out[`${ENV}/queue.job_failed`] = { rows: rows.length, leaks: leaksIn(text), sample: (/"error_message":"([^"]*)"/.exec(text)?.[1] ?? '(no message)').slice(0, 120) + ` [${acks.join(',')}]` };
+      }
+    }
+    console.log(`QA D1: ${JSON.stringify(out)}`);
+    for (const [k, v] of Object.entries(out)) expect(v.leaks, k).toEqual([]);
+  });
+
+  it('D2 an unknown order: production logs name and code only; test keeps the scrubbed message (what stays)', async () => {
+    const out: Record<string, string> = {};
+    for (const ENV of ['production', 'preview', 'test'] as const) {
+      env.ENVIRONMENT = ENV;
+      configureLog(env);
+      for (const [k, msg] of Object.entries({
+        latin: `failed for ${LA.full_name}, ${LA.street}`,
+        'phone-972': 'phone 972547716204',
+        'phone-no-prefix': 'phone 54-771-6204',
+      })) {
+        const rows = await captured(async () => {
+          // the checkout of a new order (no order in the path): the cart lookup fails with the customer's values
+          await req('/api/cart', { method: 'POST' }, { ...env, DB: brokenDb(msg) });
+        });
+        const text = rows.join('\n');
+        out[`${ENV}/${k}`] = `${leaksIn(text).join('+') || 'clean'} ${(/"error_message":"([^"]*)"/.exec(text)?.[1] ?? '(name and code only)').slice(0, 80)}`;
+      }
+    }
+    console.log(`QA D2: ${JSON.stringify(out)}`);
+    expect(out['production/latin']!.startsWith('clean')).toBe(true);
+    expect(out['production/phone-no-prefix']!.startsWith('clean')).toBe(true);
+  });
+
+  it('D3 codes: a provider `code` property, a snake_case message prefix that carries the name, an error name, through the supplier job', async () => {
+    const out: Record<string, string> = {};
+    const cases: Record<string, (i: SupplierOrderInput) => Error> = {
+      'code-prop': (i) => Object.assign(new Error('x'), { code: `invalid_consignee:${i.ship_to.full_name.split(' ')[0]}` }),
+      'code-prop-token': (i) => Object.assign(new Error('x'), { code: `consignee_${i.ship_to.full_name.split(' ')[0]!.toLowerCase()}` }),
+      'message-prefix': (i) => new Error(`consignee_${i.ship_to.full_name.split(' ')[0]!.toLowerCase()}_rejected: address ${i.ship_to.city}`),
+      'message-prefix-upper': (i) => new Error(`CONSIGNEE_${i.ship_to.full_name.split(' ')[0]!.toUpperCase()}: rejected`),
+      'error-name': (i) => Object.assign(new Error('rejected'), { name: i.ship_to.full_name.split(' ')[0] }),
+    };
+    for (const [k, fail] of Object.entries(cases)) {
+      const o = await paid(LA);
+      const rows = await captured(() => processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: supplier({ failWith: fail }) }));
+      const row = rows.find((r) => r.includes('supplier.submit_failed')) ?? '';
+      out[k] = `${leaksIn(row).join('+') || 'clean'} code=${/"code":"([^"]*)"/.exec(row)?.[1]}`;
+    }
+    // errorCode directly, for the record
+    out['errorCode(SupplierRefused orna_x)'] = errorCode(new SupplierRefused('orna_bodeket'));
+    console.log(`QA D3: ${JSON.stringify(out)}`);
+    expect(out['code-prop']!.startsWith('clean')).toBe(true);
+  });
+
+  it('D4 what else the strip removes (over-redaction) and JSON-escaped Hebrew', async () => {
+    const k = knownValues({ full_name: 'Dana Gat', email: 'dana.gat@gmail.com', phone: '052-7654321', address: { city: 'Tel Aviv', street: 'Ben Yehuda', house: '5', zip: '6100000' } });
+    const msg = 'connection reset at api.example.com after commit; telemetry ok; hotel; AliExpress; order 1527654321 attempt 6100000';
+    const he = knownValues({ full_name: 'אורנה טל', email: 'x@example.invalid', phone: null, address: { city: 'מצפה', street: 'הבודקים' } });
+    const escaped = JSON.stringify({ consignee: 'אורנה טל' }).replace(/[֐-׿]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`);
+    const row = logRow('error', 'qa.d4', { error_id: 'E-DANA2345', order_id: '1527654321', path: '/api/orders/1527654321/complete' }, new Error(msg), k);
+    const rowHe = logRow('error', 'qa.d4he', {}, new Error(`provider said ${escaped}`), he);
+    console.log(
+      `QA D4: stripped message: ${stripKnown(msg, k)} | the row's error_id ${String(row.error_id)}, path ${String(row.path)}, order_id ${String(row.order_id)} | escaped Hebrew: ${String(rowHe.error_message)}`,
+    );
+  });
+});
+
+// ---------------------------------------------------------------- E. ת47
+describe('QA E (ת47): a send that died mid-call', () => {
+  const health = async () => {
+    const r = await req('/healthz');
+    return `${r.status} ${((await r.json()) as { checks: { supplier: string } }).checks.supplier}`;
+  };
+  it('E1 my S15–S16 edge on the clock: a failure, then a retry that dies mid-call; and a first claim that died', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const T0 = Date.now();
+    vi.useFakeTimers({ toFake: ['Date'], now: T0 });
+    const e = await paid();
+    // a 503 at T0 (failing_since T0, last_error set), then at T0+1 min the retry claims it and the isolate dies (no catch)
+    await processSupplierJob(env, { kind: 'submit-order', order_id: e.id }, 1, { client: supplier({ failWith: () => Object.assign(new Error('503'), { status: 503 }) }) });
+    vi.setSystemTime(T0 + 60_000);
+    await env.DB.prepare("UPDATE supplier_shipments SET status = 'submitting', attempts = 2, updated_at = ? WHERE order_id = ?").bind(new Date(T0 + 60_000).toISOString(), e.id).run();
+    const at: Record<string, string> = {};
+    for (const m of [5, 10.5, 29.5, 30.5, 90]) {
+      vi.setSystemTime(T0 + m * 60_000);
+      at[`T0+${m}m`] = await health();
+    }
+    // a first claim that died (no failure before it): claimed at T1, no failing_since, no last_error
+    await env.DB.prepare("UPDATE orders SET status = 'canceled' WHERE id = ?").bind(e.id).run();
+    const T1 = T0 + 2 * 3600_000;
+    vi.setSystemTime(T1);
+    const f = await paid();
+    await env.DB.prepare("UPDATE supplier_shipments SET status = 'submitting', attempts = 1, updated_at = ? WHERE order_id = ?").bind(new Date(T1).toISOString(), f.id).run();
+    const first: Record<string, string> = {};
+    for (const m of [11, 29.5, 30.5]) {
+      vi.setSystemTime(T1 + m * 60_000);
+      first[`T1+${m}m`] = await health();
+    }
+    // and the takeover: the next delivery after the lease asks (it can't be asked here → a person); /healthz then
+    vi.setSystemTime(T1 + 31 * 60_000);
+    const r = await processSupplierJob(env, { kind: 'submit-order', order_id: f.id }, 2, { client: supplier() });
+    const s = await ship(f.id);
+    first['takeover'] = `${r} → shipment ${s.status}/${s.reach}, order ${await status(f.id)}, /healthz ${await health()}`;
+    vi.useRealTimers();
+    console.log(`QA E1: retry died mid-call ${JSON.stringify(at)} | first claim died ${JSON.stringify(first)} | lease ${SUBMIT_LEASE_MS / 60000} min`);
+    expect(at['T0+5m']!.startsWith('200')).toBe(true);
+    expect(at['T0+30.5m']).toBe('503 degraded');
+    expect(at['T0+90m']).toBe('503 degraded');
+    expect(first['T1+29.5m']!.startsWith('200')).toBe(true);
+    expect(first['T1+30.5m']).toBe('503 degraded');
+  });
+});
+
+// ---------------------------------------------------------------- B. ת48
+describe('QA B (ת48): a send that may have reached the supplier', () => {
+  const quiet = () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    vi.spyOn(console, 'log').mockImplementation(() => undefined);
+  };
+  /** B4d: a timeout that created the order at the supplier, then a 503, then whatever comes */
+  async function b4d(sup: ReturnType<typeof supplier>, more = 3) {
+    const o = await paid();
+    const outs: string[] = [];
+    outs.push(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup, callTimeoutMs: 15 }));
+    await sleep(60);
+    for (let a = 2; a <= 1 + more; a++) outs.push(await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, a, { client: sup }));
+    const s = await ship(o.id);
+    return { o, outs, s, st: await status(o.id) };
+  }
+
+  it('B1 three suppliers after a timeout that created the order: can be asked / cannot / dedupes', async () => {
+    quiet();
+    const res: Record<string, string> = {};
+    const asked = supplier({ hangMs: 40, find: 'yes' });
+    const a = await b4d(asked);
+    res.askable = `${a.outs.join(',')}; supplier orders ${asked.orders.length}, calls ${asked.calls}, finds ${asked.finds.length}; shipment ${a.s.status}/${a.s.reach} ${a.s.supplier_order_id}; order ${a.st}`;
+    const cannot = supplier({ hangMs: 40 });
+    const c = await b4d(cannot);
+    res.cannot = `${c.outs.join(',')}; supplier orders ${cannot.orders.length}, calls ${cannot.calls}; shipment ${c.s.status}/${c.s.reach}; order ${c.st}; needs_person rows ${await count("SELECT COUNT(*) AS n FROM audit_log WHERE action = 'supplier.resend_needs_person' AND subject = ?", c.o.id)}`;
+    const ded = supplier({ hangMs: 40, dedupes: true });
+    const d = await b4d(ded);
+    res.dedupes = `${d.outs.join(',')}; supplier orders ${ded.orders.length}, calls ${ded.calls}; shipment ${d.s.status}/${d.s.reach} ${d.s.supplier_order_id}; order ${d.st}`;
+    // the customer's view of the one left to a person
+    const v = (await (await req(`/api/orders/${c.o.id}`, { headers: { 'x-order-token': c.o.token } })).json()) as { status: string; status_he: string };
+    res.customer = `${v.status} "${v.status_he}"`;
+    process.stdout.write(`QA B1: ${JSON.stringify(res)}\n`);
+    expect(asked.orders).toHaveLength(1);
+    expect(cannot.orders).toHaveLength(1);
+    expect(ded.orders).toHaveLength(1);
+    expect(a.st).toBe('sent_to_supplier');
+    expect(c.st).toBe('supplier_error');
+    expect(d.st).toBe('sent_to_supplier');
+  });
+
+  it('B2 askable, it holds none (the timeout created nothing); a lookup that fails 5 times; a refusal after a maybe', async () => {
+    quiet();
+    const res: Record<string, string> = {};
+    // the timed-out call created nothing (failWith once): asked → none → sent once
+    const none = supplier({ failWith: () => Object.assign(new Error('socket hang up'), { status: 503 }), failTimes: 1, find: 'yes' });
+    const o1 = await paid();
+    const outs1 = [await processSupplierJob(env, { kind: 'submit-order', order_id: o1.id }, 1, { client: none })];
+    outs1.push(await processSupplierJob(env, { kind: 'submit-order', order_id: o1.id }, 2, { client: none }));
+    res.none = `${outs1.join(',')}; supplier orders ${none.orders.length}, finds ${none.finds.length}; order ${await status(o1.id)}`;
+    // the lookup fails every time: never sent again; supplier_error at attempt 5; a person's check is then possible
+    const fails = supplier({ hangMs: 40, find: 'fails' });
+    const o2 = await paid();
+    const outs2 = [await processSupplierJob(env, { kind: 'submit-order', order_id: o2.id }, 1, { client: fails, callTimeoutMs: 15 })];
+    await sleep(60);
+    for (let a = 2; a <= 6; a++) outs2.push(await processSupplierJob(env, { kind: 'submit-order', order_id: o2.id }, a, { client: fails }));
+    const s2 = await ship(o2.id);
+    res.lookup_fails = `${outs2.join(',')}; supplier orders ${fails.orders.length}, calls ${fails.calls}, finds ${fails.finds.length}; shipment ${s2.status}/${s2.reach}, last_error "${s2.last_error}"; order ${await status(o2.id)}`;
+    const chk = await req(`/api/admin/orders/${o2.id}/supplier-check`, json({ outcome: 'found', supplier_order_id: `QA-SUP-${o2.id}-1`, note: 'נמצאה אצל הספק' }, 'POST', admin));
+    res.lookup_fails_person_found = `${chk.status}; order ${await status(o2.id)}; shipment ${(await ship(o2.id)).status}; supplier orders ${fails.orders.length}`;
+    // a refusal after a maybe: the refusal created nothing, the reach stays as it was
+    const ref = supplier({ hangMs: 40, find: 'yes' });
+    const o3 = await paid();
+    await processSupplierJob(env, { kind: 'submit-order', order_id: o3.id }, 1, { client: ref, callTimeoutMs: 15 });
+    await sleep(60);
+    ref.orders.length = 0; // the supplier lost it (it never really took it): asked → none → the send is refused
+    const refusing: SupplierClient = { ...ref, id: 'mock', findOrder: ref.findOrder, submitOrder: async () => { throw new SupplierRefused('sku_out_of_stock'); } };
+    const r3a = await processSupplierJob(env, { kind: 'submit-order', order_id: o3.id }, 2, { client: refusing });
+    const s3a = await ship(o3.id);
+    const r3b = await processSupplierJob(env, { kind: 'submit-order', order_id: o3.id }, 3, { client: ref });
+    res.refusal_after_maybe = `${r3a} (${s3a.status}/${s3a.reach}) → ${r3b} (${(await ship(o3.id)).status}/${(await ship(o3.id)).reach}); supplier orders ${ref.orders.length}, finds ${ref.finds.length}`;
+    process.stdout.write(`QA B2: ${JSON.stringify(res)}\n`);
+    expect(none.orders).toHaveLength(1);
+    expect(fails.orders).toHaveLength(1);
+  });
+
+  it('B3 the one left to a person, through the queue consumer and the admin API: "none" sends once; a second "none" is refused; "found" records', async () => {
+    quiet();
+    const res: Record<string, string> = {};
+    for (const outcome of ['none', 'found'] as const) {
+      const sup = supplier({ hangMs: 40 });
+      const o = await paid();
+      await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup, callTimeoutMs: 15 });
+      await sleep(60);
+      // the queue's own retry, through src/index.ts with the configured (mock) supplier: the mock can't be asked
+      const acks: string[] = [];
+      await worker.queue!(
+        {
+          queue: 'q',
+          messages: [{ id: 'm', timestamp: new Date(), body: { kind: 'submit-order', order_id: o.id }, attempts: 2, ack: () => void acks.push('ack'), retry: () => void acks.push('retry') }],
+          ackAll() {},
+          retryAll() {},
+        } as unknown as MessageBatch<SupplierJob>,
+        env,
+      );
+      const mid = `${await status(o.id)} ${(await ship(o.id)).status}/${(await ship(o.id)).reach} [${acks.join(',')}]`;
+      const body = outcome === 'found' ? { outcome, supplier_order_id: `QA-SUP-${o.id}-1`, note: 'נמצאה' } : { outcome, note: 'אין אצל הספק' };
+      const r1 = await req(`/api/admin/orders/${o.id}/supplier-check`, json(body, 'POST', admin));
+      const queued = sent.filter((j) => j.order_id === o.id).length;
+      const r2 = await req(`/api/admin/orders/${o.id}/supplier-check`, json(body, 'POST', admin));
+      const queued2 = sent.filter((j) => j.order_id === o.id).length;
+      let after = '';
+      if (outcome === 'none') {
+        // the queued send runs (the timed-out call really created nothing in this story: the supplier forgets it)
+        sup.orders.length = 0;
+        after = await processSupplierJob(env, { kind: 'submit-order', order_id: o.id }, 1, { client: sup });
+      }
+      res[outcome] = `after the queue's retry: ${mid}; check ${r1.status}, sends queued ${queued}; second check ${r2.status} (${((await r2.json()) as { error?: string }).error ?? 'ok'}), queued ${queued2}; then ${after || '-'}: order ${await status(o.id)}, shipment ${(await ship(o.id)).status}, supplier orders ${sup.orders.length}`;
+    }
+    process.stdout.write(`QA B3: ${JSON.stringify(res)}\n`);
+    expect(res.none).toContain('sends queued 1');
+    expect(res.none).toContain('queued 1;');
+  });
+});

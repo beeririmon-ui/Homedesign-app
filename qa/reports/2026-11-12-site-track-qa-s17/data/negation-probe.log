@@ -1,0 +1,25 @@
+denials (must not be "הדפס במרקם"):
+  ok   "non-textured print" → הדפס
+  ok   "smooth print (no texture)" → הדפס
+  ok   "nontextured printed canvas" → הדפס
+  ok   "printed poster, not embossed" → הדפס
+  ok   "print without any texture" → הדפס
+  ok   "Print, NO TEXTURE" → הדפס
+  MISS "print with no embossed texture" → הדפס במרקם
+  MISS "printed, no raised or embossed texture" → הדפס במרקם
+  MISS "print; neither textured nor embossed" → הדפס במרקם
+  MISS "print (isn't textured)" → הדפס במרקם
+  MISS "flat print, texture: none" → הדפס במרקם
+  MISS "texture-free print" → הדפס במרקם
+  MISS "print, no 3D texture" → הדפס במרקם
+  MISS "print with no visible texture" → הדפס במרקם
+  MISS "printed panel, lacks texture" → הדפס במרקם
+  MISS "print without embossed or textured finish" → הדפס במרקם
+claims (must stay "הדפס במרקם"):
+  ok   "printed embossed film" → הדפס במרקם
+  ok   "textured print, no gloss" → הדפס במרקם
+  ok   "embossed print, not framed" → הדפס במרקם
+  ok   "print with raised texture, no frame" → הדפס במרקם
+  ok   "non-slip backing, textured print" → הדפס במרקם
+  ok   "textured canvas print (not glossy)" → הדפס במרקם
+QA ה3: 6/16 denials read right, 6/6 claims kept
