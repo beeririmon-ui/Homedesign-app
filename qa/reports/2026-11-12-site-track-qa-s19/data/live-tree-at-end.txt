@@ -1,0 +1,65 @@
+354d0c99968c9e9c540d6ae4a3af3e97db691837
+Thu Nov 12 11:03:58 UTC 2026
+ M assets/renders/living-room/warm-modern/phase2-2026-11-10/fix_r8.py
+ M assets/renders/living-room/warm-modern/phase2-2026-11-10/step0/table_group_wm_t3.py
+ D assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/curtain3-speck-mask.npy
+ D assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3-free-alpha.png
+ D assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3.png
+ D assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/shadows/curtains-v3.png
+ M docs/ops/deploy-runbook.md
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa.log
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q0.out
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q28.out
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q29.out
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q30.out
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q31.out
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q32.out
+ M qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q33.out
+ M qa/reports/2026-11-07-site-track/s20/tools/mut-qa.sh
+ M site/api/src/routes/public.ts
+ M site/api/test/api.test.ts
+ M site/api/test/s20.test.ts
+ M site/copy/promises.he.json
+ M site/e2e/s20.spec.ts
+ M site/tools/build-copy.ts
+ M site/tools/check-promises.ts
+ M site/tools/lib/promise-scan.ts
+ M site/tools/lib/promises.ts
+ M site/tools/test/fixtures/promise-phrases.json
+ M site/tools/test/s18.test.ts
+ M site/tools/test/s20.test.ts
+ M site/web/src/story/story.ts
+?? assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-free-alpha.png
+?? assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains.png
+?? assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/shadows/curtains.png
+?? qa/reports/2026-11-07-site-track/s20/data/build-public-contact.log
+?? qa/reports/2026-11-07-site-track/s20/data/build-srcmut.log
+?? qa/reports/2026-11-07-site-track/s20/data/check-promises-srcmut.json
+?? qa/reports/2026-11-07-site-track/s20/data/e2e-public-contact.log
+?? qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q34.out
+?? qa/reports/2026-11-07-site-track/s20/data/mut-qa/Q35.out
+?? qa/reports/2026-11-07-site-track/s20/data/phrase-probe.json
+?? qa/reports/2026-11-07-site-track/s20/data/phrase-probe.log
+?? qa/reports/2026-11-07-site-track/s20/data/public-no-contact.log
+?? qa/reports/2026-11-07-site-track/s20/data/s20-timings-contact.json
+?? qa/reports/2026-11-07-site-track/s20/data/s20-timings-no-contact.json
+?? qa/reports/2026-11-07-site-track/s20/data/srcmut-webbuild.log
+?? qa/reports/2026-11-07-site-track/s20/screens/
+?? qa/reports/2026-11-07-site-track/s20/test-all.log
+?? qa/reports/2026-11-07-site-track/s20/tools/srcmut.sh
+?? site/e2e/shots-s20.spec.ts
+--- render dirs the build reads vs f33cfe42:
+(empty line above = identical)
+--- commits since f33cfe42:
+354d0c99 WIP: S20, QA S19, R8 in progress. Not reviewed, not for the site
+062292bc QA R6-R7 passes (all defaults and variants behind the flag); 4 code fixes added to R8
+23e0962b WIP: S20, QA S19, QA R6-R7, WM-T3 clay in progress. Not reviewed, not for the site
+d16f0354 IMG1 source-record: throw v3 QA verdict yes
+7eb15f62 QA throw P2 v3: yes (6/6); report saved by manager
+c6143da6 Designer R7 table decisions (WM-T3 proposal pending clay; bowl 3 and iron candles out); clay check launched
+6746ea48 WIP: S20, QA S19, QA R6-R7, designer table, QA throw v3 in progress. Not reviewed, not for the site
+95d3ca1c Throw P2 v3 code fix (0 tokens); QA recheck launched
+8a7af150 WIP: S20, QA S19, QA R6-R7, designer table decisions, throw v3 (stopped at usage limit). Not reviewed, not for the site
+--- site/ vs f33cfe42:
+ 34 files changed, 2316 insertions(+), 250 deletions(-)
+(empty = unchanged)

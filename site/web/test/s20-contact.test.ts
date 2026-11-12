@@ -49,7 +49,7 @@ describe('S20 ת61: the contact block', () => {
   it('an email without a phone: the email alone', async () => {
     vi.doMock('../src/copy', () => ({ contact: { ...CONTACT, phone: null, phone_href: null }, copyHe: () => null }));
     const { ContactBlock } = await import('../src/components/Contact');
-    const html = renderToString(h(ContactBlock, {}));
+    const html = renderToString(h(ContactBlock, { title: undefined }));
     expect(html).toContain('mailto:');
     expect(html).not.toContain('tel:');
   });

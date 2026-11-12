@@ -100,7 +100,10 @@ describe('public api', () => {
 
   it('the waiting list (PRE1) is closed while no provider sends the back-in-stock message (S20, ת57): nothing is stored', async () => {
     // the list itself (one email for a product or a slot) is tested with a provider that sends it: api/test/s20.test.ts
-    for (const body of [{ email: 'buyer@example.com', product_id: 'vase-a' }, { email: 'buyer@example.com', room: 'living-room', slot: 'vase' }]) {
+    for (const body of [
+      { email: 'buyer@example.com', product_id: 'vase-a' },
+      { email: 'buyer@example.com', room: 'living-room', slot: 'vase' },
+    ]) {
       const r = await req('/api/waitlist', json(body));
       expect(r.status).toBe(409);
       expect(await r.json()).toEqual({ error: 'waitlist_closed', message_he: 'אין כרגע רשימת המתנה למוצר.' });

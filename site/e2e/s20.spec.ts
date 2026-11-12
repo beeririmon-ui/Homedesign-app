@@ -28,11 +28,8 @@ const line = (k: string): string => {
 };
 /** the preview's own D1, as JSON rows */
 function d1<T>(sql: string): T[] {
-  const out = execFileSync('npx', ['--no-install', 'wrangler', 'd1', 'execute', 'DB', '--local', '--persist-to', '../.wrangler-state', '--json', '--command', sql], {
-    cwd: join(SITE, 'api'),
-    stdio: 'pipe',
-    encoding: 'utf8',
-  });
+  const args = ['wrangler', 'd1', 'execute', 'DB', '--local', '--persist-to', '../.wrangler-state', '--json', '--command', sql];
+  const out = execFileSync('npx', ['--no-install', ...args], { cwd: join(SITE, 'api'), stdio: 'pipe', encoding: 'utf8' });
   return (JSON.parse(out) as { results: T[] }[])[0]!.results;
 }
 const NO_CONTACT = /mailto:|tel:|כתבו לנו|פנו אלינו|לכתוב לנו/;
@@ -51,7 +48,9 @@ test('the build: no email provider, no contact details', () => {
 });
 
 test('ת56: every story page and every sheet: the status alone, no promise', async ({ page }) => {
-  const pages = walk(join(SITE, 'web/dist/story'), (r) => r.endsWith('index.html')).map((p) => `/story/${p.slice(join(SITE, 'web/dist/story').length + 1).replace(/index\.html$/, '')}`);
+  const pages = walk(join(SITE, 'web/dist/story'), (r) => r.endsWith('index.html')).map(
+    (p) => `/story/${p.slice(join(SITE, 'web/dist/story').length + 1).replace(/index\.html$/, '')}`,
+  );
   expect(pages.length).toBeGreaterThan(5);
   const found: string[] = [];
   let unavailable = 0;

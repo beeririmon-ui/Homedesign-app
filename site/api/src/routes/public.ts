@@ -226,15 +226,7 @@ publicApi.post('/checkout', async (c) => {
   const stmts = [
     c.env.DB.prepare(
       'INSERT INTO customers (id, email, phone, full_name, marketing_consent, marketing_consent_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    ).bind(
-      customerId,
-      req.customer.email,
-      req.customer.phone,
-      req.customer.full_name,
-      marketing ? 1 : 0,
-      marketing ? now : null,
-      now,
-    ),
+    ).bind(customerId, req.customer.email, req.customer.phone, req.customer.full_name, marketing ? 1 : 0, marketing ? now : null, now),
     c.env.DB.prepare(
       `INSERT INTO orders (id, token_hash, cart_id, customer_id, status, subtotal_agorot, shipping_method, shipping_agorot, total_agorot, vat_agorot, vat_rate, fx_usd_ils_at_order, address_json, terms_accepted_at, payment_provider, payment_session_id, created_at, updated_at)
        VALUES (?, ?, ?, ?, 'pending_payment', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,

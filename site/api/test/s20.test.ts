@@ -154,7 +154,11 @@ describe('S20 ת61: the contact details', () => {
       expect(contactConfigIssues(vars)).toEqual([]);
       expect(contactOf(vars)).toBeNull();
     }
-    expect(contactOf({ CONTACT_EMAIL: 'shop@hd-test.co.il', CONTACT_PHONE: 'UNDECIDED' })).toEqual({ email: 'shop@hd-test.co.il', phone: null, phone_href: null });
+    expect(contactOf({ CONTACT_EMAIL: 'shop@hd-test.co.il', CONTACT_PHONE: 'UNDECIDED' })).toEqual({
+      email: 'shop@hd-test.co.il',
+      phone: null,
+      phone_href: null,
+    });
     expect(contactOf({ CONTACT_EMAIL: ' shop@hd-test.co.il ', CONTACT_PHONE: '03-1234567' })).toEqual({
       email: 'shop@hd-test.co.il',
       phone: '03-1234567',
@@ -167,7 +171,9 @@ describe('S20 ת61: the contact details', () => {
   it('a malformed value, a phone without an email, or a missing variable fails the deploy check', () => {
     expect(contactIssues({ CONTACT_EMAIL: 'shop at hd', CONTACT_PHONE: 'UNDECIDED' })).toEqual([expect.stringContaining('is not an email address')]);
     expect(contactIssues({ CONTACT_EMAIL: 'shop@hd.co.il', CONTACT_PHONE: '12345' })).toEqual([expect.stringContaining('is not an Israeli phone number')]);
-    expect(contactIssues({ CONTACT_EMAIL: 'UNDECIDED', CONTACT_PHONE: '03-1234567' })).toEqual([expect.stringContaining('CONTACT_PHONE without CONTACT_EMAIL')]);
+    expect(contactIssues({ CONTACT_EMAIL: 'UNDECIDED', CONTACT_PHONE: '03-1234567' })).toEqual([
+      expect.stringContaining('CONTACT_PHONE without CONTACT_EMAIL'),
+    ]);
     expect(contactIssues({})).toEqual([expect.stringContaining('CONTACT_EMAIL is not set')]);
     expect(contactOf({ CONTACT_EMAIL: 'shop at hd' })).toBeNull();
     expect(isPlaceholderEmail('hello@example.com')).toBe(true);

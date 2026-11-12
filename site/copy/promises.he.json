@@ -3,36 +3,25 @@
   "strings": {
     "checkout.email_hint": {
       "where": "הקופה, מתחת לשדה האימייל",
-      "needs": [
-        "order_confirmation",
-        "invoice_email"
-      ],
+      "needs": ["order_confirmation", "invoice_email"],
       "no_email": "לפנייה בנושא ההזמנה, אם יהיה צורך.",
       "email": "לשם נשלחים אישור ההזמנה והחשבונית."
     },
     "checkout.marketing_consent": {
       "where": "הקופה, תיבת הסימון (רשות) מתחת לאישור התקנון. null: אין תיבה",
-      "needs": [
-        "marketing"
-      ],
+      "needs": ["marketing"],
       "no_email": null,
       "email": "אשמח לקבל עדכונים על מוצרים חדשים במייל (רשות, אפשר להסיר בכל עת)."
     },
     "checkout.total_note": {
       "where": "הקופה, מתחת לסכום לתשלום",
-      "needs": [
-        "invoice_email"
-      ],
+      "needs": ["invoice_email"],
       "no_email": "כולל מע\"מ.",
       "email": "כולל מע\"מ. חשבונית מס נשלחת במייל אחרי התשלום."
     },
     "order.next.received": {
       "where": "דף ההזמנה, מתחת לסה\"כ: אחרי התשלום, עד שההזמנה יוצאת למשלוח",
-      "needs": [
-        "order_confirmation",
-        "invoice_email",
-        "shipping_update"
-      ],
+      "needs": ["order_confirmation", "invoice_email", "shipping_update"],
       "no_email": "אישור ההזמנה ומצבה מופיעים בדף הזה, כולל היציאה למשלוח. כדאי לשמור את הקישור. הוא נפתח רק בדפדפן הזה.",
       "email": "אישור וחשבונית מס יישלחו לאימייל. נעדכן כשההזמנה יוצאת למשלוח."
     },
@@ -51,9 +40,7 @@
     },
     "order.no_access": {
       "where": "דף ההזמנה, כשהוא נפתח בדפדפן אחר מזה שבו הזמינו. S20 (QA ת61): בלי סיבה אחת, כי גם אחרי מחיקת נתוני האתר באותו דפדפן אין גישה",
-      "needs": [
-        "order_confirmation"
-      ],
+      "needs": ["order_confirmation"],
       "no_email": "אין גישה להזמנה הזו מהדפדפן הזה. דף ההזמנה נפתח רק בדפדפן שבו הזמנתם, וכל עוד נתוני האתר בו לא נמחקו.",
       "email": "אין לנו גישה להזמנה הזו מהדפדפן הזה. את פרטי ההזמנה שלחנו לאימייל שלכם."
     },
@@ -64,54 +51,42 @@
     },
     "order.delay.followup": {
       "where": "דף ההזמנה, המשפט השלישי אחרי שורת העיכוב (master-designer §7). null: רק שני המשפטים",
-      "needs": [
-        "delay_notice"
-      ],
+      "needs": ["delay_notice"],
       "no_email": null,
       "email": "אם מועד המסירה ישתנה, נעדכן אותך במייל."
     },
     "waitlist.offer": {
       "where": "\"המלאי אינו זמין כעת\": הכפתור שפותח את הטופס (דף המוצר והגלגל). null: אין טופס, רק השורה \"המלאי אינו זמין כעת\"",
       "group": "waitlist",
-      "needs": [
-        "back_in_stock"
-      ],
+      "needs": ["back_in_stock"],
       "no_email": null,
       "email": "עדכנו אותי כשחוזר"
     },
     "waitlist.why": {
       "where": "\"המלאי אינו זמין כעת\": מתחת לשדה האימייל, לשם מה הכתובת",
       "group": "waitlist",
-      "needs": [
-        "back_in_stock"
-      ],
+      "needs": ["back_in_stock"],
       "no_email": null,
       "email": "נשלח הודעה אחת כשהמוצר חוזר למלאי. הכתובת לא תשמש לשום דבר אחר."
     },
     "waitlist.submit": {
       "where": "\"המלאי אינו זמין כעת\": כפתור השליחה של הטופס",
       "group": "waitlist",
-      "needs": [
-        "back_in_stock"
-      ],
+      "needs": ["back_in_stock"],
       "no_email": null,
       "email": "עדכנו אותי"
     },
     "waitlist.done": {
       "where": "\"המלאי אינו זמין כעת\": אחרי ההרשמה",
       "group": "waitlist",
-      "needs": [
-        "back_in_stock"
-      ],
+      "needs": ["back_in_stock"],
       "no_email": null,
       "email": "נרשמתם. נשלח הודעה אחת כשהמוצר חוזר."
     },
     "story.unavailable_note": {
       "where": "שכבת הסיפור, גיליון \"קנה את המראה\": אחרי \"המלאי אינו זמין כעת.\", כשלמוצר יש דף מוצר (S20, QA ת56). null: רק \"המלאי אינו זמין כעת.\"",
       "group": "waitlist",
-      "needs": [
-        "back_in_stock"
-      ],
+      "needs": ["back_in_stock"],
       "no_email": null,
       "email": "בדף המוצר אפשר לבקש עדכון כשהוא חוזר."
     },
@@ -123,9 +98,7 @@
     },
     "privacy.marketing": {
       "where": "מדיניות הפרטיות: דיוור שיווקי",
-      "needs": [
-        "marketing"
-      ],
+      "needs": ["marketing"],
       "no_email": "האתר לא שולח דיוור שיווקי.",
       "email": "דיוור שיווקי נשלח רק אם סימנתם הסכמה, ואפשר להסיר בכל עת."
     },

@@ -1,0 +1,110 @@
+
+Running 7 tests using 1 worker
+
+encoding warm-modern 1920@1: base AVIF 6/8/20 · 0.07% · ΔE 3.21
+encoding warm-modern 1280@1: base AVIF 4/6/12 · 0.01% · ΔE 2.58
+encoding warm-modern 400@1: base AVIF 4/6/11 · 0.01% · ΔE 2.67
+encoding warm-modern 400@3: base AVIF 6/9/24 · 0.12% · ΔE 3.42
+encoding warm-modern 1280-zoom: base AVIF 5/7/13 · 0.02% · ΔE 2.8
+  ✓  1 [e2e] › e2e/encoding.spec.ts:89:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: the base (AVIF q70 and its WebP fallback) meets it in every view (47.2s)
+encoding warm-modern set B 1920@1: 2/2/3 · 0.00% · ΔE 1.46
+encoding warm-modern set B 1280@1: 1/2/2 · 0.00% · ΔE 1.29
+encoding warm-modern set B 400@1: 1/2/2 · 0.00% · ΔE 1.23
+encoding warm-modern set B 400@3: 2/2/3 · 0.00% · ΔE 1.5
+encoding warm-modern set B 1280-zoom: 1/2/3 · 0.00% · ΔE 1.32
+  ✓  2 [e2e] › e2e/encoding.spec.ts:132:5 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: set B's layer (WebP near-lossless 60) meets it inside its own area, in every view (39.0s)
+encoding warm-modern set A 1920@1: 2/2/132 · 0.03% · ΔE 1.44
+encoding warm-modern set A 1280@1: 1/2/3 · 0.00% · ΔE 1.25
+encoding warm-modern set A 400@1: 1/2/2 · 0.00% · ΔE 1.25
+  ✘  3 [e2e] › e2e/encoding.spec.ts:132:5 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: set A's layer (WebP near-lossless 60) meets it inside its own area, in every view (1.0m)
+encoding warm-modern set C 1920@1: 2/2/3 · 0.00% · ΔE 1.62
+encoding warm-modern set C 1280@1: 1/2/3 · 0.00% · ΔE 1.45
+encoding warm-modern set C 400@1: 1/2/2 · 0.00% · ΔE 1.4
+encoding warm-modern set C 400@3: 2/2/4 · 0.00% · ΔE 1.67
+encoding warm-modern set C 1280-zoom: 1/2/2 · 0.00% · ΔE 1.5
+  ✓  4 [e2e] › e2e/encoding.spec.ts:132:5 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: set C's layer (WebP near-lossless 60) meets it inside its own area, in every view (37.0s)
+encoding nordic 1920@1: base AVIF 5/7/13 · 0.02% · ΔE 2.38
+encoding nordic 1280@1: base AVIF 5/47/155 · 0.19% · ΔE 2.38
+encoding nordic 400@1: base AVIF 3/5/10 · 0.00% · ΔE 1.8
+encoding nordic 400@3: base AVIF 3/4/10 · 0.00% · ΔE 1.69
+encoding nordic 1280-zoom: base AVIF 4/6/12 · 0.00% · ΔE 2.3
+  ✘  5 [e2e] › e2e/encoding.spec.ts:154:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › Nordic: its base (AVIF: q80 at 1280 and 1920, the posters, S14; q70 at 2752; and the WebP fallback) meets it in every view (its layers are temporary) (46.0s)
+encoding warm-modern poster 1920@1 (default.2720.avif): AVIF 5/7/23 · 0.04% · ΔE 3.36 · WebP 7/11/34 · 0.40% · ΔE 4.14
+encoding warm-modern poster 1280@1 (default.1280.avif): AVIF 6/7/13 · 0.03% · ΔE 3.28 · WebP 9/14/28 · 1.37% · ΔE 4.46
+encoding warm-modern poster 400@1 (default.1280.avif): AVIF 4/5/8 · 0.00% · ΔE 2.52 · WebP 7/12/23 · 0.46% · ΔE 3.47
+encoding warm-modern poster 400@3 (default.2720.avif): AVIF 5/8/23 · 0.04% · ΔE 3.32 · WebP 8/13/34 · 0.73% · ΔE 4.38
+  ✓  6 [e2e] › e2e/encoding.spec.ts:202:5 › the poster at rest meets the threshold (S14, QA S11–S12 ת30 §4), in both houses and the four views › warm-modern: the poster the page rests on (AVIF and the WebP fallback) (31.3s)
+encoding nordic poster 1920@1 (shell.1920.avif): AVIF 6/8/15 · 0.09% · ΔE 2.79 · WebP 5/7/16 · 0.01% · ΔE 2.75
+encoding nordic poster 1280@1 (shell.1280.avif): AVIF 6/8/16 · 0.08% · ΔE 2.75 · WebP 5/7/15 · 0.02% · ΔE 2.7
+encoding nordic poster 400@1 (shell.1280.avif): AVIF 5/7/12 · 0.01% · ΔE 2.49 · WebP 4/5/10 · 0.00% · ΔE 2.55
+encoding nordic poster 400@3 (shell.2752.avif): AVIF 6/9/17 · 0.11% · ΔE 2.73 · WebP 4/5/17 · 0.00% · ΔE 2.59
+  ✓  7 [e2e] › e2e/encoding.spec.ts:202:5 › the poster at rest meets the threshold (S14, QA S11–S12 ת30 §4), in both houses and the four views › nordic: the poster the page rests on (AVIF and the WebP fallback) (35.7s)
+
+
+  1) [e2e] › e2e/encoding.spec.ts:132:5 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: set A's layer (WebP near-lossless 60) meets it inside its own area, in every view 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mtrue[39m
+    Received: [31mfalse[39m
+
+    Call Log:
+    - Timeout 30000ms exceeded while waiting on the predicate
+
+       at encoding-capture.ts:42
+
+      40 |   const sb = (await page.locator('section.stage').boundingBox())!;
+      41 |   await page.mouse.click(sb.x + 20, sb.y + sb.height / 2);
+    > 42 |   await expect.poll(() => page.evaluate(() => window.__hdEngine?.ready ?? false), { timeout: 30_000 }).toBe(true);
+         |   ^
+      43 |   if (before) {
+      44 |     await before(page);
+      45 |     await settle(page);
+        at capture (/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa19/build-s19/site/e2e/encoding-capture.ts:42:3)
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa19/build-s19/site/e2e/encoding.spec.ts:142:21
+
+    Error Context: test-results/encoding-the-tool-layer-en-11ccc--its-own-area-in-every-view-e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encoding-the-tool-layer-en-11ccc--its-own-area-in-every-view-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encoding-the-tool-layer-en-11ccc--its-own-area-in-every-view-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [e2e] › e2e/encoding.spec.ts:154:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › Nordic: its base (AVIF: q80 at 1280 and 1920, the posters, S14; q70 at 2752; and the WebP fallback) meets it in every view (its layers are temporary) 
+
+    Error: base AVIF 1280@1: p99.9 47 > 10
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "base AVIF 1280@1: p99.9 47 > 10",[39m
+    [31m+ ][39m
+
+      175 |     }
+      176 |     write();
+    > 177 |     expect(bad, bad.join('\n')).toEqual([]);
+          |                                 ^
+      178 |   });
+      179 | });
+      180 |
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa19/build-s19/site/e2e/encoding.spec.ts:177:33
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/encoding-the-tool-layer-en-4ddd5-w-its-layers-are-temporary--e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/encoding-the-tool-layer-en-4ddd5-w-its-layers-are-temporary--e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [e2e] › e2e/encoding.spec.ts:132:5 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › warm-modern: set A's layer (WebP near-lossless 60) meets it inside its own area, in every view 
+    [e2e] › e2e/encoding.spec.ts:154:3 › the tool-layer encoding threshold (S12, QA S8–S10 §4), as the browser draws it › Nordic: its base (AVIF: q80 at 1280 and 1920, the posters, S14; q70 at 2752; and the WebP fallback) meets it in every view (its layers are temporary) 
+  5 passed (5.4m)

@@ -125,6 +125,17 @@ def nearest_point(a, b):
 
 
 def run_combo(bowl, h, bowl_xy, dest_root, tag, CM, REAL):
+    """one combination (cached in the scratch folder by point, bowl, holders and tag, so an interrupted run resumes)"""
+    ck = os.path.join(SCRATCH, "cache", f"{os.path.basename(dest_root)}__{bowl}__{h}{tag}.json")
+    if os.path.exists(ck):
+        return json.load(open(ck))
+    r = _run_combo(bowl, h, bowl_xy, dest_root, tag, CM, REAL)
+    os.makedirs(os.path.dirname(ck), exist_ok=True)
+    json.dump(r, open(ck, "w"), default=float)
+    return r
+
+
+def _run_combo(bowl, h, bowl_xy, dest_root, tag, CM, REAL):
     TG.OUT = dest_root
     rr = TG.run(bowl, h, bowl_xy=bowl_xy, suffix=tag)
     sub = os.path.join(HERE, rr["folder"]) if not os.path.isabs(rr["folder"]) else rr["folder"]
@@ -209,7 +220,7 @@ def mins(res, keys):
                     (" (R7 layers)" if "R7 layer" in nm else " (placeholder)")
             upd(short, g, f"{k}: {nm}")
         upd("bowl inside front edge (m)", r["bowl_inside_front_edge_m"], k)
-    return {nm: dict(min=v[0], at=at) for nm, (v, at) in sorted(w.items())}
+    return {nm: dict(min=v, at=at) for nm, (v, at) in sorted(w.items())}
 
 
 def main():

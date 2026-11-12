@@ -119,7 +119,8 @@ function rendered(n: ts.Node): string {
     for (const a of n.arguments)
       if (ts.isObjectLiteralExpression(a))
         for (const p of a.properties)
-          if (ts.isPropertyAssignment(p) && (ts.isIdentifier(p.name) || ts.isStringLiteral(p.name)) && p.name.text === 'children') return rendered(p.initializer);
+          if (ts.isPropertyAssignment(p) && (ts.isIdentifier(p.name) || ts.isStringLiteral(p.name)) && p.name.text === 'children')
+            return rendered(p.initializer);
   if (ts.isJsxElement(n) || ts.isJsxFragment(n)) return n.children.map(rendered).join('');
   if (ts.isJsxText(n)) return n.text.replace(/\s+/g, ' ');
   if (ts.isJsxExpression(n)) return n.expression ? rendered(n.expression) : '';
@@ -132,7 +133,13 @@ function rendered(n: ts.Node): string {
  * JSX element's children. A string that is HTML is read as a page; one that is JSON, as JSON.
  */
 export function codeStrings(code: string, file: string): string[] {
-  const kind = file.endsWith('.ts') ? ts.ScriptKind.TS : file.endsWith('.tsx') ? ts.ScriptKind.TSX : file.endsWith('.jsx') ? ts.ScriptKind.JSX : ts.ScriptKind.JS;
+  const kind = file.endsWith('.ts')
+    ? ts.ScriptKind.TS
+    : file.endsWith('.tsx')
+      ? ts.ScriptKind.TSX
+      : file.endsWith('.jsx')
+        ? ts.ScriptKind.JSX
+        : ts.ScriptKind.JS;
   const sf = ts.createSourceFile(file, code, ts.ScriptTarget.Latest, true, kind);
   const out: string[] = [];
   const push = (t: string) => {
@@ -173,7 +180,11 @@ const SCRIPT_REF = /(?:^|["'`(\s/=])([\w.-]+\.m?js)(?=["'`)\s?#]|$)/g;
  * Which scripts in the build the pages load (statically, lazily, by any URL), and which only the review pages load.
  * S20 (QA ת60): every script anywhere in the build is scanned but those only the review pages (dist/test) reach.
  */
-export function scriptsOf(dist: string, customerPages: string[], reviewPages: string[]): { loaded: Set<string>; reviewOnly: string[]; unreferenced: string[]; all: string[] } {
+export function scriptsOf(
+  dist: string,
+  customerPages: string[],
+  reviewPages: string[],
+): { loaded: Set<string>; reviewOnly: string[]; unreferenced: string[]; all: string[] } {
   const all = walk(dist, (r) => /\.m?js$/.test(r)).map((p) => relative(dist, p).split('\\').join('/'));
   const byName = new Map<string, string[]>();
   for (const f of all) byName.set(f.split('/').pop()!, [...(byName.get(f.split('/').pop()!) ?? []), f]);

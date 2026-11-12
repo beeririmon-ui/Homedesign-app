@@ -153,7 +153,10 @@ describe('S18: the copy build (tools/build-copy.ts)', () => {
     const f = join(dir, `wrangler-${top}-${prod}.jsonc`);
     // S20: with the contact placeholders (CONTACT1), as every environment has them
     const c = '"CONTACT_EMAIL": "UNDECIDED", "CONTACT_PHONE": "UNDECIDED"';
-    writeFileSync(f, `{ // test\n "vars": { "EMAIL_PROVIDER": "${top}", ${c} },\n "env": { "production": { "vars": { "EMAIL_PROVIDER": "${prod}", ${c}, }, }, },\n}`);
+    writeFileSync(
+      f,
+      `{ // test\n "vars": { "EMAIL_PROVIDER": "${top}", ${c} },\n "env": { "production": { "vars": { "EMAIL_PROVIDER": "${prod}", ${c}, }, }, },\n}`,
+    );
     return f;
   };
   it('UNDECIDED: writes the wording without an email, and only it', () => {

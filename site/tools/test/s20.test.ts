@@ -36,7 +36,12 @@ import { sitePath } from '../lib/paths';
 const TSX = sitePath('node_modules/tsx/dist/cli.mjs');
 const tmp = (name: string) => mkdtempSync(join(tmpdir(), `hd-s20-${name}-`));
 const run = (args: string[], env: Record<string, string> = {}) =>
-  spawnSync(process.execPath, [TSX, ...args], { cwd: sitePath(), encoding: 'utf8', timeout: 90_000, env: { ...process.env, HD_PUBLIC: '', HD_WRANGLER: '', ...env } });
+  spawnSync(process.execPath, [TSX, ...args], {
+    cwd: sitePath(),
+    encoding: 'utf8',
+    timeout: 90_000,
+    env: { ...process.env, HD_PUBLIC: '', HD_WRANGLER: '', ...env },
+  });
 const phrases = JSON.parse(readFileSync(sitePath('tools/test/fixtures/promise-phrases.json'), 'utf8')) as {
   promises: { id: string; tier: 'A' | 'B'; text: string }[];
   honest: { id: string; text: string }[];
@@ -69,8 +74,7 @@ describe('S20 ת58: what a promise is, wider', () => {
   });
   it('typographic marks, niqqud and invisible characters do not hide a promise', () => {
     expect(normalize('We’ll ־ “x” \u200Fא\u00A0ב')).toBe(`We'll - "x" א ב`);
-    for (const t of ['נ\u200Bעדכן אתכם', 'נְעַדְכֵּן אתכם', 'תקבלו אישור באי־מייל', 'נשלח לכם אישור בדוא״ל'])
-      expect(promiseFindings(t), t).not.toEqual([]);
+    for (const t of ['נ\u200Bעדכן אתכם', 'נְעַדְכֵּן אתכם', 'תקבלו אישור באי־מייל', 'נשלח לכם אישור בדוא״ל']) expect(promiseFindings(t), t).not.toEqual([]);
   });
   it('a negation one word before, across a comma, does not cancel a promise (P27); right before the verb it does', () => {
     expect(promiseFindings('בלי לחכות, נשלח לכם אישור במייל.')).not.toEqual([]);
@@ -116,8 +120,14 @@ describe('S20 ת59: honest lines pass', () => {
 function site(): string {
   const d = tmp('dist');
   for (const dir of ['assets', 'test', 'privacy', 'p/x', 'story/living-room/nordic']) mkdirSync(join(d, dir), { recursive: true });
-  writeFileSync(join(d, 'index.html'), '<!doctype html><html lang="he"><head><script type="module" src="/assets/main-a1.js"></script></head><body><p>הבית</p></body></html>');
-  writeFileSync(join(d, 'privacy/index.html'), '<html><body><ul><li>האתר לא שולח דיוור שיווקי.</li></ul><script type="module" src="/assets/main-a1.js"></script></body></html>');
+  writeFileSync(
+    join(d, 'index.html'),
+    '<!doctype html><html lang="he"><head><script type="module" src="/assets/main-a1.js"></script></head><body><p>הבית</p></body></html>',
+  );
+  writeFileSync(
+    join(d, 'privacy/index.html'),
+    '<html><body><ul><li>האתר לא שולח דיוור שיווקי.</li></ul><script type="module" src="/assets/main-a1.js"></script></body></html>',
+  );
   writeFileSync(join(d, 'p/x/index.html'), '<html><body><div class="waitlist"><p class="waitlist-status">המלאי אינו זמין כעת</p></div></body></html>');
   writeFileSync(
     join(d, 'story/living-room/nordic/index.html'),
@@ -138,7 +148,14 @@ const edit = (f: string, a: string, b: string) => {
 const check = (dist: string, extra: string[] = []) => {
   const json = join(dist, '..', `${relative(tmpdir(), dist).replace(/\W/g, '')}.json`);
   const r = run(['tools/check-promises.ts', `--dist=${dist}`, `--json=${json}`, '--worker-bundle=none', ...extra]);
-  return { ...r, report: JSON.parse(readFileSync(json, 'utf8')) as { findings: { file: string; rule: string }[]; scripts_review_only: string[]; scripts_unreferenced: string[] } };
+  return {
+    ...r,
+    report: JSON.parse(readFileSync(json, 'utf8')) as {
+      findings: { file: string; rule: string }[];
+      scripts_review_only: string[];
+      scripts_unreferenced: string[];
+    },
+  };
 };
 
 describe('S20 ת60: the scanner’s blind spots (QA S18 mutations)', () => {
@@ -147,10 +164,16 @@ describe('S20 ת60: the scanner’s blind spots (QA S18 mutations)', () => {
   const PROD = 'p/x/index.html';
   const mutations: [string, (d: string) => void][] = [
     ['Q1 a verb in a <span>', (d) => edit(join(d, P), PRIV, 'חשבונית מס <span>נשלחת</span> במייל אחרי התשלום.')],
-    ['Q7 a submit input’s value', (d) => edit(join(d, PROD), 'המלאי אינו זמין כעת</p>', 'המלאי אינו זמין כעת</p><input type="submit" value="עדכנו אותי כשחוזר">')],
-    ['Q8 aria-label in single quotes', (d) => edit(join(d, PROD), 'class="waitlist-status"', "class=\"waitlist-status\" aria-label='נעדכן אתכם במייל כשחוזר'")],
+    [
+      'Q7 a submit input’s value',
+      (d) => edit(join(d, PROD), 'המלאי אינו זמין כעת</p>', 'המלאי אינו זמין כעת</p><input type="submit" value="עדכנו אותי כשחוזר">'),
+    ],
+    ['Q8 aria-label in single quotes', (d) => edit(join(d, PROD), 'class="waitlist-status"', 'class="waitlist-status" aria-label=\'נעדכן אתכם במייל כשחוזר\'')],
     ['Q9 aria-roledescription', (d) => edit(join(d, PROD), 'class="waitlist-status"', 'class="waitlist-status" aria-roledescription="נעדכן אתכם כשחוזר"')],
-    ['Q10 a JSON island (the story data)', (d) => edit(join(d, 'story/living-room/nordic/index.html'), '"detail_he":"', '"detail_he":"נשלח לכם הודעה כשהמוצר חוזר. ')],
+    [
+      'Q10 a JSON island (the story data)',
+      (d) => edit(join(d, 'story/living-room/nordic/index.html'), '"detail_he":"', '"detail_he":"נשלח לכם הודעה כשהמוצר חוזר. '),
+    ],
     [
       'Q12 a JSON file in dist',
       (d) => {
@@ -158,7 +181,10 @@ describe('S20 ת60: the scanner’s blind spots (QA S18 mutations)', () => {
         writeFileSync(join(d, 'data/notice.json'), '{"notice_he":"נשלח לכם הודעה כשהמוצר חוזר למלאי."}');
       },
     ],
-    ['Q14 JSX split across <b>', (d) => writeFileSync(join(d, 'assets/Order-b2.js'), 'export const t=(u)=>u("p",{children:["אישור ",u("b",{children:"יישלח"})," לאימייל שלכם."]});')],
+    [
+      'Q14 JSX split across <b>',
+      (d) => writeFileSync(join(d, 'assets/Order-b2.js'), 'export const t=(u)=>u("p",{children:["אישור ",u("b",{children:"יישלח"})," לאימייל שלכם."]});'),
+    ],
     ['Q15 a template literal split by ${}', (d) => writeFileSync(join(d, 'assets/Order-b2.js'), 'export const t=(n)=>`האישור על ${n} פריטים יישלח אליכם`;')],
     ['Q16 "a" + "b"', (d) => writeFileSync(join(d, 'assets/Order-b2.js'), 'export const t="אישור ההזמנה "+"יישלח בקרוב.";')],
     [
@@ -212,7 +238,7 @@ describe('S20 ת60: the scanner’s blind spots (QA S18 mutations)', () => {
     expect(codeStrings('const t="א"+"ב"+"ג";', 'x.js')).toContain('אבג');
     expect(codeStrings('const T=<p>אישור <b>יישלח</b> במייל</p>;', 'x.tsx')).toContain('אישור יישלח במייל');
     expect(htmlTexts('<p>חשבונית <span>נשלחת</span> במייל</p>')).toContain('חשבונית נשלחת במייל');
-    expect(htmlTexts("<i data-x='א' value=ב aria-roledescription=\"ג\"></i>")).toEqual(expect.arrayContaining(['א', 'ב', 'ג']));
+    expect(htmlTexts('<i data-x=\'א\' value=ב aria-roledescription="ג"></i>')).toEqual(expect.arrayContaining(['א', 'ב', 'ג']));
     expect(cssStrings('.a::after{content:"\\5D0 ב"}')).toEqual(['אב']);
   });
 });
@@ -246,7 +272,10 @@ describe('S20 ת62: capabilities, not one switch', () => {
     expect(emailSends('confirm', TEST)).toBe(true);
     expect(emailCapabilities('toString', TEST)).toEqual([]);
   });
-  const emailEntries = Object.entries(src.strings).filter(([, e]) => 'email' in e) as [string, { needs: EmailCapability[] | 'any'; email: string | null; no_email: string | null }][];
+  const emailEntries = Object.entries(src.strings).filter(([, e]) => 'email' in e) as [
+    string,
+    { needs: EmailCapability[] | 'any'; email: string | null; no_email: string | null },
+  ][];
   for (const [key, e] of emailEntries)
     it(`${key}: its email line only with all it needs (${Array.isArray(e.needs) ? e.needs.join(', ') : e.needs})`, () => {
       expect(lineOf(e as never, ALL_EMAIL)).toBe(e.email);

@@ -19,7 +19,7 @@ TMP=$(mktemp -d "${MUT_TMP:?a scratch dir}/mut-XXXX")
 trap 'rm -rf "$TMP"' EXIT
 copy_dist() { local d="$TMP/$1"; mkdir -p "$d" && (cd web/dist && tar cf - --exclude=./media .) | (cd "$d" && tar xf -); echo "$d"; }
 # sub <file> <old> <new>: replace the first occurrence, exit 3 if the old text is not there
-sub() { node -e 'const fs=require("fs");const [f,a,b]=process.argv.slice(1);const s=fs.readFileSync(f,"utf8");if(!s.includes(a)){console.error("not found in "+f+": "+a);process.exit(3)}fs.writeFileSync(f,s.replace(a,b))' "$@"; }
+sub() { node -e 'const fs=require("fs");const [f,a,b]=process.argv.slice(1);const s=fs.readFileSync(f,"utf8");if(!s.includes(a)){console.error("not found in "+f+": "+a);process.exit(3)}fs.writeFileSync(f,s.replace(a,b))' "$@" || { echo "S20: the anchor of a mutation is missing; the run stops"; exit 3; }; }
 PASS=0; FAIL=0
 row() { # row <id> <want> <what> <command...>
   local id=$1 want=$2 what=$3; shift 3
@@ -106,7 +106,7 @@ row Q29 1 "copy file, no_email: \"…המייל עם האישור כבר בדר�
 node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync("copy/promises.he.json","utf8"));s.strings["order.next.shipped"].text="ההזמנה בדרך אליכם. נעדכן כשתגיע.";fs.writeFileSync(process.argv[1],JSON.stringify(s))' "$TMP/c3.json"
 row Q30 1 "copy file, a text line (both modes) that promises" $TSX tools/build-copy.ts --copy="$TMP/c3.json" --out="$TMP/never3.json"
 # --- false positives on honest lines (want 0) ---
-D=$(copy_dist q31); sub "$D/returns/index.html" 'להודעת ביטול: באימייל' 'הודעת ביטול שנשלחת אלינו באימייל תטופל תוך 3 ימי עסקים. להודעת ביטול: באימייל'
+D=$(copy_dist q31); sub "$D/returns/index.html" 'להודעת ביטול: פרטי הקשר' 'הודעת ביטול שנשלחת אלינו באימייל תטופל תוך 3 ימי עסקים. להודעת ביטול: פרטי הקשר' # S20: the line's new anchor
 row Q31 0 "honest: the customer writes to us (\"הודעת ביטול שנשלחת אלינו באימייל…\")" CHK "$D"
 D=$(copy_dist q32); sub "$D/privacy/index.html" "$PRIV" "$PRIV נעדכן את המדיניות מעת לעת, והנוסח המעודכן יופיע בדף הזה."
 row Q32 0 "honest: legal boilerplate (\"נעדכן את המדיניות מעת לעת…\")" CHK "$D"
@@ -114,6 +114,6 @@ D=$(copy_dist q33); sub "$D/privacy/index.html" "$PRIV" "$PRIV שיניתם כת
 row Q33 0 "honest: the customer updates us (\"עדכנו אותנו\")" CHK "$D"
 D=$(copy_dist q34); f=$(ls "$D"/assets/Order-*.js); printf '\nexport const __q34="קישור למעקב יופיע כאן כשהספק ישלח את החבילה.";\n' >>"$f"
 row Q34 0 "honest: the page will show the link (\"קישור למעקב יופיע כאן כשהספק ישלח את החבילה\")" CHK "$D"
-D=$(copy_dist q35); sub "$D/accessibility/index.html" 'נשמח לשמוע על כל קושי' 'אנחנו מקבלים פניות במייל ובטלפון. נשמח לשמוע על כל קושי'
+D=$(copy_dist q35); sub "$D/accessibility/index.html" 'שם, טלפון ואימייל של רכז/ת הנגישות' 'אנחנו מקבלים פניות במייל ובטלפון. שם, טלפון ואימייל של רכז/ת הנגישות' # S20: the line's new anchor
 row Q35 0 "honest: we accept inquiries (\"אנחנו מקבלים פניות במייל ובטלפון\")" CHK "$D"
 echo "rows as wanted: $PASS, gaps: $FAIL"

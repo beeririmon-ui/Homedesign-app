@@ -1,0 +1,37 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa19/build-s19/site[39m
+
+(node:10632) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA K (ת52): redaction by whole words[2m > [22m[2mK1 ordinary words keep their letters (S17: commit, hotel, /complete, invalid were cut)
+[22m[39mQA K1: {"commit":"x commit y","hotel":"x hotel y","complete":"x complete y","invalid":"x invalid y","gateway":"x gateway y","navigate":"x navigate y","Danaher":"x Danaher y","Benjamin":"x Benjamin y","avivit":"x avivit y","gmail":"x gmail y","example":"x example y","telemetry":"x telemetry y","Yehudah":"x Yehudah y"}
+
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA K (ת52): redaction by whole words[2m > [22m[2mK2 the values themselves still go, in every case and form
+[22m[39mQA K2: {"6100000":"<[phone]>","Dana":"<[customer]>","DANA":"<[customer]>","dana":"<[customer]>","Dana's":"<[customer]'s>","Gat,":"<[customer],>","Dana-Gat":"<[customer]-[customer]>","Dana.Gat":"<[customer]>","dana.gat@gmail.com":"<[customer]>","DANA.GAT@GMAIL.COM":"<[customer]>","dana.gat":"<[customer]>","Tel Aviv":"<[customer]>","tel aviv":"<[customer]>","Yehuda":"<[customer]>","052-7654321":"<[phone]>","0527654321":"<[phone]>","+972 52 765 4321":"<[phone]>","972527654321":"<[phone]>","00972-52-7654321":"<[phone]>","(052) 765-4321":"<([phone]>"}
+
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA K (ת52): redaction by whole words[2m > [22m[2mK3 a value glued to an underscore or digits (a provider token): what stays
+[22m[39mQA K3: {"consignee_dana_rejected":"<consignee_dana_rejected>","DANA_GAT":"<DANA_GAT>","user_dana":"<user_dana>","dana2":"<dana2>","dana1985":"<dana1985>","gat123":"<gat123>","DanaGat":"<DanaGat>","Dana’s":"<[customer]’s>","dana@other.example":"<[customer]@other.example>"} | name still in: consignee_dana_rejected, DANA_GAT, user_dana, dana2, dana1985, gat123, DanaGat
+QA K3 row: error_message consignee_dana_rejected: address [customer]
+
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA K (ת52): redaction by whole words[2m > [22m[2mK4 Hebrew: the value with one or two prefix letters; three; and the over-redaction frontend-dev named
+[22m[39mQA K4: {"אורנה":"[customer]","לאורנה":"[customer]","ואורנה":"[customer]","שבמצפה":"[customer]","וכשבמצפה":"וכשבמצפה","רמון":"[customer]","ברמון":"[customer]","רמונים":"רמונים","הרמון":"[customer]","טלפון":"טלפון","הבודקים":"[customer]","מהבודקים":"[customer]","אורנה_טל":"אורנה_טל"}
+
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA K (ת52): redaction by whole words[2m > [22m[2mK5 the fields no rule may change: error_id, order_id, event, path; and what is not in their shape
+[22m[39mQA K5: kept {"error_id":"E-DANA2345","order_id":"1527654321","path":"/api/orders/1527654321/complete","event":"qa.k5"} | not in shape {"error_id":"E-dana2345","order_id":"[phone]","path":"/api/x/[email]/[phone]/y"} | a name in a path /api/search/Dana
+
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA K (ת52): redaction by whole words[2m > [22m[2mK6 the id the logger returns is the id in the row
+[22m[39mQA K6: [{"level":"error","event":"qa.k6","at":"2026-11-12T10:36:07.067Z","error_id":"E-DANA2345","error_name":"Error","error_code":"Error","error_message":"[customer]"}] | ["QA K6 returned E-DANA2345"]
+
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA C (ת53): codes and names only from our own classes[2m > [22m[2mC1 errorCode and errorName on provider errors, ours and the runtime
+[22m[39mQA C1: {"provider prefix":"Error / Error","provider prefix upper":"Error / Error","provider name Orna":"Error / Error","provider class OrnaError":"Error / Error","provider code snake":"Error / Error","provider code E_-shaped":"E_CONSIGNEE_ORNA / Error","TypeError with a prefix":"TypeError / TypeError","system ECONNRESET":"ECONNRESET / Error","status 502":"http_502 / Error","TimeoutError":"aborted / TimeoutError","ours CodedError":"set_composition_missing / CodedError","ours SupplierRefused":"cj_line_without_sku / SupplierRefused","ours SupplierRefused(provider text)":"orna_bodeket / SupplierRefused","a string":"unknown / Error"}
+
+[90mstdout[2m | api/test/qa-s19.test.ts[2m > [22m[2mQA C (ת53): codes and names only from our own classes[2m > [22m[2mC2 through the supplier job: the supplier.submit_failed row
+[22m[39mQA C2: {"message-prefix":"clean code=Error","error-name":"clean code=Error","code-E-shaped":"NAME IN ROW code=E_ORNA"}
+
+ [32m✓[39m api/test/qa-s19.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 544[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 10:36:05
+[2m   Duration [22m 2.37s[2m (transform 1.06s, setup 0ms, collect 1.27s, tests 544ms, environment 0ms, prepare 5ms)[22m
+

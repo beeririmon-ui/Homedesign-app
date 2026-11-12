@@ -1,0 +1,98 @@
+{
+ "id": "2026-11-12-site-track-qa-s19",
+ "by": "qa-agent",
+ "date": "2026-11-12",
+ "scope": "Site track S19 (fixes of QA S17: ת50–ת55, note ה8) and frontend-dev's question 1 (rule A against near-blank pictures); full regression",
+ "inputs": ["briefs/site-s19-qa-fixes-2026-11-12.md", "qa/reports/2026-11-07-site-track/s19/README.md and data/", "qa/reports/2026-11-12-site-track-qa-s17.md and .json (ת50–ת55, ה8) and its tools", "docs/studio-rules.md"],
+ "measured": {
+  "commit": "f33cfe42",
+  "copy": "isolated, outside the live tree (session scratchpad qa19/): git archive of site/, data/, status/, docs/, .github/ and the S19 evidence at f33cfe42; assets/manifest.json pinned; the other assets dirs linked read-only (the render dirs the build reads were identical to f33cfe42 at the start and the end: data/live-tree-at-*.txt); node_modules hard-linked from my S17 copy (package-lock.json unchanged a988b099..f33cfe42); supplier-image cache hard-linked, builds --offline",
+  "copies": {"build-s19": "flag build: CI-order regression, my server on 8819, e2e/a11y, my vitest file, the scans", "build-s19-pub": "public build (HD_PUBLIC=1, CF_ANALYTICS_TOKEN = a dummy of the right shape, 32 hex, not a real token): mutations on copies of its dist, my public server on 8816, the ת55 browser checks, public-scan and s19 e2e"},
+  "ab_server": "my S17 flag copy (a988b099) served on 8817 for the cost A/B of ת55 (same cart code, in-site cart)",
+  "server": "wrangler dev under a private name (qasrv19.js), own D1 (seed:sql, migrate, seed), ENVIRONMENT=preview-local, dummy PAYMENT_WEBHOOK_SECRET as --var on the command line only; api/.dev.vars holds only a dummy ADMIN_DEV_TOKEN",
+  "network": "none: proxy-aware tools pointed at a closed local port (tools/noNet.sh), npm offline, every npx --no-install; ~/.npm/_npx 0 entries at the end; external requests stopped in the browser checks: 0",
+  "machine": "the container restarted mid-round (usage limit); the copies and both builds (exit 0) survived and were checked. Load 8–14 on 4 cores from other agents' jobs during the e2e.",
+  "live_tree_moved_during_round": ["8a7af150, 6746ea48, 95d3ca1c, c6143da6, 7eb15f62, d16f0354, 23e0962b, 062292bc, 354d0c99 (manager WIP: S20, QA R6–R7, IMG1, R8; site/ differs from f33cfe42 in 34 files: not measured, my copy stays at f33cfe42)", "render-agent's files under assets/renders/living-room/warm-modern/phase2-2026-11-10 and products/img1-pilot-2026-11-12 (not read by the build; read by my scans, inventoried before and after)"],
+  "evidence": "qa/reports/2026-11-12-site-track-qa-s19/{tools,data,screens}/"
+ },
+ "bottom_line": {
+  "s19": "PASSES. ת50–ת55 and ה8 hold on my own cases, in the public build with a dummy token.",
+  "new_findings": "ת63 (medium: the full loads of ת55 show an empty cart while it loads, and lose the cart without storage or with an add in flight), ת64–ת66 (low)",
+  "question_1": "P1 (A skips at ink < 2 against ≥ 8) is safe (0 true copies lost) but buys 3 bits only (27 → 30); recommended instead: P3, a flatness guard on plain-vs-plain A (d ≤ (popcount a + popcount b) / 2): also 0 lost, and no flat picture can match by A whatever supplier picture comes (ת66)",
+  "hd_public": "not yet: from QA ת63 before launch, 1.1 and 1.4; ת55 itself is closed (the real token may go in from QA's side, ה12 still to check in the dashboard)"
+ },
+ "t50": {
+  "verdict": "closed",
+  "scan": "my fp-scan (S17 tool on my copy) over all of assets/renders (2,203 rasters, the phase-2 folder 430) and the flag dist outside the supplier folders (765): 2,835 files of ours; repeated at the end over 2,844 (render-agent's new files)",
+  "ours": "gate 0, my re-implementation of the briefed rule (plain vs plain, B with ink ≥ 4 in both) 0, gate and mine agree on every file; the S17 rule (no guard) 184 (187 at the end)",
+  "story_copies": "321/321 (A 312, B 9: plain 307 A + 8 B, trimmed 5 A + 1 B), against the set a public build has",
+  "references": "12 of the 133 files under the refs folders match a picture of the set (A 10, B 2): my S17 10 and 2 more by the trimmed forms (dHash 2–3, grey 0.1–0.6: true copies with margins); the other 121 are pictures of products not in the set",
+  "synthetic": "white, transparent, near-white, a dot, a grey ramp, a shadow blob: 0 matches (S17 rule: white, transparent and the dot by B)",
+  "margin": "nearest of ours to rule A: work-r7/shadows/bowl-v3.png (ink 0.1, dHash popcount 3) at 27 from products/vase-white-plum-hand-thrown-karts/opt-096404f51a (ink 95.4, popcount 30); 4 more R7 bowl shadow layers at 28; by grey: the sconce layers 2.3 from the thin floor lamp (B blocked by ink)"
+ },
+ "t51": {
+  "verdict": "closed; known limits documented (launch checklist 1.5, S19 README); add two classes (note ה15)",
+  "mutations_public_build": {
+   "R0": "pass (clean, 261 files)", "R1": "FAIL (bytes)", "R2": "FAIL (bytes)", "R3": "FAIL (host)", "R4": "FAIL (data-uri bytes)", "R6": "FAIL: 321/321 by pixels, 9 by the near-miss rule (dHash 25–40, grey 0.35–1.91)", "R7": "FAIL (B, dHash 43, grey 0.9)",
+   "R8a crop 10% each side": "PASSES (known limit)", "R8b left third off": "PASSES (known limit)",
+   "R9 flip": "FAIL (B, this vs the picture mirrored, dHash 33, grey 0.7)", "R10": "FAIL (A 23)", "R11a": "FAIL (data-uri pixels)", "R11b": "FAIL (pixels)", "R11c": "FAIL (host)", "R12": "FAIL (bytes)", "R13": "FAIL (data-uri pixels)", "R14 aliexpress-media": "FAIL (host)", "R15 broken data:": "FAIL (data-uri pixels)", "R16": "FAIL (data-uri pixels, B)",
+   "R17 pad onto white 4:3 (my study's)": "FAIL (B, trimmed vs trimmed, dHash 33, grey 1.3)", "R18 grey 3% border (my study's)": "FAIL (B, trimmed vs plain, dHash 34, grey 0.9)",
+   "R17b the picture at 60% on a beige 1200×630 card": "FAIL (B, dHash 32, grey 1.2)", "R18b passe-partout (4% white mat, dark frame)": "FAIL (A, dHash 24)", "R9b flip + 50% JPEG q60": "FAIL (B, dHash 31)", "R9c flip + brightness +6%, hue +12°": "PASSES", "R19 the lowest-ink original (thin floor lamp, ink 2.6) flipped": "FAIL (A, trimmed vs trimmed-mirrored, dHash 2)", "R20 the same padded": "FAIL (A, dHash 2)", "R21 one tile of a 2×2 collage": "PASSES"
+  },
+  "pixel_study": {
+   "originals": "78 (every third withheld original in the cache), against the public set (454 pictures, 1,166 fingerprints); caught = a match with the same product; my emulation equals the gate in every row",
+   "flip left-right": "75/78 (A plain vs mirrored 55, B 6, A trimmed vs trimmed-mirrored 14); median dHash to the mirrored form 12",
+   "pad onto a white 4:3 canvas": "72/78", "grey 3% border": "73/78",
+   "flip + 50% JPEG q60": "74/78", "flip + brightness/hue": "67/78", "pad at 60% onto a beige card": "67/78", "passe-partout": "73/78", "pad + flip": "76/78",
+   "crop 5% / 10% / left third / top half / centre 60%": "10 / 5 / 1 / 1 / 1 of 78", "flip upside-down": "2/78", "rotate 3°": "2/78",
+   "the other 15 changes": "66–78 of 78, as in S17"
+  }
+ },
+ "t52": {"verdict": "closed (new low ת64)", "K1": "13/13 ordinary words keep their letters (commit, hotel, complete, invalid, gateway, navigate…)", "K2": "20/20 forms of the values stripped (cases, e-mail, local part, phones in 7 forms, zip)", "K3": "a name glued to an underscore or digits stays: consignee_dana_rejected, DANA_GAT, user_dana, dana2, dana1985, gat123, DanaGat; in a known order's row: 'consignee_dana_rejected: address [customer]'", "K4": "Hebrew with one or two prefix letters stripped; three (וכשבמצפה) not; הרמון over-stripped as frontend-dev said", "K5": "error_id E-DANA2345, order_id, path and event kept; out of shape: order_id 0527654321 → [phone], path e-mail and phone stripped; a name in a path is kept (by design)", "K6": "the id returned = the id in the row"},
+ "t53": {"verdict": "closed (new low ת65)", "C1": "a provider's prefix, upper-case prefix, name 'Orna', class OrnaError, snake code: 'Error / Error'; TypeError keeps its name; ECONNRESET, http_502, aborted; our CodedError and SupplierRefused keep their codes; but a provider code 'E_CONSIGNEE_ORNA' passes as a system code", "C2": "through the supplier job: message prefix and name clean (code Error); code E_ORNA → the name in the supplier.submit_failed row"},
+ "t54": {"verdict": "closed", "H1": "first claim dies at T1: 200 at +11 and +29.5, 503 degraded at +30.5; takeover at +31 leaves it to a person (failed/maybe, failing_since = the dead claim); degraded at +31, +45, +61, +120; the person's 'found' → 200 ok", "H2": "a claim dead 12 min before the takeover: ok at +12.5, degraded at +30.5 (from the claim, not +42.5); 'none' and a good send → ok; another left to a person degraded, then canceled → ok", "H3": "a 503 at T0, the retry claim dies at T0+1, takeover at T0+12: failing_since stays T0; degraded at T0+30.5"},
+ "t55": {
+  "verdict": "closed (its cost: ת63)",
+  "journeys": "J1 mouse 1280, J2 keyboard (Enter on the header's cart link and on 'continue to payment'), J3 back and forward with the details typed, J1m 400 px: the cart and the checkout always a new document, tag 0, stub 0; my worst-case stub (listens to input, change, keyup and reads every field at pagehide) reported only 'load /rooms/living-room/' and 'pushState /p/…/' (and a reload of the product on back); typed values seen 0 of 4 journeys",
+  "pages": "the beacon on 45 of 49 pages (public-scan with the dummy token), none on cart, checkout, order, 404",
+  "cost_ab_vs_s17": {
+   "empty_state_on_entry": "cart: 'סל (0)' and 'הסל ריק.' for 361 ms (local) and 1,086 ms (cart API 800 ms); checkout 'הסל ריק, אין מה לשלם.' 219 / 980 ms; S17: 0 / 0",
+   "first_cart_line_ms": "605 / 1,279 (S17 226 / 319); checkout form ready 637 / 1,085 (S17 140 / 170)",
+   "storage_blocked": "the cart page empty after an add (S17: the line)",
+   "add_in_flight": "the cart PUT held 1.5 s, the cart clicked 200 ms after 'add': the add is lost (S17: kept)",
+   "back_after_changing_the_cart": "no bfcache here (the product page reloads), the header count correct",
+   "focus": "full loads: focus on the body, first Tab the skip link 'דילוג לתוכן' → main, titles 'סל הקניות · הבית' and 'תשלום · הבית', h1 present, he/rtl; in-site moves focus the h1 (parity acceptable)"
+  }
+ },
+ "h8": {"verdict": "closed (residual: note ה14)", "s17_denials": "16/16 read 'הדפס'", "claims": "6/6 (S17) and 6/6 (new) stay 'הדפס במרקם'; 4 mixed clauses give it up on purpose", "new_denials": "9/20; missed: 'w/o' ×2, 'texture-less', 'texture: N/A', 'Texture: Smooth', 'texture: flat', 'Embossed: N', 'Textured: False', 'isnt', 'doesnt', '(texture? no)'", "cards": "489 files, 815 material texts: 0 read differently from S17; 'הדפס במרקם' 1 (the Morandi triptych, as the build list says)"},
+ "question_1": {
+  "asked": "should rule A skip when one image is near-empty (ink < 2) and the other full (ink ≥ 8)? (a new R7 shadow layer, ink 0.1, 27 bits from rule A)",
+  "facts": {"supplier_set": "561 plain pictures; ink < 2: 0; ink < 4: 2 (the thin floor lamp); lowest dHash popcount 30 (the dark vase options, ink 95–99)", "ours": "2,844 files, 220 with ink < 2", "why_27": "a near-blank file's dHash has almost no bits (popcount 0–3), so it sits about popcount(picture) bits from every picture: 27–28 from the vase with popcount 30", "true_copies_with_a_near_blank_side": "story 0/321, references 0/12, pixel study 2/2,340 (the thin lamp's top-half crop and pad: ink 1.8 and 1.6 against 2.6)"},
+  "P1 (as proposed)": "0 true copies lost (321 story, 12 references, 2,340 pixel-study copies, my mutations); margin 27 → 30 only: next come flat inked files (a beige palette canvas, ink 14; a depth map, ink 174; popcount 0)",
+  "P3 (A plain vs plain only when d ≤ (popcount a + popcount b) / 2)": "0 true copies lost in the same sets; margin 27 → 30 and the nearest is then a real likeness (our floor-lamp layer and the floor-lamp option, grey 18.3); a flat file can never match by A, whatever supplier picture comes (two flat pictures still match each other: harmless)",
+  "ruling": "yes to the intent, not as proposed: adopt P3 (P1 then adds nothing); keep printing the margin every build. Not blocking: the gate fails closed (a false match stops the public build, it never lets a copy through)."
+ },
+ "regression": {
+  "ci_order": "prepare:data (copy, catalog, assets:temp, supplier images --offline, test:page, story), typecheck, lint, format:check, vitest 358 + 1 skipped by design (before the build), check:config, build (web, api, budget, check:rights, check:promises): all pass",
+  "vitest_after_build": "359/359", "my_vitest": "qa-s19.test.ts 11/11 (in the copy only)",
+  "e2e": "first run 131 passed, 2 failed, 1 skipped by design (19.2 min, load 12–14): encoding ×2 (an engine-ready timeout; a 0.19% patch at Nordic 1280@1); alone, both pass with the baseline numbers (Nordic 1280@1 5/7/16 · 0.02% · ΔE 2.32, as frontend-dev and S17), as in S18",
+  "a11y": "16/16",
+  "public_build": "exit 0; check:rights 0 over 261 files; check:promises 0; public-scan 5/5 and s19 2/2 on my public server",
+  "flag_build_control": "check:rights 1,484 files, 0 outside the supplier folders; nearest outside: a 276 B data: URI in a JS chunk at dHash 30, by grey the floor-lamp layer 18.3",
+  "budget": "first load 711.9 KB (flag) / 699.0 KB (public) of 3,072; no AVIF 1,274.7 / 1,261.8; warm-modern house 1,025.1 KB"
+ },
+ "findings": [
+  {"id": "ת63", "severity": "medium: before the public launch (the customer sees it); not a privacy issue", "owner": "frontend-dev", "what": "The cost of ת55's full page loads, A/B against my S17 build (same cart code): (1) every entry into the cart shows 'סל (0)' and 'הסל ריק.' with the room picture until the cart loads: 361 ms locally, 1,086 ms with an 800 ms cart API; the checkout says 'הסל ריק, אין מה לשלם.' for 219 / 980 ms (S17: 0); the prerendered /cart/ is the empty cart; (2) without storage (localStorage throws) the cart page is empty after an add (S17 kept it in memory); (3) an add still on its way when the cart is clicked is lost (S17 finished it).", "fix": "(1) while a saved cart id is loading, the cart, the checkout and the header count show a quiet loading state (aria-busy), never 'ריק' or '(0)'; the empty state only when there is no id or the API says so. (2) without storage, carry the cart id in the full load's fragment (/cart/#c=<id>, read, then removed with replaceState; a fragment reaches no server and no referrer). (3) cart writes with fetch keepalive, or the cart link waits for a pending add (up to ~2 s)."},
+  {"id": "ת64", "severity": "low", "owner": "frontend-dev", "what": "ת52's word boundaries count '_' and digits as letters, so a customer's name glued to them in a provider's text stays in a known order's row: 'consignee_dana_rejected: address [customer]', 'dana1985', 'DANA_GAT', 'DanaGat'. S17's strip removed them.", "fix": "Boundaries by letters only: (?<!\\p{L}) … (?!\\p{L}) (error_id and order_id are already kept by their shape). Optional: split camel case."},
+  {"id": "ת65", "severity": "low", "owner": "frontend-dev", "what": "ת53's system-code door: a provider error's own code shaped like a system code (/^E[A-Z0-9_]{2,40}$/, e.g. 'E_ORNA') becomes error_code and reaches the supplier.submit_failed row.", "fix": "A closed list of system codes (ECONNRESET, ECONNREFUSED, ECONNABORTED, ETIMEDOUT, ENOTFOUND, EAI_AGAIN, EPIPE, EHOSTUNREACH, ENETUNREACH), else the status or 'Error'."},
+  {"id": "ת66", "severity": "low (noise, fails closed)", "owner": "frontend-dev", "what": "Question 1: rule A matches flat pictures by the emptiness of their hash, not by likeness: our 220 near-blank files and flat inked ones (canvases, depth maps) sit about popcount(picture) bits from every supplier picture; today 27 from the vase (popcount 30). One supplier picture with popcount ≤ 24 would fail every public build that ships such a layer.", "fix": "P3: plain-vs-plain A only when d ≤ (popcount a + popcount b) / 2. Measured: 0 true copies lost; P1 as proposed is safe but only 27 → 30."}
+ ],
+ "notes": [
+  {"id": "ה14", "what": "ה8 residual: 11 of my 20 new denials still read 'הדפס במרקם': 'w/o texture', 'w/o embossing', 'texture-less', 'texture: N/A', 'Texture: Smooth', 'texture: flat', 'Embossed: N', 'Textured: False', 'isnt textured', 'doesnt have texture', '(texture? no)'. No card says any of them; the build list (1 product today) is the backstop. Cheap: add w/o, -less, isnt/doesnt/dont, and read '<texture word>: <no | n | none | n/a | false | smooth | flat | 0>' as a denial."},
+  {"id": "ה15", "what": "ת51's known limits (checklist 1.5, the S19 README): crop into the picture, rotation, upside-down. Add: a flip with a colour change (R9c passes; 67/78 in the study) and one tile of a collage (R21). The gate's code header names what it catches but not these."},
+  {"id": "ה16", "what": "Analytics undercount (owner decides): after the cart, and after an order, in-site browsing stays in a document without the beacon, so those page views are not counted. If it matters: a move from a page without the beacon to one with it is a full load too."},
+  {"id": "ה17", "what": "e2e under load: the encoding spec failed twice in the full run (load 12–14) and passed alone with the baseline numbers, as in S18. A capture that waits for idle frames, or a retry for the encoding spec, would keep the CI quiet on a busy runner."},
+  {"id": "ה12", "what": "Still open: the AN1 assumptions (token format, spa:false, cookieless, the report on leaving) are checked in the Cloudflare dashboard after the upload."}
+ ],
+ "hd_public_readiness": {"verdict": "not yet", "from_qa": ["ת63 before launch", "1.1 and 1.4: assets not approved for the site"], "closed_now": ["ת55 (a real token may go in from QA's side; then ה12 in the dashboard)", "ת50 and ת51 (the warm-modern house and small-product layers may enter a public build as far as the gate goes)"], "owner": ["1.5 rights of the supplier pictures or IMG1", "2.1–2.4", "3.1", "3.4", "4.1, 4.2, 4.4", "5.1–5.3, 5.5, 5.6", "6.5", "Access, the alert channel, the uptime clock", "the real token"], "launch_checklist": "not edited (new files only). Suggested lines: 1.5 (QA 12.11, S19: ת50 and ת51 closed; known limits incl. ה15; ת66), 6.1 (ת55 closed: 4 journeys, 0 typed values observed; ת63 before launch; ה12, ה16), 6.2 (ת52–ת54 closed; ת64, ת65)."}
+}

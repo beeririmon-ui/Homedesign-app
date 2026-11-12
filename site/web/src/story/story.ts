@@ -382,11 +382,7 @@ function fill(it: Item): void {
   // the back-in-stock message (site/copy, story.unavailable_note, group waitlist); until then the status alone
   const note = it.href ? copyHe('story.unavailable_note') : null;
   whyEl.textContent =
-    it.status === 'unavailable'
-      ? `המלאי אינו זמין כעת.${note ? ` ${note}` : ''}`
-      : sold
-        ? ''
-        : 'המחיר עוד לא נקבע, ולכן המוצר עוד לא במכירה.';
+    it.status === 'unavailable' ? `המלאי אינו זמין כעת.${note ? ` ${note}` : ''}` : sold ? '' : 'המחיר עוד לא נקבע, ולכן המוצר עוד לא במכירה.';
   pageLink.hidden = !it.href;
   if (it.href) pageLink.href = it.href;
   tryLink.hidden = !it.try_href;

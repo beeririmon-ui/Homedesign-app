@@ -61,11 +61,8 @@ if (issues.length) {
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(
   out,
-  JSON.stringify(
-    { env: target.env, email_provider: target.value, capabilities: target.capabilities, sends: target.sends, contact, strings: lines },
-    null,
-    1,
-  ) + '\n',
+  JSON.stringify({ env: target.env, email_provider: target.value, capabilities: target.capabilities, sends: target.sends, contact, strings: lines }, null, 1) +
+    '\n',
 );
 const hidden = Object.values(lines).filter((l) => l === null).length;
 if (!contact) console.warn(`build-copy: warning (${target.env}): ${NO_CONTACT}. A public build (HD_PUBLIC=1) stops here.`);

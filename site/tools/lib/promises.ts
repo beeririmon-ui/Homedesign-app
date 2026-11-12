@@ -45,12 +45,12 @@ const re = (src: string, flags = 'u') => new RegExp(src, flags);
 export function normalize(text: string): string {
   return text
     .normalize('NFC')
-    .replace(/־/g, '-')
-    .replace(/[֑-ׇ]/g, '')
-    .replace(/[‘’‚‛ʼ′´`׳]/g, "'")
-    .replace(/[“”„‟″״]/g, '"')
-    .replace(/[­​-‏‪-‮⁠-⁤﻿]/g, '')
-    .replace(/[   -   　]/g, ' ');
+    .replace(/\u05BE/g, '-')
+    .replace(/[\u0591-\u05C7]/g, '')
+    .replace(/[\u2018\u2019\u201A\u201B\u02BC\u2032\u00B4`\u05F3]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F\u2033\u05F4]/g, '"')
+    .replace(/[\u00AD\u200B-\u200F\u202A-\u202E\u2060-\u2064\uFEFF]/g, '')
+    .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, ' ');
 }
 
 /** the channels: email, SMS, messaging, a newsletter or a mailing list, a mailbox */
@@ -92,7 +92,19 @@ const OBJECT = re(
 );
 /** what the customer gets (receive, arrive) */
 const RECEIVED = re(
-  words(['הודע(?:ה|ות|ת)', 'עדכונ(?:ים|י)?', 'עדכון', 'התרא(?:ה|ות|ת)', 'תזכור(?:ת|ות)', 'אישור(?:ים)?', 'חשבוני(?:ת|ות)', 'קישור(?:ים)?', 'מסרונ(?:ים)?', 'מסרון', 'קבלה']),
+  words([
+    'הודע(?:ה|ות|ת)',
+    'עדכונ(?:ים|י)?',
+    'עדכון',
+    'התרא(?:ה|ות|ת)',
+    'תזכור(?:ת|ות)',
+    'אישור(?:ים)?',
+    'חשבוני(?:ת|ות)',
+    'קישור(?:ים)?',
+    'מסרונ(?:ים)?',
+    'מסרון',
+    'קבלה',
+  ]),
 );
 /** sending by us: first person (with "אליכם" alone it is a promise) */
 const SEND_FIRST = re(words(['נשלח', 'נשלוח', 'שלחנו']), 'gu');
@@ -399,7 +411,12 @@ export function copyIssues(src: unknown): string[] {
       }
     }
     // what is read while no provider sends: never a promise
-    const quiet = k === 'text' ? [lineOf(e, NO_EMAIL)] : k === 'contact' ? [(e as { contact: Line }).contact, (e as { no_contact: Line }).no_contact] : [lineOf(e, NO_EMAIL)];
+    const quiet =
+      k === 'text'
+        ? [lineOf(e, NO_EMAIL)]
+        : k === 'contact'
+          ? [(e as { contact: Line }).contact, (e as { no_contact: Line }).no_contact]
+          : [lineOf(e, NO_EMAIL)];
     for (const shown of quiet)
       if (typeof shown === 'string')
         for (const f of promiseFindings(shown))
@@ -418,7 +435,9 @@ export function copyIssues(src: unknown): string[] {
     for (const st of STATES) {
       const shown = new Set(keys.map((k) => lineOf(strings[k]!, st) !== null));
       if (shown.size > 1) {
-        out.push(`group ${name}: its lines are shown or hidden together (with ${st.capabilities.length ? st.capabilities.join('+') : 'no email'}, some are null and some are not)`);
+        out.push(
+          `group ${name}: its lines are shown or hidden together (with ${st.capabilities.length ? st.capabilities.join('+') : 'no email'}, some are null and some are not)`,
+        );
         break;
       }
     }

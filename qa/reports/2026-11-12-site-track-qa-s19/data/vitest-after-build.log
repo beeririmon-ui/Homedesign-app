@@ -1,0 +1,285 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa19/build-s19/site[39m
+
+ [32m✓[39m tools/test/s19.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 8260[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s near-blank pictures against a thin lamp on white: white, transparent, a dot and a mostly transparent layer find nothing (the S17 rule matched them) [33m 1471[2mms[22m[39m
+     [33m[2m✓[22m[39m a copy that carries ink is still caught: a 96 px copy inlined in a script, a half-size JPEG [33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s gate demo on the real set: our four phase-2 layers as house layers in a public build find nothing [33m 3360[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s R9 (flipped), padding onto white 4:3, a grey 3% border, and a crop that cuts only margin: each found [33m 1869[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s R15: a data: URI in CSS broken by escaped line breaks is decoded and found; so are whitespace, percent escapes and references inside one [33m 514[2mms[22m[39m
+ [32m✓[39m tools/test/s14-catalog.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 7526[2mms[22m[39m
+(node:789) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m api/test/s14.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 4541[2mms[22m[39m
+     [33m[2m✓[22m[39m the floor lamp, bought and paid: the order line and the supplier request carry CJYD224754407GT, never CJYD2247544 [33m 673[2mms[22m[39m
+(node:970) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tools/test/s17-rights.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 24605[2mms[22m[39m
+     [33m[2m✓[22m[39m R0, the clean build: a render and a page find nothing [33m 397[2mms[22m[39m
+     [33m[2m✓[22m[39m R2b, the original from the cache under a picture’s name: its bytes [33m 305[2mms[22m[39m
+     [33m[2m✓[22m[39m R4, the picture inlined as a data: URI: its bytes; re-encoded smaller, its pixels [33m 762[2mms[22m[39m
+     [33m[2m✓[22m[39m R6, the story’s own copies: by the story’s ledger; and without any ledger of them, by pixels at every width [33m 1365[2mms[22m[39m
+     [33m[2m✓[22m[39m a picture whose rights are confirmed may ship, under any name [33m 311[2mms[22m[39m
+     [33m[2m✓[22m[39m a cached original no ledger names may not ship (its rights are unknown) [33m 500[2mms[22m[39m
+     [33m[2m✓[22m[39m R0 clean, R1, R2, R3, R4 and R6 through the real check: only the clean copy passes [33m 14606[2mms[22m[39m
+     [33m[2m✓[22m[39m R6 by pixels alone: every copy the story made is found without the story’s ledger [33m 4278[2mms[22m[39m
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mQA A4: a cross-site "text/plain; charset=application/json" cancel is refused, and the order is untouched
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.115Z'[39m,
+  path: [32m'/api/admin/orders/5760669969/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.314Z'[39m,
+  path: [32m'/api/admin/orders/2475093001/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.318Z'[39m,
+  path: [32m'/api/admin/orders/2475093001/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.320Z'[39m,
+  path: [32m'/api/admin/orders/2475093001/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.322Z'[39m,
+  path: [32m'/api/admin/orders/2475093001/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.326Z'[39m,
+  path: [32m'/api/admin/orders/2475093001/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.327Z'[39m,
+  path: [32m'/api/admin/orders/2475093001/cancel'[39m,
+  reason: [32m'no_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma service token (the studio): no browser markers needed; the actor names the token; a foreign Origin is still refused
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.402Z'[39m,
+  path: [32m'/api/admin/orders/1335348882/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'service'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mthe screen’s forms: the same rule (a foreign Origin is bad_origin); the local dev token acts without markers
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T10:48:37.452Z'[39m,
+  path: [32m'/api/admin/orders/7797358632/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'dev'[39m
+}
+
+(node:977) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת35: a submit that may have reached the supplier counts as sent; never a silent full refund[2m > [22m[2ma timeout, then refusals: the order stays "maybe" (a later refusal never clears it)
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'supplier.resend_needs_person'[39m,
+  at: [32m'2026-11-12T10:48:38.192Z'[39m,
+  order_id: [32m'8218429606'[39m,
+  supplier: [32m'mock'[39m,
+  attempt: [33m2[39m
+}
+
+ [32m✓[39m api/test/s17.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1144[2mms[22m[39m
+     [33m[2m✓[22m[39m cannot be asked and does not deduplicate: nothing sent, a person checks; "none" sends it again, "found" records it [33m 311[2mms[22m[39m
+ [32m✓[39m api/test/s16.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 2413[2mms[22m[39m
+     [33m[2m✓[22m[39m QA A4: a cross-site "text/plain; charset=application/json" cancel is refused, and the order is untouched [33m 320[2mms[22m[39m
+(node:1049) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:41.362Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:41.363Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:41.363Z'[39m,
+  path: [32m'/admin/'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:41.363Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:41.363Z'[39m,
+  path: [32m'/admin/'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin screen and API (order operations)[2m > [22m[2mthe screen acts through forms from its own origin only; a refund from the form is idempotent by its key
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:41.543Z'[39m,
+  path: [32m'/api/admin/orders/6131944306/mock-supplier'[39m,
+  reason: [32m'no_token'[39m
+}
+
+ [32m✓[39m api/test/s13.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 2031[2mms[22m[39m
+(node:1148) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m api/test/s18.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 3136[2mms[22m[39m
+     [33m[2m✓[22m[39m check-config fails a wrangler.jsonc whose production has a mock email, and names it [33m 3130[2mms[22m[39m
+ [32m✓[39m tools/test/s18.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 29066[2mms[22m[39m
+     [33m[2m✓[22m[39m UNDECIDED: writes the wording without an email, and only it [33m 920[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the wording without a provider stops it [33m 1193[2mms[22m[39m
+     [33m[2m✓[22m[39m a mock, a typo or no EMAIL_PROVIDER stops it; the public build reads production [33m 6077[2mms[22m[39m
+     [33m[2m✓[22m[39m a clean site passes; the test page chunk is not the customer’s (listed, not scanned) [33m 3641[2mms[22m[39m
+     [33m[2m✓[22m[39m the order page’s old line in a lazy chunk stops the build [33m 3987[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in a page’s text stops the build [33m 2822[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the Worker’s customer strings stops the build; the owner’s screens are not the customer’s [33m 4647[2mms[22m[39m
+     [33m[2m✓[22m[39m a copy built for another EMAIL_PROVIDER fails: the build’s choice must be this build’s [33m 4178[2mms[22m[39m
+     [33m[2m✓[22m[39m no promise is written in the web’s code (the copy is the one place for these lines); the design test page aside [33m 1482[2mms[22m[39m
+(node:1171) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
+[22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
+
+ [32m✓[39m shared/test/shared.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 1296[2mms[22m[39m
+     [33m[2m✓[22m[39m every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields [33m 369[2mms[22m[39m
+     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 642[2mms[22m[39m
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'payment.webhook_rejected'[39m,
+  at: [32m'2026-11-12T10:48:45.062Z'[39m,
+  provider: [32m'mock'[39m,
+  reason: [32m'mismatch'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'payment.webhook_rejected'[39m,
+  at: [32m'2026-11-12T10:48:45.066Z'[39m,
+  provider: [32m'mock'[39m,
+  reason: [32m'stale'[39m
+}
+
+ [32m✓[39m api/test/s12.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 2926[2mms[22m[39m
+     [33m[2m✓[22m[39m the queue delivers the invoice message twice in one batch, and again later: one invoice [33m 304[2mms[22m[39m
+     [33m[2m✓[22m[39m pending, failed, and canceled or refunded without a payment: never; paid, sent and supplier_error: once [33m 356[2mms[22m[39m
+     [33m[2m✓[22m[39m the expansion: a snapshot first; an order from before S12 takes the set’s composition; a set without one is refused, never N × its SKU [33m 381[2mms[22m[39m
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2madmin[2m > [22m[2mis closed without Cloudflare Access and open with the local dev bypass
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:45.671Z'[39m,
+  path: [32m'/api/admin/overview'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2madmin[2m > [22m[2mdev bypass is ignored in preview
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T10:48:45.717Z'[39m,
+  path: [32m'/api/admin/overview'[39m,
+  reason: [32m'no_token'[39m
+}
+
+(node:1250) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 2270[2mms[22m[39m
+     [33m[2m✓[22m[39m verifies Access JWTs (signature, aud, iss, exp) [33m 343[2mms[22m[39m
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 215[2mms[22m[39m
+ [32m✓[39m tools/test/s17.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1320[2mms[22m[39m
+     [33m[2m✓[22m[39m runs tsx from site/node_modules by its path, and passes from site/api [33m 934[2mms[22m[39m
+ [32m✓[39m tools/test/design-system.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m api/test/s19.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 1168[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s ת46 case still holds through a request: the known order’s Latin values leave the row, and its number stays [33m 423[2mms[22m[39m
+ [32m✓[39m web/test/story-cart.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m api/test/integrations.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 203[2mms[22m[39m
+ [32m✓[39m tools/test/qa-frames.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+ [32m✓[39m tools/test/s16.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m tools/test/story-hotspots.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m tools/test/s15-rights.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m web/test/s19-router.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tools/test/lines.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m web/test/s15-copy.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m web/test/story-detail.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m web/test/viewport-frame.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m web/test/wheel-physics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tools/test/sets.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m shared/test/s17-analytics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m shared/test/product-url.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m web/test/s17-notes.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m      Tests [22m [1m[32m359 passed[39m[22m[90m (359)[39m
+[2m   Start at [22m 10:48:11
+[2m   Duration [22m 39.92s[2m (transform 5.29s, setup 0ms, collect 11.92s, tests 92.73s, environment 8ms, prepare 300ms)[22m
+

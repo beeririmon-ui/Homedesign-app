@@ -105,7 +105,10 @@ for (const f of apiFiles) scan(rel(f), f.endsWith('.json') ? (fileTexts(f) ?? []
 if (bundle) {
   // the owner's strings are in the bundle too: leave out what comes from OWNER_ONLY
   const owner = new Set(API ? OWNER_ONLY.flatMap((o) => (existsSync(join(API, o)) ? codeStrings(readFileSync(join(API, o), 'utf8'), o) : [])) : []);
-  scan(rel(bundle), codeStrings(readFileSync(bundle, 'utf8'), bundle).filter((s) => !owner.has(s)));
+  scan(
+    rel(bundle),
+    codeStrings(readFileSync(bundle, 'utf8'), bundle).filter((s) => !owner.has(s)),
+  );
 }
 
 const report = {
