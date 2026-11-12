@@ -38,6 +38,7 @@ import {
   supplierKey,
   ORDER_STATUS_HE,
   ORDER_DELAY_HE,
+  ORDER_DELAY_SHORT_HE,
   orderStep,
 } from '../src';
 import { loadLeadRecords } from '../../tools/lib/leads';
@@ -416,10 +417,15 @@ describe("the order in the customer's words (ART6)", () => {
       orderStep('pending_payment'),
     ]).toEqual([0, 1, 1, 2, 3, null]);
   });
-  it('S16 (QA ה7): an order stuck on a supplier error is said honestly, never "בהכנה", and names no supplier', () => {
-    expect(ORDER_STATUS_HE.supplier_error).not.toBe('בהכנה');
-    expect(ORDER_STATUS_HE.supplier_error).toBe('מתעכבת');
-    expect(ORDER_DELAY_HE).not.toMatch(/ספק/);
+  it('S17 (master-designer §7): no fifth status: supplier_error stays "בהכנה", with one line; no supplier, no email promise', () => {
+    expect(ORDER_STATUS_HE.supplier_error).toBe('בהכנה');
+    expect(new Set(Object.values(ORDER_STATUS_HE)).has('מתעכבת')).toBe(false);
+    expect(ORDER_STEPS_HE).toEqual(['התקבלה', 'בהכנה', 'נשלחה', 'נמסרה']);
+    expect(orderStep('supplier_error')).toBe(1);
+    expect(ORDER_DELAY_HE).toBe('ההכנה נמשכת יותר מהרגיל. אנחנו כבר מטפלים בזה, ואין צורך לעשות דבר.');
+    expect(ORDER_DELAY_SHORT_HE).toBe('עדיין בהכנה');
+    // §9.6: no supplier, fault or system; and the third sentence only when the email is really sent (it is not, today)
+    expect(ORDER_DELAY_HE).not.toMatch(/ספק|תקלה|מערכת|מייל|אימייל/);
   });
 });
 

@@ -276,6 +276,19 @@ export function OrderPage({ id }: { id: string }) {
   const paid = order && order.status !== 'pending_payment' && order.status !== 'payment_failed';
   const closed = order?.status === 'canceled' || order?.status === 'refunded';
   const step = order ? orderStep(order.status) : null;
+  // S17 (master-designer §7): an order in supplier_error stays on "בהכנה", with one line under the progress line. The
+  // line is announced once, politely: its live region is on the page before the line is put in it. When the order
+  // moves on ("נשלחה"), the line goes, with no "resolved" message.
+  const delayed = order?.status === 'supplier_error';
+  const [delayLine, setDelayLine] = useState('');
+  useEffect(() => {
+    if (!delayed) {
+      setDelayLine('');
+      return;
+    }
+    const t = setTimeout(() => setDelayLine(ORDER_DELAY_HE), 60);
+    return () => clearTimeout(t);
+  }, [delayed]);
   return (
     <div class="wrap page">
       <div class="page-head">
@@ -309,10 +322,10 @@ export function OrderPage({ id }: { id: string }) {
               סטטוס: <span class="status-pill">{order.status_he}</span>
             </p>
           )}
-          {order.status === 'supplier_error' ? (
-            // S16 (QA ה7): an order stuck on a supplier error is said honestly, in neutral words
-            <p class="order-delay" role="status">
-              {ORDER_DELAY_HE}
+          {step !== null ? (
+            // S17 (§7): body text, the same ink, no red, no icon, no frame; aria-live polite, never role=alert
+            <p class="order-delay" aria-live="polite">
+              {delayLine}
             </p>
           ) : null}
           {order.shipments?.length ? <Tracking shipments={order.shipments} /> : null}

@@ -590,9 +590,9 @@ describe('ת39: a failing supplier is seen: a row per failed send, /healthz, and
       .run();
     vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     expect(await health()).toEqual({ code: 503, body: { ok: false, checks: { db: 'ok', queue: 'ok', supplier: 'degraded' } } });
-    // the customer reads it honestly, in neutral words, without the supplier
+    // the customer reads it honestly, in neutral words, without the supplier (S17, §7: still "בהכנה", with the line)
     const view = (await (await req(`/api/orders/${o.id}`, { headers: { 'x-order-token': o.token } })).json()) as { status_he: string };
-    expect(view.status_he).toBe('מתעכבת');
+    expect(view.status_he).toBe('בהכנה');
     // the order is canceled (a person checked: none at the supplier): nothing is failing any more
     env.ADMIN_DEV_TOKEN = DEV_TOKEN;
     await req(`/api/admin/orders/${o.id}/supplier-check`, json({ outcome: 'none', note: 'אין אצל הספק' }, 'POST', { 'x-hd-dev-admin': DEV_TOKEN }));

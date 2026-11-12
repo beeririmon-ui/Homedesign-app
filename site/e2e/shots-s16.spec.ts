@@ -1,7 +1,7 @@
 /**
  * S16 evidence (qa/reports/2026-11-07-site-track/s16/screens/), at 400 and 1280:
  * - the admin's "בדיקה אצל הספק" on an order whose submit may have reached the supplier (ת35);
- * - the customer's page of an order in supplier_error: "מתעכבת" and its line (ה7, ת39);
+ * - the customer's page of an order in supplier_error: "בהכנה" and its line (ה7, ת39; S17 §7: no fifth status);
  * - the stage while the poster is on its way: the inlined placeholder (ה1);
  * - the order page with the server's message and code (ת37).
  * Runs only as `HD_SHOTS_DIR=<dir> npx playwright test --project=evidence e2e/shots-s16.spec.ts`, against the local
@@ -80,7 +80,7 @@ for (const w of WIDTHS)
           .evaluateAll((is) => is.length > 0 && is.every((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth > 0)),
       )
       .toBe(true);
-    await expect(page.locator('.order-steps')).toHaveAttribute('aria-label', 'מצב ההזמנה: מתעכבת');
+    await expect(page.locator('.order-steps')).toHaveAttribute('aria-label', 'מצב ההזמנה: בהכנה');
     await shot(page, `order-delayed-${w}`);
     await ctx.close();
   });
