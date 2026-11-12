@@ -332,17 +332,17 @@
       1268.5
      ],
      "translate_px": [
-      -75.41,
-      -9.09
+      -81.31,
+      -9.67
      ],
-     "scale": 0.982,
+     "scale": 0.98,
      "du_dv": [
-      -0.0294,
-      -0.0063
+      -0.0317,
+      -0.0067
      ],
      "new_anchor_px": [
-      1679.39,
-      1259.41
+      1673.49,
+      1258.83
      ],
      "box_before": [
       1729,
@@ -375,9 +375,79 @@
       1874,
       1280
      ]
+    },
+    "recut_before_the_move": {
+     "piece_1": {
+      "box": [
+       1729,
+       1155,
+       46,
+       114
+      ],
+      "axis_x": 1751.0,
+      "cup_top_row": 1179,
+      "cup_underside_row": 1204,
+      "cone_line": {
+       "slope": -0.1748,
+       "at_underside": 1736.05,
+       "at_bottom": 1725.92,
+       "inliers": 50,
+       "rows": 59
+      },
+      "candle_left_x": 1733.35,
+      "cup_bottom_ellipse": {
+       "a_px": 24.0,
+       "b_px": 5.09,
+       "centre_row": 1199.41
+      }
+     },
+     "piece_2": {
+      "box": [
+       1824,
+       1173,
+       50,
+       107
+      ],
+      "axis_x": 1848.5,
+      "cup_top_row": 1199,
+      "cup_underside_row": 1222,
+      "cone_line": {
+       "slope": -0.1649,
+       "at_underside": 1832.74,
+       "at_bottom": 1824.33,
+       "inliers": 48,
+       "rows": 52
+      },
+      "candle_left_x": 1830.51,
+      "cup_bottom_ellipse": {
+       "a_px": 26.0,
+       "b_px": 5.12,
+       "centre_row": 1217.38
+      }
+     },
+     "alpha_removed_px": 797
     }
    },
-   "shadow_px_clipped_by_the_recipe_masks": 18,
+   "lever": {
+    "A": {
+     "designer": [
+      -0.0294,
+      -0.0063,
+      0.982
+     ],
+     "used": [
+      -0.0317,
+      -0.0067,
+      0.98
+     ],
+     "point": [
+      0.195,
+      1.74
+     ],
+     "why": "A x B 0.0191 < 0.02 on the moved rendered layers; section 1.4 lever 'A-B -> 9 cm clear (A 1 cm left)'"
+    }
+   },
+   "shadow_px_clipped_by_the_recipe_masks": 24,
    "files": {
     "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/candle-holders.png",
     "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/shadows/candle-holders.png"
@@ -415,6 +485,7 @@
      ]
     }
    },
+   "lever": null,
    "shadow_px_clipped_by_the_recipe_masks": 0,
    "files": {
     "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/bowl.png",
@@ -426,13 +497,13 @@
    }
   },
   "layer_gaps_frame": {
-   "candle-holders x cushions A": 0.0298,
-   "candle-holders x cushions B": 0.0312,
-   "candle-holders x cushions C": 0.0286,
+   "candle-holders x cushions A": 0.0292,
+   "candle-holders x cushions B": 0.0307,
+   "candle-holders x cushions C": 0.028,
    "bowl x cushions A": 0.0109,
    "bowl x cushions B": 0.0096,
    "bowl x cushions C": 0.0092,
-   "A x B": 0.0191,
+   "A x B": 0.0214,
    "B x bowl": 0.025
   },
   "note": "measured on the moved RENDERED layers (alpha > 0.5; the real silhouettes, smaller than step 0's card cylinders); the bowl x throw gap stays under 0.02 at the 1.9.4 point, as the clay shows (step0/r7-table-group): the bowl's point goes back to the designer (section 1.4 'otherwise back to me'); the move itself is the owner-approved WM-T2 point"

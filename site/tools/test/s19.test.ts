@@ -376,6 +376,8 @@ describe('ה8: "הדפס במרקם" only when a clause claims the texture with 
       expect(NEGATION_WORD.test(`x ${w} y`), w).toBe(true);
     for (const w of ['note', 'nonce', 'notebook', 'nordic', 'freely', 'לאה']) expect(NEGATION_WORD.test(`x ${w} y`), w).toBe(false);
     expect(materialHe('non-slip textured print')).toBe('הדפס');
+    expect(materialHe('Un-textured canvas print')).toBe('הדפס');
+    expect(NEGATION_WORD.test('unique textured print')).toBe(false);
     expect(textureClaimSources(['cotton', 'textured print, no gloss', 'print, no texture'])).toEqual(['textured print, no gloss']);
   });
 

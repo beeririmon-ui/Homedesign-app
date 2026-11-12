@@ -210,7 +210,8 @@ export function newErrorId(): string {
  * ties the row to the order), the event and the path. Each is kept as written when it has its own shape; anything else
  * in its place is redacted like any field.
  */
-const ERROR_ID = /^E-[2-9A-HJ-NP-Z]{8}$/;
+/** an error id as `newErrorId` makes it: "E-" and eight of 2–9 and A–Z without I, L and O */
+const ERROR_ID = /^E-[2-9A-HJKMNP-Z]{8}$/;
 /** an order number as lib/http.ts `orderId` makes it: ten digits, the first 1–9 (a phone starts with 0, or is longer) */
 const ORDER_ID = /^[1-9]\d{9}$/;
 /** a path keeps its order numbers (/api/orders/<id>); any other piece of it is scrubbed of an e-mail or a phone */

@@ -54,7 +54,7 @@ const NEGATED_TEXTURE =
  */
 export const TEXTURE_WORD = /\b(?:embossed|embossing|textured?|textures)\b/i;
 export const NEGATION_WORD =
-  /\b(?:no|not|non|none|never|neither|nor|without|lacks?|lacking|zero|free|minus)\b|n['’]t\b|(?:^|[^\u0590-\u05ff])(?:לא|ללא|בלי|אין|אינו|אינה)(?=$|[^\u0590-\u05ff])/i;
+  /\b(?:no|not|non|none|never|neither|nor|without|lacks?|lacking|zero|free|minus)\b|\bun[-\s]?(?=textur|emboss)|n['’]t\b|(?:^|[^\u0590-\u05ff])(?:לא|ללא|בלי|אין|אינו|אינה)(?=$|[^\u0590-\u05ff])/i;
 const CLAUSE = /[,;.!?()[\]{}/|·•]+|\s[-–—]+\s/;
 /** the clauses of a material text that claim a texture (none: the text claims none) */
 export function textureClauses(raw: string): string[] {

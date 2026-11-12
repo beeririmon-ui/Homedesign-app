@@ -565,12 +565,116 @@ def pieces_of(a):
     return lab_, ids, st
 
 
+def _ransac_line(ys, xs, tol=1.5, iters=400, seed=7):
+    rng = np.random.default_rng(seed)
+    best, best_n = None, -1
+    for _ in range(iters):
+        i, j = rng.choice(len(ys), 2, replace=False)
+        if ys[i] == ys[j]:
+            continue
+        m = (xs[j] - xs[i]) / (ys[j] - ys[i])
+        c = xs[i] - m * ys[i]
+        n = int((np.abs(xs - (m * ys + c)) <= tol).sum())
+        if n > best_n:
+            best, best_n = (m, c), n
+    m, c = best
+    inl = np.abs(xs - (m * ys + c)) <= tol
+    m, c = np.polyfit(ys[inl], xs[inl], 1)
+    return float(m), float(c), int(inl.sum())
+
+
+def recut_holders(rgb, a):
+    """the travertine pair's alpha, re-cut at its rendered place (0 tokens): extract.cut_one filled each piece to its CONVEX HULL, which
+    carried the render's background (the sofa's boucle, the walnut) beside the candle and the cone's narrow top; invisible in place, it
+    shows once the pair moves (the brief: a halo after the move). Each piece is a solid of revolution: its axis from the cup and the
+    base (the hull is exact where the piece is widest); the lit LEFT edge read on the render against the scene below (the R6 stack
+    without the pair: Lab dE > 14 and L* > 55); the cone's edge a straight line (RANSAC, 1.5 px), the candle's a vertical line; the
+    right edge their mirror about the axis; the cup and the base rows keep the hull. New alpha = min(old alpha, the model's coverage):
+    nothing is added"""
+    U, _ = F6.compose6(items=[j for j in ACCEPTED if j != "candle-holders"])
+    la = cv2.cvtColor(cv2.GaussianBlur(rgb, (0, 0), 0.7), cv2.COLOR_RGB2LAB)
+    lb = cv2.cvtColor(cv2.GaussianBlur(U.astype(np.float32), (0, 0), 0.7), cv2.COLOR_RGB2LAB)
+    dE = np.sqrt(((la - lb) ** 2).sum(2))
+    Ls = la[..., 0]
+    n, lab_, st, _ = cv2.connectedComponentsWithStats((a > 0.5).astype(np.uint8))
+    cov = np.ones_like(a)
+    rec = {}
+    for i in range(1, n):
+        x, y, w, h, area = st[i]
+        if area < 200:
+            continue
+        ext = {}
+        for yy in range(y, y + h):
+            xs_ = np.nonzero(a[yy, x - 3:x + w + 3] > 0.02)[0]
+            if len(xs_):
+                ext[yy] = (x - 3 + xs_.min(), x - 3 + xs_.max())
+        Wd = {r: e[1] - e[0] for r, e in ext.items()}
+        Wmax = max(Wd.values())
+        plateau = [r for r in ext if Wd[r] >= Wmax - 1]
+        xc = float(np.median([(ext[r][0] + ext[r][1]) / 2.0 for r in plateau]))
+        cup_top = min(r for r in ext if Wd[r] >= Wmax - 2)
+        mid = (x + 0.2 * w, x + 0.8 * w)
+        rowL = {r: float(Ls[r, int(mid[0]):int(mid[1])].mean()) for r in ext}
+        band = [r for r in ext if y + 0.3 * h <= r <= y + 0.7 * h]
+        under = min(band, key=lambda r: rowL[r])                 # the cup's dark underside
+        bottom = max(ext)
+        xl = {}
+        for r in ext:
+            h0 = ext[r][0]
+            for xx in range(h0, int(xc)):
+                if dE[r, xx] > 14 and Ls[r, xx] > 55:
+                    # sub-pixel: where dE crosses 14 between xx-1 and xx
+                    d0, d1 = dE[r, xx - 1], dE[r, xx]
+                    xl[r] = xx - 1 + float(np.clip((14 - d0) / max(d1 - d0, 1e-3), 0, 1))
+                    break
+        cone = [r for r in xl if under + 2 <= r <= bottom - 4]
+        m, c, ninl = _ransac_line(np.array(cone, float), np.array([xl[r] for r in cone]))
+        cand = [r for r in xl if y + 3 <= r <= cup_top - 3 and xl[r] > ext[r][0] + 1]
+        cl = float(np.median([xl[r] for r in cand])) if cand else None
+        # the cup's bottom outline is the lower half of an ellipse (a horizontal circle seen from above): its corners rise by the
+        # ellipse's semi-minor b = 1.1852 (1.20 - Z) r / d^2 x 1443 px with the cup's r 3.5 cm at Z 0.49 and the piece's depth
+        # (step 0's P() at the slots 1.9.4 point the piece came from); a = the hull's half width at the cup
+        uu = (xc - FX0) / FW_
+        d_ = float(np.interp(uu, [0.65, 0.69], [2.89, 2.88]))
+        b_ = 1.1852 * (1.20 - 0.49) * 0.035 / d_ ** 2 * FH_
+        a_ = Wmax / 2.0
+        yce = under - b_ + 0.5
+        left = {}
+        for r in ext:
+            if r < cup_top and cl is not None:
+                left[r] = max(cl, ext[r][0] - 0.5)
+            elif under + 2 <= r <= bottom - 4:
+                left[r] = max(m * r + c, ext[r][0] - 0.5)
+            elif yce < r < under + 2:
+                t = min(1.0, (r - yce) / b_)
+                half = a_ * math.sqrt(max(0.0, 1 - t * t))
+                left[r] = max(min(xc - half, m * r + c), ext[r][0] - 0.5)
+            else:
+                left[r] = ext[r][0] - 0.5
+        for r, L_ in left.items():
+            R_ = 2 * xc - L_
+            xs_ = np.arange(x - 3, x + w + 3, dtype=np.float32)
+            cv_ = np.clip(np.minimum(xs_ + 0.5, R_ + 0.5) - np.maximum(xs_ - 0.5, L_ - 0.5), 0, 1)
+            cov[r, x - 3:x + w + 3] = np.minimum(cov[r, x - 3:x + w + 3], cv_)
+        rec[f"piece_{len(rec) + 1}"] = dict(box=[int(x), int(y), int(w), int(h)], axis_x=round(xc, 2), cup_top_row=int(cup_top),
+                                            cup_underside_row=int(under), cone_line=dict(slope=round(m, 4), at_underside=round(m * (under + 2) + c, 2),
+                                                                                         at_bottom=round(m * (bottom - 4) + c, 2), inliers=ninl, rows=len(cone)),
+                                            candle_left_x=None if cl is None else round(cl, 2),
+                                            cup_bottom_ellipse=dict(a_px=round(a_, 2), b_px=round(b_, 2), centre_row=round(yce, 2)))
+    a2 = np.minimum(a, cov).astype(np.float32)
+    rec["alpha_removed_px"] = int(((a > 0.5) & (a2 <= 0.5)).sum())
+    return a2, rec
+
+
 def move_item(k):
     """each piece (its layer premultiplied and its shadow field) moved about its contact point; the frozen recipe's masks at the new place"""
     ld, sd = SRC6[k]
     L = f32(D(ld, f"{k}.png"))
     rgb, a = L[..., :3], L[..., 3]
     sh = f32(D(sd, f"{k}.png"), "L")
+    recut = None
+    if k == "candle-holders":
+        a, recut = recut_holders(rgb, a)
     lab_, ids, st = pieces_of(a)
     names = list(MOVE[k]["pieces"])
     assert len(ids) == len(names), (k, len(ids))
@@ -604,6 +708,8 @@ def move_item(k):
                        new_anchor_px=[round(ax + tx, 2), round(ay + ty, 2)], box_before=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1])
     a2 = np.clip(outA, 0, 1).astype(np.float32)
     rgb2 = np.where((outA > 1e-4)[..., None], outP / np.maximum(outA, 1e-4)[..., None], rgb).astype(np.float32)
+    if recut:
+        rec["recut_before_the_move"] = recut
     return rgb2, a2, np.clip(outD, 0, 1).astype(np.float32), rec
 
 
