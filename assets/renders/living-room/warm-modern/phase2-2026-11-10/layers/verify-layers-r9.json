@@ -14323,15 +14323,26 @@
       "qa_lab": {
        "L": true,
        "h": true,
-       "C": false
+       "C": true,
+       "read": {
+        "L": 73.1,
+        "h": 83.5,
+        "C": 12.5
+       }
       },
       "r8_lab": {
        "L": true,
        "h": true,
-       "C": false
+       "C": true,
+       "read": {
+        "L": 73.0,
+        "h": 83.5,
+        "C": 12.5
+       }
       }
      },
-     "note": "R9 changes no pixel in this mask (the 11 are soft-edge pixels), so the colour is R8's: L* and h inside the lock; C* sits on the top edge 12.5 (QA R8 F3: the lock's measurement and precision are the designer's to write)"
+     "method": "data/selections/living-room.warm-modern.json, curtains-cj-japanese-linen-half-shade colour_2026_11_12 (the designer, F3 closed): QA's same mask, CIELAB D65 by QA's formulas, medians; each value rounded half-up to 0.1, ends included; QA's Lab decides, OpenCV is a cross-check",
+     "note": "R9 changes no pixel in this mask (the 11 are soft-edge pixels): the colour is R8's, C* 12.52 reads 12.5 (on the edge, passes)"
     },
     "record_dL_max": 0.024,
     "pass_": true,
