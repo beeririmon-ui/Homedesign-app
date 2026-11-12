@@ -6413,7 +6413,13 @@
       ],
       "source": "docs/ops/deploy-runbook.md",
       "asked": "2026-11-10",
-      "status": "open"
+      "status": "deferred",
+      "triage": {
+        "defer_to": "demo-first",
+        "label": "מחכה לתשובה על TOUR-Q3: קודם אתר-הדגמה לחנויות, ואחר כך מכירה אמיתית",
+        "date": "2026-11-12",
+        "rule": "EFF1.7"
+      }
     },
     {
       "id": "WM-T2",
@@ -6729,7 +6735,13 @@
       ],
       "source": "qa/reports/2026-11-07-site-track/s18/README.md",
       "asked": "2026-11-12",
-      "status": "open"
+      "status": "deferred",
+      "triage": {
+        "defer_to": "demo-first",
+        "label": "מחכה לתשובה על TOUR-Q3: קודם אתר-הדגמה לחנויות, ואחר כך מכירה אמיתית",
+        "date": "2026-11-12",
+        "rule": "EFF1.7"
+      }
     },
     {
       "id": "IMG2",
@@ -6762,7 +6774,13 @@
       ],
       "source": "docs/proposals/own-product-images-v2-2026-11-12.md",
       "asked": "2026-11-12",
-      "status": "open"
+      "status": "deferred",
+      "triage": {
+        "defer_to": "demo-first",
+        "label": "מחכה לתשובה על TOUR-Q3: קודם אתר-הדגמה לחנויות, ואחר כך מכירה אמיתית",
+        "date": "2026-11-12",
+        "rule": "EFF1.7"
+      }
     },
     {
       "id": "IMG3",
@@ -6834,7 +6852,13 @@
       ],
       "source": "qa/reports/2026-11-12-site-track-qa-s18.md",
       "asked": "2026-11-12",
-      "status": "open"
+      "status": "deferred",
+      "triage": {
+        "defer_to": "demo-first",
+        "label": "מחכה לתשובה על TOUR-Q3: קודם אתר-הדגמה לחנויות, ואחר כך מכירה אמיתית",
+        "date": "2026-11-12",
+        "rule": "EFF1.7"
+      }
     },
     {
       "id": "WM-T3",
@@ -6924,6 +6948,87 @@
         "via": "chat",
         "text": "\"1.כן 2.כן 3.כן 4.כן רק לא לאבד פרטים 5.כן 6.כן בואי נעשה סשן על זה יש לי רעיון בראש 7.כן\""
       }
+    },
+    {
+      "id": "TOUR-Q1",
+      "group": "מיקוד",
+      "title": "באיזה בית בונים קודם את סיור ההדגמה",
+      "question": "באיזה בית בונים קודם את הסיור (דלת → סלון → חדר שינה)? במודרני החם כל שכבות המוצר של הסלון מוכנות ועברו בדיקת איכות, ופריים חדר השינה ב'מבחן סופי'. בנורדי החדר בכלי עדיין מתמונות זמניות.",
+      "context": "docs/studio-rules.md ז.000 (EFF1.6: TOUR1, TOUR2)",
+      "options": [
+        {
+          "id": "warm-modern",
+          "label": "המודרני החם",
+          "desc": "הכי קרוב למוכן",
+          "recommended": true
+        },
+        {
+          "id": "nordic",
+          "label": "הנורדי",
+          "desc": "דורש קודם רינדור שכבות סופי",
+          "recommended": false
+        }
+      ],
+      "blocks": [
+        "מסלול הסיור"
+      ],
+      "source": "docs/studio-rules.md ז.000 (EFF1.6: TOUR1, TOUR2)",
+      "asked": "2026-11-12",
+      "status": "open"
+    },
+    {
+      "id": "TOUR-Q2",
+      "group": "מיקוד",
+      "title": "האתר נפתח בדלת הכניסה",
+      "question": "המסך הראשון של האתר יהיה דלת הכניסה והסיור, במקום פריים המגזין (שינוי ב-DIR1)? פריימי המגזין יישארו כשער לכל סגנון וכדפי 'קנה את המראה'.",
+      "context": "docs/studio-rules.md ז.000 (EFF1.6: TOUR1, TOUR2)",
+      "options": [
+        {
+          "id": "door",
+          "label": "כן, נפתח בדלת",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "magazine",
+          "label": "לא, נשאר פריים מגזין ואחריו הסיור",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": [
+        "מבנה האתר"
+      ],
+      "source": "docs/studio-rules.md ז.000 (EFF1.6: TOUR1, TOUR2)",
+      "asked": "2026-11-12",
+      "status": "open"
+    },
+    {
+      "id": "TOUR-Q3",
+      "group": "מיקוד",
+      "title": "קודם הדגמה לחנויות, אחר כך מכירה אמיתית",
+      "question": "מאחר שהיעד הקרוב הוא אתר-הדגמה לחנויות: לעצור עד אחרי ההדגמה את כל מה ששייך למכירה אמיתית (תשלום, חשבוניות, מיילים ללקוח, פרטי קשר, עורך דין, תמונות מוצר משלנו)? כל העבודה נשמרת, והשאלות INV1, EMAIL1, CONTACT1 ו-IMG2 חוזרות אחרי ההדגמה.",
+      "context": "docs/studio-rules.md ז.000 (EFF1.6: TOUR1, TOUR2)",
+      "options": [
+        {
+          "id": "demo-first",
+          "label": "כן, קודם הדגמה",
+          "desc": "",
+          "recommended": true
+        },
+        {
+          "id": "both",
+          "label": "לא, ממשיכים גם במכירה",
+          "desc": "",
+          "recommended": false
+        }
+      ],
+      "blocks": [
+        "סדר העדיפויות"
+      ],
+      "source": "docs/studio-rules.md ז.000 (EFF1.6: TOUR1, TOUR2)",
+      "asked": "2026-11-12",
+      "status": "open"
     }
   ]
 }
