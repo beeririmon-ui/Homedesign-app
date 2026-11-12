@@ -1499,12 +1499,23 @@ def rods_edge():
         tubes_all |= X.dil(tb, 2)
 
     def dark_line(G8):
-        LL = lab8(G8)
-        C_ = np.hypot(LL[..., 1], LL[..., 2])
+        """pixels on a rod's edge darker by 4 L* than both the rod's own edge 2 px inside and the neighbour 2 px outside (a dark line
+        between two lighter things); off the tubes"""
+        LL = lab8(G8)[..., 0].astype(np.float32)
         n_ = 0
         for nm, r in Mk.items():
-            ring = X.dil(r["mask"], 3) & (a > 0.02) & ~tubes_all
-            n_ += int((ring & (LL[..., 0] < 24) & (C_ < 10)).sum())
+            k_, b_ = info[nm]["line_y_eq_ax_plus_b"]
+            x0, x1 = info[nm]["x_span"]
+            cosn = 1.0 / math.hypot(k_, 1.0)
+            nrm = np.array([-k_, 1.0]) * cosn
+            dist_ = (yy - (k_ * xx + b_)) * cosn
+            for side in (-1, 1):
+                Es = rec[nm][f"edge_{'upper' if side < 0 else 'lower'}_px"]["value"]
+                band_ = (side * dist_ >= Es - 1.0) & (side * dist_ <= Es + 1.0) & (a > 0.02) & ~tubes_all & (xx >= x0) & (xx <= x1)
+                cy_, cx_ = np.nonzero(band_)
+                ins = cv2.remap(LL, (cx_ - 2 * side * nrm[0]).astype(np.float32).reshape(1, -1), (cy_ - 2 * side * nrm[1]).astype(np.float32).reshape(1, -1), cv2.INTER_LINEAR).ravel()
+                outs = cv2.remap(LL, (cx_ + 2 * side * nrm[0]).astype(np.float32).reshape(1, -1), (cy_ + 2 * side * nrm[1]).astype(np.float32).reshape(1, -1), cv2.INTER_LINEAR).ravel()
+                n_ += int((LL[cy_, cx_] < np.minimum(ins, outs) - 4).sum())
         return n_
     _, _, G5 = graded(override={"magazine-holder": (rgb5, a, None, f32(D(WR5, "shadows", "magazine-holder.png"), "L"))})
     _, _, G6 = graded(override={"magazine-holder": (rgb_n, a, None, f32(D(WR5, "shadows", "magazine-holder.png"), "L"))})

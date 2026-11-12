@@ -25,7 +25,7 @@ expect() { # expect <name> <wanted exit> <command...>
   "$@" >"$OUT/$name.out" 2>&1
   local got=$?
   local verdict=$([ "$got" = "$want" ] && echo ok || echo WRONG)
-  printf '%-6s %-4s exit %s (wanted %s)  %s\n' "$verdict" "$name" "$got" "$want" "$(grep -m1 -E 'promises \(|refused|is not|problem|built for|0 promises' "$OUT/$name.out" | sed 's/^ *//' | cut -c1-170)"
+  printf '%-6s %-4s exit %s (wanted %s)  %s\n' "$verdict" "$name" "$got" "$want" "$(grep -m1 -E '^ +[^ ].*(promises \(|refused|is not|built for)|: 0 promises' "$OUT/$name.out" | sed 's/^ *//' | cut -c1-190)"
 }
 
 echo "S18 mutations, $(date -u +%FT%TZ)"
