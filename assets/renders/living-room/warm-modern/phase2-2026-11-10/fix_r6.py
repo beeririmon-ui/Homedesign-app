@@ -607,8 +607,9 @@ def curtains_v2():
     p2_colour's mask on each layer, intersected), L* included. (1) The lightness: ONE monotone tone curve on the low frequencies of L*
     (a normalised blur over the curtain, sigma 1.5 fold spacings = 75 px, i.e. a kernel about 3 spacings wide): the low-frequency L*
     quantiles of 554205 mapped onto 180502's (the same mask, the ungraded layers), shifted so the graded medians meet; the high
-    frequencies back x g, g = (L*180502 + 16) / (L*554205 + 16) clipped to 1-1.2 (a brighter cloth shows the same folds as larger L*
-    steps), lowered if the high-pass leaves 3.1-4.2. (2) The colour after the lightness: a*b* by R5's method (one hue rotation, one chroma
+    frequencies (the folds, sigma 3-75, and the slub, under sigma 3) back x g, g = (L*180502 + 16) / (L*554205 + 16) clipped to 1-1.2
+    (a brighter cloth shows the same folds as larger L* steps); two soft shoulders (the folds' crests over 89, the slub's specks over
+    93.5) keep the brightest folds under burn (target 5). (2) The colour after the lightness: a*b* by R5's method (one hue rotation, one chroma
     factor for every pixel) to 180502's median C* and h. (3) The armchair post's line solved again (fix_r5.post_line_fix). The free alpha
     and the shadow layer are 554205's own, unchanged"""
     Lw = f32(D(WRES, "layers", "curtains.png"))
@@ -650,14 +651,16 @@ def curtains_v2():
         y = np.where(x < qa_[0], qb_[0] + (x - qa_[0]) * s_lo, y)
         y = np.where(x > qa_[-1], qb_[-1] + (x - qa_[-1]) * s_hi, y)
         return y + off
-    high = lab_w[..., 0] - low554
+    base3 = cv2.GaussianBlur(lab_w[..., 0], (0, 0), 3.0)
+    folds, fine = base3 - low554, lab_w[..., 0] - base3            # the folds (sigma 3-75) and the slub (under sigma 3)
     g = float(np.clip((s180["L"] + 16) / (s0["L"] + 16), 1.0, 1.2))
     off = 0.0
     hist_L = []
+    shoulder = lambda L_, s0_, w_: np.where(L_ > s0_, s0_ + w_ * np.tanh((L_ - s0_) / w_), L_)  # noqa: E731
 
     def lightness(off, g):
-        Ln = curve(low554, off) + g * high
-        Ln = np.where(Ln > 92, 92 + 4 * np.tanh((Ln - 92) / 4), Ln)          # a soft shoulder: never a burnt fold (target 5)
+        Ln = shoulder(curve(low554, off) + g * folds, 89.0, 3.0) + g * fine
+        Ln = shoulder(Ln, 93.5, 2.0)                                     # the slub's brightest specks (target 5: no burn)
         return rgb_of(np.clip(Ln, 0, 100), lab_w[..., 1], lab_w[..., 2])
     for it in range(8):
         rgb_L = lightness(off, g)
@@ -714,8 +717,237 @@ def curtains_v2():
         reference_180502=dict(same_mask=s180, own_mask=s180_own), before_r1=s0, before_r5=s5,
         tone_curve=dict(sigma_px=sig, fold_spacing_px=FOLD_PX, quantiles_554205=[round(float(v), 2) for v in qa_[::10]],
                         quantiles_180502=[round(float(v), 2) for v in qb_[::10]], offset=round(off, 3), high_gain=round(g, 3),
-                        shoulder="L > 92: 92 + 4 tanh((L - 92) / 4)", iterations=hist_L),
+                        bands="low = the normalised blur (sigma 75); folds = blur 3 - low; slub = L - blur 3",
+                        formula="L* = top(shoulder(curve(low) + offset + g folds) + g slub); shoulder: above 89, 89 + 3 tanh((L - 89) / 3); "
+                                "top: above 93.5, 93.5 + 2 tanh((L - 93.5) / 2) (the crests and the slub's specks under burn, target 5)",
+                        iterations=hist_L),
         ab=dict(dh_deg=round(dh, 3), k=round(k, 4), target=dict(C=want_C, h=want_h), iterations=hist_ab),
         post_line=dict(fringe_px=int(fringe.sum())), after=sf, after_own_mask=sf_own, targets=tg, all_met=all(v["pass_"] for v in tg.values()),
         file=rel(pl)))
     print(json.dumps(dict(ref=s180, before=s0, after=sf, targets=tg), indent=1, default=float))
+
+
+# ================================================================================================= framed art 2: the seams and the specks
+SS_ART = 8              # supersampling of the band / line / print coverage
+
+
+def _side_lines(inner_piece):
+    """the four sides of one print area as lines fitted through R5's integer staircase (the middle 80 % of each side): top / bottom
+    y = k x + b (pixel-edge coordinates), left / right x = k y + b"""
+    ys, xs = np.nonzero(inner_piece)
+    x0, x1, y0, y1 = xs.min(), xs.max() + 1, ys.min(), ys.max() + 1
+    cols = np.arange(int(x0 + 0.1 * (x1 - x0)), int(x1 - 0.1 * (x1 - x0)))
+    rows = np.arange(int(y0 + 0.1 * (y1 - y0)), int(y1 - 0.1 * (y1 - y0)))
+    top = np.array([np.nonzero(inner_piece[:, x])[0].min() for x in cols], np.float64)
+    bot = np.array([np.nonzero(inner_piece[:, x])[0].max() + 1 for x in cols], np.float64)
+    lef = np.array([np.nonzero(inner_piece[y])[0].min() for y in rows], np.float64)
+    rig = np.array([np.nonzero(inner_piece[y])[0].max() + 1 for y in rows], np.float64)
+    out = {}
+    for nm, t, v in (("top", cols, top), ("bottom", cols, bot), ("left", rows, lef), ("right", rows, rig)):
+        p = np.polyfit(t + 0.5, v, 1)
+        r = v - np.polyval(p, t + 0.5)
+        out[nm] = dict(k=float(p[0]), b=float(p[1]), staircase_steps=int((np.abs(np.diff(v)) > 0).sum()),
+                       staircase_rms=round(float(np.sqrt((r ** 2).mean())), 3),
+                       t0=float(x0 if nm in ("top", "bottom") else y0), t1=float(x1 if nm in ("top", "bottom") else y1))
+    return out, (int(x0), int(y0), int(x1), int(y1))
+
+
+def _default_edge_lines(LD, lines):
+    """each side refitted on the DEFAULT's own moulding -> print edge (where its print begins), from the positions along the side where
+    the default's print next to it is light (L* > 60 at 3.5 px inside: the step is clear): per position the sub-pixel peak of the L*
+    step from the moulding into the print, within 3 px of R5's line; a line through them (two rounds, residuals over
+    1 px dropped). A side with fewer than 20 such positions keeps R5's line"""
+    out, info = {}, {}
+    H, Wd = LD.shape
+    for side, l in lines.items():
+        horiz = side in ("top", "bottom")
+        sgn = -1.0 if side in ("top", "left") else 1.0          # the outward direction (toward the moulding)
+        lo_t, hi_t = (l["t0"], l["t1"])
+        pts = []
+        for t in range(int(lo_t) + 10, int(hi_t) - 10):
+            c = l["k"] * (t + 0.5) + l["b"]                     # the boundary coordinate across the side (pixel edges)
+            ci = int(math.floor(c))
+            idx = np.arange(ci - 5, ci + 6)
+            prof = LD[idx, t] if horiz else LD[t, idx]
+            inside = (LD[int(math.floor(c - sgn * 3.5)), t] if horiz else LD[t, int(math.floor(c - sgn * 3.5))])
+            if inside <= 60:
+                continue
+            # the step into the print: going inward (against sgn), L rises; the gradient between pixel centres j and j + 1
+            g = (np.diff(prof) * (-sgn))
+            pos = idx[:-1] + 1.0                                # the pixel edge between j and j + 1
+            win = (pos >= c - 3.0) & (pos <= c + 3.0)
+            if not win.any():
+                continue
+            gi = np.where(win, g, -1e9)
+            j = int(np.argmax(gi))
+            if g[j] < 4:
+                continue
+            o = _parab(g, j) - j
+            pts.append((t + 0.5, pos[j] + o))
+        if len(pts) >= 20:
+            p_ = np.array(pts)
+            keep = np.ones(len(p_), bool)
+            for _ in range(2):
+                q = np.polyfit(p_[keep, 0], p_[keep, 1], 1)
+                keep = np.abs(p_[:, 1] - np.polyval(q, p_[:, 0])) <= 1.0
+            out[side] = dict(l, k=float(q[0]), b=float(q[1]))
+            mid = (lo_t + hi_t) / 2
+            info[side] = dict(source="the default's edge", positions=int(len(pts)), used=int(keep.sum()),
+                              shift_from_r5_px=round(float(np.polyval(q, mid) - (l["k"] * mid + l["b"])), 3))
+        else:
+            out[side] = l
+            info[side] = dict(source="R5's staircase line (the default's print is dark along this side)", positions=int(len(pts)))
+    return out, info
+
+
+def _signed_inside(lines, X, Y):
+    """per sample: the distance (px) inside the print area's four lines (negative outside), the minimum over the sides"""
+    t, b, l_, r = lines["top"], lines["bottom"], lines["left"], lines["right"]
+    d = np.minimum.reduce([Y - (t["k"] * X + t["b"]), (b["k"] * X + b["b"]) - Y, X - (l_["k"] * Y + l_["b"]), (r["k"] * Y + r["b"]) - X])
+    return d
+
+
+def framed_art_v2():
+    """framed-art v2 (QA R5 3.5; the designer section 5): the seam between the default's walnut band and the variant's prints, along all
+    six rails, anti-aliased. Each print area's four sides are ONE sub-pixel line each (fitted through R5's integer staircase, which
+    followed the moulding's measured offset from the frame's outer edge); per pixel the coverage (8 x 8 samples) of three zones: the print
+    (inside the lines), the default's inner line (the 1.2 px just outside them: the dark shadow line the default's top mouldings end
+    with; its colour from the default's own whole pixels there, sigma 1.5 along the rail) and the moulding (beyond: the default's own
+    pixels, unchanged wherever a pixel is fully moulding). Each line is fitted on the default's own moulding -> print edge where the
+    default's print beside it is light (_default_edge_lines), else through R5's staircase. The print's colour next to the line is carried from 2.5 px inside (a normalised blur,
+    sigma 1.5: the render's light-oak frame was wider than the walnut band, as R5). R5's black lift on the prints, the same lift. Then the
+    isolated light specks in the prints' black (QA: L* > the neighbours' + 25 with 7 of 8 neighbours black) take their neighbours' median"""
+    Lc = f32(D(WR5, "layers", "framed-art-v2-cut.png"))
+    Dd = f32(D(W.WORK, "layers", "framed-art.png"))
+    ph = f32(D(WR5, "ph-p4", "layers", "framed-art.png"))
+    inner = (np.abs(ph[..., :3] - Dd[..., :3]).max(2) > 1e-6) & (Dd[..., 3] > 0.5)
+    rgb_c, a_c = Lc[..., :3], Lc[..., 3]
+    # the print colour field: the render's print, carried out to the line from 2.5 px inside; R5's black lift (L* only)
+    n, lb, st, _ = cv2.connectedComponentsWithStats(inner.astype(np.uint8))
+    pieces = [i for i in range(1, n) if st[i, 4] > 5000]
+    H, Wd = inner.shape
+    w_print = np.zeros((H, Wd), np.float32)
+    w_line = np.zeros((H, Wd), np.float32)
+    dist_in = np.full((H, Wd), -99.0, np.float32)
+    recs = {}
+    LINE_W = 1.2
+    LDd = lab(Dd[..., :3])[..., 0]
+    for i in pieces:
+        lines5, (x0, y0, x1, y1) = _side_lines(lb == i)
+        lines, edge_info = _default_edge_lines(LDd, lines5)
+        bx0, by0, bx1, by1 = x0 - 6, y0 - 6, x1 + 6, y1 + 6
+        ys_, xs_ = np.mgrid[by0:by1, bx0:bx1].astype(np.float64)
+        off = (np.arange(SS_ART) + 0.5) / SS_ART
+        cp = np.zeros(ys_.shape)
+        cl = np.zeros(ys_.shape)
+        for oy in off:
+            for ox in off:
+                dd = _signed_inside(lines, xs_ + ox, ys_ + oy)
+                cp += dd >= 0
+                cl += (dd < 0) & (dd >= -LINE_W)
+        w_print[by0:by1, bx0:bx1] = cp / SS_ART ** 2
+        w_line[by0:by1, bx0:bx1] = cl / SS_ART ** 2
+        dist_in[by0:by1, bx0:bx1] = _signed_inside(lines, xs_ + 0.5, ys_ + 0.5)
+        recs[f"print area {len(recs) + 1} (x {x0}-{x1})"] = {k: dict(slope=round(v["k"], 5), offset=round(v["b"], 3), r5_staircase_steps=v["staircase_steps"],
+                                                                      r5_staircase_rms_px=v["staircase_rms"], fit=edge_info[k]) for k, v in lines.items()}
+    core = dist_in >= 2.5
+    P, den = nblur(rgb_c, core.astype(np.float32), 1.5)
+    P5, _ = nblur(rgb_c, core.astype(np.float32), 4.0)
+    P = np.where((den > 1e-3)[..., None], P, P5)
+    P = np.where(core[..., None], rgb_c, P)
+    lift = json.load(open(D(WR5, "post-r5.json")))["framed-art-v2"]["blacks"]["lift_at_L5"]
+    LP = lab(P)
+    wl = np.clip((35.0 - LP[..., 0]) / 30.0, 0, 1)
+    P = rgb_of(LP[..., 0] + lift * wl, LP[..., 1], LP[..., 2])
+    # the specks: isolated light pixels in the prints' black
+    LPn = lab(P)[..., 0]
+    k8 = np.ones((3, 3), np.float32)
+    k8[1, 1] = 0
+    dark = (LPn < 25).astype(np.float32)
+    ndark = cv2.filter2D(dark, -1, k8, borderType=cv2.BORDER_CONSTANT)
+    stackn = np.stack([np.roll(np.roll(LPn, dy, 0), dx, 1) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dy or dx], 0)
+    med8 = np.median(stackn, 0)
+    speck = (dist_in >= 1.0) & (ndark >= 7) & (LPn > med8 + 25)
+    if speck.any():
+        nb_rgb = np.stack([np.roll(np.roll(P, dy, 0), dx, 1) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dy or dx], 0)
+        P = np.where(speck[..., None], np.median(nb_rgb, 0), P)
+    sy_, sx_ = np.nonzero(speck)
+    # the default's own colours next to the line: the inner line (the pixels whose centre is 0.5-1.7 px outside it: whole pixels of the
+    # default's band, its dark shadow line on the top rails, its moulding elsewhere) and the moulding beyond (centres 1.7+ px out)
+    lin_px = (dist_in <= -0.5) & (dist_in >= -1.7) & (Dd[..., 3] > 0.98)
+    Dk, dden = nblur(Dd[..., :3], lin_px.astype(np.float32), 1.5)
+    Dk4, _ = nblur(Dd[..., :3], lin_px.astype(np.float32), 4.0)
+    Dk = np.where((dden > 0.05)[..., None], Dk, Dk4)
+    pure = (dist_in < -1.7) & (Dd[..., 3] > 0.98)
+    M, mden = nblur(Dd[..., :3], pure.astype(np.float32), 1.0)
+    M3, _ = nblur(Dd[..., :3], pure.astype(np.float32), 3.0)
+    M = np.where((mden > 0.02)[..., None], M, M3)
+    w_band = np.clip(1 - w_print - w_line, 0, 1)
+    full_band = (w_band >= 0.999) & (dist_in > -98)
+    mix = (w_band[..., None] * np.where(full_band[..., None], Dd[..., :3], M) + w_line[..., None] * Dk + w_print[..., None] * P)
+    zone = dist_in > -98
+    band_r5 = (Dd[..., 3] > 0) & ~inner
+    rgb = np.where(band_r5[..., None], Dd[..., :3], rgb_c)                              # the band: the default's own pixels (as R5)
+    rgb = np.where((zone & (dist_in >= 0))[..., None], P, rgb)                           # the prints
+    rgb = np.where((zone & (dist_in >= -(LINE_W + 3)) & (dist_in < 3))[..., None], mix, rgb)   # the seam: the three zones' coverage
+    a = np.where(band_r5 | (zone & (dist_in < 0)), Dd[..., 3], np.where(inner | (zone & (dist_in >= 0)), np.maximum(a_c, Dd[..., 3]), a_c))
+    pl = save_layer("framed-art-v2", rgb, a)
+    # measures (graded, the variant on the R6 stack): QA's rails and specks, the black median, the band identical to the default
+    _, _, Gv = graded(variants={"framed-art": "framed-art-v2"})
+    meas = art_measures(Gv)
+    record("framed-art-v2", dict(what="the seam anti-aliased along every rail, the default's inner shadow line kept; the light specks out; R5's black lift",
+                                 method=framed_art_v2.__doc__.replace("\n", " "), source=dict(cut=rel(D(WR5, "layers", "framed-art-v2-cut.png")),
+                                                                                       default=rel(D(W.WORK, "layers", "framed-art.png"))),
+                                 print_areas=recs, line_width_px=LINE_W, supersampling=SS_ART, black_lift_at_L5=lift,
+                                 specks_fixed=[[int(x), int(y)] for y, x in zip(sy_, sx_)], measured=meas, file=rel(pl)))
+    print(json.dumps(dict(specks=len(sx_), measured=meas), indent=1, default=float))
+
+
+ART_RAILS = [("print 1 top", 1525, 1690, 528, 552), ("print 2 top", 1735, 1910, 512, 540), ("print 3 top", 1965, 2160, 500, 530),
+             ("print 1 bottom", 1525, 1690, 772, 796), ("print 2 bottom", 1735, 1910, 772, 796), ("print 3 bottom", 1965, 2160, 776, 802)]
+
+
+def _rail_profile(L, x0, x1, y0, y1, top):
+    """QA's r5_art_seam.rail_profile: per column the strongest frame -> print step, sub-pixel; a line fit; the residual and the jumps"""
+    ys = []
+    for x in range(x0, x1):
+        col = L[y0:y1, x].astype(np.float64)
+        g = np.diff(col) if top else -np.diff(col)
+        i = int(np.argmax(g))
+        if 0 < i < len(g) - 1:
+            a_, b_, c_ = g[i - 1], g[i], g[i + 1]
+            den = a_ - 2 * b_ + c_
+            o = 0.5 * (a_ - c_) / den if abs(den) > 1e-6 else 0.0
+        else:
+            o = 0.0
+        ys.append(y0 + i + 0.5 + float(np.clip(o, -0.5, 0.5)))
+    ys = np.array(ys)
+    xs = np.arange(x0, x1)
+    k, b = np.polyfit(xs, ys, 1)
+    r = ys - (k * xs + b)
+    j = np.abs(np.diff(ys))
+    return dict(residual_rms=round(float(np.sqrt((r ** 2).mean())), 3), residual_max=round(float(np.abs(r).max()), 2),
+                jumps_ge_0_6=int((j >= 0.6).sum()), jumps_ge_1_0=int((j >= 1.0).sum()))
+
+
+def art_measures(Gv):
+    """QA's R5 art measures on the graded variant scene and the variant's own layer pixels: the rails, the isolated specks (layer: L* < 25
+    black; light > median + 25 with 7 of 8 neighbours black), the blacks' median"""
+    LV = cv2.cvtColor(Gv.astype(np.uint8), cv2.COLOR_RGB2LAB).astype(np.float32) * [100 / 255, 1, 1] - [0, 128, 128]
+    LV = LV[..., 0]
+    rails = {nm: _rail_profile(LV, x0, x1, y0, y1, "top" in nm) for nm, x0, x1, y0, y1 in ART_RAILS}
+    Lp = f32(D(WR6, "layers", "framed-art-v2.png"))
+    # the specks as QA counts them, on the graded scene inside the variant's alpha 255
+    a = Lp[..., 3] >= 0.999
+    black = (LV < 25) & a
+    blk = cv2.morphologyEx(black.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8)).astype(bool)
+    med = float(np.median(LV[black]))
+    spk = blk & ~black & (LV > med + 25)
+    k8 = np.ones((3, 3), np.float32)
+    k8[1, 1] = 0
+    nb = cv2.filter2D(black.astype(np.float32), -1, k8, borderType=cv2.BORDER_CONSTANT)
+    iso = spk & (nb >= 7)
+    inner_b = cv2.erode(black.astype(np.uint8), np.ones((7, 7), np.uint8)).astype(bool)
+    return dict(rails=rails, specks_isolated=int(iso.sum()), light_px_inside_black=int(spk.sum()),
+                light_px_inside_black_list=[[int(x), int(y)] for y, x in zip(*np.nonzero(spk))][:40],
+                black_median_L=round(float(np.median(LV[inner_b])), 2))

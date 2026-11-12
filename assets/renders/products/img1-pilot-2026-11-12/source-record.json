@@ -208,19 +208,12 @@
    "qa_report": null,
    "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-lamp-raw.png",
    "reframe": {
-    "raw_bbox": [
-     86,
-     473,
-     1686,
-     1870
-    ],
-    "scale": 0.819,
-    "limiting": "width",
+    "scale": 0.5956,
     "placed": [
      164,
-     452,
+     608,
      1310,
-     1144
+     832
     ]
    },
    "render_agent": {
@@ -290,9 +283,32 @@
      "bulb_cable": "no bulb, no cable; a recessed lens ring in the bottom opening, as in the SKU photo",
      "gap_cm": 2.1
     },
-    "render_agent_read": "PARTIAL: geometry matches the SKU photo (H/D 2.68-2.74 vs 2.55-2.64; plate 0.75-0.77 vs 0.76), but vs the card 2.46 the silhouette is +11% (between ellipse centres +9%); lit L* 86.0 is 1.0 over the 76-85 window (SKU 84.1); both end faces are visible at once (top from above, bottom from below), a perspective inconsistency; the gap is ~2 cm, not 10",
+    "render_agent_read": "PARTIAL: geometry vs the SKU photo good; vs the card silhouette +11% (centres +9%); lit L* 86.0 (1.0 over 85); both ends visible (geometry_error). Gap fixed to 10 cm in code.",
     "C2_risk": "vs urls[9]: angle matches; pair, no wall, off = <=2/5"
-   }
+   },
+   "code_fixes": [
+    {
+     "what": "gap between the units moved from 2.17 cm to 10 cm by shifting the right unit (cut at the empty column x=885, raw scale) 600 px right; transparent background, no shadow or light to break",
+     "approved": "manager, 2026-11-12",
+     "numbers": {
+      "empty_gap_px_before": 166,
+      "gap_cm_before": 2.17,
+      "px_per_cm": 76.6,
+      "shift_px": 600,
+      "gap_px_after": 766,
+      "split_x": 885,
+      "reframe_scale": 0.5956,
+      "placed": [
+       164,
+       608,
+       1310,
+       832
+      ]
+     },
+     "before": "assets/renders/products/img1-pilot-2026-11-12/accent-sconces-aliexpress-indoor-stone-wall-lamp/p2-before-gapfix.png"
+    }
+   ],
+   "geometry_error": "Both units: the cylinder's top end is drawn as an ellipse seen from ABOVE (the rim and the top opening visible, ~43 px tall on a 498 px wide cylinder, raw scale) and its bottom end as an ellipse seen from BELOW (the bottom opening and a recessed lens ring visible, ~105-109 px tall). With the camera at the lamps' centre height and an 85 mm lens, a vertical cylinder shows at most a thin sliver of one end; seeing the top from above and the bottom from below at once implies two eye heights. Effect on the numbers: silhouette H/D 2.74 includes both bulges; between the ellipse centres 2.68. Not re-rendered (manager); QA judges visibility at product-page size; a retake needs the manager's approval."
   },
   {
    "card": "sofa-cover-cj-cotton-muslin-fringe",
@@ -474,15 +490,190 @@
     },
     "render_agent_read": "PARTIAL: lit, two soft beams within the Bible, stone not burnt, proportions within +-15%; G4.16 reachable only by a code crop at 50% and that is 1360x1700 native (below 2K, not enlarged); the room reads as the same wall (olive, print, cushions, candles in the raw)"
    }
+  },
+  {
+   "card": "sofa-cover-cj-cotton-muslin-fringe",
+   "type": "P2",
+   "attempt": "R1 (the one retake)",
+   "sku": "CJYD205807526ZA",
+   "model": "gpt-image-2-5 i2i 2K, background=transparent, quality=sunburst, aspect 3:4",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-a-throw.txt",
+    "sha256_16": "de1fa25fa9275599"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/canvas-transparent-1638x2048.png (empty)",
+   "references_by_card_index": {
+    "sheet": "throw-white (as round 1)",
+    "extra": "images.urls[0] colour waffle square [280,300,480,500] at original scale (200x200, no resampling), fabric only, image_refs[1]"
+   },
+   "tokens": 600,
+   "paid_from": "reserve",
+   "file": "assets/renders/products/img1-pilot-2026-11-12/sofa-cover-cj-cotton-muslin-fringe/p2-r1.png",
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-throw-r1-raw.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "render_agent": {
+    "measured": {
+     "raw_bbox": [
+      75,
+      341,
+      1741,
+      2086
+     ],
+     "scale": 0.7866,
+     "lit_LCh": [
+      89.41,
+      4.45,
+      81.5
+     ],
+     "dL_vs_sku": -0.94,
+     "halo": {
+      "paper": {
+       "median": 2.61,
+       "p95": 6.39
+      },
+      "dark": {
+       "median": 3.29,
+       "p95": 8.36
+      },
+      "soft_px": 9972
+     },
+     "alpha_max_1_4px_outside": 8,
+     "halo_raw_45": {
+      "paper": {
+       "median": 1.49,
+       "p95": 5.68
+      },
+      "dark": {
+       "median": 1.85,
+       "p95": 6.6
+      },
+      "soft_px": 15413
+     },
+     "lit_LCh_raw": [
+      89.92,
+      4.78,
+      84.0
+     ],
+     "halo_note": "halo_raw_45 is on the same basis as round 1 (raw 4:5 crop); \"halo\" is after the downscale to 1638x2048",
+     "count": 1,
+     "label": "none",
+     "fringe": "short frayed fringe on the turned-back corner and edges, reads right"
+    },
+    "waffle_check": {
+     "method": "visual at 100% + spectral peak of high-passed L* (3 patches)",
+     "sku_u0": [
+      [
+       186.1,
+       4.6
+      ],
+      [
+       596.1,
+       4.9
+      ],
+      [
+       322.7,
+       4.3
+      ]
+     ],
+     "p2_round1": [
+      [
+       87.3,
+       13.0
+      ],
+      [
+       66.8,
+       13.2
+      ],
+      [
+       254.7,
+       12.5
+      ]
+     ],
+     "p2_r1": [
+      [
+       175.3,
+       37.0
+      ],
+      [
+       85.7,
+       34.2
+      ],
+      [
+       1105.0,
+       13.2
+      ]
+     ],
+     "read": "the SKU has one consistent grid peak (4.3-4.9 px) in every patch; both P2s show a fine slub structure (~13 px) in some patches and folds (34-37 px) in others; at 100% they read as slub/gauze weave without the puckered waffle cells"
+    },
+    "render_agent_read": "NO (material, same as round 1): colour, count, label, fringe and alpha pass; no waffle grid at 100%. The retake limit for this image is reached."
+   }
+  },
+  {
+   "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+   "type": "P1",
+   "attempt": "R3 (the one retake)",
+   "sku": "12000043242375290",
+   "model": "nano-banana-2 i2i 4K, 4:5",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p1-lamp.txt",
+    "sha256_16": "9ad1cc64d07ff0cd"
+   },
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/p1-lamp-r3-nordic-A-ed4-1085-406-1185-531.png (ed4 crop, 100x125 at original resolution; the block lamp 30x69 px at ~55% of the height, left third)",
+   "references_by_card_index": {
+    "sheet": "lamp-16 (as round 1)"
+   },
+   "tokens": 450,
+   "paid_from": "reserve",
+   "file": "assets/renders/products/img1-pilot-2026-11-12/accent-sconces-aliexpress-indoor-stone-wall-lamp/p1-r3.png",
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p1-lamp-r3-raw.jpg",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "render_agent": {
+    "measured": {
+     "size": [
+      3712,
+      4608
+     ],
+     "burnt_pct": 0.157,
+     "L_p1": 19.47,
+     "stone_px_ge_254": 11,
+     "cyl_box_4k": [
+      932,
+      1138,
+      1744,
+      3534
+     ],
+     "H_over_D": 2.95,
+     "plate_box_4k": [
+      664,
+      1773,
+      932,
+      2887
+     ],
+     "plate_over_cyl": 0.46,
+     "fill_h": 0.52,
+     "centre_x_frac": 0.36,
+     "beam_len_x_body": 0.25
+    },
+    "render_agent_read": "NO (proportions): G4.16 now holds at 4K (52%, left third, 1638x2048 by downscale) and it is lit, but the cylinder H/D is 2.95 (+20% vs the card, +12% vs the SKU photo; P1 allows +-15%) and the plate is 0.46 of the cylinder (SKU 0.76). With a 100x125 base the model redrew the lamp (the Bible 1.9 trap); the background prints were invented (light wood frames, pastel) instead of ed4's black-framed prints. The round-1 lamp P1 stays the more faithful one (1360x1700, below 2K). Retake limit reached."
+   }
   }
  ],
  "not_made": {
-  "P3 throw (400) and P4 Pecan (400)": "held: their base, the throw P2, fails on material (no waffle grid). 2.4/5.6: P3/P4 are edits of the approved P2; building them now would carry the wrong weave. 800 of the base unspent."
+  "P3 throw (400), P4 Pecan (400)": "not run: the throw P2 failed the material check twice (round 1 and R1); the manager made them conditional on a pass",
+  "R4 throw P1 (450)": "not run: conditional on a throw P2 pass",
+  "R2": "not approved"
  },
  "pecan_precheck": {
   "verdict": "construction looks the same (P4 by edit allowed, manager 2026-11-12)",
   "price_gap": "Pecan 150x200 (CJYD205807508HS) $16.25 vs White 150x200 (CJYD205807526ZA) $11.64; the photos do not explain it (dye or weight)",
   "G2.11": "the \"same SKU\" verdict (QA + designer, side by side) is still due after P4 exists"
  },
- "internal_evidence_not_in_repo": "the C2 side-by-side with supplier photos was built in the session scratchpad only; rebuild from jobs.json references"
+ "internal_evidence_not_in_repo": "the C2 side-by-side with supplier photos was built in the session scratchpad only; rebuild from jobs.json references",
+ "round2": {
+  "decision": "manager, 2026-11-12: R1, R3 approved from the reserve; P3/P4 and R4 only after the throw P2 passes the material check; R2 not approved; max one retake per image"
+ }
 }

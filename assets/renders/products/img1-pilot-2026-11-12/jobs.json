@@ -8,8 +8,8 @@
   "base": 3950,
   "reserve_with_manager_approval": 2000
  },
- "status": "RAN UNDER OPTION D (manager, 2026-11-12). P2 x3 and P1 x3 done; P3 and P4 held because the throw P2 fails on material.",
- "tokens_spent": 3150,
+ "status": "ROUND 2 DONE. Spent 4,200 of 5,950. Throw P2 failed material twice (retake limit); P3/P4/R4 not run. Lamp P1 R3 meets G4.16 but fails proportions.",
+ "tokens_spent": 4200,
  "var2_auth": "no authentication requested (var2_list_models and var2_estimate_cost answered)",
  "estimate_calls": {
   "tool": "var2_estimate_cost (live lookup, 2026-11-12)",
@@ -685,9 +685,97 @@
   }
  ],
  "pilot_findings": {
-  "D1_P2": "gpt-image-2-5 transparent: vase YES, lamp PARTIAL (marginal L* and silhouette H/D, both end faces), throw NO (weave). Native alpha clean: no halo outside the alpha (max 7/255), soft-edge dE00 median 1.1-2.0",
-  "D2_P1": "nano-banana-2 4K keeps the base composition and does not re-frame as a close-up; it also keeps the product the base shows (the throw's long fringe, the vase's ed9 proportions). A code re-frame meets G4.16 only when the product is large in the base (vase yes at 2K, lamp only at 1360x1700). Base crops should be tighter, with the product already at 50-65%",
-  "D3_P4": "not tested yet (held)",
+  "D1_P2": "gpt-image-2-5 transparent: vase YES, lamp PARTIAL (marginal L* and silhouette H/D, both end faces), throw NO (weave). Native alpha clean: no halo outside the alpha (max 7/255), soft-edge dE00 median 1.1-2.0 | R1 (with a native colour waffle square) still produced a slub weave: gpt-image-2-5 does not reproduce this waffle muslin from references at this setting",
+  "D2_P1": "nano-banana-2 4K keeps the base composition and does not re-frame as a close-up; it also keeps the product the base shows (the throw's long fringe, the vase's ed9 proportions). A code re-frame meets G4.16 only when the product is large in the base (vase yes at 2K, lamp only at 1360x1700). Base crops should be tighter, with the product already at 50-65% | R3: a tiny base (100x125) makes the model redraw the product (lamp +20% H/D, plate -39%, invented prints): the base must be both tight AND high-resolution, i.e. a frame where the product is already large",
+  "D3_P4": "not tested: no throw P2 passed",
   "D4_C2": "P2 packshots vs supplier studio photos match on background and soft light by construction; the vase P2 vs urls[4] reads 4/5. C2 needs calibration for P2"
+ },
+ "round2": {
+  "decision": "manager, 2026-11-12: R1, R3 approved from the reserve; P3/P4 and R4 only after the throw P2 passes the material check; R2 not approved; max one retake per image",
+  "estimate": {
+   "gpt-image-2-5 i2i 2K 3:4 transparent sunburst": 600,
+   "nano-banana-2 i2i 4K 4:5": 450,
+   "deviation_pct": 0.0
+  },
+  "jobs_run": [
+   {
+    "id": "img1-p2-throw-r1",
+    "tokens": 600,
+    "from": "reserve",
+    "placeholder_id": "99756b7f-790e-4584-aade-02527c3d8311",
+    "task_id": "d40e23f5fc8fa46b690193c2500ebe78",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-d40e23f5fc8fa46b690193c2500ebe78-0-1794444746388-0cc0aefa.png",
+    "image_url": "own empty canvas",
+    "image_refs": [
+     "throw-white sheet",
+     "waffle square urls[0] [280,300,480,500]"
+    ],
+    "prompt": "prompts/p2-a-throw.txt",
+    "returned": [
+     1776,
+     2368,
+     "RGBA"
+    ],
+    "raw": "raw/p2-throw-r1-raw.png",
+    "final": "sofa-cover-cj-cotton-muslin-fringe/p2-r1.png",
+    "verdict_render_agent": "material fail",
+    "idempotency_key": "img1-pilot-20261112-p2-throw-r1"
+   },
+   {
+    "id": "img1-p1-lamp-r3",
+    "tokens": 450,
+    "from": "reserve",
+    "placeholder_id": "763f72c3-d40e-431e-b11b-86348eec0795",
+    "task_id": "15ae71929b55874e45372851e0168d09",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-15ae71929b55874e45372851e0168d09-0-1794444737263-4bf38608.jpg",
+    "image_url": "bases/p1-lamp-r3-nordic-A-ed4-1085-406-1185-531.png",
+    "image_refs": [
+     "lamp-16 sheet"
+    ],
+    "prompt": "prompts/p1-lamp.txt",
+    "returned": [
+     3712,
+     4608,
+     "RGB"
+    ],
+    "raw": "raw/p1-lamp-r3-raw.jpg",
+    "final": "accent-sconces-aliexpress-indoor-stone-wall-lamp/p1-r3.png",
+    "verdict_render_agent": "proportions fail",
+    "idempotency_key": "img1-pilot-20261112-p1-lamp-r3"
+   }
+  ],
+  "code_fix": {
+   "lamp P2 gap": {
+    "empty_gap_px_before": 166,
+    "gap_cm_before": 2.17,
+    "px_per_cm": 76.6,
+    "shift_px": 600,
+    "gap_px_after": 766,
+    "split_x": 885,
+    "reframe_scale": 0.5956,
+    "placed": [
+     164,
+     608,
+     1310,
+     832
+    ]
+   }
+  },
+  "not_run": {
+   "P3 throw (400), P4 Pecan (400)": "not run: the throw P2 failed the material check twice (round 1 and R1); the manager made them conditional on a pass",
+   "R4 throw P1 (450)": "not run: conditional on a throw P2 pass",
+   "R2": "not approved"
+  }
+ },
+ "budget_state": {
+  "base_3950": {
+   "spent": 3150,
+   "left": 800
+  },
+  "reserve_2000": {
+   "spent": 1050,
+   "left": 950
+  },
+  "cap_5950_left": 1750
  }
 }

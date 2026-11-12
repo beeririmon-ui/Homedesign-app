@@ -459,7 +459,7 @@
  },
  "curtains-v2": {
   "what": "554205 (curtains-aliexpress-beige-linen-sheer-curtains-554205, hooks 150 x 270, SKU 12000029601125492), now variant 2: L* and a*b* relative to 180502 (designer section 1)",
-  "method": "554205 as variant 2 (designer section 1, 'the fix of 554205'): relative to 180502 in the same light and under the same mask (QA     p2_colour's mask on each layer, intersected), L* included. (1) The lightness: ONE monotone tone curve on the low frequencies of L*     (a normalised blur over the curtain, sigma 1.5 fold spacings = 75 px, i.e. a kernel about 3 spacings wide): the low-frequency L*     quantiles of 554205 mapped onto 180502's (the same mask, the ungraded layers), shifted so the graded medians meet; the high     frequencies back x g, g = (L*180502 + 16) / (L*554205 + 16) clipped to 1-1.2 (a brighter cloth shows the same folds as larger L*     steps), lowered if the high-pass leaves 3.1-4.2. (2) The colour after the lightness: a*b* by R5's method (one hue rotation, one chroma     factor for every pixel) to 180502's median C* and h. (3) The armchair post's line solved again (fix_r5.post_line_fix). The free alpha     and the shadow layer are 554205's own, unchanged",
+  "method": "554205 as variant 2 (designer section 1, 'the fix of 554205'): relative to 180502 in the same light and under the same mask (QA     p2_colour's mask on each layer, intersected), L* included. (1) The lightness: ONE monotone tone curve on the low frequencies of L*     (a normalised blur over the curtain, sigma 1.5 fold spacings = 75 px, i.e. a kernel about 3 spacings wide): the low-frequency L*     quantiles of 554205 mapped onto 180502's (the same mask, the ungraded layers), shifted so the graded medians meet; the high     frequencies (the folds, sigma 3-75, and the slub, under sigma 3) back x g, g = (L*180502 + 16) / (L*554205 + 16) clipped to 1-1.2     (a brighter cloth shows the same folds as larger L* steps); two soft shoulders (the folds' crests over 89, the slub's specks over     93.5) keep the brightest folds under burn (target 5). (2) The colour after the lightness: a*b* by R5's method (one hue rotation, one chroma     factor for every pixel) to 180502's median C* and h. (3) The armchair post's line solved again (fix_r5.post_line_fix). The free alpha     and the shadow layer are 554205's own, unchanged",
   "source": {
    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/curtains.png (R1, before R5's fix)",
    "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/curtains-free-alpha.png",
@@ -562,79 +562,32 @@
     85.46,
     87.73
    ],
-   "offset": 4.43,
+   "offset": 4.44,
    "high_gain": 1.2,
-   "shoulder": "L > 92: 92 + 4 tanh((L - 92) / 4)",
+   "bands": "low = the normalised blur (sigma 75); folds = blur 3 - low; slub = L - blur 3",
+   "formula": "L* = top(shoulder(curve(low) + offset + g folds) + g slub); shoulder: above 89, 89 + 3 tanh((L - 89) / 3); top: above 93.5, 93.5 + 2 tanh((L - 93.5) / 2) (the crests and the slub's specks under burn, target 5)",
    "iterations": [
     {
      "it": 0,
      "offset": 0.0,
      "g": 1.2,
      "L": 75.13,
-     "highpass_std": 3.289,
-     "L_p99": 93.4
+     "highpass_std": 3.363,
+     "L_p99": 93.11
     },
     {
      "it": 1,
      "offset": 4.44,
      "g": 1.2,
-     "L": 79.58,
-     "highpass_std": 3.033,
-     "L_p99": 93.4
-    },
-    {
-     "it": 2,
-     "offset": 4.43,
-     "g": 1.2,
-     "L": 79.57,
-     "highpass_std": 3.034,
-     "L_p99": 93.4
-    },
-    {
-     "it": 3,
-     "offset": 4.43,
-     "g": 1.2,
-     "L": 79.57,
-     "highpass_std": 3.034,
-     "L_p99": 93.4
-    },
-    {
-     "it": 4,
-     "offset": 4.43,
-     "g": 1.2,
-     "L": 79.57,
-     "highpass_std": 3.034,
-     "L_p99": 93.4
-    },
-    {
-     "it": 5,
-     "offset": 4.43,
-     "g": 1.2,
-     "L": 79.57,
-     "highpass_std": 3.034,
-     "L_p99": 93.4
-    },
-    {
-     "it": 6,
-     "offset": 4.43,
-     "g": 1.2,
-     "L": 79.57,
-     "highpass_std": 3.034,
-     "L_p99": 93.4
-    },
-    {
-     "it": 7,
-     "offset": 4.43,
-     "g": 1.2,
-     "L": 79.57,
-     "highpass_std": 3.034,
-     "L_p99": 93.4
+     "L": 79.53,
+     "highpass_std": 3.158,
+     "L_p99": 93.12
     }
    ]
   },
   "ab": {
-   "dh_deg": 14.23,
-   "k": 0.3956,
+   "dh_deg": 14.77,
+   "k": 0.3919,
    "target": {
     "C": 5.91,
     "h": 90.0
@@ -642,12 +595,12 @@
    "iterations": [
     {
      "it": 0,
-     "dh": 14.23,
-     "k": 0.3956,
+     "dh": 14.77,
+     "k": 0.3919,
      "C": 5.92,
-     "h": 90.15,
-     "C_p95": 8.62,
-     "L": 79.49
+     "h": 90.0,
+     "C_p95": 8.58,
+     "L": 79.45
     }
    ]
   },
@@ -655,13 +608,13 @@
    "fringe_px": 2126
   },
   "after": {
-   "L": 79.49,
+   "L": 79.45,
    "C": 5.92,
-   "h": 90.15,
-   "C_px_p95": 8.62,
-   "L_p99": 93.33,
-   "L_max": 93.43,
-   "highpass_std": 3.038,
+   "h": 90.0,
+   "C_px_p95": 8.58,
+   "L_p99": 93.04,
+   "L_max": 93.21,
+   "highpass_std": 3.163,
    "px": 305301,
    "clean_ring": {
     "L": 93.33,
@@ -671,13 +624,13 @@
    }
   },
   "after_own_mask": {
-   "L": 79.54,
+   "L": 79.51,
    "C": 5.92,
-   "h": 90.15,
-   "C_px_p95": 8.62,
-   "L_p99": 93.33,
-   "L_max": 93.43,
-   "highpass_std": 3.035,
+   "h": 90.0,
+   "C_px_p95": 8.58,
+   "L_p99": 93.04,
+   "L_max": 93.21,
+   "highpass_std": 3.16,
    "px": 306080,
    "clean_ring": {
     "L": 93.33,
@@ -688,7 +641,7 @@
   },
   "targets": {
    "1 median L* = 180502's +-2": {
-    "value": -0.08,
+    "value": -0.12,
     "pass_": true
    },
    "2a median C* = 180502's +-0.8": {
@@ -700,26 +653,286 @@
     "pass_": true
    },
    "3 median h 87-93": {
-    "value": 90.15,
+    "value": 90.0,
     "pass_": true
    },
    "4 p95 C* <= 11": {
-    "value": 8.62,
+    "value": 8.58,
     "pass_": true
    },
    "5 no burn: p99 L* <= 94, no pixel at 100": {
     "value": {
-     "L_p99_visible": 93.33,
+     "L_p99_visible": 93.04,
      "px_at_100": 0
     },
     "pass_": true
    },
    "6 folds: high-pass L* std 3.1-4.2": {
-    "value": 3.038,
-    "pass_": false
+    "value": 3.163,
+    "pass_": true
    }
   },
-  "all_met": false,
+  "all_met": true,
   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains-v2.png"
+ },
+ "framed-art-v2": {
+  "what": "the seam anti-aliased along every rail, the default's inner shadow line kept; the light specks out; R5's black lift",
+  "method": "framed-art v2 (QA R5 3.5; the designer section 5): the seam between the default's walnut band and the variant's prints, along all     six rails, anti-aliased. Each print area's four sides are ONE sub-pixel line each (fitted through R5's integer staircase, which     followed the moulding's measured offset from the frame's outer edge); per pixel the coverage (8 x 8 samples) of three zones: the print     (inside the lines), the default's inner line (the 1.2 px just outside them: the dark shadow line the default's top mouldings end     with; its colour from the default's own whole pixels there, sigma 1.5 along the rail) and the moulding (beyond: the default's own     pixels, unchanged wherever a pixel is fully moulding). Each line is fitted on the default's own moulding -> print edge where the     default's print beside it is light (_default_edge_lines), else through R5's staircase. The print's colour next to the line is carried from 2.5 px inside (a normalised blur,     sigma 1.5: the render's light-oak frame was wider than the walnut band, as R5). R5's black lift on the prints, the same lift. Then the     isolated light specks in the prints' black (QA: L* > the neighbours' + 25 with 7 of 8 neighbours black) take their neighbours' median",
+  "source": {
+   "cut": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/framed-art-v2-cut.png",
+   "default": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/layers/framed-art.png"
+  },
+  "print_areas": {
+   "print area 1 (x 1963-2159)": {
+    "top": {
+     "slope": -0.05708,
+     "offset": 632.749,
+     "r5_staircase_steps": 13,
+     "r5_staircase_rms_px": 0.32,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 86,
+      "used": 86,
+      "shift_from_r5_px": 0.188
+     }
+    },
+    "bottom": {
+     "slope": 0.00501,
+     "offset": 774.884,
+     "r5_staircase_steps": 1,
+     "r5_staircase_rms_px": 0.288,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 176,
+      "used": 176,
+      "shift_from_r5_px": 1.004
+     }
+    },
+    "left": {
+     "slope": -0.00019,
+     "offset": 1963.156,
+     "r5_staircase_steps": 12,
+     "r5_staircase_rms_px": 0.175,
+     "fit": {
+      "source": "R5's staircase line (the default's print is dark along this side)",
+      "positions": 0
+     }
+    },
+    "right": {
+     "slope": 0.00229,
+     "offset": 2159.196,
+     "r5_staircase_steps": 0,
+     "r5_staircase_rms_px": 0.0,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 242,
+      "used": 242,
+      "shift_from_r5_px": 1.678
+     }
+    }
+   },
+   "print area 2 (x 1733-1914)": {
+    "top": {
+     "slope": -0.04926,
+     "offset": 618.241,
+     "r5_staircase_steps": 11,
+     "r5_staircase_rms_px": 0.337,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 79,
+      "used": 79,
+      "shift_from_r5_px": -0.109
+     }
+    },
+    "bottom": {
+     "slope": 0.01025,
+     "offset": 764.869,
+     "r5_staircase_steps": 1,
+     "r5_staircase_rms_px": 0.254,
+     "fit": {
+      "source": "R5's staircase line (the default's print is dark along this side)",
+      "positions": 6
+     }
+    },
+    "left": {
+     "slope": -0.0,
+     "offset": 1733.0,
+     "r5_staircase_steps": 0,
+     "r5_staircase_rms_px": 0.0,
+     "fit": {
+      "source": "R5's staircase line (the default's print is dark along this side)",
+      "positions": 0
+     }
+    },
+    "right": {
+     "slope": -0.00014,
+     "offset": 1915.241,
+     "r5_staircase_steps": 0,
+     "r5_staircase_rms_px": 0.0,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 158,
+      "used": 158,
+      "shift_from_r5_px": 1.147
+     }
+    }
+   },
+   "print area 3 (x 1521-1688)": {
+    "top": {
+     "slope": -0.06492,
+     "offset": 644.438,
+     "r5_staircase_steps": 9,
+     "r5_staircase_rms_px": 0.305,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 70,
+      "used": 70,
+      "shift_from_r5_px": -0.289
+     }
+    },
+    "bottom": {
+     "slope": 0.00887,
+     "offset": 769.718,
+     "r5_staircase_steps": 1,
+     "r5_staircase_rms_px": 0.25,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 77,
+      "used": 77,
+      "shift_from_r5_px": 1.457
+     }
+    },
+    "left": {
+     "slope": -0.00289,
+     "offset": 1523.407,
+     "r5_staircase_steps": 0,
+     "r5_staircase_rms_px": 0.0,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 139,
+      "used": 139,
+      "shift_from_r5_px": 0.501
+     }
+    },
+    "right": {
+     "slope": 9e-05,
+     "offset": 1689.06,
+     "r5_staircase_steps": 2,
+     "r5_staircase_rms_px": 0.07,
+     "fit": {
+      "source": "the default's edge",
+      "positions": 143,
+      "used": 143,
+      "shift_from_r5_px": 1.123
+     }
+    }
+   }
+  },
+  "line_width_px": 1.2,
+  "supersampling": 8,
+  "black_lift_at_L5": 7.588,
+  "specks_fixed": [],
+  "measured": {
+   "rails": {
+    "print 1 top": {
+     "residual_rms": 0.168,
+     "residual_max": 1.46,
+     "jumps_ge_0_6": 1,
+     "jumps_ge_1_0": 1
+    },
+    "print 2 top": {
+     "residual_rms": 2.405,
+     "residual_max": 9.93,
+     "jumps_ge_0_6": 6,
+     "jumps_ge_1_0": 6
+    },
+    "print 3 top": {
+     "residual_rms": 0.126,
+     "residual_max": 0.22,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0
+    },
+    "print 1 bottom": {
+     "residual_rms": 0.431,
+     "residual_max": 5.03,
+     "jumps_ge_0_6": 3,
+     "jumps_ge_1_0": 3
+    },
+    "print 2 bottom": {
+     "residual_rms": 0.193,
+     "residual_max": 0.42,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0
+    },
+    "print 3 bottom": {
+     "residual_rms": 0.12,
+     "residual_max": 0.27,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0
+    }
+   },
+   "specks_isolated": 0,
+   "light_px_inside_black": 14,
+   "light_px_inside_black_list": [
+    [
+     1522,
+     603
+    ],
+    [
+     1523,
+     603
+    ],
+    [
+     1524,
+     603
+    ],
+    [
+     1734,
+     655
+    ],
+    [
+     1902,
+     679
+    ],
+    [
+     1902,
+     680
+    ],
+    [
+     1903,
+     680
+    ],
+    [
+     1902,
+     681
+    ],
+    [
+     1903,
+     681
+    ],
+    [
+     1902,
+     682
+    ],
+    [
+     1903,
+     682
+    ],
+    [
+     1902,
+     683
+    ],
+    [
+     1903,
+     683
+    ],
+    [
+     1904,
+     683
+    ]
+   ],
+   "black_median_L": 14.9
+  },
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/framed-art-v2.png"
  }
 }
