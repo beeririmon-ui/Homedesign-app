@@ -1,0 +1,61 @@
+(1) my S17 denials (must not read "הדפס במרקם"):
+  ok   "non-textured print" → הדפס
+  ok   "smooth print (no texture)" → הדפס
+  ok   "nontextured printed canvas" → הדפס
+  ok   "printed poster, not embossed" → הדפס
+  ok   "print without any texture" → הדפס
+  ok   "Print, NO TEXTURE" → הדפס
+  ok   "print with no embossed texture" → הדפס
+  ok   "printed, no raised or embossed texture" → הדפס
+  ok   "print; neither textured nor embossed" → הדפס
+  ok   "print (isn't textured)" → הדפס
+  ok   "flat print, texture: none" → הדפס
+  ok   "texture-free print" → הדפס
+  ok   "print, no 3D texture" → הדפס
+  ok   "print with no visible texture" → הדפס
+  ok   "printed panel, lacks texture" → הדפס
+  ok   "print without embossed or textured finish" → הדפס
+(2) new denials (must not read "הדפס במרקם"):
+  ok   "print w/o texture" → הדפס
+  ok   "printed canvas w/o embossing" → הדפס
+  ok   "print, texture-less" → הדפס
+  ok   "print, texture: N/A" → הדפס
+  ok   "printed poster, Texture: Smooth" → הדפס
+  ok   "print, texture: flat" → הדפס
+  ok   "Printed: Yes; Embossed: N" → הדפס
+  ok   "print, Textured: False" → הדפס
+  ok   "print, isnt textured" → הדפס
+  ok   "print, doesnt have texture" → הדפס
+  ok   "print, isn’t textured" → הדפס
+  ok   "print ‒ not textured" → הדפס
+  ok   "printed poster (texture? no)" → הדפס
+  ok   "PRINT, NOT TEXTURED" → הדפס
+  ok   "print; non‑textured" → הדפס
+  ok   "printed canvas: untextured" → הדפס
+  ok   "print with zero texture" → הדפס
+  ok   "print – no embossing" → הדפס
+  ok   "הדפס, ללא מרקם (printed, texture: none)" → הדפס
+  ok   "print, embossing: none" → הדפס
+(3a) claims (must stay "הדפס במרקם"):
+  ok   "printed embossed film" → הדפס במרקם
+  ok   "textured print, no gloss" → הדפס במרקם
+  ok   "embossed print, not framed" → הדפס במרקם
+  ok   "print with raised texture, no frame" → הדפס במרקם
+  ok   "non-slip backing, textured print" → הדפס במרקם
+  ok   "textured canvas print (not glossy)" → הדפס במרקם
+  ok   "textured canvas print" → הדפס במרקם
+  ok   "3D embossed print" → הדפס במרקם
+  ok   "unframed embossed print" → הדפס במרקם
+  ok   "printed embossed film / texture painting" → הדפס במרקם
+  ok   "Painting material: embossed film, printed" → הדפס במרקם
+  ok   "frameless textured print" → הדפס במרקם
+(3b) claims the clause rule gives up on purpose (says the less):
+  less "non-fading embossed print" → הדפס
+  less "textured print that is not glossy" → הדפס
+  less "embossed print without frame" → הדפס
+  less "non-slip textured print" → הדפס
+(4) cards: 489 files, 815 material texts; read differently from S17: 0
+    read "הדפס במרקם" now: 1
+  framed-art-cj-morandi-triptych-sage: "printed embossed film / 'texture painting' panel (supplier: 'Painting material: embossed film')"
+QA ה8 (S19): S17 denials 16/16 read right; new denials 20/20; claims kept 6/6 (S17) and 6/6 (new)
+exit 0

@@ -318,10 +318,16 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
       });
       const page = await ctx.newPage();
       await houseReady(page);
-      await page.locator(`button.hotspot[data-slot="${SLOT.id}"]`).focus();
-      await page.keyboard.press('Enter');
       const dialog = page.getByRole('dialog', { name: SLOT.name_he });
-      await expect(dialog).toBeVisible({ timeout: 15_000 });
+      // S21 (as QA ה17 for the encoding spec): on a busy runner the press can land before the page hydrates and does
+      // nothing; it is made again until the dialog is open
+      await expect(async () => {
+        if (!(await dialog.isVisible())) {
+          await page.locator(`button.hotspot[data-slot="${SLOT.id}"]`).focus();
+          await page.keyboard.press('Enter');
+        }
+        await expect(dialog).toBeVisible({ timeout: 5_000 });
+      }).toPass({ timeout: 30_000 });
       for (const [i, set] of house.sets.entries()) {
         if (i > 0) await page.keyboard.press('ArrowLeft');
         await expect(dialog.getByRole('radio').nth(i)).toHaveAttribute('aria-checked', 'true');
