@@ -36,6 +36,8 @@ import { colorNameHe, materialsHe } from './lib/hebrew';
 import { hasLatin } from './lib/lines';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 import { cardOf, registerReader, rowOf, type QaFrame, type QaState } from './lib/qa-frames';
+import { shipsPublicly, type Rights } from './lib/image-rights';
+import { LEDGER_STORY, sha256, writeLedger, type LedgerEntry } from './lib/rights-content';
 
 type Box = [number, number, number, number];
 type Point = {
@@ -101,7 +103,7 @@ type Card = {
   materials?: string[];
   dimensions_cm?: { width?: number | null; depth?: number | null; height?: number | null };
   colors: { dominant_hex: string };
-  images: { urls: string[] };
+  images: { urls: string[]; usage_rights?: Rights };
   options?: {
     default_sku: string;
     axes: { id: string; values: { id: string; label_he: string }[] }[];
@@ -215,6 +217,14 @@ const URL_BASE = '/media/story';
 const WIDTHS = [1280, 1920, 2720];
 const PHONE_WIDTHS = [480, 800, 1224];
 const PHOTO_WIDTHS = [160, 480, 800];
+/**
+ * S17, QA ת45: the image-rights rule (tools/lib/image-rights.ts) applies here too, before the story ever leaves the
+ * flag: a public build copies no supplier photo whose rights are not confirmed. Behind the flag the story keeps its
+ * photos, as the shop does. Every copy made is in .generated/rights/story.json, for the gate by content.
+ */
+const STORY_RIGHTS_RULE = process.env.HD_PUBLIC === '1';
+const withheldPhotos = new Set<string>();
+const ledger = new Map<string, LedgerEntry>();
 /** G-ED.17 (proposal): the 4:5 crop at the full width of a 390 CSS phone; a product's visible part ≥ 44 × 24 CSS */
 const PHONE_CSS = 390;
 const MIN_LONG = 44;
@@ -313,6 +323,12 @@ async function photo(card: Card, skuImage: string | null): Promise<Image | null>
 /** One cached supplier photo at 160, 480 and 800 (never downloaded here: tools/supplier-images.ts fills the cache). */
 async function photoOf(card: Card, url: string | null | undefined): Promise<Image | null> {
   if (!url || !/^https:\/\//.test(url) || !existsSync(cacheOf(url))) return null;
+  // S17, QA ת45: the rights rule, before the story ever goes public: a public build (HD_PUBLIC=1) makes no copy of a
+  // supplier photo whose card's rights are not confirmed; the page then shows the product's crop from the frame
+  if (STORY_RIGHTS_RULE && !shipsPublicly(card.images.usage_rights)) {
+    withheldPhotos.add(card.id);
+    return null;
+  }
   const file = cacheOf(url);
   const key = createHash('sha256').update(url).digest('hex').slice(0, 10);
   // S7: the folder is the product's public id (no supplier in a media path)
@@ -324,6 +340,17 @@ async function photoOf(card: Card, url: string | null | undefined): Promise<Imag
   for (const w of PHOTO_WIDTHS) {
     const out = join(dir, `${key}.${w}.webp`);
     if (!existsSync(out)) await img.clone().resize({ width: w, withoutEnlargement: true }).webp({ quality: 78 }).toFile(out);
+    // S17 (ת45): every copy, by its bytes, in the story's rights ledger
+    if (!ledger.has(out))
+      ledger.set(out, {
+        file: `web/public/media/story/products/${publicId(card.id)}/${key}.${w}.webp`,
+        sha256: sha256(readFileSync(out)),
+        product: publicId(card.id),
+        rights: card.images.usage_rights ?? 'none',
+        source: 'story',
+        picture: `story/products/${publicId(card.id)}/${key}`,
+        width: w,
+      });
     srcs.push(`${URL_BASE}/products/${publicId(card.id)}/${key}.${w}.webp ${Math.min(w, meta.width ?? w)}w`);
   }
   const w = Math.min(800, meta.width ?? 800);
@@ -1494,6 +1521,11 @@ writeFileSync(
 );
 mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'story.json'), JSON.stringify(resolved, null, 1));
+writeLedger(join(GENERATED, LEDGER_STORY), { generated_at: new Date().toISOString(), source: 'story', entries: [...ledger.values()] });
+console.log(
+  `story rights (S17): ${ledger.size} copies of supplier photos in the ledger (.generated/${LEDGER_STORY})` +
+    (STORY_RIGHTS_RULE ? `; the public rule withheld the photos of ${withheldPhotos.size} products` : '; behind the flag the story keeps its photos'),
+);
 // S5: two products never share an address (fails here, before a page does); the old addresses move to the neutral ones
 slugIndex(new Set(details.map((d) => d.product)));
 writeFileSync(

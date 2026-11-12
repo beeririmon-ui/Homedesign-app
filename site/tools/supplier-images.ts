@@ -29,11 +29,12 @@ import sharp from 'sharp';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { join, dirname } from 'node:path';
+import { join, dirname, relative } from 'node:path';
 import { tmpdir } from 'node:os';
 import { expandOptions, type FullCatalog, type SupplierImageManifest } from '@hd/shared';
-import { GENERATED, MEDIA_OUT, sitePath } from './lib/paths';
-import { publicManifest, withheld } from './lib/image-rights';
+import { GENERATED, MEDIA_OUT, SITE, sitePath } from './lib/paths';
+import { publicManifest, withheld, type Rights } from './lib/image-rights';
+import { LEDGER_SHOP, sha256, writeLedger, type LedgerEntry } from './lib/rights-content';
 
 const WIDTH = 800;
 const OFFLINE = process.argv.includes('--offline');
@@ -95,8 +96,11 @@ async function main() {
   let encoded = 0;
   let reused = 0;
   let downloaded = 0;
+  // S17 (ת45): every original this run reads, by the product it belongs to (the ledger of the cache)
+  const used = new Map<string, string>();
   for (const p of catalog.products) {
     const url = p.supplier_image.url;
+    if (url) used.set(url, p.id);
     if (!url) {
       manifest.missing.push({ id: p.id, reason: 'the card has no https image url' });
       continue;
@@ -145,6 +149,7 @@ async function main() {
         sku.push(null);
         continue;
       }
+      if (!used.has(url)) used.set(url, p.id);
       if (!fileOf.has(url)) {
         const name = `opt-${hashOf(url).slice(0, 10)}`;
         const src = `products/${p.id}/${name}.${WIDTH}`;
@@ -181,6 +186,9 @@ async function main() {
   // S15: the public build's manifest, without a picture whose rights are not confirmed
   writeFileSync(PUBLIC_MANIFEST, JSON.stringify(publicManifest(manifest), null, 1));
   const out = withheld(manifest);
+  // S17 (ת45): the ledger of every file made from a supplier picture, and of every original, by its bytes
+  const ledger = shopLedger(manifest, used);
+  writeLedger(join(GENERATED, LEDGER_SHOP), { generated_at: manifest.generated_at, source: 'shop+cache', entries: ledger });
   // S7: a folder of a product the catalog no longer names (an old card id with the supplier in it) leaves the media
   const keep = new Set(catalog.products.map((p) => p.id));
   const dir = join(MEDIA_OUT, 'products');
@@ -200,7 +208,29 @@ async function main() {
         .map(([r, k]) => `${r} ${k}`)
         .join(', ')}) → ${PUBLIC_MANIFEST}`,
   );
+  console.log(`rights ledger (S17): ${ledger.length} files by sha256 (shop ${ledger.filter((e) => e.source === 'shop').length}, cached originals ${ledger.filter((e) => e.source === 'cache').length}) → .generated/${LEDGER_SHOP}`);
   for (const m of manifest.missing) console.warn(`  missing: ${m.id}: ${m.reason}`);
+}
+
+/**
+ * S17, QA ת45: the shop's ledger. Each photo and option picture written under media/products, and each cached original
+ * the run read, with its sha256, its product and the card's rights (tools/lib/rights-content.ts).
+ */
+function shopLedger(manifest: SupplierImageManifest, used: Map<string, string>): LedgerEntry[] {
+  const rights = new Map<string, Rights>(catalog.products.map((p) => [p.id, p.supplier_image.usage_rights as Rights]));
+  const entries: LedgerEntry[] = [];
+  const add = (file: string, product: string, picture: string, source: LedgerEntry['source'], width?: number) => {
+    if (!existsSync(file)) return;
+    entries.push({ file: relative(SITE, file).split('\\').join('/'), sha256: sha256(readFileSync(file)), product, rights: rights.get(product) ?? 'none', source, picture, width });
+  };
+  for (const [id, p] of Object.entries(manifest.products)) add(join(MEDIA_OUT, `${p.src}.webp`), id, p.src.replace(/\.\d+$/, ''), 'shop', p.width);
+  for (const [id, o] of Object.entries(manifest.options ?? {}))
+    for (const f of o.files) add(join(MEDIA_OUT, `products/${id}/${f.name}.${manifest.width}.webp`), id, `products/${id}/${f.name}`, 'shop', f.width);
+  for (const [url, id] of used) {
+    const file = join(CACHE, `${hashOf(url)}.bin`);
+    add(file, id, relative(SITE, file).split('\\').join('/'), 'cache');
+  }
+  return entries;
 }
 
 await main();
