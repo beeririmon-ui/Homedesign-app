@@ -34,3 +34,838 @@ catalog 9284f57dfa23 (provisional; rooms living-room)
   public text (ת33): Latin in 0 names, descriptions or notes · supplier SKUs (ת27): 0 issues; a single variant's SKU in place of the card's product-level code: magazine-holder-cj-arch-iron-cane → CJJT161011001AZ
   public text (ה5): 0 fields that say their value is unknown
   sets of distinct SKUs (S12): framed-art-aliexpress-minimal-geometric-triptych-prints: 4 sizes, 3 SKUs each; framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: NOT SOLD, sourcing to name the parts (the card has 8 values on "color" (05, 08, 01, 02, 04, 03, 06, 07) for a set of 3: which 3 make the set is not named)
+
+> homedesign-site@0.1.0 assets:temp
+> tsx tools/make-temp-assets.ts
+
+temp media up to date (use --force to rebuild)
+
+> homedesign-site@0.1.0 assets:supplier
+> tsx tools/supplier-images.ts
+
+supplier images: 39/39 products (0 encoded, 39 up to date, 0 downloaded) → media/products/<public id>/photo.800.webp · usage rights confirmed 0, unclear 39, none 0 (10.1s)
+option pictures: 483 options, 182 files (0 encoded) · artifact: 40 files
+image rights (S15): a public build (HD_PUBLIC=1) withholds the supplier pictures of 39/39 products (39 photos, 182 option pictures; unclear 39) → /home/user/homedesign-app/site/.generated/supplier-images.public.json
+rights ledger (S17): 423 files by sha256 (shop 221, cached originals 202) → .generated/rights/shop.json
+
+> homedesign-site@0.1.0 test:page
+> tsx tools/build-catalog.ts --rooms=living-room,dining-room --out=test-page && tsx tools/make-test-page.ts
+
+catalog 23869332545c (provisional, catalog.test-page; rooms living-room, dining-room)
+  products shown: 57 (provisional prices: 1)
+  hidden: 21 · curtains-aliexpress-linen-blend-s-fold-180502: no price: not in data/economics/products.json, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent: no shipping line in the studio, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent-091154: no shipping line in the studio, the card or the final round; curtains-cj-linen-yarn-sheer-tab: no price: not in data/economics/products.json, the card or the final round; wall-decor-cj-macrame-triangle-branch: no price: not in data/economics/products.json, the card or the final round; accent-sconces-aliexpress-travertine-cylinder-walnut-choice: no price: not in data/economics/products.json, the card or the final round; accent-sconces-cj-travertine-block-updown-8x16: no price: not in data/economics/products.json, the card or the final round; wall-sconce-cj-travertine-cube-updown-12: no price: not in data/economics/products.json, the card or the final round; vase-cj-black-matte-stoneware-jar-30: no price: not in data/economics/products.json, the card or the final round; cushions-cj-chenille-check-milky-white: no price: not in data/economics/products.json, the card or the final round; candle-holders-cj-ceramic-pedestal-tray: no price: not in data/economics/products.json, the card or the final round; pendant-cj-silk-ribbed-pumpkin-40: no price: not in data/economics/products.json, the card or the final round; table-runner-aliexpress-solid-color-textured-runner-525144: no shipping line in the studio, the card or the final round; centerpiece-vase-cj-matte-frosted-tapered-28: no price: not in data/economics/products.json, the card or the final round; centerpiece-vase-aliexpress-modern-minimalist-white-ceramic: no shipping line in the studio, the card or the final round; centerpiece-vase-aliexpress-nordic-morandi-matte-ceramic: no shipping line in the studio, the card or the final round; centerpiece-vase-aliexpress-nordic-matte-ceramic-vase: no shipping line in the studio, the card or the final round; framed-art-cj-charcoal-flower-silhouette-set3-30x40: no price: not in data/economics/products.json, the card or the final round; paper-towel-holder-aliexpress-wood-upright-g4483a-078038: no price: not in data/economics/products.json, the card or the final round; paper-towel-holder-cj-beech-upright-31: no shipping to Israel (cj); tea-towel-cj-waffle-cotton-beige-45x65-pair: no price: not in data/economics/products.json, the card or the final round
+  living-room slots: 18, placeholder options: 15
+  shipping line source: manual 0, cj 46, zendrop 5, aliexpress 0, card 1, cache 5, leads 0 (no default figure)
+  price source: owner 0, studio 56, initial-card 0, initial-leads 1
+  no-loss floor (SITE1): 107 option prices and 1 single-piece prices raised to their own no-loss price; studio prices that lose on the site's reading: 0
+  not sold (PRE1): nl2-above-market 1, nl2-express-only 2, slot-on-hold 2; slots on hold: kids/skateboard, corridor/runner-rug, kids/desk-chair, kids/doll-pram, bath/towel-ladder, dining-room/floor-vase, hall/runner-rug, work/rug, kids/step-stool, living-room/pouf, bath/shower-stool
+  economics defaults used: freight_method, vat_rate, payment_fee_rate, payment_fee_fixed_ils, packaging_ils, items_per_order, bundle_factor, shipping_fee_economy_ils, shipping_fee_express_ils, free_shipping_threshold_ils
+  supplier images (FR-I): 57 with a url · usage rights confirmed 0, unclear 57, none 0
+  fixed-product slots waiting for a card (F3): sofa, coffee-table, armchair, dining-table, dining-chairs, dining-bench
+  supplier options (2026-10-11): 46 products with options, 585 SKUs
+  card room vs folder: all agree
+  invalid product cards skipped: 8 · data/products/pool/basket/pool-cj-cotton-linen-box-camel-40x30.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/candle-holders/pool-cj-carbonized-wood-pedestal-candlestick.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/curtains/pool-cj-linen-look-tassel-curtain.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/table-runner/pool-cj-woven-cotton-runner-fringe.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/tray/pool-cj-travertine-organic-tray-24.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-terracotta-amphora-floor-51.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-wabi-sabi-floor-vase-white.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/wall-decor/pool-cj-wood-sunburst-mirror-43.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null)
+  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): 68 · data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-442162.json; data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-977022.json; data/products/bath/bath-mat/bath-mat-aliexpress-waffle-bath-mat-rug-487304.json; data/products/bath/ceiling-light/ceiling-light-aliexpress-retro-led-bamboo-woven-086617.json; data/products/bath/soap-dispenser/soap-dispenser-aliexpress-beige-travertine-bathroom-accessorie-528496.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-254527.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-550975.json; data/products/bath/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-rack-adhesive-949351.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-ring-hook-827023.json; data/products/bath/towel-ring/towel-ring-aliexpress-stainless-steel-towel-ring-312287.json; data/products/corridor/ceiling-lights/ceiling-lights-aliexpress-retro-led-bamboo-woven-086617.json; data/products/corridor/gallery-art/gallery-art-aliexpress-antique-botanical-posters-prints-710412.json; data/products/corridor/gallery-art/gallery-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/corridor/gallery-art/gallery-art-aliexpress-set-3-neutral-floral-945249.json; data/products/corridor/gallery-art/gallery-art-aliexpress-simple-nordic-posters-picasso-983896.json; data/products/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.json; data/products/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882.json; data/products/cushions/cushions-aliexpress-farmhouse-floral-pillow-covers-166217.json; data/products/cushions/cushions-aliexpress-fashion-modern-wabi-sabi-464203.json; data/products/dining/centerpiece-vase/centerpiece-vase-aliexpress-20-4cm-high-ceramic-732760.json; data/products/dining/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363.json; data/products/dining/framed-art/framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603.json; data/products/dining/paper-towel-holder/paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063.json; data/products/dining/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532-dining.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-bench-cushion-chenille-743098.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-chenille-bench-cushion-826372.json; data/products/entrance/ceiling-light/ceiling-light-aliexpress-semi-circular-natural-handmade-958145.json; data/products/entrance/console-vessel/console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575.json; data/products/entrance/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/entrance/table-lamp/table-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/entrance/wall-sconce/wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640.json; data/products/framed-art/framed-art-aliexpress-japandi-wall-art-set-969661.json; data/products/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890.json; data/products/kids/doll/doll-aliexpress-soft-plush-toys-waldorf-664801.json; data/products/kids/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914-kids.json; data/products/kids/roman-blind/roman-blind-aliexpress-customized-flat-sheer-roman-221993.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-beige-color-flat-868827.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-cotton-linen-farbic-488628.json; data/products/kids/soft-toy/soft-toy-aliexpress-handmade-crochet-bunny-baby-999497.json; data/products/kids/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285.json; data/products/kids/toy-basket/toy-basket-aliexpress-seagrass-wicker-woven-storage-192174.json; data/products/kids/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833.json; data/products/kids/toy-cars/toy-cars-aliexpress-baby-wooden-toys-beech-975232.json; data/products/kids/toy-cars/toy-cars-aliexpress-let-s-make-wooden-192455.json; data/products/master/basket/basket-aliexpress-plant-basket-handles-wicker-464380.json; data/products/master/bedding/bedding-aliexpress-boho-3d-tufted-cut-500672.json; data/products/master/curtains/curtains-aliexpress-linen-blend-beige-curtains-122000.json; data/products/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532.json; data/products/table-runner/table-runner-aliexpress-boho-table-runner-macrame-072806.json; data/products/table-runner/table-runner-aliexpress-nordic-table-runner-kitchen-244347.json; data/products/vase/vase-aliexpress-vintage-distressed-clay-vase-589009.json; data/products/wall-decor/wall-decor-aliexpress-japandi-wall-art-set-969661.json; data/products/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.json; data/products/work/curtains/curtains-aliexpress-1pc-japanese-folk-wabi-212463.json; data/products/work/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-work.json; data/products/work/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882-work.json; data/products/work/curtains/curtains-aliexpress-natural-linen-curtains-84-784378.json; data/products/work/desk-lamp/desk-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/work/desk-organizer/desk-organizer-aliexpress-household-rattan-organizer-chopstick-060819.json; data/products/work/desk-tray/desk-tray-aliexpress-tableware-solid-walnut-wooden-861163.json; data/products/work/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.json; data/products/work/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323-work.json; data/products/work/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890-work.json; data/products/work/framed-art/framed-art-aliexpress-modern-minimalist-neutral-gallery-802995.json; data/products/work/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914.json; data/products/work/planter/planter-aliexpress-nordic-style-natural-seagrass-839727.json; data/products/work/wall-sconce/wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943.json
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 21 variants; parts of a set (not sold alone): 0 variants; Latin in public labels: 0
+  public text (ת33): Latin in 0 names, descriptions or notes · supplier SKUs (ת27): 0 issues; a single variant's SKU in place of the card's product-level code: magazine-holder-cj-arch-iron-cane → CJJT161011001AZ, condiment-set-cj-rubberwood-mill-pair-6in → CJCJ171446501AZ, bowl-cj-glutinous-white-belly-bowl-21 → CJYD238977901AZ, mug-set-cj-cream-matte-breakfast-cup → CJCJ143490301AZ
+  public text (ה5): 0 fields that say their value is unknown
+  sets of distinct SKUs (S12): framed-art-aliexpress-minimal-geometric-triptych-prints: 4 sizes, 3 SKUs each; framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: NOT SOLD, sourcing to name the parts (the card has 8 values on "color" (05, 08, 01, 02, 04, 03, 06, 07) for a set of 3: which 3 make the set is not named)
+H0: 2736×1539, window u 0.201–0.539, 0 hotspots
+M0: 2736×1539, window u 0.567–0.905, 13 hotspots
+D1: 2736×1539, window u 0.330–0.667, 12 hotspots
+P-D: 84 frames, 1.4 s, variants 1920 84 avif / 84 webp, mobile 84 avif / 43 webp
+test page → web/test/index.html (57.1 KB with the LQIPs), manifest → .generated/test-page.nordic.json
+
+> homedesign-site@0.1.0 story
+> tsx tools/build-catalog.ts --rooms=living-room --products=../data/story/story.json,tools/house/living-room.warm-modern.json --out=story && tsx tools/make-house.ts && tsx tools/make-story.ts
+
+catalog a471002dfc0d (provisional, catalog.story; rooms living-room)
+  products shown: 51 (provisional prices: 2)
+  hidden: 21 · curtains-aliexpress-linen-blend-s-fold-180502: no price: not in data/economics/products.json, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent: no shipping line in the studio, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent-091154: no shipping line in the studio, the card or the final round; curtains-cj-linen-yarn-sheer-tab: no price: not in data/economics/products.json, the card or the final round; wall-decor-cj-macrame-triangle-branch: no price: not in data/economics/products.json, the card or the final round; accent-sconces-aliexpress-travertine-cylinder-walnut-choice: no price: not in data/economics/products.json, the card or the final round; accent-sconces-cj-travertine-block-updown-8x16: no price: not in data/economics/products.json, the card or the final round; wall-sconce-cj-travertine-cube-updown-12: no price: not in data/economics/products.json, the card or the final round; vase-cj-black-matte-stoneware-jar-30: no price: not in data/economics/products.json, the card or the final round; cushions-cj-chenille-check-milky-white: no price: not in data/economics/products.json, the card or the final round; candle-holders-cj-ceramic-pedestal-tray: no price: not in data/economics/products.json, the card or the final round; pendant-cj-silk-ribbed-pumpkin-40: no price: not in data/economics/products.json, the card or the final round; vase-aliexpress-vintage-distressed-clay-vase-589009: draft card (DS API: colors and visual_weight unfilled); framed-art-aliexpress-frameless-minimalist-wall-art-631735: draft card (DS API: colors and visual_weight unfilled); bowl-cj-matte-black-bowl-20: no price: not in data/economics/products.json, the card or the final round; cushions-aliexpress-farmhouse-floral-pillow-covers-166217: draft card (DS API: colors and visual_weight unfilled); wall-decor-aliexpress-natural-raffia-woven-bohemian-763597: draft card (DS API: colors and visual_weight unfilled); wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943: draft card (DS API: colors and visual_weight unfilled); table-runner-aliexpress-boho-macrame-table-runners-263532: draft card (DS API: colors and visual_weight unfilled); framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: draft card (DS API: colors and visual_weight unfilled); basket-zendrop-seagrass-belly-38x34: no price: not in data/economics/products.json, the card or the final round
+  living-room slots: 18, placeholder options: 15
+  shipping line source: manual 1, cj 44, zendrop 2, aliexpress 0, card 1, cache 2, leads 1 (no default figure)
+  price source: owner 0, studio 49, initial-card 0, initial-leads 2
+  no-loss floor (SITE1): 88 option prices and 0 single-piece prices raised to their own no-loss price; studio prices that lose on the site's reading: 0
+  not sold (PRE1): nl2-above-market 0, nl2-express-only 2, slot-on-hold 1; slots on hold: kids/skateboard, corridor/runner-rug, kids/desk-chair, kids/doll-pram, bath/towel-ladder, dining-room/floor-vase, hall/runner-rug, work/rug, kids/step-stool, living-room/pouf, bath/shower-stool
+  economics defaults used: freight_method, vat_rate, payment_fee_rate, payment_fee_fixed_ils, packaging_ils, items_per_order, bundle_factor, shipping_fee_economy_ils, shipping_fee_express_ils, free_shipping_threshold_ils
+  supplier images (FR-I): 51 with a url · usage rights confirmed 0, unclear 51, none 0
+  fixed-product slots waiting for a card (F3): sofa, coffee-table, armchair
+  supplier options (2026-10-11): 43 products with options, 698 SKUs
+  card room vs folder: all agree
+  invalid product cards skipped: 8 · data/products/pool/basket/pool-cj-cotton-linen-box-camel-40x30.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/candle-holders/pool-cj-carbonized-wood-pedestal-candlestick.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/curtains/pool-cj-linen-look-tassel-curtain.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/table-runner/pool-cj-woven-cotton-runner-fringe.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/tray/pool-cj-travertine-organic-tray-24.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-terracotta-amphora-floor-51.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-wabi-sabi-floor-vase-white.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/wall-decor/pool-cj-wood-sunburst-mirror-43.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null)
+  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): 68 · data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-442162.json; data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-977022.json; data/products/bath/bath-mat/bath-mat-aliexpress-waffle-bath-mat-rug-487304.json; data/products/bath/ceiling-light/ceiling-light-aliexpress-retro-led-bamboo-woven-086617.json; data/products/bath/soap-dispenser/soap-dispenser-aliexpress-beige-travertine-bathroom-accessorie-528496.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-254527.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-550975.json; data/products/bath/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-rack-adhesive-949351.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-ring-hook-827023.json; data/products/bath/towel-ring/towel-ring-aliexpress-stainless-steel-towel-ring-312287.json; data/products/corridor/ceiling-lights/ceiling-lights-aliexpress-retro-led-bamboo-woven-086617.json; data/products/corridor/gallery-art/gallery-art-aliexpress-antique-botanical-posters-prints-710412.json; data/products/corridor/gallery-art/gallery-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/corridor/gallery-art/gallery-art-aliexpress-set-3-neutral-floral-945249.json; data/products/corridor/gallery-art/gallery-art-aliexpress-simple-nordic-posters-picasso-983896.json; data/products/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.json; data/products/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882.json; data/products/cushions/cushions-aliexpress-farmhouse-floral-pillow-covers-166217.json; data/products/cushions/cushions-aliexpress-fashion-modern-wabi-sabi-464203.json; data/products/dining/centerpiece-vase/centerpiece-vase-aliexpress-20-4cm-high-ceramic-732760.json; data/products/dining/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363.json; data/products/dining/framed-art/framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603.json; data/products/dining/paper-towel-holder/paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063.json; data/products/dining/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532-dining.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-bench-cushion-chenille-743098.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-chenille-bench-cushion-826372.json; data/products/entrance/ceiling-light/ceiling-light-aliexpress-semi-circular-natural-handmade-958145.json; data/products/entrance/console-vessel/console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575.json; data/products/entrance/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/entrance/table-lamp/table-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/entrance/wall-sconce/wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640.json; data/products/framed-art/framed-art-aliexpress-japandi-wall-art-set-969661.json; data/products/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890.json; data/products/kids/doll/doll-aliexpress-soft-plush-toys-waldorf-664801.json; data/products/kids/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914-kids.json; data/products/kids/roman-blind/roman-blind-aliexpress-customized-flat-sheer-roman-221993.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-beige-color-flat-868827.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-cotton-linen-farbic-488628.json; data/products/kids/soft-toy/soft-toy-aliexpress-handmade-crochet-bunny-baby-999497.json; data/products/kids/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285.json; data/products/kids/toy-basket/toy-basket-aliexpress-seagrass-wicker-woven-storage-192174.json; data/products/kids/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833.json; data/products/kids/toy-cars/toy-cars-aliexpress-baby-wooden-toys-beech-975232.json; data/products/kids/toy-cars/toy-cars-aliexpress-let-s-make-wooden-192455.json; data/products/master/basket/basket-aliexpress-plant-basket-handles-wicker-464380.json; data/products/master/bedding/bedding-aliexpress-boho-3d-tufted-cut-500672.json; data/products/master/curtains/curtains-aliexpress-linen-blend-beige-curtains-122000.json; data/products/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532.json; data/products/table-runner/table-runner-aliexpress-boho-table-runner-macrame-072806.json; data/products/table-runner/table-runner-aliexpress-nordic-table-runner-kitchen-244347.json; data/products/vase/vase-aliexpress-vintage-distressed-clay-vase-589009.json; data/products/wall-decor/wall-decor-aliexpress-japandi-wall-art-set-969661.json; data/products/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.json; data/products/work/curtains/curtains-aliexpress-1pc-japanese-folk-wabi-212463.json; data/products/work/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-work.json; data/products/work/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882-work.json; data/products/work/curtains/curtains-aliexpress-natural-linen-curtains-84-784378.json; data/products/work/desk-lamp/desk-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/work/desk-organizer/desk-organizer-aliexpress-household-rattan-organizer-chopstick-060819.json; data/products/work/desk-tray/desk-tray-aliexpress-tableware-solid-walnut-wooden-861163.json; data/products/work/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.json; data/products/work/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323-work.json; data/products/work/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890-work.json; data/products/work/framed-art/framed-art-aliexpress-modern-minimalist-neutral-gallery-802995.json; data/products/work/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914.json; data/products/work/planter/planter-aliexpress-nordic-style-natural-seagrass-839727.json; data/products/work/wall-sconce/wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943.json
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 24 variants; parts of a set (not sold alone): 8 variants; Latin in public labels: 0
+  public text (ת33): Latin in 0 names, descriptions or notes · supplier SKUs (ת27): 0 issues; a single variant's SKU in place of the card's product-level code: magazine-holder-cj-arch-iron-cane → CJJT161011001AZ, bowl-cj-glutinous-white-belly-bowl-21 → CJYD238977901AZ
+  public text (ה5): 0 fields that say their value is unknown
+  sets of distinct SKUs (S12): framed-art-aliexpress-minimal-geometric-triptych-prints: 4 sizes, 3 SKUs each; framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: NOT SOLD, sourcing to name the parts (the card has 8 values on "color" (05, 08, 01, 02, 04, 03, 06, 07) for a set of 3: which 3 make the set is not named)
+house living-room/warm-modern: layers from layers-v3c/; the swap rectangle 1343,2454,851,1435 px (outside it the sets differ by ≤ 0 levels); 3 sets, 12 pieces (0 not sold); the default composition ≈ 228 KB at 1920; the poster (AVIF/WebP) 1280: 147/157 KB, 2720: 462/669 KB; 21.9 KB of data → /home/user/homedesign-app/site/.generated/house.living-room.warm-modern.json
+QA register qa/reports/ged-register-2026-11-11-r13.json, version 13
+living-room/warm-modern A: warm-modern-A-ed8 is superseded by warm-modern-A-ed9 in the register: the frame stays out until the data names warm-modern-A-ed9
+A: accent-sconces-cj-travertine-block-updown-8x16: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/nordic A (nordic-A-ed4, final_test): 13 products, 11 priced, 9 with the card photo; dots 12, on the phone 9 (not there: accent-sconces-cj-travertine-block-updown-8x16 בטלפון 12×24 CSS, פחות מ-44×24; planter-cj-seagrass-belly מחוץ לחיתוך הטלפון; basket-cj-jute-rope-cylinder מחוץ לחיתוך הטלפון)
+B: curtains-aliexpress-linen-blend-s-fold-180502: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/nordic B (nordic-B-fin, final_test): 7 products, 5 priced, 4 with the card photo; dots 6, on the phone 4 (not there: wall-decor-cj-corn-husk-round-38 מחוץ לחיתוך הטלפון; basket-cj-jute-rope-cylinder מחוץ לחיתוך הטלפון)
+A: accent-sconces-aliexpress-travertine-cylinder-walnut-choice: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/warm-modern A (warm-modern-A-ed8, final_test): 12 products, 9 priced, 7 with the card photo; dots 11, on the phone 10 (not there: floor-lamp-cj-pleated-walnut-stem-158 מחוץ לחיתוך הטלפון)
+A: curtains-aliexpress-linen-blend-s-fold-180502: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/modern-country A (modern-country-A-fix4, final_test): 7 products, 3 priced, 2 with the card photo; dots 7, on the phone 6 (not there: sill-vase-cj-cream-fluted-column-25 מחוץ לחיתוך הטלפון)
+living-room/boho A (boho-A-fin7, final_test): 9 products, 6 priced, 3 with the card photo; dots 9, on the phone 6 (not there: basket-cj-seagrass-belly-xl מחוץ לחיתוך הטלפון; planter-zendrop-seagrass-belly-38x34 מחוץ לחיתוך הטלפון; pouf-cj-cotton-knit-ball-cover מחוץ לחיתוך הטלפון)
+A: cushions-cj-washed-cotton-frayed: the register shows 3 units; the point's credit did not say it, so it says "שלוש יחידות"
+living-room/mediterranean A (mediterranean-A-ed7, final_test): 10 products, 7 priced, 5 with the card photo; dots 10, on the phone 8 (not there: vase-aliexpress-vintage-distressed-clay-vase-589009 מחוץ לחיתוך הטלפון; basket-zendrop-seagrass-belly-38x34 מחוץ לחיתוך הטלפון)
+living-room/japandi A (japandi-A-ed5): held, not_yet
+/story/living-room/nordic/p/pendant-silk-ribbed-pumpkin-xnrc4/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/framed-art-minimal-geometric-triptych-prints-4ue7k/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/accent-sconces-travertine-block-updown-y5o51/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/bowl-glutinous-white-belly-bowl-dmhuc/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/wall-decor-corn-husk-round-8aouz/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/vase-vintage-distressed-clay-vase-1bzp3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/curtains-linen-blend-s-fold-qgo4l/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/floor-lamp-pleated-walnut-stem-p2hz3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/accent-sconces-travertine-cylinder-walnut-choice-1bu8d/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/framed-art-frameless-minimalist-wall-art-lv30f/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/bowl-matte-black-bowl-2mk8v/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/cushions-wide-stripe-corduroy-light-green-narue/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/sill-vase-cream-fluted-column-g20ky/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/vase-vintage-distressed-clay-vase-1bzp3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/curtains-linen-blend-s-fold-qgo4l/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/cushions-farmhouse-floral-pillow-covers-mgrj1/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/cushions-chenille-check-milky-white-icq08/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/wall-decor-natural-raffia-woven-bohemian-wgypa/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/wall-sconce-rattan-bamboo-wall-lamp-egdwd/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/basket-seagrass-belly-xl-2ew3r/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/cushions-washed-cotton-frayed-ws8a6/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/cushions-sandstone-chenille-flange-nubfy/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/table-runner-boho-macrame-table-runners-y0xlc/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/mediterranean/p/framed-art-mediterranean-wabi-sabi-poster-5a1d5/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/mediterranean/p/vase-vintage-distressed-clay-vase-1bzp3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/mediterranean/p/cushions-washed-cotton-frayed-ws8a6/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/ → web/story/living-room/nordic/index.html (58.6 KB): A final_test, B final_test
+/story/living-room/warm-modern/ → web/story/living-room/warm-modern/index.html (39.1 KB): A final_test
+/story/living-room/modern-country/ → web/story/living-room/modern-country/index.html (28.6 KB): A final_test
+/story/living-room/boho/ → web/story/living-room/boho/index.html (31.8 KB): A final_test
+/story/living-room/mediterranean/ → web/story/living-room/mediterranean/index.html (35.3 KB): A final_test
+/story/living-room/japandi/ → web/story/living-room/japandi/index.html (12.9 KB): typographic
+layer 2: 52 detail pages (32 for sale, 17 without a price, 3 not sold now); 26 with a card photo; close-ups shown 0, held 0
+/story/living-room/warm-modern/tool/ → /rooms/living-room/?style=warm-modern (301): the house's tool is in the room engine
+/story/ → web/story/index.html (13.6 KB): 9 rooms × 6 styles, 6 pages
+story rights (S17): 321 copies of supplier photos in the ledger (.generated/rights/story.json); behind the flag the story keeps its photos
+story: 6 pages (5 with frames, 1 typographic); 58 points, 37 for sale, 4 not sold now, 17 without a price; 28 without a cached card photo
+
+> homedesign-site@0.1.0 typecheck
+> tsx shared/scripts/gen-product-card-schema.ts --check && npm run typecheck --workspaces --if-present
+
+product-card.gen.ts is up to date
+
+> @hd/shared@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/api@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/web@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> @hd/tools@0.1.0 typecheck
+> tsc -p ../tsconfig.tools.json --noEmit
+
+
+> homedesign-site@0.1.0 lint
+> eslint . --max-warnings=0
+
+
+> homedesign-site@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> homedesign-site@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m/home/user/homedesign-app/site[39m
+
+ [32m✓[39m tools/test/s14-catalog.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 3097[2mms[22m[39m
+(node:6306) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m api/test/s14.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 2938[2mms[22m[39m
+     [33m[2m✓[22m[39m the floor lamp, bought and paid: the order line and the supplier request carry CJYD224754407GT, never CJYD2247544 [33m 569[2mms[22m[39m
+(node:6792) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mQA A4: a cross-site "text/plain; charset=application/json" cancel is refused, and the order is untouched
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:53.388Z'[39m,
+  path: [32m'/api/admin/orders/9993492718/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:53.698Z'[39m,
+  path: [32m'/api/admin/orders/3341568011/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:53.702Z'[39m,
+  path: [32m'/api/admin/orders/3341568011/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:53.704Z'[39m,
+  path: [32m'/api/admin/orders/3341568011/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:53.710Z'[39m,
+  path: [32m'/api/admin/orders/3341568011/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:53.711Z'[39m,
+  path: [32m'/api/admin/orders/3341568011/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:53.722Z'[39m,
+  path: [32m'/api/admin/orders/3341568011/cancel'[39m,
+  reason: [32m'no_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma service token (the studio): no browser markers needed; the actor names the token; a foreign Origin is still refused
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:54.018Z'[39m,
+  path: [32m'/api/admin/orders/6862378430/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'service'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mthe screen’s forms: the same rule (a foreign Origin is bad_origin); the local dev token acts without markers
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T04:40:54.183Z'[39m,
+  path: [32m'/api/admin/orders/3278494144/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'dev'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת35: a submit that may have reached the supplier counts as sent; never a silent full refund[2m > [22m[2ma timeout, then refusals: the order stays "maybe" (a later refusal never clears it)
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'supplier.resend_needs_person'[39m,
+  at: [32m'2026-11-12T04:40:54.855Z'[39m,
+  order_id: [32m'5088186289'[39m,
+  supplier: [32m'mock'[39m,
+  attempt: [33m2[39m
+}
+
+ [32m✓[39m api/test/s16.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 3153[2mms[22m[39m
+     [33m[2m✓[22m[39m QA A4: a cross-site "text/plain; charset=application/json" cancel is refused, and the order is untouched [33m 729[2mms[22m[39m
+     [33m[2m✓[22m[39m a person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403 [33m 302[2mms[22m[39m
+(node:7191) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:40:58.301Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:40:58.302Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:40:58.303Z'[39m,
+  path: [32m'/admin/'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:40:58.304Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:40:58.304Z'[39m,
+  path: [32m'/admin/'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin screen and API (order operations)[2m > [22m[2mthe screen acts through forms from its own origin only; a refund from the form is idempotent by its key
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:40:58.543Z'[39m,
+  path: [32m'/api/admin/orders/7618073299/mock-supplier'[39m,
+  reason: [32m'no_token'[39m
+}
+
+ [32m✓[39m api/test/s13.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1689[2mms[22m[39m
+     [33m[2m✓[22m[39m before payment: canceled, nothing refunded; a payment that still arrives is refunded at once [33m 375[2mms[22m[39m
+ [32m✓[39m api/test/s18.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1751[2mms[22m[39m
+     [33m[2m✓[22m[39m check-config fails a wrangler.jsonc whose production has a mock email, and names it [33m 1731[2mms[22m[39m
+ [32m✓[39m tools/test/s18.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 16612[2mms[22m[39m
+     [33m[2m✓[22m[39m UNDECIDED: writes the wording without an email, and only it [33m 662[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the wording without a provider stops it [33m 410[2mms[22m[39m
+     [33m[2m✓[22m[39m a mock, a typo or no EMAIL_PROVIDER stops it; the public build reads production [33m 2292[2mms[22m[39m
+     [33m[2m✓[22m[39m a clean site passes; the test page chunk is not the customer’s (listed, not scanned) [33m 2729[2mms[22m[39m
+     [33m[2m✓[22m[39m the order page’s old line in a lazy chunk stops the build [33m 2716[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in a page’s text stops the build [33m 2918[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the Worker’s customer strings stops the build; the owner’s screens are not the customer’s [33m 2306[2mms[22m[39m
+     [33m[2m✓[22m[39m a copy built for another EMAIL_PROVIDER fails: the build’s choice must be this build’s [33m 1912[2mms[22m[39m
+     [33m[2m✓[22m[39m no promise is written in the web’s code (the copy is the one place for these lines); the design test page aside [33m 603[2mms[22m[39m
+ [32m✓[39m tools/test/s17-rights.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 17771[2mms[22m[39m
+     [33m[2m✓[22m[39m dHash: one picture at any width and quality is within the threshold; two pictures are far apart [33m 612[2mms[22m[39m
+     [33m[2m✓[22m[39m R0, the clean build: a render and a page find nothing [33m 513[2mms[22m[39m
+     [33m[2m✓[22m[39m R1, the picture at its own path: found by its bytes [33m 991[2mms[22m[39m
+     [33m[2m✓[22m[39m R2, the same bytes under another name, as og:image: found by its bytes [33m 338[2mms[22m[39m
+     [33m[2m✓[22m[39m R3, og:image hotlinked to the supplier’s CDN (and a sibling host of it): found by host [33m 317[2mms[22m[39m
+     [33m[2m✓[22m[39m R4, the picture inlined as a data: URI: its bytes; re-encoded smaller, its pixels [33m 391[2mms[22m[39m
+     [33m[2m✓[22m[39m R6, the story’s own copies: by the story’s ledger; and without any ledger of them, by pixels at every width [33m 579[2mms[22m[39m
+     [33m[2m✓[22m[39m a cached original no ledger names may not ship (its rights are unknown) [33m 414[2mms[22m[39m
+     [33m[2m✓[22m[39m R0 clean, R1, R2, R3, R4 and R6 through the real check: only the clean copy passes [33m 11040[2mms[22m[39m
+     [33m[2m✓[22m[39m R6 by pixels alone: every copy the story made is found without the story’s ledger [33m 1483[2mms[22m[39m
+(node:7540) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7558) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7568) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'payment.webhook_rejected'[39m,
+  at: [32m'2026-11-12T04:41:03.074Z'[39m,
+  provider: [32m'mock'[39m,
+  reason: [32m'mismatch'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'payment.webhook_rejected'[39m,
+  at: [32m'2026-11-12T04:41:03.079Z'[39m,
+  provider: [32m'mock'[39m,
+  reason: [32m'stale'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2madmin[2m > [22m[2mis closed without Cloudflare Access and open with the local dev bypass
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:41:03.259Z'[39m,
+  path: [32m'/api/admin/overview'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2madmin[2m > [22m[2mdev bypass is ignored in preview
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T04:41:03.308Z'[39m,
+  path: [32m'/api/admin/overview'[39m,
+  reason: [32m'no_token'[39m
+}
+
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 1976[2mms[22m[39m
+ [32m✓[39m api/test/s17.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1207[2mms[22m[39m
+     [33m[2m✓[22m[39m cannot be asked and does not deduplicate: nothing sent, a person checks; "none" sends it again, "found" records it [33m 304[2mms[22m[39m
+ [32m✓[39m api/test/s12.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 1622[2mms[22m[39m
+     [33m[2m✓[22m[39m two (and three) runs at once issue one invoice; the others are retried and then skip [33m 459[2mms[22m[39m
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 415[2mms[22m[39m
+     [33m[2m✓[22m[39m parses, names a SKU for the room, and passes the cross-field rules [33m 398[2mms[22m[39m
+[90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
+[22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
+
+ [32m✓[39m tools/test/s17.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1317[2mms[22m[39m
+     [33m[2m✓[22m[39m runs tsx from site/node_modules by its path, and passes from site/api [33m 1149[2mms[22m[39m
+ [32m✓[39m tools/test/design-system.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 96[2mms[22m[39m
+ [32m✓[39m api/test/integrations.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m web/test/story-cart.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m tools/test/s16.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 110[2mms[22m[39m
+ [32m✓[39m shared/test/shared.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 1996[2mms[22m[39m
+     [33m[2m✓[22m[39m every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields [33m 439[2mms[22m[39m
+     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 1131[2mms[22m[39m
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m tools/test/qa-frames.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tools/test/story-hotspots.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m web/test/s15-copy.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tools/test/s15-rights.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m web/test/story-detail.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tools/test/sets.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tools/test/lines.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m shared/test/product-url.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m web/test/s17-notes.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m web/test/wheel-physics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m shared/test/s17-analytics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m web/test/viewport-frame.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m32 passed[39m[22m[90m (32)[39m
+[2m      Tests [22m [1m[32m331 passed[39m[22m[90m (331)[39m
+[2m   Start at [22m 04:40:42
+[2m   Duration [22m 25.66s[2m (transform 3.57s, setup 0ms, collect 10.12s, tests 56.14s, environment 5ms, prepare 340ms)[22m
+
+
+> homedesign-site@0.1.0 build
+> npm run prepare:data && npm run build -w @hd/web && npm run build -w @hd/api && npm run budget && npm run check:rights && npm run check:promises
+
+
+> homedesign-site@0.1.0 prepare:data
+> npm run copy && npm run catalog && npm run assets:temp && npm run assets:supplier && npm run test:page && npm run story
+
+
+> homedesign-site@0.1.0 copy
+> tsx tools/build-copy.ts
+
+build-copy (S18): EMAIL_PROVIDER=UNDECIDED (top level) → the wording without an email: 15 lines, 6 not shown
+
+> homedesign-site@0.1.0 catalog
+> tsx tools/build-catalog.ts
+
+catalog 9284f57dfa23 (provisional; rooms living-room)
+  products shown: 39 (provisional prices: 1)
+  hidden: 12 · curtains-aliexpress-linen-blend-s-fold-180502: no price: not in data/economics/products.json, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent: no shipping line in the studio, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent-091154: no shipping line in the studio, the card or the final round; curtains-cj-linen-yarn-sheer-tab: no price: not in data/economics/products.json, the card or the final round; wall-decor-cj-macrame-triangle-branch: no price: not in data/economics/products.json, the card or the final round; accent-sconces-aliexpress-travertine-cylinder-walnut-choice: no price: not in data/economics/products.json, the card or the final round; accent-sconces-cj-travertine-block-updown-8x16: no price: not in data/economics/products.json, the card or the final round; wall-sconce-cj-travertine-cube-updown-12: no price: not in data/economics/products.json, the card or the final round; vase-cj-black-matte-stoneware-jar-30: no price: not in data/economics/products.json, the card or the final round; cushions-cj-chenille-check-milky-white: no price: not in data/economics/products.json, the card or the final round; candle-holders-cj-ceramic-pedestal-tray: no price: not in data/economics/products.json, the card or the final round; pendant-cj-silk-ribbed-pumpkin-40: no price: not in data/economics/products.json, the card or the final round
+  living-room slots: 18, placeholder options: 15
+  shipping line source: manual 0, cj 34, zendrop 2, aliexpress 0, card 1, cache 2, leads 0 (no default figure)
+  price source: owner 0, studio 38, initial-card 0, initial-leads 1
+  no-loss floor (SITE1): 87 option prices and 0 single-piece prices raised to their own no-loss price; studio prices that lose on the site's reading: 0
+  not sold (PRE1): nl2-above-market 0, nl2-express-only 2, slot-on-hold 1; slots on hold: kids/skateboard, corridor/runner-rug, kids/desk-chair, kids/doll-pram, bath/towel-ladder, dining-room/floor-vase, hall/runner-rug, work/rug, kids/step-stool, living-room/pouf, bath/shower-stool
+  economics defaults used: freight_method, vat_rate, payment_fee_rate, payment_fee_fixed_ils, packaging_ils, items_per_order, bundle_factor, shipping_fee_economy_ils, shipping_fee_express_ils, free_shipping_threshold_ils
+  supplier images (FR-I): 39 with a url · usage rights confirmed 0, unclear 39, none 0
+  fixed-product slots waiting for a card (F3): sofa, coffee-table, armchair
+  supplier options (2026-10-11): 33 products with options, 492 SKUs
+  card room vs folder: all agree
+  invalid product cards skipped: 8 · data/products/pool/basket/pool-cj-cotton-linen-box-camel-40x30.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/candle-holders/pool-cj-carbonized-wood-pedestal-candlestick.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/curtains/pool-cj-linen-look-tassel-curtain.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/table-runner/pool-cj-woven-cotton-runner-fringe.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/tray/pool-cj-travertine-organic-tray-24.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-terracotta-amphora-floor-51.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-wabi-sabi-floor-vase-white.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/wall-decor/pool-cj-wood-sunburst-mirror-43.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null)
+  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): 68 · data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-442162.json; data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-977022.json; data/products/bath/bath-mat/bath-mat-aliexpress-waffle-bath-mat-rug-487304.json; data/products/bath/ceiling-light/ceiling-light-aliexpress-retro-led-bamboo-woven-086617.json; data/products/bath/soap-dispenser/soap-dispenser-aliexpress-beige-travertine-bathroom-accessorie-528496.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-254527.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-550975.json; data/products/bath/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-rack-adhesive-949351.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-ring-hook-827023.json; data/products/bath/towel-ring/towel-ring-aliexpress-stainless-steel-towel-ring-312287.json; data/products/corridor/ceiling-lights/ceiling-lights-aliexpress-retro-led-bamboo-woven-086617.json; data/products/corridor/gallery-art/gallery-art-aliexpress-antique-botanical-posters-prints-710412.json; data/products/corridor/gallery-art/gallery-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/corridor/gallery-art/gallery-art-aliexpress-set-3-neutral-floral-945249.json; data/products/corridor/gallery-art/gallery-art-aliexpress-simple-nordic-posters-picasso-983896.json; data/products/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.json; data/products/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882.json; data/products/cushions/cushions-aliexpress-farmhouse-floral-pillow-covers-166217.json; data/products/cushions/cushions-aliexpress-fashion-modern-wabi-sabi-464203.json; data/products/dining/centerpiece-vase/centerpiece-vase-aliexpress-20-4cm-high-ceramic-732760.json; data/products/dining/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363.json; data/products/dining/framed-art/framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603.json; data/products/dining/paper-towel-holder/paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063.json; data/products/dining/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532-dining.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-bench-cushion-chenille-743098.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-chenille-bench-cushion-826372.json; data/products/entrance/ceiling-light/ceiling-light-aliexpress-semi-circular-natural-handmade-958145.json; data/products/entrance/console-vessel/console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575.json; data/products/entrance/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/entrance/table-lamp/table-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/entrance/wall-sconce/wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640.json; data/products/framed-art/framed-art-aliexpress-japandi-wall-art-set-969661.json; data/products/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890.json; data/products/kids/doll/doll-aliexpress-soft-plush-toys-waldorf-664801.json; data/products/kids/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914-kids.json; data/products/kids/roman-blind/roman-blind-aliexpress-customized-flat-sheer-roman-221993.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-beige-color-flat-868827.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-cotton-linen-farbic-488628.json; data/products/kids/soft-toy/soft-toy-aliexpress-handmade-crochet-bunny-baby-999497.json; data/products/kids/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285.json; data/products/kids/toy-basket/toy-basket-aliexpress-seagrass-wicker-woven-storage-192174.json; data/products/kids/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833.json; data/products/kids/toy-cars/toy-cars-aliexpress-baby-wooden-toys-beech-975232.json; data/products/kids/toy-cars/toy-cars-aliexpress-let-s-make-wooden-192455.json; data/products/master/basket/basket-aliexpress-plant-basket-handles-wicker-464380.json; data/products/master/bedding/bedding-aliexpress-boho-3d-tufted-cut-500672.json; data/products/master/curtains/curtains-aliexpress-linen-blend-beige-curtains-122000.json; data/products/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532.json; data/products/table-runner/table-runner-aliexpress-boho-table-runner-macrame-072806.json; data/products/table-runner/table-runner-aliexpress-nordic-table-runner-kitchen-244347.json; data/products/vase/vase-aliexpress-vintage-distressed-clay-vase-589009.json; data/products/wall-decor/wall-decor-aliexpress-japandi-wall-art-set-969661.json; data/products/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.json; data/products/work/curtains/curtains-aliexpress-1pc-japanese-folk-wabi-212463.json; data/products/work/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-work.json; data/products/work/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882-work.json; data/products/work/curtains/curtains-aliexpress-natural-linen-curtains-84-784378.json; data/products/work/desk-lamp/desk-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/work/desk-organizer/desk-organizer-aliexpress-household-rattan-organizer-chopstick-060819.json; data/products/work/desk-tray/desk-tray-aliexpress-tableware-solid-walnut-wooden-861163.json; data/products/work/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.json; data/products/work/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323-work.json; data/products/work/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890-work.json; data/products/work/framed-art/framed-art-aliexpress-modern-minimalist-neutral-gallery-802995.json; data/products/work/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914.json; data/products/work/planter/planter-aliexpress-nordic-style-natural-seagrass-839727.json; data/products/work/wall-sconce/wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943.json
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 21 variants; parts of a set (not sold alone): 0 variants; Latin in public labels: 0
+  public text (ת33): Latin in 0 names, descriptions or notes · supplier SKUs (ת27): 0 issues; a single variant's SKU in place of the card's product-level code: magazine-holder-cj-arch-iron-cane → CJJT161011001AZ
+  public text (ה5): 0 fields that say their value is unknown
+  sets of distinct SKUs (S12): framed-art-aliexpress-minimal-geometric-triptych-prints: 4 sizes, 3 SKUs each; framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: NOT SOLD, sourcing to name the parts (the card has 8 values on "color" (05, 08, 01, 02, 04, 03, 06, 07) for a set of 3: which 3 make the set is not named)
+
+> homedesign-site@0.1.0 assets:temp
+> tsx tools/make-temp-assets.ts
+
+temp media up to date (use --force to rebuild)
+
+> homedesign-site@0.1.0 assets:supplier
+> tsx tools/supplier-images.ts
+
+supplier images: 39/39 products (0 encoded, 39 up to date, 0 downloaded) → media/products/<public id>/photo.800.webp · usage rights confirmed 0, unclear 39, none 0 (0.1s)
+option pictures: 483 options, 182 files (0 encoded) · artifact: 40 files
+image rights (S15): a public build (HD_PUBLIC=1) withholds the supplier pictures of 39/39 products (39 photos, 182 option pictures; unclear 39) → /home/user/homedesign-app/site/.generated/supplier-images.public.json
+rights ledger (S17): 423 files by sha256 (shop 221, cached originals 202) → .generated/rights/shop.json
+
+> homedesign-site@0.1.0 test:page
+> tsx tools/build-catalog.ts --rooms=living-room,dining-room --out=test-page && tsx tools/make-test-page.ts
+
+catalog 23869332545c (provisional, catalog.test-page; rooms living-room, dining-room)
+  products shown: 57 (provisional prices: 1)
+  hidden: 21 · curtains-aliexpress-linen-blend-s-fold-180502: no price: not in data/economics/products.json, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent: no shipping line in the studio, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent-091154: no shipping line in the studio, the card or the final round; curtains-cj-linen-yarn-sheer-tab: no price: not in data/economics/products.json, the card or the final round; wall-decor-cj-macrame-triangle-branch: no price: not in data/economics/products.json, the card or the final round; accent-sconces-aliexpress-travertine-cylinder-walnut-choice: no price: not in data/economics/products.json, the card or the final round; accent-sconces-cj-travertine-block-updown-8x16: no price: not in data/economics/products.json, the card or the final round; wall-sconce-cj-travertine-cube-updown-12: no price: not in data/economics/products.json, the card or the final round; vase-cj-black-matte-stoneware-jar-30: no price: not in data/economics/products.json, the card or the final round; cushions-cj-chenille-check-milky-white: no price: not in data/economics/products.json, the card or the final round; candle-holders-cj-ceramic-pedestal-tray: no price: not in data/economics/products.json, the card or the final round; pendant-cj-silk-ribbed-pumpkin-40: no price: not in data/economics/products.json, the card or the final round; table-runner-aliexpress-solid-color-textured-runner-525144: no shipping line in the studio, the card or the final round; centerpiece-vase-cj-matte-frosted-tapered-28: no price: not in data/economics/products.json, the card or the final round; centerpiece-vase-aliexpress-modern-minimalist-white-ceramic: no shipping line in the studio, the card or the final round; centerpiece-vase-aliexpress-nordic-morandi-matte-ceramic: no shipping line in the studio, the card or the final round; centerpiece-vase-aliexpress-nordic-matte-ceramic-vase: no shipping line in the studio, the card or the final round; framed-art-cj-charcoal-flower-silhouette-set3-30x40: no price: not in data/economics/products.json, the card or the final round; paper-towel-holder-aliexpress-wood-upright-g4483a-078038: no price: not in data/economics/products.json, the card or the final round; paper-towel-holder-cj-beech-upright-31: no shipping to Israel (cj); tea-towel-cj-waffle-cotton-beige-45x65-pair: no price: not in data/economics/products.json, the card or the final round
+  living-room slots: 18, placeholder options: 15
+  shipping line source: manual 0, cj 46, zendrop 5, aliexpress 0, card 1, cache 5, leads 0 (no default figure)
+  price source: owner 0, studio 56, initial-card 0, initial-leads 1
+  no-loss floor (SITE1): 107 option prices and 1 single-piece prices raised to their own no-loss price; studio prices that lose on the site's reading: 0
+  not sold (PRE1): nl2-above-market 1, nl2-express-only 2, slot-on-hold 2; slots on hold: kids/skateboard, corridor/runner-rug, kids/desk-chair, kids/doll-pram, bath/towel-ladder, dining-room/floor-vase, hall/runner-rug, work/rug, kids/step-stool, living-room/pouf, bath/shower-stool
+  economics defaults used: freight_method, vat_rate, payment_fee_rate, payment_fee_fixed_ils, packaging_ils, items_per_order, bundle_factor, shipping_fee_economy_ils, shipping_fee_express_ils, free_shipping_threshold_ils
+  supplier images (FR-I): 57 with a url · usage rights confirmed 0, unclear 57, none 0
+  fixed-product slots waiting for a card (F3): sofa, coffee-table, armchair, dining-table, dining-chairs, dining-bench
+  supplier options (2026-10-11): 46 products with options, 585 SKUs
+  card room vs folder: all agree
+  invalid product cards skipped: 8 · data/products/pool/basket/pool-cj-cotton-linen-box-camel-40x30.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/candle-holders/pool-cj-carbonized-wood-pedestal-candlestick.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/curtains/pool-cj-linen-look-tassel-curtain.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/table-runner/pool-cj-woven-cotton-runner-fringe.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/tray/pool-cj-travertine-organic-tray-24.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-terracotta-amphora-floor-51.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-wabi-sabi-floor-vase-white.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/wall-decor/pool-cj-wood-sunburst-mirror-43.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null)
+  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): 68 · data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-442162.json; data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-977022.json; data/products/bath/bath-mat/bath-mat-aliexpress-waffle-bath-mat-rug-487304.json; data/products/bath/ceiling-light/ceiling-light-aliexpress-retro-led-bamboo-woven-086617.json; data/products/bath/soap-dispenser/soap-dispenser-aliexpress-beige-travertine-bathroom-accessorie-528496.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-254527.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-550975.json; data/products/bath/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-rack-adhesive-949351.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-ring-hook-827023.json; data/products/bath/towel-ring/towel-ring-aliexpress-stainless-steel-towel-ring-312287.json; data/products/corridor/ceiling-lights/ceiling-lights-aliexpress-retro-led-bamboo-woven-086617.json; data/products/corridor/gallery-art/gallery-art-aliexpress-antique-botanical-posters-prints-710412.json; data/products/corridor/gallery-art/gallery-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/corridor/gallery-art/gallery-art-aliexpress-set-3-neutral-floral-945249.json; data/products/corridor/gallery-art/gallery-art-aliexpress-simple-nordic-posters-picasso-983896.json; data/products/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.json; data/products/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882.json; data/products/cushions/cushions-aliexpress-farmhouse-floral-pillow-covers-166217.json; data/products/cushions/cushions-aliexpress-fashion-modern-wabi-sabi-464203.json; data/products/dining/centerpiece-vase/centerpiece-vase-aliexpress-20-4cm-high-ceramic-732760.json; data/products/dining/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363.json; data/products/dining/framed-art/framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603.json; data/products/dining/paper-towel-holder/paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063.json; data/products/dining/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532-dining.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-bench-cushion-chenille-743098.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-chenille-bench-cushion-826372.json; data/products/entrance/ceiling-light/ceiling-light-aliexpress-semi-circular-natural-handmade-958145.json; data/products/entrance/console-vessel/console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575.json; data/products/entrance/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/entrance/table-lamp/table-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/entrance/wall-sconce/wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640.json; data/products/framed-art/framed-art-aliexpress-japandi-wall-art-set-969661.json; data/products/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890.json; data/products/kids/doll/doll-aliexpress-soft-plush-toys-waldorf-664801.json; data/products/kids/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914-kids.json; data/products/kids/roman-blind/roman-blind-aliexpress-customized-flat-sheer-roman-221993.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-beige-color-flat-868827.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-cotton-linen-farbic-488628.json; data/products/kids/soft-toy/soft-toy-aliexpress-handmade-crochet-bunny-baby-999497.json; data/products/kids/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285.json; data/products/kids/toy-basket/toy-basket-aliexpress-seagrass-wicker-woven-storage-192174.json; data/products/kids/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833.json; data/products/kids/toy-cars/toy-cars-aliexpress-baby-wooden-toys-beech-975232.json; data/products/kids/toy-cars/toy-cars-aliexpress-let-s-make-wooden-192455.json; data/products/master/basket/basket-aliexpress-plant-basket-handles-wicker-464380.json; data/products/master/bedding/bedding-aliexpress-boho-3d-tufted-cut-500672.json; data/products/master/curtains/curtains-aliexpress-linen-blend-beige-curtains-122000.json; data/products/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532.json; data/products/table-runner/table-runner-aliexpress-boho-table-runner-macrame-072806.json; data/products/table-runner/table-runner-aliexpress-nordic-table-runner-kitchen-244347.json; data/products/vase/vase-aliexpress-vintage-distressed-clay-vase-589009.json; data/products/wall-decor/wall-decor-aliexpress-japandi-wall-art-set-969661.json; data/products/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.json; data/products/work/curtains/curtains-aliexpress-1pc-japanese-folk-wabi-212463.json; data/products/work/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-work.json; data/products/work/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882-work.json; data/products/work/curtains/curtains-aliexpress-natural-linen-curtains-84-784378.json; data/products/work/desk-lamp/desk-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/work/desk-organizer/desk-organizer-aliexpress-household-rattan-organizer-chopstick-060819.json; data/products/work/desk-tray/desk-tray-aliexpress-tableware-solid-walnut-wooden-861163.json; data/products/work/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.json; data/products/work/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323-work.json; data/products/work/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890-work.json; data/products/work/framed-art/framed-art-aliexpress-modern-minimalist-neutral-gallery-802995.json; data/products/work/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914.json; data/products/work/planter/planter-aliexpress-nordic-style-natural-seagrass-839727.json; data/products/work/wall-sconce/wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943.json
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 21 variants; parts of a set (not sold alone): 0 variants; Latin in public labels: 0
+  public text (ת33): Latin in 0 names, descriptions or notes · supplier SKUs (ת27): 0 issues; a single variant's SKU in place of the card's product-level code: magazine-holder-cj-arch-iron-cane → CJJT161011001AZ, condiment-set-cj-rubberwood-mill-pair-6in → CJCJ171446501AZ, bowl-cj-glutinous-white-belly-bowl-21 → CJYD238977901AZ, mug-set-cj-cream-matte-breakfast-cup → CJCJ143490301AZ
+  public text (ה5): 0 fields that say their value is unknown
+  sets of distinct SKUs (S12): framed-art-aliexpress-minimal-geometric-triptych-prints: 4 sizes, 3 SKUs each; framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: NOT SOLD, sourcing to name the parts (the card has 8 values on "color" (05, 08, 01, 02, 04, 03, 06, 07) for a set of 3: which 3 make the set is not named)
+H0: 2736×1539, window u 0.201–0.539, 0 hotspots
+M0: 2736×1539, window u 0.567–0.905, 13 hotspots
+D1: 2736×1539, window u 0.330–0.667, 12 hotspots
+P-D: 84 frames, 1.4 s, variants 1920 84 avif / 84 webp, mobile 84 avif / 43 webp
+test page → web/test/index.html (57.1 KB with the LQIPs), manifest → .generated/test-page.nordic.json
+
+> homedesign-site@0.1.0 story
+> tsx tools/build-catalog.ts --rooms=living-room --products=../data/story/story.json,tools/house/living-room.warm-modern.json --out=story && tsx tools/make-house.ts && tsx tools/make-story.ts
+
+catalog a471002dfc0d (provisional, catalog.story; rooms living-room)
+  products shown: 51 (provisional prices: 2)
+  hidden: 21 · curtains-aliexpress-linen-blend-s-fold-180502: no price: not in data/economics/products.json, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent: no shipping line in the studio, the card or the final round; curtains-aliexpress-cotton-linen-texture-translucent-091154: no shipping line in the studio, the card or the final round; curtains-cj-linen-yarn-sheer-tab: no price: not in data/economics/products.json, the card or the final round; wall-decor-cj-macrame-triangle-branch: no price: not in data/economics/products.json, the card or the final round; accent-sconces-aliexpress-travertine-cylinder-walnut-choice: no price: not in data/economics/products.json, the card or the final round; accent-sconces-cj-travertine-block-updown-8x16: no price: not in data/economics/products.json, the card or the final round; wall-sconce-cj-travertine-cube-updown-12: no price: not in data/economics/products.json, the card or the final round; vase-cj-black-matte-stoneware-jar-30: no price: not in data/economics/products.json, the card or the final round; cushions-cj-chenille-check-milky-white: no price: not in data/economics/products.json, the card or the final round; candle-holders-cj-ceramic-pedestal-tray: no price: not in data/economics/products.json, the card or the final round; pendant-cj-silk-ribbed-pumpkin-40: no price: not in data/economics/products.json, the card or the final round; vase-aliexpress-vintage-distressed-clay-vase-589009: draft card (DS API: colors and visual_weight unfilled); framed-art-aliexpress-frameless-minimalist-wall-art-631735: draft card (DS API: colors and visual_weight unfilled); bowl-cj-matte-black-bowl-20: no price: not in data/economics/products.json, the card or the final round; cushions-aliexpress-farmhouse-floral-pillow-covers-166217: draft card (DS API: colors and visual_weight unfilled); wall-decor-aliexpress-natural-raffia-woven-bohemian-763597: draft card (DS API: colors and visual_weight unfilled); wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943: draft card (DS API: colors and visual_weight unfilled); table-runner-aliexpress-boho-macrame-table-runners-263532: draft card (DS API: colors and visual_weight unfilled); framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: draft card (DS API: colors and visual_weight unfilled); basket-zendrop-seagrass-belly-38x34: no price: not in data/economics/products.json, the card or the final round
+  living-room slots: 18, placeholder options: 15
+  shipping line source: manual 1, cj 44, zendrop 2, aliexpress 0, card 1, cache 2, leads 1 (no default figure)
+  price source: owner 0, studio 49, initial-card 0, initial-leads 2
+  no-loss floor (SITE1): 88 option prices and 0 single-piece prices raised to their own no-loss price; studio prices that lose on the site's reading: 0
+  not sold (PRE1): nl2-above-market 0, nl2-express-only 2, slot-on-hold 1; slots on hold: kids/skateboard, corridor/runner-rug, kids/desk-chair, kids/doll-pram, bath/towel-ladder, dining-room/floor-vase, hall/runner-rug, work/rug, kids/step-stool, living-room/pouf, bath/shower-stool
+  economics defaults used: freight_method, vat_rate, payment_fee_rate, payment_fee_fixed_ils, packaging_ils, items_per_order, bundle_factor, shipping_fee_economy_ils, shipping_fee_express_ils, free_shipping_threshold_ils
+  supplier images (FR-I): 51 with a url · usage rights confirmed 0, unclear 51, none 0
+  fixed-product slots waiting for a card (F3): sofa, coffee-table, armchair
+  supplier options (2026-10-11): 43 products with options, 698 SKUs
+  card room vs folder: all agree
+  invalid product cards skipped: 8 · data/products/pool/basket/pool-cj-cotton-linen-box-camel-40x30.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/candle-holders/pool-cj-carbonized-wood-pedestal-candlestick.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/curtains/pool-cj-linen-look-tassel-curtain.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/table-runner/pool-cj-woven-cotton-runner-fringe.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/tray/pool-cj-travertine-organic-tray-24.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-terracotta-amphora-floor-51.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/vase/pool-cj-wabi-sabi-floor-vase-white.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null); data/products/pool/wall-decor/pool-cj-wood-sunburst-mirror-43.json (room: Invalid option: expected one of "living-room"|"dining-room"|"hall"|"work"|"corridor"|"kids"|"master"|"bath"; slot: Invalid input: expected string, received null)
+  draft cards (DS API, colors and visual_weight unfilled; for the sourcing-agent, not shown): 68 · data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-442162.json; data/products/basket/basket-aliexpress-seaweed-wicker-basket-rattan-977022.json; data/products/bath/bath-mat/bath-mat-aliexpress-waffle-bath-mat-rug-487304.json; data/products/bath/ceiling-light/ceiling-light-aliexpress-retro-led-bamboo-woven-086617.json; data/products/bath/soap-dispenser/soap-dispenser-aliexpress-beige-travertine-bathroom-accessorie-528496.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-254527.json; data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-stainless-steel-toilet-paper-550975.json; data/products/bath/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-rack-adhesive-949351.json; data/products/bath/towel-ring/towel-ring-aliexpress-bathroom-towel-ring-hook-827023.json; data/products/bath/towel-ring/towel-ring-aliexpress-stainless-steel-towel-ring-312287.json; data/products/corridor/ceiling-lights/ceiling-lights-aliexpress-retro-led-bamboo-woven-086617.json; data/products/corridor/gallery-art/gallery-art-aliexpress-antique-botanical-posters-prints-710412.json; data/products/corridor/gallery-art/gallery-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/corridor/gallery-art/gallery-art-aliexpress-set-3-neutral-floral-945249.json; data/products/corridor/gallery-art/gallery-art-aliexpress-simple-nordic-posters-picasso-983896.json; data/products/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205.json; data/products/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882.json; data/products/cushions/cushions-aliexpress-farmhouse-floral-pillow-covers-166217.json; data/products/cushions/cushions-aliexpress-fashion-modern-wabi-sabi-464203.json; data/products/dining/centerpiece-vase/centerpiece-vase-aliexpress-20-4cm-high-ceramic-732760.json; data/products/dining/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363.json; data/products/dining/framed-art/framed-art-aliexpress-retro-farmhouse-chicken-botanical-333603.json; data/products/dining/paper-towel-holder/paper-towel-holder-aliexpress-1pc-bamboo-paper-towel-316063.json; data/products/dining/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532-dining.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-bench-cushion-chenille-743098.json; data/products/entrance/bench-cushion/bench-cushion-aliexpress-custom-chenille-bench-cushion-826372.json; data/products/entrance/ceiling-light/ceiling-light-aliexpress-semi-circular-natural-handmade-958145.json; data/products/entrance/console-vessel/console-vessel-aliexpress-ceramic-wabi-sabi-vase-906575.json; data/products/entrance/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323.json; data/products/entrance/table-lamp/table-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/entrance/wall-sconce/wall-sconce-aliexpress-handwoven-rattan-wall-lamp-915640.json; data/products/framed-art/framed-art-aliexpress-japandi-wall-art-set-969661.json; data/products/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890.json; data/products/kids/doll/doll-aliexpress-soft-plush-toys-waldorf-664801.json; data/products/kids/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914-kids.json; data/products/kids/roman-blind/roman-blind-aliexpress-customized-flat-sheer-roman-221993.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-beige-color-flat-868827.json; data/products/kids/roman-blind/roman-blind-aliexpress-modern-cotton-linen-farbic-488628.json; data/products/kids/soft-toy/soft-toy-aliexpress-handmade-crochet-bunny-baby-999497.json; data/products/kids/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285.json; data/products/kids/toy-basket/toy-basket-aliexpress-seagrass-wicker-woven-storage-192174.json; data/products/kids/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833.json; data/products/kids/toy-cars/toy-cars-aliexpress-baby-wooden-toys-beech-975232.json; data/products/kids/toy-cars/toy-cars-aliexpress-let-s-make-wooden-192455.json; data/products/master/basket/basket-aliexpress-plant-basket-handles-wicker-464380.json; data/products/master/bedding/bedding-aliexpress-boho-3d-tufted-cut-500672.json; data/products/master/curtains/curtains-aliexpress-linen-blend-beige-curtains-122000.json; data/products/table-runner/table-runner-aliexpress-boho-macrame-table-runners-263532.json; data/products/table-runner/table-runner-aliexpress-boho-table-runner-macrame-072806.json; data/products/table-runner/table-runner-aliexpress-nordic-table-runner-kitchen-244347.json; data/products/vase/vase-aliexpress-vintage-distressed-clay-vase-589009.json; data/products/wall-decor/wall-decor-aliexpress-japandi-wall-art-set-969661.json; data/products/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.json; data/products/work/curtains/curtains-aliexpress-1pc-japanese-folk-wabi-212463.json; data/products/work/curtains/curtains-aliexpress-beige-linen-sheer-curtains-554205-work.json; data/products/work/curtains/curtains-aliexpress-cotton-linen-curtain-look-902882-work.json; data/products/work/curtains/curtains-aliexpress-natural-linen-curtains-84-784378.json; data/products/work/desk-lamp/desk-lamp-aliexpress-solid-wood-table-lamp-045552.json; data/products/work/desk-organizer/desk-organizer-aliexpress-household-rattan-organizer-chopstick-060819.json; data/products/work/desk-tray/desk-tray-aliexpress-tableware-solid-walnut-wooden-861163.json; data/products/work/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.json; data/products/work/framed-art/framed-art-aliexpress-japanese-wabi-sabi-tree-176323-work.json; data/products/work/framed-art/framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890-work.json; data/products/work/framed-art/framed-art-aliexpress-modern-minimalist-neutral-gallery-802995.json; data/products/work/pendant/pendant-aliexpress-rustic-woven-pendant-light-200914.json; data/products/work/planter/planter-aliexpress-nordic-style-natural-seagrass-839727.json; data/products/work/wall-sconce/wall-sconce-aliexpress-rattan-bamboo-wall-lamp-671943.json
+  lines (ת8): base names 65, Hebrew labels 69 cards; not offered (sale-exclusions): 24 variants; parts of a set (not sold alone): 8 variants; Latin in public labels: 0
+  public text (ת33): Latin in 0 names, descriptions or notes · supplier SKUs (ת27): 0 issues; a single variant's SKU in place of the card's product-level code: magazine-holder-cj-arch-iron-cane → CJJT161011001AZ, bowl-cj-glutinous-white-belly-bowl-21 → CJYD238977901AZ
+  public text (ה5): 0 fields that say their value is unknown
+  sets of distinct SKUs (S12): framed-art-aliexpress-minimal-geometric-triptych-prints: 4 sizes, 3 SKUs each; framed-art-aliexpress-mediterranean-wabi-sabi-poster-802890: NOT SOLD, sourcing to name the parts (the card has 8 values on "color" (05, 08, 01, 02, 04, 03, 06, 07) for a set of 3: which 3 make the set is not named)
+house living-room/warm-modern: layers from layers-v3c/; the swap rectangle 1343,2454,851,1435 px (outside it the sets differ by ≤ 0 levels); 3 sets, 12 pieces (0 not sold); the default composition ≈ 228 KB at 1920; the poster (AVIF/WebP) 1280: 147/157 KB, 2720: 462/669 KB; 21.9 KB of data → /home/user/homedesign-app/site/.generated/house.living-room.warm-modern.json
+QA register qa/reports/ged-register-2026-11-11-r13.json, version 13
+living-room/warm-modern A: warm-modern-A-ed8 is superseded by warm-modern-A-ed9 in the register: the frame stays out until the data names warm-modern-A-ed9
+A: accent-sconces-cj-travertine-block-updown-8x16: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/nordic A (nordic-A-ed4, final_test): 13 products, 11 priced, 9 with the card photo; dots 12, on the phone 9 (not there: accent-sconces-cj-travertine-block-updown-8x16 בטלפון 12×24 CSS, פחות מ-44×24; planter-cj-seagrass-belly מחוץ לחיתוך הטלפון; basket-cj-jute-rope-cylinder מחוץ לחיתוך הטלפון)
+B: curtains-aliexpress-linen-blend-s-fold-180502: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/nordic B (nordic-B-fin, final_test): 7 products, 5 priced, 4 with the card photo; dots 6, on the phone 4 (not there: wall-decor-cj-corn-husk-round-38 מחוץ לחיתוך הטלפון; basket-cj-jute-rope-cylinder מחוץ לחיתוך הטלפון)
+A: accent-sconces-aliexpress-travertine-cylinder-walnut-choice: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/warm-modern A (warm-modern-A-ed8, final_test): 12 products, 9 priced, 7 with the card photo; dots 11, on the phone 10 (not there: floor-lamp-cj-pleated-walnut-stem-158 מחוץ לחיתוך הטלפון)
+A: curtains-aliexpress-linen-blend-s-fold-180502: the register shows 2 units; the point's credit did not say it, so it says "שתי יחידות"
+living-room/modern-country A (modern-country-A-fix4, final_test): 7 products, 3 priced, 2 with the card photo; dots 7, on the phone 6 (not there: sill-vase-cj-cream-fluted-column-25 מחוץ לחיתוך הטלפון)
+living-room/boho A (boho-A-fin7, final_test): 9 products, 6 priced, 3 with the card photo; dots 9, on the phone 6 (not there: basket-cj-seagrass-belly-xl מחוץ לחיתוך הטלפון; planter-zendrop-seagrass-belly-38x34 מחוץ לחיתוך הטלפון; pouf-cj-cotton-knit-ball-cover מחוץ לחיתוך הטלפון)
+A: cushions-cj-washed-cotton-frayed: the register shows 3 units; the point's credit did not say it, so it says "שלוש יחידות"
+living-room/mediterranean A (mediterranean-A-ed7, final_test): 10 products, 7 priced, 5 with the card photo; dots 10, on the phone 8 (not there: vase-aliexpress-vintage-distressed-clay-vase-589009 מחוץ לחיתוך הטלפון; basket-zendrop-seagrass-belly-38x34 מחוץ לחיתוך הטלפון)
+living-room/japandi A (japandi-A-ed5): held, not_yet
+/story/living-room/nordic/p/pendant-silk-ribbed-pumpkin-xnrc4/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/framed-art-minimal-geometric-triptych-prints-4ue7k/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/accent-sconces-travertine-block-updown-y5o51/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/bowl-glutinous-white-belly-bowl-dmhuc/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/wall-decor-corn-husk-round-8aouz/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/vase-vintage-distressed-clay-vase-1bzp3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/p/curtains-linen-blend-s-fold-qgo4l/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/floor-lamp-pleated-walnut-stem-p2hz3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/accent-sconces-travertine-cylinder-walnut-choice-1bu8d/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/framed-art-frameless-minimalist-wall-art-lv30f/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/bowl-matte-black-bowl-2mk8v/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/warm-modern/p/cushions-wide-stripe-corduroy-light-green-narue/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/sill-vase-cream-fluted-column-g20ky/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/vase-vintage-distressed-clay-vase-1bzp3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/curtains-linen-blend-s-fold-qgo4l/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/cushions-farmhouse-floral-pillow-covers-mgrj1/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/modern-country/p/cushions-chenille-check-milky-white-icq08/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/wall-decor-natural-raffia-woven-bohemian-wgypa/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/wall-sconce-rattan-bamboo-wall-lamp-egdwd/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/basket-seagrass-belly-xl-2ew3r/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/cushions-washed-cotton-frayed-ws8a6/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/cushions-sandstone-chenille-flange-nubfy/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/boho/p/table-runner-boho-macrame-table-runners-y0xlc/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/mediterranean/p/framed-art-mediterranean-wabi-sabi-poster-5a1d5/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/mediterranean/p/vase-vintage-distressed-clay-vase-1bzp3/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/mediterranean/p/cushions-washed-cotton-frayed-ws8a6/: no cached card photo and no close-up: the frame's crop stands in
+/story/living-room/nordic/ → web/story/living-room/nordic/index.html (58.6 KB): A final_test, B final_test
+/story/living-room/warm-modern/ → web/story/living-room/warm-modern/index.html (39.1 KB): A final_test
+/story/living-room/modern-country/ → web/story/living-room/modern-country/index.html (28.6 KB): A final_test
+/story/living-room/boho/ → web/story/living-room/boho/index.html (31.8 KB): A final_test
+/story/living-room/mediterranean/ → web/story/living-room/mediterranean/index.html (35.3 KB): A final_test
+/story/living-room/japandi/ → web/story/living-room/japandi/index.html (12.9 KB): typographic
+layer 2: 52 detail pages (32 for sale, 17 without a price, 3 not sold now); 26 with a card photo; close-ups shown 0, held 0
+/story/living-room/warm-modern/tool/ → /rooms/living-room/?style=warm-modern (301): the house's tool is in the room engine
+/story/ → web/story/index.html (13.6 KB): 9 rooms × 6 styles, 6 pages
+story rights (S17): 321 copies of supplier photos in the ledger (.generated/rights/story.json); behind the flag the story keeps its photos
+story: 6 pages (5 with frames, 1 typographic); 58 points, 37 for sale, 4 not sold now, 17 without a price; 28 without a cached card photo
+
+> @hd/web@0.1.0 build
+> vite build && vite build --ssr src/entry-server.tsx --outDir .ssr && tsx scripts/prerender.ts
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 190 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/story/order/index.html                                                                               0.43 kB │ gzip:  0.27 kB
+dist/story/checkout/index.html                                                                            0.46 kB │ gzip:  0.28 kB
+dist/test/story/index.html                                                                                0.49 kB │ gzip:  0.31 kB
+dist/story/living-room/warm-modern/tool/index.html                                                        0.50 kB │ gzip:  0.29 kB
+dist/index.html                                                                                           0.77 kB │ gzip:  0.39 kB
+dist/assets/assistant-hebrew-600-normal-DM_XHISn.woff2                                                    4.24 kB
+dist/assets/assistant-hebrew-400-normal-BaQtOmbn.woff2                                                    4.24 kB
+dist/assets/assistant-hebrew-300-normal-BJ-T_jEV.woff2                                                    4.26 kB
+dist/assets/assistant-hebrew-600-normal-D6VOnxse.woff                                                     5.52 kB
+dist/assets/assistant-hebrew-400-normal-B18Ux13Q.woff                                                     5.54 kB
+dist/assets/assistant-hebrew-300-normal-DkL4HH_0.woff                                                     5.55 kB
+dist/assets/frank-ruhl-libre-hebrew-300-normal-CpnDuyr4.woff2                                             6.21 kB
+dist/assets/assistant-latin-ext-300-normal-B7qJuRfJ.woff2                                                 6.39 kB
+dist/assets/assistant-latin-ext-400-normal-CJRdOknU.woff2                                                 6.42 kB
+dist/assets/assistant-latin-ext-600-normal-BRc8ZhdA.woff2                                                 6.45 kB
+dist/assets/frank-ruhl-libre-hebrew-500-normal-UhV5Nrdm.woff2                                             6.62 kB
+dist/assets/frank-ruhl-libre-hebrew-300-normal-CuhWN747.woff                                              7.78 kB
+dist/assets/frank-ruhl-libre-latin-ext-300-normal-B9Dv6aZe.woff2                                          7.93 kB
+dist/assets/frank-ruhl-libre-latin-ext-500-normal-gwbrZlZG.woff2                                          8.03 kB
+dist/assets/assistant-latin-ext-300-normal-D7fjKuPF.woff                                                  8.12 kB
+dist/assets/assistant-latin-ext-600-normal-DvGDKMJu.woff                                                  8.13 kB
+dist/assets/assistant-latin-ext-400-normal-BcqNq6r3.woff                                                  8.14 kB
+dist/assets/frank-ruhl-libre-hebrew-500-normal-DXveaSS_.woff                                              8.16 kB
+dist/assets/frank-ruhl-libre-latin-ext-300-normal-0KjHu9ch.woff                                          10.43 kB
+dist/assets/frank-ruhl-libre-latin-ext-500-normal-CrEvhThu.woff                                          10.55 kB
+dist/story/living-room/boho/p/wall-sconce-rattan-bamboo-wall-lamp-egdwd/index.html                       11.64 kB │ gzip:  3.51 kB
+dist/story/living-room/nordic/p/bowl-glutinous-white-belly-bowl-dmhuc/index.html                         11.81 kB │ gzip:  3.64 kB
+dist/story/living-room/warm-modern/p/floor-lamp-pleated-walnut-stem-p2hz3/index.html                     12.13 kB │ gzip:  3.69 kB
+dist/assets/assistant-latin-300-normal-4NS-73jk.woff2                                                    12.28 kB
+dist/assets/assistant-latin-600-normal-DQhO4fCi.woff2                                                    12.32 kB
+dist/assets/assistant-latin-400-normal-CDF-mh-3.woff2                                                    12.35 kB
+dist/story/living-room/warm-modern/p/pendant-tiered-fabric-drum-cjkd4/index.html                         12.59 kB │ gzip:  3.78 kB
+dist/story/living-room/mediterranean/p/magazine-holder-arch-iron-cane-ema28/index.html                   12.78 kB │ gzip:  3.77 kB
+dist/story/living-room/boho/p/wall-decor-natural-raffia-woven-bohemian-wgypa/index.html                  13.24 kB │ gzip:  3.77 kB
+dist/story/living-room/modern-country/p/sill-vase-cream-fluted-column-g20ky/index.html                   14.56 kB │ gzip:  4.05 kB
+dist/story/living-room/warm-modern/p/accent-sconces-travertine-cylinder-walnut-choice-1bu8d/index.html   14.57 kB │ gzip:  3.98 kB
+dist/story/living-room/nordic/p/magazine-holder-felt-log-basket-c59b4/index.html                         14.68 kB │ gzip:  4.08 kB
+dist/story/living-room/nordic/p/vase-vintage-distressed-clay-vase-1bzp3/index.html                       14.78 kB │ gzip:  4.02 kB
+dist/story/living-room/japandi/index.html                                                                14.79 kB │ gzip:  4.24 kB
+dist/assets/frank-ruhl-libre-latin-300-normal-DssNYltd.woff2                                             14.82 kB
+dist/story/living-room/mediterranean/p/vase-vintage-distressed-clay-vase-1bzp3/index.html                14.96 kB │ gzip:  4.06 kB
+dist/story/living-room/modern-country/p/vase-vintage-distressed-clay-vase-1bzp3/index.html               14.97 kB │ gzip:  4.04 kB
+dist/assets/frank-ruhl-libre-latin-500-normal-BAzcRRUT.woff2                                             15.01 kB
+dist/story/living-room/warm-modern/p/vase-textured-white-stoneware-w90r9/index.html                      15.17 kB │ gzip:  4.14 kB
+dist/story/living-room/nordic/p/accent-sconces-travertine-block-updown-y5o51/index.html                  15.20 kB │ gzip:  4.03 kB
+dist/story/living-room/nordic/p/framed-art-minimal-geometric-triptych-prints-4ue7k/index.html            15.44 kB │ gzip:  4.11 kB
+dist/story/index.html                                                                                    15.47 kB │ gzip:  4.12 kB
+dist/story/living-room/nordic/p/pendant-silk-ribbed-pumpkin-xnrc4/index.html                             15.56 kB │ gzip:  4.02 kB
+dist/assets/assistant-latin-300-normal-BnSAwo92.woff                                                     15.70 kB
+dist/assets/assistant-latin-600-normal-CfJI0IBS.woff                                                     15.72 kB
+dist/assets/assistant-latin-400-normal-BKD5Gqji.woff                                                     15.74 kB
+dist/story/living-room/mediterranean/p/framed-art-mediterranean-wabi-sabi-poster-5a1d5/index.html        15.88 kB │ gzip:  4.03 kB
+dist/story/living-room/nordic/p/wall-decor-corn-husk-round-8aouz/index.html                              16.14 kB │ gzip:  4.09 kB
+dist/story/living-room/mediterranean/p/candle-holders-travertine-pedestal-5hc18/index.html               16.58 kB │ gzip:  4.37 kB
+dist/story/living-room/warm-modern/p/candle-holders-travertine-pedestal-5hc18/index.html                 16.70 kB │ gzip:  4.39 kB
+dist/story/living-room/nordic/p/candle-holders-travertine-pedestal-5hc18/index.html                      16.79 kB │ gzip:  4.39 kB
+dist/story/living-room/boho/p/planter-seagrass-belly-jyyuu/index.html                                    16.81 kB │ gzip:  4.24 kB
+dist/story/living-room/mediterranean/p/basket-seagrass-belly-ltsd4/index.html                            16.88 kB │ gzip:  4.17 kB
+dist/story/living-room/boho/p/basket-seagrass-belly-xl-2ew3r/index.html                                  16.95 kB │ gzip:  4.33 kB
+dist/story/living-room/warm-modern/p/bowl-matte-black-bowl-2mk8v/index.html                              17.84 kB │ gzip:  4.10 kB
+dist/story/living-room/boho/p/pouf-cotton-knit-ball-cover-mlo5s/index.html                               18.28 kB │ gzip:  4.50 kB
+dist/story/living-room/boho/p/cushions-sandstone-chenille-flange-nubfy/index.html                        18.49 kB │ gzip:  4.30 kB
+dist/assets/frank-ruhl-libre-latin-300-normal-DWtGO9Zk.woff                                              18.76 kB
+dist/story/living-room/nordic/p/planter-seagrass-belly-msbbq/index.html                                  18.76 kB │ gzip:  4.42 kB
+dist/assets/frank-ruhl-libre-latin-500-normal-Czdveetw.woff                                              18.94 kB
+dist/story/living-room/nordic/p/basket-jute-rope-cylinder-6wing/index.html                               21.29 kB │ gzip:  4.62 kB
+dist/story/living-room/warm-modern/p/cushions-wide-stripe-corduroy-light-green-narue/index.html          24.98 kB │ gzip:  4.91 kB
+dist/story/living-room/modern-country/p/cushions-farmhouse-floral-pillow-covers-mgrj1/index.html         25.09 kB │ gzip:  4.47 kB
+dist/story/living-room/modern-country/p/bowl-speckled-ivory-wide-bowl-1491s/index.html                   25.26 kB │ gzip:  4.91 kB
+dist/story/living-room/mediterranean/p/bowl-speckled-ivory-wide-bowl-1491s/index.html                    25.34 kB │ gzip:  4.93 kB
+dist/story/living-room/warm-modern/p/framed-art-frameless-minimalist-wall-art-lv30f/index.html           27.01 kB │ gzip:  4.53 kB
+dist/story/living-room/modern-country/p/table-runner-linen-look-sage-fringe-9vndw/index.html             27.91 kB │ gzip:  4.99 kB
+dist/story/living-room/nordic/p/table-runner-linen-look-sage-fringe-9vndw/index.html                     28.01 kB │ gzip:  4.99 kB
+dist/story/living-room/boho/p/sofa-cover-washed-hemp-throw-g8qc5/index.html                              30.75 kB │ gzip:  5.34 kB
+dist/story/living-room/nordic/p/cushions-knitted-chenille-bean-green-4z66l/index.html                    31.88 kB │ gzip:  5.56 kB
+dist/story/living-room/modern-country/index.html                                                         32.64 kB │ gzip:  7.45 kB
+dist/story/living-room/warm-modern/p/rug-braided-wool-natural-jzzjv/index.html                           33.90 kB │ gzip:  5.59 kB
+dist/story/living-room/nordic/p/rug-braided-wool-natural-jzzjv/index.html                                34.61 kB │ gzip:  5.65 kB
+dist/story/living-room/mediterranean/p/sofa-cover-cotton-muslin-fringe-0iz5d/index.html                  35.23 kB │ gzip:  5.64 kB
+dist/story/living-room/warm-modern/p/sofa-cover-cotton-muslin-fringe-0iz5d/index.html                    35.50 kB │ gzip:  5.67 kB
+dist/story/living-room/nordic/p/sofa-cover-cotton-muslin-fringe-0iz5d/index.html                         36.02 kB │ gzip:  5.70 kB
+dist/story/living-room/boho/index.html                                                                   36.15 kB │ gzip:  7.98 kB
+dist/story/living-room/modern-country/p/cushions-chenille-check-milky-white-icq08/index.html             36.37 kB │ gzip:  5.18 kB
+dist/story/living-room/nordic/p/cushions-boucle-teddy-d7wrb/index.html                                   36.78 kB │ gzip:  5.78 kB
+dist/story/living-room/boho/p/cushions-washed-cotton-frayed-ws8a6/index.html                             37.00 kB │ gzip:  5.58 kB
+dist/story/living-room/warm-modern/p/cushions-boucle-teddy-d7wrb/index.html                              37.78 kB │ gzip:  5.87 kB
+dist/story/living-room/mediterranean/p/cushions-washed-cotton-frayed-ws8a6/index.html                    38.79 kB │ gzip:  5.71 kB
+dist/story/living-room/mediterranean/index.html                                                          40.26 kB │ gzip:  8.25 kB
+dist/story/living-room/warm-modern/index.html                                                            44.37 kB │ gzip:  9.07 kB
+dist/story/living-room/nordic/index.html                                                                 66.22 kB │ gzip: 11.90 kB
+dist/story/living-room/nordic/p/cushions-linen-look-charcoal-j7xyk/index.html                            66.61 kB │ gzip:  6.85 kB
+dist/test/index.html                                                                                     68.08 kB │ gzip: 13.81 kB
+dist/story/living-room/nordic/p/curtains-linen-blend-s-fold-qgo4l/index.html                             74.82 kB │ gzip:  6.56 kB
+dist/story/living-room/modern-country/p/curtains-linen-blend-s-fold-qgo4l/index.html                     75.10 kB │ gzip:  6.58 kB
+dist/story/living-room/boho/p/table-runner-boho-macrame-table-runners-y0xlc/index.html                  105.32 kB │ gzip:  7.15 kB
+dist/assets/story-CssMphGJ.css                                                                           19.17 kB │ gzip:  4.12 kB
+dist/assets/magazine-BkL_ORj8.css                                                                        23.73 kB │ gzip:  5.28 kB
+dist/assets/main-BD4wfiWc.css                                                                            43.08 kB │ gzip:  9.14 kB
+dist/assets/packs-CVFF84Bd.js                                                                             0.07 kB │ gzip:  0.10 kB
+dist/assets/shipping-YwG1TIKO.js                                                                          0.19 kB │ gzip:  0.17 kB
+dist/assets/lineLabel-DEWfZFKa.js                                                                         0.19 kB │ gzip:  0.17 kB
+dist/assets/lines-DI2P_kjP.js                                                                             0.39 kB │ gzip:  0.27 kB
+dist/assets/constants-wPmiO5FM.js                                                                         0.49 kB │ gzip:  0.36 kB
+dist/assets/picker-BvGgOTIU.js                                                                            0.62 kB │ gzip:  0.36 kB
+dist/assets/motion-CHwVsrGc.js                                                                            0.92 kB │ gzip:  0.51 kB
+dist/assets/PackPicker-BQs3WizJ.js                                                                        1.17 kB │ gzip:  0.66 kB
+dist/assets/copy-ByN6rErl.js                                                                              1.24 kB │ gzip:  0.60 kB
+dist/assets/MockPay-dZyxyixC.js                                                                           1.28 kB │ gzip:  0.72 kB
+dist/assets/Waitlist-CSB0589f.js                                                                          1.68 kB │ gzip:  0.91 kB
+dist/assets/http-CZgHwXUq.js                                                                              2.10 kB │ gzip:  1.15 kB
+dist/assets/Cart-7tes0qLt.js                                                                              3.56 kB │ gzip:  1.54 kB
+dist/assets/sequence-dNqUkZ_s.js                                                                          5.16 kB │ gzip:  2.09 kB
+dist/assets/Legal-DfSKRgt7.js                                                                             5.31 kB │ gzip:  2.07 kB
+dist/assets/detail-C7Eba69P.js                                                                            6.86 kB │ gzip:  2.85 kB
+dist/assets/Order-GS3pfVUT.js                                                                             8.03 kB │ gzip:  3.42 kB
+dist/assets/Checkout-CDfS5io3.js                                                                          8.15 kB │ gzip:  3.20 kB
+dist/assets/VariantWheel-DW8MgRYd.js                                                                      9.25 kB │ gzip:  3.84 kB
+dist/assets/Product-DTdqHkav.js                                                                          12.16 kB │ gzip:  4.85 kB
+dist/assets/story-CMsi_B77.js                                                                            15.71 kB │ gzip:  6.01 kB
+dist/assets/test-z9wwrDKC.js                                                                             17.58 kB │ gzip:  6.40 kB
+dist/assets/warm-modern-PHg3MXRi.js                                                                      27.14 kB │ gzip:  7.38 kB
+dist/assets/main-DiW5afBF.js                                                                            192.12 kB │ gzip: 52.01 kB
+✓ built in 8.67s
+vite v7.3.7 building ssr environment for production...
+transforming...
+✓ 67 modules transformed.
+rendering chunks...
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Product.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Cart.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Checkout.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Order.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/MockPay.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+[plugin vite:reporter] 
+(!) /home/user/homedesign-app/site/web/src/pages/Legal.tsx is dynamically imported by /home/user/homedesign-app/site/web/src/App.tsx but also statically imported by /home/user/homedesign-app/site/web/src/entry-server.tsx, dynamic import will not move module into another chunk.
+
+.ssr/assets/VariantWheel-9WDXUj3Y.js   16.20 kB
+.ssr/assets/warm-modern-DvmvEzXG.js    30.38 kB
+.ssr/entry-server.js                  286.56 kB
+✓ built in 1.01s
+prerendered 47 pages + 1 house page(s) + order shell + 404; analytics beacon (S17): none (behind the flag)
+
+> @hd/api@0.1.0 build
+> tsx scripts/check-config.ts && wrangler deploy --dry-run --env="" --outdir dist
+
+check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED); preview preview (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED, customer email UNDECIDED)
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+
+
+
+ ⛅️ wrangler 4.149.0
+────────────────────
+[custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
+[custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED); preview preview (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED, customer email UNDECIDED)
+[custom build] 
+✨ Read 1731 files from the assets directory /home/user/homedesign-app/site/web/dist
+Total Upload: 806.90 KiB / gzip: 137.59 KiB
+Your Worker has access to the following bindings:
+Binding                                           Resource                  
+env.SUPPLIER_QUEUE (supplier-orders-dev)          Queue                     
+env.DB (homedesign-dev)                           D1 Database               
+env.RL_WRITE (60 requests/60s)                    Rate Limit                
+env.RL_CHECKOUT (10 requests/60s)                 Rate Limit                
+env.ASSETS                                        Assets                    
+env.ENVIRONMENT ("development")                   Environment Variable      
+env.PAYMENT_PROVIDER ("mock")                     Environment Variable      
+env.INVOICE_PROVIDER ("mock")                     Environment Variable      
+env.SUPPLIER_PROVIDER ("mock")                    Environment Variable      
+env.NOTIFY_PROVIDER ("mock")                      Environment Variable      
+env.EMAIL_PROVIDER ("UNDECIDED")                  Environment Variable      
+env.ACCESS_TEAM_DOMAIN ("")                       Environment Variable      
+env.ACCESS_AUD ("")                               Environment Variable      
+
+--dry-run: exiting now.
+
+> homedesign-site@0.1.0 budget
+> tsx tools/check-budget.ts
+
+ok    no lazy page's code in the room's entry (by content: 4 entry chunk(s) and their static imports)
+ok    JS (gzip), the room page entry                              54.4 KB  / 80.0 KB
+ok    CSS (gzip), the room page entry                              8.9 KB  / 15.0 KB
+ok    lazy chunks + test page: JS 20 files, CSS 2                 54.0 KB
+ok    fonts (woff2, he+latin)                                     90.2 KB
+ok    room media (18 files, shell @2752, layers @1920)           548.9 KB
+ok    first load, living room, mobile                            711.8 KB  / 3072.0 KB
+ok    first load, living room, mobile, no AVIF                  1274.7 KB  / 3072.0 KB
+ok    warm-modern house media (poster @2720, composition @2720)   860.7 KB
+ok    first load, the warm-modern house, mobile                 1025.0 KB  / 3072.0 KB
+ok    warm-modern house media, no AVIF (WebP poster @2720, composition @2720)  1622.3 KB
+ok    first load, the warm-modern house, mobile, no AVIF        1786.6 KB  / 3072.0 KB
+ok    JS (gzip), a story page                                      7.7 KB  / 40.0 KB
+ok    CSS (gzip), a story page                                     9.2 KB  / 15.0 KB
+ok    first view, a story page, mobile (the Nordic living room)   254.2 KB  / 1228.8 KB
+ok    first view, a detail page, mobile                          117.8 KB  / 921.6 KB
+
+> homedesign-site@0.1.0 check:rights
+> tsx tools/check-image-rights.ts
+
+image rights (S15, behind the flag): 39/39 public products lose the supplier's picture in a public build (39 photos, 182 option pictures withheld: unclear 39); shipped publicly: 0; behind the flag nothing is withheld
+image rights by content (S17): 1484 files, 825 pictures (60 data: URIs) against 748 supplier files by sha256 and 561 pictures by pixels (dHash 16×16, Hamming ≤ 24 of 256 (or ≤ 48 with a 32×32 grey difference ≤ 3)), hosts alicdn.com, cjdropshipping.com, rihut-express.co.il, zendrop.com (1.6s): behind the flag, the control: found 542 (bytes 542, pixels 0, data-uri bytes 0, data-uri pixels 0, host 0), 0 outside media/products and media/story/products
+
+> homedesign-site@0.1.0 check:promises
+> tsx tools/check-promises.ts
+
+check-promises (S18): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 chunks (not loaded by them, not scanned: assets/test-z9wwrDKC.js), 22 Worker files (346 ms)
+
+> homedesign-site@0.1.0 e2e
+> playwright test --project=e2e
+
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mScheduled Workers are not automatically triggered during local development.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m  To manually trigger a scheduled event, run:
+[2m[WebServer] [22m    curl "http://localhost:8788/cdn-cgi/local/scheduled"
+[2m[WebServer] [22m  For more details, see [4mhttps://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+
+Running 132 tests using 1 worker
+
+  ✓    1 [e2e] › e2e/copy-seo.spec.ts:52:3 › SEO per house (§4) › the Nordic page: its own title and description, its canonical, its products (129ms)
+  ✓    2 [e2e] › e2e/copy-seo.spec.ts:66:3 › SEO per house (§4) › the warm-modern page: its own canonical (the bug), its title and description, and only its own products (322ms)
+  ✓    3 [e2e] › e2e/copy-seo.spec.ts:90:3 › SEO per house (§4) › in the browser: the title follows the house, the switch included (3.9s)
+product pages: 39, meta descriptions cut at a sentence: 1
+  ✓    4 [e2e] › e2e/copy-seo.spec.ts:99:1 › every product page: its meta description is whole sentences of its description, never a cut word (§5) (507ms)
+  ✓    5 [e2e] › e2e/copy-seo.spec.ts:124:3 › the words on the stage (§2, §5) › the Nordic house: "כריות ושמיכה" and "3 גרסאות" on the wheel; no "(סט)" and no "וריאציות" on the page (6.9s)
+  ✓    6 [e2e] › e2e/copy-seo.spec.ts:144:3 › the words on the stage (§2, §5) › the warm-modern house: the set names, "3 סטים", its line under the room and its description (6.2s)
+encoding warm-modern 1920@1: base AVIF 6/8/20 · 0.07% · ΔE 3.21
+encoding warm-modern 1280@1: base AVIF 4/6/12 · 0.01% · ΔE 2.58
+encoding warm-modern 400@1: base AVIF 4/6/11 · 0.01% · ΔE 2.67

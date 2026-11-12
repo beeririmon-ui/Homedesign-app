@@ -8,8 +8,8 @@
   "base": 3950,
   "reserve_with_manager_approval": 2000
  },
- "status": "ROUND 2 DONE. Spent 4,200 of 5,950. Throw P2 failed material twice (retake limit); P3/P4/R4 not run. Lamp P1 R3 meets G4.16 but fails proportions.",
- "tokens_spent": 4200,
+ "status": "ROUND 3 DONE. 5,250 of 5,950. Vase P2+P1 passed QA. Lamp P2: retake no better (geometry consistent but low, H/D +18%). Textile: nano-banana-2 reproduces the waffle muslin (material passes), L* 0.6 over.",
+ "tokens_spent": 5250,
  "var2_auth": "no authentication requested (var2_list_models and var2_estimate_cost answered)",
  "estimate_calls": {
   "tool": "var2_estimate_cost (live lookup, 2026-11-12)",
@@ -685,10 +685,12 @@
   }
  ],
  "pilot_findings": {
-  "D1_P2": "gpt-image-2-5 transparent: vase YES, lamp PARTIAL (marginal L* and silhouette H/D, both end faces), throw NO (weave). Native alpha clean: no halo outside the alpha (max 7/255), soft-edge dE00 median 1.1-2.0 | R1 (with a native colour waffle square) still produced a slub weave: gpt-image-2-5 does not reproduce this waffle muslin from references at this setting",
+  "D1_P2": "gpt-image-2-5 transparent: vase YES, lamp PARTIAL (marginal L* and silhouette H/D, both end faces), throw NO (weave). Native alpha clean: no halo outside the alpha (max 7/255), soft-edge dE00 median 1.1-2.0 | R1 (with a native colour waffle square) still produced a slub weave: gpt-image-2-5 does not reproduce this waffle muslin from references at this setting | Round 3: nano-banana-2 2K + remove-background reproduces the waffle muslin where gpt-image-2-5 failed twice -> textile P2 route = nano; ceramics = gpt",
   "D2_P1": "nano-banana-2 4K keeps the base composition and does not re-frame as a close-up; it also keeps the product the base shows (the throw's long fringe, the vase's ed9 proportions). A code re-frame meets G4.16 only when the product is large in the base (vase yes at 2K, lamp only at 1360x1700). Base crops should be tighter, with the product already at 50-65% | R3: a tiny base (100x125) makes the model redraw the product (lamp +20% H/D, plate -39%, invented prints): the base must be both tight AND high-resolution, i.e. a frame where the product is already large",
   "D3_P4": "not tested: no throw P2 passed",
-  "D4_C2": "P2 packshots vs supplier studio photos match on background and soft light by construction; the vase P2 vs urls[4] reads 4/5. C2 needs calibration for P2"
+  "D4_C2": "P2 packshots vs supplier studio photos match on background and soft light by construction; the vase P2 vs urls[4] reads 4/5. C2 needs calibration for P2",
+  "lamp_P2": "gpt-image-2-5 drew the lamp from a low camera both times (inherited from the SKU photo urls[9]) and the retake drifted taller (H/D 2.90). The reference sheet's R1 viewpoint leaks into P2",
+  "small_product_P1": "a small product's P1 needs a MEDIUM base (QA: at least ~400x500) that already holds a size anchor (the print beside it, the lamp it replaces), the line \"same height as the lamp it replaces (16 cm)\", and measurement on the raw against the anchor before any crop. A tiny base (100x125) lets the model invent the product and the room; a loose base lets nano keep the composition and inflate the product (x1.8-2.05)."
  },
  "round2": {
   "decision": "manager, 2026-11-12: R1, R3 approved from the reserve; P3/P4 and R4 only after the throw P2 passes the material check; R2 not approved; max one retake per image",
@@ -768,14 +770,90 @@
   }
  },
  "budget_state": {
-  "base_3950": {
-   "spent": 3150,
-   "left": 800
+  "cap": 5950,
+  "spent": 5250,
+  "left": 700,
+  "by_round": {
+   "1": 3150,
+   "2": 1050,
+   "3": 1050
+  }
+ },
+ "round3": {
+  "decision": "manager after QA (qa/reports/2026-11-12-img1-pilot.md): lamp P2 one retake (600); vase P2 alpha clamp (0); one textile method test (<=650, model by render-agent); no more lamp P1",
+  "container_restart": "mid-round; both submitted jobs had been fetched to raw/ before it; nothing resubmitted",
+  "model_choice_textile": "nano-banana-2 2K + remove-background (450): the recipe's measured evidence (nano keeps shape and texture for single objects; Nordic B 7/1/0); delivers a full transparent P2 inside the cap; seedream (650) would need +50 for a cut-out (over the cap) and stays the repair tool",
+  "estimates": {
+   "gpt-image-2-5 2K transparent": 600,
+   "nano-banana-2 2K": 400,
+   "remove-background": 50,
+   "deviation_pct": 0.0
   },
-  "reserve_2000": {
-   "spent": 1050,
-   "left": 950
-  },
-  "cap_5950_left": 1750
+  "jobs_run": [
+   {
+    "id": "img1-p2-lamp-r2",
+    "tokens": 600,
+    "placeholder_id": "32371164-e338-4888-88e3-0af3dbc85830",
+    "task_id": "6f7f779e0abcf96fc29f835fffb58caa",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/gpt25-6f7f779e0abcf96fc29f835fffb58caa-0-1794446468316-49c32794.png",
+    "prompt": "prompts/p2-a-lamp-r2.txt",
+    "raw": "raw/p2-lamp-r2-raw.png",
+    "final": "accent-sconces-aliexpress-indoor-stone-wall-lamp/p2-r2.png",
+    "verdict_render_agent": "no",
+    "idempotency_key": "img1-pilot-20261112-p2-lamp-r2"
+   },
+   {
+    "id": "img1-p2-throw-nano-test",
+    "tokens": 400,
+    "placeholder_id": "da700482-95cc-4768-afa4-3c54c047b5f6",
+    "task_id": "86a6611b396b658d2d72665615f2bf49",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-86a6611b396b658d2d72665615f2bf49-0-1794446486427-32e97b83.png",
+    "image_url": "bases/palette-F4F1EC-1638x2048.png",
+    "image_refs": [
+     "throw-white sheet",
+     "waffle square"
+    ],
+    "prompt": "prompts/p2-b-throw-test.txt",
+    "raw": "raw/p2-throw-nano-test-raw.png",
+    "idempotency_key": "img1-pilot-20261112-p2-throw-nano-test"
+   },
+   {
+    "id": "img1-p2-throw-nano-test-nobg",
+    "tokens": 50,
+    "placeholder_id": "57c72706-4981-4bde-93b6-89cdb60fafef",
+    "task_id": "46c921a5704849ad24f7898d19080713",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-46c921a5704849ad24f7898d19080713-1794458408735-8b158a15.png",
+    "raw": "raw/p2-throw-nano-test-nobg.png",
+    "final": "sofa-cover-cj-cotton-muslin-fringe/p2-nano-test.png",
+    "verdict_render_agent": "material passes; L* 0.6 over; QA"
+   }
+  ],
+  "code_fixes": {
+   "vase P2 alpha": {
+    "rule": "alpha = clip(round(alpha*255/251)), all pixels",
+    "interior_after_p01_p50": [
+     255.0,
+     255.0
+    ],
+    "changed_px": 1067348,
+    "zero_alpha_unchanged": true,
+    "max_edge_change": 3
+   },
+   "lamp P2 R2 gap+alpha": {
+    "gap_px_before": 147,
+    "gap_cm_before": 1.84,
+    "px_per_cm": 79.8,
+    "shift_px": 651,
+    "split_x": 889,
+    "alpha_divisor": 252.0,
+    "reframe_scale": 0.5768,
+    "placed": [
+     164,
+     572,
+     1310,
+     903
+    ]
+   }
+  }
  }
 }

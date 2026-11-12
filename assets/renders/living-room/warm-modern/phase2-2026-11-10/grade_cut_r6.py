@@ -61,9 +61,10 @@ def sha(p):
     return h.hexdigest()
 
 
-def same_file(d, arr, mode):
-    """an existing file in d with exactly these pixels (mode RGBA or RGB), or None"""
-    for p in sorted(glob.glob(os.path.join(d, "*.png"))):
+def same_file(d, arr, mode, stem=""):
+    """an existing file in d with exactly these pixels (mode RGBA or RGB), or None; the files of the product's own stem first"""
+    ps = sorted(glob.glob(os.path.join(d, "*.png")))
+    for p in sorted(ps, key=lambda p_: (not os.path.basename(p_).startswith(stem), p_)):
         im = Image.open(p)
         if im.size != (arr.shape[1], arr.shape[0]):
             continue
@@ -81,7 +82,7 @@ def write_or_reuse(d, stem, arr, mode, cache):
     key = (d, mode)
     if key not in cache:
         cache[key] = None
-    found = same_file(d, arr, mode)
+    found = same_file(d, arr, mode, stem)
     if found:
         return found, "existing file, same bytes (" + os.path.basename(found) + ")"
     p = os.path.join(d, f"{stem}-r6{'-shadow' if mode == 'RGB' else ''}.png")
