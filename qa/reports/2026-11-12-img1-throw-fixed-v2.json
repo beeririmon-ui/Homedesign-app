@@ -1,0 +1,776 @@
+{
+ "report": "qa/reports/2026-11-12-img1-throw-fixed-v2.md (text returned to the manager if the .md is blocked)",
+ "date": "2026-11-12",
+ "by": "qa-agent",
+ "scope": "IMG1 throw P2 v2 (QA throw-fixed fixes 1-3, 0 tokens): p2-nano-fixed-v2.png",
+ "rules": "new files only; no commit; no var2; no network. Supplier images not needed (SKU lit side carried from QA r3).",
+ "files_sha256": {
+  "p2-nano-fixed-v2.png": "ee131b02f3449f795225ba2298ce361ec92eef79a96d53a4034ecd21872474be",
+  "p2-nano-fixed-v2-fullres.png": "7c924920183d3bbc1836ca0cadd1609bb968d368440a66f4f736d3eabba247ae",
+  "p2-nano-fixed-v2.json": "92864b7cc45bffcdfc9a456176286477d94ac60afddf9658b697bd00ee3f67c2",
+  "tools/fix_throw_nano_v2.py": "f3c1ac5da2e6340fe5c1db7b2c3c9fc216b739f643098d5a79444c5665e49919",
+  "raw/p2-throw-nano-test-raw.png": "90b8aa6bf75d2248e4f1a82c7d86227db95586bd7e3e84b4f79489ec129bbc1a",
+  "raw/p2-throw-nano-test-nobg.png": "f85bfd13d6a49553411bcd2f5bce678f5e515e86e19c09ea3bbbcf7fd64c24ea",
+  "source_record_images[12]_sha256_match": true
+ },
+ "verdict": {
+  "throw_p2_v2": "partial",
+  "one_line": "five of six checks yes; edge loss fails in the top-corner segment (p99 0.60-0.78 cell vs <= 0.5): the 10 px erosion removes whole thread tips, two of them unambiguous (~18 px); the box edges leave a 5 px step and ghost stubs",
+  "behind_flag": "stays 'partial, not for publication' (owner review page); check:rights keeps it out of the public build",
+  "to_yes": [
+   "one 0-token code fix: protect product px (G-IMG 6 (1), >= paper +5 L*) inside the corner cut, at the matte stage; clean the box edges",
+   "QA short re-check on the new hash"
+  ],
+  "render_agent_claims": {
+   "1_thread_mask_and_direction": "confirmed (596 / 590 / 0 / 6; RGB elsewhere = raw x k)",
+   "2_top_corner": "segments confirmed (75.1 / 85.9 / 76.6 legacy; 77.2% amended); edge loss NOT confirmed: 'p99 0' is the legacy per-row tool over rows 500-1900 for the whole edge, which does not see raw y 360-500 and averages the corner away (against G-IMG 6 (2), per segment)",
+   "3_specks": "confirmed (344 px zeroed, max alpha 5; 0 detached in the final)",
+   "4_fidelity": "confirmed (QA: L* 93.06, dE00 1.84, texture -2.19%; render-agent's 93.16 / 1.91 is its own lit definition, same gap as in v1)"
+  }
+ },
+ "rebuild": {
+  "tool": "tools/fix_throw_nano_v2.py <img1-dir> <out.png> (k 0.934 default), python3 numpy 2.4.6 cv2 5.0.0 PIL 13.0.0",
+  "runs": 2,
+  "png_identical_to_delivered": true,
+  "fullres_identical": true,
+  "json_identical": true,
+  "seconds_per_run": 27,
+  "framing": {
+   "scale": [
+    0.8878,
+    0.8878
+   ],
+   "bbox_v1_v2": [
+    [
+     197,
+     371,
+     1673,
+     1943
+    ],
+    [
+     197,
+     373,
+     1673,
+     1943
+    ]
+   ],
+   "placed_v1_v2": [
+    [
+     164,
+     326,
+     1310,
+     1396
+    ],
+    [
+     164,
+     327,
+     1310,
+     1394
+    ]
+   ],
+   "read": "same scale; 1 px vertical shift from the corner cut, immaterial for a stand-alone product image"
+  }
+ },
+ "gimg6_segments_amended": {
+  "definition": "band = within 40 px inside the alpha 0.5 contour + 45 px outside it, x>=1450, raw rows 360-1965; gap = L* <= local max (9x9) - 6; against background = L* <= paper envelope + 5 (doubt zone +2..+5 counted as background); over product = > +5",
+  "control_sure_paper_paperlike_pct": 88.3,
+  "v2": {
+   "top_corner_y<560": {
+    "vs_background_px": 1827,
+    "pct_alpha_le_0.5": 77.2,
+    "legacy_+2_pct": 75.1,
+    "over_product_px": 188,
+    "over_product_pct_opaque": 0.0,
+    "opaque_over_product_dE00_to_fabric_p50": null,
+    "opaque_over_product_paperlike_pct": null,
+    "item4_ge_50": true,
+    "item3": null
+   },
+   "mid_third1_560-973": {
+    "vs_background_px": 2956,
+    "pct_alpha_le_0.5": 76.3,
+    "legacy_+2_pct": 88.4,
+    "over_product_px": 3721,
+    "over_product_pct_opaque": 76.7,
+    "opaque_over_product_dE00_to_fabric_p50": 2.58,
+    "opaque_over_product_paperlike_pct": 0.0,
+    "item4_ge_50": true,
+    "item3": true
+   },
+   "mid_third2_973-1387": {
+    "vs_background_px": 3279,
+    "pct_alpha_le_0.5": 63.4,
+    "legacy_+2_pct": 78.9,
+    "over_product_px": 2923,
+    "over_product_pct_opaque": 78.8,
+    "opaque_over_product_dE00_to_fabric_p50": 2.3,
+    "opaque_over_product_paperlike_pct": 0.2,
+    "item4_ge_50": true,
+    "item3": true
+   },
+   "mid_third3_1387-1800": {
+    "vs_background_px": 3282,
+    "pct_alpha_le_0.5": 79.5,
+    "legacy_+2_pct": 90.5,
+    "over_product_px": 3488,
+    "over_product_pct_opaque": 73.5,
+    "opaque_over_product_dE00_to_fabric_p50": 2.57,
+    "opaque_over_product_paperlike_pct": 0.0,
+    "item4_ge_50": true,
+    "item3": true
+   },
+   "bottom_corner_y>=1800": {
+    "vs_background_px": 2883,
+    "pct_alpha_le_0.5": 69.5,
+    "legacy_+2_pct": 76.6,
+    "over_product_px": 2113,
+    "over_product_pct_opaque": 73.0,
+    "opaque_over_product_dE00_to_fabric_p50": 2.37,
+    "opaque_over_product_paperlike_pct": 0.4,
+    "item4_ge_50": true,
+    "item3": true
+   }
+  },
+  "v1_top_corner": {
+   "vs_background_px": 1827,
+   "pct_alpha_le_0.5": 18.6,
+   "legacy_+2_pct": 13.9,
+   "over_product_px": 188,
+   "over_product_pct_opaque": 41.5,
+   "opaque_over_product_dE00_to_fabric_p50": 3.02,
+   "opaque_over_product_paperlike_pct": 0.0,
+   "item4_ge_50": false,
+   "item3": false
+  },
+  "item4_all_segments_pass": true,
+  "item3": "pass in the four segments where over-product gaps stay opaque (dE00 to fabric 2.30-2.58, paper-like <= 0.4%); top corner n/a: all 188 over-product gaps were made transparent by the cut (product removed, counted under edge loss)"
+ },
+ "decontamination": {
+  "changed_vs_raw_x_k": 596,
+  "rgb_identical_elsewhere": true,
+  "a_semi_transparent": {
+   "alpha255_min": 0,
+   "max": 244,
+   "p50": 148.5,
+   "n_alpha_0": 16,
+   "n_alpha_ge_250": 0,
+   "n_alpha_255": 0,
+   "pass": true
+  },
+  "b_colour_source": {
+   "thread_mask_px_feeding_changed_px_11x11": 649,
+   "of_which_final_alpha_lt_0.04": 77,
+   "of_which_final_alpha_lt_0.5": 89,
+   "pct_final_alpha_lt_0.5": 13.71,
+   "final_alpha_lt_0.04_sources": {
+    "y": [
+     517,
+     543
+    ],
+    "x": [
+     1571,
+     1586
+    ],
+    "in_top_cut_box": 77,
+    "removebg_alpha_p50": 0.925,
+    "L_minus_paper_envelope_p10_p50": [
+     5.8,
+     9.7
+    ],
+    "product_by_item1_ge_+5_px": 74
+   },
+   "whole_outer_zone_mask_px": 91,
+   "whole_outer_zone_mask_final_alpha_lt_0.04": 5,
+   "whole_outer_zone_mask_am_ge_0.5_only": "by construction outer mask px need am>=0.5",
+   "v1_reference": "51,063 of 51,566 outer-zone mask px had final alpha < 0.04",
+   "note": "upper bound: the ~cand exclusion of the top corner is not applied here",
+   "pass": true
+  },
+  "c_not_brighter": {
+   "window": "31x31, product = final alpha >= 0.5",
+   "changed_px_without_product_in_window": 3,
+   "brighter_than_local_product_max_px": 20,
+   "dL_vs_local_max_p50_p99_max": [
+    -4.93,
+    7.35,
+    11.39
+   ],
+   "pass_by_the_letter": false,
+   "see": "brighter_px.py: all in the cut box, alpha <= 10/255, none brighter than the product before the cut"
+  },
+  "c_detail": {
+   "n": 20,
+   "y": [
+    525,
+    544
+   ],
+   "x": [
+    1580,
+    1590
+   ],
+   "in_top_cut_box": 20,
+   "alpha255": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    3,
+    4,
+    6,
+    6,
+    6,
+    8,
+    10
+   ],
+   "dL_final_vs_local_product_max": [
+    1.4,
+    1.4,
+    2.3,
+    2.3,
+    2.6,
+    2.6,
+    2.6,
+    2.6,
+    2.8,
+    3.7,
+    3.7,
+    3.8,
+    4.8,
+    7.3,
+    7.8,
+    9.8,
+    9.8,
+    10.2,
+    11.4,
+    11.4
+   ],
+   "raw_x_k_was_already_brighter_than_that_max": 3,
+   "final_vs_raw_x_k_dL_p50": 11.38,
+   "brighter_than_the_product_max_before_the_cut_(v1 alpha)": 0
+  },
+  "d_direction": {
+   "moved_away": 590,
+   "moved_toward": 0,
+   "about_unchanged": 6,
+   "pct_away_all": 99.0,
+   "pct_away_visible_alpha_gt_0": 99.0,
+   "dE00_to_paper_before_after_p50": [
+    10.11,
+    16.11
+   ],
+   "about_unchanged_alpha255": [
+    1,
+    223,
+    232,
+    192,
+    197,
+    236
+   ],
+   "pass_ge_95": true
+  },
+  "composite_paper_dE00_replaced_vs_kept": {
+   "p50": 2.46,
+   "p95": 4.66,
+   "max": 5.3
+  },
+  "composite_dark_dE00_replaced_vs_kept": {
+   "p50": 3.23,
+   "p95": 7.7,
+   "max": 8.96
+  },
+  "verdict": {
+   "a": "pass",
+   "b": "pass (outer-zone mask: 5 of 91 px background, v1 51,063 of 51,566; the 77 source px at alpha<0.04 are the two cut thread tips, 74 product by item 1)",
+   "c": "pass in substance: 20 px brighter than the product left nearby, all at alpha <= 10/255 inside the cut box, 0 brighter than the product before the cut; by the letter it fails because the colour is computed before the cut",
+   "d": "pass, 99.0% (>= 95)"
+  },
+  "note": "the direction filter (replace only if it moves away) makes (d) true by construction; 1,335 of 1,931 candidates kept the raw colour (no re-contamination). Independent recount with QA's paper model agrees: 590 / 0 / 6."
+ },
+ "specks": {
+  "final": {
+   "components": 0,
+   "max_alpha": 0,
+   "alpha_ge_8": 0,
+   "px": 0,
+   "list_first10": []
+  },
+  "zeroed_by_the_step": {
+   "px": 344,
+   "components": 29,
+   "max_alpha": 5,
+   "components_alpha_ge_8": 0,
+   "sum_alpha_255": 400,
+   "dist_to_body_p50_max": [
+    1.9,
+    5.7
+   ],
+   "other_px_differing_from_rebuilt_canvas": 0
+  },
+  "fullres_detached": {
+   "components": 29,
+   "alpha_gt_8": 8,
+   "note": "fullres is not the shipped asset; one 3 px alpha-255 fragment at raw (1635,1618)"
+  },
+  "verdict": "pass"
+ },
+ "fidelity_5_5": {
+  "v2": {
+   "lit_p90_99_LCh": [
+    93.06,
+    3.81,
+    80.3
+   ],
+   "top_layer_lit_LCh": [
+    93.3,
+    3.8,
+    80.3
+   ],
+   "p75_98_LCh": [
+    91.57,
+    4.2,
+    78.8
+   ],
+   "dE00_vs_sku_lit": 1.84,
+   "dL_vs_sku": 2.71,
+   "top_layer_dE00_vs_sku": 1.98,
+   "hp_std_L_sigma8": 5.637,
+   "clipped_any_channel_ge254_pct_of_opaque": 0.007,
+   "all_channels_ge254_px": 1
+  },
+  "texture_hp_std_change_pct": -2.19,
+  "window_pass": {
+   "L": true,
+   "C": true,
+   "h": true,
+   "dL_le_6": true,
+   "dE00_le_3_GIMG": true
+  },
+  "waffle_period_px_Tx_Ty": {
+   "v2": [
+    [
+     21.38,
+     20.31
+    ],
+    [
+     22.84,
+     23.97
+    ],
+    [
+     23.56,
+     18.7
+    ],
+    [
+     22.82,
+     20.92
+    ],
+    [
+     22.83,
+     18.89
+    ],
+    [
+     22.17,
+     18.97
+    ]
+   ],
+   "v1": [
+    [
+     21.38,
+     20.3
+    ],
+    [
+     22.84,
+     23.99
+    ],
+    [
+     23.56,
+     18.68
+    ],
+    [
+     22.82,
+     20.91
+    ],
+    [
+     22.83,
+     18.89
+    ],
+    [
+     22.18,
+     19.01
+    ]
+   ],
+   "same_within_px": 0.04
+  },
+  "verdict": "pass: unchanged from v1; the waffle reads"
+ },
+ "edge_loss": {
+  "rule": "G-IMG 6 (5) with (2): p99 <= half a waffle cell per segment; cell 25.5 px raw, half 12.75 px raw",
+  "tool": "tools/edge_loss_2d.py: thread px = product by item 1 (>= local paper envelope + 5 L*), outside the alpha 0.5 contour, connected to the body; depth = L2 distance to the 0.5 region; per edge position (2-D) and per row (as the legacy tool, but all rows 360-1965, per segment)",
+  "control_paper_counted_as_product_pct": 0.108,
+  "v2": {
+   "top_corner_y<560": {
+    "lost_product_px": 400,
+    "per_edge_position_p99_max_px": [
+     15.25,
+     18.39
+    ],
+    "per_row_p99_max_px": [
+     20.0,
+     20.0
+    ],
+    "rows_gt_half_cell": 22
+   },
+   "mid_third1_560-973": {
+    "lost_product_px": 149,
+    "per_edge_position_p99_max_px": [
+     1.0,
+     1.4
+    ],
+    "per_row_p99_max_px": [
+     2.88,
+     18.0
+    ],
+    "rows_gt_half_cell": 1
+   },
+   "mid_third2_973-1387": {
+    "lost_product_px": 147,
+    "per_edge_position_p99_max_px": [
+     1.0,
+     1.4
+    ],
+    "per_row_p99_max_px": [
+     1.0,
+     8.0
+    ],
+    "rows_gt_half_cell": 0
+   },
+   "mid_third3_1387-1800": {
+    "lost_product_px": 183,
+    "per_edge_position_p99_max_px": [
+     1.4,
+     2.2
+    ],
+    "per_row_p99_max_px": [
+     3.88,
+     13.0
+    ],
+    "rows_gt_half_cell": 1
+   },
+   "bottom_corner_y>=1800": {
+    "lost_product_px": 166,
+    "per_edge_position_p99_max_px": [
+     2.0,
+     2.0
+    ],
+    "per_row_p99_max_px": [
+     10.0,
+     15.0
+    ],
+    "rows_gt_half_cell": 1
+   }
+  },
+  "v1": {
+   "top_corner_y<560": {
+    "lost_product_px": 57,
+    "per_edge_position_p99_max_px": [
+     2.74,
+     3.6
+    ],
+    "per_row_p99_max_px": [
+     4.0,
+     4.0
+    ],
+    "rows_gt_half_cell": 0
+   },
+   "mid_third1_560-973": {
+    "lost_product_px": 149,
+    "per_edge_position_p99_max_px": [
+     1.0,
+     1.4
+    ],
+    "per_row_p99_max_px": [
+     2.88,
+     18.0
+    ],
+    "rows_gt_half_cell": 1
+   },
+   "mid_third2_973-1387": {
+    "lost_product_px": 147,
+    "per_edge_position_p99_max_px": [
+     1.0,
+     1.4
+    ],
+    "per_row_p99_max_px": [
+     1.0,
+     8.0
+    ],
+    "rows_gt_half_cell": 0
+   },
+   "mid_third3_1387-1800": {
+    "lost_product_px": 183,
+    "per_edge_position_p99_max_px": [
+     1.4,
+     2.2
+    ],
+    "per_row_p99_max_px": [
+     3.88,
+     13.0
+    ],
+    "rows_gt_half_cell": 1
+   },
+   "bottom_corner_y>=1800": {
+    "lost_product_px": 166,
+    "per_edge_position_p99_max_px": [
+     2.0,
+     2.0
+    ],
+    "per_row_p99_max_px": [
+     10.0,
+     15.0
+    ],
+    "rows_gt_half_cell": 1
+   }
+  },
+  "remove_bg": {
+   "top_corner_y<560": {
+    "lost_product_px": 86,
+    "per_edge_position_p99_max_px": [
+     2.8,
+     3.6
+    ],
+    "per_row_p99_max_px": [
+     5.17,
+     7.0
+    ],
+    "rows_gt_half_cell": 0
+   },
+   "mid_third1_560-973": {
+    "lost_product_px": 241,
+    "per_edge_position_p99_max_px": [
+     2.84,
+     7.19
+    ],
+    "per_row_p99_max_px": [
+     6.76,
+     20.0
+    ],
+    "rows_gt_half_cell": 2
+   },
+   "mid_third2_973-1387": {
+    "lost_product_px": 323,
+    "per_edge_position_p99_max_px": [
+     4.0,
+     8.39
+    ],
+    "per_row_p99_max_px": [
+     8.87,
+     13.0
+    ],
+    "rows_gt_half_cell": 1
+   },
+   "mid_third3_1387-1800": {
+    "lost_product_px": 320,
+    "per_edge_position_p99_max_px": [
+     7.8,
+     13.0
+    ],
+    "per_row_p99_max_px": [
+     12.0,
+     13.0
+    ],
+    "rows_gt_half_cell": 3
+   },
+   "bottom_corner_y>=1800": {
+    "lost_product_px": 235,
+    "per_edge_position_p99_max_px": [
+     3.19,
+     5.2
+    ],
+    "per_row_p99_max_px": [
+     13.0,
+     15.0
+    ],
+    "rows_gt_half_cell": 3
+   }
+  },
+  "v2_top_corner_other_definitions": {
+   "stricter_ridge_and_+5": {
+    "lost_product_px": 119,
+    "per_edge_position_p99_max_px": [
+     8.79,
+     14.59
+    ],
+    "per_row_p99_max_px": [
+     17.0,
+     17.0
+    ],
+    "rows_gt_half_cell": 12
+   },
+   "any_ridge_upper_bound": {
+    "lost_product_px": 1146,
+    "per_edge_position_p99_max_px": [
+     15.58,
+     20.59
+    ],
+    "per_row_p99_max_px": [
+     22.26,
+     23.0
+    ],
+    "rows_gt_half_cell": 78
+   }
+  },
+  "legacy_tool_render_agent": {
+   "rows": "500-1900 only, whole edge",
+   "p99_px": 0.0,
+   "max_px": 19,
+   "read": "the corner is raw y 360-575: the legacy p99 cannot see it; its max 19 px is the corner (rows 500-541)"
+  },
+  "verdict": "fail in the top-corner segment: p99 15.2 px per edge position (0.60 cell), 20.0 px per row (0.78 cell), 22 rows over half a cell; 400 product px lost (v1 57). All other segments pass (per edge p99 <= 2.0, per row <= 10.0).",
+  "what_is_lost": "two thread tips on shadowed paper at raw y 515-560, x 1565-1590, ~18 px each (0.72 cell), unambiguous product (median +9.7 L* over the paper); above y 470 the tips against the bright paper are also trimmed ~10 px, but item 1 counts those as background"
+ },
+ "box_edges": {
+  "top_edge_step": {
+   "x": "1494->1496",
+   "y_v1": [
+    384,
+    383
+   ],
+   "y_v2": [
+    386,
+    391
+   ],
+   "px": 5,
+   "note": "at the box's left edge; v2 top edge inside the box 1-9 px lower than v1; a faint wisp above it"
+  },
+  "box_bottom": {
+   "soft_px_v1": 204,
+   "soft_px_v2": 259,
+   "soft_width_per_row_p50_v1_v2": [
+    3.0,
+    4.0
+   ],
+   "px_where_v2_alpha_lower_by_gt_0.3": 296,
+   "px_where_v2_alpha_higher_by_gt_0.1": 0
+  },
+  "read": "grey ghost stubs where the two tips were, visible on dark at 100%"
+ },
+ "page_view": {
+  "paper_1280": "clean; the v1 haze is gone",
+  "dark_1280": "the haze is gone (better than v1); the corner a little blunter; the ghost stub barely visible",
+  "dark_100pct": "the corner reads as a trimmed, blunt edge; ghost stubs at the box's lower edge; a notch in the top edge",
+  "render_agent_sheet": "review/p2-throw-nano-fixed-v2-1280-dark-paper.jpg agrees at page size"
+ },
+ "simulation_not_an_asset": {
+  "tool": "tools/SIM_protect_product.py",
+  "change": "inside the box, px that item 1 calls product, connected to the body, keep their v1 alpha",
+  "top_corner": {
+   "item4_pct": 75.5,
+   "edge_loss_per_edge_p99_max": [
+    2.0,
+    4.39
+   ],
+   "edge_loss_per_row_p99_max": [
+    12.26,
+    13.0
+   ],
+   "item3_opaque_over_product": {
+    "pct_opaque": 41.5,
+    "dE00_to_fabric_p50": 3.02,
+    "paperlike_pct": 0.0,
+    "read": "on the line (3.02 vs <= 3), as in v1: leave those gaps semi-open or show <= 3"
+   }
+  },
+  "read": "the fix works on the numbers; the sim restores the tips with a hard edge (binary restore after the feather), so the real fix belongs at the matte stage",
+  "image": "SIM-protect-product-top-corner-v1-v2-sim-x3-NOT-AN-ASSET.png"
+ },
+ "carried": {
+  "C1-C5": "pass (QA r3)",
+  "house_angle": "~65 deg for throws (designer v2 1.4)"
+ },
+ "fix_list": [
+  {
+   "n": 1,
+   "who": "render-agent",
+   "tokens": 0,
+   "what": "fix_throw_nano_v3.py (new file): in the top-corner cut, px that G-IMG 6 (1) calls product (>= local paper envelope + 5 L*, connected to the body) keep their pre-cut alpha; do it at the matte stage, before the colour step and the speck step"
+  },
+  {
+   "n": 2,
+   "who": "render-agent",
+   "tokens": 0,
+   "what": "box edges: no step at the left edge (top-contour column jump at x 1488-1500 no larger than v1's, 1 px) and no ghost stubs at the lower edge (soft band at raw y 535-580 no wider than v1); e.g. a cut zone by distance from the outline with a >= 20 px ramp instead of a rectangle"
+  },
+  {
+   "n": 3,
+   "who": "render-agent",
+   "tokens": 0,
+   "what": "report with QA tools on the new file: edge_loss_2d.py (p99 <= 12.75 px raw per edge position and per row, every segment), gimg6_segments.py (item 4 >= 50% per segment; item 3 in the top corner: dE00 to fabric <= 3 or the gaps left semi-open), decontam_v2.py, specks_v2.py"
+  },
+  {
+   "n": 4,
+   "who": "qa-agent",
+   "tokens": 0,
+   "what": "short re-check on the new hash"
+  },
+  {
+   "n": 5,
+   "who": "render-agent",
+   "tokens": 0,
+   "what": "source-record images[12]: qa_verdict 'partial (QA throw-fixed-v2): top-corner edge loss p99 0.60-0.78 cell > 0.5; all else yes', qa_report += this report"
+  },
+  {
+   "n": 6,
+   "who": "frontend-dev",
+   "tokens": 0,
+   "what": "no change: flag page 'partial, not for publication'; check:rights keeps it out of public"
+  },
+  {
+   "n": 7,
+   "who": "render-agent",
+   "tokens": 0,
+   "what": "optional: zero the detached fragments in -fullres as well (3 px alpha 255 at raw 1635,1618), or mark -fullres as intermediate"
+  },
+  {
+   "n": 8,
+   "who": "master-designer (wording), qa-agent (numbers)",
+   "tokens": 0,
+   "what": "G-IMG 6 (5) for IMG1b: edge loss measured in 2-D, per segment, with edge_loss_2d.py; the legacy per-row tool covers rows 500-1900 only"
+  },
+  {
+   "n": 9,
+   "who": "master-designer",
+   "tokens": 0,
+   "what": "optional eye: above raw y 470 the low-contrast tips (<= +5 over the bright paper) are trimmed ~10 px; the rule counts them as background; on dark at 100% the corner reads blunter. Accept, or a smaller radius there (5-6 px)"
+  }
+ ],
+ "evidence": [
+  "top-corner-removebg-v1-v2-alpha-paper-dark-x3.png",
+  "lost-product-px-top-corner-x4.png",
+  "box-bottom-lost-tips-and-ghost-x5.png",
+  "top-corner-tips-trimmed-x6.png",
+  "top-edge-step-at-box-edge-x6.png",
+  "final100-top-corner-v1-v2-paper-dark-x2.png",
+  "page1280-top-corner-v1-v2-paper-dark-x3.png",
+  "page1280-right-edge-v1-v2-paper-dark.png",
+  "SIM-protect-product-top-corner-v1-v2-sim-x3-NOT-AN-ASSET.png"
+ ],
+ "data": [
+  "edge_loss_2d.json",
+  "gimg6_segments.json",
+  "decontam_v2.json",
+  "decontam_condition_c_detail.json",
+  "specks_v2.json",
+  "fidelity_v2.json",
+  "box_edges.json",
+  "SIM-edge_loss_2d-NOT-AN-ASSET.json",
+  "SIM-gimg6_segments-NOT-AN-ASSET.json"
+ ]
+}

@@ -63,6 +63,9 @@ R6BY = {l_["id"]: l_ for l_ in R6MAN["layers"]}
 R6VAR = {v["id"]: v for vs in R6MAN["variants"].values() for v in vs}
 TG = json.load(open(os.path.join(HERE, "step0/r7-table-group/table-group-r7.json")))
 LEV = json.load(open(os.path.join(HERE, "step0/r7-table-group/levers-r7.json")))
+# the basket stands in front of the planter: its soft edge over the pot is re-solved by GC.cut on the darker pot (as in R5); checked in
+# verify_layers_r7.py (the basket's RGB at full alpha and its alpha unchanged)
+SOFT_EDGE_ONLY = {"basket"}
 PASS7 = {"planter": "pass 5' + fix R7 (code: k 0.78 in linear light, section 8)",
          "curtains": "pass 4' (180502) + fix R7 (code: the sold 270, section 6.3)",
          "candle-holders": "steps 1-3 + fix R7 (code: re-cut, moved to the 1.9.4 points, section 1.5)",
@@ -217,8 +220,9 @@ def main():
         sp, so = write_or_reuse(d, stem, r["S"], "RGB")
         vfiles[nm] = (lp, sp)
         origin[nm] = dict(layer=lo, shadow=so)
-    changed = sorted({k.split("-")[0] if k.startswith("cushions") else k for k, v in origin.items() if "new" in v["layer"] or "new" in v["shadow"]})
-    unexpected = [k for k in changed if k not in FIX7 and k not in NEW_IN_R7]
+    changed = sorted({k.split("-")[0] if k.startswith("cushions") else k for k, v in origin.items()
+                      if v["layer"].startswith("new") or v["shadow"].startswith("new")})
+    unexpected = [k for k in changed if k not in FIX7 and k not in NEW_IN_R7 and k not in SOFT_EDGE_ONLY]
     gaps = layer_gaps(vfiles, files)
     man = write_manifest(G, files, results, regions, cush_changed, overlap, origin, vres, vreg, vfiles, disjoint, unexpected, gaps)
     write_asset_entries(man, origin)
@@ -393,7 +397,9 @@ def write_manifest(G, files, results, regions, cush_changed, overlap, origin, vr
                                     "bowl_candidates: the throw needs the bowl left of X ~0.45, the holders need it right of ~0.58)"),
         failed_in_r7={"bowl-v3": p7["bowl-v3"], "candle-holders-v3": p7["candle-holders-v3"]},
         pending={"bowl point": "the designer (section 1.4)", "bowl-v3, candle-holders-v3": "a new pass, or a code salvage the designer approves (not done)"},
-        changed_in_r7=dict(defaults=FIX7, variants=sorted(NEW_IN_R7), files=origin, unexpected_other_changes=unexpected),
+        changed_in_r7=dict(defaults=FIX7, variants=sorted(NEW_IN_R7), files=origin, unexpected_other_changes=unexpected,
+                           soft_edge_only=dict(basket="its soft edge over the darker pot re-solved by the cut (as in R5); its RGB at full alpha "
+                                                      "and its alpha: see verify-layers-r7.json basket_soft_edge")),
         light_layers=R6MAN["light_layers"],
         files=dict(build="grade_cut_r7.py (fix_r7.py, pass_r7.py, post_r7.py)", fixes="../fix_r7.py -> ../work-r7/ (../work-r7/fix-r7.json)",
                    passes="../pass_r7.py -> ../work-r7/p6-fetch.json, p7-fetch.json; ../post_r7.py -> ../work-r7/post-r7.json; ../jobs-r7.json",

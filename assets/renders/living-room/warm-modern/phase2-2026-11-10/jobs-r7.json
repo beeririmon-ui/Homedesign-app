@@ -1,0 +1,199 @@
+{
+ "date": "2026-11-12",
+ "brief": "briefs/render-wm-tool-r7-2026-11-12.md",
+ "decision": "PH2-WM (owner, up to 9,740); phase 2 before R7 5,850; passes 6' and 7' at 650 each; no third pass",
+ "references_policy": "supplier images are references only: cropped in the scratchpad and uploaded to var2, never stored in the repo",
+ "shadow_recipe": "FROZEN: extract.shadow_one as every existing layer",
+ "tokens_total": 1300,
+ "phase2_total_after": 7150,
+ "jobs": [
+  {
+   "id": "wm-ph2-variants-p6",
+   "pass_": "6'",
+   "slots": [
+    "bowl v2",
+    "candle-holders v2",
+    "vase v3"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "tokens": 650,
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 3
+    },
+    "total_tokens": 650
+   },
+   "idempotency_key": "wm-ph2-variants-p6-20261112",
+   "placeholder_id": "6afb2e1d-8bb5-4923-a3b2-50dd1511f671",
+   "task_id": "1a66817fb042b91c2bb2a7c8916b3c1b",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-1a66817fb042b91c2bb2a7c8916b3c1b-0-1794462806403-37cd8134.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6c863144-30a1-48e6-a839-dbf3669a19e0.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p6-input.png",
+   "image_sha256": "dd841c06161d286f2f3b9ca2512a4830b94f1c5f877e6c80ec82f6cc77c40795",
+   "image_upload_verified": "GET of the public URL returned the same sha256",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p6-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/variants-p6.txt",
+   "prompt_chars": 2451,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/32d33ab5-9ff3-4567-b139-42a9dbb6f236.png",
+     "card": "bowl-cj-glutinous-white-belly-bowl-21",
+     "sku": "vid 2505301100271623400",
+     "what": "the bowl alone on white (the dimension text cropped out)",
+     "source_image": "bowl2/img4.jpg",
+     "crop": [
+      0.15,
+      0.47,
+      0.8,
+      0.8
+     ],
+     "verified": true,
+     "note": "r7 crop (scratchpad/r7/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/0257ad28-8cae-4e10-8160-81b66b197f14.png",
+     "card": "candle-holders-cj-ceramic-pedestal-tray",
+     "sku": "CJYD234800201AZ",
+     "what": "White: the tray on its walnut foot with the ball handles (text cropped out)",
+     "source_image": "ch2/img0.jpg",
+     "crop": [
+      0.21,
+      0.37,
+      0.86,
+      0.71
+     ],
+     "verified": true,
+     "note": "r7 crop (scratchpad/r7/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7b950d9c-02e5-463f-95b0-d694ff74d1b5.png",
+     "card": "vase-cj-white-plum-hand-thrown",
+     "sku": "CJJT281811802BY",
+     "what": "M (33 x 22.6): the vase alone (the size text cropped out)",
+     "source_image": "vase3/img6.jpg",
+     "crop": [
+      0.12,
+      0.4,
+      0.55,
+      1.0
+     ],
+     "verified": true,
+     "note": "r7 crop (scratchpad/r7/refs, var2 only, never in the repo)"
+    }
+   ],
+   "fetch": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/p6-fetch.json",
+   "post": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/post-r7.json#p6",
+   "result": "6' passed: the three products rendered at their places; post R7: the trays' ball handles added back to the cut, the pieces registered back onto their placeholders (the model's local warp of the table region)"
+  },
+  {
+   "id": "wm-ph2-variants-p7",
+   "pass_": "7'",
+   "slots": [
+    "bowl v3",
+    "candle-holders v3",
+    "curtains v3 (Linen 200 x 260, 4 hook)"
+   ],
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "resolution": "2K",
+   "type": "image-to-image",
+   "tokens": 650,
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 3
+    },
+    "total_tokens": 650
+   },
+   "idempotency_key": "wm-ph2-variants-p7-20261112",
+   "placeholder_id": "6da43d3c-847b-40b4-bd6b-98a35971097e",
+   "task_id": "92d093fa5fe5b7916950b08b47d2da3f",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-92d093fa5fe5b7916950b08b47d2da3f-0-1794463227882-1a2a76fc.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f7b1dfe6-18b4-47e6-8c88-967341a2a25f.png",
+   "image_url_local": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p7-input.png",
+   "image_sha256": "d55c353a9334d88c52a5608dbc316e21c19ac1def075d80e172a5a132ae65b91",
+   "image_upload_verified": "GET of the public URL returned the same sha256",
+   "input_record": "assets/renders/living-room/warm-modern/phase2-2026-11-10/inputs/p7-input.json",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/variants-p7.txt",
+   "prompt_chars": 2331,
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4f2423ff-edfa-48ff-8e2d-57c4e4fe0e91.png",
+     "card": "bowl-cj-speckled-ivory-wide-bowl-21",
+     "sku": "CJCJ241334805EV",
+     "what": "the speckled ivory 21.3 x 5.2 bowl (the image the API lists under large-natural-color: the supplier swapped the white / natural images; sourcing to confirm)",
+     "source_image": "bowl3/sku-38b96d58-db3d-4499-9066-da10b0f7af52.jpg",
+     "crop": [
+      0.0,
+      0.12,
+      1.0,
+      0.86
+     ],
+     "verified": true,
+     "note": "r7 crop (scratchpad/r7/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/16140605-2544-4513-b390-4866625edefa.png",
+     "card": "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+     "sku": "12000057351444960",
+     "what": "one dish with a pillar candle",
+     "source_image": "ch3/img3.jpg",
+     "crop": [
+      0.28,
+      0.38,
+      0.6,
+      0.82
+     ],
+     "verified": true,
+     "note": "r7 crop (scratchpad/r7/refs, var2 only, never in the repo)"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/436a6732-9b5b-43de-a582-07a43961a430.png",
+     "card": "curtains-cj-japanese-linen-half-shade",
+     "sku": "CJYD218713946TG",
+     "what": "the Linen SKU photo (the curtain only)",
+     "source_image": "curt3/img1.jpg",
+     "crop": [
+      0.0,
+      0.0,
+      0.58,
+      0.5
+     ],
+     "verified": true,
+     "note": "r7 crop (scratchpad/r7/refs, var2 only, never in the repo)"
+    }
+   ],
+   "fetch": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/p7-fetch.json",
+   "post": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/post-r7.json#p7",
+   "result": "7' partly failed: curtain 3 passed (colour by the R5 method, cut to its sold 260); the bowl came out ~1.55x the card and the iron pair ~0.4 m left and ~1.25x the card: not layers (no third pass)"
+  }
+ ]
+}
