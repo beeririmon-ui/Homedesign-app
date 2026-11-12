@@ -1,3 +1,173 @@
 [2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
 [2m[WebServer] [22m
 [2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mScheduled Workers are not automatically triggered during local development.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m  To manually trigger a scheduled event, run:
+[2m[WebServer] [22m    curl "http://localhost:8788/cdn-cgi/local/scheduled"
+[2m[WebServer] [22m  For more details, see [4mhttps://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+
+Running 13 tests using 1 worker
+
+  ✓   1 [e2e] › e2e/s23.spec.ts:131:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת72 (a): storage works and holds no cart: a link with someone else’s #c= plants nothing (room, cart, product) (5.1s)
+  ✓   2 [e2e] › e2e/s23.spec.ts:155:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת72 (a): storage refused: a page that is not the cart or the checkout takes no #c= either, and drops it (2.9s)
+  ✓   3 [e2e] › e2e/s23.spec.ts:171:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת72 (b): storage refused, "סל" pressed on the cart page itself: no #c= in the address or the tab’s history; the lines stay (2.7s)
+(node:28129) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 [e2e] › e2e/s23.spec.ts:201:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת72 (c): storage refused, a real profile: the History database keeps no cart id; another site does not see window.name (4.5s)
+  ✓   5 [e2e] › e2e/s23.spec.ts:240:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת73 (a): the shop, an add after a load that failed: refused with the error, ×2 stays ×2; once the API answers, ×3 (2.0s)
+  ✓   6 [e2e] › e2e/s23.spec.ts:263:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת73 (b): the story, "המראה כולו לסל" pressed while the saved cart’s GET is held 2.5 s: ×3 stays ×3, "already in the cart" said (6.5s)
+  ✓   7 [e2e] › e2e/s23.spec.ts:286:5 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת74: the story’s load fails (500): a blank count, the error and "לנסות שוב", never "0" or "הסל ריק."; the retry brings the lines (2.4s)
+  ✓   8 [e2e] › e2e/s23.spec.ts:286:5 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת74: the story’s load fails (503): a blank count, the error and "לנסות שוב", never "0" or "הסל ריק."; the retry brings the lines (2.9s)
+  ✓   9 [e2e] › e2e/s23.spec.ts:286:5 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת74: the story’s load fails (abort): a blank count, the error and "לנסות שוב", never "0" or "הסל ריק."; the retry brings the lines (3.2s)
+  ✓  10 [e2e] › e2e/s23.spec.ts:317:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת75: the back/forward cache on: back to a product page and to a story page reads the cart again (3.3s)
+  ✘  11 [e2e] › e2e/s23.spec.ts:353:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה29: an add whose PUT takes 6 s, the cart pressed 200 ms later: never "הסל ריק." or "סל (0)", and the line once it lands (20.0s)
+  ✘  12 [e2e] › e2e/s23.spec.ts:372:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה29: from the story, a look whose first PUT takes 6 s, then the cart by its address: never empty, and the line once it lands (16.6s)
+  ✘  13 [e2e] › e2e/s23.spec.ts:388:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה30: without JavaScript the cart and the checkout say what to do (and never "empty") (10.5s)
+
+
+  1) [e2e] › e2e/s23.spec.ts:201:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת72 (c): storage refused, a real profile: the History database keeps no cart id; another site does not see window.name 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m""[39m
+    Received: [31m"hd1:{\"c\":\"De3OE0rag7oTdkjUjopZscF52ieOy855\"}"[39m
+
+      232 |       expect(urls.some((u) => u.includes('/checkout/'))).toBe(true);
+      233 |       expect(urls.filter((u) => u.includes(id!) || /[#&?]c=/.test(u))).toEqual([]);
+    > 234 |       expect(there).toBe('');
+          |                     ^
+      235 |     } finally {
+      236 |       rmSync(dir, { recursive: true, force: true });
+      237 |     }
+        at /home/user/homedesign-app/site/e2e/s23.spec.ts:234:21
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s23-S23-QA-S21-the-cart-id-93638-te-does-not-see-window-name-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s23-S23-QA-S21-the-cart-id-93638-te-does-not-see-window-name-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [e2e] › e2e/s23.spec.ts:353:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה29: an add whose PUT takes 6 s, the cart pressed 200 ms later: never "הסל ריק." or "סל (0)", and the line once it lands 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  locator('.cart-line')
+    Expected: [32m1[39m
+    Received: [31m0[39m
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 15000ms[22m
+    [2m  - waiting for locator('.cart-line')[22m
+    [2m    19 × locator resolved to 0 elements[22m
+    [2m       - unexpected value "0"[22m
+
+
+      363 |     await headerCart(page).click();
+      364 |     await page.waitForURL(/\/cart\/$/, { timeout: 12_000 });
+    > 365 |     await expect(page.locator('.cart-line')).toHaveCount(1, { timeout: 15_000 });
+          |                                              ^
+      366 |     await expect(page.locator('.cart-count')).toHaveText('1');
+      367 |     expect(await seen(page)).toMatchObject({ empty: 0, zero: 0 });
+      368 |     expect(await page.evaluate(() => window.name)).toBe('');
+        at /home/user/homedesign-app/site/e2e/s23.spec.ts:365:46
+
+    Error Context: test-results/s23-S23-QA-S21-the-cart-id-34255--and-the-line-once-it-lands-e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s23-S23-QA-S21-the-cart-id-34255--and-the-line-once-it-lands-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s23-S23-QA-S21-the-cart-id-34255--and-the-line-once-it-lands-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [e2e] › e2e/s23.spec.ts:372:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה29: from the story, a look whose first PUT takes 6 s, then the cart by its address: never empty, and the line once it lands 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  locator('.cart-line')
+    Expected: [32m1[39m
+    Received: [31m2[39m
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 15000ms[22m
+    [2m  - waiting for locator('.cart-line')[22m
+    [2m    10 × locator resolved to 0 elements[22m
+    [2m       - unexpected value "0"[22m
+    [2m    9 × locator resolved to 2 elements[22m
+    [2m      - unexpected value "2"[22m
+
+
+      381 |     await page.waitForTimeout(400);
+      382 |     await page.goto('/cart/', { waitUntil: 'load' });
+    > 383 |     await expect(page.locator('.cart-line')).toHaveCount(1, { timeout: 15_000 });
+          |                                              ^
+      384 |     expect(await seen(page)).toMatchObject({ empty: 0, zero: 0 });
+      385 |     await ctx.close();
+      386 |   });
+        at /home/user/homedesign-app/site/e2e/s23.spec.ts:383:46
+
+    Error Context: test-results/s23-S23-QA-S21-the-cart-id-35cf6--and-the-line-once-it-lands-e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s23-S23-QA-S21-the-cart-id-35cf6--and-the-line-once-it-lands-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s23-S23-QA-S21-the-cart-id-35cf6--and-the-line-once-it-lands-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [e2e] › e2e/s23.spec.ts:388:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה30: without JavaScript the cart and the checkout say what to do (and never "empty") 
+
+    Error: /cart/
+
+    [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('הסל והתשלום פועלים עם JavaScript')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - /cart/ with timeout 10000ms[22m
+    [2m  - waiting for getByText('הסל והתשלום פועלים עם JavaScript')[22m
+
+
+      391 |     for (const p of ['/cart/', '/checkout/']) {
+      392 |       await page.goto(p, { waitUntil: 'load' });
+    > 393 |       await expect(page.getByText('הסל והתשלום פועלים עם JavaScript', { exact: false }), p).toBeVisible();
+          |                                                                                             ^
+      394 |       await expect(page.getByText('הסל ריק')).toHaveCount(0);
+      395 |     }
+      396 |     await ctx.close();
+        at /home/user/homedesign-app/site/e2e/s23.spec.ts:393:93
+
+    Error Context: test-results/s23-S23-QA-S21-the-cart-id-6dfe1-what-to-do-and-never-empty--e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s23-S23-QA-S21-the-cart-id-6dfe1-what-to-do-and-never-empty--e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s23-S23-QA-S21-the-cart-id-6dfe1-what-to-do-and-never-empty--e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [e2e] › e2e/s23.spec.ts:201:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ת72 (c): storage refused, a real profile: the History database keeps no cart id; another site does not see window.name 
+    [e2e] › e2e/s23.spec.ts:353:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה29: an add whose PUT takes 6 s, the cart pressed 200 ms later: never "הסל ריק." or "סל (0)", and the line once it lands 
+    [e2e] › e2e/s23.spec.ts:372:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה29: from the story, a look whose first PUT takes 6 s, then the cart by its address: never empty, and the line once it lands 
+    [e2e] › e2e/s23.spec.ts:388:3 › S23 (QA S21): the cart id, the story’s cart, the cache and the slow write › ה30: without JavaScript the cart and the checkout say what to do (and never "empty") 
+  9 passed (1.8m)

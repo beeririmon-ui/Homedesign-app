@@ -12,8 +12,8 @@
  *          "לנסות שוב" (never "הסל ריק."); the retry once the API answers brings the saved lines;
  *  ת75     the back/forward cache on (Playwright turns it off): back to a product page and to a story page after the
  *          cart changed elsewhere: the count read again;
- *  ה29     an add whose PUT takes 6 s, the cart pressed 200 ms later (the shop) or opened by its address (from the
- *          story): never "הסל ריק." or "סל (0)", and the line once it lands;
+ *  ה29     an add whose PUT lands 6 s later (its page gone by then), the cart pressed 200 ms after it (the shop) or
+ *          reached by a link (from the story): never "הסל ריק." or "סל (0)", and the line once it lands;
  *  ה30     no JavaScript: the cart and the checkout say what to do.
  */
 import { expect, test, chromium, type APIRequestContext, type Browser, type BrowserContext, type Page } from '@playwright/test';
@@ -58,7 +58,20 @@ const DENY_STORAGE = () => {
   Object.defineProperty(window, 'localStorage', { get: deny, configurable: true });
   Object.defineProperty(window, 'sessionStorage', { get: deny, configurable: true });
 };
-type Opt = { cartId?: string; noStorage?: boolean; slowGet?: number; failGet?: 500 | 503 | 'abort'; slowPut?: number; js?: boolean };
+/**
+ * `holdPut` (ה29): a PUT of a line never answers the page that sent it, and reaches the server `ms` later, sent by the
+ * test: a keepalive write that lands after its page is gone. (The test runner's Playwright, 1.56, aborts a request held
+ * by a route once its page navigates and hands the page the error, which a browser never does to a keepalive fetch;
+ * QA's tools, on Playwright 1.64, hold it in the network and see the server get it.) A PUT sets an absolute quantity.
+ */
+type Opt = {
+  cartId?: string;
+  noStorage?: boolean;
+  slowGet?: number;
+  failGet?: 500 | 503 | 'abort';
+  holdPut?: { ms: number; request: APIRequestContext };
+  js?: boolean;
+};
 async function context(browser: Browser, base: string, o: Opt = {}): Promise<BrowserContext> {
   const ctx = await browser.newContext({
     locale: 'he-IL',
@@ -68,6 +81,24 @@ async function context(browser: Browser, base: string, o: Opt = {}): Promise<Bro
   });
   await ctx.addInitScript(SAMPLER);
   if (o.noStorage) await ctx.addInitScript(DENY_STORAGE);
+  if (o.holdPut) {
+    const { ms, request } = o.holdPut;
+    await ctx.exposeBinding('__hdHoldPut', (_src, u: string, body: string) => {
+      setTimeout(() => void request.put(u, { data: JSON.parse(body) as object }).catch(() => null), ms);
+    });
+    await ctx.addInitScript(() => {
+      const w = window as unknown as { fetch: typeof fetch; __hdHoldPut: (u: string, b: string) => void };
+      const f = w.fetch;
+      w.fetch = function (input: RequestInfo | URL, init?: RequestInit) {
+        const u = typeof input === 'string' ? input : input instanceof URL ? input.pathname : input.url;
+        if (init?.method === 'PUT' && /\/api\/cart\/[^/]+\/items$/.test(u)) {
+          w.__hdHoldPut(u, String(init.body));
+          return new Promise<Response>(() => {});
+        }
+        return f.call(this, input, init);
+      } as typeof fetch;
+    });
+  }
   await route(ctx, o);
   return ctx;
 }
@@ -81,7 +112,6 @@ async function route(ctx: BrowserContext, o: Opt): Promise<void> {
       return r.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'unavailable', message_he: 'השרת עמוס כרגע. נסו שוב בעוד רגע. קוד השגיאה: E-S23TEST2' }) });
     if (isGet && o.failGet) return r.fulfill({ status: o.failGet, contentType: 'text/plain', body: 'boom' });
     if (isGet && o.slowGet) await new Promise((ok) => setTimeout(ok, o.slowGet));
-    if (o.slowPut && m === 'PUT' && /\/items$/.test(u)) await new Promise((ok) => setTimeout(ok, o.slowPut));
     return r.fallback();
   });
 }
@@ -217,9 +247,18 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
       await page.getByRole('link', { name: 'להמשך לתשלום' }).click();
       await page.waitForURL(/\/checkout\/$/);
       await expect(page.locator('.summary li')).toHaveCount(1);
-      // another site in the same tab (127.0.0.1 and localhost are two sites): the name does not go along
+      // a link to another site in the same tab (127.0.0.1 and localhost are two sites): the name does not go along (every
+      // page of ours sends COOP same-origin, so the browser moves the tab to a new browsing context group, without it)
       const other = baseURL!.replace('127.0.0.1', 'localhost');
-      await page.goto(`${other}/accessibility/`, { waitUntil: 'load' });
+      await page.evaluate((href) => {
+        const a = document.createElement('a');
+        a.href = href;
+        a.id = 'hd-away';
+        a.textContent = 'away';
+        document.body.prepend(a);
+      }, `${other}/accessibility/`);
+      await page.locator('#hd-away').click();
+      await page.waitForURL(/localhost/);
       const there = await page.evaluate(() => window.name);
       await page.waitForTimeout(1200);
       await ctx.close();
@@ -353,8 +392,9 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
   test('ה29: an add whose PUT takes 6 s, the cart pressed 200 ms later: never "הסל ריק." or "סל (0)", and the line once it lands', async ({
     browser,
     baseURL,
+    request,
   }) => {
-    const ctx = await context(browser, baseURL!, { slowPut: 6000 });
+    const ctx = await context(browser, baseURL!, { holdPut: { ms: 6000, request } });
     const page = await ctx.newPage();
     await page.goto(`/p/${VASE}/`, { waitUntil: 'load' });
     await known(page);
@@ -369,18 +409,21 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
     await ctx.close();
   });
 
-  test('ה29: from the story, a look whose first PUT takes 6 s, then the cart by its address: never empty, and the line once it lands', async ({
+  test('ה29: from the story, a look whose first PUT takes 6 s, then a link to the cart: never empty, and the line once it lands', async ({
     browser,
     baseURL,
+    request,
   }) => {
-    const ctx = await context(browser, baseURL!, { slowPut: 6000 });
+    const ctx = await context(browser, baseURL!, { holdPut: { ms: 6000, request } });
     const page = await ctx.newPage();
     await page.goto(`${STORY}#list-A`, { waitUntil: 'load' });
     await expect(page.locator('#st-cart-open')).not.toHaveAttribute('aria-busy', 'true');
     await page.locator('#look-A').click();
     await page.waitForTimeout(400);
-    await page.goto('/cart/', { waitUntil: 'load' });
-    await expect(page.locator('.cart-line')).toHaveCount(1, { timeout: 15_000 });
+    // a link the page follows (a typed address starts the tab afresh: window.name does not go along, README)
+    await page.evaluate(() => location.assign('/cart/'));
+    await page.waitForURL(/\/cart\/$/);
+    await expect(page.locator('.cart-line').first()).toBeVisible({ timeout: 15_000 });
     expect(await seen(page)).toMatchObject({ empty: 0, zero: 0 });
     await ctx.close();
   });
@@ -390,7 +433,9 @@ test.describe('S23 (QA S21): the cart id, the story’s cart, the cache and the 
     const page = await ctx.newPage();
     for (const p of ['/cart/', '/checkout/']) {
       await page.goto(p, { waitUntil: 'load' });
-      await expect(page.getByText('הסל והתשלום פועלים עם JavaScript', { exact: false }), p).toBeVisible();
+      // (Playwright's text matcher skips <noscript>: the line is found by its class)
+      await expect(page.locator('.cart-noscript'), p).toBeVisible();
+      await expect(page.locator('.cart-noscript'), p).toHaveText(/^הסל והתשלום פועלים עם JavaScript\./);
       await expect(page.getByText('הסל ריק')).toHaveCount(0);
     }
     await ctx.close();
