@@ -1,0 +1,10 @@
+changed: ['curtains', 'curtains-shadow', 'curtains-v2 layer', 'curtains-v2 shadow', 'framed-art-v2 layer', 'framed-art-v2 shadow', 'magazine-holder', 'pendant-v2 layer', 'vase', 'vase-shadow', 'vase-v2 layer', 'vase-v2 shadow'] | base ok: True
+recomposite A {'P1': (0.0, 3.0, 14), 'P2': (0.0, 3.0, 14), 'P4': (1.0, 3.0, 14)} 16
+recomposite B {'P1': (0.0, 4.0, 25), 'P2': (0.0, 4.0, 25), 'P4': (1.0, 4.0, 25)} 27
+recomposite C {'P1': (0.0, 4.0, 27), 'P2': (0.0, 4.0, 27), 'P4': (1.0, 4.0, 27)} 39
+swap defaults: toggles 42 outside 0 153
+Traceback (most recent call last):
+  File "/home/user/homedesign-app/qa/reports/2026-11-12-wm-tool-phase2-r6-r7/tools/r67_integrity.py", line 218, in <module>
+    cu |= reg[k] | regp[k]
+          ~~~^^^
+KeyError: 'curtains-shadow'
