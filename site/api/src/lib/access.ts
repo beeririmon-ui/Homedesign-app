@@ -7,6 +7,7 @@ import type { MiddlewareHandler } from 'hono';
 import { sha256Hex, timingSafeEqualHex } from '@hd/shared';
 import type { AppEnv, Env } from '../env';
 import { HttpError } from './http';
+import { CodedError } from './errors';
 import { log } from './log';
 
 type Jwk = JsonWebKey & { kid?: string };
@@ -26,7 +27,7 @@ function b64urlDecode(s: string): Uint8Array<ArrayBuffer> {
 async function teamKeys(domain: string, fetcher: typeof fetch): Promise<Jwk[]> {
   if (jwksCache && jwksCache.domain === domain && Date.now() - jwksCache.at < 10 * 60_000) return jwksCache.keys;
   const res = await fetcher(`https://${domain}/cdn-cgi/access/certs`);
-  if (!res.ok) throw new Error(`access certs ${res.status}`);
+  if (!res.ok) throw new CodedError('access_certs_failed', String(res.status));
   const body = (await res.json()) as { keys: Jwk[] };
   jwksCache = { domain, keys: body.keys, at: Date.now() };
   return body.keys;

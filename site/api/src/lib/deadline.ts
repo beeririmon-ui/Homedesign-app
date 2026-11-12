@@ -8,12 +8,13 @@
  * (its `signal` fires, for a provider that passes it to fetch) and the run treats it as a failure that may have issued
  * something: the claim stays, and once the lease is over the next run asks the provider before it calls again.
  */
+import { OwnError } from './errors';
 
 /** The deadline of one call to a provider: far below every lease that guards it (CALL_TIMEOUT_MS × 5 ≤ lease). */
 export const PROVIDER_CALL_TIMEOUT_MS = 60_000;
 
 /** The call did not answer in time: it may still have done its work at the provider, so it is never a refusal. */
-export class CallTimedOut extends Error {
+export class CallTimedOut extends OwnError {
   constructor(what: string, ms: number) {
     super(`${what}: no answer within ${ms < 1000 ? `${ms} ms` : `${Math.round(ms / 1000)} s`} (aborted; it may still have been done at the provider)`);
     this.name = 'CallTimedOut';

@@ -1,3 +1,4 @@
+import { OwnError } from '../errors';
 export type SupplierOrderInput = {
   order_id: string;
   lines: { supplier_sku: string | null; product_id: string; qty: number }[];
@@ -27,7 +28,7 @@ export type SupplierCancelOutcome = { outcome: 'canceled' | 'requested' | 'refus
  * without a SKU): nothing was created at the supplier. Any other failure (a timeout, a network or server error) may have
  * created the order, and the shipment then counts as sent until the supplier (or a person) says otherwise.
  */
-export class SupplierRefused extends Error {
+export class SupplierRefused extends OwnError {
   constructor(
     public readonly code: string,
     message: string = code,

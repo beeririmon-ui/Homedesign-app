@@ -20,6 +20,7 @@
  */
 import { providerOf, refuseLoudly } from '../config';
 import { errorCode } from '../log';
+import { OwnError } from '../errors';
 import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from '../deadline';
 
 export type InvoiceInput = {
@@ -63,7 +64,7 @@ export interface InvoiceProvider {
 }
 
 /** A refusal the provider gives before issuing anything (a total that does not add up): the claim is released. */
-export class InvoiceRefused extends Error {}
+export class InvoiceRefused extends OwnError {}
 
 /** Development, tests and preview: a deterministic number per order; idempotent per key within the Worker instance */
 export function mockInvoices(): InvoiceProvider {

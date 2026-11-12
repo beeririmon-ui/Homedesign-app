@@ -27,6 +27,7 @@ import { PROVIDER_CALL_TIMEOUT_MS, withDeadline } from './deadline';
 import { supplierClient, type SupplierChoice } from './suppliers';
 import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from './suppliers/types';
 import { errorCode, log } from './log';
+import { CodedError } from './errors';
 import { processCreditNoteJob, processInvoiceJob } from './invoices';
 import { processNotifyJob } from './notify';
 
@@ -66,9 +67,9 @@ export function supplierLines(items: ItemRow[]): SupplierOrderInput['lines'] {
         : null;
     if (parts) {
       // never N × the same print: a set's parts are distinct SKUs
-      if (parts.length > 1 && new Set(parts.map((p) => p.supplier_sku)).size !== parts.length) throw new Error(`set_parts_not_distinct: ${i.variant_id}`);
+      if (parts.length > 1 && new Set(parts.map((p) => p.supplier_sku)).size !== parts.length) throw new CodedError('set_parts_not_distinct', i.variant_id);
       for (const p of parts) add(p.supplier_sku, i.product_id, i.qty * p.qty);
-    } else if (i.pack === 'set' && i.set_incomplete) throw new Error(`set_composition_missing: ${i.variant_id}`);
+    } else if (i.pack === 'set' && i.set_incomplete) throw new CodedError('set_composition_missing', i.variant_id);
     else add(i.supplier_sku, i.product_id, i.qty * i.unit_sell_qty);
   }
   return [...out.values()];

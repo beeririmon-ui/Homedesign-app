@@ -1,6 +1,7 @@
 import type { Env } from '../../env';
 import { providerOf } from '../config';
 import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from './types';
+import { CodedError } from '../errors';
 
 /**
  * Development and preview: records the order without calling a supplier.
@@ -39,7 +40,7 @@ export function cjSupplier(apiKey: string | undefined, fetcher: Fetch = (u, i) =
     id: 'cj',
     /** the access token (the documented call our sourcing client uses), cached for its life */
     async token(): Promise<string> {
-      if (!apiKey) throw new Error('CJ_API_KEY is not set');
+      if (!apiKey) throw new CodedError('cj_api_key_missing', 'CJ_API_KEY is not set');
       if (cached && cached.until > Date.now()) return cached.token;
       const r = await fetcher(`${CJ_BASE}/authentication/getAccessToken`, {
         method: 'POST',
@@ -47,7 +48,7 @@ export function cjSupplier(apiKey: string | undefined, fetcher: Fetch = (u, i) =
         body: JSON.stringify({ apiKey }),
       });
       const d = (await r.json().catch(() => ({}))) as { result?: boolean; message?: string; data?: { accessToken?: string } };
-      if (!r.ok || !d.result || !d.data?.accessToken) throw new Error(`cj_token_failed: ${d.message ?? r.status}`);
+      if (!r.ok || !d.result || !d.data?.accessToken) throw new CodedError('cj_token_failed', String(d.message ?? r.status));
       cached = { token: d.data.accessToken, until: Date.now() + 12 * 3600_000 };
       return cached.token;
     },

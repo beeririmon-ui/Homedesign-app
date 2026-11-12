@@ -4,6 +4,7 @@
  * Candidates (not verified, decision open): Grow (Meshulam), Cardcom, PayPlus. Each gets an adapter
  * with the same interface; `mock` is for development, tests and the artifact preview.
  */
+import { OwnError } from '../errors';
 export type CreateSessionInput = {
   order_id: string;
   amount_agorot: number;
@@ -37,7 +38,7 @@ export type RefundInput = {
 export type IssuedRefund = { refund_id: string; raw?: unknown };
 
 /** A refusal the provider gives before anything moved (more than what is left, a payment it does not know). */
-export class RefundRefused extends Error {}
+export class RefundRefused extends OwnError {}
 
 export interface PaymentProvider {
   readonly id: string;

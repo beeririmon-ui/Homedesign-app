@@ -1,8 +1,9 @@
 import type { Context, MiddlewareHandler } from 'hono';
 import type { z } from 'zod';
 import type { AppEnv, RateLimiter } from '../env';
+import { OwnError } from './errors';
 
-export class HttpError extends Error {
+export class HttpError extends OwnError {
   constructor(
     public status: 400 | 401 | 403 | 404 | 409 | 413 | 422 | 429 | 500 | 502 | 503,
     public code: string,
