@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-fix_r8.py: R8, two 0-token code fixes on existing warm-modern tool layers (render-agent, 2026-11-12). Code only: 0 tokens, no var2,
-no network. Source: docs/proposals/wm-r7-table-decisions-2026-11-12.md section 3 (3.3.1 and 3.2.4). NEW FILES ONLY: work-r8/ (ungraded
+fix_r8.py: R8, 0-token code fixes on existing warm-modern tool layers (render-agent, 2026-11-12). Code only: 0 tokens, no var2,
+no network. Sources: docs/proposals/wm-r7-table-decisions-2026-11-12.md section 3 (3.3.1 and 3.2.4) and QA's combined R6/R7 report
+(the coordinator's additions, below). On the travertine marks QA proposed filling the 3 px gap inside the field; the designer's 3.3.1
+rule (whatever lies between the feet goes) is what is applied: the fill, computed for comparison only, would join the dashes into one
+patch up to 36 % dark between the feet (fix-r8.json holders_qa_fill_alternative). NEW FILES ONLY: work-r8/ (ungraded
 per-product layers and shadows, the same form as work-r7/) and work-r8/fix-r8.json; grade_cut_r8.py grades and cuts them with the ONE
 v3c grade. The R7 files are read, never written.
 
@@ -381,13 +384,18 @@ def break_and_contact(name, rgb, af, sh, fa8):
     t = con_y[None, :] - yy
     s_ = np.clip((BREAK_END - t) / (BREAK_END - BREAK_FULL), 0, 1)
     prof = np.where(t <= BREAK_FULL, 1.0, s_ * s_ * (3 - 2 * s_)) * (t > -1) * (xx > xh + 1) * (af > 0)
+    # R7's own break (fix_r7.curtain_cut: L* -4 x smoothstep, peaking AT the contact) is taken back out, so the band is ONE flat step
+    # (a peak at the contact line stacked on the step reads as a dark contour: QA's halo metric)
+    sr = np.clip(1 - t / F7.BREAK_PX, 0, 1)
+    brk7 = (sr * sr * (3 - 2 * sr)) * (t > -2) * (xx > xh) * (af > 0)
+    touch = (prof > 0) | (brk7 > 0)
     lb0 = lab(rgb)
     L0, _ = graded_L(rgb, a_eff)
     before_break = qa_break(L0, fa8)
 
     def apply(A):
-        L_ = lb0[..., 0] - A * prof
-        return np.where((prof > 0)[..., None], rgb_of(L_, lb0[..., 1], lb0[..., 2]), rgb).astype(np.float32)
+        L_ = lb0[..., 0] + 4.0 * brk7 - A * prof
+        return np.where(touch[..., None], rgb_of(L_, lb0[..., 1], lb0[..., 2]), rgb).astype(np.float32)
     lo, hi, hist = 0.0, 25.0, []
     for _ in range(18):
         A = (lo + hi) / 2
@@ -428,9 +436,11 @@ def break_and_contact(name, rgb, af, sh, fa8):
     sh2 = sh_with(Dd)
     after_contact = qa_contact(graded_shadow_r(rgb2, af, sh2, fa8), fa8)
     after_contact_ungraded = qa_contact(np.round(sh2 * 255).astype(np.uint8), fa8)
+    halo = dict(before=qa_halo_model(rgb, af, sh, fa8), after=qa_halo_model(rgb2, af, sh2, fa8))
     rec = dict(break_=dict(qa_measure_graded=dict(before=before_break[0], after=after_break[0], columns=after_break[1]), target=BREAK_TARGET,
-                           extra_step_L_ungraded=round(A, 3), profile=f"full up to {BREAK_FULL} px above the contact (x > the bench end), "
-                           f"smoothstep to 0 at {BREAK_END} px (10.5 at 3840)", bisection=hist,
+                           flat_step_L_ungraded=round(A, 3), extra_step_L_ungraded=round(A, 3),
+                           profile=f"ONE flat step (R7's smoothstep peak at the contact taken back out): full up to {BREAK_FULL} px above the "
+                                   f"contact (x > the bench end), smoothstep to 0 at {BREAK_END} px (10.5 at 3840)", bisection=hist,
                            why="R7's -4 was applied before the grade; the v3c highlight shoulder (the fabric at L* 93-95) eats it"),
                contact=dict(qa_measure=dict(before=before_contact[0], after=after_contact[0], columns=after_contact[1]), target=CONTACT_TARGET,
                             on_the_graded_shadow="modelled as grade_cut's cut() solves it (graded_shadow_r); the build's file is checked in verify",
@@ -438,8 +448,33 @@ def break_and_contact(name, rgb, af, sh, fa8):
                                                  why="the bright stone sits in the v3c shoulder: the graded file reads lighter than its source"),
                             extra_darkening=round(Dd, 4), bisection=chist,
                             profile="fix_r7.curtain_cut's contact profile (width 5 px at 3840, linear, blur sigma CONTACT_BLUR), on top of R7's"),
+               qa_hem_halo_model=halo,
                rgb_px_changed=int(((rgb2 != rgb).any(2)).sum()), shadow_px_changed=int((np.round(sh2 * 255) != np.round(sh * 255)).sum()))
     return rgb2, sh2, rec
+
+
+_HALO = []
+
+
+def qa_halo_model(rgb, af, sh, fa8):
+    """QA's hem-halo metric (r67_halo.analyse, loaded read-only as r67_hem_halo.py does) on the modelled set-B scene of this curtain:
+    the curtain composed first behind the furniture on the base, graded (stack.py); box x 0-260, y 1180-1445"""
+    if not _HALO:
+        qad = os.path.join(REPO, "qa/reports/2026-11-12-wm-tool-phase2-r6-r7")
+        src = open(os.path.join(qad, "tools/r67_halo.py")).read()
+        ns = {}
+        exec(src[src.index("def Lof"):src.index("def alphas_of")], {"np": np, "cv2": cv2, "Image": Image, "os": os, "OUT": qad}, ns)
+        _HALO.append(ns)
+    ns = _HALO[0]
+    P = base_parts()
+    fa = fa8.astype(np.float32) / 255
+    Uw = (P["behind0"] * sh[..., None] * (1 - af[..., None]) + rgb * af[..., None]) * (1 - fa[..., None]) + P["F"] * fa[..., None]
+    a_eff = af * (1 - fa)
+    T = grade()(Uw, a_eff)
+    A8 = np.clip(np.floor(a_eff * 255 + 0.5), 0, 255).astype(np.uint8)
+    above = cv2.dilate((fa8 > 0).astype(np.uint8), np.ones((7, 7), np.uint8)) > 0
+    h = ns["analyse"](ns["Lof"](T), A8, "model", T, above, box=(0, 1180, 260, 1445), save=False)
+    return {k: v for k, v in h.items() if k.startswith(("dark", "bright"))}
 
 
 _P = []
@@ -604,6 +639,16 @@ def curtain3():
                        "than the fabric 4-9 px inside + 2 L*; a* b* kept" % (int(yv - 1), int(y_hem)), px_changed=int(nfr), dL_max=round(float(np.abs(lab(s3)[..., 0] - lab(s2)[..., 0]).max()), 2))
     # (4) the break and the contact
     s4, sh2, bc = break_and_contact(name, s3, af, sh, fa8)
+    # the final speck pass: after the L* factor the 8-bit round trip nudges a few borderline pixels past the rule (dark folds)
+    s4 = np.round(s4 * 255) / 255
+    lit5, spk5, _ = speck_masks(s4, a8)
+    m5 = lit5 | spk5
+    if m5.any():
+        n5 = neutralise(s4, a8, m5)
+        s4 = np.where(m5[..., None], np.round(n5 * 255) / 255, s4).astype(np.float32)
+    lit6, spk6, _ = speck_masks(s4, a8)
+    specks["final_pass"] = dict(px=int(m5.sum()), after=dict(literal=int(lit6.sum()), specks=int(spk6.sum())),
+                                why="after the L* factor, the 8-bit round trip nudged borderline dark-fold pixels past the rule")
     files, out8, s8 = save_curtain(name, L8, s4, sh2)
     Lg, g8 = graded_L(out8.astype(np.float32) / 255, a_eff)
     bc["hem_band_dL_qa"] = dict(after=qa_hem_band(Lg, F7.HEM_Z[name]), before=qa_hem_band(graded_L(rgb, a_eff)[0], F7.HEM_Z[name]), rule="-2 +-1")

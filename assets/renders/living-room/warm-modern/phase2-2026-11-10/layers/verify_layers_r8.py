@@ -25,12 +25,19 @@ Checks (as verify_layers_r7.py, on the R8 files)
      histogram inside with the constant one outside (numpy's linear percentile, reproduced from the integer histogram).
   8. ONE v3c grade on every layer changed in R7 or R8 (verify_layers_r4.py's method): the residual against its ungraded source,
      |median| <= 0.5 and the toe within +-1.
-  9. R8 (designer 3.3.1 and 3.2.4), against manifest-r7.json's files: only the travertine pair's SHADOW and curtains-v3's LAYER are
-     new files; every other file is the R7 file. The pair: its RGBA the same bytes; the shadow changes only inside the mark box, only
-     lighter (nothing added); between the feet (x 1718-1752, alpha 0) the darkening <= 3 / 255 and, on the set-B scene, the table there
-     within 1 L* of the scene without the pair. Curtain 3: alpha the same bytes; RGB changes where alpha > 0 only on the speck mask
-     (work-r8/curtain3-speck-mask.npy); 0 pixels by the designer's rule (h 150-230, C* > 6) and 0 by the specks rule; L* on the
-     specks within 1; the body's median Lab within 0.1.
+  9. R8, against manifest-r7.json's files: only the travertine pair's shadow and the three curtains' layers and shadows are new files;
+     every other file is the R7 file.
+     (a) the pair (designer 3.3.1): its alpha the same bytes, its RGB re-solved only inside the mark box (premultiplied <= 1 level);
+         the shadow changes only inside the mark box and only lighter; between the
+         feet (x 1718-1752, alpha 0) the darkening <= 3 / 255 and the table within 1 L* of the scene without the pair (QA's -15 L*).
+     (b) the curtains (QA R6/R7 section 5), QA's own formulas (tools/r67_curtains.py; the halo metric of r67_halo.py, loaded read-only as
+         r67_hem_halo.py does): the source alpha the same bytes (the graded alpha moves only where the source is soft: cut() raises a
+         soft edge where the scene under it changed); break -3..-5 on the graded truth; stone contact 0.90-0.95 on the graded shadow;
+         hem band -2 +-1; the floor contact still 255; curtain 3's bright fringe run < 8 px, the others no longer than in R7.
+     (c) curtain 3: 0 visible px (alpha >= 128) by the designer's speck rule (h 150-230, C* > 6) and 0 by the wider specks rule (the
+         cut's soft edge reported apart); L* in QA's same mask within 0.5
+         of the card-ratio target (fix-r8.json), C* within 0.6 and h within 1.5 deg of R7 (hue and chroma kept); 180502's L* unchanged;
+         marked pending the designer's eye.
 """
 import importlib.util
 import json
@@ -308,7 +315,7 @@ def main():
     # 8 one grade on the R7 changes
     W7 = os.path.join(P2, "work-r7", "layers")
     W8 = os.path.join(P2, "work-r8", "layers")
-    src8 = {"candle-holders", "curtains-v3"}
+    src8 = {"candle-holders", "curtains", "curtains-v2", "curtains-v3"}
     names = {k: (byid[k]["file"], os.path.join(W8 if k in src8 else W7, f"{k}.png"), byid[k]["z"]) for k in ("curtains", "planter", "candle-holders", "bowl")}
     for vid in ("curtains-v2", "curtains-v3", "bowl-v2", "candle-holders-v2", "vase-v3"):
         v = next(x for vs in man["variants"].values() for x in vs if x["id"] == vid)
@@ -340,6 +347,8 @@ def main():
 # ------------------------------------------------------------------------------------------------- 9 the R8 fixes
 MARK_BOX = (1704, 1240, 1752, 1292)          # x0, y0, x1, y1 (2720), as fix_r8.py
 BETWEEN = (1718, 1240, 1752, 1292)           # between the feet, beyond A's own blob
+QAD = os.path.join(REPO, "qa/reports/2026-11-12-wm-tool-phase2-r6-r7")
+EXPECTED_CHANGED = ["candle-holders", "candle-holders-shadow", "curtains", "curtains-shadow", "curtains-v2", "curtains-v2-shadow", "curtains-v3", "curtains-v3-shadow"]
 
 
 def _lab(rgb8):
@@ -360,7 +369,64 @@ def _speck_rules(rgb8, a8):
     return lit, spk, lb
 
 
+def _qa_halo():
+    """QA's halo metric, analyse() and Lof() of tools/r67_halo.py, loaded exactly as QA's r67_hem_halo.py loads them (read only)"""
+    import cv2
+    src = open(os.path.join(QAD, "tools/r67_halo.py")).read()
+    ns = {}
+    exec(src[src.index("def Lof"):src.index("def alphas_of")], {"np": np, "cv2": cv2, "Image": Image, "os": os, "OUT": QAD}, ns)
+    return ns
+
+
+def _qa_yline(P, x):
+    (x0, y0), (x1, y1) = P
+    return y0 + (x - x0) * (y1 - y0) / (x1 - x0)
+
+
+QA_CON = [(129.3, 1209.9), (244.7, 1183.6)]
+
+
+def _qa_break(Lt, fa):
+    brk, abv = [], []
+    for x in range(200, 245):
+        yp = _qa_yline(QA_CON, x)
+        if fa[int(yp) - 20:int(yp) + 2, x].max() > 0:
+            continue
+        b0 = int(round(yp)) - 1
+        brk.append(np.median(Lt[b0 - 5:b0, x]))
+        abv.append(np.median(Lt[b0 - 15:b0 - 5, x]))
+    return round(float(np.median(np.array(brk) - np.array(abv))), 2)
+
+
+def _qa_contact(S8, fa):
+    cm = []
+    for x in range(131, 245):
+        yp = _qa_yline(QA_CON, x)
+        if fa[int(yp) - 6:int(yp) + 8, x].max() > 0:
+            continue
+        cm.append(float(S8[int(yp):int(yp) + 6, x].min()) / 255)
+    return round(float(np.median(cm)), 3)
+
+
+def _qa_hem_band(Lt, hem):
+    band, above = [], []
+    for x in range(80, 126):
+        yp = _qa_yline(hem, x)
+        b0 = int(round(yp)) - 3
+        band.append(np.median(Lt[b0 - 15:b0, x]))
+        above.append(np.median(Lt[b0 - 35:b0 - 15, x]))
+    return round(float(np.median(np.array(band) - np.array(above))), 2)
+
+
+def _summ(T, m):
+    import math
+    lb = _lab(T)[m].astype(np.float64)
+    L_, a_, b_ = np.median(lb, 0)
+    return dict(L=round(float(L_), 2), C=round(float(math.hypot(a_, b_)), 2), h=round(float(math.degrees(math.atan2(b_, a_)) % 360), 1))
+
+
 def r8_checks(man, base, layersB):
+    import cv2
     m7 = json.load(open(os.path.join(HERE, "manifest-r7.json")))
     f7 = {l_["id"]: l_["file"] for l_ in m7["layers"] if "file" in l_}
     f8 = {l_["id"]: l_["file"] for l_ in man["layers"] if "file" in l_}
@@ -374,8 +440,8 @@ def r8_checks(man, base, layersB):
         f7[f"cushions-{s}"], f7[f"cushions-{s}-shadow"] = m7["slot_cushions"]["sets"][s]["layer"], m7["slot_cushions"]["sets"][s]["shadow"]
         f8[f"cushions-{s}"], f8[f"cushions-{s}-shadow"] = man["slot_cushions"]["sets"][s]["layer"], man["slot_cushions"]["sets"][s]["shadow"]
     diff = sorted(k for k in f8 if f8[k] != f7.get(k))
-    out = {"files_changed_vs_r7": dict(changed=diff, expected=["candle-holders-shadow", "curtains-v3"], pass_=diff == ["candle-holders-shadow", "curtains-v3"])}
-    # the pair
+    out = {"files_changed_vs_r7": dict(changed=diff, expected=EXPECTED_CHANGED, pass_=diff == EXPECTED_CHANGED)}
+    # (a) the travertine pair
     L7, L8 = arr(f7["candle-holders"]), arr(f8["candle-holders"])
     S7 = arr(f7["candle-holders-shadow"])[..., :3].astype(int)
     S8 = arr(f8["candle-holders-shadow"])[..., :3].astype(int)
@@ -387,44 +453,112 @@ def r8_checks(man, base, layersB):
     zone = np.zeros(ch.shape, bool)
     zone[by0:by1, bx0:bx1] = True
     zone &= L8[..., 3] == 0
-    # on the set-B default scene: the table between the feet against the same scene without the pair (L*)
     full = compose(base, layersB, "8bit")
     wo = compose(base, layersB, "8bit", skip="candle-holders")
-    dL = _lab(rhu(full).astype(np.uint8))[..., 0] - _lab(rhu(wo).astype(np.uint8))[..., 0]
+    Lwo = _lab(rhu(wo).astype(np.uint8))[..., 0]
+    dL = _lab(rhu(full).astype(np.uint8))[..., 0] - Lwo
     T7 = np.asarray(Image.open(os.path.join(P2, "graded/default-scene-r7-set-B-graded-v3c.png")).convert("RGB"))
-    dL7 = _lab(T7)[..., 0] - _lab(rhu(wo).astype(np.uint8))[..., 0]
-    hold = dict(layer_rgba_same_bytes=bool(np.array_equal(L7, L8)), shadow_px_changed=int(ch.sum()),
+    dL7 = _lab(T7)[..., 0] - Lwo
+    mark7 = zone & (dL7 < -1.0)
+    lch = (L7 != L8).any(2)
+    pm = np.abs(L7[..., :3].astype(float) * L7[..., 3:] / 255 - L8[..., :3].astype(float) * L8[..., 3:] / 255).max()
+    hold = dict(layer_alpha_same_bytes=bool(np.array_equal(L7[..., 3], L8[..., 3])), layer_px_changed=int(lch.sum()),
+                layer_px_changed_outside_mark_box=int((lch & ~box).sum()), layer_visible_px_changed_outside_mark_box=int((lch & ~box & (L8[..., 3] > 0)).sum()),
+                layer_max_alpha_where_changed=int(L8[..., 3][lch].max()) if lch.any() else 0,
+                layer_premultiplied_max_diff=round(float(pm), 3), shadow_px_changed=int(ch.sum()),
                 shadow_px_changed_outside_mark_box=int((ch & ~box).sum()), only_lighter=bool((S8 >= S7).all()),
                 between_feet_max_darkening_255=dict(r7=int(255 - S7[..., 0][zone].min()), r8=int(255 - S8[..., 0][zone].min())),
-                between_feet_table_dL=dict(r7_min=round(float(dL7[zone].min()), 2), r8_min=round(float(dL[zone].min()), 2)))
-    hold["pass_"] = (hold["layer_rgba_same_bytes"] and hold["shadow_px_changed_outside_mark_box"] == 0 and hold["only_lighter"]
-                     and hold["between_feet_max_darkening_255"]["r8"] <= 3 and hold["between_feet_table_dL"]["r8_min"] >= -1.0)
-    hold["summary"] = dict(changed=hold["shadow_px_changed"], between_r7=hold["between_feet_max_darkening_255"]["r7"],
-                           between_r8=hold["between_feet_max_darkening_255"]["r8"], dL_r7=hold["between_feet_table_dL"]["r7_min"],
-                           dL_r8=hold["between_feet_table_dL"]["r8_min"])
+                between_feet_table_dL_as_qa=dict(what="set-B scene L* minus the same scene without the pair, x 1718-1752, y 1240-1292, the pair's alpha 0",
+                                                  r7_min=round(float(dL7[zone].min()), 2), r8_min=round(float(dL[zone].min()), 2),
+                                                  r7_median_on_the_marks=round(float(np.median(dL7[mark7])), 2) if mark7.any() else None,
+                                                  r8_median_on_the_same_px=round(float(np.median(dL[mark7])), 2) if mark7.any() else None,
+                                                  mark_px_r7=int(mark7.sum())))
+    hold["pass_"] = (hold["layer_alpha_same_bytes"] and hold["layer_visible_px_changed_outside_mark_box"] == 0 and hold["layer_premultiplied_max_diff"] <= 1.0
+                     and hold["shadow_px_changed_outside_mark_box"] == 0 and hold["only_lighter"]
+                     and hold["between_feet_max_darkening_255"]["r8"] <= 3 and hold["between_feet_table_dL_as_qa"]["r8_min"] >= -1.0)
+    hold["summary"] = dict(changed=hold["shadow_px_changed"], dark255=hold["between_feet_max_darkening_255"], dL=hold["between_feet_table_dL_as_qa"])
     out["travertine_marks"] = hold
-    # curtain 3
+    # (b) the three curtains: QA's measures (tools/r67_curtains.py, r67_hem_halo.py) on R7 and R8
+    fa = np.asarray(Image.open(os.path.join(P1, "fixed-furniture.png")))[..., 3]
+    halo = _qa_halo()
+    ff = fa > 0
+    above_ff = cv2.dilate(ff.astype(np.uint8), np.ones((7, 7), np.uint8)) > 0
+    sys.path.insert(0, P2D)
+    sys.path.insert(0, os.path.join(P2D, "step0"))
+    import fix_r7 as F7
+    fix8 = json.load(open(os.path.join(P2D, "work-r8", "fix-r8.json")))
+    cur = {}
+    truth = {"r7": {"curtains": "graded/default-scene-r7-set-B-graded-v3c.png", "curtains-v2": "graded/variant-r7-curtains-v2-set-B-graded-v3c.png",
+                    "curtains-v3": "graded/variant-r7-curtains-v3-set-B-graded-v3c.png"},
+             "r8": {"curtains": "graded/default-scene-r8-set-B-graded-v3c.png", "curtains-v2": "graded/variant-r8-curtains-v2-set-B-graded-v3c.png",
+                    "curtains-v3": "graded/variant-r8-curtains-v3-set-B-graded-v3c.png"}}
+    for key in ("curtains", "curtains-v2", "curtains-v3"):
+        hz = F7.HEM_Z[key]
+        hem = [F7.wpt(-2.15, 2.95, hz), F7.wpt(-2.15, 2.85, hz)]
+        rr = {}
+        for tag, fl in (("r7", f7), ("r8", f8)):
+            T = np.asarray(Image.open(os.path.join(P2, truth[tag][key])).convert("RGB"))
+            Lt = _lab(T)[..., 0]
+            S = arr(fl[key + "-shadow"])
+            S = S if S.ndim == 2 else S[..., 0]
+            A = arr(fl[key])[..., 3]
+            hh = halo["analyse"](halo["Lof"](T), A, f"r8check-{key}-{tag}", T, above_ff, box=(0, 1180, 260, 1445), save=False)
+            fl_ = np.zeros(A.shape, bool)
+            fl_[1440:, :310] = True
+            rr[tag] = dict(break_dL=_qa_break(Lt, fa), stone_contact=_qa_contact(S, fa), hem_band_dL=_qa_hem_band(Lt, hem),
+                           floor_contact_min=int(S[fl_].min()), hem_halo_bright_run=hh["bright_longest_run_px"], hem_halo_dark_run=hh["dark_longest_run_px"],
+                           hem_halo_bright_px=hh["bright_halo_px"])
+        nm_src = {"curtains": "curtains", "curtains-v2": "curtains-v2", "curtains-v3": "curtains-v3"}[key]
+        fa7 = np.asarray(Image.open(os.path.join(P2D, "work-r7", "layers", f"{nm_src}-free-alpha.png")))
+        fa8_ = np.asarray(Image.open(os.path.join(P2D, "work-r8", "layers", f"{nm_src}-free-alpha.png")))
+        sa7 = np.asarray(Image.open(os.path.join(P2D, "work-r7", "layers", f"{nm_src}.png")))[..., 3]
+        sa8 = np.asarray(Image.open(os.path.join(P2D, "work-r8", "layers", f"{nm_src}.png")))[..., 3]
+        G7a, G8a = arr(f7[key])[..., 3].astype(int), arr(f8[key])[..., 3].astype(int)
+        gch = G7a != G8a
+        a_same = bool(np.array_equal(fa7, fa8_) and np.array_equal(sa7, sa8))
+        src_soft = (sa8 > 0) & (sa8 < 255)
+        graded_alpha = dict(px_changed=int(gch.sum()), max_diff=int(np.abs(G7a - G8a).max()), changed_where_source_not_soft=int((gch & ~src_soft).sum()))
+        a_same = a_same and graded_alpha["changed_where_source_not_soft"] == 0
+        ok = (a_same and -5.0 <= rr["r8"]["break_dL"] <= -3.0 and 0.90 <= rr["r8"]["stone_contact"] <= 0.95 and -3.0 <= rr["r8"]["hem_band_dL"] <= -1.0
+              and rr["r8"]["floor_contact_min"] == 255 and rr["r8"]["hem_halo_dark_run"] <= max(rr["r7"]["hem_halo_dark_run"], 7)
+              and (rr["r8"]["hem_halo_bright_run"] < 8 if key == "curtains-v3" else rr["r8"]["hem_halo_bright_run"] <= rr["r7"]["hem_halo_bright_run"]))
+        cur[key] = dict(qa_r7=rr["r7"], qa_r8=rr["r8"], source_alpha_same_bytes=a_same, graded_alpha=graded_alpha, pass_=ok,
+                        rules=dict(break_dL="-3..-5", stone_contact="0.90-0.95", hem_band_dL="-2 +-1", hem_halo="curtain 3: bright run < 8 (QA crops >= 8); "
+                                   "the others: no longer than in R7"))
+    out["curtains_bench"] = dict(per_curtain=cur, pass_=all(v["pass_"] for v in cur.values()),
+                                 summary={k: dict(brk=(v["qa_r7"]["break_dL"], v["qa_r8"]["break_dL"]), contact=(v["qa_r7"]["stone_contact"], v["qa_r8"]["stone_contact"]),
+                                                  bright_run=(v["qa_r7"]["hem_halo_bright_run"], v["qa_r8"]["hem_halo_bright_run"])) for k, v in cur.items()})
+    # (c) curtain 3: the specks and L*
     v7 = next(v for v in m7["variants"]["curtains"] if v["id"] == "curtains-v3")
     v8 = next(v for v in man["variants"]["curtains"] if v["id"] == "curtains-v3")
     C7, C8 = arr(v7["file"]), arr(v8["file"])
-    mask = np.load(os.path.join(P2D, "work-r8", "curtain3-speck-mask.npy"))
-    rgbch = (C7[..., :3] != C8[..., :3]).any(2)
-    lit7, spk7, lb7 = _speck_rules(C7[..., :3], C7[..., 3])
-    lit8, spk8, lb8 = _speck_rules(C8[..., :3], C8[..., 3])
-    body = C8[..., 3] == 255
-    cur = dict(alpha_same_bytes=bool(np.array_equal(C7[..., 3], C8[..., 3])), speck_mask_px=int(mask.sum()),
-               rgb_changed_alpha_gt0=int((rgbch & (C8[..., 3] > 0)).sum()), rgb_changed_alpha_gt0_outside_specks=int((rgbch & (C8[..., 3] > 0) & ~mask).sum()),
-               rgb_changed_alpha0_bleed_only=int((rgbch & (C8[..., 3] == 0)).sum()),
-               designer_rule_px=dict(r7=int(lit7.sum()), r8=int(lit8.sum())), specks_rule_px=dict(r7=int(spk7.sum()), r8=int(spk8.sum())),
-               dL_max_on_specks=round(float(np.abs(lb8[..., 0] - lb7[..., 0])[mask & (C8[..., 3] > 0)].max()), 3),
-               body_median_lab=dict(r7=[round(float(v), 3) for v in np.median(lb7[body], 0)], r8=[round(float(v), 3) for v in np.median(lb8[body], 0)]),
-               shadow_same_file=v7["shadow"] == v8["shadow"])
-    cur["pass_"] = (cur["alpha_same_bytes"] and cur["rgb_changed_alpha_gt0_outside_specks"] == 0 and cur["designer_rule_px"]["r8"] == 0
-                    and cur["specks_rule_px"]["r8"] == 0 and cur["dL_max_on_specks"] <= 1.0 and cur["shadow_same_file"]
-                    and max(abs(a - b) for a, b in zip(cur["body_median_lab"]["r7"], cur["body_median_lab"]["r8"])) <= 0.1)
-    cur["summary"] = dict(designer_rule=cur["designer_rule_px"], specks=cur["specks_rule_px"], outside=cur["rgb_changed_alpha_gt0_outside_specks"],
-                          dL=cur["dL_max_on_specks"])
-    out["curtain3_specks"] = cur
+    lit7, spk7, _ = _speck_rules(C7[..., :3], C7[..., 3])
+    lit8, spk8, _ = _speck_rules(C8[..., :3], C8[..., 3])
+    vis7, vis8 = C7[..., 3] >= 128, C8[..., 3] >= 128
+    soft_edge = dict(r7=dict(literal=int((lit7 & ~vis7).sum()), specks=int((spk7 & ~vis7).sum())),
+                     r8=dict(literal=int((lit8 & ~vis8).sum()), specks=int((spk8 & ~vis8).sum())),
+                     note="alpha < 128: the cut's solved colour at the soft edge (division by a small alpha), not a visible speck")
+    lit7, spk7, lit8, spk8 = lit7 & vis7, spk7 & vis7, lit8 & vis8, spk8 & vis8
+    same = np.ones(C8.shape[:2], bool)
+    for f in (f8["curtains"], f8["curtains-v2"], f8["curtains-v3"]):
+        A = arr(f)[..., 3]
+        m = cv2.erode((A == 255).astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
+        m[:100] = False
+        m[1150:] = False
+        same &= m
+    t7 = {k: _summ(np.asarray(Image.open(os.path.join(P2, truth["r7"][k])).convert("RGB")), same) for k in ("curtains", "curtains-v3")}
+    t8 = {k: _summ(np.asarray(Image.open(os.path.join(P2, truth["r8"][k])).convert("RGB")), same) for k in ("curtains", "curtains-v3")}
+    target = fix8["curtain3"]["lstar"]["target_L"]
+    c3 = dict(counted_on="alpha >= 128 (visible fabric)", soft_edge_apart=soft_edge, designer_rule_px=dict(r7=int(lit7.sum()), r8=int(lit8.sum())),
+              specks_rule_px=dict(r7=int(spk7.sum()), r8=int(spk8.sum())), qa_same_mask=dict(r7=t7, r8=t8, px=int(same.sum())), target_L=target,
+              status=v8.get("fidelity_status"))
+    c3["pass_"] = (c3["designer_rule_px"]["r8"] == 0 and c3["specks_rule_px"]["r8"] == 0
+                   and abs(t8["curtains-v3"]["L"] - target) <= 0.5 and abs(t8["curtains-v3"]["C"] - t7["curtains-v3"]["C"]) <= 0.6
+                   and abs(t8["curtains-v3"]["h"] - t7["curtains-v3"]["h"]) <= 1.5 and abs(t8["curtains"]["L"] - t7["curtains"]["L"]) <= 0.05
+                   and "pending the designer's eye" in str(c3["status"]))
+    c3["summary"] = dict(designer_rule=c3["designer_rule_px"], specks=c3["specks_rule_px"], L=(t7["curtains-v3"]["L"], t8["curtains-v3"]["L"], target),
+                         C=(t7["curtains-v3"]["C"], t8["curtains-v3"]["C"]), h=(t7["curtains-v3"]["h"], t8["curtains-v3"]["h"]))
+    out["curtain3"] = c3
     return out
 
 

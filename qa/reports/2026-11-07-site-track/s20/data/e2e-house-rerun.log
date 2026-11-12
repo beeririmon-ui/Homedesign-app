@@ -1,0 +1,47 @@
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProxy environment variables detected. We'll use your proxy for fetch requests.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mScheduled Workers are not automatically triggered during local development.[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m  To manually trigger a scheduled event, run:
+[2m[WebServer] [22m    curl "http://localhost:8788/cdn-cgi/local/scheduled"
+[2m[WebServer] [22m  For more details, see [4mhttps://developers.cloudflare.com/workers/configuration/cron-triggers/#test-cron-triggers-locally[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+
+Running 17 tests using 1 worker
+
+  ✓   1 [e2e] › e2e/house.spec.ts:117:3 › a house's own address (S10 question 7, S11) › ?style=warm-modern is served that house’s own page: its own poster (S14, ת29), no Nordic one, the page CSP; the Nordic address is unchanged (90ms)
+  ✓   2 [e2e] › e2e/house.spec.ts:166:3 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › before any script runs: the prerendered page already draws the poster of set B (the first paint) (1.0s)
+ת29 1280@1: poster vs set B 6/7 · 0.03%; vs the empty base 5.31% above 8
+  ✓   3 [e2e] › e2e/house.spec.ts:186:5 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › 1280@1: the poster at rest is the approved set B composition, not the empty sofa (5.7s)
+ת29 400@1: poster vs set B 4/5 · 0.00%; vs the empty base 10.69% above 8
+  ✓   4 [e2e] › e2e/house.spec.ts:186:5 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › 400@1: the poster at rest is the approved set B composition, not the empty sofa (3.6s)
+  ✓   5 [e2e] › e2e/house.spec.ts:211:3 › the warm-modern house in the room engine (S10) › entering at its address: its own picture, the status label, one slot with a mark, B the default (1.4s)
+  ✓   6 [e2e] › e2e/house.spec.ts:251:3 › the warm-modern house in the room engine (S10) › the wheel reaches all three sets (B, A, C), each with its pieces and prices; the whole set goes to the cart (5.1s)
+  ✓   7 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1280×720@1) (3.3s)
+  ✓   8 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1440×900@1) (3.6s)
+  ✓   9 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1920×1080@1) (2.7s)
+  ✓  10 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (400×800@1) (3.2s)
+  ✓  11 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (390×844@3) (3.5s)
+  ✓  12 [e2e] › e2e/house.spec.ts:350:3 › the warm-modern house in the room engine (S10) › a deep link opens the wheel on its set (the story’s "לנסות בחדר") (2.6s)
+swap-diff (warm modern, 1280×720): B↔A: 0 px changed outside (worst 1 levels), 54900 inside an area of 7.3%; A↔C: 0 px changed outside (worst 2 levels), 57620 inside an area of 7.7%; B↔C: 0 px changed outside (worst 1 levels), 54175 inside an area of 7.4%
+  ✓  13 [e2e] › e2e/house.spec.ts:357:3 › the warm-modern house in the room engine (S10) › swap: a set changes nothing outside the sets’ own area (alpha and shadow of the two sets) (2.9s)
+house switch nordic → warm-modern: dissolve 1049 ms, press → end 1447 ms
+  ✓  14 [e2e] › e2e/house.spec.ts:466:3 › the soft switch between houses, in the engine (S10) › one frame for every layer, the same camera, 1.0 s; the address names the house; back again (5.7s)
+ת15 1280: nordic → warm-modern: before 191.0, at 0 191.0, mid 186.8, at 1 182.6; |0 − before| 0.00, |mid − half each| 0.23, |0 − 1| 43.1; frames drawn in the dissolve 17, darkest 182.5
+ת15 1280: warm-modern → nordic: before 182.6, at 0 182.6, mid 186.8, at 1 190.9; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 42.6; frames drawn in the dissolve 12, darkest 182.5
+  ✓  15 [e2e] › e2e/house.spec.ts:512:5 › the soft switch between houses, in the engine (S10) › ת15: the dissolve draws both houses mixed, never black, both ways (1280×720) (6.2s)
+ת15 400: nordic → warm-modern: before 198.2, at 0 198.2, mid 188.8, at 1 179.3; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 45.3; frames drawn in the dissolve 45, darkest 179.4
+ת15 400: warm-modern → nordic: before 179.3, at 0 179.3, mid 188.7, at 1 198.0; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 45.2; frames drawn in the dissolve 43, darkest 179.5
+  ✓  16 [e2e] › e2e/house.spec.ts:512:5 › the soft switch between houses, in the engine (S10) › ת15: the dissolve draws both houses mixed, never black, both ways (400×800) (5.8s)
+house switch, reduced motion: dissolve 343 ms
+  ✓  17 [e2e] › e2e/house.spec.ts:556:3 › the soft switch between houses, in the engine (S10) › reduced motion: a short dissolve, 0.3 s, nothing moves (2.0s)
+
+  17 passed (1.2m)

@@ -2,14 +2,18 @@
 """
 grade_cut_r8.py: the v3c layers of the warm-modern tool, phase 2, after R8 (render-agent, 2026-11-12; 0 tokens, code only).
 Source: docs/proposals/wm-r7-table-decisions-2026-11-12.md section 3 (3.3.1 the marks between the travertine feet, 3.2.4 the specks in
-curtain 3). NEW FILES ONLY: the R7 files (and every earlier one) are read, never written; a layer or shadow whose recomputed bytes equal
+curtain 3) + QA's combined R6/R7 report (qa/reports/2026-11-12-wm-tool-phase2-r6-r7.md sections 5, 7, 8, 10: the break and the stone
+contact of the three curtains, curtain 3's L* relative to 180502, its corner fringe; the coordinator's additions). NEW FILES ONLY: the R7 files (and every earlier one) are read, never written; a layer or shadow whose recomputed bytes equal
 an existing file keeps that file (each of the two on its own), anything else is written as <stem>-r8.png.
 
 The same method as grade_cut_r7.py, unchanged (ONE v3c grade, stack.Grade; every layer cut from the graded composites, never graded on
 its own; the cushion sets kept byte for byte where the stack under them did not change; the frozen shadow recipe), on the R7 sources with
-two R8 sources (fix_r8.py -> work-r8/):
+four R8 sources (fix_r8.py -> work-r8/):
   candle-holders (default)   the shadow without the marks between the feet (the layer: the R7 source, byte copy)
-  curtains-v3 (variant)      the specks neutralised (a*, b* only; alpha, free alpha and shadow: the R7 sources, byte copies)
+  curtains (default 180502)  the break over the bench and the stone contact to section 6.3's numbers as QA reads them
+  curtains-v2 (554205)       the same
+  curtains-v3 (Linen)        the specks; L* relative to 180502 by the card ratio (pending the designer's eye); the corner fringe; the
+                             break and the contact (alpha and free alpha: the R7 sources, byte copies)
 Every other slot and variant reads its R7 source; the run checks that each of them reproduces its R7 file byte for byte.
 
 Writes: layers/<slot>/...-r8.png (only where the bytes are new), layers/manifest-r8.json, layers/asset-manifest-entries-r8.json,
@@ -35,8 +39,12 @@ LAY, GRD, REPO = G7.LAY, G7.GRD, G7.REPO
 D = os.path.join
 WR8 = D(HERE, "work-r8")
 F7.SRC7["candle-holders"] = (D(WR8, "layers"), D(WR8, "shadows"))
+F7.SRC7["curtains"] = (D(WR8, "layers"), D(WR8, "shadows"))
+F7.VSRC7["curtains-v2"] = (D(WR8, "layers"), D(WR8, "shadows"))
 F7.VSRC7["curtains-v3"] = (D(WR8, "layers"), D(WR8, "shadows"))
-FIX8 = {"candle-holders": "shadow", "curtains-v3": "layer"}       # what R8 is allowed to change
+# the pair's LAYER: its alpha is unchanged, but cut() re-solves its soft edge (alpha <= 6 / 255) against the table the marks no longer darken
+FIX8 = {"candle-holders": ["shadow", "layer"], "curtains": ["layer", "shadow"], "curtains-v2": ["layer", "shadow"],
+        "curtains-v3": ["layer", "shadow"]}                        # what R8 is allowed to change
 FIXREC8 = json.load(open(D(WR8, "fix-r8.json")))
 MAN7 = json.load(open(D(LAY, "manifest-r7.json")))
 ACCEPTED, VARIANTS, CARDS, VCARDS = G7.ACCEPTED, G7.VARIANTS, G7.CARDS, G7.VCARDS
@@ -168,7 +176,7 @@ def main():
         same_as_r7[nm] = dict(layer=os.path.relpath(lp, LAY) == r7var[nm][0], shadow=os.path.relpath(sp, LAY) == r7var[nm][1])
     for key, v in same_as_r7.items():
         for part in ("layer", "shadow"):
-            if not v[part] and FIX8.get(key) != part:
+            if not v[part] and part not in FIX8.get(key, []):
                 unexpected.append(f"{key} {part}")
     gaps = G7.layer_gaps(vfiles, files)
     man = write_manifest(G, files, results, regions, origin, vres, vreg, vfiles, unexpected, gaps, same_as_r7)
@@ -177,6 +185,15 @@ def main():
     if unexpected:
         raise SystemExit(f"unexpected changes: {unexpected}")
     return man
+
+
+def bench_rec(c):
+    return dict(record="../work-r8/fix-r8.json", break_qa_graded=c["break_"]["qa_measure_graded"], break_target=c["break_"]["target"],
+                break_extra_step_L_ungraded=c["break_"]["extra_step_L_ungraded"], contact_qa=c["contact"]["qa_measure"],
+                contact_target=c["contact"]["target"], contact_extra_darkening=c["contact"]["extra_darkening"], hem_band_dL_qa=c.get("hem_band_dL_qa"),
+                qa_hem_halo_model=c.get("qa_hem_halo_model"), break_profile=c["break_"]["profile"],
+                note="QA R6/R7 section 5: the break and the stone contact read weaker than section 6.3 on the graded files; solved here on QA's "
+                     "own formulas (tools/r67_curtains.py); the cut, the hem, the shade under the hem and the alpha unchanged")
 
 
 def write_manifest(G, files, results, regions, origin, vres, vreg, vfiles, unexpected, gaps, same_as_r7):
@@ -201,9 +218,17 @@ def write_manifest(G, files, results, regions, origin, vres, vreg, vfiles, unexp
             l_["r8"] = dict(record="../work-r8/fix-r8.json#holders", what="the shadow only: the frozen recipe's field kept on each foot, "
                             "whatever lay between the feet taken out (one soft ellipse under each foot)", px_changed_ungraded=h["px_changed"],
                             darkening_removed_255_max=h["darkening_removed_255"]["max"], between_feet_after=h["between_feet_after"],
-                            nothing_added=h["nothing_added"], layer_rgba="unchanged (the R7 file)")
+                            nothing_added=h["nothing_added"],
+                            layer_rgba="alpha unchanged; cut() re-solves the soft edge under the removed marks (8 px at alpha <= 6 / 255, "
+                                       "premultiplied <= 0.74 levels) and its colour bleed under alpha 0 (51 px): a new -r8 file")
             l_["status_note"] = l_["status_note"] + (" R8: the three short dark marks between A and B (they came from R6 inside the shadow file) "
                                                      "taken out; the WM-T3 move, if the owner approves it, starts from these files")
+        if k == "curtains":
+            c = fx["curtains_bench"]["curtains"]
+            l_["previous_file"] = next(x["file"] for x in MAN7["layers"] if x["id"] == "curtains")
+            l_["previous_shadow_file"] = next(x["file"] for x in MAN7["layers"] if x["id"] == "curtains-shadow")
+            l_["pass_"] = l_["pass_"] + " + fix R8 (code: the break and the stone contact to section 6.3 as QA reads them)"
+            l_["r8"] = bench_rec(c)
     sets = man["slot_cushions"]["sets"]
     for s in "BAC":
         lp, sp = files[("cushions", s)]
@@ -218,15 +243,24 @@ def write_manifest(G, files, results, regions, origin, vres, vreg, vfiles, unexp
             v["region"] = GC.region_info(vreg[nm])
             v["build"] = vres[nm]["stats"]
             v["truth"] = f"../graded/variant-r8-{nm}-set-B-graded-v3c.png"
+            if nm in ("curtains-v2", "curtains-v3"):
+                v["previous_file"] = next(x["file"] for x in MAN7["variants"]["curtains"] if x["id"] == nm)
+                v["previous_shadow_file"] = next(x["shadow"] for x in MAN7["variants"]["curtains"] if x["id"] == nm)
+            if nm == "curtains-v2":
+                v["pass_"] = v["pass_"] + " + fix R8 (code: the break and the stone contact to section 6.3 as QA reads them)"
+                v["r8"] = bench_rec(fx["curtains_bench"]["curtains-v2"])
             if nm == "curtains-v3":
                 c = fx["curtain3"]
-                v["previous_file"] = next(x["file"] for x in MAN7["variants"]["curtains"] if x["id"] == "curtains-v3")
-                v["pass_"] = v["pass_"] + " + fix R8 (code: the green specks neutralised, designer 3.2.4)"
-                v["r8"] = dict(record="../work-r8/fix-r8.json#curtain3", rules=c["rules"], before=c["before"], fixed_px=c["fixed_px"],
-                               after_ungraded=c["after_ungraded"], changed_outside_specks=c["changed_outside_specks"],
-                               dL_max_on_specks=c["dL_max_on_specks"], dab_on_specks=c["dab_on_specks"],
-                               body_median_lab=dict(before=c["body_median_lab_before"], after=c["body_median_lab_after"]),
-                               alpha="unchanged (layer alpha, free alpha and shadow: the R7 sources)")
+                v["pass_"] = v["pass_"] + (" + fix R8 (code: the specks, designer 3.2.4; L* relative to 180502 by the card ratio, PENDING THE "
+                                           "DESIGNER'S EYE; the corner fringe; the break and the stone contact)")
+                v["fidelity_status"] = "partial: L* set by the card ratio to 180502 (QA R6/R7 section 7), pending the designer's eye"
+                v["r8"] = dict(record="../work-r8/fix-r8.json#curtain3",
+                               specks={kk: c["specks"][kk] for kk in ("rules", "before", "fixed_px", "after_ungraded", "changed_outside_specks",
+                                                                      "dL_max_on_specks", "dab_on_specks")},
+                               lstar={kk: c["lstar"][kk] for kk in ("status", "target_L", "card_ratio_linear_Y", "method", "factor_Y", "before", "after",
+                                                                     "reference_180502")},
+                               corner_fringe=c["corner_fringe"], bench=bench_rec(c["bench"]), final_same_mask=c["final_same_mask"],
+                               alpha="unchanged (layer alpha and free alpha: the R7 sources)")
     tg = dict(man["table_group"])
     tg["wm_t3_clay"] = dict(record="../step0/wm-t3/table-group-wm-t3.json", overlay="../step0/wm-t3/table-group-wm-t3-overlay.jpg",
                             note="WM-T3 (designer 2026-11-12 section 1.4) checked in clay only; NO layer moved: the owner answers WM-T3 first")
@@ -235,9 +269,11 @@ def write_manifest(G, files, results, regions, origin, vres, vreg, vfiles, unexp
         id="wm-living-room-m0-tool-layers-phase2-r8", version="r8 (supersedes manifest-r7.json for the tool; the earlier manifests are kept)",
         date="2026-11-12", author="render-agent",
         brief="the coordinator's R8 task (2026-11-12, 0 tokens): docs/proposals/wm-r7-table-decisions-2026-11-12.md section 3 (3.3.1, 3.2.4); "
-              "the WM-T3 clay of section 1.6 (no layer moved)",
-        approval=MAN7["approval"] + "; R8: code fixes in the designer's authority (section 3), 0 tokens",
-        status=MAN7["status"].replace("after R7", "after R8 (R7 + two code fixes: the marks between the travertine feet, the specks in curtain 3)"),
+              "the WM-T3 clay of section 1.6 (no layer moved); + QA's combined R6/R7 report's four 0-token fixes "
+              "(qa/reports/2026-11-12-wm-tool-phase2-r6-r7.md section 10)",
+        approval=MAN7["approval"] + "; R8: code fixes, 0 tokens: the designer's section 3 (wm-r7-table-decisions) and QA's R6/R7 section 10 (the coordinator)",
+        status=MAN7["status"].replace("after R7", "after R8 (R7 + code fixes: the marks between the travertine feet; the curtains' break and "
+                                                  "stone contact; curtain 3's specks, L* (pending the designer's eye) and corner fringe)"),
         grade_params=G.record(),
         table_group=tg,
         changed_in_r8=dict(allowed=FIX8, unexpected_other_changes=unexpected, files={k: v for k, v in origin.items() if "new" in v["layer"] + v["shadow"]},
@@ -280,7 +316,7 @@ def write_asset_entries(man, origin):
                     continue
                 add(f"wm-tool-ph2-r8-{v['id']}{'-shadow' if is_sh else ''}", base + "layers/" + (v["shadow"] if is_sh else v["file"]),
                     f"tool {'shadow layer, RGB multiply' if is_sh else 'product layer, RGBA straight alpha'}, {k}, variant {v['variant']}, v3c",
-                    "code (R8, 0 tokens) on the 7' seedream-5-pro render", None if is_sh else dict(product_id=v["product"]["card_id"], sku=v["product"]["sku"]))
+                    "code (R8, 0 tokens) on earlier seedream-5-pro renders", None if is_sh else dict(product_id=v["product"]["card_id"], sku=v["product"]["sku"]))
     for s in "BAC":
         add(f"wm-tool-ph2-r8-default-scene-{s}", base + f"graded/default-scene-r8-set-{s}-graded-v3c.png", f"graded default scene (12 defaults, R8), set {s}, v3c", "composite")
     for k, vs in man["variants"].items():

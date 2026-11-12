@@ -58,229 +58,271 @@
   "recipe": "the frozen recipe's field (extract.shadow_one, carried in R7 with each piece) unchanged on each foot; only what lies between the feet is taken out (the designer's 3.3.1 rule); the WM-T3 move, if approved, starts from this file"
  },
  "curtain3": {
-  "rules": {
-   "literal": "the designer's: h 150-230 deg and C* > 6 (alpha > 0)",
-   "specks": "green side h 100-230, C* > 6, a* - median7(a*) <= -8 (alpha > 0); holds every literal pixel",
-   "why_wider": "the literal window misses the designer's own example points (x/y 108/610, 122/674, 127/707: h 117-142 there)",
-   "fix": "a*, b* -> the median of the radius-3 surroundings (not specks, not transparent); L* kept"
-  },
-  "before": {
-   "graded_r7": {
-    "literal": 12,
-    "specks": 848,
-    "literal_not_in_specks": 1
+  "specks": {
+   "rules": {
+    "literal": "the designer's: h 150-230 deg and C* > 6 (alpha > 0)",
+    "specks": "green side h 100-230, C* > 6, a* - median7(a*) <= -8 (alpha > 0); holds every literal pixel",
+    "why_wider": "the literal window misses the designer's own example points (x/y 108/610, 122/674, 127/707: h 117-142 there)",
+    "fix": "a*, b* -> the median of the radius-3 surroundings (not specks, not transparent); L* kept"
    },
-   "ungraded_r7": {
-    "literal": 11,
-    "specks": 843
+   "before": {
+    "graded_r7": {
+     "literal": 12,
+     "specks": 848,
+     "literal_not_in_specks": 1
+    },
+    "ungraded_r7": {
+     "literal": 11,
+     "specks": 843
+    }
+   },
+   "fixed_px": {
+    "pass_1": 849,
+    "pass_2": 4,
+    "total": 853,
+    "of_layer_px": 329559,
+    "soft_edge": 8
+   },
+   "after_ungraded": {
+    "literal": 0,
+    "specks": 0
+   },
+   "changed_outside_specks": 0,
+   "dL_max_on_specks": 0.33,
+   "dab_on_specks": {
+    "median": 11.34,
+    "max": 33.44
+   },
+   "examples": {
+    "107/611": {
+     "before": [
+      60.2,
+      2.0,
+      15.2
+     ],
+     "after": [
+      60.2,
+      2.0,
+      15.2
+     ],
+     "fixed": false
+    },
+    "108/610": {
+     "before": [
+      58.4,
+      -8.4,
+      16.4
+     ],
+     "after": [
+      58.4,
+      2.4,
+      15.4
+     ],
+     "fixed": true
+    },
+    "122/674": {
+     "before": [
+      67.6,
+      -19.7,
+      15.5
+     ],
+     "after": [
+      67.4,
+      3.4,
+      18.5
+     ],
+     "fixed": true
+    },
+    "124/706": {
+     "before": [
+      67.2,
+      -15.3,
+      15.2
+     ],
+     "after": [
+      67.1,
+      2.7,
+      12.0
+     ],
+     "fixed": true
+    },
+    "126/689": {
+     "before": [
+      69.8,
+      -21.3,
+      11.0
+     ],
+     "after": [
+      69.6,
+      2.6,
+      10.7
+     ],
+     "fixed": true
+    },
+    "143/635": {
+     "before": [
+      83.5,
+      -8.6,
+      3.7
+     ],
+     "after": [
+      83.3,
+      1.0,
+      3.7
+     ],
+     "fixed": true
+    },
+    "148/714": {
+     "before": [
+      81.7,
+      -18.3,
+      9.0
+     ],
+     "after": [
+      81.6,
+      2.5,
+      7.6
+     ],
+     "fixed": true
+    },
+    "160/735": {
+     "before": [
+      80.0,
+      -17.8,
+      6.5
+     ],
+     "after": [
+      79.8,
+      2.2,
+      9.8
+     ],
+     "fixed": true
+    }
+   },
+   "final_pass": {
+    "px": 42,
+    "after": {
+     "literal": 0,
+     "specks": 0
+    },
+    "why": "after the L* factor, the 8-bit round trip nudged borderline dark-fold pixels past the rule"
    }
   },
-  "fixed_px": {
-   "pass_1": 849,
-   "pass_2": 4,
-   "total": 853,
-   "of_layer_px": 329559,
-   "rows_lt_80": 85,
-   "soft_edge": 8
+  "lstar": {
+   "status": "PENDING THE DESIGNER'S EYE (the coordinator, 2026-11-12)",
+   "reference_180502": {
+    "L": 80.94,
+    "C": 5.52,
+    "h": 90.2,
+    "L_p99": 94.6,
+    "highpass_L_std": 2.174
+   },
+   "card_ratio_linear_Y": 0.7708,
+   "cards": {
+    "180502": "#EDE7DB",
+    "linen": "#D9CDB8"
+   },
+   "target_L": 72.88,
+   "qa_said": "about 72.7 (card ratio); the photo ratio ~62 is a soft lower bound",
+   "method": "one factor f on the luminance Y in linear light (L* from Y x f), a* and b* kept: hue and chroma unchanged; f solved on the graded layer in QA's same mask (alpha 255 eroded 5 x 5 in all three curtain layers, rows 100-1149)",
+   "factor_Y": 0.8332,
+   "bisection": [
+    [
+     0.65,
+     65.77
+    ],
+    [
+     0.825,
+     72.55
+    ],
+    [
+     0.9125,
+     75.74
+    ],
+    [
+     0.86875,
+     74.23
+    ],
+    [
+     0.84687,
+     73.47
+    ],
+    [
+     0.83594,
+     73.07
+    ],
+    [
+     0.83047,
+     72.81
+    ],
+    [
+     0.8332,
+     72.83
+    ]
+   ],
+   "before": {
+    "L": 78.64,
+    "C": 12.52,
+    "h": 83.5,
+    "L_p99": 93.66,
+    "highpass_L_std": 4.271
+   },
+   "after": {
+    "L": 72.83,
+    "C": 12.54,
+    "h": 83.4,
+    "L_p99": 89.76,
+    "highpass_L_std": 4.14
+   },
+   "not_the_r5_method": "L* is not locked to the render (the method the designer retired in R5): it is set by the card ratio to 180502"
   },
-  "after_ungraded": {
-   "literal": 0,
-   "specks": 0
+  "corner_fringe": {
+   "rule": "the last 4 fabric columns of the free part's edge at the bench end (rows 1208-1346; the spill's diagonal included) no lighter than the fabric 4-9 px inside + 2 L*; a* b* kept",
+   "px_changed": 355,
+   "dL_max": 22.46
   },
-  "changed_px": 851,
-  "changed_outside_specks": 0,
-  "dL_max_on_specks": 0.33,
-  "dab_on_specks": {
-   "median": 11.34,
-   "max": 33.44
-  },
-  "body_median_lab_before": [
-   75.562,
-   1.562,
-   13.125
-  ],
-  "body_median_lab_after": [
-   75.562,
-   1.578,
-   13.125
-  ],
-  "alpha_unchanged": true,
-  "examples": {
-   "107/611": {
-    "before": [
-     60.2,
-     2.0,
-     15.2
-    ],
-    "after": [
-     60.2,
-     2.0,
-     15.2
-    ],
-    "fixed": false
-   },
-   "108/610": {
-    "before": [
-     58.4,
-     -8.4,
-     16.4
-    ],
-    "after": [
-     58.4,
-     2.4,
-     15.4
-    ],
-    "fixed": true
-   },
-   "122/674": {
-    "before": [
-     67.6,
-     -19.7,
-     15.5
-    ],
-    "after": [
-     67.4,
-     3.4,
-     18.5
-    ],
-    "fixed": true
-   },
-   "124/706": {
-    "before": [
-     67.2,
-     -15.3,
-     15.2
-    ],
-    "after": [
-     67.1,
-     2.7,
-     12.0
-    ],
-    "fixed": true
-   },
-   "126/689": {
-    "before": [
-     69.8,
-     -21.3,
-     11.0
-    ],
-    "after": [
-     69.6,
-     2.6,
-     10.7
-    ],
-    "fixed": true
-   },
-   "143/635": {
-    "before": [
-     83.5,
-     -8.6,
-     3.7
-    ],
-    "after": [
-     83.3,
-     1.0,
-     3.7
-    ],
-    "fixed": true
-   },
-   "148/714": {
-    "before": [
-     81.7,
-     -18.3,
-     9.0
-    ],
-    "after": [
-     81.6,
-     2.5,
-     7.6
-    ],
-    "fixed": true
-   },
-   "160/735": {
-    "before": [
-     80.0,
-     -17.8,
-     6.5
-    ],
-    "after": [
-     79.8,
-     2.2,
-     9.8
-    ],
-    "fixed": true
-   }
-  },
-  "files": {
-   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3.png",
-   "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3-free-alpha.png (byte copy)",
-   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/shadows/curtains-v3.png (byte copy)",
-   "speck_mask": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/curtain3-speck-mask.npy"
-  },
-  "source": {
-   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/curtains-v3.png",
-   "graded_r7": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/curtains/curtains-cj-japanese-linen-half-shade-r7.png"
-  }
- },
- "curtains_bench": {
-  "what": "QA R6/R7 section 5 (the coordinator's R8 addition 2): the break over the bench and the stone contact to the designer's section 6.3 numbers, measured as QA measures them",
-  "curtains": {
+  "bench": {
    "break_": {
     "qa_measure_graded": {
-     "before": -0.14,
-     "after": -3.98,
+     "before": -1.08,
+     "after": -3.99,
      "columns": 36
     },
     "target": -4.0,
-    "extra_step_L_ungraded": 7.886,
-    "profile": "full up to 5.0 px above the contact (x > the bench end), smoothstep to 0 at 7.0 px (10.5 at 3840)",
+    "flat_step_L_ungraded": 4.297,
+    "extra_step_L_ungraded": 4.297,
+    "profile": "ONE flat step (R7's smoothstep peak at the contact taken back out): full up to 5.0 px above the contact (x > the bench end), smoothstep to 0 at 7.0 px (10.5 at 3840)",
     "bisection": [
      [
       12.5,
-      -8.13
+      -12.18
      ],
      [
       6.25,
-      -2.85
+      -5.91
      ],
      [
-      9.375,
-      -5.3
+      3.125,
+      -2.9
      ],
      [
-      7.812,
-      -3.9
+      4.688,
+      -4.35
      ],
      [
-      8.594,
-      -4.6
+      3.906,
+      -3.64
      ],
      [
-      8.203,
-      -4.25
-     ],
-     [
-      8.008,
-      -4.21
-     ],
-     [
-      7.91,
-      -4.13
-     ],
-     [
-      7.861,
-      -3.9
-     ],
-     [
-      7.886,
-      -3.98
+      4.297,
+      -3.99
      ]
     ],
     "why": "R7's -4 was applied before the grade; the v3c highlight shoulder (the fabric at L* 93-95) eats it"
    },
    "contact": {
     "qa_measure": {
-     "before": 0.9529,
+     "before": 0.9725,
      "after": 0.9255,
      "columns": 43
     },
@@ -299,11 +341,11 @@
      ],
      [
       0.1,
-      0.9137
+      0.9176
      ],
      [
       0.05,
-      0.9412
+      0.9451
      ],
      [
       0.075,
@@ -320,7 +362,196 @@
     ],
     "profile": "fix_r7.curtain_cut's contact profile (width 5 px at 3840, linear, blur sigma CONTACT_BLUR), on top of R7's"
    },
-   "rgb_px_changed": 443,
+   "qa_hem_halo_model": {
+    "before": {
+     "bright_halo_px": 3,
+     "dark_fringe_px": 16,
+     "bright_longest_run_px": 2,
+     "bright_longest_run_box": [
+      129,
+      1210,
+      133,
+      1214
+     ],
+     "bright_worst_excess_L": 16.4,
+     "bright_p90_excess_L": 15.2,
+     "dark_longest_run_px": 10,
+     "dark_longest_run_box": [
+      205,
+      1188,
+      219,
+      1194
+     ],
+     "dark_worst_excess_L": 10.7,
+     "dark_p90_excess_L": 10.1
+    },
+    "after": {
+     "bright_halo_px": 3,
+     "dark_fringe_px": 13,
+     "bright_longest_run_px": 2,
+     "bright_longest_run_box": [
+      129,
+      1210,
+      133,
+      1214
+     ],
+     "bright_worst_excess_L": 16.4,
+     "bright_p90_excess_L": 15.2,
+     "dark_longest_run_px": 4,
+     "dark_longest_run_box": [
+      210,
+      1189,
+      216,
+      1193
+     ],
+     "dark_worst_excess_L": 11.3,
+     "dark_p90_excess_L": 10.2
+    }
+   },
+   "rgb_px_changed": 453,
+   "shadow_px_changed": 712,
+   "hem_band_dL_qa": {
+    "after": -1.41,
+    "before": -1.59,
+    "rule": "-2 +-1"
+   }
+  },
+  "final_same_mask": {
+   "L": 72.99,
+   "C": 12.5,
+   "h": 83.5,
+   "L_p99": 89.68,
+   "highpass_L_std": 4.136
+  },
+  "alpha_unchanged": true,
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3.png",
+   "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3-free-alpha.png (byte copy of the R7 source)",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/shadows/curtains-v3.png"
+  },
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/curtains-v3.png",
+   "graded_r7": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/curtains/curtains-cj-japanese-linen-half-shade-r7.png"
+  }
+ },
+ "curtains_bench": {
+  "what": "QA R6/R7 section 5 (the coordinator's R8 addition 2): the break over the bench and the stone contact to the designer's section 6.3 numbers, measured as QA measures them",
+  "curtains": {
+   "break_": {
+    "qa_measure_graded": {
+     "before": -0.14,
+     "after": -4.0,
+     "columns": 36
+    },
+    "target": -4.0,
+    "flat_step_L_ungraded": 8.594,
+    "extra_step_L_ungraded": 8.594,
+    "profile": "ONE flat step (R7's smoothstep peak at the contact taken back out): full up to 5.0 px above the contact (x > the bench end), smoothstep to 0 at 7.0 px (10.5 at 3840)",
+    "bisection": [
+     [
+      12.5,
+      -7.48
+     ],
+     [
+      6.25,
+      -2.51
+     ],
+     [
+      9.375,
+      -4.65
+     ],
+     [
+      7.812,
+      -3.49
+     ],
+     [
+      8.594,
+      -4.0
+     ]
+    ],
+    "why": "R7's -4 was applied before the grade; the v3c highlight shoulder (the fabric at L* 93-95) eats it"
+   },
+   "contact": {
+    "qa_measure": {
+     "before": 0.9725,
+     "after": 0.9255,
+     "columns": 43
+    },
+    "target": 0.925,
+    "on_the_graded_shadow": "modelled as grade_cut's cut() solves it (graded_shadow_r); the build's file is checked in verify",
+    "ungraded_source": {
+     "before": 0.9529,
+     "after": 0.9059,
+     "why": "the bright stone sits in the v3c shoulder: the graded file reads lighter than its source"
+    },
+    "extra_darkening": 0.0813,
+    "bisection": [
+     [
+      0.2,
+      0.8549
+     ],
+     [
+      0.1,
+      0.9176
+     ],
+     [
+      0.05,
+      0.9451
+     ],
+     [
+      0.075,
+      0.9294
+     ],
+     [
+      0.0875,
+      0.9216
+     ],
+     [
+      0.0813,
+      0.9255
+     ]
+    ],
+    "profile": "fix_r7.curtain_cut's contact profile (width 5 px at 3840, linear, blur sigma CONTACT_BLUR), on top of R7's"
+   },
+   "qa_hem_halo_model": {
+    "before": {
+     "bright_halo_px": 5,
+     "dark_fringe_px": 0,
+     "bright_longest_run_px": 5,
+     "bright_longest_run_box": [
+      97,
+      1413,
+      102,
+      1418
+     ],
+     "bright_worst_excess_L": 13.9,
+     "bright_p90_excess_L": 12.6,
+     "dark_longest_run_px": 0
+    },
+    "after": {
+     "bright_halo_px": 5,
+     "dark_fringe_px": 8,
+     "bright_longest_run_px": 5,
+     "bright_longest_run_box": [
+      97,
+      1413,
+      102,
+      1418
+     ],
+     "bright_worst_excess_L": 13.9,
+     "bright_p90_excess_L": 12.6,
+     "dark_longest_run_px": 5,
+     "dark_longest_run_box": [
+      206,
+      1189,
+      215,
+      1194
+     ],
+     "dark_worst_excess_L": 10.5,
+     "dark_p90_excess_L": 9.8
+    }
+   },
+   "rgb_px_changed": 454,
    "shadow_px_changed": 711,
    "hem_band_dL_qa": {
     "after": -2.91,
@@ -341,51 +572,48 @@
    "break_": {
     "qa_measure_graded": {
      "before": -0.68,
-     "after": -4.03,
+     "after": -3.98,
      "columns": 36
     },
     "target": -4.0,
-    "extra_step_L_ungraded": 4.004,
-    "profile": "full up to 5.0 px above the contact (x > the bench end), smoothstep to 0 at 7.0 px (10.5 at 3840)",
+    "flat_step_L_ungraded": 4.883,
+    "extra_step_L_ungraded": 4.883,
+    "profile": "ONE flat step (R7's smoothstep peak at the contact taken back out): full up to 5.0 px above the contact (x > the bench end), smoothstep to 0 at 7.0 px (10.5 at 3840)",
     "bisection": [
      [
       12.5,
-      -12.47
+      -11.61
      ],
      [
       6.25,
-      -6.16
+      -5.34
      ],
      [
       3.125,
-      -3.14
+      -2.43
      ],
      [
       4.688,
-      -4.73
+      -3.87
      ],
      [
-      3.906,
-      -3.85
+      5.469,
+      -4.51
      ],
      [
-      4.297,
-      -4.37
+      5.078,
+      -4.26
      ],
      [
-      4.102,
-      -4.2
-     ],
-     [
-      4.004,
-      -4.03
+      4.883,
+      -3.98
      ]
     ],
     "why": "R7's -4 was applied before the grade; the v3c highlight shoulder (the fabric at L* 93-95) eats it"
    },
    "contact": {
     "qa_measure": {
-     "before": 0.9451,
+     "before": 0.9725,
      "after": 0.9255,
      "columns": 43
     },
@@ -404,11 +632,11 @@
      ],
      [
       0.1,
-      0.9137
+      0.9176
      ],
      [
       0.05,
-      0.9373
+      0.9451
      ],
      [
       0.075,
@@ -425,7 +653,53 @@
     ],
     "profile": "fix_r7.curtain_cut's contact profile (width 5 px at 3840, linear, blur sigma CONTACT_BLUR), on top of R7's"
    },
-   "rgb_px_changed": 443,
+   "qa_hem_halo_model": {
+    "before": {
+     "bright_halo_px": 44,
+     "dark_fringe_px": 4,
+     "bright_longest_run_px": 5,
+     "bright_longest_run_box": [
+      128,
+      1236,
+      131,
+      1248
+     ],
+     "bright_worst_excess_L": 10.9,
+     "bright_p90_excess_L": 9.8,
+     "dark_longest_run_px": 3,
+     "dark_longest_run_box": [
+      227,
+      1185,
+      231,
+      1189
+     ],
+     "dark_worst_excess_L": 7.5,
+     "dark_p90_excess_L": 7.5
+    },
+    "after": {
+     "bright_halo_px": 44,
+     "dark_fringe_px": 13,
+     "bright_longest_run_px": 5,
+     "bright_longest_run_box": [
+      128,
+      1236,
+      131,
+      1248
+     ],
+     "bright_worst_excess_L": 10.9,
+     "bright_p90_excess_L": 9.8,
+     "dark_longest_run_px": 4,
+     "dark_longest_run_box": [
+      210,
+      1188,
+      219,
+      1192
+     ],
+     "dark_worst_excess_L": 8.9,
+     "dark_p90_excess_L": 8.3
+    }
+   },
+   "rgb_px_changed": 454,
    "shadow_px_changed": 712,
    "hem_band_dL_qa": {
     "after": -2.92,
@@ -442,5 +716,21 @@
     "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/shadows/curtains-v2.png"
    }
   }
+ },
+ "holders_qa_fill_alternative": {
+  "what": "QA's suggested fix, computed for comparison only (not used): the 0-value columns inside the marks filled by linear interpolation",
+  "gap_px_filled": 101,
+  "patch_ge_5pct": {
+   "px": 569,
+   "box": [
+    1708,
+    1249,
+    1748,
+    1271
+   ]
+  },
+  "max_darkening_255": 92,
+  "max_darkening_pct": 36.1,
+  "why_not": "it joins the dashes into one dark patch between the feet (up to the same depth), against the designer's rule (3.3.1: one soft ellipse under each foot; whatever lies between the feet goes); the recipe-frozen field of each foot is kept either way"
  }
 }
