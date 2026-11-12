@@ -457,10 +457,15 @@ def curtain3(man, m8):
         return dict(L=round(float(L_), 3), C=round(float(math.hypot(a_, b_)), 3), h=round(float(math.degrees(math.atan2(b_, a_)) % 360), 2))
     lock = dict(qa_lab=summ(T9, F9.lab_qa), r8_lab=summ(T9, F9.lab_cv), r8_truth_qa_lab=summ(T8, F9.lab_qa), mask_px=int(same.sum()),
                 truth_changed_in_mask=int((tch & same).sum()), designer_lock=dict(L=[71.5, 74.5], h=[81, 87], C=[10.5, 12.5]))
-    inlock = {lab_: dict(L=71.5 <= v["L"] <= 74.5, h=81 <= v["h"] <= 87, C=10.5 <= v["C"] <= 12.5) for lab_, v in (("qa_lab", lock["qa_lab"]), ("r8_lab", lock["r8_lab"]))}
+    def r1(x):
+        return math.floor(x * 10 + 0.5) / 10                           # one decimal, rounded half-up (the designer's recorded precision)
+    inlock = {lab_: dict(L=71.5 <= r1(v["L"]) <= 74.5, h=81 <= r1(v["h"]) <= 87, C=10.5 <= r1(v["C"]) <= 12.5, read=dict(L=r1(v["L"]), h=r1(v["h"]), C=r1(v["C"])))
+              for lab_, v in (("qa_lab", lock["qa_lab"]), ("r8_lab", lock["r8_lab"]))}
     lock["in_lock"] = inlock
-    lock["note"] = ("R9 changes no pixel in this mask (the 11 are soft-edge pixels), so the colour is R8's: L* and h inside the lock; C* sits on the "
-                    "top edge 12.5 (QA R8 F3: the lock's measurement and precision are the designer's to write)")
+    lock["method"] = ("data/selections/living-room.warm-modern.json, curtains-cj-japanese-linen-half-shade colour_2026_11_12 (the designer, F3 closed): "
+                      "QA's same mask, CIELAB D65 by QA's formulas, medians; each value rounded half-up to 0.1, ends included; QA's Lab decides, "
+                      "OpenCV is a cross-check")
+    lock["note"] = "R9 changes no pixel in this mask (the 11 are soft-edge pixels): the colour is R8's, C* 12.52 reads 12.5 (on the edge, passes)"
     out = dict(before=cnt8, after=cnt9, px_changed=int(ch.sum()), changed_equals_mask=bool(np.array_equal(ch, m)), mask_px=int(m.sum()),
                alpha_same_bytes=bool(np.array_equal(C8[..., 3], C9[..., 3])), dL_max_on_changed=round(float(np.abs(L9_ - L8_)[ch].max()), 4),
                truth_px_changed=int(tch.sum()), truth_changed_only_on_mask=bool(not (tch & ~m).any()), truth_max_level_change=int(np.abs(T8.astype(int) - T9.astype(int)).max()),
@@ -468,7 +473,7 @@ def curtain3(man, m8):
     out["pass_"] = (cnt9["literal_alpha_gt0"]["r8_lab"] == 0 and cnt9["literal_alpha_gt0"]["qa_lab"] == 0 and cnt9["wide_visible_alpha_ge128"]["r8_lab"] == 0
                     and out["changed_equals_mask"] and out["mask_px"] == 11 and out["alpha_same_bytes"] and out["dL_max_on_changed"] <= 0.05
                     and out["truth_changed_only_on_mask"] and out["shadow_same_file"] and lock["truth_changed_in_mask"] == 0
-                    and inlock["qa_lab"]["L"] and inlock["qa_lab"]["h"])
+                    and inlock["qa_lab"]["L"] and inlock["qa_lab"]["h"] and inlock["qa_lab"]["C"])
     out["summary"] = dict(literal=(cnt8["literal_alpha_gt0"], cnt9["literal_alpha_gt0"]), wide_visible=cnt9["wide_visible_alpha_ge128"],
                           wide_soft=(cnt8["wide_soft_edge_alpha_lt128"], cnt9["wide_soft_edge_alpha_lt128"]), dL=out["dL_max_on_changed"],
                           lock=(lock["qa_lab"], lock["r8_lab"]))

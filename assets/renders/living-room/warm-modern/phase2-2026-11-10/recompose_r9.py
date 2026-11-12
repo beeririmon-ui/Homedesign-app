@@ -158,6 +158,8 @@ def write_manifest(truths, region, repro, GC):
                                  note="R9 changes the graded layer after the cut; 'build' is R8's cut record")
             if nm == "pendant-v2":
                 v["pass_"] = v["pass_"] + " + fix R9 (code: P2-1, the outline and the ramp, alpha only)"
+                v["fidelity_status"] = ("'partial' OFF (the designer, 2026-11-12: docs/proposals/wm-pendant2-eye-2026-11-12.md; data/selections "
+                                        "eye_2026_11_12): 'approved for site' after QA on P2-1 (a)-(g); 'buy' after the CE and the canopy colour (sourcing)")
                 v["r9"] = dict(record="../work-r9/fix-r9.json#pendant2", what=p2["what"], stop_rule=dict(applied=p2["stop_rule"]["applied"],
                                top_left_arc=p2["stop_rule"]["top_left_arc"]["decision"]),
                                ramp_10_90_px=dict(reference_default_pendant_flanks=p2["ramp"]["reference"]["flanks"], before=p2["ramp"]["before"],
@@ -167,8 +169,9 @@ def write_manifest(truths, region, repro, GC):
                                                                   "site': P2-1 (this fix) and QA's (a)-(g)")
             else:
                 v["pass_"] = v["pass_"] + " + fix R9 (code: the 11 soft-edge pixels the literal speck rule flagged, QA R8 F1)"
-                v["fidelity_status"] = ("designer's eye 2026-11-12 (docs/proposals/wm-r8-eye-2026-11-12.md): L* 73.0 is faithful to the Linen SKU; lock "
-                                        "L* 71.5-74.5, h 81-87, C* 10.5-12.5 (C* 12.52 on the top edge: QA R8 F3, the designer's)")
+                v["fidelity_status"] = ("'partial' OFF (the designer, 2026-11-12: docs/proposals/wm-r8-eye-2026-11-12.md 1.1, wm-r8-followups-2026-11-12.md "
+                                        "section 1; data/selections colour_2026_11_12): L* 73.0 is faithful to the Linen SKU; lock L* 71.5-74.5, h 81-87, "
+                                        "C* 10.5-12.5 read at one decimal by QA's method (F3 closed: C* 12.52 reads 12.5); 'approved for site' after QA on R9")
                 v["r9"] = dict(record="../work-r9/fix-r9.json#curtain3", what=c3["what"], before=c3["before"], after=c3["after"],
                                dL_max_abs=c3["dL_max_abs"], px_changed=c3["px_changed"], px_changed_outside_flagged=c3["px_changed_outside_flagged"],
                                alpha=c3["alpha"], shadow=c3["shadow"], wide_rule_soft_edge_note=c3["wide_rule_soft_edge_note"])
