@@ -26,8 +26,9 @@ export const adminHeaders = (): Record<string, string> => ({ 'x-hd-dev-admin': d
 
 export type Placed = { id: string; token: string; total: number };
 
-/** a paid order through the public API and the mock payment page; `ip` keeps the rate limits per test */
-export async function placeOrder(request: APIRequestContext, ip: string, variant = 'vase'): Promise<Placed> {
+/** a paid order through the public API and the mock payment page; `ip` keeps the rate limits per test; `consents.marketing`
+ * as the request says it (S20, ת57: the Worker records it only where a provider sends marketing email) */
+export async function placeOrder(request: APIRequestContext, ip: string, variant = 'vase', consents: { marketing?: boolean } = {}): Promise<Placed> {
   const h = { 'cf-connecting-ip': ip };
   const catalog = JSON.parse(readFileSync(resolve(SITE, '.generated/catalog.public.json'), 'utf8')) as {
     products: { id: string; slot: string; price_agorot: number | null; variants: { id: string }[]; availability: { status: string } }[];
@@ -43,7 +44,7 @@ export async function placeOrder(request: APIRequestContext, ip: string, variant
       customer: { full_name: 'נועה כהן', email: 'noa.ops@example.com', phone: '050-1234567' },
       address: { city: 'חיפה', street: 'הנמל', house: '12' },
       shipping_method: 'express',
-      consents: { terms: true, marketing: false },
+      consents: { terms: true, marketing: consents.marketing ?? false },
     },
   });
   expect(res.status()).toBe(201);

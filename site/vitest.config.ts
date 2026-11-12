@@ -1,6 +1,9 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  // S20: the web's generated data, as web/vite.config.ts resolves it (web/src/copy.ts reads .generated/copy.he.json)
+  resolve: { alias: [{ find: /^@generated\/(.*)$/, replacement: fileURLToPath(new URL('./.generated/$1', import.meta.url)) }] },
   test: {
     include: ['shared/test/**/*.test.ts', 'api/test/**/*.test.ts', 'web/test/**/*.test.ts', 'tools/test/**/*.test.ts'],
     environment: 'node',

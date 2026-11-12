@@ -15,7 +15,7 @@
  * - **The build's choice:** .generated/copy.he.json must be the choice for this build's EMAIL_PROVIDER, its
  *   capabilities and its contact details (a stale file from another build fails). S20 (QA ת62): with a provider that
  *   sends, the scan still runs; a promise passes only when it is the email wording of a line whose needs are real.
- *   npx --no-install tsx tools/check-promises.ts [--dist=<dir>] [--api=<dir>|--api=none] [--worker-bundle=<file>|none]
+ *   npx --no-install tsx tools/check-promises.ts [--dist=<dir>] [--api=<dir>|--api=none] [--shared=<dir>] [--worker-bundle=<file>|none]
  *     [--copy-out=<file>] [--wrangler=<file>] [--json=<out>]
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -28,7 +28,7 @@ import { sitePath } from './lib/paths';
 const arg = (name: string): string | undefined => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
 const DIST = resolve(arg('dist') ?? sitePath('web/dist'));
 const API = arg('api') === 'none' ? null : resolve(arg('api') ?? sitePath('api/src'));
-const SHARED = sitePath('shared/src');
+const SHARED = resolve(arg('shared') ?? sitePath('shared/src'));
 const BUNDLE = arg('worker-bundle') === 'none' ? null : resolve(arg('worker-bundle') ?? sitePath('api/dist/index.js'));
 const COPY = resolve(arg('copy-out') ?? COPY_OUT);
 const WRANGLER = resolve(arg('wrangler') ?? WRANGLER_FILE);

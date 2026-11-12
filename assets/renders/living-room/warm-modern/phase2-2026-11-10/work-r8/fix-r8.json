@@ -1,0 +1,225 @@
+{
+ "date": "2026-11-12",
+ "author": "render-agent",
+ "tokens": 0,
+ "source": "docs/proposals/wm-r7-table-decisions-2026-11-12.md section 3 (3.3.1, 3.2.4)",
+ "note": "ungraded per-product layers (RGBA, straight alpha) and shadows (grey RGB, multiply) in work-r8/; grade_cut_r8.py grades and cuts them with the ONE v3c grade; only the two fixed products have R8 sources, every other slot reads its R7 source",
+ "holders": {
+  "pieces": {
+   "A": {
+    "box": [
+     1648,
+     1148,
+     45,
+     111
+    ],
+    "foot_centre_x": 1673
+   },
+   "B": {
+    "box": [
+     1747,
+     1166,
+     49,
+     105
+    ],
+    "foot_centre_x": 1775
+   }
+  },
+  "rows_changed": 36,
+  "rule": {
+   "tolerance_255": 1.5,
+   "fade_px": 4.0,
+   "floor_255": 1.5
+  },
+  "px_changed": 806,
+  "px_changed_outside_mark_box": 0,
+  "alpha_at_changed_px_max": 6,
+  "darkening_removed_255": {
+   "max": 81,
+   "sum": 17980
+  },
+  "mark_box_before": {
+   "max_darkening_255": 92
+  },
+  "nothing_added": true,
+  "between_feet_after": {
+   "zone": "x 1718-1752, y 1240-1292, alpha 0",
+   "max_darkening_255": 2,
+   "before_max_darkening_255": 61
+  },
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/candle-holders.png (byte copy of assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/candle-holders.png)",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/shadows/candle-holders.png"
+  },
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/candle-holders.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/shadows/candle-holders.png"
+  },
+  "recipe": "the frozen recipe's field (extract.shadow_one, carried in R7 with each piece) unchanged on each foot; only what lies between the feet is taken out (the designer's 3.3.1 rule); the WM-T3 move, if approved, starts from this file"
+ },
+ "curtain3": {
+  "rules": {
+   "literal": "the designer's: h 150-230 deg and C* > 6 (alpha > 0)",
+   "specks": "green side h 100-230, C* > 6, a* - median7(a*) <= -8 (alpha > 0); holds every literal pixel",
+   "why_wider": "the literal window misses the designer's own example points (x/y 108/610, 122/674, 127/707: h 117-142 there)",
+   "fix": "a*, b* -> the median of the radius-3 surroundings (not specks, not transparent); L* kept"
+  },
+  "before": {
+   "graded_r7": {
+    "literal": 12,
+    "specks": 848,
+    "literal_not_in_specks": 1
+   },
+   "ungraded_r7": {
+    "literal": 11,
+    "specks": 843
+   }
+  },
+  "fixed_px": {
+   "pass_1": 849,
+   "pass_2": 4,
+   "total": 853,
+   "of_layer_px": 329559,
+   "rows_lt_80": 85,
+   "soft_edge": 8
+  },
+  "after_ungraded": {
+   "literal": 0,
+   "specks": 0
+  },
+  "changed_px": 851,
+  "changed_outside_specks": 0,
+  "dL_max_on_specks": 0.33,
+  "dab_on_specks": {
+   "median": 11.34,
+   "max": 33.44
+  },
+  "body_median_lab_before": [
+   75.562,
+   1.562,
+   13.125
+  ],
+  "body_median_lab_after": [
+   75.562,
+   1.578,
+   13.125
+  ],
+  "alpha_unchanged": true,
+  "examples": {
+   "107/611": {
+    "before": [
+     60.2,
+     2.0,
+     15.2
+    ],
+    "after": [
+     60.2,
+     2.0,
+     15.2
+    ],
+    "fixed": false
+   },
+   "108/610": {
+    "before": [
+     58.4,
+     -8.4,
+     16.4
+    ],
+    "after": [
+     58.4,
+     2.4,
+     15.4
+    ],
+    "fixed": true
+   },
+   "122/674": {
+    "before": [
+     67.6,
+     -19.7,
+     15.5
+    ],
+    "after": [
+     67.4,
+     3.4,
+     18.5
+    ],
+    "fixed": true
+   },
+   "124/706": {
+    "before": [
+     67.2,
+     -15.3,
+     15.2
+    ],
+    "after": [
+     67.1,
+     2.7,
+     12.0
+    ],
+    "fixed": true
+   },
+   "126/689": {
+    "before": [
+     69.8,
+     -21.3,
+     11.0
+    ],
+    "after": [
+     69.6,
+     2.6,
+     10.7
+    ],
+    "fixed": true
+   },
+   "143/635": {
+    "before": [
+     83.5,
+     -8.6,
+     3.7
+    ],
+    "after": [
+     83.3,
+     1.0,
+     3.7
+    ],
+    "fixed": true
+   },
+   "148/714": {
+    "before": [
+     81.7,
+     -18.3,
+     9.0
+    ],
+    "after": [
+     81.6,
+     2.5,
+     7.6
+    ],
+    "fixed": true
+   },
+   "160/735": {
+    "before": [
+     80.0,
+     -17.8,
+     6.5
+    ],
+    "after": [
+     79.8,
+     2.2,
+     9.8
+    ],
+    "fixed": true
+   }
+  },
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3.png",
+   "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/layers/curtains-v3-free-alpha.png (byte copy)",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/shadows/curtains-v3.png (byte copy)",
+   "speck_mask": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r8/curtain3-speck-mask.npy"
+  },
+  "source": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/curtains-v3.png",
+   "graded_r7": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/curtains/curtains-cj-japanese-linen-half-shade-r7.png"
+  }
+ }
+}

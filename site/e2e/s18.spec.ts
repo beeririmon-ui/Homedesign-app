@@ -8,10 +8,10 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { ORDER_DELAY_HE } from '@hd/shared/constants';
 import { shopPath } from '@hd/shared/product-url';
-import { promiseFindings } from '../tools/lib/promises';
+import { promisesOn } from './promises-dom';
 import { openCustomerOrder, placeOrder, supplierSays, waitStatus, type Placed } from './ops';
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -32,16 +32,7 @@ function d1(sql: string) {
     stdio: 'pipe',
   });
 }
-/** what the page says, as a person reads it after hydration, and every promise in it */
-async function promisesOn(page: Page): Promise<string[]> {
-  const texts = await page.evaluate(() => [
-    document.body.innerText,
-    ...Array.from(document.querySelectorAll('[aria-label], [title], [placeholder], img[alt]')).flatMap((el) =>
-      ['aria-label', 'title', 'placeholder', 'alt'].map((a) => el.getAttribute(a) ?? ''),
-    ),
-  ]);
-  return texts.flatMap((t) => promiseFindings(t).map((f) => `${f.rule}: "${f.sentence}"`));
-}
+// S20 (QA ת60): the rendered scan reads every attribute, hidden text and CSS content too (e2e/promises-dom.ts)
 
 test.describe.configure({ mode: 'serial', timeout: 120_000 });
 

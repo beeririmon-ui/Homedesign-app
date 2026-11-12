@@ -1,0 +1,125 @@
+{
+ "bottom_line": "Integrity passes in full (R6 288 and R7 2,592 composites, QA's own code). Every R6 fix and every R7 code change passes its numbers; no layer fails before the tool. Behind HD_PUBLIC=0: all 12 defaults and all 10 variants may go in; the bowl's point stays provisional (F3 bowl x throw 0.009-0.013, the designer's, known) and curtain 3 enters as 'partial' (lightness). Four small 0-token code fixes before 'approved for the site'.",
+ "per_product": [
+  {
+   "product": "curtains default 180502 (R6 flip + R7 270)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes",
+   "numbers": "hem within 0.36 cm of the plan (max 3.2 px at 2160); base under the lines = base x shadow (max 2); floor contact gone; shade 5.5 %; base edge within 1 px at 3840 of the plan (snap OK)",
+   "notes": "break over the bench -0.1 L* (spec -3..-5) and stone contact multiply 0.973 (spec 0.90-0.95): the 'resting' cues are weaker than written; reads right at x2. Inner edge vs R1: 63 of 951 rows over 0.003 u (max 0.0039), unchanged since R5",
+   "fix": "0-token: break and contact on the graded L* (the highlight roll-off eats the -4)",
+   "owner": "render-agent"
+  },
+  {
+   "product": "curtains v2 554205 (R6 L* + R7 270)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes (wheel)",
+   "numbers": "same mask vs 180502: L 81.3 vs 80.9, C 6.0 vs 5.5, h 90.1 vs 90.2; relative to the room white C 2.8 vs 2.4; high-pass 3.14 (180502 2.17)",
+   "notes": "same cream cloth, stronger slub; hem as the default",
+   "fix": "same break / contact fix",
+   "owner": "render-agent"
+  },
+  {
+   "product": "curtains v3 Linen 200x260 4 Hook (7' + 260 cut)",
+   "verdict": "partial (lightness)",
+   "tool_behind_flag": "yes, as 'partial'",
+   "numbers": "hem 22 cm within 0.22 cm; vs 180502 same mask: hue -6.7 deg and chroma x2.27 (photos: -6.7 deg, x2.0); L 78.6 vs 80.9 (card ratio expects ~72.7, photo ratio ~62)",
+   "notes": "render-agent locked L* (the method the designer retired in R5); a bright 18 px fringe on the free part's edge at the bench corner (x4-x6); inner edge 54 rows over 0.003 (max 0.0035); the record's 'clean_ring' is the curtain itself",
+   "fix": "designer sets the relative L* target; render-agent: the 554205 tone-curve method + the corner fringe, 0 tokens",
+   "owner": "master-designer, render-agent"
+  },
+  {
+   "product": "vase default (R6 re-cut)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes",
+   "numbers": "tilt 0.01 deg (R5 -7.2 by QA's fit), half-width asymmetry p90 0.002 (R5 0.203), width 1.003 x card, lit half C 4.8 h 82"
+  },
+  {
+   "product": "vase 2 charcoal (R6)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes (wheel)",
+   "numbers": "body C 3.35 h 84 L 17.0 (unchanged); width 1.013 x card; asymmetry 0.016",
+   "notes": "the branch's cut carries the render's window behind the leaves: a pale textureless patch above the mouth at x2 (since R5, all vases; most visible on the dark vase)"
+  },
+  {
+   "product": "vase 3 white plum (6')",
+   "verdict": "pass",
+   "tool_behind_flag": "yes (wheel)",
+   "numbers": "meiping shape; width 0.966 x card; lit half L 83.8 C 5.1 h 84.5 vs the default's 87.6 / 4.8 / 82.1 (sister cards)",
+   "notes": "tilt 1.2 deg; cast shadow weak (70 px, min 0.965 vs the default's 321 px, 0.769): grounded by the contact line only"
+  },
+  {
+   "product": "pendant 2 (R6)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes (wheel, no buy point: CE)",
+   "numbers": "canopy whole, centre 3.9 px off the cord (R5 -9.1, two thirds); cord L 18.9 C 0.07; ring row-residual max 3.1 -> 2.2, std 1.24 -> 0.72",
+   "notes": "faint ring lines at x3-x4; the right edge is a hard 1-px ramp with a slight facet (x6)"
+  },
+  {
+   "product": "framed art 2 (R6)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes (wheel)",
+   "numbers": "seams smooth at x6 on all rails; QA R5 specks now L 16.5-16.9 (were 89.7); 0 isolated specks; x 1963 line equals its neighbours"
+  },
+  {
+   "product": "magazine holder rods (R6)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes",
+   "notes": "a few dark specks remain under the front rod at x5, not at x2"
+  },
+  {
+   "product": "planter (R7 k 0.78)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes; 'partial' comes off (designer section 8)",
+   "numbers": "k 0.780 in linear light (p5-p95 0.771-0.790); (a') -7.94; (a'') 77.2; bottom -1.4; (b) -1.08; (c) -9.1 deg; (d) -5.6 %",
+   "notes": "the strip above the basket: the soil band; the rims touch over 14 canvas px (19.8 at 2160, threshold 20) at the rim ellipse's right end, where an ellipse closes: at the threshold, reads 'tree in a pot behind the basket'"
+  },
+  {
+   "product": "candle holders default travertine (R7 move)",
+   "verdict": "pass",
+   "tool_behind_flag": "yes",
+   "numbers": "A x B 0.0217 (lever 0.195), vs sets >= 0.028, B x bowls 0.0226-0.025; centres within 0.5 cm; vacated table = clean base (0 px)",
+   "notes": "no carried-over boucle; the old dark streaks in its shadow (a 3-px gap of 255 inside the field) move with it: visible at x2, L* down to -15 against the table",
+   "fix": "0-token: fill the gap in the shadow field (no recipe change)",
+   "owner": "render-agent"
+  },
+  {
+   "product": "bowl default black (R7 move)",
+   "verdict": "pass as a layer; point provisional",
+   "tool_behind_flag": "yes, provisional",
+   "numbers": "F3 bowl x throw 0.0092-0.0109 (real), clay 0.0097-0.012 (QA) = render-agent's; the 0.64 lever makes it worse",
+   "owner": "master-designer (known, out of scope)"
+  },
+  {
+   "product": "bowl 2 white belly (6')",
+   "verdict": "pass (fidelity); point provisional",
+   "tool_behind_flag": "yes, provisional",
+   "numbers": "rim 1.02 x the projected card; C 10.3 h 90: +2.8 C over the white trays on the same table (cards +2.7): consistent",
+   "notes": "F3 vs throw 0.011-0.013"
+  },
+  {
+   "product": "candle holders 2 ceramic trays (6')",
+   "verdict": "pass",
+   "tool_behind_flag": "yes (wheel)",
+   "numbers": "17.8 cm with the handles vs 17.3 projected; A x B 0.0207, vs sets >= 0.028, B x bowls 0.0295; the balls are the model's own pixels re-cut",
+   "notes": "contact shadow weaker than the travertine's (min 0.80, mass 0.014 vs 0.04): grounded at 100 %"
+  },
+  {
+   "product": "basket (R7 soft edge)",
+   "verdict": "pass",
+   "numbers": "every change inside the planter's alpha; on screen 0 px outside it; shadow <= 4 levels over the planter"
+  }
+ ],
+ "fixes_0_tokens": [
+  "travertine shadow: fill the 3-px no-shadow gap between the holders (the dark streaks)",
+  "curtains: the break over the bench and the stone contact to the written numbers on the graded L*",
+  "curtain 3: the light fringe at the bench corner; L* after the designer's target",
+  "records: post-r7 curtains-v3 clean_ring is the curtain itself"
+ ],
+ "for_designer": [
+  "the bowl point (F3 vs throw, known)",
+  "curtain 3 relative L* target (card ~72.7, photo ~62, render 78.6)",
+  "the planter strip at the threshold (19.8 px vs 20)",
+  "optional: vase 3's weak cast shadow; the pale patch behind the vase branches"
+ ]
+}

@@ -1,0 +1,311 @@
+/**
+ * qa-agent, S19 (2026-11-12): my own cases for ת52 (log redaction by word), ת53 (codes and names only from our classes)
+ * and ת54 (/healthz after a takeover), on my isolated copy of f33cfe42. In the copy only (never the repo); dummy secrets.
+ * Each case prints what it saw (QA K…, C…, H…), and asserts only what the brief asked for.
+ */
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { signWebhook } from '@hd/shared';
+import { app } from '../src/app';
+import type { Env, SupplierJob } from '../src/env';
+import { createD1, migrate } from './d1-shim';
+import { processSupplierJob } from '../src/lib/fulfillment';
+import { configureLog, errorCode, errorName, knownValues, log, logRow, stripKnown } from '../src/lib/log';
+import { CodedError } from '../src/lib/errors';
+import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from '../src/lib/suppliers/types';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const GEN = resolve(here, '../../.generated');
+const SEED = readFileSync(resolve(GEN, 'seed.sql'), 'utf8');
+const SECRET = 'qa-dummy-webhook-secret-not-a-key-19';
+const DEV_TOKEN = 'qa-dummy-admin-token-not-a-key-19-0123456789abcdef';
+type Full = { products: { availability: { status: string }; price_agorot: number | null; pack?: unknown; variants: { id: string }[] }[] };
+const shop = JSON.parse(readFileSync(resolve(GEN, 'catalog.full.json'), 'utf8')) as Full;
+const plain = shop.products.find((p) => p.availability.status === 'available' && p.price_agorot && !p.pack && p.variants.length === 1)!;
+const PLAIN = plain.variants[0]!.id;
+const LA = { full_name: 'Orna Tal-Bodeket', email: 'orna.latin19@example.invalid', phone: '+972 54 771 6219', city: 'Mitzpe Bdika', street: 'Sderot HaBodkim', house: '41', apartment: '12', zip: '7711229', notes: 'back door' };
+
+let env: Env;
+let sent: SupplierJob[];
+beforeEach(() => {
+  const DB = createD1();
+  migrate(DB, SEED);
+  sent = [];
+  env = {
+    DB,
+    SUPPLIER_QUEUE: { send: vi.fn(async (m: SupplierJob) => void sent.push(m)), sendBatch: vi.fn() } as unknown as Queue<SupplierJob>,
+    ENVIRONMENT: 'test',
+    PAYMENT_PROVIDER: 'mock',
+    SUPPLIER_PROVIDER: 'mock',
+    INVOICE_PROVIDER: 'mock',
+    NOTIFY_PROVIDER: 'mock',
+    ACCESS_TEAM_DOMAIN: '',
+    ACCESS_AUD: '',
+    PAYMENT_WEBHOOK_SECRET: SECRET,
+    ADMIN_DEV_TOKEN: DEV_TOKEN,
+  } as Env;
+  configureLog(env);
+});
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+  configureLog({ ENVIRONMENT: 'production' } as Env);
+});
+const req = (path: string, init?: RequestInit) => app.request(`http://localhost${path}`, init, env);
+const json = (body: unknown, method = 'POST', headers: Record<string, string> = {}): RequestInit => ({
+  method,
+  headers: { 'content-type': 'application/json', ...headers },
+  body: JSON.stringify(body),
+});
+const admin = { 'x-hd-dev-admin': DEV_TOKEN };
+const one = async <T>(sql: string, ...b: unknown[]) =>
+  (await env.DB.prepare(sql)
+    .bind(...b)
+    .first<T>())!;
+const status = async (id: string) => (await one<{ status: string }>('SELECT status FROM orders WHERE id = ?', id)).status;
+const ship = async (id: string) =>
+  one<{ status: string; reach: string; failing_since: string | null }>('SELECT status, reach, failing_since FROM supplier_shipments WHERE order_id = ?', id);
+const quiet = () => {
+  for (const m of ['log', 'info', 'warn', 'error'] as const) vi.spyOn(console, m).mockImplementation(() => undefined);
+};
+async function captured(fn: () => Promise<unknown>): Promise<string[]> {
+  const rows: string[] = [];
+  for (const m of ['log', 'info', 'warn', 'error', 'debug'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push(JSON.stringify(a)));
+  try {
+    await fn();
+  } finally {
+    for (const m of ['log', 'info', 'warn', 'error', 'debug'] as const) (console[m] as unknown as { mockRestore?: () => void }).mockRestore?.();
+  }
+  return rows;
+}
+async function paid(who = LA) {
+  const { id: cartId } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+  expect((await req(`/api/cart/${cartId}/items`, json({ qty: 1, variant_id: PLAIN }, 'PUT'))).status).toBe(200);
+  const body = {
+    cart_id: cartId,
+    customer: { full_name: who.full_name, email: who.email, phone: who.phone },
+    address: { city: who.city, street: who.street, house: who.house, apartment: who.apartment, zip: who.zip, notes: who.notes },
+    shipping_method: 'economy',
+    consents: { terms: true, marketing: false },
+  };
+  const r = await req('/api/checkout', json(body));
+  expect(r.status, await r.clone().text()).toBe(201);
+  const c = (await r.json()) as { order_id: string };
+  const o = await one<{ payment_session_id: string; total_agorot: number }>('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?', c.order_id);
+  const ev = JSON.stringify({ id: `qa19_${c.order_id}_${Math.random().toString(36).slice(2, 8)}`, type: 'payment.succeeded', session_id: o.payment_session_id, amount_agorot: o.total_agorot });
+  const p = await req('/api/webhooks/payment/mock', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(SECRET, ev, Math.floor(Date.now() / 1000)) },
+    body: ev,
+  });
+  expect(((await p.json()) as { outcome: string }).outcome).toBe('paid');
+  sent.length = 0;
+  return c.order_id;
+}
+function supplier(o: { failWith?: (i: SupplierOrderInput) => Error } = {}) {
+  const orders: string[] = [];
+  const c: SupplierClient & { orders: string[] } = {
+    id: 'mock',
+    orders,
+    async submitOrder(input) {
+      if (o.failWith) throw o.failWith(input);
+      orders.push(input.order_id);
+      return { supplier_order_id: `QA-SUP-${input.order_id}-${orders.length}`, raw: {} };
+    },
+  };
+  return c;
+}
+
+// ---------------------------------------------------------------- ת52
+describe('QA K (ת52): redaction by whole words', () => {
+  const k = knownValues({ full_name: 'Dana Gat', email: 'dana.gat@gmail.com', phone: '052-7654321', address: { city: 'Tel Aviv', street: 'Ben Yehuda', house: '5', zip: '6100000' } });
+  it('K1 ordinary words keep their letters (S17: commit, hotel, /complete, invalid were cut)', () => {
+    const words = ['commit', 'hotel', 'complete', 'invalid', 'gateway', 'navigate', 'Danaher', 'Benjamin', 'avivit', 'gmail', 'example', 'telemetry', 'Yehudah'];
+    const out = Object.fromEntries(words.map((w) => [w, stripKnown(`x ${w} y`, k)]));
+    console.log(`QA K1: ${JSON.stringify(out)}`);
+    for (const w of words) expect(out[w], w).toBe(`x ${w} y`);
+  });
+  it('K2 the values themselves still go, in every case and form', () => {
+    const forms = ['Dana', 'DANA', 'dana', "Dana's", 'Gat,', 'Dana-Gat', 'Dana.Gat', 'dana.gat@gmail.com', 'DANA.GAT@GMAIL.COM', 'dana.gat', 'Tel Aviv', 'tel aviv', 'Yehuda', '052-7654321', '0527654321', '+972 52 765 4321', '972527654321', '00972-52-7654321', '(052) 765-4321', '6100000'];
+    const out = Object.fromEntries(forms.map((f) => [f, stripKnown(`<${f}>`, k)]));
+    console.log(`QA K2: ${JSON.stringify(out)}`);
+    for (const f of forms) expect(out[f], f).not.toMatch(/dana|gat|aviv|yehuda|7654321|765 4321|765-4321|6100000/i);
+  });
+  it('K3 a value glued to an underscore or digits (a provider token): what stays', () => {
+    const forms = ['consignee_dana_rejected', 'DANA_GAT', 'user_dana', 'dana2', 'dana1985', 'gat123', 'DanaGat', 'Dana’s', 'dana@other.example'];
+    const out = Object.fromEntries(forms.map((f) => [f, stripKnown(`<${f}>`, k)]));
+    const left = forms.filter((f) => /dana|gat/i.test(out[f]!));
+    console.log(`QA K3: ${JSON.stringify(out)} | name still in: ${left.join(', ') || 'none'}`);
+    // the same message through a known order's row (what a supplier error reaching supplier.submit_failed would log)
+    const row = logRow('error', 'qa.k3', { order_id: '1527654321' }, new Error('consignee_dana_rejected: address Tel Aviv'), k);
+    console.log(`QA K3 row: error_message ${String(row.error_message)}`);
+  });
+  it('K4 Hebrew: the value with one or two prefix letters; three; and the over-redaction frontend-dev named', () => {
+    const he = knownValues({ full_name: 'אורנה טל', email: 'x@example.invalid', phone: null, address: { city: 'מצפה רמון', street: 'הבודקים' } });
+    const forms = ['אורנה', 'לאורנה', 'ואורנה', 'שבמצפה', 'וכשבמצפה', 'רמון', 'ברמון', 'רמונים', 'הרמון', 'טלפון', 'הבודקים', 'מהבודקים', 'אורנה_טל'];
+    const out = Object.fromEntries(forms.map((f) => [f, stripKnown(f, he)]));
+    console.log(`QA K4: ${JSON.stringify(out)}`);
+    for (const f of ['אורנה', 'לאורנה', 'ואורנה', 'שבמצפה', 'רמון', 'ברמון', 'הבודקים']) expect(out[f], f).toContain('[customer]');
+    for (const f of ['רמונים', 'טלפון']) expect(out[f], f).toBe(f);
+  });
+  it('K5 the fields no rule may change: error_id, order_id, event, path; and what is not in their shape', () => {
+    const r1 = logRow('error', 'qa.k5', { error_id: 'E-DANA2345', order_id: '1527654321', path: '/api/orders/1527654321/complete', event: 'forged.event', note: 'Dana at Tel Aviv' }, undefined, k);
+    const r2 = logRow('error', 'qa.k5b', { error_id: 'E-dana2345', order_id: '0527654321', path: '/api/x/dana.gat@gmail.com/052-7654321/y' }, undefined, k);
+    const r3 = logRow('error', 'qa.k5c', { path: '/api/search/Dana' }, undefined, k);
+    console.log(`QA K5: kept ${JSON.stringify({ error_id: r1.error_id, order_id: r1.order_id, path: r1.path, event: r1.event, note: r1.note })} | not in shape ${JSON.stringify({ error_id: r2.error_id, order_id: r2.order_id, path: r2.path })} | a name in a path ${String(r3.path)}`);
+    expect(r1.error_id).toBe('E-DANA2345');
+    expect(r1.order_id).toBe('1527654321');
+    expect(r1.path).toBe('/api/orders/1527654321/complete');
+    expect(r1.event).toBe('qa.k5');
+    expect(String(r1.note)).not.toMatch(/Dana|Aviv/);
+    expect(String(r2.order_id)).not.toContain('7654321');
+    expect(String(r2.path)).not.toMatch(/dana|7654321/i);
+  });
+  it('K6 the id the logger returns is the id in the row', async () => {
+    const rows = await captured(async () => {
+      const id = log.forOrder(k).error('qa.k6', { error_id: 'E-DANA2345' }, new Error('Dana'));
+      console.log(`QA K6 returned ${id}`);
+    });
+    console.log(`QA K6: ${rows.join(' | ').slice(0, 400)}`);
+    expect(rows.join(' ')).toContain('"error_id":"E-DANA2345"');
+    expect(rows.join(' ')).toContain('returned E-DANA2345');
+  });
+});
+
+// ---------------------------------------------------------------- ת53
+describe('QA C (ת53): codes and names only from our own classes', () => {
+  class OrnaError extends Error {}
+  it('C1 errorCode and errorName on provider errors, ours and the runtime', () => {
+    const cases: Record<string, unknown> = {
+      'provider prefix': new Error('consignee_orna_rejected: x'),
+      'provider prefix upper': new Error('CONSIGNEE_ORNA: rejected'),
+      'provider name Orna': Object.assign(new Error('rejected'), { name: 'Orna' }),
+      'provider class OrnaError': new OrnaError('rejected'),
+      'provider code snake': Object.assign(new Error('x'), { code: 'consignee_orna' }),
+      'provider code E_-shaped': Object.assign(new Error('x'), { code: 'E_CONSIGNEE_ORNA' }),
+      'TypeError with a prefix': new TypeError('orna_tal: bad'),
+      'system ECONNRESET': Object.assign(new Error('socket'), { code: 'ECONNRESET' }),
+      'status 502': Object.assign(new Error('bad gateway for Orna'), { status: 502 }),
+      'TimeoutError': Object.assign(new Error('t'), { name: 'TimeoutError' }),
+      'ours CodedError': new CodedError('set_composition_missing', 'v1'),
+      'ours SupplierRefused': new SupplierRefused('cj_line_without_sku', 'cj_line_without_sku: p1'),
+      'ours SupplierRefused(provider text)': new SupplierRefused('orna_bodeket'),
+      'a string': 'orna_tal: x',
+    };
+    const out = Object.fromEntries(Object.entries(cases).map(([k, e]) => [k, `${errorCode(e)} / ${errorName(e)}`]));
+    console.log(`QA C1: ${JSON.stringify(out)}`);
+    for (const k of ['provider prefix', 'provider prefix upper', 'provider name Orna', 'provider class OrnaError', 'provider code snake', 'TypeError with a prefix', 'status 502']) expect(out[k], k).not.toMatch(/orna/i);
+    expect(out['ours CodedError']).toBe('set_composition_missing / CodedError');
+  });
+  it('C2 through the supplier job: the supplier.submit_failed row', async () => {
+    const out: Record<string, string> = {};
+    const cases: Record<string, (i: SupplierOrderInput) => Error> = {
+      'message-prefix': (i) => new Error(`consignee_${i.ship_to.full_name.split(' ')[0]!.toLowerCase()}_rejected: address ${i.ship_to.city}`),
+      'error-name': (i) => Object.assign(new Error('rejected'), { name: i.ship_to.full_name.split(' ')[0] }),
+      'code-E-shaped': (i) => Object.assign(new Error('x'), { code: `E_${i.ship_to.full_name.split(' ')[0]!.toUpperCase()}` }),
+    };
+    for (const [k, fail] of Object.entries(cases)) {
+      const id = await paid();
+      const rows = await captured(() => processSupplierJob(env, { kind: 'submit-order', order_id: id }, 1, { client: supplier({ failWith: fail }) }));
+      const row = rows.find((r) => r.includes('supplier.submit_failed')) ?? '';
+      out[k] = `${/orna/i.test(row) ? 'NAME IN ROW' : 'clean'} code=${/"error_code":"([^"]*)"|"code":"([^"]*)"/.exec(row)?.slice(1).find(Boolean)}`;
+    }
+    console.log(`QA C2: ${JSON.stringify(out)}`);
+    expect(out['message-prefix']).toMatch(/^clean/);
+    expect(out['error-name']).toMatch(/^clean/);
+  });
+});
+
+// ---------------------------------------------------------------- ת54
+describe('QA H (ת54): /healthz after a takeover', () => {
+  const health = async () => {
+    const r = await req('/healthz');
+    return `${r.status} ${((await r.json()) as { checks: { supplier: string } }).checks.supplier}`;
+  };
+  const die = async (id: string, at: number, attempts = 1) =>
+    env.DB.prepare("UPDATE supplier_shipments SET status = 'submitting', attempts = ?, updated_at = ? WHERE order_id = ?").bind(attempts, new Date(at).toISOString(), id).run();
+  it('H1 the S17 clock: a first claim dies at T1; the takeover at T1+31 leaves it to a person; /healthz stays degraded until the person acts', async () => {
+    quiet();
+    const T1 = Date.now();
+    vi.useFakeTimers({ toFake: ['Date'], now: T1 });
+    const id = await paid();
+    await die(id, T1);
+    const at: Record<string, string> = {};
+    for (const m of [11, 29.5, 30.5]) {
+      vi.setSystemTime(T1 + m * 60_000);
+      at[`T1+${m}m`] = await health();
+    }
+    vi.setSystemTime(T1 + 31 * 60_000);
+    const r = await processSupplierJob(env, { kind: 'submit-order', order_id: id }, 2, { client: supplier() });
+    const s = await ship(id);
+    at['takeover'] = `${r} → ${s.status}/${s.reach}, order ${await status(id)}, failing_since ${s.failing_since === new Date(T1).toISOString() ? 'the dead claim' : s.failing_since}`;
+    for (const m of [31, 45, 61, 120]) {
+      vi.setSystemTime(T1 + m * 60_000);
+      at[`T1+${m}m`] = await health();
+    }
+    // the person: "found" at the supplier → the shipment is recorded, failing_since cleared
+    const f = await req(`/api/admin/orders/${id}/supplier-check`, json({ outcome: 'found', supplier_order_id: `QA-SUP-${id}-1`, note: 'נמצאה' }, 'POST', admin));
+    at['after the person says found'] = `${f.status} → ${(await ship(id)).status}, /healthz ${await health()}`;
+    vi.useRealTimers();
+    console.log(`QA H1: ${JSON.stringify(at)}`);
+    expect(at['T1+29.5m']!.startsWith('200')).toBe(true);
+    expect(at['T1+30.5m']).toBe('503 degraded');
+    for (const m of [31, 45, 61, 120]) expect(at[`T1+${m}m`], `T1+${m}m`).toBe('503 degraded');
+    expect(at['after the person says found']).toContain('/healthz 200 ok');
+  });
+  it('H2 a claim that died 12 minutes before the takeover: ok now, degraded 30 min after the CLAIM (not the takeover); "none" then a good send clears it; a cancel clears it', async () => {
+    quiet();
+    const T = Date.now();
+    vi.useFakeTimers({ toFake: ['Date'], now: T });
+    const id = await paid();
+    await die(id, T);
+    vi.setSystemTime(T + 12 * 60_000);
+    await processSupplierJob(env, { kind: 'submit-order', order_id: id }, 2, { client: supplier() });
+    const at: Record<string, string> = {};
+    for (const m of [12.5, 29.5, 30.5, 42.5]) {
+      vi.setSystemTime(T + m * 60_000);
+      at[`T+${m}m`] = await health();
+    }
+    const n = await req(`/api/admin/orders/${id}/supplier-check`, json({ outcome: 'none', note: 'אין אצל הספק' }, 'POST', admin));
+    const resend = await processSupplierJob(env, { kind: 'submit-order', order_id: id }, 1, { client: supplier() });
+    at['after "none" and a good send'] = `${n.status}, ${resend} → ${(await ship(id)).status}, /healthz ${await health()}`;
+    // another one, left to a person, then canceled by the owner
+    const id2 = await paid();
+    await die(id2, T + 43 * 60_000);
+    vi.setSystemTime(T + 80 * 60_000);
+    await processSupplierJob(env, { kind: 'submit-order', order_id: id2 }, 2, { client: supplier() });
+    at['second, left to a person'] = await health();
+    await env.DB.prepare("UPDATE orders SET status = 'canceled' WHERE id = ?").bind(id2).run();
+    at['second, canceled'] = await health();
+    vi.useRealTimers();
+    console.log(`QA H2: ${JSON.stringify(at)}`);
+    expect(at['T+12.5m']!.startsWith('200')).toBe(true);
+    expect(at['T+30.5m']).toBe('503 degraded');
+    expect(at['after "none" and a good send']).toContain('/healthz 200 ok');
+    expect(at['second, left to a person']).toBe('503 degraded');
+    expect(at['second, canceled']).toBe('200 ok');
+  });
+  it('H3 an earlier failure is kept as the start: a 503 at T0, the retry claim dies at T0+1, the takeover at T0+12', async () => {
+    quiet();
+    const T0 = Date.now();
+    vi.useFakeTimers({ toFake: ['Date'], now: T0 });
+    const id = await paid();
+    await processSupplierJob(env, { kind: 'submit-order', order_id: id }, 1, { client: supplier({ failWith: () => Object.assign(new Error('503'), { status: 503 }) }) });
+    vi.setSystemTime(T0 + 60_000);
+    await die(id, T0 + 60_000, 2);
+    vi.setSystemTime(T0 + 12 * 60_000);
+    await processSupplierJob(env, { kind: 'submit-order', order_id: id }, 3, { client: supplier() });
+    const s = await ship(id);
+    const at: Record<string, string> = { takeover: `${s.status}/${s.reach}, failing_since ${s.failing_since === new Date(T0).toISOString() ? 'T0 (the first failure)' : s.failing_since}` };
+    for (const m of [29.5, 30.5]) {
+      vi.setSystemTime(T0 + m * 60_000);
+      at[`T0+${m}m`] = await health();
+    }
+    vi.useRealTimers();
+    console.log(`QA H3: ${JSON.stringify(at)}`);
+    expect(at.takeover).toContain('T0 (the first failure)');
+    expect(at['T0+30.5m']).toBe('503 degraded');
+  });
+});

@@ -45,7 +45,7 @@ temp media up to date (use --force to rebuild)
 > homedesign-site@0.1.0 assets:supplier
 > tsx tools/supplier-images.ts
 
-supplier images: 39/39 products (0 encoded, 39 up to date, 0 downloaded) → media/products/<public id>/photo.800.webp · usage rights confirmed 0, unclear 39, none 0 (7.2s)
+supplier images: 39/39 products (0 encoded, 39 up to date, 0 downloaded) → media/products/<public id>/photo.800.webp · usage rights confirmed 0, unclear 39, none 0 (0.3s)
 option pictures: 483 options, 182 files (0 encoded) · artifact: 40 files
 image rights (S15): a public build (HD_PUBLIC=1) withholds the supplier pictures of 39/39 products (39 photos, 182 option pictures; unclear 39) → /home/user/homedesign-app/site/.generated/supplier-images.public.json
 rights ledger (S17): 423 files by sha256 (shop 221, cached originals 202) → .generated/rights/shop.json
@@ -285,7 +285,7 @@ dist/assets/story-5xU-DDp6.js                                                   
 dist/assets/test-z9wwrDKC.js                                                                             17.58 kB │ gzip:  6.40 kB
 dist/assets/warm-modern-DJGyC5TS.js                                                                      27.14 kB │ gzip:  7.38 kB
 dist/assets/main-Brw4J6np.js                                                                            192.42 kB │ gzip: 52.13 kB
-✓ built in 8.26s
+✓ built in 7.58s
 vite v7.3.7 building ssr environment for production...
 transforming...
 ✓ 69 modules transformed.
@@ -311,7 +311,7 @@ rendering chunks...
 .ssr/assets/VariantWheel-9WDXUj3Y.js   16.20 kB
 .ssr/assets/warm-modern-DvmvEzXG.js    30.38 kB
 .ssr/entry-server.js                  287.71 kB
-✓ built in 1.10s
+✓ built in 2.36s
 prerendered 47 pages + 1 house page(s) + order shell + 404; analytics beacon (S17): none (behind the flag)
 
 > @hd/api@0.1.0 build
@@ -322,8 +322,8 @@ check-config: (top level) development (payment mock, invoices mock, supplier moc
 
 
 
- ⛅️ wrangler 4.149.0
-────────────────────
+ ⛅️ wrangler 4.149.0 (update available 4.160.1)
+───────────────────────────────────────────────
 [custom build] Running: node ../node_modules/tsx/dist/cli.mjs scripts/check-config.ts
 [custom build] check-config: (top level) development (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED, contact UNDECIDED); preview preview (payment mock, invoices mock, supplier mock, alerts mock, customer email UNDECIDED, contact UNDECIDED); production production (payment UNDECIDED, invoices UNDECIDED, supplier cj, alerts UNDECIDED, customer email UNDECIDED, contact UNDECIDED)
 [custom build] 
@@ -373,14 +373,14 @@ ok    first view, a detail page, mobile                          118.6 KB  / 921
 > tsx tools/check-image-rights.ts
 
 image rights (S15, behind the flag): 39/39 public products lose the supplier's picture in a public build (39 photos, 182 option pictures withheld: unclear 39); shipped publicly: 0; behind the flag nothing is withheld
-image rights by content (S17): 1484 files, 825 pictures (60 data: URIs) against 748 supplier files by sha256 and 561 pictures (1422 fingerprints) by pixels (dHash 16×16, Hamming ≤ 24 of 256 (or ≤ 48 with a 32×32 grey difference ≤ 3 when both carry ink ≥ 4); plain and mirrored, and trimmed of margins), hosts alicdn.com, aliexpress-media.com, aliexpress.com, cjdropshipping.com, rihut-express.co.il, zendrop.com (1.3s): behind the flag, the control: found 542 (bytes 542, pixels 0, data-uri bytes 0, data-uri pixels 0, host 0), 0 outside media/products and media/story/products
+image rights by content (S17): 1484 files, 825 pictures (60 data: URIs) against 748 supplier files by sha256 and 561 pictures (1422 fingerprints) by pixels (dHash 16×16, Hamming ≤ 24 of 256 (or ≤ 48 with a 32×32 grey difference ≤ 3 when both carry ink ≥ 4); plain and mirrored, and trimmed of margins), hosts alicdn.com, aliexpress-media.com, aliexpress.com, cjdropshipping.com, rihut-express.co.il, zendrop.com (1s): behind the flag, the control: found 542 (bytes 542, pixels 0, data-uri bytes 0, data-uri pixels 0, host 0), 0 outside media/products and media/story/products
   nearest outside the supplier folders: assets/sequence-dNqUkZ_s.js (data: URI #1, 276 B) dHash 30/256 from products/vase-white-plum-hand-thrown-karts/opt-096404f51a (rule A at 24); by grey: media/rooms/living-room/nordic/M0/slots/floor-lamp/1.product.2752.webp 18.3 (rule B at 3, with ink)
 
 > homedesign-site@0.1.0 check:promises
 > tsx tools/check-promises.ts
 
-check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, not scanned), 9 other text files, 44 Worker files and its bundle (2133 ms)
+check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, not scanned), 9 other text files, 44 Worker files and its bundle (3515 ms)
 
-real	1m38.555s
-user	0m31.378s
-sys	0m3.741s
+real	1m10.004s
+user	0m29.818s
+sys	0m3.323s
