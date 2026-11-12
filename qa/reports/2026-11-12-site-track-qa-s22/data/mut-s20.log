@@ -1,0 +1,25 @@
+QA S20 new mutations of check:promises, 2026-11-12T18:00:49Z, re-run by QA S22 on 9b6c6746 (flag build)
+ok   X0   want 0 got 0  clean dist  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, no
+ok   X1   want 1 got 1  an SVG file in dist (favicon.svg): <title>  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X2   want 1 got 1  an inline SVG in a page: <title>  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X3   want 1 got 1  an inline SVG in a page: <desc>  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X4   want 1 got 1  <noscript> in the <head> of the order shell (a client-only page), numeric entities ("אישור יישלח לאימייל שלכם.")  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X5   want 1 got 1  <noscript> in 404, split across <b>  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X6   want 1 got 1  meta description (home)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X7   want 1 got 1  og:description (home)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X8   want 1 got 1  og:title (home)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X9   want 1 got 1  twitter:description with &quot; entities (home)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X10  want 1 got 1  a second og:description, single quotes  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X11  want 0 got 0  a WebP with XMP (dc:description) in dist, shown by a page: binary, never read by a customer (want 0: info only)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, no
+ok   X12  want 1 got 1  manifest.json in dist, linked from home: description  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X13  want 1 got 1  site.webmanifest, not linked: short_name "עדכונים ב-SMS" (two words: the definition's label exemption)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X13b want 1 got 1  site.webmanifest, not linked: short_name "נעדכן אתכם במייל" (the file is scanned)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X14  want 1 got 1  manifest.webmanifest: a shortcut's name  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X15  want 1 got 1  lazy chunk (Order): ["אישור ההזמנה","יישלח","במייל"].join(" ")  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X16  want 1 got 1  lazy chunk (Order): "האישור ".concat("יגיע ","לתיבת הדואר")  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   X17  want 1 got 1  two checkbox labels, two words each: "חשבונית במייל", "עדכונים ב-SMS"  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+ok   Y1   want 0 got 0  honest: the S20 contact wording (returns, no_access_contact)  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, no
+ok   Y2   want 0 got 0  honest: the S20 accessibility wording and the contact block ("אימייל: info@…")  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, no
+ok   Y3   want 0 got 0  honest: a heading "X: Y" then a negation ("דיוור שיווקי: האתר לא שולח דיוור.")  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, no
+ok   Y4   want 0 got 0  honest: the customer writes to us ("שלחו לנו מייל")  | check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): 0 promises of an email in 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, no
+rows as wanted: 23, gaps: 0

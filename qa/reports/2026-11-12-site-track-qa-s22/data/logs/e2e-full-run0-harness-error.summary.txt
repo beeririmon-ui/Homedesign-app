@@ -1,0 +1,8 @@
+QA S22, the first full e2e run (17:53), discarded: my harness set TMPDIR to a long scratch path, and Chromium aborts on a socket path that long ("Socket path too long … SingletonSocket"): 125 failed at browser launch, 14 passed, 1 skipped; a11y 16 failed the same way. Nothing to do with the site. Re-run at 18:0x with the default TMPDIR: logs/e2e-full.log.
+    [pid=31874][err] [31874:31874:1112/175315.292500:FATAL:chrome/browser/process_singleton_posix.cc:313] Socket path too long: <scratch>
+    [2m  - [pid=31874][err] [31874:31874:1112/175315.292500:FATAL:chrome/browser/process_singleton_posix.cc:313] Socket path too long: <scratch>
+    [pid=31896][err] [31896:31896:1112/175316.707107:FATAL:chrome/browser/process_singleton_posix.cc:313] Socket path too long: <scratch>
+  125 failed
+  1 skipped
+  14 passed (2.2m)
+  16 failed

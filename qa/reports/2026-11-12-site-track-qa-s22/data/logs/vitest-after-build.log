@@ -1,0 +1,340 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.8 [39m[90m<qa22>/build-s22/site[39m
+
+ [32m✓[39m tools/test/s19.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 4255[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s near-blank pictures against a thin lamp on white: white, transparent, a dot and a mostly transparent layer find nothing (the S17 rule matched them) [33m 845[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s gate demo on the real set: our four phase-2 layers as house layers in a public build find nothing [33m 1455[2mms[22m[39m
+     [33m[2m✓[22m[39m QA’s R9 (flipped), padding onto white 4:3, a grey 3% border, and a crop that cuts only margin: each found [33m 1106[2mms[22m[39m
+ [32m✓[39m tools/test/s17-rights.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 14527[2mms[22m[39m
+     [33m[2m✓[22m[39m dHash: one picture at any width and quality is within the threshold; two pictures are far apart [33m 409[2mms[22m[39m
+     [33m[2m✓[22m[39m R4, the picture inlined as a data: URI: its bytes; re-encoded smaller, its pixels [33m 418[2mms[22m[39m
+     [33m[2m✓[22m[39m R6, the story’s own copies: by the story’s ledger; and without any ledger of them, by pixels at every width [33m 766[2mms[22m[39m
+     [33m[2m✓[22m[39m R0 clean, R1, R2, R3, R4 and R6 through the real check: only the clean copy passes [33m 5761[2mms[22m[39m
+     [33m[2m✓[22m[39m R6 by pixels alone: every copy the story made is found without the story’s ledger [33m 4840[2mms[22m[39m
+ [32m✓[39m tools/test/s18.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 18724[2mms[22m[39m
+     [33m[2m✓[22m[39m UNDECIDED: writes the wording without an email, and only it [33m 702[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the wording without a provider stops it [33m 449[2mms[22m[39m
+     [33m[2m✓[22m[39m a mock, a typo or no EMAIL_PROVIDER stops it; the public build reads production [33m 3114[2mms[22m[39m
+     [33m[2m✓[22m[39m a clean site passes; the test page chunk is not the customer’s (listed, not scanned) [33m 2177[2mms[22m[39m
+     [33m[2m✓[22m[39m the order page’s old line in a lazy chunk stops the build [33m 2859[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in a page’s text stops the build [33m 3391[2mms[22m[39m
+     [33m[2m✓[22m[39m a promise in the Worker’s customer strings stops the build; the owner’s screens are not the customer’s [33m 2225[2mms[22m[39m
+     [33m[2m✓[22m[39m a copy built for another EMAIL_PROVIDER fails: the build’s choice must be this build’s [33m 2567[2mms[22m[39m
+     [33m[2m✓[22m[39m no promise is written in the web’s code (the copy is the one place for these lines); the design test page aside [33m 1019[2mms[22m[39m
+ [32m✓[39m tools/test/s14-catalog.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 2636[2mms[22m[39m
+ [32m✓[39m tools/test/s20.test.ts [2m([22m[2m52 tests[22m[2m)[22m[33m 38076[2mms[22m[39m
+     [33m[2m✓[22m[39m the clean small site passes; the review page’s chunk alone is not scanned [33m 1579[2mms[22m[39m
+     [33m[2m✓[22m[39m Q1 a verb in a <span>: the build stops [33m 1365[2mms[22m[39m
+     [33m[2m✓[22m[39m Q7 a submit input’s value: the build stops [33m 1496[2mms[22m[39m
+     [33m[2m✓[22m[39m Q8 aria-label in single quotes: the build stops [33m 1483[2mms[22m[39m
+     [33m[2m✓[22m[39m Q9 aria-roledescription: the build stops [33m 1463[2mms[22m[39m
+     [33m[2m✓[22m[39m Q10 a JSON island (the story data): the build stops [33m 1346[2mms[22m[39m
+     [33m[2m✓[22m[39m Q12 a JSON file in dist: the build stops [33m 1534[2mms[22m[39m
+     [33m[2m✓[22m[39m Q14 JSX split across <b>: the build stops [33m 1802[2mms[22m[39m
+     [33m[2m✓[22m[39m Q15 a template literal split by ${}: the build stops [33m 1561[2mms[22m[39m
+     [33m[2m✓[22m[39m Q16 "a" + "b": the build stops [33m 1457[2mms[22m[39m
+     [33m[2m✓[22m[39m Q17 a script outside assets/: the build stops [33m 1499[2mms[22m[39m
+     [33m[2m✓[22m[39m Q18 a chunk named by a CDN URL: the build stops [33m 1253[2mms[22m[39m
+     [33m[2m✓[22m[39m Q19 CSS content: the build stops [33m 1367[2mms[22m[39m
+     [33m[2m✓[22m[39m Q20 a typographic apostrophe: the build stops [33m 1479[2mms[22m[39m
+     [33m[2m✓[22m[39m Q21 a mailbox: the build stops [33m 1743[2mms[22m[39m
+     [33m[2m✓[22m[39m Q22 SMS and WhatsApp with no verb: the build stops [33m 2398[2mms[22m[39m
+     [33m[2m✓[22m[39m an inline script: the build stops [33m 2253[2mms[22m[39m
+     [33m[2m✓[22m[39m an unreferenced script, scanned all the same: the build stops [33m 2383[2mms[22m[39m
+     [33m[2m✓[22m[39m Q26 a .json of messages in api/src, Q27 shared/src served by the Worker: the build stops [33m 1679[2mms[22m[39m
+     [33m[2m✓[22m[39m the story’s code no longer writes it; the gate catches the old line in a story chunk [33m 2414[2mms[22m[39m
+     [33m[2m✓[22m[39m behind the flag, no contact details: a warning; the block and the "כתבו לנו" lines are out [33m 826[2mms[22m[39m
+     [33m[2m✓[22m[39m the public build stops without them, or with an address reserved for examples; it passes with real ones (S22: made at run time) [33m 2134[2mms[22m[39m
+     [33m[2m✓[22m[39m malformed contact details stop any build [33m 529[2mms[22m[39m
+     [33m[2m✓[22m[39m no "כתבו לנו" left in the web’s or the Worker’s code outside the copy and the contact-aware error line [33m 782[2mms[22m[39m
+(node:29706) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29752) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s20.test.ts[2m > [22m[2mS20 ת61: the contact details[2m > [22m[2mthe Worker's error line: "כתבו לנו" only with an email to write to; the code either way
+[22m[39m{
+  level: [32m'error'[39m,
+  event: [32m'request.unhandled'[39m,
+  at: [32m'2026-11-12T17:52:27.084Z'[39m,
+  method: [32m'GET'[39m,
+  path: [32m'/api/health'[39m,
+  error_id: [32m'E-X7USMWFP'[39m,
+  error_name: [32m'Error'[39m,
+  error_code: [32m'Error'[39m,
+  error_message: [32m'boom'[39m
+}
+
+[90mstderr[2m | api/test/s20.test.ts[2m > [22m[2mS20 ת61: the contact details[2m > [22m[2mthe Worker's error line: "כתבו לנו" only with an email to write to; the code either way
+[22m[39m{
+  level: [32m'error'[39m,
+  event: [32m'request.unhandled'[39m,
+  at: [32m'2026-11-12T17:52:27.091Z'[39m,
+  method: [32m'GET'[39m,
+  path: [32m'/api/health'[39m,
+  error_id: [32m'E-T5AKWRE7'[39m,
+  error_name: [32m'Error'[39m,
+  error_code: [32m'Error'[39m,
+  error_message: [32m'boom'[39m
+}
+
+ [32m✓[39m api/test/s20.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 2174[2mms[22m[39m
+     [33m[2m✓[22m[39m check-config names a malformed contact in production, and passes the repo as it is [33m 1379[2mms[22m[39m
+ [32m✓[39m api/test/s14.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 2399[2mms[22m[39m
+(node:30061) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tools/test/s22.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 37244[2mms[22m[39m
+     [33m[2m✓[22m[39m each sample stops the public build, and is a warning behind the flag [33m 28072[2mms[22m[39m
+     [33m[2m✓[22m[39m a value made at run time passes both builds without a warning [33m 1812[2mms[22m[39m
+     [33m[2m✓[22m[39m ה25: check-config fails production on a sample, and warns in another environment [33m 2277[2mms[22m[39m
+     [33m[2m✓[22m[39m the gate stops a chunk with either (a scratch dist) [33m 4607[2mms[22m[39m
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mQA A4: a cross-site "text/plain; charset=application/json" cancel is refused, and the order is untouched
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.039Z'[39m,
+  path: [32m'/api/admin/orders/3924069572/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.204Z'[39m,
+  path: [32m'/api/admin/orders/6862306059/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.206Z'[39m,
+  path: [32m'/api/admin/orders/6862306059/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.211Z'[39m,
+  path: [32m'/api/admin/orders/6862306059/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.213Z'[39m,
+  path: [32m'/api/admin/orders/6862306059/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.215Z'[39m,
+  path: [32m'/api/admin/orders/6862306059/cancel'[39m,
+  reason: [32m'cross_site'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma person (Access login): only with this origin, or Sec-Fetch-Site same-origin; a foreign or missing marker is 403
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.222Z'[39m,
+  path: [32m'/api/admin/orders/6862306059/cancel'[39m,
+  reason: [32m'no_origin'[39m,
+  kind: [32m'user'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2ma service token (the studio): no browser markers needed; the actor names the token; a foreign Origin is still refused
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.340Z'[39m,
+  path: [32m'/api/admin/orders/7714810412/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'service'[39m
+}
+
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת34: the Admin API acts only for the admin itself[2m > [22m[2mthe screen’s forms: the same rule (a foreign Origin is bad_origin); the local dev token acts without markers
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.cross_site_refused'[39m,
+  at: [32m'2026-11-12T17:52:28.385Z'[39m,
+  path: [32m'/api/admin/orders/2865027139/cancel'[39m,
+  reason: [32m'cross_origin'[39m,
+  kind: [32m'dev'[39m
+}
+
+(node:30132) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m api/test/s18.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1075[2mms[22m[39m
+     [33m[2m✓[22m[39m check-config fails a wrangler.jsonc whose production has a mock email, and names it [33m 1068[2mms[22m[39m
+[90mstderr[2m | api/test/s16.test.ts[2m > [22m[2mת35: a submit that may have reached the supplier counts as sent; never a silent full refund[2m > [22m[2ma timeout, then refusals: the order stays "maybe" (a later refusal never clears it)
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'supplier.resend_needs_person'[39m,
+  at: [32m'2026-11-12T17:52:29.104Z'[39m,
+  order_id: [32m'4451190505'[39m,
+  supplier: [32m'mock'[39m,
+  attempt: [33m2[39m
+}
+
+(node:30168) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m api/test/s17.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1315[2mms[22m[39m
+     [33m[2m✓[22m[39m cannot be asked and does not deduplicate: nothing sent, a person checks; "none" sends it again, "found" records it [33m 332[2mms[22m[39m
+ [32m✓[39m api/test/s16.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1955[2mms[22m[39m
+(node:30225) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30223) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:30.499Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:30.500Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:30.501Z'[39m,
+  path: [32m'/admin/'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:30.502Z'[39m,
+  path: [32m'/api/admin/orders'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin: 403 without permission, everywhere[2m > [22m[2mthe dev token: only in a local run, only the exact value
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:30.502Z'[39m,
+  path: [32m'/admin/'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/s13.test.ts[2m > [22m[2mthe admin screen and API (order operations)[2m > [22m[2mthe screen acts through forms from its own origin only; a refund from the form is idempotent by its key
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:30.827Z'[39m,
+  path: [32m'/api/admin/orders/8425743203/mock-supplier'[39m,
+  reason: [32m'no_token'[39m
+}
+
+ [32m✓[39m api/test/s13.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1544[2mms[22m[39m
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'payment.webhook_rejected'[39m,
+  at: [32m'2026-11-12T17:52:31.187Z'[39m,
+  provider: [32m'mock'[39m,
+  reason: [32m'mismatch'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2mpayment webhook[2m > [22m[2mrejects bad and stale signatures
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'payment.webhook_rejected'[39m,
+  at: [32m'2026-11-12T17:52:31.244Z'[39m,
+  provider: [32m'mock'[39m,
+  reason: [32m'stale'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2madmin[2m > [22m[2mis closed without Cloudflare Access and open with the local dev bypass
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:31.525Z'[39m,
+  path: [32m'/api/admin/overview'[39m,
+  reason: [32m'no_token'[39m
+}
+
+[90mstderr[2m | api/test/api.test.ts[2m > [22m[2madmin[2m > [22m[2mdev bypass is ignored in preview
+[22m[39m{
+  level: [32m'warn'[39m,
+  event: [32m'admin.forbidden'[39m,
+  at: [32m'2026-11-12T17:52:31.544Z'[39m,
+  path: [32m'/api/admin/overview'[39m,
+  reason: [32m'no_token'[39m
+}
+
+ [32m✓[39m api/test/api.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 1255[2mms[22m[39m
+ [32m✓[39m api/test/s12.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 1411[2mms[22m[39m
+[90mstdout[2m | shared/test/shared.test.ts[2m > [22m[2mrepo data against the derived schemas[2m > [22m[2mevery product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields
+[22m[39mdraft cards (DS API, colors / visual_weight unfilled): 68
+
+ [32m✓[39m shared/test/shared.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 1249[2mms[22m[39m
+     [33m[2m✓[22m[39m every product card outside the shared pool parses, or is a DS-API draft whose only gaps are its unfilled draft fields [33m 515[2mms[22m[39m
+     [33m[2m✓[22m[39m agrees with studio/build.py on the real cards [33m 431[2mms[22m[39m
+ [32m✓[39m tools/test/s17.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 747[2mms[22m[39m
+     [33m[2m✓[22m[39m runs tsx from site/node_modules by its path, and passes from site/api [33m 699[2mms[22m[39m
+ [32m✓[39m tools/test/s21.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 491[2mms[22m[39m
+     [33m[2m✓[22m[39m on pictures: flat layers within the threshold of a supplier picture (S19: matched by A) find nothing now; a copy of it is found [33m 471[2mms[22m[39m
+(node:30434) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30449) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m web/test/s21-cart.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 281[2mms[22m[39m
+ [32m✓[39m api/test/s19.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 308[2mms[22m[39m
+ [32m✓[39m api/test/s21.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 240[2mms[22m[39m
+ [32m✓[39m shared/test/options.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 151[2mms[22m[39m
+ [32m✓[39m tools/test/design-system.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m web/test/s20-contact.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+ [32m✓[39m tools/test/s16.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m tools/test/lines.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m api/test/integrations.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m web/test/story-cart.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m tools/test/qa-frames.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tools/test/story-hotspots.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m web/test/product-bits.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tools/test/s15-rights.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m web/test/s19-router.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m web/test/s15-copy.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m web/test/viewport-frame.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tools/test/sets.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m web/test/story-detail.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m web/test/product-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m web/test/option-picker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m web/test/wheel-physics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m web/test/s17-notes.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m shared/test/product-url.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m shared/test/s17-analytics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m42 passed[39m[22m[90m (42)[39m
+[2m      Tests [22m [1m[32m482 passed[39m[22m[90m (482)[39m
+[2m   Start at [22m 17:51:44
+[2m   Duration [22m 50.37s[2m (transform 3.50s, setup 0ms, collect 10.40s, tests 132.51s, environment 8ms, prepare 227ms)[22m
+

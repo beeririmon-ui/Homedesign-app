@@ -1,0 +1,20 @@
+### no_loss.py --check
+{"products": 464, "by_status": {"ok": 318, "express-only": 6, "cannot-compute": 10, "no-price": 130}, "by_flag": {"above-market": 19, "below-floor": 244, "ok": 55, "express-only": 6, "cannot-compute": 10, "no-price": 130}}
+check: 0 invariant failures, 0 products lose at their current price
+exit 0
+### no_loss.py --check-derived
+{"products": 464, "by_status": {"ok": 318, "express-only": 6, "cannot-compute": 10, "no-price": 130}, "by_flag": {"above-market": 19, "below-floor": 244, "ok": 55, "express-only": 6, "cannot-compute": 10, "no-price": 130}}
+check-derived: 7546 derived scenarios, 722 floored by the site (largest raise ₪2880), 0 lose at the site's price
+exit 0
+### no_loss.py --check-site site/.generated/catalog.full.json
+{"products": 464, "by_status": {"ok": 318, "express-only": 6, "cannot-compute": 10, "no-price": 130}, "by_flag": {"above-market": 19, "below-floor": 244, "ok": 55, "express-only": 6, "cannot-compute": 10, "no-price": 130}}
+check-site: catalog ef84e2c62c58 (provisional), 39 products (3 not sold, PRE1), 443 prices checked, 60 floored by the site, 0 lose
+exit 0
+### no_loss.py --check-site site/.generated/catalog.story.full.json
+{"products": 464, "by_status": {"ok": 318, "express-only": 6, "cannot-compute": 10, "no-price": 130}, "by_flag": {"above-market": 19, "below-floor": 244, "ok": 55, "express-only": 6, "cannot-compute": 10, "no-price": 130}}
+check-site: catalog 2e40d9acb92b (provisional), 51 products (3 not sold, PRE1), 659 prices checked, 60 floored by the site, 0 lose
+exit 0
+### no_loss.py --check-site site/.generated/catalog.test-page.full.json
+{"products": 464, "by_status": {"ok": 318, "express-only": 6, "cannot-compute": 10, "no-price": 130}, "by_flag": {"above-market": 19, "below-floor": 244, "ok": 55, "express-only": 6, "cannot-compute": 10, "no-price": 130}}
+check-site: catalog 81e673626f83 (provisional), 57 products (5 not sold, PRE1), 538 prices checked, 80 floored by the site, 0 lose
+exit 0

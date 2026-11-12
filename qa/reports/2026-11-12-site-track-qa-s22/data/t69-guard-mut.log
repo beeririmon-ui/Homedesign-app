@@ -1,0 +1,13 @@
+QA S22: the S22 guard test ('every address and phone in the site…') against planted values in a hardlinked scratch copy (temporary files only; digits of the planted phones masked here).
+planted: G1 plain email, G2 mailto: email, G3 03-xxxxxxx, G4 +972 (3) xxx-xxxx, G5 972-3-xxxxxxx, G6 03.xxx.xxxx, G7 x [at] domain, G8 *xxxx, G9 1-800-xxx-xxx, G10 tel:+9723xxxxxxx, G11 052 xxx xxxx, G12 email in JSON; site/web/public/zz-qa22.webmanifest (email), site/zz-qa22.yml (email), briefs/zz-qa22.md (email), docs/ops/zz-qa22.md (phone)
+reported by the test (want: all 16; found 7):
++   "site/e2e/zz-qa22-guard.md: orders@beit-qa22-guard.co.il",
++   "site/e2e/zz-qa22-guard.md: care@beit-qa22-json.co.il",
++   "site/e2e/zz-qa22-guard.md: 03-xxxxxxx",
++   "site/e2e/zz-qa22-guard.md: +972xxx1xxxx",
++   "site/e2e/zz-qa22-guard.md: 052 xxx xxxx",
++   "briefs/zz-qa22.md: office@beit-qa22-brief.co.il",
++   "docs/ops/zz-qa22.md: 050-xxxxxxx",
+missed: G2 (mailto:, the lookbehind (?<![:\w.%+-]) skips any address after a colon), G4, G5, G6, G7, G8, G9, the .webmanifest and .yml files (not in TEXT)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 23 skipped (24)

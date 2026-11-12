@@ -1,0 +1,254 @@
+{
+ "ok": 10,
+ "total": 18,
+ "rows": [
+  {
+   "id": "J1",
+   "want": "stop",
+   "code": "export const x=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"].join(\" \").trim();",
+   "what": "join(\" \") then .trim()",
+   "got": "stop",
+   "texts": [
+    "אישור ההזמנה יישלח במייל",
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J2",
+   "want": "stop",
+   "code": "export const x=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"].join(` `);",
+   "what": "join with a template-literal no-break space",
+   "got": "stop",
+   "texts": [
+    "אישור ההזמנה יישלח במייל",
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J3",
+   "want": "stop",
+   "code": "const p=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"];export const x=p.join(\" \");",
+   "what": "the array in a variable, then p.join(\" \") (minifiers keep it)",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J4",
+   "want": "stop",
+   "code": "export const x=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"].filter(Boolean).join(\" \");",
+   "what": ".filter(Boolean).join(\" \") (the common idiom)",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J5",
+   "want": "stop",
+   "code": "export const x=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"].map(s=>s).join(\" \");",
+   "what": ".map(…).join(\" \")",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J6",
+   "want": "stop",
+   "code": "export const x=Array.of(\"אישור ההזמנה\",\"יישלח\",\"במייל\").join(\" \");",
+   "what": "Array.of(…).join(\" \")",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J7",
+   "want": "stop",
+   "code": "export const x=new Array(\"אישור ההזמנה\",\"יישלח\",\"במייל\").join(\" \");",
+   "what": "new Array(…).join(\" \")",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J8",
+   "want": "stop",
+   "code": "export const x=[...[\"אישור ההזמנה\",\"יישלח\",\"במייל\"]].join(\" \");",
+   "what": "a spread inside the array",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J9",
+   "want": "stop",
+   "code": "export const x=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"].reduce((a,b)=>a+\" \"+b);",
+   "what": ".reduce((a,b)=>a+\" \"+b)",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J10",
+   "want": "stop",
+   "code": "export const x=\"אישור ההזמנה \".concat(\"יישלח \").concat(\"במייל\");",
+   "what": "chained .concat().concat()",
+   "got": "stop",
+   "texts": [
+    "אישור ההזמנה יישלח במייל",
+    "אישור ההזמנה יישלח ",
+    "אישור ההזמנה ",
+    "יישלח ",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J11",
+   "want": "stop",
+   "code": "export const x=String.prototype.concat.call(\"אישור ההזמנה \",\"יישלח \",\"במייל\");",
+   "what": "String.prototype.concat.call",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנה ",
+    "יישלח ",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J12",
+   "want": "stop",
+   "code": "export const x=[\"אישור ההזמנה\",[\"יישלח\",\"במייל\"].join(\" \")].join(\" \");",
+   "what": "a join inside a join",
+   "got": "stop",
+   "texts": [
+    "אישור ההזמנה יישלח במייל",
+    "אישור ההזמנהיישלח במייל",
+    "אישור ההזמנה",
+    "יישלח במייל",
+    "יישלחבמייל",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J13",
+   "want": "stop",
+   "code": "export const x=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"].join(sep);",
+   "what": "join with a variable separator (read as a space)",
+   "got": "stop",
+   "texts": [
+    "אישור ההזמנה יישלח במייל",
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J14",
+   "want": "stop",
+   "code": "export const x=`${[\"אישור ההזמנה\",\"יישלח\"].join(\" \")} במייל`;",
+   "what": "a join inside a template literal",
+   "got": "stop",
+   "texts": [
+    "אישור ההזמנה יישלח במייל",
+    "אישור ההזמנה יישלח",
+    "אישור ההזמנהיישלח",
+    "אישור ההזמנה",
+    "יישלח",
+    " במייל"
+   ]
+  },
+  {
+   "id": "J15",
+   "want": "pass",
+   "code": "export const x=[\"אישור ההזמנה\",\"יישלח\",\"במייל\"].join(\"\");",
+   "what": "control: join(\"\") renders the words run together (that is what the reader sees)",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנהיישלחבמייל",
+    "אישור ההזמנה",
+    "יישלח",
+    "במייל"
+   ]
+  },
+  {
+   "id": "J16",
+   "want": "pass",
+   "code": "export const x=[\"המלאי\",\"אינו\",\"זמין\",\"כעת\"].join(\" \");",
+   "what": "control: an honest line",
+   "got": "pass",
+   "texts": [
+    "המלאי אינו זמין כעת",
+    "המלאיאינוזמיןכעת",
+    "המלאי",
+    "אינו",
+    "זמין",
+    "כעת"
+   ]
+  },
+  {
+   "id": "J17",
+   "want": "pass",
+   "code": "export const x=[\"אישור\",\"ההזמנה\"].join(\" \")+\" מופיע בדף\";",
+   "what": "control: honest, joined",
+   "got": "pass",
+   "texts": [
+    "אישור ההזמנה מופיע בדף",
+    "אישור ההזמנה",
+    "אישורההזמנה",
+    "אישור",
+    "ההזמנה",
+    " מופיע בדף"
+   ]
+  },
+  {
+   "id": "J18",
+   "want": "pass",
+   "code": "export const x=[\"האתר\",\"לא\",\"שולח\",\"מיילים\"].join(\" \");",
+   "what": "control: a negation, joined",
+   "got": "pass",
+   "texts": [
+    "האתר לא שולח מיילים",
+    "האתרלאשולחמיילים",
+    "האתר",
+    "לא",
+    "שולח",
+    "מיילים"
+   ]
+  }
+ ],
+ "gate": []
+}

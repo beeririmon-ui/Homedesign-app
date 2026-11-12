@@ -1,0 +1,898 @@
+[
+ {
+  "id": "G1",
+  "mode": "public",
+  "what": "the repo as it is (CONTACT1 open)",
+  "email": "UNDECIDED",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every \"כתבו לנו\" line is in its wording without contact (CONTACT1). The public build needs the shop's co"
+ },
+ {
+  "id": "G1",
+  "mode": "flag",
+  "what": "the repo as it is (CONTACT1 open)",
+  "email": "UNDECIDED",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": null,
+  "first": "build-copy: warning (top level): no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every \"כתבו לנו\" line is in its wording without contact (CONTACT1). A public build "
+ },
+ {
+  "id": "G2",
+  "mode": "public",
+  "what": "empty",
+  "email": "",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every \"כתבו לנו\" line is in its wording without contact (CONTACT1). The public build needs the shop's co"
+ },
+ {
+  "id": "G2",
+  "mode": "flag",
+  "what": "empty",
+  "email": "",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": null,
+  "first": "build-copy: warning (top level): no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every \"כתבו לנו\" line is in its wording without contact (CONTACT1). A public build "
+ },
+ {
+  "id": "G3",
+  "mode": "public",
+  "what": "the keys missing",
+  "email": "(missing)",
+  "phone": "(missing)",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL is not set (it is UNDECIDED until the owner decides, CONTACT1)"
+ },
+ {
+  "id": "G3",
+  "mode": "flag",
+  "what": "the keys missing",
+  "email": "(missing)",
+  "phone": "(missing)",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "top level: CONTACT_EMAIL is not set (it is UNDECIDED until the owner decides, CONTACT1)"
+ },
+ {
+  "id": "G4",
+  "mode": "public",
+  "what": "null",
+  "email": null,
+  "phone": null,
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every \"כתבו לנו\" line is in its wording without contact (CONTACT1). The public build needs the shop's co"
+ },
+ {
+  "id": "G4",
+  "mode": "flag",
+  "what": "null",
+  "email": null,
+  "phone": null,
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": null,
+  "first": "build-copy: warning (top level): no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every \"כתבו לנו\" line is in its wording without contact (CONTACT1). A public build "
+ },
+ {
+  "id": "G5",
+  "mode": "public",
+  "what": "example.com",
+  "email": "shop@example.com",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=shop@example.com is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G5",
+  "mode": "flag",
+  "what": "example.com",
+  "email": "shop@example.com",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "shop@example.com",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=shop@example.com is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD"
+ },
+ {
+  "id": "G6",
+  "mode": "public",
+  "what": "EXAMPLE.COM, capitals",
+  "email": "SHOP@EXAMPLE.COM",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=SHOP@EXAMPLE.COM is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G6",
+  "mode": "flag",
+  "what": "EXAMPLE.COM, capitals",
+  "email": "SHOP@EXAMPLE.COM",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "SHOP@EXAMPLE.COM",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=SHOP@EXAMPLE.COM is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD"
+ },
+ {
+  "id": "G7",
+  "mode": "public",
+  "what": "a subdomain of example.org",
+  "email": "info@mail.example.org",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=info@mail.example.org is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G7",
+  "mode": "flag",
+  "what": "a subdomain of example.org",
+  "email": "info@mail.example.org",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@mail.example.org",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=info@mail.example.org is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public buil"
+ },
+ {
+  "id": "G8",
+  "mode": "public",
+  "what": ".test",
+  "email": "a@shop.test",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=a@shop.test is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G8",
+  "mode": "flag",
+  "what": ".test",
+  "email": "a@shop.test",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "a@shop.test",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=a@shop.test is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBL"
+ },
+ {
+  "id": "G9",
+  "mode": "public",
+  "what": ".invalid",
+  "email": "x@shop.invalid",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=x@shop.invalid is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G9",
+  "mode": "flag",
+  "what": ".invalid",
+  "email": "x@shop.invalid",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "x@shop.invalid",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=x@shop.invalid is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_P"
+ },
+ {
+  "id": "G10",
+  "mode": "public",
+  "what": ".example",
+  "email": "x@shop.example",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=x@shop.example is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G10",
+  "mode": "flag",
+  "what": ".example",
+  "email": "x@shop.example",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "x@shop.example",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=x@shop.example is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_P"
+ },
+ {
+  "id": "G11",
+  "mode": "public",
+  "what": "lower case undecided",
+  "email": "undecided",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=\"undecided\" is not an email address"
+ },
+ {
+  "id": "G11",
+  "mode": "flag",
+  "what": "lower case undecided",
+  "email": "undecided",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "top level: CONTACT_EMAIL=\"undecided\" is not an email address"
+ },
+ {
+  "id": "G12",
+  "mode": "public",
+  "what": "a leading space",
+  "email": " UNDECIDED",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=\" UNDECIDED\" is not an email address"
+ },
+ {
+  "id": "G12",
+  "mode": "flag",
+  "what": "a leading space",
+  "email": " UNDECIDED",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "top level: CONTACT_EMAIL=\" UNDECIDED\" is not an email address"
+ },
+ {
+  "id": "G13",
+  "mode": "public",
+  "what": "example.co.il",
+  "email": "shop@example.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=shop@example.co.il is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G13",
+  "mode": "flag",
+  "what": "example.co.il",
+  "email": "shop@example.co.il",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "shop@example.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=shop@example.co.il is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build ("
+ },
+ {
+  "id": "G14",
+  "mode": "public",
+  "what": "frontend-dev's S20 test address, the error message's phone",
+  "email": "shop@hd-test.co.il",
+  "phone": "03-1234567",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=shop@hd-test.co.il is a sample address (an address the repo’s tests or docs use), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G14",
+  "mode": "flag",
+  "what": "frontend-dev's S20 test address, the error message's phone",
+  "email": "shop@hd-test.co.il",
+  "phone": "03-1234567",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "shop@hd-test.co.il",
+   "phone": "03-1234567",
+   "phone_href": "+97231234567"
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=shop@hd-test.co.il is a sample address (an address the repo’s tests or docs use), not the shop's: the real one comes from the owner (CONTACT1). A public "
+ },
+ {
+  "id": "G15",
+  "mode": "public",
+  "what": "a template's placeholder",
+  "email": "email@domain.com",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=email@domain.com is a sample address (a template’s domain (domain.…)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G15",
+  "mode": "flag",
+  "what": "a template's placeholder",
+  "email": "email@domain.com",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "email@domain.com",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=email@domain.com is a sample address (a template’s domain (domain.…)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_P"
+ },
+ {
+  "id": "G16",
+  "mode": "public",
+  "what": "a template's placeholder",
+  "email": "info@yourdomain.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=info@yourdomain.co.il is a sample address (a template’s domain (yourdomain.…)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G16",
+  "mode": "flag",
+  "what": "a template's placeholder",
+  "email": "info@yourdomain.co.il",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@yourdomain.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=info@yourdomain.co.il is a sample address (a template’s domain (yourdomain.…)), not the shop's: the real one comes from the owner (CONTACT1). A public bu"
+ },
+ {
+  "id": "G17",
+  "mode": "public",
+  "what": "test@test",
+  "email": "test@test.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=test@test.co.il is a sample address (a template’s domain (test.…)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G17",
+  "mode": "flag",
+  "what": "test@test",
+  "email": "test@test.co.il",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "test@test.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=test@test.co.il is a sample address (a template’s domain (test.…)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBL"
+ },
+ {
+  "id": "G18",
+  "mode": "public",
+  "what": "QA's own address: a test value of the repo (S22)",
+  "email": "info@hd-qa.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=info@hd-qa.co.il is a sample address (an address the repo’s tests or docs use), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G18",
+  "mode": "flag",
+  "what": "QA's own address: a test value of the repo (S22)",
+  "email": "info@hd-qa.co.il",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hd-qa.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=info@hd-qa.co.il is a sample address (an address the repo’s tests or docs use), not the shop's: the real one comes from the owner (CONTACT1). A public bu"
+ },
+ {
+  "id": "G19",
+  "mode": "public",
+  "what": "QA's own, with QA's phone",
+  "email": "info@hd-qa.co.il",
+  "phone": "04-8123456",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=info@hd-qa.co.il is a sample address (an address the repo’s tests or docs use), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G19",
+  "mode": "flag",
+  "what": "QA's own, with QA's phone",
+  "email": "info@hd-qa.co.il",
+  "phone": "04-8123456",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hd-qa.co.il",
+   "phone": "04-8123456",
+   "phone_href": "+97248123456"
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=info@hd-qa.co.il is a sample address (an address the repo’s tests or docs use), not the shop's: the real one comes from the owner (CONTACT1). A public bu"
+ },
+ {
+  "id": "G20",
+  "mode": "public",
+  "what": "a phone without an email",
+  "email": "UNDECIDED",
+  "phone": "04-8123456",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE without CONTACT_EMAIL: the contact block needs the email"
+ },
+ {
+  "id": "G20",
+  "mode": "flag",
+  "what": "a phone without an email",
+  "email": "UNDECIDED",
+  "phone": "04-8123456",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "top level: CONTACT_PHONE without CONTACT_EMAIL: the contact block needs the email"
+ },
+ {
+  "id": "G21",
+  "mode": "public",
+  "what": "a malformed phone",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "12345",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE=\"12345\" is not an Israeli phone number (03-1234567, 050-1234567, +972…, 1-800-…, *1234)"
+ },
+ {
+  "id": "G21",
+  "mode": "flag",
+  "what": "a malformed phone",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "12345",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "top level: CONTACT_PHONE=\"12345\" is not an Israeli phone number (03-1234567, 050-1234567, +972…, 1-800-…, *1234)"
+ },
+ {
+  "id": "G22",
+  "mode": "public",
+  "what": "a mailto: prefix",
+  "email": "mailto:info@hdmwdufyk6x.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=\"mailto:info@hdmwdufyk6x.co.il\" is not an email address"
+ },
+ {
+  "id": "G22",
+  "mode": "flag",
+  "what": "a mailto: prefix",
+  "email": "mailto:info@hdmwdufyk6x.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "top level: CONTACT_EMAIL=\"mailto:info@hdmwdufyk6x.co.il\" is not an email address"
+ },
+ {
+  "id": "G23",
+  "mode": "public",
+  "what": "an address made at run time, a trailing space",
+  "email": "info@hdmwdufyk6x.co.il ",
+  "phone": "UNDECIDED",
+  "want": "pass",
+  "got": "pass",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": ""
+ },
+ {
+  "id": "G23",
+  "mode": "flag",
+  "what": "an address made at run time, a trailing space",
+  "email": "info@hdmwdufyk6x.co.il ",
+  "phone": "UNDECIDED",
+  "want": "pass",
+  "got": "pass",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": ""
+ },
+ {
+  "id": "G24",
+  "mode": "public",
+  "what": "an address made at run time (never in the repo)",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "UNDECIDED",
+  "want": "pass",
+  "got": "pass",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": ""
+ },
+ {
+  "id": "G24",
+  "mode": "flag",
+  "what": "an address made at run time (never in the repo)",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "UNDECIDED",
+  "want": "pass",
+  "got": "pass",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": ""
+ },
+ {
+  "id": "G25",
+  "mode": "public",
+  "what": "a good address, phone 050-0000000",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "050-0000000",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE=050-0000000 is a sample number (one digit repeated), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G25",
+  "mode": "flag",
+  "what": "a good address, phone 050-0000000",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "050-0000000",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": "050-0000000",
+   "phone_href": "+972500000000"
+  },
+  "first": "build-copy: warning (top level): CONTACT_PHONE=050-0000000 is a sample number (one digit repeated), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) stops her"
+ },
+ {
+  "id": "G26",
+  "mode": "public",
+  "what": "a good address, a descending phone",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "052-7654321",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE=052-7654321 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G26",
+  "mode": "flag",
+  "what": "a good address, a descending phone",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "052-7654321",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": "052-7654321",
+   "phone_href": "+972527654321"
+  },
+  "first": "build-copy: warning (top level): CONTACT_PHONE=052-7654321 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) st"
+ },
+ {
+  "id": "G27",
+  "mode": "public",
+  "what": "a good address, +972 and an ascending phone",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "+972 50-123-4567",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE=+972 50-123-4567 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G27",
+  "mode": "flag",
+  "what": "a good address, +972 and an ascending phone",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "+972 50-123-4567",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": "+972 50-123-4567",
+   "phone_href": "+972501234567"
+  },
+  "first": "build-copy: warning (top level): CONTACT_PHONE=+972 50-123-4567 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC="
+ },
+ {
+  "id": "G28",
+  "mode": "public",
+  "what": "a good address, 1-800-123-456",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "1-800-123-456",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE=1-800-123-456 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G28",
+  "mode": "flag",
+  "what": "a good address, 1-800-123-456",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "1-800-123-456",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": "1-800-123-456",
+   "phone_href": "1800123456"
+  },
+  "first": "build-copy: warning (top level): CONTACT_PHONE=1-800-123-456 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) "
+ },
+ {
+  "id": "G29",
+  "mode": "public",
+  "what": "a good address, *1234",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "*1234",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE=*1234 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G29",
+  "mode": "flag",
+  "what": "a good address, *1234",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "*1234",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": "*1234",
+   "phone_href": "*1234"
+  },
+  "first": "build-copy: warning (top level): CONTACT_PHONE=*1234 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) stops he"
+ },
+ {
+  "id": "G30",
+  "mode": "public",
+  "what": "a good address, a 555 phone (shared/test)",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "052-555-1234",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_PHONE=052-555-1234 is a sample number (a 555 number), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G30",
+  "mode": "flag",
+  "what": "a good address, a 555 phone (shared/test)",
+  "email": "info@hdmwdufyk6x.co.il",
+  "phone": "052-555-1234",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "info@hdmwdufyk6x.co.il",
+   "phone": "052-555-1234",
+   "phone_href": "+972525551234"
+  },
+  "first": "build-copy: warning (top level): CONTACT_PHONE=052-555-1234 is a sample number (a 555 number), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) stops here."
+ },
+ {
+  "id": "G31",
+  "mode": "public",
+  "what": "yourcompany.com",
+  "email": "name@yourcompany.com",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=name@yourcompany.com is a sample address (a template’s domain (yourcompany.…)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G31",
+  "mode": "flag",
+  "what": "yourcompany.com",
+  "email": "name@yourcompany.com",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "name@yourcompany.com",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=name@yourcompany.com is a sample address (a template’s domain (yourcompany.…)), not the shop's: the real one comes from the owner (CONTACT1). A public bu"
+ },
+ {
+  "id": "G32",
+  "mode": "public",
+  "what": "test@ at any domain",
+  "email": "test@hdmwdufyk6y.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=test@hdmwdufyk6y.co.il is a sample address (a template’s name before the @ (test@)), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G32",
+  "mode": "flag",
+  "what": "test@ at any domain",
+  "email": "test@hdmwdufyk6y.co.il",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "test@hdmwdufyk6y.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=test@hdmwdufyk6y.co.il is a sample address (a template’s name before the @ (test@)), not the shop's: the real one comes from the owner (CONTACT1). A publ"
+ },
+ {
+  "id": "G33",
+  "mode": "public",
+  "what": "a subdomain of our test domain",
+  "email": "shop@sub.hd-test.co.il",
+  "phone": "UNDECIDED",
+  "want": "fail",
+  "got": "fail",
+  "exit": 1,
+  "contact": null,
+  "first": "production: CONTACT_EMAIL=shop@sub.hd-test.co.il is a sample address (a test domain of ours), not the shop's: the real one comes from the owner (CONTACT1)"
+ },
+ {
+  "id": "G33",
+  "mode": "flag",
+  "what": "a subdomain of our test domain",
+  "email": "shop@sub.hd-test.co.il",
+  "phone": "UNDECIDED",
+  "want": "warn",
+  "got": "warn",
+  "exit": 0,
+  "contact": {
+   "email": "shop@sub.hd-test.co.il",
+   "phone": null,
+   "phone_href": null
+  },
+  "first": "build-copy: warning (top level): CONTACT_EMAIL=shop@sub.hd-test.co.il is a sample address (a test domain of ours), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBL"
+ }
+]

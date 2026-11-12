@@ -1,0 +1,35 @@
+web/src/pages/Order.tsx:2
+web/src/pages/Checkout.tsx:1
+shared/src/constants.ts:1
+web/src/pages/Legal.tsx:3
+=== build-copy 18:25:53
+
+> homedesign-site@0.1.0 copy
+> tsx tools/build-copy.ts
+
+build-copy: warning (top level): no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every "כתבו לנו" line is in its wording without contact (CONTACT1). A public build (HD_PUBLIC=1) stops here.
+build-copy (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level) → the wording without an email; contact none: 20 lines, 8 not shown
+=== web build 18:25:54
+=== check-promises 18:26:00
+check-promises (S18, S20): EMAIL_PROVIDER=UNDECIDED (top level): the build stops.
+  privacy/index.html: promises (send: "נשלחת"): "חשבונית מס נשלחת במייל (סמ5)"
+  privacy/index.html: promises (channel: "בתיבת הדואר"): "את האישור תמצאו בתיבת הדואר שלכם (סמ6)"
+  assets/Checkout-DpN5KxUv.js: promises (send: "יישלח"): "אישור ההזמנה יישלח בקרוב (סמ3)"
+  assets/Legal-BcNyUfvi.js: promises (send: "נשלחת"): "חשבונית מס נשלחת במייל (סמ5)"
+  assets/Legal-BcNyUfvi.js: promises (channel: "בתיבת הדואר"): "את האישור תמצאו בתיבת הדואר שלכם (סמ6)"
+  assets/Legal-BcNyUfvi.js: promises (channel: "במייל"): "במייל (סמ5)"
+  assets/Order-DpYqAzBk.js: promises (send: "יישלח"): "אישור יישלח לאימייל שלכם (סמ1)"
+  assets/Order-DpYqAzBk.js: promises (send: "יישלח"): "האישור על פריטים יישלח אליכם (סמ2)"
+  assets/Order-DpYqAzBk.js: promises (channel: "לאימייל"): "לאימייל שלכם (סמ1)"
+  shared/src/constants.ts: promises (send: "יישלח"): "אישור יישלח במייל (סמ4)"
+  scanned: 112 pages, 23 scripts (23 loaded by the pages; 1 only the review pages load, not scanned), 9 other text files, 44 Worker files
+check-promises exit 1
+=== which marker each finding carries 18:26:04
+סמ1: assets/Order-DpYqAzBk.js send; assets/Order-DpYqAzBk.js channel
+סמ2: assets/Order-DpYqAzBk.js send
+סמ3: assets/Checkout-DpN5KxUv.js send
+סמ4: shared/src/constants.ts send
+סמ5: privacy/index.html send; assets/Legal-BcNyUfvi.js send; assets/Legal-BcNyUfvi.js channel
+סמ6: privacy/index.html channel; assets/Legal-BcNyUfvi.js channel
+=== done 18:26:04
+exit 0

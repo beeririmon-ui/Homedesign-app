@@ -1016,3 +1016,170 @@ encoding nordic poster 400@3 (shell.2752.avif): AVIF 6/9/17 · 0.11% · ΔE 2.73
   ✓   24 [e2e] › e2e/flow.spec.ts:261:3 › store › a declined payment returns to checkout with a clear message (2.6s)
   ✓   25 [e2e] › e2e/flow.spec.ts:283:3 › store › set or single piece (P1): the set is the default, one piece has its own price, the cart keeps both apart (2.3s)
   ✓   26 [e2e] › e2e/flow.spec.ts:332:3 › store › the variant wheel offers set or single piece; its arrow keys stay with the radios (3.2s)
+  ✓   27 [e2e] › e2e/hotspots.spec.ts:22:3 › marks and outlines at 1280 px (11.4s)
+  ✓   28 [e2e] › e2e/hotspots.spec.ts:22:3 › marks and outlines at 400 px (10.2s)
+  ✓   29 [e2e] › e2e/house.spec.ts:117:3 › a house's own address (S10 question 7, S11) › ?style=warm-modern is served that house’s own page: its own poster (S14, ת29), no Nordic one, the page CSP; the Nordic address is unchanged (72ms)
+  ✓   30 [e2e] › e2e/house.spec.ts:166:3 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › before any script runs: the prerendered page already draws the poster of set B (the first paint) (1.2s)
+ת29 1280@1: poster vs set B 6/7 · 0.03%; vs the empty base 5.31% above 8
+  ✓   31 [e2e] › e2e/house.spec.ts:186:5 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › 1280@1: the poster at rest is the approved set B composition, not the empty sofa (6.5s)
+ת29 400@1: poster vs set B 4/5 · 0.00%; vs the empty base 10.69% above 8
+  ✓   32 [e2e] › e2e/house.spec.ts:186:5 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › 400@1: the poster at rest is the approved set B composition, not the empty sofa (4.6s)
+  ✓   33 [e2e] › e2e/house.spec.ts:211:3 › the warm-modern house in the room engine (S10) › entering at its address: its own picture, the status label, one slot with a mark, B the default (1.8s)
+  ✓   34 [e2e] › e2e/house.spec.ts:251:3 › the warm-modern house in the room engine (S10) › the wheel reaches all three sets (B, A, C), each with its pieces and prices; the whole set goes to the cart (5.6s)
+  ✓   35 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1280×720@1) (3.7s)
+  ✓   36 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1440×900@1) (3.8s)
+  ✓   37 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1920×1080@1) (4.2s)
+  ✓   38 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (400×800@1) (3.5s)
+  ✓   39 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (390×844@3) (3.9s)
+  ✓   40 [e2e] › e2e/house.spec.ts:355:3 › the warm-modern house in the room engine (S10) › a deep link opens the wheel on its set (the story’s "לנסות בחדר") (2.6s)
+swap-diff (warm modern, 1280×720): B↔A: 0 px changed outside (worst 1 levels), 54900 inside an area of 7.3%; A↔C: 0 px changed outside (worst 2 levels), 57620 inside an area of 7.7%; B↔C: 0 px changed outside (worst 1 levels), 54175 inside an area of 7.4%
+  ✓   41 [e2e] › e2e/house.spec.ts:362:3 › the warm-modern house in the room engine (S10) › swap: a set changes nothing outside the sets’ own area (alpha and shadow of the two sets) (3.1s)
+house switch nordic → warm-modern: dissolve 1011 ms, press → end 1245 ms
+  ✓   42 [e2e] › e2e/house.spec.ts:471:3 › the soft switch between houses, in the engine (S10) › one frame for every layer, the same camera, 1.0 s; the address names the house; back again (5.4s)
+ת15 1280: nordic → warm-modern: before 191.0, at 0 191.0, mid 186.8, at 1 182.6; |0 − before| 0.00, |mid − half each| 0.23, |0 − 1| 43.1; frames drawn in the dissolve 7, darkest 182.5
+ת15 1280: warm-modern → nordic: before 182.6, at 0 182.6, mid 186.8, at 1 190.9; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 42.6; frames drawn in the dissolve 10, darkest 182.5
+  ✓   43 [e2e] › e2e/house.spec.ts:517:5 › the soft switch between houses, in the engine (S10) › ת15: the dissolve draws both houses mixed, never black, both ways (1280×720) (5.6s)
+ת15 400: nordic → warm-modern: before 198.2, at 0 198.2, mid 188.8, at 1 179.3; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 45.3; frames drawn in the dissolve 37, darkest 179.4
+ת15 400: warm-modern → nordic: before 179.3, at 0 179.3, mid 188.7, at 1 198.0; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 45.2; frames drawn in the dissolve 35, darkest 179.5
+  ✓   44 [e2e] › e2e/house.spec.ts:517:5 › the soft switch between houses, in the engine (S10) › ת15: the dissolve draws both houses mixed, never black, both ways (400×800) (5.7s)
+house switch, reduced motion: dissolve 331 ms
+  ✓   45 [e2e] › e2e/house.spec.ts:561:3 › the soft switch between houses, in the engine (S10) › reduced motion: a short dissolve, 0.3 s, nothing moves (1.8s)
+  ✓   46 [e2e] › e2e/lines.spec.ts:51:3 › ת8: the line names what was bought (base name · Hebrew labels) › the nine variants: the API cart, the cart page, the checkout and the order read as the designer’s table (1.7s)
+  ✓   47 [e2e] › e2e/operations.spec.ts:23:1 › /healthz: D1 and the queue are ok, and the answer carries no internal detail (23ms)
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.364Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin/'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.373Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.380Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin/orders/1234567890'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.386Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.395Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/overview'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.402Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.409Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders'[39m,
+[2m[WebServer] [22m    reason: [32m'access_not_configured'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.416Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders/1234567890/refund'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T18:38:47.425Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin/'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+  ✓   48 [e2e] › e2e/operations.spec.ts:30:1 › the admin without permission: 403 for the screen and the API, reads and actions (71ms)
+  ✓   49 [e2e] › e2e/operations.spec.ts:42:1 › delivery statuses for the customer: בהכנה, then נשלחה with its number and a generic link, then נמסרה (1.0s)
+  ✓   50 [e2e] › e2e/operations.spec.ts:75:1 › the admin screen: the list and search, an order with its tracks, a partial refund from the form (2.8s)
+  ✓   51 [e2e] › e2e/operations.spec.ts:118:1 › the cancellation after the supplier: requested (a clear status), then confirmed: canceled and refunded in full (5.3s)
+  ✓   52 [e2e] › e2e/options.spec.ts:56:3 › supplier options on the product page › defaults to the room’s option; another option has its own price; the cart gets that SKU; the render stays (1.4s)
+  ✓   53 [e2e] › e2e/options.spec.ts:95:3 › supplier options on the product page › the keyboard: arrows move within an axis, the price and the legend follow; back to the room’s option (620ms)
+  ✓   54 [e2e] › e2e/options.spec.ts:123:5 › supplier options on the product page › mobile › fits the screen (no sideways scroll), 44 px targets, screenshot (1.3s)
+poster and hotspots: 0.78 MB
+first load (mobile, until composed): 2.29 MB
+  ✓   55 [e2e] › e2e/perf.spec.ts:17:3 › mobile › first load of the living room ≤ 3 MB and only reachable transitions preload (7.4s)
+zoom: 16 frames, p95 266.7 ms · wheel: 13 frames, p95 133.3 ms
+  ✓   56 [e2e] › e2e/perf.spec.ts:43:1 › animation frame times (zoom and wheel) (3.7s)
+  ✓   57 [e2e] › e2e/public-scan.spec.ts:31:1 › no supplier name and no listing number in anything the site serves (paths, pages, scripts, data) (34ms)
+  ✓   58 [e2e] › e2e/public-scan.spec.ts:57:1 › no admin code in the public build: no admin route, API call, dev header or admin screen text (25ms)
+  -   59 [e2e] › e2e/public-scan.spec.ts:74:1 › S16 (ת41): in a public build, _redirects names no supplier and no listing number
+ה5: 39 product pages, 0 without a picture
+  ✓   60 [e2e] › e2e/public-scan.spec.ts:80:1 › S17 (QA ה5): no product page shows a value that says it is unknown, nor a note about a picture it does not have (4ms)
+  ✓   61 [e2e] › e2e/public-scan.spec.ts:98:1 › S17 (AN1): the analytics beacon only with a token, only in the public build, never on the cart, checkout, order or 404 (16ms)
+no AVIF, warm-modern house, until composed: 1.77 MB (WebP fallbacks 0.65 MB: /media/house/living-room/warm-modern/M0/poster/default.2720.webp)
+  ✓   62 [e2e] › e2e/s16.spec.ts:46:3 › ת43: a phone without AVIF in the warm-modern house › the WebP poster, the engine at idle, and the first load ≤ 3 MB until the room is composed (733ms)
+  ✓   63 [e2e] › e2e/s16.spec.ts:85:3 › ת43: a phone without AVIF in the warm-modern house › with AVIF, the engine still waits for intent (the poster is the room at rest) (3.6s)
+the stage while the poster waits: mean 182.7 (the stage colour #141312 is about 19)
+  ✓   64 [e2e] › e2e/s16.spec.ts:93:1 › ה1: while the poster is on its way, the stage is the placeholder of the same room, not the dark stage (753ms)
+  ✓   65 [e2e] › e2e/s16.spec.ts:113:1 › ת37: the order page and the cart show the server’s message and its error code, as the checkout does (788ms)
+  ✓   66 [e2e] › e2e/s18.spec.ts:39:1 › the build has no email provider: the wording without an email (4ms)
+  ✓   67 [e2e] › e2e/s18.spec.ts:44:1 › the checkout: what the address is for, the total with VAT, no marketing box, no promise (486ms)
+  ✓   68 [e2e] › e2e/s18.spec.ts:62:1 › the order page after payment: the order is on this page, in this browser; no email (986ms)
+  ✓   69 [e2e] › e2e/s18.spec.ts:76:1 › the delayed order: §7 in two sentences, without the third (the email one) (2.9s)
+  ✓   70 [e2e] › e2e/s18.spec.ts:87:1 › shipped: "מספר המשלוח למעלה" only when there is a number above (2.9s)
+  ✓   71 [e2e] › e2e/s18.spec.ts:99:1 › a product on hold: "המלאי אינו זמין כעת" alone; no form, no address asked for, no promise (850ms)
+  ✓   72 [e2e] › e2e/s18.spec.ts:111:1 › every page in the sitemap, the cart, the empty checkout and 404: no promise of an email (31.5s)
+  ✓   73 [e2e] › e2e/s19.spec.ts:59:3 › S19 (QA ת55): the cart and the checkout load as their own document › room → product → cart → checkout by the site’s links: the beacon of the room is gone at the cart and the checkout, and sees nothing typed (2.3s)
+  ✓   74 [e2e] › e2e/s19.spec.ts:108:3 › S19 (QA ת55): the cart and the checkout load as their own document › other ways in from a page that may carry the beacon are full loads too: the header’s cart, a link to the checkout with a query (1.3s)
+  ✓   75 [e2e] › e2e/s20.spec.ts:43:1 › the build: no email provider, no contact details (3ms)
+  ✓   76 [e2e] › e2e/s20.spec.ts:50:1 › ת56: every story page and every sheet: the status alone, no promise (14.3s)
+  ✓   77 [e2e] › e2e/s20.spec.ts:86:1 › ת57: the waiting list refuses and stores nothing (4.6s)
+  ✓   78 [e2e] › e2e/s20.spec.ts:99:1 › ת57: a checkout that says yes to marketing records no consent; the order goes on (2.2s)
+  ✓   79 [e2e] › e2e/s20.spec.ts:107:1 › ת61: no contact offered where there is none: footer, legal pages, the delivered order, "אין גישה" (5.4s)
+  ✓   80 [e2e] › e2e/s21.spec.ts:80:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › the prerendered cart and checkout say nothing they do not know: no "(0)", no "הסל ריק", aria-busy (32ms)
+  ✓   81 [e2e] › e2e/s21.spec.ts:88:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (1) the cart API held 800 ms: the cart and the checkout are busy, never empty, and the header never "סל (0)" (3.7s)
+  ✓   82 [e2e] › e2e/s21.spec.ts:114:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (1) a cart that is really empty still says so, once it is known (675ms)
+  ✓   83 [e2e] › e2e/s21.spec.ts:125:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (2) storage refused: the cart and the checkout still have the line (the id in #c=, removed once read) (2.0s)
+  ✓   84 [e2e] › e2e/s21.spec.ts:147:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (3) an add still on its way when the header’s cart is clicked (the PUT held 1.5 s): kept (2.9s)
+  ✓   85 [e2e] › e2e/s21.spec.ts:160:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (3) and with storage refused too: the add lands, then the id goes along (3.2s)
+  ✓   86 [e2e] › e2e/s21.spec.ts:171:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (4) the story’s "לתשלום" without storage reaches the checkout with the line (1.7s)
+  ✓   87 [e2e] › e2e/s21.spec.ts:187:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › the story’s count waits for the saved cart: a blank, busy, never "0" over a cart that has lines (2.2s)
+  ✓   88 [e2e] › e2e/s22.spec.ts:59:3 › ת70 on the suite build: no provider, the status alone › every unavailable item has its shop page in the data, and the sheet shows no link without a provider (508ms)

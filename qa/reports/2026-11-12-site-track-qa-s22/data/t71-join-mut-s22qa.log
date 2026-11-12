@@ -1,0 +1,20 @@
+ok   J1   want stop got stop  join(" ") then .trim()  ← "אישור ההזמנה יישלח במייל"
+ok   J2   want stop got stop  join with a template-literal no-break space  ← "אישור ההזמנה יישלח במייל"
+GAP  J3   want stop got pass  the array in a variable, then p.join(" ") (minifiers keep it)
+GAP  J4   want stop got pass  .filter(Boolean).join(" ") (the common idiom)
+GAP  J5   want stop got pass  .map(…).join(" ")
+GAP  J6   want stop got pass  Array.of(…).join(" ")
+GAP  J7   want stop got pass  new Array(…).join(" ")
+GAP  J8   want stop got pass  a spread inside the array
+GAP  J9   want stop got pass  .reduce((a,b)=>a+" "+b)
+ok   J10  want stop got stop  chained .concat().concat()  ← "אישור ההזמנה יישלח במייל"
+GAP  J11  want stop got pass  String.prototype.concat.call
+ok   J12  want stop got stop  a join inside a join  ← "אישור ההזמנה יישלח במייל"
+ok   J13  want stop got stop  join with a variable separator (read as a space)  ← "אישור ההזמנה יישלח במייל"
+ok   J14  want stop got stop  a join inside a template literal  ← "אישור ההזמנה יישלח במייל"
+ok   J15  want pass got pass  control: join("") renders the words run together (that is what the reader sees)
+ok   J16  want pass got pass  control: an honest line
+ok   J17  want pass got pass  control: honest, joined
+ok   J18  want pass got pass  control: a negation, joined
+
+10/18 as expected

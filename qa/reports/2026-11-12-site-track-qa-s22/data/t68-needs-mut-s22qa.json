@@ -1,0 +1,190 @@
+{
+ "states": 128,
+ "ok": 10,
+ "total": 21,
+ "rows": [
+  {
+   "id": "M-any-1",
+   "want": "stop",
+   "got": "pass",
+   "what": "privacy.processors (needs \"any\") + \"נעדכן אתכם כשהשליח יוצא לדרך.\": a shipping update, words outside IMPLIES (שליח, יוצא)",
+   "issues": [],
+   "shown": " | with invoice_email only, privacy.processors shows: \"הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים. נעדכן אתכם כשהשליח יוצא לדרך.\" (implied: [])"
+  },
+  {
+   "id": "M-any-2",
+   "want": "stop",
+   "got": "pass",
+   "what": "privacy.processors (needs \"any\") + \"נודיע לכם כשהמחיר יורד.\": a price alert: a promise no capability covers",
+   "issues": [],
+   "shown": " | with invoice_email only, privacy.processors shows: \"הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים. נודיע לכם כשהמחיר יורד.\" (implied: [])"
+  },
+  {
+   "id": "M-any-3",
+   "want": "stop",
+   "got": "pass",
+   "what": "privacy.processors (needs \"any\") + \"We'll email you the moment it's on its way.\": a shipping update in English, outside IMPLIES",
+   "issues": [],
+   "shown": " | with invoice_email only, privacy.processors shows: \"הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים. We'll email you the moment it's on its way.\" (implied: [])"
+  },
+  {
+   "id": "M-any-4",
+   "want": "stop",
+   "got": "pass",
+   "what": "privacy.processors (needs \"any\") + \"נשלח לכם השראה ורעיונות לבית במייל.\": marketing, outside IMPLIES (השראה)",
+   "issues": [],
+   "shown": " | with invoice_email only, privacy.processors shows: \"הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים. נשלח לכם השראה ורעיונות לבית במייל.\" (implied: [])"
+  },
+  {
+   "id": "M-any-5",
+   "want": "stop",
+   "got": "pass",
+   "what": "privacy.processors (needs \"any\") + \"נעדכן אתכם כשהמוצר יהיה זמין.\": back in stock, outside IMPLIES (יהיה זמין)",
+   "issues": [],
+   "shown": " | with invoice_email only, privacy.processors shows: \"הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים. נעדכן אתכם כשהמוצר יהיה זמין.\" (implied: [])"
+  },
+  {
+   "id": "M-any-6",
+   "want": "stop",
+   "got": "pass",
+   "what": "privacy.processors (needs \"any\") + \"אם יהיה שינוי בתאריך, נודיע לכם.\": a delay notice, outside IMPLIES (שינוי בתאריך)",
+   "issues": [],
+   "shown": " | with invoice_email only, privacy.processors shows: \"הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים. אם יהיה שינוי בתאריך, נודיע לכם.\" (implied: [])"
+  },
+  {
+   "id": "M-any-7",
+   "want": "stop",
+   "got": "pass",
+   "what": "privacy.processors (needs \"any\") + \"את חשבון המס נשלח לכם במייל.\": an invoice, outside IMPLIES (חשבון המס)",
+   "issues": [],
+   "shown": " | with invoice_email only, privacy.processors shows: \"הפרטים מועברים רק למי שצריך אותם לביצוע ההזמנה: הספק ושירות המשלוחים, חברת הסליקה, שירות החשבוניות ושירות המיילים. את חשבון המס נשלח לכם במייל.\" (implied: [])"
+  },
+  {
+   "id": "M-any-8",
+   "want": "stop",
+   "got": "stop",
+   "what": "privacy.processors (needs \"any\") + \"נעדכן אתכם כשהחבילה יוצאת.\": control in IMPLIES words (החבילה, יוצאת)",
+   "issues": [
+    "privacy.processors: \"needs\" is \"any\", but the email line promises shipping_update: list what it needs"
+   ],
+   "shown": ""
+  },
+  {
+   "id": "M-any-9",
+   "want": "stop",
+   "got": "stop",
+   "what": "privacy.processors (needs \"any\") + \"נשלח לכם קופון הנחה במייל.\": control in IMPLIES words (קופון, הנחה)",
+   "issues": [
+    "privacy.processors: \"needs\" is \"any\", but the email line promises marketing: list what it needs"
+   ],
+   "shown": ""
+  },
+  {
+   "id": "M-any-10",
+   "want": "pass",
+   "got": "pass",
+   "what": "checkout.total_note: needs \"any\" and an email line with no promise (\"כולל מע\"מ.\")",
+   "issues": [],
+   "shown": ""
+  },
+  {
+   "id": "M-any-11",
+   "want": "stop",
+   "got": "pass",
+   "what": "checkout.email_hint: needs \"any\" and \"לשם נשלחים כל העדכונים על ההזמנה.\" (an update of unnamed kind)",
+   "issues": [],
+   "shown": " | with marketing only, checkout.email_hint shows: \"לשם נשלחים כל העדכונים על ההזמנה.\" (implied: [])"
+  },
+  {
+   "id": "M-list-1",
+   "want": "stop",
+   "got": "pass",
+   "what": "order.no_access (needs order_confirmation) + \"ונודיע לכם כשהשליח בדרך.\" (shipping, outside IMPLIES)",
+   "issues": [],
+   "shown": " | with order_confirmation only, order.no_access shows: \"אין לנו גישה להזמנה הזו מהדפדפן הזה. את פרטי ההזמנה שלחנו לאימייל שלכם, ונודיע לכם כשהשליח בדרך.\" (implied: [\"order_confirmation\"])"
+  },
+  {
+   "id": "M-list-2",
+   "want": "stop",
+   "got": "pass",
+   "what": "order.no_access (needs order_confirmation) + \"גם חשבון המס נשלח לשם.\" (an invoice, outside IMPLIES)",
+   "issues": [],
+   "shown": " | with order_confirmation only, order.no_access shows: \"אין לנו גישה להזמנה הזו מהדפדפן הזה. את פרטי ההזמנה שלחנו לאימייל שלכם. גם חשבון המס נשלח לשם.\" (implied: [\"order_confirmation\"])"
+  },
+  {
+   "id": "M-list-3",
+   "want": "stop",
+   "got": "pass",
+   "what": "waitlist.why (needs back_in_stock) + \"ונשלח לכם גם קולקציות חדשות.\" (marketing, outside IMPLIES)",
+   "issues": [],
+   "shown": " | with back_in_stock only, waitlist.why shows: \"נשלח הודעה אחת כשהמוצר חוזר למלאי, ונשלח לכם גם קולקציות חדשות.\" (implied: [\"back_in_stock\"])"
+  },
+  {
+   "id": "M-grp-1",
+   "want": "stop",
+   "got": "stop",
+   "what": "group waitlist: waitlist.why becomes a contact line (contact: its text, no_contact: null)",
+   "issues": [
+    "group waitlist: its lines are shown or hidden together (with back_in_stock, some are null and some are not)"
+   ],
+   "shown": ""
+  },
+  {
+   "id": "M-grp-2",
+   "want": "stop",
+   "got": "stop",
+   "what": "group waitlist: waitlist.why gets a no_email line (\"המלאי אינו זמין כעת.\") while the rest of the group is null",
+   "issues": [
+    "group waitlist: its lines are shown or hidden together (with no email, some are null and some are not)"
+   ],
+   "shown": ""
+  },
+  {
+   "id": "M-grp-3",
+   "want": "stop",
+   "got": "stop",
+   "what": "group waitlist: waitlist.done needs \"any\" (its line has no promise words in IMPLIES? it has \"חוזר\")",
+   "issues": [
+    "waitlist.done: \"needs\" is \"any\", but the email line promises back_in_stock: list what it needs",
+    "group waitlist: its lines are shown or hidden together (with order_confirmation, some are null and some are not)"
+   ],
+   "shown": ""
+  },
+  {
+   "id": "M-grp-4",
+   "want": "stop",
+   "got": "stop",
+   "what": "group waitlist: waitlist.submit needs \"any\" and its line \"עדכנו אותי\" (a promise, no capability word)",
+   "issues": [
+    "group waitlist: its lines are shown or hidden together (with order_confirmation, some are null and some are not)"
+   ],
+   "shown": ""
+  },
+  {
+   "id": "M-grp-5",
+   "want": "stop",
+   "got": "stop",
+   "what": "a new group \"pair\" of two lines split by three capabilities (a triple, not a pair)",
+   "issues": [
+    "group pair: its lines are shown or hidden together (with order_confirmation+shipping_update+delay_notice, some are null and some are not)"
+   ],
+   "shown": ""
+  },
+  {
+   "id": "M-ctl-1",
+   "want": "pass",
+   "got": "pass",
+   "what": "control: the copy file as it is",
+   "issues": [],
+   "shown": ""
+  },
+  {
+   "id": "M-ctl-2",
+   "want": "pass",
+   "got": "pass",
+   "what": "control: privacy.processors keeps \"any\" and names one more processor (\"ושירות ה-SMS\")",
+   "issues": [],
+   "shown": ""
+  }
+ ]
+}

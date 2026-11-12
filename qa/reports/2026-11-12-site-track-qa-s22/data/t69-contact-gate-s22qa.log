@@ -1,0 +1,67 @@
+ok   Q1   public want fail got fail "info@example.net" "UNDECIDED" example.net | production: CONTACT_EMAIL=info@example.net is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q1   flag   want warn got warn "info@example.net" "UNDECIDED" example.net | build-copy: warning (top level): CONTACT_EMAIL=info@example.net is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD
+ok   Q2   public want fail got fail "Info@Example.Co.IL " "UNDECIDED" example.co.il, capitals, a trailing space | production: CONTACT_EMAIL=Info@Example.Co.IL is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q2   flag   want warn got warn "Info@Example.Co.IL " "UNDECIDED" example.co.il, capitals, a trailing space | build-copy: warning (top level): CONTACT_EMAIL=Info@Example.Co.IL is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1). A public build (
+ok   Q3   public want fail got fail "contact@your-domain.co.il" "UNDECIDED" your-domain | production: CONTACT_EMAIL=contact@your-domain.co.il is a sample address (a template’s domain (your-domain.…)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q3   flag   want warn got warn "contact@your-domain.co.il" "UNDECIDED" your-domain | build-copy: warning (top level): CONTACT_EMAIL=contact@your-domain.co.il is a sample address (a template’s domain (your-domain.…)), not the shop's: the real one comes from the owner (CONTACT1). A publ
+ok   Q4   public want fail got fail "hello@yourstore.com" "UNDECIDED" yourstore | production: CONTACT_EMAIL=hello@yourstore.com is a sample address (a template’s domain (yourstore.…)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q4   flag   want warn got warn "hello@yourstore.com" "UNDECIDED" yourstore | build-copy: warning (top level): CONTACT_EMAIL=hello@yourstore.com is a sample address (a template’s domain (yourstore.…)), not the shop's: the real one comes from the owner (CONTACT1). A public build
+ok   Q5   public want fail got fail "name@company.com" "UNDECIDED" name@ | production: CONTACT_EMAIL=name@company.com is a sample address (a template’s name before the @ (name@)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q5   flag   want warn got warn "name@company.com" "UNDECIDED" name@ | build-copy: warning (top level): CONTACT_EMAIL=name@company.com is a sample address (a template’s name before the @ (name@)), not the shop's: the real one comes from the owner (CONTACT1). A public bui
+ok   Q6   public want fail got fail "shop+orders@hd-test.co.il" "UNDECIDED" a sub-address at our test domain | production: CONTACT_EMAIL=shop+orders@hd-test.co.il is a sample address (a test domain of ours), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q6   flag   want warn got warn "shop+orders@hd-test.co.il" "UNDECIDED" a sub-address at our test domain | build-copy: warning (top level): CONTACT_EMAIL=shop+orders@hd-test.co.il is a sample address (a test domain of ours), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_P
+ok   Q7   public want fail got fail "info@mail.hd-qa.co.il" "UNDECIDED" a subdomain of our QA domain | production: CONTACT_EMAIL=info@mail.hd-qa.co.il is a sample address (a test domain of ours), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q7   flag   want warn got warn "info@mail.hd-qa.co.il" "UNDECIDED" a subdomain of our QA domain | build-copy: warning (top level): CONTACT_EMAIL=info@mail.hd-qa.co.il is a sample address (a test domain of ours), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLI
+ok   Q8   public want fail got fail "noreply@beit-qsyly-studio.co.il" "UNDECIDED" noreply@ (not a contact) | production: CONTACT_EMAIL=noreply@beit-qsyly-studio.co.il is a sample address (a template’s name before the @ (noreply@)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q8   flag   want warn got warn "noreply@beit-qsyly-studio.co.il" "UNDECIDED" noreply@ (not a contact) | build-copy: warning (top level): CONTACT_EMAIL=noreply@beit-qsyly-studio.co.il is a sample address (a template’s name before the @ (noreply@)), not the shop's: the real one comes from the owner (CONTA
+ok   Q9   public want fail got fail "JOHN.DOE@gmail.com" "UNDECIDED" john.doe, capitals | production: CONTACT_EMAIL=JOHN.DOE@gmail.com is a sample address (a template’s name before the @ (john.doe@)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q9   flag   want warn got warn "JOHN.DOE@gmail.com" "UNDECIDED" john.doe, capitals | build-copy: warning (top level): CONTACT_EMAIL=JOHN.DOE@gmail.com is a sample address (a template’s name before the @ (john.doe@)), not the shop's: the real one comes from the owner (CONTACT1). A publ
+GAP  Q10  public want fail got pass "israel.israeli@gmail.com" "UNDECIDED" ישראל ישראלי, the Hebrew John Doe | 
+GAP  Q10  flag   want warn got pass "israel.israeli@gmail.com" "UNDECIDED" ישראל ישראלי, the Hebrew John Doe | 
+GAP  Q11  public want fail got pass "israel@israeli.co.il" "UNDECIDED" ישראל ישראלי as the domain | 
+GAP  Q11  flag   want warn got pass "israel@israeli.co.il" "UNDECIDED" ישראל ישראלי as the domain | 
+GAP  Q12  public want fail got pass "your@email.com" "UNDECIDED" your@email.com, a common template | 
+GAP  Q12  flag   want warn got pass "your@email.com" "UNDECIDED" your@email.com, a common template | 
+GAP  Q13  public want fail got pass "info@mysite.co.il" "UNDECIDED" mysite, a common template | 
+GAP  Q13  flag   want warn got pass "info@mysite.co.il" "UNDECIDED" mysite, a common template | 
+GAP  Q14  public want fail got pass "office@mycompany.co.il" "UNDECIDED" mycompany, a common template | 
+GAP  Q14  flag   want warn got pass "office@mycompany.co.il" "UNDECIDED" mycompany, a common template | 
+GAP  Q15  public want fail got pass "test.user@gmail.com" "UNDECIDED" test.user@ | 
+GAP  Q15  flag   want warn got pass "test.user@gmail.com" "UNDECIDED" test.user@ | 
+GAP  Q16  public want fail got pass "info@exаmple.com" "UNDECIDED" example with a Cyrillic а (a homograph) | 
+GAP  Q16  flag   want fail got pass "info@exаmple.com" "UNDECIDED" example with a Cyrillic а (a homograph) | 
+ok   Q17  public want fail got fail "hello@beit-qsyly-studio.co.il" "050-1234567" a run | production: CONTACT_PHONE=050-1234567 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q17  flag   want warn got warn "hello@beit-qsyly-studio.co.il" "050-1234567" a run | build-copy: warning (top level): CONTACT_PHONE=050-1234567 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) st
+ok   Q18  public want fail got fail "hello@beit-qsyly-studio.co.il" "+972-3-7654321" a run down, +972 | production: CONTACT_PHONE=+972-3-7654321 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q18  flag   want warn got warn "hello@beit-qsyly-studio.co.il" "+972-3-7654321" a run down, +972 | build-copy: warning (top level): CONTACT_PHONE=+972-3-7654321 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1)
+ok   Q19  public want fail got fail "hello@beit-qsyly-studio.co.il" "054-111-1111" one digit repeated | production: CONTACT_PHONE=054-111-1111 is a sample number (one digit repeated), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q19  flag   want warn got warn "hello@beit-qsyly-studio.co.il" "054-111-1111" one digit repeated | build-copy: warning (top level): CONTACT_PHONE=054-111-1111 is a sample number (one digit repeated), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) stops he
+ok   Q20  public want fail got fail "hello@beit-qsyly-studio.co.il" "1-800-000-000" 1-800, zeros | production: CONTACT_PHONE=1-800-000-000 is a sample number (one digit repeated), not the shop's: the real one comes from the owner (CONTACT1)
+ok   Q20  flag   want warn got warn "hello@beit-qsyly-studio.co.il" "1-800-000-000" 1-800, zeros | build-copy: warning (top level): CONTACT_PHONE=1-800-000-000 is a sample number (one digit repeated), not the shop's: the real one comes from the owner (CONTACT1). A public build (HD_PUBLIC=1) stops h
+GAP  Q21  public want fail got pass "hello@beit-qsyly-studio.co.il" "050-000-0001" zeros and a one (a placeholder S22 does not name) | 
+GAP  Q21  flag   want warn got pass "hello@beit-qsyly-studio.co.il" "050-000-0001" zeros and a one (a placeholder S22 does not name) | 
+ok   Q22  public want pass got pass "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "99-9999999" a landline, made at run time | 
+ok   Q22  flag   want pass got pass "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "99-9999999" a landline, made at run time | 
+ok   Q23  public want pass got pass "xxxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "999-9999999" a mobile, made at run time | 
+ok   Q23  flag   want pass got pass "xxxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "999-9999999" a mobile, made at run time | 
+ok   Q24  public want pass got pass "xxxxxx@xxxxx-xxxxx.xx.xx" "xxxxxxxxx" "testa-…" is not "test" | 
+ok   Q24  flag   want pass got pass "xxxxxx@xxxxx-xxxxx.xx.xx" "xxxxxxxxx" "testa-…" is not "test" | 
+ok   Q25  public want pass got pass "xxxxxxx@xxxxx-xxxxx.xx.xx" "xxxxxxxxx" "samples@" is not "sample@" | 
+ok   Q25  flag   want pass got pass "xxxxxxx@xxxxx-xxxxx.xx.xx" "xxxxxxxxx" "samples@" is not "sample@" | 
+ok   Q26  public want pass got pass "xxxx.xxxx@xxxxx-xxxx.xx.xx" "xxxxxxxxx" "user.care@" is not "user@" | 
+ok   Q26  flag   want pass got pass "xxxx.xxxx@xxxxx-xxxx.xx.xx" "xxxxxxxxx" "user.care@" is not "user@" | 
+ok   Q27  public want pass got pass "xxxxx@xxxxx-xxxxxx-xxxxxx.xx.xx" "xxxxxxxxx" "…-domain-studio" is not "domain" | 
+ok   Q27  flag   want pass got pass "xxxxx@xxxxx-xxxxxx-xxxxxx.xx.xx" "xxxxxxxxx" "…-domain-studio" is not "domain" | 
+GAP  Q28  public want pass got fail "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "99-9999999" a Gush Dan landline 03-555xxxx (real range, not the US 555) | ··········: ·······_·····=··-······· ·· · ······ ······ (· ··· ······), ··· ··· ····'·: ··· ···· ··· ····· ···· ··· ····· (········)
+GAP  Q28  flag   want pass got warn "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "99-9999999" a Gush Dan landline 03-555xxxx (real range, not the US 555) | ·····-····: ······· (··· ·····): ·······_·····=··-······· ·· · ······ ······ (· ··· ······), ··· ··· ····'·: ··· ···· ··· ····· ···· ··· ····· (········). · ······ ····· (··_······=·) ····· ····.
+GAP  Q29  public want pass got fail "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "999-9999999" a mobile 050-555xxxx | ··········: ·······_·····=···-······· ·· · ······ ······ (· ··· ······), ··· ··· ····'·: ··· ···· ··· ····· ···· ··· ····· (········)
+GAP  Q29  flag   want pass got warn "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "999-9999999" a mobile 050-555xxxx | ·····-····: ······· (··· ·····): ·······_·····=···-······· ·· · ······ ······ (· ··· ······), ··· ··· ····'·: ··· ···· ··· ····· ···· ··· ····· (········). · ······ ····· (··_······=·) ····· ····.
+GAP  Q30  public want pass got fail "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "*9999" a star number that is a run (*2345) | ··········: ·······_·····=*···· ·· · ······ ······ (· ··· ·· ······ (·······)), ··· ··· ····'·: ··· ···· ··· ····· ···· ··· ····· (········)
+GAP  Q30  flag   want pass got warn "xxxxx@xxxx-xxxxx-xxxxxx.xx.xx" "*9999" a star number that is a run (*2345) | ·····-····: ······· (··· ·····): ·······_·····=*···· ·· · ······ ······ (· ··· ·· ······ (·······)), ··· ··· ····'·: ··· ···· ··· ····· ···· ··· ····· (········). · ······ ····· (··_······=·) ····· ··
+rows as wanted: 38/60
+ok   check-config production Q1 want exit 1 got 1 production: CONTACT_EMAIL=info@example.net is a sample address (reserved for examples (RFC 2606)), not the shop's: the real one comes from the owner (CONTACT1)
+GAP  check-config production Q10 want exit 1 got 0 
+GAP  check-config production Q12 want exit 1 got 0 
+ok   check-config production Q17 want exit 1 got 1 production: CONTACT_PHONE=050-1234567 is a sample number (a run of digits (1234567)), not the shop's: the real one comes from the owner (CONTACT1)
+ok   check-config production Q22 want exit 0 got 0 
+GAP  check-config production Q28 want exit 0 got 1 
