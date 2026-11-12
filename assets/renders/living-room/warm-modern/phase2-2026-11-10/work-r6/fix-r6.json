@@ -8,6 +8,85 @@
   "designer": "docs/proposals/wm-phase2-r5-eye-2026-11-11.md"
  },
  "note": "ungraded per-product layers (RGBA, straight alpha) and shadows (grey RGB, multiply) in work-r6/; grade_cut_r6.py grades and cuts them with the ONE v3c grade; the numbers here are measured on graded scenes recomposed with the change (set B)",
+ "curtains": {
+  "what": "the default flips to 180502 (curtains-aliexpress-linen-blend-s-fold-180502, S-fold 132 x 270, SKU 12000059196236244): the designer's decision (wm-phase2-r5-eye section 1); 554205 becomes variant 2 (curtains-v2)",
+  "files": {
+   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains.png": {
+    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/curtains-v2.png",
+    "same_bytes": true
+   },
+   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains-free-alpha.png": {
+    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/curtains-v2-free-alpha.png",
+    "same_bytes": true
+   },
+   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/curtains.png": {
+    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/shadows/curtains-v2.png",
+    "same_bytes": true
+   }
+  },
+  "unchanged": "the R5 cut, its R5 colour fix and its shadow; the true length waits for the designer"
+ },
+ "magazine-holder": {
+  "what": "the rods' satin silver carried into their soft edge (the dark line under the front rod)",
+  "method": "the rods' soft edge (the designer's pre-approved fix, eye section 8; QA R5 4). R5 recoloured each rod's pixels within its half     width + 1.5 px of the fitted line, but only those of C* <= 14: where the black rod meets the leather, the edge pixels (part rod,     part cognac leather) were left black-and-leather, the dark broken line under the front rod at x 2. Here each rod's two edges are     measured on its R1 render (per column, off the tubes: the sub-pixel crossing of half way between the rod's core L* and the     neighbour's 4 px beyond; the median over the columns), so each pixel's rod share f is geometric: f = clip(E - |d| + 0.5, 0, 1) (d     its distance from the line, E that side's edge). In the edge band (|d| from E - 1 to E + 1.5, off the tubes) the rod's black is     replaced by R5's satin silver S of the nearest full rod pixel, in linear RGB: c' = c_R1 + f (S - K), K the R1 rod's black (its     core's median). Alpha, the tubes, the leather beyond, the rest of R5's rods and the shadow: unchanged",
+  "source": {
+   "r1": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/magazine-holder.png",
+   "r5": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/magazine-holder.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/shadows/magazine-holder.png (unchanged)"
+  },
+  "rods": {
+   "back": {
+    "edge_upper_px": {
+     "value": 2.955,
+     "columns": 146
+    },
+    "edge_lower_px": {
+     "value": 4.366,
+     "columns": 53
+    },
+    "edge_band_px": 400,
+    "rod_share_median": 0.849,
+    "black_K_srgb": [
+     0.1647,
+     0.1451,
+     0.1333
+    ],
+    "core_L": 15.23
+   },
+   "front": {
+    "edge_upper_px": {
+     "value": 3.496,
+     "columns": 158
+    },
+    "edge_lower_px": {
+     "value": 5.126,
+     "columns": 151
+    },
+    "edge_band_px": 558,
+    "rod_share_median": 0.756,
+    "black_K_srgb": [
+     0.1255,
+     0.1176,
+     0.1137
+    ],
+    "core_L": 11.41
+   }
+  },
+  "dark_line_px": {
+   "r5": {
+    "darker_than_both_sides_by_4": 18,
+    "below_L25": 14,
+    "band_px": 312
+   },
+   "r6": {
+    "darker_than_both_sides_by_4": 14,
+    "below_L25": 2,
+    "band_px": 312
+   }
+  },
+  "changed_px": 958,
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/magazine-holder.png"
+ },
  "vase": {
   "what": "re-cut from the raw render (QA R5 3.1: the cut followed R4's placeholder and lost the lit flank); straightened and sized to the card about the foot; colour",
   "source": {
@@ -439,24 +518,6 @@
    "recut_before_colour": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/vase-v2-recut.png"
   }
  },
- "curtains": {
-  "what": "the default flips to 180502 (curtains-aliexpress-linen-blend-s-fold-180502, S-fold 132 x 270, SKU 12000059196236244): the designer's decision (wm-phase2-r5-eye section 1); 554205 becomes variant 2 (curtains-v2)",
-  "files": {
-   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains.png": {
-    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/curtains-v2.png",
-    "same_bytes": true
-   },
-   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains-free-alpha.png": {
-    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/curtains-v2-free-alpha.png",
-    "same_bytes": true
-   },
-   "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/curtains.png": {
-    "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/shadows/curtains-v2.png",
-    "same_bytes": true
-   }
-  },
-  "unchanged": "the R5 cut, its R5 colour fix and its shadow; the true length waits for the designer"
- },
  "curtains-v2": {
   "what": "554205 (curtains-aliexpress-beige-linen-sheer-curtains-554205, hooks 150 x 270, SKU 12000029601125492), now variant 2: L* and a*b* relative to 180502 (designer section 1)",
   "method": "554205 as variant 2 (designer section 1, 'the fix of 554205'): relative to 180502 in the same light and under the same mask (QA     p2_colour's mask on each layer, intersected), L* included. (1) The lightness: ONE monotone tone curve on the low frequencies of L*     (a normalised blur over the curtain, sigma 1.5 fold spacings = 75 px, i.e. a kernel about 3 spacings wide): the low-frequency L*     quantiles of 554205 mapped onto 180502's (the same mask, the ungraded layers), shifted so the graded medians meet; the high     frequencies (the folds, sigma 3-75, and the slub, under sigma 3) back x g, g = (L*180502 + 16) / (L*554205 + 16) clipped to 1-1.2     (a brighter cloth shows the same folds as larger L* steps); two soft shoulders (the folds' crests over 89, the slub's specks over     93.5) keep the brightest folds under burn (target 5). (2) The colour after the lightness: a*b* by R5's method (one hue rotation, one chroma     factor for every pixel) to 180502's median C* and h. (3) The armchair post's line solved again (fix_r5.post_line_fix). The free alpha     and the shadow layer are 554205's own, unchanged",
@@ -677,7 +738,7 @@
  },
  "framed-art-v2": {
   "what": "the seam anti-aliased along every rail, the default's inner shadow line kept; the light specks out; R5's black lift",
-  "method": "framed-art v2 (QA R5 3.5; the designer section 5): the seam between the default's walnut band and the variant's prints, along all     six rails, anti-aliased. Each print area's four sides are ONE sub-pixel line each (fitted through R5's integer staircase, which     followed the moulding's measured offset from the frame's outer edge); per pixel the coverage (8 x 8 samples) of three zones: the print     (inside the lines), the default's inner line (the 1.2 px just outside them: the dark shadow line the default's top mouldings end     with; its colour from the default's own whole pixels there, sigma 1.5 along the rail) and the moulding (beyond: the default's own     pixels, unchanged wherever a pixel is fully moulding). Each line is fitted on the default's own moulding -> print edge where the     default's print beside it is light (_default_edge_lines), else through R5's staircase. The print's colour next to the line is carried from 2.5 px inside (a normalised blur,     sigma 1.5: the render's light-oak frame was wider than the walnut band, as R5). R5's black lift on the prints, the same lift. Then the     isolated light specks in the prints' black (QA: L* > the neighbours' + 25 with 7 of 8 neighbours black) take their neighbours' median",
+  "method": "framed-art v2 (QA R5 3.5; the designer section 5): the seam between the default's walnut band and the variant's prints, along all     six rails, anti-aliased. Each print area's four sides are ONE sub-pixel line each: fitted on the default's own moulding -> print edge     where the default's print beside it is light (_default_edge_lines), else through R5's integer staircase. Per pixel the coverage (8 x 8     samples) of three zones: the print (inside the lines), the default's inner line (the 1.2 px just outside them: the dark shadow line the     default's top mouldings end with; its colour from the default's own whole pixels there) and the moulding (beyond: the default's own     pixels, unchanged wherever a pixel is fully moulding). The print's colour next to the line is carried from 2.5 px inside it and 2 px     inside R5's print area (a normalised blur, sigma 1.5, else 4: the render's light-oak frame was wider than the walnut band, as R5).     R5's black lift on the prints, the same lift. Then the isolated light specks in the prints' black (L* > the 8 neighbours' median + 25     with 7 of 8 neighbours black) take their neighbours' median colour",
   "source": {
    "cut": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/framed-art-v2-cut.png",
    "default": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work/layers/framed-art.png"
@@ -833,7 +894,7 @@
   "black_lift_at_L5": 7.588,
   "specks_fixed": [],
   "measured": {
-   "rails": {
+   "rails_qa_as_is": {
     "print 1 top": {
      "residual_rms": 0.116,
      "residual_max": 0.21,
@@ -869,6 +930,50 @@
      "residual_max": 0.27,
      "jumps_ge_0_6": 0,
      "jumps_ge_1_0": 0
+    }
+   },
+   "rails_light_print_columns": {
+    "print 1 top": {
+     "residual_rms": 0.116,
+     "residual_max": 0.21,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0,
+     "columns": 164
+    },
+    "print 2 top": {
+     "residual_rms": 0.119,
+     "residual_max": 0.21,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0,
+     "columns": 156
+    },
+    "print 3 top": {
+     "residual_rms": 0.128,
+     "residual_max": 0.22,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0,
+     "columns": 146
+    },
+    "print 1 bottom": {
+     "residual_rms": 0.169,
+     "residual_max": 0.99,
+     "jumps_ge_0_6": 2,
+     "jumps_ge_1_0": 2,
+     "columns": 164
+    },
+    "print 2 bottom": {
+     "residual_rms": 0.193,
+     "residual_max": 0.42,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0,
+     "columns": 175
+    },
+    "print 3 bottom": {
+     "residual_rms": 0.025,
+     "residual_max": 0.09,
+     "jumps_ge_0_6": 0,
+     "jumps_ge_1_0": 0,
+     "columns": 91
     }
    },
    "specks_isolated": 0,
@@ -1145,58 +1250,5 @@
   },
   "all_met": true,
   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/pendant-v2.png"
- },
- "magazine-holder": {
-  "what": "the rods' satin silver carried into their soft edge (the dark line under the front rod)",
-  "method": "the rods' soft edge (the designer's pre-approved fix, eye section 8; QA R5 4). R5 recoloured each rod's pixels within its half     width + 1.5 px of the fitted line, but only those of C* <= 14: where the black rod meets the leather, the edge pixels (part rod,     part cognac leather) were left black-and-leather, the dark broken line under the front rod at x 2. Here each rod's two edges are     measured on its R1 render (per column, off the tubes: the sub-pixel crossing of half way between the rod's core L* and the     neighbour's 4 px beyond; the median over the columns), so each pixel's rod share f is geometric: f = clip(E - |d| + 0.5, 0, 1) (d     its distance from the line, E that side's edge). In the edge band (|d| from E - 1 to E + 1.5, off the tubes) the rod's black is     replaced by R5's satin silver S of the nearest full rod pixel, in linear RGB: c' = c_R1 + f (S - K), K the R1 rod's black (its     core's median). Alpha, the tubes, the leather beyond, the rest of R5's rods and the shadow: unchanged",
-  "source": {
-   "r1": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-reserve/layers/magazine-holder.png",
-   "r5": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/magazine-holder.png",
-   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/shadows/magazine-holder.png (unchanged)"
-  },
-  "rods": {
-   "back": {
-    "edge_upper_px": {
-     "value": 2.955,
-     "columns": 146
-    },
-    "edge_lower_px": {
-     "value": 4.366,
-     "columns": 53
-    },
-    "edge_band_px": 400,
-    "rod_share_median": 0.849,
-    "black_K_srgb": [
-     0.1647,
-     0.1451,
-     0.1333
-    ],
-    "core_L": 15.23
-   },
-   "front": {
-    "edge_upper_px": {
-     "value": 3.496,
-     "columns": 158
-    },
-    "edge_lower_px": {
-     "value": 5.126,
-     "columns": 151
-    },
-    "edge_band_px": 558,
-    "rod_share_median": 0.756,
-    "black_K_srgb": [
-     0.1255,
-     0.1176,
-     0.1137
-    ],
-    "core_L": 11.41
-   }
-  },
-  "dark_line_px": {
-   "r5": 0,
-   "r6": 0
-  },
-  "changed_px": 958,
-  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/magazine-holder.png"
  }
 }

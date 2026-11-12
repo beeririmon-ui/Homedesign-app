@@ -1502,7 +1502,7 @@ def rods_edge():
         """pixels on a rod's edge darker by 4 L* than both the rod's own edge 2 px inside and the neighbour 2 px outside (a dark line
         between two lighter things); off the tubes"""
         LL = lab8(G8)[..., 0].astype(np.float32)
-        n_ = 0
+        n_ = dict(darker_than_both_sides_by_4=0, below_L25=0, band_px=0)
         for nm, r in Mk.items():
             k_, b_ = info[nm]["line_y_eq_ax_plus_b"]
             x0, x1 = info[nm]["x_span"]
@@ -1515,7 +1515,9 @@ def rods_edge():
                 cy_, cx_ = np.nonzero(band_)
                 ins = cv2.remap(LL, (cx_ - 2 * side * nrm[0]).astype(np.float32).reshape(1, -1), (cy_ - 2 * side * nrm[1]).astype(np.float32).reshape(1, -1), cv2.INTER_LINEAR).ravel()
                 outs = cv2.remap(LL, (cx_ + 2 * side * nrm[0]).astype(np.float32).reshape(1, -1), (cy_ + 2 * side * nrm[1]).astype(np.float32).reshape(1, -1), cv2.INTER_LINEAR).ravel()
-                n_ += int((LL[cy_, cx_] < np.minimum(ins, outs) - 4).sum())
+                n_["darker_than_both_sides_by_4"] += int((LL[cy_, cx_] < np.minimum(ins, outs) - 4).sum())
+                n_["below_L25"] += int((LL[cy_, cx_] < 25).sum())
+                n_["band_px"] += int(len(cy_))
         return n_
     _, _, G5 = graded(override={"magazine-holder": (rgb5, a, None, f32(D(WR5, "shadows", "magazine-holder.png"), "L"))})
     _, _, G6 = graded(override={"magazine-holder": (rgb_n, a, None, f32(D(WR5, "shadows", "magazine-holder.png"), "L"))})
@@ -1524,3 +1526,14 @@ def rods_edge():
                                                                                        shadow=rel(D(WR5, "shadows", "magazine-holder.png")) + " (unchanged)"),
                                    rods=rec, dark_line_px=dict(r5=dark_line(G5), r6=dark_line(G6)), changed_px=int(changed.sum()), file=rel(pl)))
     print(json.dumps(dict(rods=rec, dark_line=json.load(open(REC))["magazine-holder"]["dark_line_px"]), indent=1))
+
+
+STEPS = [("curtains", curtains), ("rods", rods_edge), ("vase", vase), ("vase-v2", vase_v2), ("curtains-v2", curtains_v2),
+         ("art", framed_art_v2), ("pendant", pendant_v2)]
+
+if __name__ == "__main__":
+    what = sys.argv[1] if len(sys.argv) > 1 else "all"
+    for name, fn in STEPS:
+        if what in (name, "all"):
+            print("==", name, flush=True)
+            fn()
