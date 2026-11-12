@@ -477,22 +477,36 @@ def _vase(nm, pass_, src_cut, rim, axis0, white, colour):
 
 
 def vase():
-    """the default vase: R5's a*b* fix (post_r5.vase_colour: dh 6.335, k 0.3376, rows >= 935) on the re-cut body, re-measured"""
+    """the default vase: R5's a*b* fix re-solved on the re-cut body (post_r5.vase_colour's method and targets: one hue rotation and one
+    chroma factor for every body pixel, rows >= 935; the hue of the surfaces beside, L* unchanged), started from R5's dh and k. With its lit
+    flank back the lit half is lighter (L* 88 against R5's 79) and R5's k alone gives C* 3.4, under the designer's 4-7 and cooler than
+    the room's own white (the back wall, C* 4.05): the lit half is set to C* 4.5, inside the range and the nearest to the card's
+    near-neutral #EEECE8"""
     rec5 = json.load(open(D(WR5, "post-r5.json")))["vase"]
 
     def colour(rgb, a, sh):
         body = np.zeros(a.shape, bool)
         body[935:] = True
-        out = np.where(body[..., None], F5.recolour_ab(rgb, rec5["dh_deg"], rec5["k"]), rgb).astype(np.float32)
         _, _, G0 = graded(override={"vase": (rgb, a, None, sh)})
-        _, _, G1 = graded(override={"vase": (out, a, None, sh)})
-        b0, b1 = vase_measures(G0, a, 940), vase_measures(G1, a, 940)
+        b0 = vase_measures(G0, a, 940)
+        want_C, want_h = 4.5, b0["beside"]["h"]               # inside the designer's 4-7, above the room's white (C 4.05), nearest the card
+        dh, k = rec5["dh_deg"], rec5["k"]
+        hist = []
+        for it in range(8):
+            out = np.where(body[..., None], F5.recolour_ab(rgb, dh, k), rgb).astype(np.float32)
+            _, _, G1 = graded(override={"vase": (out, a, None, sh)})
+            b1 = vase_measures(G1, a, 940)
+            hist.append(dict(it=it, dh=round(dh, 3), k=round(k, 4), **b1["lit_half"]))
+            if abs(b1["lit_half"]["C"] - want_C) < 0.1 and abs((b1["lit_half"]["h"] - want_h + 180) % 360 - 180) < 0.5:
+                break
+            dh += (want_h - b1["lit_half"]["h"] + 180) % 360 - 180
+            k *= want_C / max(b1["lit_half"]["C"], 1e-3)
         hb = b1["beside"]["h"]
         tg = {"C* median 4-7 on the lit half": 4 <= b1["lit_half"]["C"] <= 7,
               "hue within 10 deg of the surface beside": abs((b1["lit_half"]["h"] - hb + 180) % 360 - 180) <= 10,
               "not above C 7": b1["lit_half"]["C"] <= 7, "L* unchanged (+-0.5)": abs(b1["lit_half"]["L"] - b0["lit_half"]["L"]) <= 0.5}
-        return out, dict(fix="R5's (post_r5.vase_colour): a*b* only, the same hue rotation and chroma factor (dh %.3f, k %.4f), rows >= 935; the "
-                              "branch keeps its colour" % (rec5["dh_deg"], rec5["k"]), before=b0, after=b1, targets_r5=tg, all_met=all(tg.values()))
+        return out, dict(fix=vase.__doc__.replace("\n", " "), r5=dict(dh=rec5["dh_deg"], k=rec5["k"]), dh_deg=round(dh, 3), k=round(k, 4),
+                         iterations=hist, before=b0, after=b1, targets_r5=tg, all_met=all(tg.values()), card="#EEECE8")
     return _vase("vase", "p4", D(WR5, "layers/vase-cut.png"), 936, 674.0, True, colour)
 
 

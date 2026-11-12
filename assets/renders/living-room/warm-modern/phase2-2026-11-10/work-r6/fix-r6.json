@@ -1,0 +1,229 @@
+{
+ "date": "2026-11-12",
+ "author": "render-agent",
+ "tokens": 0,
+ "brief": "briefs/render-wm-tool-r6-codefix-2026-11-12.md",
+ "sources": {
+  "qa": "qa/reports/2026-11-11-wm-tool-phase2-r5.md (+ .json)",
+  "designer": "docs/proposals/wm-phase2-r5-eye-2026-11-11.md"
+ },
+ "note": "ungraded per-product layers (RGBA, straight alpha) and shadows (grey RGB, multiply) in work-r6/; grade_cut_r6.py grades and cuts them with the ONE v3c grade; the numbers here are measured on graded scenes recomposed with the change (set B)",
+ "vase": {
+  "what": "re-cut from the raw render (QA R5 3.1: the cut followed R4's placeholder and lost the lit flank); straightened and sized to the card about the foot; colour",
+  "source": {
+   "render": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/p4-regt.npy (the registered, tone-matched raw assets/renders/living-room/warm-modern/phase2-2026-11-10/raw/p4-r5-seedream.png)",
+   "scene_behind": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/scene-p4.png",
+   "old_cut": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/vase-cut.png"
+  },
+  "method": {
+   "edges": "the vase's silhouette as the model drew it, row by row on its body (the rim + 3 to the foot's contact): the edges are the     sub-pixel peaks of the render's own colour gradient (Lab, sigma-0.6 blur; central differences): the right edge within 8 px inside /     3 px outside the old cut's (QA found that side right); the left edge within a window round the right edge's mirror about the     axis. The axis is fitted as a line on the rows where both edges are found (robust: two rounds, residuals over 2 px dropped), the     windows narrowed round it (10 px, then 5 px). The half width r(y) = (right - left) / 2, outliers against a 7-row median (> 1.5 px)     replaced by it, then smoothed (sigma 1.5 rows): a turned body is smooth. Returns per body row the axis and r, and the record",
+   "alpha": "the re-cut alpha in the render's own coordinates: the body rows from the profile (the old cut's soft bottom row kept as a vertical     falloff), the old cut above the body (the lip, the branch)",
+   "straighten_and_size": "the forward affine (render -> layer): the axis made vertical about the foot (x - tilt (y - foot_y): the camera is level, the     window's mullion is vertical in the same render, so the model's lean is the model's), then the card's size about the foot (sx, sy);     applied premultiplied (bilinear). Returns rgb, alpha, the matrix, the foot's axis x",
+   "shadow": "extract.shadow_one (frozen, pass_r5.shadow_new) on the re-cut in the render's coordinates; then at the foot's scale (sx both ways about the foot: it lies on the bench), 1 under the full alpha"
+  },
+  "recut": {
+   "body_rows": [
+    939,
+    1067
+   ],
+   "axis": {
+    "x_at_foot": 667.59,
+    "x_at_top": 676.37,
+    "tilt_px_per_row": -0.0686,
+    "tilt_deg": -3.92
+   },
+   "fit": [
+    {
+     "window_px": 10,
+     "tilt_px_per_row": -0.06454,
+     "rows_used": 107
+    },
+    {
+     "window_px": 5,
+     "tilt_px_per_row": -0.06864,
+     "rows_used": 110
+    },
+    {
+     "window_px": 5,
+     "tilt_px_per_row": -0.0686,
+     "rows_used": 111
+    }
+   ],
+   "rows_left_edge_measured": 111,
+   "rows_from_profile": 18,
+   "widest_px": 76.21,
+   "widest_row": 972,
+   "old_cut_width_px_median": 58.0,
+   "new_width_px_median": 63.52
+  },
+  "axis_check_in_layer": {
+   "tilt_px_per_row": 0.0002,
+   "tilt_deg": 0.01,
+   "how": "the alpha 0.5 mid-points of the body rows"
+  },
+  "size": {
+   "card_cm": [
+    16,
+    32
+   ],
+   "card_at_point_px": {
+    "width": 66.72,
+    "left": 638.87,
+    "right": 705.59,
+    "top": 932.14,
+    "bottom": 1062.96,
+    "height": 130.82,
+    "centre_x": 672.44,
+    "depth": 4.36
+   },
+   "render_widest_px": 76.2,
+   "render_widest_row": 972,
+   "render_height_px": 135.82,
+   "lip_top_row": 932,
+   "foot_contact_y": 1067.32,
+   "render_vs_card": [
+    1.1421,
+    1.0382
+   ],
+   "render_cm": [
+    18.3,
+    33.2
+   ],
+   "tolerance": 0.05,
+   "scale": [
+    0.8756,
+    1.0
+   ],
+   "layer_widest_px": 66.79,
+   "layer_cm": [
+    16.0,
+    33.2
+   ]
+  },
+  "matrix_layer": [
+   [
+    0.8755800127983093,
+    0.06007000058889389,
+    18.94308090209961
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ]
+  ],
+  "matrix_shadow": [
+   [
+    0.8755800127983093,
+    0.0,
+    83.05628204345703
+   ],
+   [
+    0.0,
+    0.8755800127983093,
+    132.7927703857422
+   ]
+  ],
+  "foot_axis_x": 667.56,
+  "widths": {
+   "old_cut_width_px_median_body": 58.0,
+   "render_width_px_widest": 76.2,
+   "layer_width_px_widest": 66.79
+  },
+  "shadow": {
+   "recipe": "extract.shadow_one as is (frozen)",
+   "px_below_0_97": 250,
+   "min": 0.728
+  },
+  "colour": {
+   "fix": "the default vase: R5's a*b* fix re-solved on the re-cut body (post_r5.vase_colour's method and targets: one hue rotation and one     chroma factor for every body pixel, rows >= 935; C* 5.5 on the lit half, the hue of the surfaces beside, L* unchanged); started from     R5's dh and k: with its lit flank back the lit half is lighter and less chromatic than R5 measured it, so R5's k alone gives C* ~3.5",
+   "r5": {
+    "dh": 6.335,
+    "k": 0.3376
+   },
+   "dh_deg": 2.205,
+   "k": 0.5366,
+   "iterations": [
+    {
+     "it": 0,
+     "dh": 6.335,
+     "k": 0.3376,
+     "L": 88.47,
+     "C": 3.46,
+     "h": 87.41,
+     "C_px_median": 3.5,
+     "px": 2870
+    },
+    {
+     "it": 1,
+     "dh": 2.205,
+     "k": 0.5366,
+     "L": 88.44,
+     "C": 5.49,
+     "h": 83.14,
+     "C_px_median": 5.56,
+     "px": 2870
+    }
+   ],
+   "before": {
+    "lit_half": {
+     "L": 88.57,
+     "C": 10.29,
+     "h": 81.35,
+     "C_px_median": 10.44,
+     "px": 2870
+    },
+    "body": {
+     "L": 69.29,
+     "C": 18.77,
+     "h": 78.19,
+     "C_px_median": 19.03,
+     "px": 5897
+    },
+    "beside": {
+     "L": 91.93,
+     "C": 4.14,
+     "h": 83.28,
+     "C_px_median": 4.21,
+     "px": 16143
+    }
+   },
+   "after": {
+    "lit_half": {
+     "L": 88.44,
+     "C": 5.49,
+     "h": 83.14,
+     "C_px_median": 5.56,
+     "px": 2870
+    },
+    "body": {
+     "L": 69.18,
+     "C": 10.12,
+     "h": 80.49,
+     "C_px_median": 10.24,
+     "px": 5897
+    },
+    "beside": {
+     "L": 91.93,
+     "C": 4.14,
+     "h": 83.28,
+     "C_px_median": 4.21,
+     "px": 16143
+    }
+   },
+   "targets_r5": {
+    "C* median 4-7 on the lit half": true,
+    "hue within 10 deg of the surface beside": true,
+    "not above C 7": true,
+    "L* unchanged (+-0.5)": true
+   },
+   "all_met": true,
+   "card": "#EEECE8"
+  },
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/vase.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/vase.png",
+   "recut_before_colour": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/vase-recut.png"
+  }
+ }
+}

@@ -866,3 +866,193 @@ encoding nordic poster 400@3 (shell.2752.avif): AVIF 6/9/17 · 0.11% · ΔE 2.73
   ✓   15 [e2e] › e2e/flow.spec.ts:34:3 › room experience › hotspots are buttons; the wheel works with the keyboard and restores focus (4.8s)
   ✓   16 [e2e] › e2e/flow.spec.ts:56:3 › room experience › product marks: 44 px targets that never overlap, no pulsing, focus lights the product outline, reduced motion respected (2.4s)
   ✓   17 [e2e] › e2e/flow.spec.ts:92:3 › room experience › hovering the product itself lights its outline, and a click on it opens its variants (3.4s)
+  ✓   18 [e2e] › e2e/flow.spec.ts:107:3 › room experience › product marks rest hidden: a first-visit hint, then they show on pointer movement, fade ~3 s later, and stay with keyboard focus (12.9s)
+  ✓   19 [e2e] › e2e/flow.spec.ts:137:3 › room experience › product marks: a touch shows them too, and the list under the room is unchanged (1.2s)
+  ✓   20 [e2e] › e2e/flow.spec.ts:146:3 › room experience › drag with inertia moves the wheel (mouse) (3.6s)
+  ✓   21 [e2e] › e2e/flow.spec.ts:164:3 › product gallery (FR-I) › the render leads with a visible note, the supplier photo follows; buttons, keys and the live region move between them (1.8s)
+  ✓   22 [e2e] › e2e/flow.spec.ts:204:5 › product gallery (FR-I) › mobile › the strip scrolls sideways within the screen, and the buttons work (968ms)
+  ✓   23 [e2e] › e2e/flow.spec.ts:220:3 › store › product → cart → checkout validation → mock hosted page → paid order (2.5s)
+  ✓   24 [e2e] › e2e/flow.spec.ts:261:3 › store › a declined payment returns to checkout with a clear message (1.9s)
+  ✓   25 [e2e] › e2e/flow.spec.ts:283:3 › store › set or single piece (P1): the set is the default, one piece has its own price, the cart keeps both apart (2.3s)
+  ✓   26 [e2e] › e2e/flow.spec.ts:332:3 › store › the variant wheel offers set or single piece; its arrow keys stay with the radios (3.3s)
+  ✓   27 [e2e] › e2e/hotspots.spec.ts:22:3 › marks and outlines at 1280 px (11.5s)
+  ✓   28 [e2e] › e2e/hotspots.spec.ts:22:3 › marks and outlines at 400 px (9.9s)
+  ✓   29 [e2e] › e2e/house.spec.ts:117:3 › a house's own address (S10 question 7, S11) › ?style=warm-modern is served that house’s own page: its own poster (S14, ת29), no Nordic one, the page CSP; the Nordic address is unchanged (84ms)
+  ✓   30 [e2e] › e2e/house.spec.ts:166:3 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › before any script runs: the prerendered page already draws the poster of set B (the first paint) (826ms)
+ת29 1280@1: poster vs set B 6/7 · 0.03%; vs the empty base 5.31% above 8
+  ✓   31 [e2e] › e2e/house.spec.ts:186:5 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › 1280@1: the poster at rest is the approved set B composition, not the empty sofa (5.7s)
+ת29 400@1: poster vs set B 4/6 · 0.00%; vs the empty base 10.69% above 8
+  ✓   32 [e2e] › e2e/house.spec.ts:186:5 › ת29 (S14): a direct entry rests on set B from the first paint, before any touch › 400@1: the poster at rest is the approved set B composition, not the empty sofa (4.8s)
+  ✓   33 [e2e] › e2e/house.spec.ts:211:3 › the warm-modern house in the room engine (S10) › entering at its address: its own picture, the status label, one slot with a mark, B the default (1.7s)
+  ✓   34 [e2e] › e2e/house.spec.ts:251:3 › the warm-modern house in the room engine (S10) › the wheel reaches all three sets (B, A, C), each with its pieces and prices; the whole set goes to the cart (5.3s)
+  ✓   35 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1280×720@1) (3.4s)
+  ✓   36 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1440×900@1) (3.9s)
+  ✓   37 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (1920×1080@1) (4.0s)
+  ✓   38 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (400×800@1) (3.5s)
+  ✓   39 [e2e] › e2e/house.spec.ts:311:5 › the warm-modern house in the room engine (S10) › ת22: every piece of every set shows whole, the throw too (390×844@3) (4.0s)
+  ✓   40 [e2e] › e2e/house.spec.ts:350:3 › the warm-modern house in the room engine (S10) › a deep link opens the wheel on its set (the story’s "לנסות בחדר") (2.7s)
+swap-diff (warm modern, 1280×720): B↔A: 0 px changed outside (worst 1 levels), 54900 inside an area of 7.3%; A↔C: 0 px changed outside (worst 2 levels), 57620 inside an area of 7.7%; B↔C: 0 px changed outside (worst 1 levels), 54175 inside an area of 7.4%
+  ✓   41 [e2e] › e2e/house.spec.ts:357:3 › the warm-modern house in the room engine (S10) › swap: a set changes nothing outside the sets’ own area (alpha and shadow of the two sets) (3.4s)
+house switch nordic → warm-modern: dissolve 1009 ms, press → end 1298 ms
+  ✓   42 [e2e] › e2e/house.spec.ts:466:3 › the soft switch between houses, in the engine (S10) › one frame for every layer, the same camera, 1.0 s; the address names the house; back again (5.8s)
+ת15 1280: nordic → warm-modern: before 191.0, at 0 191.0, mid 186.8, at 1 182.6; |0 − before| 0.00, |mid − half each| 0.23, |0 − 1| 43.1; frames drawn in the dissolve 18, darkest 182.5
+ת15 1280: warm-modern → nordic: before 182.6, at 0 182.6, mid 186.8, at 1 190.9; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 42.6; frames drawn in the dissolve 16, darkest 182.5
+  ✓   43 [e2e] › e2e/house.spec.ts:512:5 › the soft switch between houses, in the engine (S10) › ת15: the dissolve draws both houses mixed, never black, both ways (1280×720) (5.3s)
+ת15 400: nordic → warm-modern: before 198.2, at 0 198.2, mid 188.8, at 1 179.3; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 45.3; frames drawn in the dissolve 48, darkest 179.4
+ת15 400: warm-modern → nordic: before 179.3, at 0 179.3, mid 188.7, at 1 198.0; |0 − before| 0.00, |mid − half each| 0.22, |0 − 1| 45.2; frames drawn in the dissolve 49, darkest 179.5
+  ✓   44 [e2e] › e2e/house.spec.ts:512:5 › the soft switch between houses, in the engine (S10) › ת15: the dissolve draws both houses mixed, never black, both ways (400×800) (4.9s)
+house switch, reduced motion: dissolve 352 ms
+  ✓   45 [e2e] › e2e/house.spec.ts:556:3 › the soft switch between houses, in the engine (S10) › reduced motion: a short dissolve, 0.3 s, nothing moves (1.9s)
+  ✓   46 [e2e] › e2e/lines.spec.ts:51:3 › ת8: the line names what was bought (base name · Hebrew labels) › the nine variants: the API cart, the cart page, the checkout and the order read as the designer’s table (1.6s)
+  ✓   47 [e2e] › e2e/operations.spec.ts:23:1 › /healthz: D1 and the queue are ok, and the answer carries no internal detail (19ms)
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.918Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin/'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.928Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.935Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin/orders/1234567890'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.942Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.950Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/overview'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.958Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.964Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders'[39m,
+[2m[WebServer] [22m    reason: [32m'access_not_configured'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.974Z'[39m,
+[2m[WebServer] [22m    path: [32m'/api/admin/orders/1234567890/refund'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m{[0m
+[2m[WebServer] [22m
+[2m[WebServer] [22m    level: [32m'warn'[39m,
+[2m[WebServer] [22m    event: [32m'admin.forbidden'[39m,
+[2m[WebServer] [22m    at: [32m'2026-11-12T00:36:01.981Z'[39m,
+[2m[WebServer] [22m    path: [32m'/admin/'[39m,
+[2m[WebServer] [22m    reason: [32m'no_token'[39m
+[2m[WebServer] [22m  }
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+  ✓   48 [e2e] › e2e/operations.spec.ts:30:1 › the admin without permission: 403 for the screen and the API, reads and actions (77ms)
+  ✓   49 [e2e] › e2e/operations.spec.ts:42:1 › delivery statuses for the customer: בהכנה, then נשלחה with its number and a generic link, then נמסרה (1.1s)
+  ✓   50 [e2e] › e2e/operations.spec.ts:75:1 › the admin screen: the list and search, an order with its tracks, a partial refund from the form (2.7s)
+  ✓   51 [e2e] › e2e/operations.spec.ts:118:1 › the cancellation after the supplier: requested (a clear status), then confirmed: canceled and refunded in full (5.4s)
+  ✓   52 [e2e] › e2e/options.spec.ts:56:3 › supplier options on the product page › defaults to the room’s option; another option has its own price; the cart gets that SKU; the render stays (1.4s)
+  ✓   53 [e2e] › e2e/options.spec.ts:95:3 › supplier options on the product page › the keyboard: arrows move within an axis, the price and the legend follow; back to the room’s option (817ms)
+  ✓   54 [e2e] › e2e/options.spec.ts:117:5 › supplier options on the product page › mobile › fits the screen (no sideways scroll), 44 px targets, screenshot (1.4s)
+poster and hotspots: 0.61 MB
+first load (mobile, until composed): 2.08 MB
+  ✓   55 [e2e] › e2e/perf.spec.ts:17:3 › mobile › first load of the living room ≤ 3 MB and only reachable transitions preload (7.6s)
+zoom: 15 frames, p95 266.7 ms · wheel: 14 frames, p95 116.6 ms
+  ✓   56 [e2e] › e2e/perf.spec.ts:43:1 › animation frame times (zoom and wheel) (4.0s)
+  ✓   57 [e2e] › e2e/public-scan.spec.ts:31:1 › no supplier name and no listing number in anything the site serves (paths, pages, scripts, data) (53ms)
+  ✓   58 [e2e] › e2e/public-scan.spec.ts:57:1 › no admin code in the public build: no admin route, API call, dev header or admin screen text (24ms)
+  -   59 [e2e] › e2e/public-scan.spec.ts:74:1 › S16 (ת41): in a public build, _redirects names no supplier and no listing number
+ה5: 39 product pages, 0 without a picture
+  ✓   60 [e2e] › e2e/public-scan.spec.ts:80:1 › S17 (QA ה5): no product page shows a value that says it is unknown, nor a note about a picture it does not have (5ms)
+  ✓   61 [e2e] › e2e/public-scan.spec.ts:98:1 › S17 (AN1): the analytics beacon only with a token, only in the public build, never on the cart, checkout, order or 404 (13ms)
+no AVIF, warm-modern house, until composed: 1.76 MB (WebP fallbacks 0.65 MB: /media/house/living-room/warm-modern/M0/poster/default.2720.webp)
+  ✓   62 [e2e] › e2e/s16.spec.ts:46:3 › ת43: a phone without AVIF in the warm-modern house › the WebP poster, the engine at idle, and the first load ≤ 3 MB until the room is composed (820ms)
+  ✓   63 [e2e] › e2e/s16.spec.ts:85:3 › ת43: a phone without AVIF in the warm-modern house › with AVIF, the engine still waits for intent (the poster is the room at rest) (3.8s)
+the stage while the poster waits: mean 182.7 (the stage colour #141312 is about 19)
+  ✓   64 [e2e] › e2e/s16.spec.ts:93:1 › ה1: while the poster is on its way, the stage is the placeholder of the same room, not the dark stage (917ms)
+  ✓   65 [e2e] › e2e/s16.spec.ts:113:1 › ת37: the order page and the cart show the server’s message and its error code, as the checkout does (717ms)
+  ✓   66 [e2e] › e2e/story.spec.ts:66:3 › the story contents › every room, every house: a picture only where QA let a frame in, type for the rest, and links to each page (976ms)
+  ✓   67 [e2e] › e2e/story.spec.ts:92:3 › the story contents › zero axe violations on the contents (1280) (2.1s)
+  ✓   68 [e2e] › e2e/story.spec.ts:100:3 › the Nordic living room › the opening develops, then the title; every frame carries the visible test mark (671ms)
+  ✓   69 [e2e] › e2e/story.spec.ts:121:3 › the Nordic living room › a clean frame at rest; dots on movement; a dot opens the sheet with the card, adds to the test cart, Esc returns (3.9s)
+  ✓   70 [e2e] › e2e/story.spec.ts:148:3 › the Nordic living room › the keyboard: Tab to a dot shows the dots, Enter opens the sheet, the page behind is inert, Esc back (1.8s)
+  ✓   71 [e2e] › e2e/story.spec.ts:174:3 › the Nordic living room › the list opens the same sheet; a product without a price says so, with no add button (1.1s)
+  ✓   72 [e2e] › e2e/story.spec.ts:189:3 › the Nordic living room › "עצב בעצמך" opens the room engine (788ms)
+  ✓   73 [e2e] › e2e/story.spec.ts:200:5 › the Nordic living room › every dot shown on the opening takes its own click at 1280, the pendant's too (clear of the top band) (609ms)
+  ✓   74 [e2e] › e2e/story.spec.ts:200:5 › the Nordic living room › every dot shown on the opening takes its own click at 1440, the pendant's too (clear of the top band) (703ms)
+  ✓   75 [e2e] › e2e/story.spec.ts:220:3 › the Nordic living room › reduced motion: the sheet only fades, nothing rises (561ms)
+  ✓   76 [e2e] › e2e/story.spec.ts:230:3 › the Nordic living room › zero axe violations: at rest, with the sheet open, with the cart open (1280) (5.4s)
+  ✓   77 [e2e] › e2e/story.spec.ts:251:3 › the other houses › modern country: the mark says the register's state; every product QA called faithful has its dot (2.5s)
+  ✓   78 [e2e] › e2e/story.spec.ts:270:3 › the other houses › japandi: QA has not let its frame in, so the page is type only, with no frame and no picture (2.0s)
+  ✓   79 [e2e] › e2e/story.spec.ts:284:3 › the other houses › boho fin7: its frame, a dot where the register puts one, the mark of its state, two rust cushions (1.7s)
+  ✓   80 [e2e] › e2e/story.spec.ts:311:3 › the other houses › one test cart across the story pages, and the old prototype address goes on to the Nordic living room (1.5s)
+  ✓   81 [e2e] › e2e/story.spec.ts:345:3 › the detail page (layer 2, "הפרט") › the sheet leads to it: the card, the price, the empty close-up slot, the frame it came from, and the test cart (1.7s)
+  ✓   82 [e2e] › e2e/story.spec.ts:367:3 › the detail page (layer 2, "הפרט") › options: the choice moves the price, the picture and the address; the story option is one step back (1.7s)
+  ✓   83 [e2e] › e2e/story.spec.ts:399:3 › the detail page (layer 2, "הפרט") › a product without a price, and one not sold now: no add button, the reason instead (620ms)
+  ✓   84 [e2e] › e2e/story.spec.ts:409:3 › the detail page (layer 2, "הפרט") › "לנסות בחדר" opens the room engine on the product's slot (3.1s)
+  ✓   85 [e2e] › e2e/story.spec.ts:422:3 › the detail page (layer 2, "הפרט") › zero axe violations on a detail page with options (1280), and after a choice (3.0s)
+  ✓   86 [e2e] › e2e/story.spec.ts:433:3 › the detail page, after the designer (§6) › no supplier photo: the product's crop from the frame says so; another option shows its colour, never the crop (632ms)
+  ✓   87 [e2e] › e2e/story.spec.ts:447:3 › the detail page, after the designer (§6) › QA on S2: a dot of another option opens the detail page on that option (the Mediterranean's terracotta cushion) (753ms)
+  ✓   88 [e2e] › e2e/story.spec.ts:460:3 › the detail page, after the designer (§6) › a set sells as a set by default, and as a single piece where the supplier offers one (SET1) (691ms)
+  ✓   89 [e2e] › e2e/story.spec.ts:473:3 › the shop (S4) › "קנה את המראה" whole: every product for sale, once; the cart edits a line; the rest is named (3.6s)
+  ✓   90 [e2e] › e2e/story.spec.ts:497:3 › the shop (S4) › S7: from the whole look to the order, through the shop’s own cart and its real checkout (3.4s)
+  ✓   91 [e2e] › e2e/story.spec.ts:516:3 › the shop (S4) › PRE1 / MED1 in the tool: an option out of stock stays on the wheel, said, and never sold (3.1s)
+  ✓   92 [e2e] › e2e/story.spec.ts:529:3 › the shop after QA on S4 › S7: the server sells only what is for sale, in 1–20 whole units (PRE1; QA on S3–S5, ת3) (310ms)
+  ✓   93 [e2e] › e2e/story.spec.ts:541:3 › the shop after QA on S4 › the whole look twice adds nothing the second time; another tab's order empties this one (6.2s)
+  ✓   94 [e2e] › e2e/story.spec.ts:562:3 › the shop after QA on S4 › the triptych sells as its set of three different prints only: no print to choose, no single print (454ms)
+  ✓   95 [e2e] › e2e/story.spec.ts:569:3 › the shop after QA on S4 › the build read the highest QA register version (rebuild when a new one lands) (484ms)
+  ✓   96 [e2e] › e2e/story.spec.ts:582:3 › from the story into the tool (S3) › the Nordic house: the tool opens with the way back to the story (1.3s)
+  ✓   97 [e2e] › e2e/story.spec.ts:600:3 › from the story into the tool (S3) › QA S6–S7 ת14: from the contents (/story/) the tool shows the way back to the contents; nothing else outside the story (2.3s)
+  ✓   98 [e2e] › e2e/story.spec.ts:618:3 › from the story into the tool (S3) › warm modern: every way into the tool goes to the house in the room engine (S10); the draft's address moved, 301 (710ms)
+  ✓   99 [e2e] › e2e/story.spec.ts:638:3 › the story on a phone (400) › the 4:5 crop at full width, dots inside it, the sheet from the bottom, zero axe violations (4.7s)
+  ✓  100 [e2e] › e2e/story.spec.ts:666:3 › the story on a phone (400) › the contents, a typographic page and a detail page fit the phone: no sideways scroll, zero axe violations (5.4s)
+  ✓  101 [e2e] › e2e/story.spec.ts:677:3 › the magazine design system (S5) › neutral addresses: no supplier in a product address; the old address moves to the new one (866ms)
+  ✓  102 [e2e] › e2e/story.spec.ts:695:3 › the magazine design system (S5) › a frame that does not load says so on paper; the list under it is whole (2.4s)
