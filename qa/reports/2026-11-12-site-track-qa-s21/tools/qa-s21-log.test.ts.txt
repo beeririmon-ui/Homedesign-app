@@ -1,0 +1,297 @@
+/**
+ * qa-agent, S21 (2026-11-12): my own cases for ת64 (a known order's values end at anything but a letter; camel case
+ * split) and ת65 (a system code only from a closed list of 9), on my isolated copy of 7b42ddc1. In the copy only (never
+ * the repo); dummy secrets. Copied to api/test/qa-s21-log.test.ts after the CI-order vitest ran, run alone.
+ * Each case prints what it saw (QA21 …) and the asserts are only the brief's claims; the rest is reported, not asserted.
+ */
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { signWebhook } from '@hd/shared';
+import { app } from '../src/app';
+import type { Env, SupplierJob } from '../src/env';
+import { createD1, migrate } from './d1-shim';
+import { processSupplierJob } from '../src/lib/fulfillment';
+import { SYSTEM_CODES, configureLog, errorCode, errorName, knownValues, logRow, stripKnown } from '../src/lib/log';
+import { CodedError } from '../src/lib/errors';
+import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from '../src/lib/suppliers/types';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const GEN = resolve(here, '../../.generated');
+const SEED = readFileSync(resolve(GEN, 'seed.sql'), 'utf8');
+const SECRET = 'qa-dummy-webhook-secret-not-a-key-21';
+const DEV_TOKEN = 'qa-dummy-admin-token-not-a-key-21-0123456789abcdef';
+type Full = { products: { availability: { status: string }; price_agorot: number | null; pack?: unknown; variants: { id: string }[] }[] };
+const shop = JSON.parse(readFileSync(resolve(GEN, 'catalog.full.json'), 'utf8')) as Full;
+const plain = shop.products.find((p) => p.availability.status === 'available' && p.price_agorot && !p.pack && p.variants.length === 1)!;
+const PLAIN = plain.variants[0]!.id;
+
+let env: Env;
+beforeEach(() => {
+  const DB = createD1();
+  migrate(DB, SEED);
+  env = {
+    DB,
+    SUPPLIER_QUEUE: { send: vi.fn(async (_m: SupplierJob) => undefined), sendBatch: vi.fn() } as unknown as Queue<SupplierJob>,
+    ENVIRONMENT: 'test',
+    PAYMENT_PROVIDER: 'mock',
+    SUPPLIER_PROVIDER: 'mock',
+    INVOICE_PROVIDER: 'mock',
+    NOTIFY_PROVIDER: 'mock',
+    ACCESS_TEAM_DOMAIN: '',
+    ACCESS_AUD: '',
+    PAYMENT_WEBHOOK_SECRET: SECRET,
+    ADMIN_DEV_TOKEN: DEV_TOKEN,
+  } as Env;
+  configureLog(env);
+});
+afterEach(() => {
+  vi.restoreAllMocks();
+  configureLog({ ENVIRONMENT: 'production' } as Env);
+});
+const req = (path: string, init?: RequestInit) => app.request(`http://localhost${path}`, init, env);
+const json = (body: unknown, method = 'POST'): RequestInit => ({ method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+const one = async <T>(sql: string, ...b: unknown[]) => (await env.DB.prepare(sql).bind(...b).first<T>())!;
+async function captured(fn: () => Promise<unknown>): Promise<string[]> {
+  const rows: string[] = [];
+  for (const m of ['log', 'info', 'warn', 'error', 'debug'] as const) vi.spyOn(console, m).mockImplementation((...a: unknown[]) => void rows.push(JSON.stringify(a)));
+  try {
+    await fn();
+  } finally {
+    for (const m of ['log', 'info', 'warn', 'error', 'debug'] as const) (console[m] as unknown as { mockRestore?: () => void }).mockRestore?.();
+  }
+  return rows;
+}
+type Who = { full_name: string; email: string; phone: string; city: string; street: string; house: string; apartment: string; zip: string; notes: string };
+async function paid(who: Who) {
+  const { id: cartId } = (await (await req('/api/cart', { method: 'POST' })).json()) as { id: string };
+  expect((await req(`/api/cart/${cartId}/items`, json({ qty: 1, variant_id: PLAIN }, 'PUT'))).status).toBe(200);
+  const r = await req(
+    '/api/checkout',
+    json({
+      cart_id: cartId,
+      customer: { full_name: who.full_name, email: who.email, phone: who.phone },
+      address: { city: who.city, street: who.street, house: who.house, apartment: who.apartment, zip: who.zip, notes: who.notes },
+      shipping_method: 'economy',
+      consents: { terms: true, marketing: false },
+    }),
+  );
+  expect(r.status, await r.clone().text()).toBe(201);
+  const c = (await r.json()) as { order_id: string };
+  const o = await one<{ payment_session_id: string; total_agorot: number }>('SELECT payment_session_id, total_agorot FROM orders WHERE id = ?', c.order_id);
+  const ev = JSON.stringify({ id: `qa21_${c.order_id}_${Math.random().toString(36).slice(2, 8)}`, type: 'payment.succeeded', session_id: o.payment_session_id, amount_agorot: o.total_agorot });
+  const p = await req('/api/webhooks/payment/mock', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-mock-signature': await signWebhook(SECRET, ev, Math.floor(Date.now() / 1000)) },
+    body: ev,
+  });
+  expect(((await p.json()) as { outcome: string }).outcome).toBe('paid');
+  return c.order_id;
+}
+function supplier(failWith: (i: SupplierOrderInput) => unknown): SupplierClient {
+  return {
+    id: 'mock',
+    async submitOrder(input) {
+      throw failWith(input);
+    },
+  } as SupplierClient;
+}
+
+// ---------------------------------------------------------------- the customers
+const LATIN = { full_name: 'Dana Gat', email: 'dana.gat1985@gmail.com', phone: '054-7716204', address: { city: 'Tel Aviv', street: 'Herzl', house: '12', zip: '6100000' } };
+const HEB = { full_name: 'נועה בן־דוד', email: 'buyer.qa21@example.com', phone: '052-1234567', address: { city: 'באר שבע', street: 'הערבה', house: '17', zip: '8410000' } };
+const MIXED = { full_name: 'Noa לוי', email: 'noa.levi@example.com', phone: '050-7654321', address: { city: 'Haifa', street: 'Rothschild', house: '7' } };
+const CYR = { full_name: 'Ольга Иванова', email: 'olga.i@example.com', phone: '053-2223344', address: { city: 'Ashdod', street: 'Ha-Atzmaut' } };
+const WORDY = { full_name: 'Max Page', email: 'mp@example.com', phone: '058-1112233', address: { city: 'Rose Valley', street: 'Mark' } };
+
+/** a probe: the text, the values that must not survive (case-insensitive) */
+type P = [id: string, text: string, gone: string[]];
+const leaks = (out: string, gone: string[]) => gone.filter((g) => out.toLowerCase().includes(g.toLowerCase()));
+
+describe('QA21 L (ת64): adversarial names in a known order\'s row', () => {
+  const sets: [string, typeof LATIN, P[]][] = [
+    [
+      'latin',
+      LATIN,
+      [
+        ['L1 snake', 'consignee_dana_rejected', ['dana']],
+        ['L2 upper snake', 'DANA_GAT', ['dana', 'gat']],
+        ['L3 digits after', 'dana1985', ['dana']],
+        ['L4 digits before', '1985dana', ['dana']],
+        ['L5 digits after (surname)', 'gat123', ['gat']],
+        ['L6 Camel', 'DanaGat', ['dana', 'gat']],
+        ['L7 camel', 'danaGat', ['dana', 'gat']],
+        ['L8 UPPER+Camel', 'DANAGat', ['dana', 'gat']],
+        ['L9 Camel+UPPER', 'DanaGAT', ['dana', 'gat']],
+        ['L10 acronym before', 'XMLDana', ['dana']],
+        ['L11 inside a code', 'E_CONSIGNEE_DANA_GAT_TELAVIV', ['dana', 'gat']],
+        ['L12 code with digits', 'ERR42DANA7', ['dana']],
+        ['L13 dotted', 'dana.gat', ['dana', 'gat']],
+        ['L14 percent-encoded space', 'dana%20gat', ['dana', 'gat']],
+        ['L15 form-encoded', 'consignee=Dana+Gat&city=Tel+Aviv', ['dana', 'gat', 'aviv']],
+        ['L16 JSON', '{"consignee":"Dana Gat","city":"Tel Aviv","street":"Herzl 12"}', ['dana', 'gat', 'aviv', 'herzl']],
+        ['L17 JSON camel', '{"consigneeName":"DanaGat"}', ['dana', 'gat']],
+        ['L18 all glued lower', 'danagat', ['dana', 'gat']],
+        ['L19 city glued', 'TELAVIV', ['aviv']],
+        ['L20 zero-width inside', 'Da​na', ['dana']],
+        ['L21 snake, all fields', 'dana_gat_tel_aviv_herzl_12', ['dana', 'gat', 'aviv', 'herzl']],
+        ['L22 email local in a path', '/u/dana.gat1985/orders', ['dana.gat1985']],
+        ['L23 possessive', "Dana's order", ['dana']],
+        ['L24 combining mark', 'Daná', ['dana']],
+      ],
+    ],
+    [
+      'hebrew',
+      HEB,
+      [
+        ['H1 snake', 'נועה_בן_דוד', ['נועה', 'דוד']],
+        ['H2 prefix', 'לנועה', ['נועה']],
+        ['H3 two prefixes', 'ולנועה', ['נועה']],
+        ['H4 digits after', 'נועה2024', ['נועה']],
+        ['H5 digits before', '2024נועה', ['נועה']],
+        ['H6 city snake', 'באר_שבע', ['באר', 'שבע']],
+        ['H7 city with prefix and dash', 'בבאר-שבע', ['באר', 'שבע']],
+        ['H8 JSON', '{"name":"נועה בן־דוד","city":"באר שבע"}', ['נועה', 'דוד', 'שבע']],
+        ['H9 inside a code', 'E_נועה_REJECTED', ['נועה']],
+        ['H10 JSON \\u escapes', '{"name":"\\u05e0\\u05d5\\u05e2\\u05d4"}', ['\\u05e0\\u05d5\\u05e2\\u05d4']],
+        ['H11 percent-encoded', 'name=%D7%A0%D7%95%D7%A2%D7%94', ['%D7%A0%D7%95%D7%A2%D7%94']],
+        ['H12 glued Hebrew', 'נועהבןדוד', ['נועה']],
+        ['H13 Latin glued to Hebrew', 'ID:נועהX', ['נועה']],
+      ],
+    ],
+    [
+      'mixed',
+      MIXED,
+      [
+        ['M1 latin_hebrew', 'Noa_לוי', ['noa', 'לוי']],
+        ['M2 hebrew digits', 'לוי123', ['לוי']],
+        ['M3 latin glued to hebrew', 'Noaלוי', ['noa', 'לוי']],
+        ['M4 street camel', 'shipToRothschild7', ['rothschild']],
+        ['M5 JSON', '{"n":"Noa לוי","s":"Rothschild"}', ['noa', 'לוי', 'rothschild']],
+      ],
+    ],
+    [
+      'cyrillic',
+      CYR,
+      [
+        ['R1 snake', 'olga_ольга_иванова', ['ольга', 'иванова']],
+        ['R2 camel', 'ОльгаИванова', ['ольга', 'иванова']],
+        ['R3 digits', 'Иванова77', ['иванова']],
+      ],
+    ],
+  ];
+  const results: Record<string, Record<string, { out_field: string; out_message: string; leak_field: string[]; leak_message: string[] }>> = {};
+  for (const [name, who, probes] of sets)
+    it(`${name}: every probe in a field and in an error's message`, () => {
+      const k = knownValues(who);
+      results[name] = {};
+      for (const [id, text] of probes) {
+        const row = logRow('error', 'qa.probe', { detail: text, error_id: 'E-2345ABCD', order_id: '1234567890' }, new Error(text), k) as Record<string, string>;
+        results[name][id] = { out_field: row.detail!, out_message: row.error_message!, leak_field: [], leak_message: [] };
+      }
+      for (const [id, , gone] of probes) {
+        const r = results[name][id]!;
+        r.leak_field = leaks(r.out_field, gone);
+        r.leak_message = leaks(r.out_message, gone);
+      }
+      console.log(`QA21 L ${name}: ${JSON.stringify(results[name])}`);
+      // the brief's claims: the S19 shapes go (snake, upper snake, digits, Camel)
+      if (name === 'latin') for (const id of ['L1 snake', 'L2 upper snake', 'L3 digits after', 'L4 digits before', 'L5 digits after (surname)', 'L6 Camel', 'L7 camel', 'L11 inside a code', 'L16 JSON', 'L21 snake, all fields']) expect(results[name][id]!.leak_field, id).toEqual([]);
+      if (name === 'hebrew') for (const id of ['H1 snake', 'H2 prefix', 'H3 two prefixes', 'H4 digits after', 'H5 digits before', 'H6 city snake', 'H8 JSON', 'H9 inside a code']) expect(results[name][id]!.leak_field, id).toEqual([]);
+    });
+
+  it('O ordinary words and our own tokens stay whole (Dana Gat, Tel Aviv, Herzl)', () => {
+    const k = knownValues(LATIN);
+    const words = [
+      'commit', 'hotel', 'complete', 'invalid', 'gateway', 'navigate', 'Danaher', 'avivit', 'gmail', 'example', 'telemetry', 'Herzliya', 'Gatorade',
+      'danger', 'gather', 'Telnet', 'hotelier', 'gatekeeper', 'metadata', 'contact', 'order_id', 'error_id', 'http_502', 'ECONNRESET', 'cart_closed',
+      'supplier.submit_failed', 'x-order-token', 'utf8', 'sha256', 'base64', 'ipv4', 'v2', 'iPhone', 'McDonald', 'JavaScript', 'TelAvivian',
+    ];
+    const out = Object.fromEntries(words.map((w) => [w, stripKnown(w, k)]));
+    const changed = Object.entries(out).filter(([a, b]) => a !== b);
+    console.log(`QA21 O: changed ${JSON.stringify(changed)}`);
+    // an error id quoted inside a message text, and the fields kept by their shape
+    const row = logRow('error', 'qa.ids', { error_id: 'E-DANA2345', order_id: '1234567890', note: 'see E-DANA2345 and E-GAT23456' }, undefined, k) as Record<string, string>;
+    console.log(`QA21 O ids: ${JSON.stringify({ error_id: row.error_id, order_id: row.order_id, note: row.note })}`);
+    expect(row.error_id).toBe('E-DANA2345');
+    expect(changed.filter(([a]) => !['TelAvivian'].includes(a))).toEqual([]);
+  });
+
+  it('W over-redaction with names that are English words (Max Page, Rose Valley, Mark): reported, not asserted', () => {
+    const k = knownValues(WORDY);
+    const words = ['max_retries', 'maxAge', 'pageSize', 'page_id', 'Maximum', 'pages', 'markPaid', 'mark_shipped', 'bookmark', 'rose_gold', 'valley2'];
+    const out = Object.fromEntries(words.map((w) => [w, stripKnown(w, k)]));
+    console.log(`QA21 W: ${JSON.stringify(out)}`);
+  });
+});
+
+describe('QA21 C (ת65): the closed list of system codes', () => {
+  class DanaError extends Error {}
+  it('C0 the list is exactly the 9 of QA S19', () => {
+    expect([...SYSTEM_CODES].sort()).toEqual(['EAI_AGAIN', 'ECONNABORTED', 'ECONNREFUSED', 'ECONNRESET', 'EHOSTUNREACH', 'ENETUNREACH', 'ENOTFOUND', 'EPIPE', 'ETIMEDOUT']);
+  });
+  it('C1 errorCode / errorName on provider-shaped codes, look-alikes, ours and the runtime', () => {
+    const E = (code: unknown, extra: Record<string, unknown> = {}) => Object.assign(new Error('x'), { code, ...extra });
+    const cases: Record<string, unknown> = {
+      'E_DANA': E('E_DANA'),
+      'E_CONSIGNEE_DANA_GAT': E('E_CONSIGNEE_DANA_GAT'),
+      'EDANA': E('EDANA'),
+      'ECONNRESET_DANA': E('ECONNRESET_DANA'),
+      'DANA_ECONNRESET': E('DANA_ECONNRESET'),
+      'ECONNRESET + trailing space': E('ECONNRESET '),
+      'ECONNRESET + newline': E('ECONNRESET\n'),
+      'econnreset (lower)': E('econnreset'),
+      'Cyrillic Е + CONNRESET': E('ЕCONNRESET'),
+      'ECONNRESET + zero-width': E('ECONN​RESET'),
+      'ERR_DANA (Node style)': E('ERR_DANA'),
+      'UND_ERR_CONNECT_TIMEOUT (undici)': E('UND_ERR_CONNECT_TIMEOUT'),
+      'EPROTO (system, not listed)': E('EPROTO'),
+      'code as a String object': E(new String('ECONNRESET')),
+      'code as an array': E(['ECONNRESET']),
+      'E_DANA with status 502': E('E_DANA', { status: 502 }),
+      'E_DANA with name Dana': E('E_DANA', { name: 'Dana' }),
+      'class DanaError code E_DANA': Object.assign(new DanaError('x'), { code: 'E_DANA' }),
+      'plain object {code:E_DANA}': { code: 'E_DANA' },
+      'plain object {code:ECONNRESET}': { code: 'ECONNRESET' },
+      'ECONNRESET': E('ECONNRESET'),
+      'ETIMEDOUT': E('ETIMEDOUT'),
+      'EAI_AGAIN': E('EAI_AGAIN'),
+      'EPIPE': E('EPIPE'),
+      'ours CodedError': new CodedError('set_composition_missing', 'v1'),
+      'ours SupplierRefused': new SupplierRefused('cj_line_without_sku', 'cj_line_without_sku: p1'),
+      'TimeoutError': Object.assign(new Error('t'), { name: 'TimeoutError' }),
+    };
+    const out = Object.fromEntries(Object.entries(cases).map(([k, e]) => [k, `${errorCode(e)} / ${errorName(e)}`]));
+    console.log(`QA21 C1: ${JSON.stringify(out)}`);
+    for (const [k, v] of Object.entries(out)) {
+      const code = v.split(' / ')[0]!;
+      const listed = SYSTEM_CODES.has(code);
+      const ours = ['set_composition_missing', 'cj_line_without_sku', 'aborted', 'http_502'].includes(code);
+      expect(listed || ours || code === 'Error' || code === 'TypeError', `${k}: ${v}`).toBe(true);
+      expect(v, k).not.toMatch(/dana/i);
+    }
+  });
+  it('C2 through the supplier job: the supplier.submit_failed row (a paid order, my customer Dana Gat)', async () => {
+    const who: Who = { full_name: 'Dana Gat', email: 'dana.qa21@example.invalid', phone: '+972 54 771 6221', city: 'Tel Aviv', street: 'Herzl', house: '12', apartment: '4', zip: '6100000', notes: '' };
+    const cases: Record<string, (i: SupplierOrderInput) => unknown> = {
+      'code E_<NAME>': (i) => Object.assign(new Error('x'), { code: `E_${i.ship_to.full_name.split(' ')[0]!.toUpperCase()}` }),
+      'code E_CONSIGNEE_<NAME>_<SURNAME>': (i) => Object.assign(new Error('x'), { code: `E_CONSIGNEE_${i.ship_to.full_name.replace(' ', '_').toUpperCase()}` }),
+      'code ECONNRESET_<NAME>': (i) => Object.assign(new Error('x'), { code: `ECONNRESET_${i.ship_to.full_name.split(' ')[0]!.toUpperCase()}` }),
+      'code ECONNRESET (real)': () => Object.assign(new Error('socket hang up'), { code: 'ECONNRESET' }),
+      'message <name>_rejected, camel': (i) => new Error(`consignee${i.ship_to.full_name.replace(' ', '')}Rejected: ${i.ship_to.city}`),
+      'thrown string': (i) => `E_${i.ship_to.full_name.toUpperCase()}`,
+    };
+    const out: Record<string, string> = {};
+    for (const [k, fail] of Object.entries(cases)) {
+      const id = await paid(who);
+      const rows = await captured(() => processSupplierJob(env, { kind: 'submit-order', order_id: id }, 1, { client: supplier(fail) }));
+      const row = rows.find((r) => r.includes('supplier.submit_failed')) ?? '';
+      const all = rows.join('\n');
+      out[k] = `${/dana|gat\b|aviv|herzl/i.test(all) ? 'NAME IN A ROW' : 'clean'} code=${/"code":"([^"]*)"/.exec(row)?.[1]}`;
+    }
+    console.log(`QA21 C2: ${JSON.stringify(out)}`);
+    for (const [k, v] of Object.entries(out)) expect(v, k).toMatch(/^clean/);
+    expect(out['code ECONNRESET (real)']).toMatch(/code=ECONNRESET$/);
+  });
+});

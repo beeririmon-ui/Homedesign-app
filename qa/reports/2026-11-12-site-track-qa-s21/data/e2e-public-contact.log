@@ -1,0 +1,87 @@
+
+Running 20 tests using 1 worker
+
+  ✓   1 [e2e] › e2e/public-scan.spec.ts:31:1 › no supplier name and no listing number in anything the site serves (paths, pages, scripts, data) (36ms)
+  ✓   2 [e2e] › e2e/public-scan.spec.ts:57:1 › no admin code in the public build: no admin route, API call, dev header or admin screen text (13ms)
+  ✓   3 [e2e] › e2e/public-scan.spec.ts:74:1 › S16 (ת41): in a public build, _redirects names no supplier and no listing number (2ms)
+ה5: 39 product pages, 5 without a picture
+  ✓   4 [e2e] › e2e/public-scan.spec.ts:80:1 › S17 (QA ה5): no product page shows a value that says it is unknown, nor a note about a picture it does not have (6ms)
+AN1: the beacon on 45 of 49 pages
+  ✓   5 [e2e] › e2e/public-scan.spec.ts:98:1 › S17 (AN1): the analytics beacon only with a token, only in the public build, never on the cart, checkout, order or 404 (99ms)
+  ✓   6 [e2e] › e2e/s18.spec.ts:39:1 › the build has no email provider: the wording without an email (5ms)
+  ✓   7 [e2e] › e2e/s18.spec.ts:44:1 › the checkout: what the address is for, the total with VAT, no marketing box, no promise (951ms)
+  ✓   8 [e2e] › e2e/s18.spec.ts:62:1 › the order page after payment: the order is on this page, in this browser; no email (1.6s)
+  ✓   9 [e2e] › e2e/s18.spec.ts:76:1 › the delayed order: §7 in two sentences, without the third (the email one) (3.0s)
+  ✓  10 [e2e] › e2e/s18.spec.ts:87:1 › shipped: "מספר המשלוח למעלה" only when there is a number above (3.1s)
+  ✓  11 [e2e] › e2e/s18.spec.ts:99:1 › a product on hold: "המלאי אינו זמין כעת" alone; no form, no address asked for, no promise (1.1s)
+  ✓  12 [e2e] › e2e/s18.spec.ts:111:1 › every page in the sitemap, the cart, the empty checkout and 404: no promise of an email (32.2s)
+  ✓  13 [e2e] › e2e/s21.spec.ts:80:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › the prerendered cart and checkout say nothing they do not know: no "(0)", no "הסל ריק", aria-busy (41ms)
+  ✓  14 [e2e] › e2e/s21.spec.ts:88:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (1) the cart API held 800 ms: the cart and the checkout are busy, never empty, and the header never "סל (0)" (4.7s)
+  ✓  15 [e2e] › e2e/s21.spec.ts:114:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (1) a cart that is really empty still says so, once it is known (1.2s)
+  ✓  16 [e2e] › e2e/s21.spec.ts:125:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (2) storage refused: the cart and the checkout still have the line (the id in #c=, removed once read) (3.1s)
+  ✓  17 [e2e] › e2e/s21.spec.ts:147:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (3) an add still on its way when the header’s cart is clicked (the PUT held 1.5 s): kept (3.8s)
+  ✓  18 [e2e] › e2e/s21.spec.ts:160:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (3) and with storage refused too: the add lands, then the id goes along (4.4s)
+  ✘  19 [e2e] › e2e/s21.spec.ts:171:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (4) the story’s "לתשלום" without storage reaches the checkout with the line (1.0m)
+  ✘  20 [e2e] › e2e/s21.spec.ts:187:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › the story’s count waits for the saved cart: a blank, busy, never "0" over a cart that has lines (1.0m)
+
+
+  1) [e2e] › e2e/s21.spec.ts:171:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (4) the story’s "לתשלום" without storage reaches the checkout with the line 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: locator.click: Test ended.
+    Call log:
+    [2m  - waiting for locator('#look-A')[22m
+
+
+      173 |     const page = await ctx.newPage();
+      174 |     await page.goto('/story/living-room/boho/#list-A', { waitUntil: 'load' });
+    > 175 |     await page.locator('#look-A').click();
+          |                                   ^
+      176 |     await expect(page.locator('#st-cart-count')).not.toHaveText(/^0?$/);
+      177 |     const n = Number(await page.locator('#st-cart-count').textContent());
+      178 |     await page.locator('#st-cart-open').click();
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa21/build-s21-pubc/site/e2e/s21.spec.ts:175:35
+
+    Error Context: test-results/s21-S21-QA-ת63-the-cart-an-a7943--the-checkout-with-the-line-e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s21-S21-QA-ת63-the-cart-an-a7943--the-checkout-with-the-line-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s21-S21-QA-ת63-the-cart-an-a7943--the-checkout-with-the-line-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [e2e] › e2e/s21.spec.ts:187:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › the story’s count waits for the saved cart: a blank, busy, never "0" over a cart that has lines 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: locator.click: Test ended.
+    Call log:
+    [2m  - waiting for locator('#look-A')[22m
+
+
+      189 |     const page = await ctx.newPage();
+      190 |     await page.goto('/story/living-room/boho/#list-A', { waitUntil: 'load' });
+    > 191 |     await page.locator('#look-A').click();
+          |                                   ^
+      192 |     await expect(page.locator('#st-cart-count')).not.toHaveText(/^0?$/);
+      193 |     const n = await page.locator('#st-cart-count').textContent();
+      194 |     await page.addInitScript(() => {
+        at /tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa21/build-s21-pubc/site/e2e/s21.spec.ts:191:35
+
+    Error Context: test-results/s21-S21-QA-ת63-the-cart-an-24227--over-a-cart-that-has-lines-e2e/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/s21-S21-QA-ת63-the-cart-an-24227--over-a-cart-that-has-lines-e2e/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/s21-S21-QA-ת63-the-cart-an-24227--over-a-cart-that-has-lines-e2e/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [e2e] › e2e/s21.spec.ts:171:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › (4) the story’s "לתשלום" without storage reaches the checkout with the line 
+    [e2e] › e2e/s21.spec.ts:187:3 › S21 (QA ת63): the cart and the checkout as their own documents, without their cost › the story’s count waits for the saved cart: a blank, busy, never "0" over a cart that has lines 
+  18 passed (3.0m)

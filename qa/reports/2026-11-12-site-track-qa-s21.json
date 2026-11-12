@@ -1,0 +1,192 @@
+{
+ "id": "2026-11-12-site-track-qa-s21",
+ "by": "qa-agent",
+ "date": "2026-11-12",
+ "scope": "Site track S21 (fixes of QA S19: ת63–ת66, notes ה14, ה15, ה17, the house.spec fix), frontend-dev's question 1 (the two extensions of P3); full regression",
+ "inputs": [
+  "briefs/site-s21-qa-fixes-2026-11-12.md",
+  "qa/reports/2026-11-07-site-track/s21/ (README, screens, data, tools, test-all.log)",
+  "qa/reports/2026-11-12-site-track-qa-s19.md and .json and folder (ת63–ת66, ה14, ה15, ה17)",
+  "qa/reports/2026-11-12-site-track-qa-s20.md and .json and folder (tools, mut-s20.sh)",
+  "qa/reports/2026-11-10-site-track/launch-checklist.md at 7b42ddc1 (rows 1.5, 6.1, 6.2)",
+  "docs/studio-rules.md, status/board.md"
+ ],
+ "measured": {
+  "commit": "7b42ddc1",
+  "copy": "isolated, in the session scratchpad (qa21/): git archive of site/, status/, docs/, .github/ and the S21 evidence at 7b42ddc1; data/ hard-linked from my S20 copy and checked against 7b42ddc1 (tar -d: 0 differences in 17,818 files, data/data-dir-check.txt); assets/manifest.json pinned at 7b42ddc1, the other assets dirs linked read-only; node_modules and the supplier-image cache hard-linked (package-lock unchanged 8828cab9..7b42ddc1). Nothing was read from or written to the live site/.",
+  "copies": {
+   "build-s21": "flag build, CI order; my server on 8830 (wrangler under a private name qasrv21.js, own D1)",
+   "build-s21-pubc": "public build (HD_PUBLIC=1, CF_ANALYTICS_TOKEN a dummy of the right shape), built with my S20 test contact config through HD_WRANGLER; served on 8831 with CONTACT_EMAIL/CONTACT_PHONE test values as --var",
+   "control": "my S19 public copy (f33cfe42) on 8819, only as a positive control for my cart recorder"
+  },
+  "secrets": "a dummy webhook secret as --var on the command line only; .dev.vars holds only a dummy ADMIN_DEV_TOKEN",
+  "network": "none: proxy-aware tools pointed at a closed local port (tools/noNet.sh), npm offline, every npx --no-install; every browser request outside 127.0.0.1 aborted",
+  "machine": "load 3–11 on 4 cores during the e2e (my mutation study and fp-scan ran beside it on purpose, for ה17). The container restarted after the e2e (usage limit); the copies, builds and logs survived; servers restarted and D1 of the public copy set up again.",
+  "live_tree_moved_during_round": "HEAD 4cdebaac at the start, 19accb08 at the end (12 commits after 7b42ddc1: S22 WIP, R8/R9, sourcing); render-agent files under assets/renders changed between the start and the end inventories (data/live-tree-at-*.txt). My copy stayed at 7b42ddc1; my fp-scan read assets/renders at 13:08 (2,893 files, the same count as frontend-dev's).",
+  "scratch": "to make room on the disk (1.1 GB free), I removed my own obsolete scratch copies of S17 and of S20's email and public variants (data/scratch-cleanup.txt); nothing of the repo",
+  "evidence": "qa/reports/2026-11-12-site-track-qa-s21/{tools,data,screens}/"
+ },
+ "bottom_line": {
+  "s21": "PASSES WITH CONDITIONS. ת63 holds in the shop (cart, checkout, header) on the flag and the public build; ת64, ת65, ת66, ה14, ה15 and ה17 hold on my own cases. The cart's id carrier and two corners of the story do not hold (ת72–ת75).",
+  "t63_shop": "141 documents recorded from their first script (MutationObserver + every frame), phone and desktop, flag and public: cart GET 0/800/2000 ms, typed address, JS held 2 s and never, warm cache, keyboard, back/forward, no storage, a failed load: 0 states with 'הסל ריק.', 'הסל ריק, אין מה לשלם.' or 'סל (0)'. The same recorder on S19 sees them 0.1–2.1 s per load (positive control).",
+  "new_findings": "ת72 (medium-low, before HD_PUBLIC=1: the #c= carrier: any page adopts a link's cart id even where storage works (cart fixation); on the cart page the header's cart leaves #c= in the address and the tab's history; the browser's History database keeps /cart/#c= and /checkout/#c=), ת73 (medium-low: a write without the saved cart replaces its quantity: the shop after a failed load ×2→×1; the story before its load ×3→×1, the old bug in the story), ת74 (medium-low, before the story is public: a failed load in the story says '0' and 'הסל ריק.'), ת75 (low: a page restored from the back/forward cache keeps a stale count), ת76 (low: redaction residuals beyond ת64), ת77 (low: house.spec retries also after hydration)",
+  "question_1": "both extensions accepted: 0 true copies lost against S20's rule and QA's P3 (321/321, 12/12, 4,223 mutated copies), my emulation equals the gate on every file; the flat-pair rule is dormant today (0 of 1,166 public fingerprints under 8 bits)",
+  "hd_public": "not yet. From QA: ת72 (a one-line guard), ת69 (S20), 1.1 and 1.4. ת63 is closed for the public build."
+ },
+ "t63": {
+  "verdict": "closed for the shop (flag and public); the story keeps two gaps (ת73b, ת74); the carrier has three (ת72)",
+  "recorder": "tools/cart-flash.mjs: an init script in every document: MutationObserver on the document from the parser's first nodes, readystatechange, pageshow, and every animation frame for 12 s; states kept with their time and source. Positive control on my S19 public copy (data/cart-flash-control-s19.json): 'הסל ריק.' / 'סל (0)' from 3–13 ms to 109–2,090 ms on the cart and 147–2,094 ms on the checkout; 'סל (0)' on the product page too.",
+  "shop_documents": {
+   "flag": "78 documents (data/cart-flash-flag-1.json, -2.json): 0 empty, 0 pay_empty, 0 'סל (0)'",
+   "public": "63 documents (data/cart-flash-public.json): 0, 0, 0",
+   "excluded_by_design": "the add held 6 s (beyond the 4 s wait, see notes) and the story's failed load (ת74)"
+  },
+  "first_line_ms": {
+   "flag_phone": "cart 174 / 887 / 2,114, checkout 167 / 907 / 2,122 (GET 0 / 800 / 2,000)",
+   "flag_desktop": "cart 168 / 887 / 3,750 (the GET left at 1,552 ms under load), checkout 169 / 893 / 2,124",
+   "public": "cart 196–281 / 915–1,037 / 2,111–2,112; checkout 195–305 / 930–1,052 / 2,114–2,158",
+   "busy_from": "aria-busy within 3–58 ms of the document's first script, every case"
+  },
+  "slow_js": "every /assets/*.js held 2 s: the prerendered cart and checkout in their loading state for ~2 s, lines at 4.1–4.5 s, never empty; JS never arriving: the loading state forever, aria-busy, no words (note ה30)",
+  "direct_typed": "/cart/, /checkout/, the room and a product page typed with GET 2 s: 0",
+  "warm_cache": "twice in one context: 0 and 0, lines 902–967 ms",
+  "keyboard": "Enter on the header's cart and on 'להמשך לתשלום': 0; focus on the body after the full load (as S19)",
+  "back_forward": {
+   "playwright_default": "the cache is off in Playwright's Chromium; back reloads: header right ('סל (2)'), 0 empty",
+   "cache_on": "tools/bfcache.mjs with the switch removed: the product page restored from the cache keeps 'סל (1)' after the cart page made it 2, still after 4 s (ת75); back during a cart GET restores the busy state, then 'סל (1)'; no storage: back and forward restore, 0 empty"
+  },
+  "story": "count blank + aria-busy until the GET (49–140 ms), then the saved count (6); the cart sheet never 'הסל ריק.' while loading; 'לתשלום' reaches the checkout with the lines (GET 800 and 2,000, phone and desktop)",
+  "failed_load": {
+   "shop": "GET 500, 503 and a network failure: cart and checkout show the error (role=alert) and 'לנסות שוב', header 'סל' without a count, never empty; 'לנסות שוב' once the API answers: the line, 'סל (1)' (12/12 on flag and public)",
+   "story": "the same failures: the count says '0' and the cart sheet 'הסל ריק.' over a saved cart of 6, no error, no retry (ת74; screens/qa-story-cart-failed-*.png)"
+  },
+  "no_storage": {
+   "flow": "product → header cart → checkout, and the story's 'לתשלום': the line each time; the fragment read and removed; no href with #c= in any DOM",
+   "referrers": "0 requests with a fragment or c= in their URL or Referer",
+   "server_logs": "the travelled ids only on /api/cart/ (as before S21); '#c=' 0 (data/server-log-scan.txt)",
+   "session_history": "the header's cart pressed ON the cart page: a same-document fragment navigation, '/cart/#c=<id>' stays in the address and as a history entry (CDP Page.getNavigationHistory) until the page is loaded again (ת72b)",
+   "browser_history": "a persistent profile, storage refused: the History database holds '/cart/#c=<id>' and '/checkout/#c=<id>'; with storage: none (ת72c, data/history-db.json)"
+  },
+  "fixation": "storage works and holds no cart: '/rooms/living-room/#c=<other>', '/cart/#c=<other>' and '/p/…/#c=<other>' are all adopted; each visitor's add went into the other cart (×3 → ×6) (ת72a)",
+  "add_in_flight": "PUT held 1.5 s, the cart pressed 200 ms after 'add': the move waits 1.52–1.62 s, the link aria-busy, POST and PUT with keepalive=true, the line on the cart page (flag and public, phone and desktop). PUT held 6 s: the move goes at 4.26–4.57 s; the server gets the line (keepalive) but the cart page says 'הסל ריק.' and 'סל (0)' and never updates (note ה29)",
+  "old_bug": "an add pressed at 1.6 s while the saved cart's GET is held 2.5 s: the same id, the PUT waits for the GET, the quantity 1 → 2 (fixed in the shop, flag and public). In the story: 'המראה כולו לסל' at 0.6 s writes before the load: basket ×3 → ×1, 'already in the cart' not seen (ת73b)",
+  "add_after_failed_load": "a saved vase ×2, its GET fails, 'הוספה לסל': the same id (no new cart) but the server holds ×1, header 'סל (1)' (ת73a)",
+  "a11y": "axe WCAG 2.0/2.1 A+AA on the cart and the checkout while loading and after a failed load, phone and desktop: 0 violations in 8 states; loading: header link aria-busy with label 'סל הקניות', region aria-busy with 'טוענים את הסל.'; failed: role=alert and the retry button, no aria-busy left (data/cart-flash-flag-a11y.json)"
+ },
+ "t64": {
+  "verdict": "closed (residuals beyond the claim: ת76)",
+  "claim_cases": "Latin, Hebrew, mixed and Cyrillic customers; each probe in a field and in an error's message of a known order's row (tools/qa-s21-log.test.ts.txt, data/qa-s21-log.log): snake, upper snake, digits before and after, Camel and camel, Camel+UPPER, inside codes (E_CONSIGNEE_DANA_GAT, ERR42DANA7), dotted, %20, form-encoded, JSON, JSON camel, snake of every field, the e-mail's local part in a path, possessive, a combining mark, Hebrew with one and two prefix letters, Hebrew snake and digits, Hebrew in JSON and inside a code, Cyrillic snake, camel and digits: all removed",
+  "residuals": "DANAGat and XMLDana (an upper-case run before a Camel word), danagat and TELAVIV and נועהבןדוד (the value without its space), \\u05e0… in a field and %D7%A0… anywhere (encoded), Noaלוי and ID:נועהX in a field (a change of script with no separator), Da<ZWSP>na",
+  "ordinary_words": "36 words and tokens with Dana Gat / Tel Aviv / Herzl: all whole (commit, hotel, gateway, Gatorade, Danaher, Herzliya, order_id, error_id, http_502, ECONNRESET, iPhone, McDonald, JavaScript…) except TelAvivian → [customer]Avivian; error_id E-DANA2345 kept by its shape",
+  "over_redaction": "names that are English words (Max Page, Rose Valley, Mark): max_retries → [customer]_retries, pageSize → [customer]Size, markPaid → [customer]Paid; Maximum, pages, bookmark whole (note ה36)"
+ },
+ "t65": {
+  "verdict": "closed",
+  "list": "exactly the 9 of QA S19",
+  "cases": "E_DANA, E_CONSIGNEE_DANA_GAT, EDANA, ECONNRESET_DANA, DANA_ECONNRESET, 'ECONNRESET ' and with a newline, lower case, a Cyrillic Е, a zero-width space, ERR_DANA, UND_ERR_CONNECT_TIMEOUT, EPROTO, a String object, an array, a class DanaError, a plain object: all 'Error'; with status 502: http_502; the 9 listed and ours (CodedError, SupplierRefused) keep their codes",
+  "supplier_job": "a paid order of Dana Gat, the supplier fails with E_DANA, E_CONSIGNEE_DANA_GAT, ECONNRESET_DANA, a camel message, a thrown string: every row clean, code Error / unknown; a real ECONNRESET keeps its code"
+ },
+ "t66": {
+  "verdict": "closed; question 1: both extensions accepted",
+  "scan": "tools/fp-s21.mts over assets/renders and the flag dist outside the supplier folders, every raster judged by the gate and by my own emulations of S20's rule (R20), QA's P3 on plain vs plain (P3q) and S21 (P3 on every pair, flat pair needs grey ≤ 8): story copies 321/321 under all four (own product 285, as S19), references 12/12 under all, ours 2,893 files: 0 under all; the gate equals my S21 emulation on every file",
+  "margin": "R20 27 (the flat bowl shadow layer, pop 3 vs 30) → S21 30 (the floor-lamp layer vs the floor-lamp option, pop 39/37, grey 18.3: a real likeness); P3q gives the same 30",
+  "synthetic": "17 flats and near-flats (white, transparent, #fafafa, beige, linen, mid grey, charcoal, black, two tinted canvases, a flat shadow, a line, a dot, three ramps, a depth map): 0 matches under every rule (the public set's lowest popcount is 31)",
+  "mutations": "tools/mut-s21.mts, 41 changes (S19's 30 and mine: inverted, inverted + flip, grey + flip, strong sepia, ±15% brightness, low contrast, 2% crop, 2% crop + flip, 180°, padded onto black, a ghost at 12% on a beige canvas, posterized) on the 78 originals of S19 and the 25 originals with the lowest popcount (31–41) and the thin lamp: 4,223 copies; lost by S21 against R20: 0, against P3q: 0; emulation = gate in all",
+  "flat_supplier_forms": "0 of 1,166 public fingerprints (and of the 1,422 with the story) under 8 bits: the flat-pair rule changes nothing today; a tinted copy of a picture that is one flat colour would pass it (no content to protect)",
+  "not_caught_and_not_listed": "an inverted picture 0/78 and inverted + flipped 0/78 (also 0 under S20's rule); 180° 0/78 (a rotation, listed); posterized 28/78 and a 12% ghost 24/78 partly"
+ },
+ "h14": {
+  "verdict": "closed",
+  "cases": "S17 denials 16/16, S19 new denials 20/20, claims 6/6 and 6/6 (the four 'says less' on purpose unchanged); 489 card files, 815 material texts: 0 read differently from S20; 'הדפס במרקם' 1 (the Morandi triptych)",
+  "fresh": "my 20 fresh denials 16/20 (missed: 'w/out texture', 'Texture - None', 'texture 0', 'texture: —'); my 10 fresh claims 9/10 ('Embossed: 0.3 mm depth' reads 'הדפס': the safe direction) (note ה31)"
+ },
+ "h15": {
+  "verdict": "closed",
+  "where": "the five limits in the headers of check-image-rights.ts and rights-content.ts, in the JSON summary (not_caught) and in launch checklist 1.5 at 7b42ddc1; the console line of check:rights does not name them, and `npm run check:rights` writes no JSON (note ה32)"
+ },
+ "h17": {
+  "verdict": "closed for the encoding spec; house.spec's retry is wider than needed (ת77)",
+  "full_run": "encoding passed in the full e2e at load 7–11 with the baseline numbers (Nordic 1280@1 5/7/16 · 0.02% · ΔE 2.32); house.spec ת22 5/5",
+  "positive_control": "the Nordic base AVIF at 1280 re-encoded at q12 in my dist: the spec fails ('base AVIF 1280@1: p99 25 > 6', the stage still settled: three equal readings); restored, it passes again with the baseline numbers",
+  "fails_closed": "never ready (60 s), never idle (30 s) and never three equal readings (40) each fail the test; no skip",
+  "house_presses": "16 runs at load 9–11 (tools/h17-probe.mjs): 15 opened on the first press; 1 press made on a hydrated hotspot did not open within 5 s and the retry did; 24 runs with ONE press and no retry (tools/h17-house2.mjs): 24/24 opened, median 2.0 s, max 3.0 s, focus never lost: a slow open, not a lost press, but the spec retries after hydration too",
+  "stage_presses": "16/16 started the engine on the first press"
+ },
+ "regression": {
+  "ci_order": "prepare:data, typecheck, lint, format:check, vitest 457 + 1 skipped by design (before the build), check:config, build (web, api, budget, check:rights, check:promises): all pass",
+  "vitest_after_build": "458/458",
+  "my_vitest": "qa-s21-log 9/9 (in the copy only)",
+  "e2e": "147: 144 passed, 1 skipped by design, 1 failed on SQLITE_BUSY (s20.spec ת57: the test's own wrangler d1 query while my load ran; ה21 again), 1 did not run (serial after it); s20.spec alone 5/5. So 146 + 1 skipped, as frontend-dev's",
+  "a11y": "16/16",
+  "public_build": "exit 0; check:rights 260 files, found 0, margin 30; check:promises 0 in 49 pages; room JS 51.6 KB, first load 701.2 KB",
+  "public_e2e": "public-scan 5/5, s18 7/7; s21 6/8 (its two story tests: no story in a public build, by design)",
+  "flag_build": "check:rights control 1,484 files, 0 outside the supplier folders, margin 30; check:promises 0 in 112 pages",
+  "weights": "room JS 55.4 KB of 80, first load 713.0 KB of 3,072 (flag); no AVIF 1,275.9 KB; warm-modern 1,026.2 KB; story page JS 9.0 KB: as the README",
+  "mut_s20": "my S20 mutations re-run: 18 as wanted, the same 5 gaps (X13, X15, X16, X17, Y3: ת67, ת71, S22): no regression",
+  "data_dir": "unchanged at 7b42ddc1 (0 differences)"
+ },
+ "findings": [
+  {
+   "id": "ת72",
+   "severity": "medium-low; before HD_PUBLIC=1 (a)",
+   "owner": "frontend-dev",
+   "what": "The #c= carrier: (a) adoptFragmentId runs on every page and takes a link's id whenever storage holds no cart, also where storage works: a crafted link makes a new visitor's browser use someone else's cart (3/3 visitors adopted, their adds went into it, ×3 → ×6); the other side sees and can change the cart until checkout. (b) On the cart page, without storage, the header's 'סל' is a same-document fragment navigation: '/cart/#c=<id>' stays in the address and in the tab's history until the page loads again. (c) The browser's own History database keeps '/cart/#c=<id>' and '/checkout/#c=<id>' (replaceState rewrites the tab's entry only).",
+   "fix": "(a) adopt only when storage is not usable (`!usable()`) and only on /cart/ and /checkout/; (b) never append to a link to the current document (or read and remove on hashchange); (c) carry the id in window.name instead of the address (same tab, not in the address, the history, a referrer or a server), or document (c) as accepted for no-storage browsers. An e2e for each."
+  },
+  {
+   "id": "ת73",
+   "severity": "medium-low; (a) before HD_PUBLIC=1 recommended, (b) before the story is public",
+   "owner": "frontend-dev",
+   "what": "A write made without the saved cart replaces its quantity: (a) the shop, after a failed load: a saved vase ×2, 'הוספה לסל' → ×1 on the server, header 'סל (1)' (same id: no new cart); (b) the story, before its load (GET 2.5 s): 'המראה כולו לסל' writes absolute quantities: basket ×3 → ×1, and 'already in the cart' is not seen: the old bug, in the story's own cart.",
+   "fix": "(b) the story's add and addLook wait for its load (as the shop's addToCart waits for `inflight`); (a) after a failed load, an add first loads again and refuses with the error if it still fails (or an add-by-delta on the server). An e2e for each."
+  },
+  {
+   "id": "ת74",
+   "severity": "medium-low; before the story is public",
+   "owner": "frontend-dev",
+   "what": "The story on a failed load (500, 503, no network) shows the count '0' and the cart sheet 'הסל ריק.' over a saved cart of 6, with no error and no retry. S21's 'never empty' holds in the shop only.",
+   "fix": "load() tells 404/409 (truly gone) from a failure; on a failure the count stays blank (not busy), the sheet shows the error and 'לנסות שוב'. An e2e like the shop's."
+  },
+  {
+   "id": "ת75",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "A page restored from the back/forward cache keeps its count: product 'סל (1)', the cart page made it 2, back: 'סל (1)', still after 4 s (the cache is on in customers' browsers; Playwright turns it off). No pageshow handler in the shop or the story.",
+   "fix": "on pageshow with persisted, load the cart again (shop and story); an e2e with the cache on (tools/bfcache.mjs shows how)."
+  },
+  {
+   "id": "ת76",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "Log redaction residuals beyond ת64's claim: an upper-case run before a Camel word (DANAGat, XMLDana); a value without its space (danagat, TELAVIV, נועהבןדוד); encoded forms (%D7%A0… anywhere, \\u05e0… in a field); a change of script with no separator (Noaלוי, ID:נועהX in a field).",
+   "fix": "split also between an upper-case run and a Camel word (/(\\p{Lu})(?=\\p{Lu}\\p{Ll})/); add the space-less form of each multi-word value; decode %XX and \\uXXXX before matching; treat a change of script as a boundary."
+  },
+  {
+   "id": "ת77",
+   "severity": "low",
+   "owner": "frontend-dev",
+   "what": "house.spec (ת22) retries Enter every 5 s whether or not the hotspot is hydrated. Measured: no lost press (24/24 single presses open, ≤ 3.0 s), but a press lost after hydration (a focus regression) would now pass.",
+   "fix": "retry only while the hotspot has no listener (not hydrated), or wait for hydration and then press once with 15 s, as the other house test does."
+  }
+ ],
+ "notes": [
+  { "id": "ה28", "what": "For the designer: during the up-to-4 s wait the link is only aria-busy; no CSS shows it (no style for [aria-busy] anywhere), so a tap seems to do nothing." },
+  { "id": "ה29", "what": "An add whose PUT takes over 4 s: the move goes at ~4.3 s, the cart page says 'הסל ריק.' and 'סל (0)' while the server gets the line later (keepalive) and the page never updates. A known limit; cheap: carry a 'write pending' mark (window.name) so the cart page reads once more after a beat." },
+  { "id": "ה30", "what": "Without JS the prerendered cart and checkout stay in the loading state forever (aria-busy, no words). Before S21 they said 'empty'. A noscript line would say what to do." },
+  { "id": "ה31", "what": "ה14 beyond the brief: 'w/out', 'Texture - None', 'texture 0' and 'texture: —' still read as a claim; 'Embossed: 0.3 mm depth' reads 'הדפס' (says less). The build list remains the backstop." },
+  { "id": "ה32", "what": "ה15: the limits are in the headers, the JSON (not_caught) and 1.5, but not in the console line, and `npm run check:rights` writes no JSON (the README says 'in its output'). Add 'an inverted picture' (0/78) to the list." },
+  { "id": "ה33", "what": "Question 1: both extensions accepted. The flat-pair rule is dormant (0 flat supplier forms); printing the number of flat supplier forms with the margin would show when it starts to matter." },
+  { "id": "ה34", "what": "ה21 again: SQLITE_BUSY in s20.spec under my load; alone 5/5." },
+  { "id": "ה35", "what": "For the designer: the failed-load line says 'נסו לרענן את הדף' beside a 'לנסות שוב' button." },
+  { "id": "ה36", "what": "ת64's letters-only boundary masks ordinary tokens glued to a name that is an English word (max_retries, pageSize for 'Max Page'): an accepted cost, only in a known order's row." },
+  { "id": "ה37", "what": "Not run: preview:artifact, Lighthouse, a real phone, Safari." }
+ ],
+ "launch_checklist": "rows 1.5, 6.1 and 6.2 at 7b42ddc1 carry QA's S19 text and the S21 lines (checked). Not edited (new files only). Suggested: 1.5 'QA 12.11 (S21): ת66 closed: 321/321, 12/12, 0 in 2,893 files, margin 27 → 30; both extensions accepted (0 of 4,223 mutated copies lost); limits: add an inverted picture (ה32)'; 6.1 'QA 12.11 (S21): ת63 closed in the shop: 141 documents, flag and public, 0 empty states; before launch: ת72; before the story is public: ת73b, ת74; ת75'; 6.2 'QA 12.11 (S21): ת64 and ת65 closed; residuals ת76 (low)'.",
+ "hd_public_readiness": {
+  "verdict": "not yet",
+  "from_qa": ["ת72 (a) before HD_PUBLIC=1", "ת73 (a) recommended", "ת69 (S20)", "1.1 and 1.4: assets not approved for the site"],
+  "closed_now": ["ת63 for the public build (the story is not in it)", "ת64, ת65, ת66"],
+  "before_the_story_is_public": ["ת73 (b)", "ת74", "ת70 (S20)"],
+  "owner": ["CONTACT1 and the lawyer (4.1)", "1.5 rights or IMG1", "the real token and ה12 in the dashboard", "ה16", "the rest as in S20"]
+ }
+}
