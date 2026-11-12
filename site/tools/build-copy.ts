@@ -13,11 +13,15 @@
  *   contact variables are malformed, and (S20 ת61) when the public build (HD_PUBLIC=1) has no contact details or an
  *   address reserved for examples: a shop that sells at a distance must give its customers a way to reach it
  *   (docs/ops/deploy-runbook.md, "פרטי הקשר של העסק"). Behind the flag that is a warning.
+ * - **S22 (QA ת69): a sample is not the shop's contact.** An address reserved for examples, one of our own test values
+ *   (every address and phone in the repo's tests, fixtures and docs), or a common placeholder (domain.*, test@…,
+ *   03-1234567, 050-0000000): the public build stops; behind the flag it is a warning (@hd/shared/contact-samples).
  *   npx --no-install tsx tools/build-copy.ts [--copy=<file>] [--wrangler=<file>] [--out=<file>]
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { contactIssues, contactOf, isPlaceholderEmail } from '@hd/shared/contact';
+import { contactIssues, contactOf } from '@hd/shared/contact';
+import { contactSampleIssues } from '@hd/shared/contact-samples';
 import { COPY_FILE, COPY_OUT, WRANGLER_FILE, copyIssues, emailTarget, loadCopy, promiseFindings, selectCopy } from './lib/promises';
 
 const arg = (name: string): string | undefined => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
@@ -44,8 +48,9 @@ const NO_CONTACT =
   'no business contact: CONTACT_EMAIL is UNDECIDED, so the contact block is hidden and every "כתבו לנו" line is in its wording without contact (CONTACT1)';
 if (publicBuild && !contact && !contactIssues(target.vars).length)
   issues.push(`${target.env}: ${NO_CONTACT}. The public build needs the shop's contact details (docs/ops/deploy-runbook.md, "פרטי הקשר של העסק")`);
-if (publicBuild && contact && isPlaceholderEmail(contact.email))
-  issues.push(`${target.env}: CONTACT_EMAIL=${contact.email} is an address reserved for examples, not the shop's`);
+// S22 (QA ת69): a sample (reserved, ours, a placeholder) stops the public build; behind the flag, a warning below
+const samples = contact ? contactSampleIssues(target.vars) : [];
+if (publicBuild) issues.push(...samples.map((i) => `${target.env}: ${i}`));
 const state = { capabilities: target.capabilities, contact: !!contact };
 const lines = issues.length ? {} : selectCopy(src, state);
 // the lines this build shows, once more: a promise is allowed only in an email line whose needs are real (the copy
@@ -66,6 +71,7 @@ writeFileSync(
 );
 const hidden = Object.values(lines).filter((l) => l === null).length;
 if (!contact) console.warn(`build-copy: warning (${target.env}): ${NO_CONTACT}. A public build (HD_PUBLIC=1) stops here.`);
+for (const i of samples) console.warn(`build-copy: warning (${target.env}): ${i}. A public build (HD_PUBLIC=1) stops here.`);
 console.log(
   `build-copy (S18, S20): EMAIL_PROVIDER=${String(target.value)} (${target.env}) → ${
     target.sends ? `the email wording where its needs are real (${target.capabilities.join(', ')})` : 'the wording without an email'
