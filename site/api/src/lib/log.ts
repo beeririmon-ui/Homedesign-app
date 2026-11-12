@@ -17,6 +17,8 @@
  *   with its one- or two-letter prefix), an e-mail as the whole address and its local part only (never its domain's
  *   parts), and never from `error_id`, `order_id`, the event or the path: the id the customer quotes finds its row.
  * - **S19, QA ת53:** `errorCode` and the row's error name come from our own error classes only (lib/errors.ts).
+ * - **S21, QA ת64–ת65:** a known order's values end at anything but a letter ("_" and digits too), camel case is split;
+ *   a system code only from a closed list.
  */
 import { contactOf } from '@hd/shared/contact';
 import { OwnError } from './errors';
@@ -111,14 +113,17 @@ export function knownValues(v: {
     const local = email.split('@')[0]!;
     if (local.length >= 3) parts.add(local);
   }
-  // S19 (ת52): whole words only, by Unicode letters and digits ("commit" keeps its "com", "hotel" its "tel"); a Hebrew
-  // value also with the one- or two-letter prefix Hebrew writes on it ("לנועה", "ובבאר שבע")
+  // S19 (ת52): whole words only ("commit" keeps its "com", "hotel" its "tel"); a Hebrew value also with the one- or
+  // two-letter prefix Hebrew writes on it ("לנועה", "ובבאר שבע").
+  // S21, QA ת64: a word ends at anything but a letter: "_" and digits are not letters, so a name glued to them in a
+  // provider's text goes too ("consignee_dana_rejected", "DANA_GAT", "dana1985", "gat123"). `stripKnown` also splits
+  // camel case ("DanaGat") before it matches.
   const words = parts.size
     ? new RegExp(
-        `(?<![\\p{L}\\p{N}_])(?:[${HE_PREFIX}]{1,2}(?=[\\u05d0-\\u05ea]))?(?:${[...parts]
+        `(?<!\\p{L})(?:[${HE_PREFIX}]{1,2}(?=[\\u05d0-\\u05ea]))?(?:${[...parts]
           .sort((a, b) => b.length - a.length)
           .map(esc)
-          .join('|')})(?![\\p{L}\\p{N}_])`,
+          .join('|')})(?!\\p{L})`,
         'giu',
       )
     : null;
@@ -132,13 +137,19 @@ export function knownValues(v: {
   for (const t of texts) if (/^[\d\s-]{5,10}$/.test(t)) phones.push(new RegExp(`(?<!\\d)${digitsOf(t).split('').join(SEP)}(?!\\d)`, 'g'));
   return { words, phones };
 }
+/** S21 (ת64): a mark between a lower-case and an upper-case letter ("Dana|Gat"), never a letter itself */
+const CAMEL = /(\p{Ll})(?=\p{Lu})/gu;
+const SEAM = '\u2063';
 /** A string without the known order's customer values. */
 export function stripKnown(s: string, k: KnownValues | undefined): string {
   if (!k) return s;
   let out = s;
   for (const re of k.phones) out = out.replace(re, '[phone]');
-  if (k.words) out = out.replace(k.words, '[customer]');
-  return out;
+  if (!k.words) return out;
+  out = out.replace(k.words, '[customer]');
+  // S21 (ת64): then camel case as two words ("DanaGat"): an invisible separator (not a letter) between them while
+  // matching, removed after (a value written in camel case, "McDonald", went in the pass before; "iPhone" stays)
+  return out.replace(CAMEL, `$1${SEAM}`).replace(k.words, '[customer]').split(SEAM).join('');
 }
 
 const NAME_RE = /^[A-Za-z]{1,40}$/;
@@ -185,12 +196,28 @@ function errorFields(err: unknown, known?: KnownValues): Fields {
  * RefundRefused, CallTimedOut, CodedError), and the message prefix and the class name are read only from those too. A
  * provider's error whose message starts "consignee_orna_rejected: …", or whose class it named 'Orna', is logged by its
  * HTTP status, a system code, or 'Error'.
+ * S21, QA ת65: a system code only from the closed list `SYSTEM_CODES` (no longer any code shaped /^E[A-Z0-9_]+$/).
  */
+/**
+ * S21, QA ת65: the system codes a network or socket error carries, a closed list. A provider's own code shaped like one
+ * ("E_ORNA", "E_CONSIGNEE_ORNA") is free text and may carry the buyer: it is never a row's error_code.
+ */
+export const SYSTEM_CODES: ReadonlySet<string> = new Set([
+  'ECONNRESET',
+  'ECONNREFUSED',
+  'ECONNABORTED',
+  'ETIMEDOUT',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'EPIPE',
+  'EHOSTUNREACH',
+  'ENETUNREACH',
+]);
 export function errorCode(err: unknown): string {
   if (!err || typeof err !== 'object') return 'unknown';
   const e = err as { code?: unknown; status?: unknown; name?: unknown; message?: unknown };
   const own = err instanceof OwnError;
-  if (typeof e.code === 'string' && ((own && /^[a-z][a-z0-9_.-]{1,60}$/i.test(e.code)) || /^E[A-Z0-9_]{2,40}$/.test(e.code))) return e.code;
+  if (typeof e.code === 'string' && ((own && /^[a-z][a-z0-9_.-]{1,60}$/i.test(e.code)) || SYSTEM_CODES.has(e.code))) return e.code;
   if (e.name === 'CallTimedOut') return 'timeout';
   if (e.name === 'AbortError' || e.name === 'TimeoutError') return 'aborted';
   if (typeof e.status === 'number' && e.status >= 100 && e.status < 600) return `http_${e.status}`;

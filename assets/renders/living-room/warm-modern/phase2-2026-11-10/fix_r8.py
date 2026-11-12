@@ -640,15 +640,27 @@ def curtain3():
     # (4) the break and the contact
     s4, sh2, bc = break_and_contact(name, s3, af, sh, fa8)
     # the final speck pass: after the L* factor the 8-bit round trip nudges a few borderline pixels past the rule (dark folds)
-    s4 = np.round(s4 * 255) / 255
-    lit5, spk5, _ = speck_masks(s4, a8)
-    m5 = lit5 | spk5
-    if m5.any():
+    # detected on the ungraded file AND on the graded model (exact where the fabric is opaque: what QA and the verify read)
+    s4 = (np.round(s4 * 255) / 255).astype(np.float32)
+    full = a8 == 255
+    m5 = np.zeros(a8.shape, bool)
+    for _ in range(4):
+        lit5, spk5, _ = speck_masks(s4, a8)
+        _, g5 = graded_L(s4, a_eff)
+        litg, spkg, _ = speck_masks(g5.astype(np.float32) / 255, a8)
+        new = (lit5 | spk5 | ((litg | spkg) & full)) & ~m5
+        if not new.any():
+            break
+        m5 |= new
         n5 = neutralise(s4, a8, m5)
         s4 = np.where(m5[..., None], np.round(n5 * 255) / 255, s4).astype(np.float32)
     lit6, spk6, _ = speck_masks(s4, a8)
-    specks["final_pass"] = dict(px=int(m5.sum()), after=dict(literal=int(lit6.sum()), specks=int(spk6.sum())),
-                                why="after the L* factor, the 8-bit round trip nudged borderline dark-fold pixels past the rule")
+    _, g6 = graded_L(s4, a_eff)
+    litg6, spkg6, _ = speck_masks(g6.astype(np.float32) / 255, a8)
+    specks["final_pass"] = dict(px=int(m5.sum()), after_ungraded=dict(literal=int(lit6.sum()), specks=int(spk6.sum())),
+                                after_graded_model_opaque=dict(literal=int((litg6 & full).sum()), specks=int((spkg6 & full).sum())),
+                                why="after the L* factor, the 8-bit round trip and the grade nudge borderline dark-fold pixels (L* ~18-60) "
+                                    "past the rule; detected on the ungraded file and on the graded model")
     files, out8, s8 = save_curtain(name, L8, s4, sh2)
     Lg, g8 = graded_L(out8.astype(np.float32) / 255, a_eff)
     bc["hem_band_dL_qa"] = dict(after=qa_hem_band(Lg, F7.HEM_Z[name]), before=qa_hem_band(graded_L(rgb, a_eff)[0], F7.HEM_Z[name]), rule="-2 +-1")

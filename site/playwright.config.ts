@@ -25,7 +25,7 @@ export default defineConfig({
     {
       name: 'e2e',
       testMatch:
-        /(flow|perf|swap-diff|hotspots|options|test-page|story|system|public-scan|house|wheel|lines|encoding|your-room|operations|copy-seo|\/s16|\/s18|\/s19|\/s20)\.spec\.ts/,
+        /(flow|perf|swap-diff|hotspots|options|test-page|story|system|public-scan|house|wheel|lines|encoding|your-room|operations|copy-seo|\/s16|\/s18|\/s19|\/s20|\/s21)\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], launchOptions },
     },
     { name: 'a11y', testMatch: /a11y\.spec\.ts/, use: { ...devices['Desktop Chrome'], launchOptions } },

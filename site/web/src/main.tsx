@@ -7,8 +7,8 @@ import './styles/pages.css';
 import './styles/shop.css';
 import { hydrate, render } from 'preact';
 import { App } from './App';
-import { initRouter, match, onLinkClick, path } from './router';
-import { loadCart } from './state/cart';
+import { initRouter, match, onLinkClick, path, setBeforeDocumentLoad } from './router';
+import { cartMounted, leaveFor, loadCart } from './state/cart';
 import { preloadRoute } from './pages/lazy';
 import { loadHouse } from './house';
 
@@ -16,6 +16,9 @@ import { loadHouse } from './house';
 document.documentElement.lang = 'he';
 document.documentElement.dir = 'rtl';
 initRouter();
+// S21, QA ת63: a full load to the cart or the checkout waits for a cart write on its way, and carries the cart id when
+// this browser keeps no storage
+setBeforeDocumentLoad(leaveFor);
 document.addEventListener('click', onLinkClick);
 
 // S13: a link's page chunk starts loading when the link is pointed at or focused, before the click (pages/lazy.tsx)
@@ -35,6 +38,9 @@ const first = match(path.value);
 void Promise.all([preloadRoute(first), first.name === 'room' && first.style ? loadHouse(first.style) : null]).then(() => {
   if (root.firstElementChild && !__ARTIFACT__ && !location.pathname.startsWith('/order/')) hydrate(<App />, root);
   else render(<App />, root);
+  // S21, QA ת63: the cart is shown from here on (the first render matched the prerendered page, in its loading state)
+  cartMounted();
 });
 
+// the saved cart is fetched from the start, beside the page's chunk (shown once the app is mounted)
 void loadCart();

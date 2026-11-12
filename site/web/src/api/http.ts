@@ -16,12 +16,19 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
   return body as T;
 }
 
+/**
+ * S21, QA ת63 (3): the cart's writes go with `keepalive`, so a page that unloads while one is on its way (the back
+ * button, a typed address, a closed tab) does not cut it off: the server still makes the cart and adds the line. A move
+ * to the cart or the checkout also waits for it (state/cart.ts `leaveFor`), so the next page reads it.
+ */
+const KEEP: RequestInit = { keepalive: true };
+
 export const httpApi: StoreApi = {
   kind: 'http',
-  createCart: () => call<Cart>('/cart', { method: 'POST' }),
+  createCart: () => call<Cart>('/cart', { method: 'POST', ...KEEP }),
   getCart: (id) => call<Cart>(`/cart/${encodeURIComponent(id)}`),
   setItem: (cartId, variant_id, pack, qty, house) =>
-    call<Cart>(`/cart/${encodeURIComponent(cartId)}/items`, { method: 'PUT', body: JSON.stringify({ variant_id, pack, qty, house }) }),
+    call<Cart>(`/cart/${encodeURIComponent(cartId)}/items`, { method: 'PUT', body: JSON.stringify({ variant_id, pack, qty, house }), ...KEEP }),
   checkout: (req: CheckoutRequest) => call<CheckoutResponse>('/checkout', { method: 'POST', body: JSON.stringify(req) }),
   getOrder: (id, token) => call<OrderView>(`/orders/${encodeURIComponent(id)}`, { headers: { 'x-order-token': token } }),
   waitlist: async (req: WaitlistRequest) => {

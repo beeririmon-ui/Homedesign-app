@@ -130,8 +130,14 @@ describe('ת50: the near miss only when both pictures carry ink', () => {
     expect(pixelRule(a, b)).toMatchObject({ d: 30, m: 1, rule: 'B' });
     expect(pixelRule(a, blank)).toMatchObject({ d: 30, rule: null });
     expect(pixelRule(blank, a)).toMatchObject({ rule: null });
-    // A is unchanged: within 24 bits it matches whatever the ink
-    expect(pixelRule(prepare({ dhash: bits(0), grey: grey(255) }), prepare({ dhash: bits(20), grey: grey(255) }))).toMatchObject({ rule: 'A' });
+    // A has no ink guard between plain forms: within 24 bits it matches whatever the ink (S21, ת66: when the two
+    // hashes share their set bits; a flat hash 20 bits from another is no likeness, tools/test/s21.test.ts)
+    const run = (from: number, n: number) => {
+      const b = Buffer.alloc(32);
+      for (let i = from; i < from + n; i++) b[i >> 3]! |= 1 << (7 - (i & 7));
+      return b.toString('hex');
+    };
+    expect(pixelRule(prepare({ dhash: run(0, 30), grey: grey(255) }), prepare({ dhash: run(10, 30), grey: grey(255) }))).toMatchObject({ d: 20, rule: 'A' });
     // beyond 48 bits there is no near miss at all
     expect(pixelRule(a, prepare({ dhash: bits(NEAR_MAX_HAMMING + 1), grey: grey(250) }))).toMatchObject({ m: null, rule: null });
     expect(NEAR_MIN_INK).toBe(4);
@@ -139,7 +145,10 @@ describe('ת50: the near miss only when both pictures carry ink', () => {
     expect(pixelRule(prepare({ dhash: bits(0), grey: grey(255) }), prepare({ dhash: bits(20), grey: grey(254) }), 24, { inkForA: true })).toMatchObject({
       rule: null,
     });
-    expect(pixelRule(a, prepare({ dhash: bits(20), grey: grey(250) }), 24, { inkForA: true })).toMatchObject({ rule: 'A' });
+    // (S21, ת66: and, like every pair, hashes that share their set bits)
+    expect(pixelRule(prepare({ dhash: run(0, 30), grey: grey(250) }), prepare({ dhash: run(10, 30), grey: grey(250) }), 24, { inkForA: true })).toMatchObject({
+      rule: 'A',
+    });
   });
 
   it('QA’s near-blank pictures against a thin lamp on white: white, transparent, a dot and a mostly transparent layer find nothing (the S17 rule matched them)', async () => {

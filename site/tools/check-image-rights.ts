@@ -15,6 +15,10 @@
  * S19, QA S17: the near miss only when both pictures carry ink (ת50); each supplier picture mirrored as well, every
  *   picture with its uniform margins trimmed as well, a fixed list of supplier picture domains beside the cards', and a
  *   data: URI read as a browser reads it (ת51). The nearest picture outside the supplier folders is printed every build.
+ * S21, QA S19: rule A between two plain forms only when d ≤ (popcount a + popcount b) / 2 (ת66, QA's P3: a flat picture
+ *   never matches an inked one by A); the margin printed counts only the pairs A may judge. Not caught (the known
+ *   limits, launch checklist 1.5, tools/lib/rights-content.ts): a crop into the picture, a rotation, a flip upside-down,
+ *   a flip with a change of colour, one tile of a collage.
  * Behind the flag the same scan runs as the control: it reports what it finds (the shop's and the story's copies, which
  * the flag build ships) and anything found elsewhere, without failing.
  *
@@ -129,7 +133,8 @@ const content = {
     domains: [...new Set(hosts.map(registrableDomain))].sort(),
     story_ledger: !!ledgers[1],
   },
-  pixel_threshold: `dHash 16×16, Hamming ≤ ${PIXEL_MAX_HAMMING} of 256 (or ≤ ${NEAR_MAX_HAMMING} with a 32×32 grey difference ≤ ${NEAR_MAX_MAD32} when both carry ink ≥ ${NEAR_MIN_INK}); plain and mirrored, and trimmed of margins`,
+  pixel_threshold: `dHash 16×16, Hamming ≤ ${PIXEL_MAX_HAMMING} of 256 and ≤ half the set bits of the two (or ≤ ${NEAR_MAX_HAMMING} with a 32×32 grey difference ≤ ${NEAR_MAX_MAD32} when both carry ink ≥ ${NEAR_MIN_INK}); plain and mirrored, and trimmed of margins`,
+  not_caught: 'a crop into the picture, a rotation, a flip upside-down, a flip with a change of colour, one tile of a collage (launch checklist 1.5)',
   scanned: { files: scan.stats.files, rasters: scan.stats.rasters, data_uris: scan.stats.data_uris, text_files: scan.stats.text_files },
   found: byHow(scan.findings),
   found_outside_supplier_folders: byHow(elsewhere),
@@ -166,7 +171,7 @@ console.log(
 const n0 = scan.stats.nearest_elsewhere[0];
 const g0 = scan.stats.nearest_by_grey_elsewhere[0];
 console.log(
-  `  nearest outside the supplier folders: ${n0 ? `${n0.where} dHash ${n0.hamming}/256 from ${n0.picture}${n0.variant ? ` (${n0.variant})` : ''} (rule A at ${PIXEL_MAX_HAMMING})` : 'none'}; ` +
+  `  nearest outside the supplier folders: ${n0 ? `${n0.where} dHash ${n0.hamming}/256 from ${n0.picture}${n0.variant ? ` (${n0.variant})` : ''} (rule A at ${PIXEL_MAX_HAMMING}, among the pairs it may judge)` : 'none'}; ` +
     `by grey: ${g0 ? `${g0.where} ${g0.mad32} (rule B at ${NEAR_MAX_MAD32}, with ink)` : 'none'}`,
 );
 if (!PUBLIC) for (const f of elsewhere.slice(0, 10)) console.warn(`  behind the flag, outside the supplier folders: ${f.where}: by ${f.how}: ${f.what}`);

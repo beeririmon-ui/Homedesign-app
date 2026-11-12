@@ -53,13 +53,24 @@ const NEGATED_TEXTURE =
  * it: when a clause both claims and denies, the shop says the less.
  */
 export const TEXTURE_WORD = /\b(?:embossed|embossing|textured?|textures)\b/i;
+/**
+ * S21, QA ה14: also the apostrophe-less contractions ("isnt", "doesnt", "dont"…) and a texture word with "-less" on it
+ * ("texture-less", "textureless").
+ */
 export const NEGATION_WORD =
-  /\b(?:no|not|non|none|never|neither|nor|without|lacks?|lacking|zero|free|minus)\b|\bun[-\s]?(?=textur|emboss)|n['’]t\b|(?:^|[^\u0590-\u05ff])(?:לא|ללא|בלי|אין|אינו|אינה)(?=$|[^\u0590-\u05ff])/i;
+  /\b(?:no|not|non|none|never|neither|nor|without|lacks?|lacking|zero|free|minus|isnt|arent|wasnt|werent|doesnt|dont|didnt|hasnt|havent|hadnt)\b|\bun[-\s]?(?=textur|emboss)|\b(?:textur|emboss)[a-z]*[-‐‑]?less\b|n['’]t\b|(?:^|[^\u0590-\u05ff])(?:לא|ללא|בלי|אין|אינו|אינה)(?=$|[^\u0590-\u05ff])/i;
 const CLAUSE = /[,;.!?()[\]{}/|·•]+|\s[-–—]+\s/;
+/**
+ * S21, QA ה14: denials written as a spec sheet writes them, read before the text is cut into clauses (a "/" or a "?" in
+ * them would cut them apart): "w/o" is "without", and a texture word given a value that denies it ("Texture: N/A",
+ * "Texture: Smooth", "texture: flat", "Embossed: N", "Textured: False", "(texture? no)") is "no texture".
+ */
+const WITHOUT_ABBR = /\bw\/o\b/gi;
+const DENIED_VALUE = /\b(?:embossed|embossing|textured?|textures)\s*[:=?]\s*(?:n\/a|na|none|nil|no|n|false|smooth|flat|0|-)(?![\p{L}\p{N}/])/giu;
+export const readDenials = (raw: string): string => raw.replace(WITHOUT_ABBR, 'without').replace(DENIED_VALUE, 'no texture');
 /** the clauses of a material text that claim a texture (none: the text claims none) */
 export function textureClauses(raw: string): string[] {
-  return raw
-    .replace(HEDGED, ' ')
+  return readDenials(raw.replace(HEDGED, ' '))
     .split(CLAUSE)
     .map((c) => c.trim())
     .filter((c) => TEXTURE_WORD.test(c) && !NEGATION_WORD.test(c));

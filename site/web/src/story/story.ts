@@ -277,7 +277,11 @@ function wallLabel(st: Stage, id: string | null): void {
 // ---------- the test cart ----------
 // S7: the story's cart is the shop's (the API, the cart id 'hd.cart'): the server prices and sells, the real /checkout/
 const cart = apiStoryCart();
+// S21, QA ת63: until the saved cart is known, the count is a blank and the cart says nothing (never "0" or "הסל ריק.")
+let cartKnown = false;
 void cart.load().then(() => {
+  cartKnown = true;
+  document.getElementById('st-cart-open')?.removeAttribute('aria-busy');
   showCount(false);
   mark('cart:loaded');
 });
@@ -287,6 +291,12 @@ addEventListener('storage', (e) => {
 });
 const countEl = document.getElementById('st-cart-count')!;
 function showCount(animate: boolean): void {
+  // an add before the saved cart loaded makes the cart known too
+  if (!cartKnown && cart.current()) {
+    cartKnown = true;
+    document.getElementById('st-cart-open')?.removeAttribute('aria-busy');
+  }
+  if (!cartKnown) return;
   const n = cart.current()?.count ?? 0;
   // an open cart follows a change that lands after it opened (an add still on its way to the server, another tab)
   if (document.querySelector<HTMLDialogElement>('#st-cart')?.open) renderCart();
@@ -546,7 +556,8 @@ function renderCart(): void {
       return p;
     }),
   );
-  $('st-cart-empty').hidden = lines.length > 0;
+  $('st-cart-empty').hidden = lines.length > 0 || !cartKnown;
+  $('st-cart-lines').toggleAttribute('aria-busy', !cartKnown);
   $('st-cart-total').textContent = lines.length ? `סכום ביניים: ${priceHe(c!.subtotal_agorot)} · ${items(c!.count)}` : '';
   $('st-cart-pay').hidden = !lines.length;
 }
@@ -589,6 +600,23 @@ for (const b of document.querySelectorAll<HTMLButtonElement>('.st-look-btn'))
       `${r.added.length ? `נוספו לסל ${items(r.units)} מהמראה` : r.already.length ? 'המראה כבר בסל, לא נוסף דבר' : 'לא נוסף דבר לסל'}${r.already.length && r.added.length ? `, ${items(r.already.length)} כבר היו בסל` : ''}${r.skipped.length ? `, ${items(r.skipped.length)} לא במכירה` : ''}. בסל ${items(r.cart?.count ?? 0)}, ${priceHe(r.cart?.subtotal_agorot ?? 0)}.`,
     );
   });
+// S21, QA ת63: "לתשלום" waits for a change still on its way, and carries the cart id when this browser keeps no storage
+$('st-cart-pay').addEventListener('click', (e) => {
+  const me = e as MouseEvent;
+  if (me.button !== 0 || me.metaKey || me.ctrlKey || me.shiftKey || me.altKey) return;
+  const href = $('st-cart-pay').getAttribute('href') ?? '/checkout/';
+  const to = cart.leaveFor(href);
+  if (to === href) return;
+  e.preventDefault();
+  if (typeof to === 'string') location.assign(to);
+  else {
+    $('st-cart-pay').setAttribute('aria-busy', 'true');
+    void to.then(
+      (u) => location.assign(u),
+      () => location.assign(href),
+    );
+  }
+});
 $('st-cart-open').addEventListener('click', async () => {
   renderCart();
   cartDlg.showModal();

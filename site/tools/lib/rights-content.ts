@@ -29,6 +29,22 @@
  *   hosts (aliexpress-media.com, which no card names). A data: URI is read as a browser reads it: CSS escapes and line
  *   continuations, percent escapes, character references and whitespace inside it are removed before it is decoded.
  *
+ * S21, QA S19:
+ * - **ת66, the flatness guard (QA's P3):** rule A only when d ≤ (popcount a + popcount b) / 2. A flat picture (a mostly
+ *   transparent layer, a canvas, a depth map) has almost no set bits and sat about popcount(b) from every picture b.
+ *   QA ruled it for two plain forms; it holds for the mirrored and trimmed forms too (a flat canvas with a little ink
+ *   passed their ink guard). The margin printed every build counts only the pairs rule A may judge.
+ * - **Two flat hashes** (both under 8 set bits: a flat canvas of ours, a supplier picture whose trimmed form is one
+ *   colour) are 0 apart whatever they show: between them A also needs the 32×32 grey images to agree (≤ 8).
+ *
+ * **What it does not catch (the known limits, launch checklist 1.5; QA's mutations R8a, R8b, R9c, R21 pass it):**
+ * - a crop into the picture (beyond its uniform margins: 10% off each side, a third off one side);
+ * - a rotation (3°: 2 of 78 in QA's study) and a flip upside-down (2 of 78);
+ * - a flip combined with a change of colour (brightness and hue: R9c; 67 of 78 still caught in QA's study);
+ * - one tile of a collage (the picture as a quarter of a 2×2 grid: R21).
+ * These need a person's eye (a page or an asset made from a supplier picture is reviewed before it ships) or a stronger
+ * matcher (local features); the rights themselves are the real fix (1.5: confirmed rights per supplier, or IMG1).
+ *
  * A picture whose card's rights are `confirmed` may ship; every other one (unclear, none, or a cached file no ledger
  * names) may not. dHashes are cached by sha256 in .cache/rights-dhash.json, so a second build hashes only new files.
  */
@@ -252,26 +268,58 @@ export function hammingBytes(a: Uint8Array, b: Uint8Array): number {
   return d;
 }
 
-/** a fingerprint ready to compare: its dHash as bytes and its ink */
-export type Prepared = Fingerprint & { bits: Uint8Array; ink: number };
-export const prepare = (f: Fingerprint): Prepared => ({ ...f, bits: Uint8Array.from(Buffer.from(f.dhash, 'hex')), ink: inkOf(f.grey) });
+/** a fingerprint ready to compare: its dHash as bytes, its ink and (S21, ת66) the set bits of its dHash */
+export type Prepared = Fingerprint & { bits: Uint8Array; ink: number; pop?: number };
+export const prepare = (f: Fingerprint): Prepared => {
+  const bits = Uint8Array.from(Buffer.from(f.dhash, 'hex'));
+  return { ...f, bits, ink: inkOf(f.grey), pop: popcount(bits) };
+};
+
+/**
+ * S21 (found by the ת66 tests, a question for QA): two flat hashes (both under this many set bits) are d ≈ 0 apart
+ * whatever they show: a flat canvas of ours against a supplier picture whose trimmed form is flat (a dark bar, a box of
+ * one colour). Between them rule A also needs the 32×32 grey images to agree (a copy of a flat picture has its grey).
+ */
+export const FLAT_MAX_POP = 8;
+export const FLAT_MAX_MAD32 = 8;
+
+/** the number of set bits of a hash (bytes) */
+export function popcount(bits: Uint8Array): number {
+  let n = 0;
+  for (const x of bits) n += POP[x]!;
+  return n;
+}
 
 /**
  * The pixel rule (S17, ת45; S19, ת50) on two fingerprints: A, within the dHash threshold; B, a near miss whose 32×32 grey
  * images differ by at most 3 on average, when both carry ink (a near-blank picture is no evidence of anything).
+ * S21, QA ת66 (QA's P3, its answer to frontend-dev's S19 question 1): A between two plain forms only when the differing
+ * bits are at most half of the set bits of the two hashes, d ≤ (popcount a + popcount b) / 2. A flat picture (a layer
+ * that is mostly transparent, a canvas of one colour, a depth map) has almost no set bits, so it sat about popcount(b)
+ * bits from every picture b: 27 from a vase with 30, and a supplier picture with 24 or fewer would have stopped every
+ * public build that ships such a layer. Under P3 a flat picture never matches an inked one by A, whatever comes; two flat
+ * pictures still match each other (harmless). On QA's sets it loses no true copy (321/321 story copies, 12/12 references).
+ * The guard holds for every pair of forms: where they are not both plain, A also needs ink on both sides (`inkForA`),
+ * but a flat picture with ink (a canvas of #fafafa has 5) passed that guard against a mirrored or trimmed form. And two
+ * flat hashes (popcount under FLAT_MAX_POP) match by A only when their grey images agree (FLAT_MAX_MAD32).
  */
 export function pixelRule(
   a: Prepared,
   b: Prepared,
   max = PIXEL_MAX_HAMMING,
   o: { inkForA?: boolean } = {},
-): { d: number; m: number | null; rule: 'A' | 'B' | null } {
+): { d: number; m: number | null; rule: 'A' | 'B' | null; aEligible: boolean } {
   const d = hammingBytes(a.bits, b.bits);
   const m = d <= NEAR_MAX_HAMMING ? mad32(a.grey, b.grey) : null;
   const inked = a.ink >= NEAR_MIN_INK && b.ink >= NEAR_MIN_INK;
-  if (d <= max && (!o.inkForA || inked)) return { d, m, rule: 'A' };
-  if (m !== null && m <= NEAR_MAX_MAD32 && inked) return { d, m, rule: 'B' };
-  return { d, m, rule: null };
+  // S21 (ת66): may rule A judge this pair at all (the flatness guard on plain vs plain, the ink on the other forms)
+  const pa = a.pop ?? popcount(a.bits);
+  const pb = b.pop ?? popcount(b.bits);
+  const flatPair = pa < FLAT_MAX_POP && pb < FLAT_MAX_POP;
+  const aEligible = (!o.inkForA || inked) && 2 * d <= pa + pb && (!flatPair || (m ?? mad32(a.grey, b.grey)) <= FLAT_MAX_MAD32);
+  if (d <= max && aEligible) return { d, m, rule: 'A', aEligible };
+  if (m !== null && m <= NEAR_MAX_MAD32 && inked) return { d, m, rule: 'B', aEligible };
+  return { d, m, rule: null, aEligible };
 }
 
 /** fingerprints by sha256, kept between builds (.cache/rights-dhash.json) */
@@ -562,11 +610,13 @@ export function dataUris(text: string): { mime: string; b64: string; index: numb
 
 /** the gate's fingerprints of a picture of the build: plain, and trimmed when it has margins (S19, ת51) */
 export type Mine = { plain: Prepared; trimmed: Prepared | null };
-export type PixelVerdict = { d: number; m: number | null; rule: 'A' | 'B' | null; p: SupplierPicture; mine: 'plain' | 'trimmed' };
+export type PixelVerdict = { d: number; m: number | null; rule: 'A' | 'B' | null; aEligible: boolean; p: SupplierPicture; mine: 'plain' | 'trimmed' };
 /**
  * S19: a picture against the supplier fingerprints, every form of it against every form of each: the best match (the
  * nearest by dHash among the matches), else the nearest; and the smallest grey difference of a near miss that is not a
  * match (the margin of rule B). Exported so QA's scans read the gate's own rule.
+ * S21 (ת66): without a match, "the nearest" is the nearest pair rule A may judge (its margin); a pair the flatness guard
+ * or the ink keeps from A is no step towards a match by A. Only when no pair is eligible, the nearest of all.
  * The plain picture against the plain one is QA's rule as approved (A; B with ink). A mirrored or trimmed form is
  * evidence only of a picture with content: there both A and B need ink on both sides (a near-blank picture is a few
  * bits from the mirror of another near-blank one).
@@ -577,6 +627,8 @@ export function nearestPicture(
   max = PIXEL_MAX_HAMMING,
   only?: (p: SupplierPicture) => boolean,
 ): { best: PixelVerdict | null; grey: PixelVerdict | null } {
+  // a match first, then a pair rule A may judge (the margin), then any pair
+  const rank = (v: PixelVerdict) => (v.rule ? 0 : v.aEligible ? 1 : 2);
   let best: PixelVerdict | null = null;
   let grey: PixelVerdict | null = null;
   const forms: ['plain' | 'trimmed', Prepared][] = [['plain', mine.plain]];
@@ -587,7 +639,7 @@ export function nearestPicture(
       const r = pixelRule(f, p, max, { inkForA: k !== 'plain' || p.variant !== 'plain' });
       const v: PixelVerdict = { ...r, p, mine: k };
       if (!r.rule && r.m !== null && (!grey || r.m < grey.m!)) grey = v;
-      if (!best || (r.rule && !best.rule) || (!!r.rule === !!best.rule && r.d < best.d)) best = v;
+      if (!best || rank(v) < rank(best) || (rank(v) === rank(best) && r.d < best.d)) best = v;
     }
   }
   return { best, grey };
@@ -634,11 +686,13 @@ export async function scanBuild(
     const variant = formsOf(best);
     const g = grey ? { where, picture: grey.p.picture, hamming: grey.d, mad32: Number(grey.m!.toFixed(1)), variant: formsOf(grey) } : null;
     const n = { where, picture: best.p.picture, hamming: best.d, mad32: best.m === null ? null : Number(best.m.toFixed(1)), variant };
+    // S21 (ת66): the margin of rule A counts only pairs it may judge (a flat picture is no step towards a match by A)
+    const onMargin = !!best.rule || best.aEligible;
     if (g) stats.nearest_by_grey.push(g);
-    stats.nearest.push(n);
+    if (onMargin) stats.nearest.push(n);
     if (elsewhere(where)) {
       if (g) stats.nearest_by_grey_elsewhere.push(g);
-      stats.nearest_elsewhere.push(n);
+      if (onMargin) stats.nearest_elsewhere.push(n);
     }
     if (best.rule)
       findings.push({

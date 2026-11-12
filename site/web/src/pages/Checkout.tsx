@@ -10,7 +10,8 @@ import { Price } from '../components/Media';
 import { lineName, removedNoteHe } from '@hd/shared/lines';
 import { lineLabelHe } from './lineLabel';
 import { api, ApiError } from '../api';
-import { cart, forgetCart, loadCart, saveOrderToken } from '../state/cart';
+import { cart, cartError, cartStatus, forgetCart, loadCart, saveOrderToken } from '../state/cart';
+import { CartLoading, CartUnavailable } from '../components/CartState';
 import { navigate } from '../router';
 import { validateCheckout, type FieldErrors } from '../validate';
 import { copyHe } from '../copy';
@@ -127,7 +128,17 @@ export function Checkout({ failed }: { failed: boolean }) {
           {removedNoteHe(c.removed)}
         </p>
       ) : null}
-      {!lines.length ? (
+      {cartStatus.value === 'loading' ? (
+        // S21, QA ת63: the saved cart is on its way: a quiet placeholder, never "nothing to pay"
+        <CartLoading />
+      ) : cartStatus.value === 'failed' && !c ? (
+        <>
+          <p class="notice error" role="alert">
+            {cartError.value}
+          </p>
+          <CartUnavailable />
+        </>
+      ) : !lines.length ? (
         <div class="notice">
           <p>הסל ריק, אין מה לשלם.</p>
           <p>

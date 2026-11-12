@@ -3,7 +3,8 @@ import { useEffect } from 'preact/hooks';
 import { catalog, livingRoom, scene } from '../catalog';
 import { Picture, Price, productImage } from '../components/Media';
 import { shippingFor } from './shipping';
-import { cart, cartBusy, cartError, loadCart, setQty } from '../state/cart';
+import { cart, cartBusy, cartError, cartStatus, loadCart, setQty } from '../state/cart';
+import { CartLoading, CartUnavailable } from '../components/CartState';
 import { removedNoteHe } from '@hd/shared/lines';
 import { lineLabelHe } from './lineLabel';
 
@@ -31,7 +32,12 @@ export function CartPage() {
           {removedNoteHe(c.removed)}
         </p>
       ) : null}
-      {!lines.length ? (
+      {cartStatus.value === 'loading' ? (
+        // S21, QA ת63: the saved cart is on its way: a quiet placeholder, never "empty"
+        <CartLoading />
+      ) : cartStatus.value === 'failed' && !c ? (
+        <CartUnavailable />
+      ) : !lines.length ? (
         // §9.3: the empty cart says so, and shows the room to go back to
         <div class="cart-empty">
           <h2>הסל ריק.</h2>

@@ -26,11 +26,46 @@ const write = (id: string | null): void => {
   }
 };
 
-export type ApiStoryCart = StoryCart & { load(): Promise<Cart | null> };
+/** S21 (ת63): whether this browser keeps storage at all (a private window may read but refuse to write) */
+const usable = (): boolean => {
+  try {
+    localStorage.setItem('hd.probe', '1');
+    localStorage.removeItem('hd.probe');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export type ApiStoryCart = StoryCart & {
+  load(): Promise<Cart | null>;
+  /**
+   * S21, QA ת63: the address of the shop's checkout to load from here: once the cart's writes on their way have landed
+   * (up to `ms`), with the cart's id in the fragment (#c=, read and removed there) when this browser keeps no storage.
+   * Without a write on its way and with storage, the address as it is (a string, not a promise: the link is followed).
+   */
+  leaveFor(href: string, ms?: number): string | Promise<string>;
+};
 
 export function apiStoryCart(api = httpApi): ApiStoryCart {
   let snap: Cart | null = null;
   let id: string | null = read();
+  // S21 (ת63): the writes on their way (an add pressed just before "לתשלום")
+  const writes = new Set<Promise<unknown>>();
+  const track = <T>(p: Promise<T>): Promise<T> => {
+    writes.add(p);
+    const done = () => void writes.delete(p);
+    p.then(done, done);
+    return p;
+  };
+  const withId = (href: string): string => {
+    const known = snap?.id ?? id;
+    if (!known || usable()) return href;
+    const [base = '', hash = ''] = href.split('#');
+    const params = new URLSearchParams(hash);
+    params.set('c', known);
+    return `${base}#${params.toString()}`;
+  };
   const ensure = async (): Promise<string> => {
     if (snap) return snap.id;
     if (id) return id;
@@ -41,7 +76,8 @@ export function apiStoryCart(api = httpApi): ApiStoryCart {
     return c.id;
   };
   /** a cart the server no longer has (ordered, or expired) starts again */
-  const set = async (variantId: string, pack: Pack, qty: number): Promise<Cart> => {
+  const set = (variantId: string, pack: Pack, qty: number): Promise<Cart> => track(setNow(variantId, pack, qty));
+  const setNow = async (variantId: string, pack: Pack, qty: number): Promise<Cart> => {
     const q = Math.max(0, Math.min(MAX_QTY, Math.trunc(qty)));
     try {
       snap = await api.setItem(await ensure(), variantId, pack, q);
@@ -60,8 +96,18 @@ export function apiStoryCart(api = httpApi): ApiStoryCart {
     createCart: () => api.createCart(),
     getCart: (cartId) => api.getCart(cartId),
     setItem: (cartId, v, pack, qty) => api.setItem(cartId, v, pack, qty),
+    leaveFor(href, ms = 4000) {
+      if (!writes.size) return withId(href);
+      const end = Date.now() + ms;
+      return (async () => {
+        while (writes.size && Date.now() < end)
+          await Promise.race([Promise.allSettled([...writes]), new Promise((r) => setTimeout(r, Math.max(0, end - Date.now())))]);
+        return withId(href);
+      })();
+    },
     async load() {
-      id = read();
+      // a browser without storage keeps the id this page made (S21); with storage, storage has the last word
+      id = usable() ? read() : (snap?.id ?? id);
       if (!id) return (snap = null);
       try {
         snap = await api.getCart(id);

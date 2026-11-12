@@ -11,12 +11,30 @@ function normalise(to: string): string {
   return to.startsWith('/') ? to : `/${to}`;
 }
 
+/**
+ * S21, QA ת63: what a full load to a page of its own waits for and carries (state/cart.ts `leaveFor`: a cart write still
+ * on its way, the cart id in the fragment when storage keeps none). It returns the address to load, or a promise of it.
+ * main.tsx sets it; until then the address is loaded as it is.
+ */
+type BeforeDocument = (href: string) => string | Promise<string>;
+let beforeDocument: BeforeDocument | null = null;
+export function setBeforeDocumentLoad(fn: BeforeDocument | null): void {
+  beforeDocument = fn;
+}
+const documentFor = (href: string): string | Promise<string> => (beforeDocument ? beforeDocument(href) : href);
+function loadDocument(href: string, to: string | Promise<string>, replace = false, busy?: Element): void {
+  const go = (u: string) => (replace ? location.replace(u) : location.assign(u));
+  if (typeof to === 'string') return go(to);
+  // the link says it is on its way while the add before it lands (a slow network: up to a few seconds)
+  busy?.setAttribute('aria-busy', 'true');
+  void to.then(go, () => go(href));
+}
+
 export function navigate(to: string, opts: { replace?: boolean } = {}): void {
   const next = normalise(to);
   // S19, QA ת55: the cart, the checkout and the order page always load as their own document (no beacon, their own CSP)
   if (!MEMORY && typeof location !== 'undefined' && loadsAsDocument(next)) {
-    if (opts.replace) location.replace(next);
-    else location.assign(next);
+    loadDocument(next, documentFor(next), opts.replace);
     return;
   }
   if (!MEMORY && typeof history !== 'undefined') {
@@ -45,7 +63,14 @@ export function onLinkClick(e: MouseEvent): void {
   if (!a || a.target || a.hasAttribute('download') || a.getAttribute('rel') === 'external') return;
   const href = a.getAttribute('href');
   if (!href || !href.startsWith('/') || href.startsWith('//')) return;
-  if (!MEMORY && loadsAsDocument(href)) return;
+  if (!MEMORY && loadsAsDocument(href)) {
+    // S21, QA ת63: the browser follows the link, unless a cart write is on its way or the cart id must go along
+    const to = documentFor(href);
+    if (to === href) return;
+    e.preventDefault();
+    loadDocument(href, to, false, a);
+    return;
+  }
   e.preventDefault();
   navigate(href);
 }

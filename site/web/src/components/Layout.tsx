@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
-import { cartCount } from '../state/cart';
+import { cartCount, cartStatus } from '../state/cart';
 import { announcement } from '../state/ui';
 import type { Route } from '../router';
 import { ContactBlock } from './Contact';
@@ -19,6 +19,8 @@ export function Layout({ route, children }: { route: Route; children: ComponentC
   }, [key]);
 
   const count = cartCount.value;
+  // S21, QA ת63: no count until the saved cart is known (never "סל (0)" while it loads); a cart that failed to load has none
+  const known = cartStatus.value === 'ready';
   return (
     <>
       <a class="skip-link" href="#main">
@@ -34,10 +36,22 @@ export function Layout({ route, children }: { route: Route; children: ComponentC
             <a href="/rooms/living-room/" aria-current={route.name === 'room' ? 'page' : undefined}>
               סלון
             </a>
-            <a href="/cart/" aria-current={route.name === 'cart' ? 'page' : undefined} aria-label={`סל הקניות, ${count} פריטים`}>
-              <span aria-hidden="true">
-                סל (<span class="cart-count num">{count}</span>)
-              </span>
+            <a
+              href="/cart/"
+              aria-current={route.name === 'cart' ? 'page' : undefined}
+              aria-label={known ? `סל הקניות, ${count} פריטים` : 'סל הקניות'}
+              aria-busy={cartStatus.value === 'loading' ? 'true' : undefined}
+            >
+              {known ? (
+                <span aria-hidden="true">
+                  סל (<span class="cart-count num">{count}</span>)
+                </span>
+              ) : (
+                <span aria-hidden="true">
+                  סל
+                  <span class="cart-count-slot" />
+                </span>
+              )}
             </a>
           </nav>
         </div>

@@ -3,7 +3,7 @@
  * qa/reports/2026-11-10-site-track-qa-s8-s10/tools/base-quality.mjs): a fresh context at the view's size and dpr, the
  * layers' requests answered as the caller says, the engine started and settled, the controls hidden, the canvas read.
  */
-import { expect, type Browser, type Page, type Route } from '@playwright/test';
+import { expect, type Browser, type Locator, type Page, type Route } from '@playwright/test';
 import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -34,12 +34,17 @@ export async function capture(browser: Browser, url: string, v: View, answers: [
       if (m) await answer(route, m);
       else await route.continue();
     });
-  await page.goto(url);
+  await page.goto(url, { waitUntil: 'load' });
   await expect(page.locator('section.stage')).toBeVisible({ timeout: 20_000 });
   await expect(page.locator('button.hotspot').first()).toBeAttached({ timeout: 20_000 });
+  // S21, QA ה17: on a busy runner a press can land before the page hydrates, and nothing starts the engine: the press
+  // is made again until the engine is there (never a longer fixed wait), then it must be ready
   const sb = (await page.locator('section.stage').boundingBox())!;
-  await page.mouse.click(sb.x + 20, sb.y + sb.height / 2);
-  await expect.poll(() => page.evaluate(() => window.__hdEngine?.ready ?? false), { timeout: 30_000 }).toBe(true);
+  await expect(async () => {
+    if (!(await page.evaluate(() => !!window.__hdEngine))) await page.mouse.click(sb.x + 20, sb.y + sb.height / 2);
+    expect(await page.evaluate(() => !!window.__hdEngine)).toBe(true);
+  }).toPass({ timeout: 60_000, intervals: [500, 1_000, 2_000] });
+  await expect.poll(() => page.evaluate(() => window.__hdEngine?.ready ?? false), { timeout: 60_000 }).toBe(true);
   if (before) {
     await before(page);
     await settle(page);
@@ -57,17 +62,12 @@ export async function capture(browser: Browser, url: string, v: View, answers: [
     await settle(page);
     await hide(page, '[role="dialog"], .wheel, .wheel-wrap');
   }
-  await hide(page, '.stage-ui, .hotspots, .stage-temp-note, .outlines, .stage-back, .stage-vignette');
   await page.mouse.move(0, 0);
-  await settle(page);
-  // the stage is still when two readings in a row are the same picture (a CSS fade or a late frame otherwise differs)
-  const canvas = page.locator('canvas.room-canvas');
-  let shot = await canvas.screenshot();
-  for (let i = 0; i < 30; i++) {
-    const next = await canvas.screenshot();
-    if (next.equals(shot)) break;
-    shot = next;
-  }
+  // S21, QA ה17: read only once the page is settled. Under load (QA: 12–14 on 4 cores) a capture caught the product
+  // marks that a press shows for a few seconds (each mark sets its own visibility, so hiding their parent once is not
+  // enough): a 0.19% patch in one of the two drawings. Now every mark and control is hidden before every reading, the
+  // engine has no animation and no picture on its way, and three readings in a row are the same picture.
+  const shot = await stillShot(page, page.locator('canvas.room-canvas'), STAGE_OVER);
   const eng = await page.evaluate(() => {
     const e = window.__hdEngine!;
     return { cam: { ...e.cam }, vp: { ...e.vp } };
@@ -119,6 +119,41 @@ export async function capturePoster(browser: Browser, url: string, v: View, answ
   await ctx.close();
   const { data, info } = await sharp(shot).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   return { data, w: info.width, h: info.height, file: new URL(info0.src).pathname.split('/').pop()!, engine: info0.engine };
+}
+
+/** what lies over the composed stage: the controls, the marks (each hotspot too: one shown sets its own visibility) */
+const STAGE_OVER = '.stage-ui, .hotspots, button.hotspot, .hotspot .mark, .stage-temp-note, .outlines, .stage-back, .stage-vignette';
+/** S21 (ה17): the engine is at rest: no animation, and no picture on its way to it (the loader's queue is empty) */
+const engineIdle = (page: Page) =>
+  page.evaluate(
+    () =>
+      new Promise<boolean>((res) =>
+        requestAnimationFrame(() => {
+          const e = window.__hdEngine as unknown as { ready?: boolean; anims?: Set<unknown>; loader?: { active?: number; queue?: unknown[] } };
+          res(!!e?.ready && (!e.anims || e.anims.size === 0) && !e.loader?.active && !e.loader?.queue?.length);
+        }),
+      ),
+  );
+/**
+ * S21, QA ה17: a reading of the stage once it is settled: what lies over it hidden again before every reading, the
+ * engine idle, and the same picture three readings in a row (up to 40 readings; the test fails on a stage that never
+ * settles rather than reading a moving one).
+ */
+async function stillShot(page: Page, el: Locator, over: string): Promise<Buffer> {
+  const read = async () => {
+    await hide(page, over);
+    await expect.poll(() => engineIdle(page), { timeout: 30_000 }).toBe(true);
+    return el.screenshot({ animations: 'disabled' });
+  };
+  let shot = await read();
+  let same = 0;
+  for (let i = 0; i < 40 && same < 2; i++) {
+    const next = await read();
+    same = next.equals(shot) ? same + 1 : 0;
+    shot = next;
+  }
+  expect(same, 'the stage never settled: three readings in a row differed').toBe(2);
+  return shot;
 }
 
 /** what lies over the poster at rest: the controls, the marks (each hotspot too: one shown sets its own visibility) */
