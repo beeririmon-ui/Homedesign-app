@@ -123,36 +123,52 @@ export const dhash = async (buf: Buffer | Uint8Array): Promise<string | null> =>
 /** S19 (ת51): a margin pixel differs from the margin's colour by at most this much (JPEG noise on white) */
 const TRIM_THRESHOLD = 16;
 /** the version of the trim and the variants, in the cache's keys */
-const TRIM_VERSION = 't1';
+const TRIM_VERSION = 't3';
 /**
  * S19, QA ת51: the box inside a grey picture's uniform margins, or null when there is nothing to trim (no margin, or
- * less than 2% of the area) or nothing left (a blank picture, or a dot: under 12 px or 4% of a side). Up to three
- * passes, each from the colour at the corner of what is left: a frame or a border, then the white inside it.
+ * less than 2% of the area) or nothing left (a blank picture, or a dot: under 12 px or 4% of a side). A pass trims what
+ * matches the colour at the corner of what is left, and only when that colour runs round the box (90% of its edge): a
+ * frame or a border, then the white inside it; never the inside of the product itself. Up to three passes.
  */
 export function trimBox(g: Uint8Array, w: number, h: number): { left: number; top: number; width: number; height: number } | null {
   let x0 = 0;
   let y0 = 0;
   let x1 = w - 1;
   let y1 = h - 1;
+  const near = (v: number, bg: number) => v - bg <= TRIM_THRESHOLD && bg - v <= TRIM_THRESHOLD;
   for (let pass = 0; pass < 3; pass++) {
     const bg = g[y0 * w + x0]!;
+    // the colour must run round the box: a margin, not a pixel of a picture that fills its frame
+    let edge = 0;
+    let same = 0;
+    for (let x = x0; x <= x1; x++) {
+      edge += 2;
+      same += (near(g[y0 * w + x]!, bg) ? 1 : 0) + (near(g[y1 * w + x]!, bg) ? 1 : 0);
+    }
+    for (let y = y0 + 1; y < y1; y++) {
+      edge += 2;
+      same += (near(g[y * w + x0]!, bg) ? 1 : 0) + (near(g[y * w + x1]!, bg) ? 1 : 0);
+    }
+    if (same < 0.9 * edge) break;
     let nx0 = x1 + 1;
     let ny0 = y1 + 1;
     let nx1 = x0 - 1;
     let ny1 = y0 - 1;
     for (let y = y0; y <= y1; y++) {
       const row = y * w;
-      for (let x = x0; x <= x1; x++) {
-        const v = g[row + x]!;
-        if (v - bg > TRIM_THRESHOLD || bg - v > TRIM_THRESHOLD) {
+      for (let x = x0; x <= x1; x++)
+        if (!near(g[row + x]!, bg)) {
           if (x < nx0) nx0 = x;
           if (x > nx1) nx1 = x;
           if (y < ny0) ny0 = y;
           if (y > ny1) ny1 = y;
         }
-      }
     }
-    if (nx1 < nx0 || ny1 < ny0) return null; // all margin: a blank picture
+    // all of it one colour: on the first pass a blank picture; later, a box of one colour (what is left is the box)
+    if (nx1 < nx0 || ny1 < ny0) {
+      if (pass === 0) return null;
+      break;
+    }
     if (nx0 === x0 && ny0 === y0 && nx1 === x1 && ny1 === y1) break;
     [x0, y0, x1, y1] = [nx0, ny0, nx1, ny1];
   }
@@ -160,6 +176,10 @@ export function trimBox(g: Uint8Array, w: number, h: number): { left: number; to
   const height = y1 - y0 + 1;
   if (width * height >= 0.98 * w * h) return null;
   if (width < Math.max(12, w * 0.04) || height < Math.max(12, h * 0.04)) return null;
+  // what is left must carry ink (ת50's measure): a blank canvas inside a frame is no picture
+  let ink = 0;
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) ink += 255 - g[y * w + x]!;
+  if (ink / (width * height) < NEAR_MIN_INK) return null;
   return { left: x0, top: y0, width, height };
 }
 
@@ -192,7 +212,8 @@ export async function fingerprintVariants(buf: Buffer | Uint8Array, want: readon
       for (let y = 0; y < h; y++) for (let i = 0; i < w; i++) o[y * w + i] = x[y * w + (w - 1 - i)]!;
       return o;
     };
-    const hash = (x: Uint8Array, w: number, h: number) => hashRaw(sharp(Buffer.from(x.buffer, x.byteOffset, x.byteLength), { raw: { width: w, height: h, channels: 1 } }));
+    const hash = (x: Uint8Array, w: number, h: number) =>
+      hashRaw(sharp(Buffer.from(x.buffer, x.byteOffset, x.byteLength), { raw: { width: w, height: h, channels: 1 } }));
     for (const v of rest) {
       if (v === 'mirrored') out[v] = await hash(mirror(g, W, H), W, H);
       else if (!box) out[v] = null;
@@ -246,11 +267,17 @@ export const prepare = (f: Fingerprint): Prepared => ({ ...f, bits: Uint8Array.f
  * The pixel rule (S17, ת45; S19, ת50) on two fingerprints: A, within the dHash threshold; B, a near miss whose 32×32 grey
  * images differ by at most 3 on average, when both carry ink (a near-blank picture is no evidence of anything).
  */
-export function pixelRule(a: Prepared, b: Prepared, max = PIXEL_MAX_HAMMING): { d: number; m: number | null; rule: 'A' | 'B' | null } {
+export function pixelRule(
+  a: Prepared,
+  b: Prepared,
+  max = PIXEL_MAX_HAMMING,
+  o: { inkForA?: boolean } = {},
+): { d: number; m: number | null; rule: 'A' | 'B' | null } {
   const d = hammingBytes(a.bits, b.bits);
   const m = d <= NEAR_MAX_HAMMING ? mad32(a.grey, b.grey) : null;
-  if (d <= max) return { d, m, rule: 'A' };
-  if (m !== null && m <= NEAR_MAX_MAD32 && a.ink >= NEAR_MIN_INK && b.ink >= NEAR_MIN_INK) return { d, m, rule: 'B' };
+  const inked = a.ink >= NEAR_MIN_INK && b.ink >= NEAR_MIN_INK;
+  if (d <= max && (!o.inkForA || inked)) return { d, m, rule: 'A' };
+  if (m !== null && m <= NEAR_MAX_MAD32 && inked) return { d, m, rule: 'B' };
   return { d, m, rule: null };
 }
 
@@ -547,6 +574,9 @@ export type PixelVerdict = { d: number; m: number | null; rule: 'A' | 'B' | null
  * S19: a picture against the supplier fingerprints, every form of it against every form of each: the best match (the
  * nearest by dHash among the matches), else the nearest; and the smallest grey difference of a near miss that is not a
  * match (the margin of rule B). Exported so QA's scans read the gate's own rule.
+ * The plain picture against the plain one is QA's rule as approved (A; B with ink). A mirrored or trimmed form is
+ * evidence only of a picture with content: there both A and B need ink on both sides (a near-blank picture is a few
+ * bits from the mirror of another near-blank one).
  */
 export function nearestPicture(
   mine: Mine,
@@ -561,7 +591,7 @@ export function nearestPicture(
   for (const p of pixels) {
     if (only && !only(p)) continue;
     for (const [k, f] of forms) {
-      const r = pixelRule(f, p, max);
+      const r = pixelRule(f, p, max, { inkForA: k !== 'plain' || p.variant !== 'plain' });
       const v: PixelVerdict = { ...r, p, mine: k };
       if (!r.rule && r.m !== null && (!grey || r.m < grey.m!)) grey = v;
       if (!best || (r.rule && !best.rule) || (!!r.rule === !!best.rule && r.d < best.d)) best = v;

@@ -1,0 +1,326 @@
+{
+ "date": "2026-11-12",
+ "author": "render-agent",
+ "tokens": 0,
+ "brief": "briefs/render-wm-tool-r7-2026-11-12.md",
+ "sources": {
+  "designer": "docs/proposals/owner-answers-applied-2026-11-12.md",
+  "slots": "data/slots/living-room.json 1.9.4",
+  "plan": "docs/house-plan.json 1.3.6"
+ },
+ "note": "ungraded per-product layers (RGBA, straight alpha) and shadows (grey RGB, multiply) in work-r7/; grade_cut_r7.py grades and cuts them with the ONE v3c grade; the numbers here are measured on graded scenes recomposed with the change (set B)",
+ "planter": {
+  "what": "section 8: ONE factor in linear light on the pot's body (R, G, B alike), the planter layer only; the shadow file is the R5 file's pixels, unchanged",
+  "k": 0.78,
+  "allowed": [
+   0.72,
+   0.84
+  ],
+  "mask": {
+   "rim_ellipse_top_row": 1044,
+   "opening_centre_row": 1054.3,
+   "soil_px": 1712
+  },
+  "mask_note": "the pot without the soil, the trunk and the crown (QA's definition) INCLUDING its soft edge and the pixels under the basket's edge (else a light fringe along the basket); feathered 2 px inside",
+  "highpass_restored": null,
+  "before": {
+   "rim_row": 1051,
+   "pot_same_rows": {
+    "L": 84.84,
+    "C": 13.02,
+    "h": 75.5,
+    "px": 1076
+   },
+   "ring": {
+    "L": 65.56,
+    "C": 14.58,
+    "h": 78.0,
+    "px": 1315
+   },
+   "pot_whole": {
+    "L": 63.92,
+    "C": 14.66,
+    "h": 68.9,
+    "px": 2612
+   },
+   "shoulder_1060_1107": {
+    "L": 85.18,
+    "C": 12.81,
+    "h": 75.5,
+    "px": 980
+   },
+   "bottom_1180_1191": {
+    "L": 15.94,
+    "C": 9.84,
+    "h": 59.5,
+    "px": 38
+   },
+   "highpass_L_std": 8.657,
+   "a1_dL_whole_minus_ring": -1.64,
+   "b_dC_same_rows": -1.56,
+   "c_dh_same_rows": -2.5
+  },
+  "after": {
+   "rim_row": 1051,
+   "pot_same_rows": {
+    "L": 76.82,
+    "C": 12.0,
+    "h": 75.4,
+    "px": 1076
+   },
+   "ring": {
+    "L": 65.56,
+    "C": 14.58,
+    "h": 78.0,
+    "px": 1315
+   },
+   "pot_whole": {
+    "L": 57.52,
+    "C": 13.58,
+    "h": 68.7,
+    "px": 2612
+   },
+   "shoulder_1060_1107": {
+    "L": 77.15,
+    "C": 11.84,
+    "h": 75.4,
+    "px": 980
+   },
+   "bottom_1180_1191": {
+    "L": 14.53,
+    "C": 9.01,
+    "h": 59.4,
+    "px": 38
+   },
+   "highpass_L_std": 8.178,
+   "a1_dL_whole_minus_ring": -8.04,
+   "b_dC_same_rows": -2.58,
+   "c_dh_same_rows": -2.6
+  },
+  "targets": {
+   "(a') whole pot 6-10 L* darker than the ring": true,
+   "(a'') lit shoulder rows 1060-1107 at 74-79": true,
+   "bottom band moves <= 3": true,
+   "(b) C* <= ring + 1.5": true,
+   "(c) hue within +-10 deg of the ring": true,
+   "(d) high-pass L* std within -10 %..+5 %": true
+  },
+  "all_met": true,
+  "expected_by_designer": {
+   "(a')": "~57.5 (about -8)",
+   "(a'')": "~76.8",
+   "bottom": "~14",
+   "(b)": "~12"
+  },
+  "left_edge_L_median": {
+   "before": {
+    "outside_1_3px": 61.27,
+    "inside_1_3px": 80.29
+   },
+   "after": {
+    "outside_1_3px": 61.27,
+    "inside_1_3px": 72.53
+   }
+  },
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/planter.png",
+  "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/shadows/planter.png",
+  "source": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r5/layers/planter.png"
+ },
+ "curtains": {
+  "what": "WM-C3 / SUP-C1 (owner 2026-11-12), the designer's section 6.3: the sold length 270 (180502 132 x 270, 554205 150 x 270): hem Z 0.12; one cut and one shadow for both",
+  "curtains": {
+   "geometry": {
+    "hem_z": 0.12,
+    "hem_px": [
+     [
+      15.0,
+      1412.8
+     ],
+     [
+      65.9,
+      1426.5
+     ],
+     [
+      129.2,
+      1405.7
+     ]
+    ],
+    "contact_px": [
+     [
+      129.2,
+      1209.9
+     ],
+     [
+      244.7,
+      1183.6
+     ]
+    ],
+    "bench_end_x_px": 129.2,
+    "spill_px": 5.34,
+    "wobble_max_px": 2.0,
+    "lines_3840": {
+     "hem": [
+      [
+       -93.5,
+       2050.0
+      ],
+      [
+       -17.4,
+       2070.6
+      ],
+      [
+       77.5,
+       2039.4
+      ]
+     ],
+     "contact": [
+      [
+       77.5,
+       1746.3
+      ],
+      [
+       250.3,
+       1706.9
+      ]
+     ]
+    }
+   },
+   "removed_free_alpha_px": 27454,
+   "kept_free_alpha_px": 335109,
+   "hem_band_px": 18.0,
+   "hem_band_step_dL": -0.75,
+   "break_px": 5.0,
+   "break_dL": -4.0,
+   "shadow": {
+    "old_removed_px": 3952,
+    "under_hem_max": 0.06,
+    "under_hem_fade_px": 16.7,
+    "contact": {
+     "width_px": 3.34,
+     "multiply": 0.925,
+     "blur_sigma_px": 1.0
+    },
+    "note": "the designer's explicit shadow (section 6.3 item 6) for the cut; the shadow above the lines is the frozen recipe's file, unchanged"
+   },
+   "files": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/curtains.png",
+    "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/curtains-free-alpha.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/shadows/curtains.png"
+   },
+   "source": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/curtains.png"
+   },
+   "band_natural_dL_before_cut": -2.05,
+   "measured": {
+    "hem_dev_px_2720": {
+     "median": -0.18,
+     "min": -2.54,
+     "max": 2.21
+    },
+    "hem_dev_px_3840": {
+     "median": -0.27,
+     "max_abs": 3.8
+    },
+    "band_dL_vs_above": -2.91
+   }
+  },
+  "curtains-v2": {
+   "geometry": {
+    "hem_z": 0.12,
+    "hem_px": [
+     [
+      15.0,
+      1412.8
+     ],
+     [
+      65.9,
+      1426.5
+     ],
+     [
+      129.2,
+      1405.7
+     ]
+    ],
+    "contact_px": [
+     [
+      129.2,
+      1209.9
+     ],
+     [
+      244.7,
+      1183.6
+     ]
+    ],
+    "bench_end_x_px": 129.2,
+    "spill_px": 5.34,
+    "wobble_max_px": 2.0,
+    "lines_3840": {
+     "hem": [
+      [
+       -93.5,
+       2050.0
+      ],
+      [
+       -17.4,
+       2070.6
+      ],
+      [
+       77.5,
+       2039.4
+      ]
+     ],
+     "contact": [
+      [
+       77.5,
+       1746.3
+      ],
+      [
+       250.3,
+       1706.9
+      ]
+     ]
+    }
+   },
+   "removed_free_alpha_px": 27425,
+   "kept_free_alpha_px": 331123,
+   "hem_band_px": 18.0,
+   "hem_band_step_dL": -0.76,
+   "break_px": 5.0,
+   "break_dL": -4.0,
+   "shadow": {
+    "old_removed_px": 4482,
+    "under_hem_max": 0.06,
+    "under_hem_fade_px": 16.7,
+    "contact": {
+     "width_px": 3.34,
+     "multiply": 0.925,
+     "blur_sigma_px": 1.0
+    },
+    "note": "the designer's explicit shadow (section 6.3 item 6) for the cut; the shadow above the lines is the frozen recipe's file, unchanged"
+   },
+   "files": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/curtains-v2.png",
+    "free_alpha": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/layers/curtains-v2-free-alpha.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r7/shadows/curtains-v2.png"
+   },
+   "source": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/layers/curtains-v2.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-r6/shadows/curtains-v2.png"
+   },
+   "band_natural_dL_before_cut": -2.04,
+   "measured": {
+    "hem_dev_px_2720": {
+     "median": -0.18,
+     "min": -2.19,
+     "max": 1.9
+    },
+    "hem_dev_px_3840": {
+     "median": -0.27,
+     "max_abs": 3.28
+    },
+    "band_dL_vs_above": -2.84
+   }
+  }
+ }
+}

@@ -8,8 +8,8 @@
   "base": 3950,
   "reserve_with_manager_approval": 2000
  },
- "status": "ROUND 3 DONE. 5,250 of 5,950. Vase P2+P1 passed QA. Lamp P2: retake no better (geometry consistent but low, H/D +18%). Textile: nano-banana-2 reproduces the waffle muslin (material passes), L* 0.6 over.",
- "tokens_spent": 5250,
+ "status": "ROUND 4 DONE. 5,650 of 5,950. Throw P2 (nano) fixed in code: colour in, clipped ends recovered; inner fringe gaps kept opaque with evidence. Stone test: no (H/D +21.5%).",
+ "tokens_spent": 5650,
  "var2_auth": "no authentication requested (var2_list_models and var2_estimate_cost answered)",
  "estimate_calls": {
   "tool": "var2_estimate_cost (live lookup, 2026-11-12)",
@@ -690,7 +690,8 @@
   "D3_P4": "not tested: no throw P2 passed",
   "D4_C2": "P2 packshots vs supplier studio photos match on background and soft light by construction; the vase P2 vs urls[4] reads 4/5. C2 needs calibration for P2",
   "lamp_P2": "gpt-image-2-5 drew the lamp from a low camera both times (inherited from the SKU photo urls[9]) and the retake drifted taller (H/D 2.90). The reference sheet's R1 viewpoint leaks into P2",
-  "small_product_P1": "a small product's P1 needs a MEDIUM base (QA: at least ~400x500) that already holds a size anchor (the print beside it, the lamp it replaces), the line \"same height as the lamp it replaces (16 cm)\", and measurement on the raw against the anchor before any crop. A tiny base (100x125) lets the model invent the product and the room; a loose base lets nano keep the composition and inflate the product (x1.8-2.05)."
+  "small_product_P1": "a small product's P1 needs a MEDIUM base (QA: at least ~400x500) that already holds a size anchor (the print beside it, the lamp it replaces), the line \"same height as the lamp it replaces (16 cm)\", and measurement on the raw against the anchor before any crop. A tiny base (100x125) lets the model invent the product and the room; a loose base lets nano keep the composition and inflate the product (x1.8-2.05).",
+  "stone_P2": "open after three tries: gpt round 1 2.62 (two viewpoints), gpt R2 2.85 (low camera), nano 2.99 (centred plate, smoother stone). Both models elongate this lamp; the most faithful is still gpt round 1 (behind the flag, partial)"
  },
  "round2": {
   "decision": "manager, 2026-11-12: R1, R3 approved from the reserve; P3/P4 and R4 only after the throw P2 passes the material check; R2 not approved; max one retake per image",
@@ -771,12 +772,13 @@
  },
  "budget_state": {
   "cap": 5950,
-  "spent": 5250,
-  "left": 700,
+  "spent": 5650,
+  "left": 300,
   "by_round": {
    "1": 3150,
    "2": 1050,
-   "3": 1050
+   "3": 1050,
+   "4": 400
   }
  },
  "round3": {
@@ -854,6 +856,37 @@
      903
     ]
    }
+  }
+ },
+ "round4": {
+  "decision": "manager after QA r3 (qa/reports/2026-11-12-img1-pilot-r3.md): throw code fixes (exposure k=0.934, fringe re-matte from the raw), stone method test (nano + remove-bg, 450), no P3/P4",
+  "estimate": {
+   "nano-banana-2 2K": 400,
+   "remove-background": 50,
+   "deviation_pct": 0.0
+  },
+  "jobs_run": [
+   {
+    "id": "img1-p2-lamp-nano-stone-test",
+    "tokens": 400,
+    "placeholder_id": "ef446ffb-e9a7-4339-90b5-0bfc5bd2b72f",
+    "task_id": "9e2b9b2c8a9886c5b041783a29a212dd",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-9e2b9b2c8a9886c5b041783a29a212dd-0-1794460887699-356aad5a.png",
+    "image_url": "bases/palette-F4F1EC-1638x2048.png",
+    "image_refs": [
+     "lamp-16-mid sheet (urls[9] rows 22-352 + swatch)"
+    ],
+    "prompt": "prompts/p2-b-lamp-stone-test.txt",
+    "raw": "raw/p2-lamp-nano-stone-test-raw.png",
+    "verdict_render_agent": "no (H/D +21.5%, top b/a 0.14, pores low)",
+    "idempotency_key": "img1-pilot-20261112-p2-lamp-nano-stone-test"
+   }
+  ],
+  "not_run": {
+   "remove-background for the stone test (50)": "the test failed on geometry; a cut-out would not be used"
+  },
+  "code_fixes": {
+   "throw": "tools/fix_throw_nano.py, k=0.934; see source-record"
   }
  }
 }

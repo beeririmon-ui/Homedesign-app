@@ -142,11 +142,14 @@ export async function processSupplierJob(
       .first<{ status: string; updated_at: string }>();
     // a claim left by a crash is taken over (compare-and-swap); the supplier must deduplicate by our order number
     if (row?.status !== 'submitting' || Date.now() - Date.parse(row.updated_at) < SUBMIT_LEASE_MS) return 'skipped';
-    // S17 (ת48): the run that died may have reached the supplier: the takeover counts as a send that may have reached it
+    // S17 (ת48): the run that died may have reached the supplier: the takeover counts as a send that may have reached it.
+    // S19, QA ת54: and the dead claim is a failure from the moment it was made: `failing_since` keeps the earliest of the
+    // run's failures, else takes the dead claim's own time. Before, the takeover's later failures set it to now, and
+    // /healthz went from degraded back to ok for about 30 minutes while the order waited for a person.
     const take = await env.DB.prepare(
-      "UPDATE supplier_shipments SET attempts = ?, reach = 'maybe', updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?",
+      "UPDATE supplier_shipments SET attempts = ?, reach = 'maybe', failing_since = COALESCE(failing_since, ?), updated_at = ? WHERE order_id = ? AND supplier = ? AND status = 'submitting' AND updated_at = ?",
     )
-      .bind(attempt, now, order.id, client.id, row.updated_at)
+      .bind(attempt, row.updated_at, now, order.id, client.id, row.updated_at)
       .run();
     if (!take.meta.changes) return 'skipped';
   }

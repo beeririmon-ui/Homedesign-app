@@ -2,6 +2,7 @@
  * Tiny router. Site: History API with prerendered pages. Artifact: in-memory (no URL changes, no hash state).
  */
 import { signal } from '@preact/signals';
+import { loadsAsDocument } from '@hd/shared/analytics';
 
 export const MEMORY = __ARTIFACT__;
 export const path = signal<string>(typeof location !== 'undefined' && !MEMORY ? location.pathname + location.search : '/');
@@ -12,6 +13,12 @@ function normalise(to: string): string {
 
 export function navigate(to: string, opts: { replace?: boolean } = {}): void {
   const next = normalise(to);
+  // S19, QA ת55: the cart, the checkout and the order page always load as their own document (no beacon, their own CSP)
+  if (!MEMORY && typeof location !== 'undefined' && loadsAsDocument(next)) {
+    if (opts.replace) location.replace(next);
+    else location.assign(next);
+    return;
+  }
   if (!MEMORY && typeof history !== 'undefined') {
     if (opts.replace) history.replaceState(null, '', next);
     else history.pushState(null, '', next);
@@ -27,13 +34,18 @@ export function initRouter(): void {
   });
 }
 
-/** Same-origin link clicks become client navigations (modifier keys and new tabs keep the browser default). */
+/**
+ * Same-origin link clicks become client navigations (modifier keys and new tabs keep the browser default).
+ * S19, QA ת55: except a link to a page without the analytics beacon (the cart, the checkout, the order page): the
+ * browser follows it, and the page loads as a document of its own.
+ */
 export function onLinkClick(e: MouseEvent): void {
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   const a = (e.target as Element | null)?.closest?.('a');
   if (!a || a.target || a.hasAttribute('download') || a.getAttribute('rel') === 'external') return;
   const href = a.getAttribute('href');
   if (!href || !href.startsWith('/') || href.startsWith('//')) return;
+  if (!MEMORY && loadsAsDocument(href)) return;
   e.preventDefault();
   navigate(href);
 }

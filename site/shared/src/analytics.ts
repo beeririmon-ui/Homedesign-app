@@ -24,6 +24,15 @@ export const ANALYTICS_TOKEN = /^[0-9a-f]{32}$/i;
 export const NO_ANALYTICS = /^\/(?:cart|checkout|order|admin|api|404)(?:\/|$)/;
 
 /**
+ * S19, QA ת55: a page without the beacon is always entered by a full page load, never by an in-site move. On the site's
+ * own links the room, the product, the cart and the checkout were one document, so a beacon loaded on the room kept
+ * running, under the room's policy, while the customer typed a name, a phone and an address at the checkout. Loaded
+ * as its own document, the cart and the checkout have no beacon and their own stricter policy, whatever the way in.
+ * (A query string or a hash does not change the page: "/checkout/?failed=1" is the checkout.)
+ */
+export const loadsAsDocument = (href: string): boolean => NO_ANALYTICS.test(href.split(/[?#]/)[0] ?? '');
+
+/**
  * The beacon's tag for a page, or '' when it has none: not a public build, no token (or not a token), or a page that
  * never carries it.
  */

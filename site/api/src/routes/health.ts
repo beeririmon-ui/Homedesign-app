@@ -13,6 +13,8 @@
  * - **S17, QA ת47:** a send that died mid-call (a `submitting` claim past its 10-minute lease, lib/fulfillment.ts) counts
  *   as failing too, whatever its last error says: without it, a retry that died after an earlier failure (`last_error`
  *   set) was neither `stalled` nor `failing`, and /healthz said ok while the paid order was never sent.
+ * - **S19, QA ת54:** a dead claim that is taken over keeps its own time as the start of the failing run
+ *   (lib/fulfillment.ts), so a takeover that leaves the order to a person does not set /healthz back to ok.
  * - **What it says:** `ok` and one word per check, nothing else: no environment, version, provider, count, time or error
  *   text. 200 when every check is ok, 503 otherwise, never cached.
  */

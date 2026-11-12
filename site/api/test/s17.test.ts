@@ -18,6 +18,7 @@ import { SUBMIT_LEASE_MS, processSupplierJob } from '../src/lib/fulfillment';
 import { cancelOrder } from '../src/lib/cancel';
 import { configureLog, errorCode, knownValues, logRow, orderLog, scrub, stripKnown } from '../src/lib/log';
 import { HttpError } from '../src/lib/http';
+import { CodedError } from '../src/lib/errors';
 import { SUPPLIER_FAILING_MS } from '../src/routes/health';
 import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from '../src/lib/suppliers/types';
 
@@ -228,7 +229,9 @@ describe('ת46: no customer value in a log row, in any script', () => {
     expect(errorCode(Object.assign(new Error('x'), { code: 'ECONNRESET' }))).toBe('ECONNRESET');
     expect(errorCode(new SupplierRefused('cj_order_api_docs_needed'))).toBe('cj_order_api_docs_needed');
     expect(errorCode(new HttpError(409, 'not_cancelable'))).toBe('not_cancelable');
-    expect(errorCode(new Error('invalid_consignee: Orna'))).toBe('invalid_consignee');
+    // S19 (QA ת53): a message prefix only from our own classes; a provider's "invalid_consignee: Orna" is 'Error'
+    expect(errorCode(new Error('invalid_consignee: Orna'))).toBe('Error');
+    expect(errorCode(new CodedError('invalid_consignee', 'Orna'))).toBe('invalid_consignee');
     expect(errorCode(new Error('orna: refused'))).toBe('Error');
     expect(errorCode(Object.assign(new Error('x'), { name: 'Orna Bodeket' }))).toBe('Error');
   });

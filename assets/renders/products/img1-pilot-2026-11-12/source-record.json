@@ -104,7 +104,8 @@
     },
     "render_agent_read": "NO (material). Colour, count, label, fringe and alpha pass; the waffle-grid muslin is not there. Not a base for P3/P4.",
     "C2_risk": "vs urls[3] (folded on white): framing, background, soft light match = 3/5; fold differs"
-   }
+   },
+   "file_sha256": "d151f5479c881656a2ea2aaf927f44829cd25b238b976456b4771ca72998d616"
   },
   {
    "card": "vase-cj-textured-white-stoneware",
@@ -126,8 +127,11 @@
    "tokens": 600,
    "file": "assets/renders/products/img1-pilot-2026-11-12/vase-cj-textured-white-stoneware/p2.png",
    "own": true,
-   "qa_verdict": "yes / passed (QA 1.1), pending the designer's written eye",
-   "qa_report": "qa/reports/2026-11-12-img1-pilot.md",
+   "qa_verdict": "yes / passed (QA r1 1.1; clamp checked QA r3 3), bound to file_sha256 2b50d6694b2013e5…; pending the designer's written eye",
+   "qa_report": [
+    "qa/reports/2026-11-12-img1-pilot.md",
+    "qa/reports/2026-11-12-img1-pilot-r3.md"
+   ],
    "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-vase-raw.png",
    "reframe": {
     "raw_bbox": [
@@ -186,7 +190,7 @@
    },
    "code_fixes": [
     {
-     "what": "interior alpha 251-253 -> 255 (alpha*255/251, clipped); zero-alpha unchanged; edge ramp moved <=3 levels",
+     "what": "interior alpha 251-253 -> 255 (alpha*255/251, clipped); zero-alpha unchanged; alpha moved 0..+4 levels (the +4 in interior pixels that were 251-252; QA r3 3)",
      "approved": "manager, 2026-11-12 (QA 6 #9)",
      "numbers": {
       "rule": "alpha = clip(round(alpha*255/251)), all pixels",
@@ -196,12 +200,13 @@
       ],
       "changed_px": 1067348,
       "zero_alpha_unchanged": true,
-      "max_edge_change": 3
+      "max_edge_change": 4
      },
      "before": "assets/renders/products/img1-pilot-2026-11-12/vase-cj-textured-white-stoneware/p2-before-alpha-clamp.png",
      "qa_to_reconfirm": "alpha only"
     }
-   ]
+   ],
+   "file_sha256": "2b50d6694b2013e5f9198b10b16cf55e060266d5b811d7d39ad2717fc9acbeba"
   },
   {
    "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
@@ -222,8 +227,11 @@
    "tokens": 600,
    "file": "assets/renders/products/img1-pilot-2026-11-12/accent-sconces-aliexpress-indoor-stone-wall-lamp/p2.png",
    "own": true,
-   "qa_verdict": "partial / failed (QA 1.3, 3): both ends visible; L* 0.3-0.9 over",
-   "qa_report": "qa/reports/2026-11-12-img1-pilot.md",
+   "qa_verdict": "partial / failed (QA r1 1.3, 3; QA r3 2.3): the more faithful of the two lamp P2s; behind the flag only, labelled \"partial, not for publication\"; check:rights blocks it from the public build",
+   "qa_report": [
+    "qa/reports/2026-11-12-img1-pilot.md",
+    "qa/reports/2026-11-12-img1-pilot-r3.md"
+   ],
    "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-lamp-raw.png",
    "reframe": {
     "scale": 0.5956,
@@ -326,7 +334,8 @@
      "before": "assets/renders/products/img1-pilot-2026-11-12/accent-sconces-aliexpress-indoor-stone-wall-lamp/p2-before-gapfix.png"
     }
    ],
-   "geometry_error": "Both units: the cylinder's top end is drawn as an ellipse seen from ABOVE (the rim and the top opening visible, ~43 px tall on a 498 px wide cylinder, raw scale) and its bottom end as an ellipse seen from BELOW (the bottom opening and a recessed lens ring visible, ~105-109 px tall). With the camera at the lamps' centre height and an 85 mm lens, a vertical cylinder shows at most a thin sliver of one end; seeing the top from above and the bottom from below at once implies two eye heights. Effect on the numbers: silhouette H/D 2.74 includes both bulges; between the ellipse centres 2.68. Not re-rendered (manager); QA judges visibility at product-page size; a retake needs the manager's approval."
+   "geometry_error": "Both units: the cylinder's top end is drawn as an ellipse seen from ABOVE (the rim and the top opening visible, ~43 px tall on a 498 px wide cylinder, raw scale) and its bottom end as an ellipse seen from BELOW (the bottom opening and a recessed lens ring visible, ~105-109 px tall). With the camera at the lamps' centre height and an 85 mm lens, a vertical cylinder shows at most a thin sliver of one end; seeing the top from above and the bottom from below at once implies two eye heights. Effect on the numbers: silhouette H/D 2.74 includes both bulges; between the ellipse centres 2.68. Not re-rendered (manager); QA judges visibility at product-page size; a retake needs the manager's approval.",
+   "file_sha256": "397057d89f9e718696b81669153f63d765339943bca8181008a52487ea605365"
   },
   {
    "card": "sofa-cover-cj-cotton-muslin-fringe",
@@ -432,7 +441,8 @@
      "mouth_over_D": 0.62
     },
     "render_agent_read": "YES for the product (within P1 +-15%), relief reads; G4.16 met only by the code re-frame (58%, left third, 1638x2048 from 2427x3034); golden evening light kept; the mug and the open book on the table were dropped by the model"
-   }
+   },
+   "file_sha256": "0eed0961803051896ffbeab2feec67f16f8d543e87ce4c4cd7be7f457fc8910c"
   },
   {
    "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
@@ -507,7 +517,8 @@
      "left_third": true
     },
     "render_agent_read": "PARTIAL: lit, two soft beams within the Bible, stone not burnt, proportions within +-15%; G4.16 reachable only by a code crop at 50% and that is 1360x1700 native (below 2K, not enlarged); the room reads as the same wall (olive, print, cushions, candles in the raw)"
-   }
+   },
+   "file_sha256": "0cade6de831bdb099afba2b3ba485940c03af139fc73818e8ba22bc45bb2a365"
   },
   {
    "card": "sofa-cover-cj-cotton-muslin-fringe",
@@ -626,7 +637,8 @@
      "read": "the SKU has one consistent grid peak (4.3-4.9 px) in every patch; both P2s show a fine slub structure (~13 px) in some patches and folds (34-37 px) in others; at 100% they read as slub/gauze weave without the puckered waffle cells"
     },
     "render_agent_read": "NO (material, same as round 1): colour, count, label, fringe and alpha pass; no waffle grid at 100%. The retake limit for this image is reached."
-   }
+   },
+   "file_sha256": "1cb4efbe8a9f17e95f4a81c7f353e86d0eac277344caeb20b53c570e8f1f08ba"
   },
   {
    "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
@@ -677,7 +689,8 @@
      "beam_len_x_body": 0.25
     },
     "render_agent_read": "NO (proportions): G4.16 now holds at 4K (52%, left third, 1638x2048 by downscale) and it is lit, but the cylinder H/D is 2.95 (+20% vs the card, +12% vs the SKU photo; P1 allows +-15%) and the plate is 0.46 of the cylinder (SKU 0.76). With a 100x125 base the model redrew the lamp (the Bible 1.9 trap); the background prints were invented (light wood frames, pastel) instead of ed4's black-framed prints. The round-1 lamp P1 stays the more faithful one (1360x1700, below 2K). Retake limit reached."
-   }
+   },
+   "file_sha256": "739b0358b94d248ff028f4fb25fb78aebd7f1dd283f68dffa9392391098221a6"
   },
   {
    "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
@@ -699,8 +712,8 @@
    "file": "assets/renders/products/img1-pilot-2026-11-12/accent-sconces-aliexpress-indoor-stone-wall-lamp/p2-r2.png",
    "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-lamp-r2-raw.png",
    "own": true,
-   "qa_verdict": "pending",
-   "qa_report": null,
+   "qa_verdict": "no / failed (QA r3 2): one viewpoint but ~9 deg below centre, H/D +14-16%, stone smoother (pores x0.25-0.35); shown nowhere",
+   "qa_report": "qa/reports/2026-11-12-img1-pilot-r3.md",
    "code_fixes": [
     {
      "what": "gap 1.84 cm -> 10 cm by shifting the right unit 651 px (cut at x=889, raw); interior alpha clamp (/252)",
@@ -769,7 +782,8 @@
      "gap_cm": 1.84
     },
     "read": "NO. Fixed: the two-viewpoint error is gone (one consistent viewpoint). Not fixed: that viewpoint is still below the lamp, so the bottom opening (an empty recess, no lens) and the plate underside show; the top shows no face. Worse: silhouette H/D 2.90 (+18% vs the card 2.46; round 1 was 2.72-2.75), body between full-width rows 2.81. Same: L* 85.5-85.75 (over 85 by 0.5-0.75). Kept: 2 units, plate 0.77 / 0.42 (SKU 0.76 / 0.45), pores. This was the image's only retake; neither version passes 5.5."
-   }
+   },
+   "file_sha256": "c3c9d9cd4d592db60dff57725b078192631bcda1e722c9cfab565888a92871cc"
   },
   {
    "card": "sofa-cover-cj-cotton-muslin-fringe",
@@ -799,8 +813,8 @@
     "assets/renders/products/img1-pilot-2026-11-12/raw/p2-throw-nano-test-nobg.png"
    ],
    "own": true,
-   "qa_verdict": "pending",
-   "qa_report": null,
+   "qa_verdict": "partial (QA r3 1): material passes; L* 95.5; fringe gaps opaque; angle off the house angle (designer, D5). Superseded by p2-nano-fixed.png",
+   "qa_report": "qa/reports/2026-11-12-img1-pilot-r3.md",
    "code_fixes": [
     {
      "what": "interior alpha 254 -> 255 (/254); re-framed to 80% width on 1638x2048 (x0.887, downscale only)",
@@ -914,14 +928,192 @@
      "native": "1856x2304 (model 2K)"
     },
     "read": "MATERIAL PASSES: the waffle grid and crinkle read at 100% (first time in the pilot). Open for QA: lit L* 95.6 (0.6 over the 89-95 window; dL* +5.3 vs the SKU, within 6); fringe at the upper edge (~7-9% of the fold width); a flat woven border ~1 cell wide before the fringe that the SKU photos do not clearly show; a few fringe tips on the right edge cut straight by remove-background; composition off the house angle (camera ~55-65 deg down and almost frontal, not 35 deg / turned 30 deg) - composition, not fidelity; C2/C3 to check."
+   },
+   "file_sha256": "e3f2c00792675bb2f341e882287b09d59539aa5c94a218cd2cdc69afdad870c9"
+  },
+  {
+   "card": "sofa-cover-cj-cotton-muslin-fringe",
+   "type": "P2",
+   "attempt": "round 4: code fixes on the nano method test (0 tokens)",
+   "sku": "CJYD205807526ZA",
+   "model": "none (code); source = the nano-banana-2 raw + its remove-background",
+   "base_own": [
+    "assets/renders/products/img1-pilot-2026-11-12/raw/p2-throw-nano-test-raw.png",
+    "assets/renders/products/img1-pilot-2026-11-12/raw/p2-throw-nano-test-nobg.png"
+   ],
+   "tokens": 0,
+   "file": "assets/renders/products/img1-pilot-2026-11-12/sofa-cover-cj-cotton-muslin-fringe/p2-nano-fixed.png",
+   "file_sha256": "556112dbeb108e00f3569a188f3524a3706e5927a8bc46d2278df090357ee79c",
+   "fullres": "assets/renders/products/img1-pilot-2026-11-12/sofa-cover-cj-cotton-muslin-fringe/p2-nano-fixed-fullres.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "code_fixes": [
+    {
+     "what": "global linear exposure gain k=0.934 on the product colour (QA r3 1.1 simulation)",
+     "approved": "manager, 2026-11-12 round 4",
+     "verify": {
+      "linear_ratio_outside_fringe_zone_median": 0.9339,
+      "p5_p95": [
+       0.9294,
+       0.9385
+      ],
+      "lit_LCh_before_after": [
+       [
+        95.61,
+        3.78,
+        80.3
+       ],
+       [
+        93.16,
+        3.81,
+        80.3
+       ]
+      ],
+      "dE00_vs_sku_lit_before_after": [
+       3.3,
+       1.91
+      ],
+      "texture_std_change_pct": -2.24
+     }
+    },
+    {
+     "what": "re-matte of the right-edge fringe from the raw: outside the remove-bg alpha=0.5 contour, alpha from a difference matte against a smooth paper/shadow model (thread pixels >= 8 L* above the paper); semi-transparent matte pixels take the local thread colour; inside the contour nothing is opened (see evidence); rows where the paper is too bright to separate (top corner) are left as remove-bg made them",
+     "approved": "manager, 2026-11-12 round 4",
+     "params": {
+      "rows": [
+       360,
+       1965
+      ],
+      "inner_band": 12,
+      "outer_ext": 40,
+      "gap_tol": 3.0,
+      "min_contrast": 8.0,
+      "min_diff": 8.0,
+      "vsigma": 6,
+      "open_inner": false
+     },
+     "verify": {
+      "rows_with_thread_beyond_alpha05_ge3px_before_after": [
+       49,
+       5
+      ],
+      "max_clip_px_before_after": [
+       19,
+       5
+      ],
+      "paper_coloured_soft_outline_px_before_after": [
+       3274,
+       1409
+      ],
+      "alpha_outside_zone_identical": true,
+      "rebuild": "tools/fix_throw_nano.py <img1-dir> <out.png> 0.934 rebuilds the final from the two raws; two runs gave the same sha256"
+     },
+     "evidence_gaps_inside_stay_opaque": "inside the fringe the gaps between threads read brighter than the shadowed paper right outside the edge (y=800: 71-73 vs 64; y=1600: 71-77 vs 66; y=1800: 74-79 vs 65). Paper under the fringe would be at least as dark as the contact shadow, so the gaps show the lower layer (fabric or its fringe), not paper; making them transparent would show the page through the throw. The QA target (>=50% of gaps at alpha<=0.5) is therefore not met by design; for QA/designer to rule. The top corner (y~380-520, paper L* 88-93) is ambiguous and unchanged."
+    },
+    {
+     "what": "interior alpha clamp (/254) and re-frame to 80% width on 1638x2048 (x0.8878, downscale only)"
+    }
+   ],
+   "render_agent": {
+    "read": "color now inside (L* 93.2, dE00 1.9 vs the SKU); clipped thread ends recovered (49 -> 5 rows, max 19 -> 5 px); soft paper-coloured outline cut by 57%; fringe gaps over the lower layer stay opaque (evidence above); the house-angle question stays with the designer (D5)"
+   }
+  },
+  {
+   "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+   "type": "P2",
+   "attempt": "round 4: stone method test (nano path, not a retake)",
+   "sku": "12000043242375290",
+   "model": "nano-banana-2 i2i 2K 4:5 (remove-background not run)",
+   "prompt": {
+    "file": "assets/renders/products/img1-pilot-2026-11-12/prompts/p2-b-lamp-stone-test.txt",
+    "sha256_16": "2079e4c717954548"
+   },
+   "prompt_additions": "plate size in text (the R1 crop cuts the plate); QA r1 3 camera-height lines; pore-density line",
+   "base_own": "assets/renders/products/img1-pilot-2026-11-12/bases/palette-F4F1EC-1638x2048.png",
+   "references_by_card_index": {
+    "sheet": "lamp-16-mid: images.urls[9] cut-out rows 22-352 (between the two ends: no top arc, no bottom face or lens), original scale, + swatch RGB [224,208,181]"
+   },
+   "tokens": 400,
+   "paid_from": "reserve",
+   "file": null,
+   "raw": "assets/renders/products/img1-pilot-2026-11-12/raw/p2-lamp-nano-stone-test-raw.png",
+   "own": true,
+   "qa_verdict": "pending",
+   "qa_report": null,
+   "render_agent": {
+    "measured": {
+     "paper_lab": [
+      95.2,
+      0.1,
+      2.8
+     ],
+     "units": 2,
+     "per_unit": [
+      {
+       "cyl_w": 473,
+       "sil_h": 1434,
+       "H_over_D_sil": 3.032,
+       "H_over_D_between_arc_centres": 2.986,
+       "top_arc_px": 33,
+       "bottom_arc_px": 10,
+       "b_over_a_top": 0.14,
+       "b_over_a_bottom": 0.042,
+       "plate_h": 1023,
+       "plate_over_sil": 0.713,
+       "plate_w_over_D": 0.431,
+       "plate_top_below_top_over_D": 0.419,
+       "plate_bottom_above_bottom_over_D": 0.45,
+       "stone_lit_LCh": [
+        83.87,
+        14.34,
+        79.6
+       ],
+       "dE00_vs_sku_lit": 1.82
+      },
+      {
+       "cyl_w": 473,
+       "sil_h": 1434,
+       "H_over_D_sil": 3.032,
+       "H_over_D_between_arc_centres": 2.986,
+       "top_arc_px": 33,
+       "bottom_arc_px": 10,
+       "b_over_a_top": 0.14,
+       "b_over_a_bottom": 0.042,
+       "plate_h": 1024,
+       "plate_over_sil": 0.714,
+       "plate_w_over_D": 0.429,
+       "plate_top_below_top_over_D": 0.421,
+       "plate_bottom_above_bottom_over_D": 0.446,
+       "stone_lit_LCh": [
+        83.82,
+        14.46,
+        79.6
+       ],
+       "dE00_vs_sku_lit": 1.81
+      }
+     ],
+     "pores_per_D2_test": [
+      58.4,
+      26.1,
+      12.5
+     ],
+     "pores_per_D2_sku_u9": [
+      241.5,
+      120.1,
+      68.8
+     ],
+     "gap_cm": 2.06
+    },
+    "read": "NO: H/D 2.99 between the arcs (+21.5% vs 2.46; gpt round 1 2.62, R2 2.85); top b/a ~0.14 (> 0.08), bottom 0.04; plate 0.71 but centred, not low as asked; pores 0.18-0.24x the SKU with my tool. Colour OK (L* 83.9, dE00 1.8). remove-background (50) not run: the geometry and the material fail and a cut-out cannot change them. All three attempts drew this lamp taller than 2.5:1 (2.62 / 2.85 / 2.99): the text ratio is not respected by either model."
    }
   }
  ],
  "not_made": {
-  "P3, P4 (800)": "not run: no pass before round 3, and after it the cap leaves 700 (< 800); needs a new approval",
+  "P3, P4 (800)": "not in this pilot (manager): next-stage proposal",
   "R4 throw P1": "not run",
-  "lamp P1": "no further attempts (manager)",
-  "R2": "not approved"
+  "lamp P1": "no further attempts",
+  "stone test cut-out (50)": "not run, the test failed on geometry"
  },
  "pecan_precheck": {
   "verdict": "construction looks the same (P4 by edit allowed, manager 2026-11-12)",
@@ -932,7 +1124,7 @@
  "round2": {
   "decision": "manager, 2026-11-12: R1, R3 approved from the reserve; P3/P4 and R4 only after the throw P2 passes the material check; R2 not approved; max one retake per image"
  },
- "hash_convention": "prompt.sha256_16 = first 16 hex of sha256 over the prompt text WITHOUT the trailing newline of the .txt file (the exact string sent to var2). sha256sum of the file differs by that newline.",
+ "hash_convention": "prompt.sha256_16 = first 16 hex of sha256 over the prompt text WITHOUT the trailing newline of the .txt file (the exact string sent to var2). sha256sum of the file differs by that newline. Final image files carry file_sha256 (sha256sum of the PNG). A QA verdict holds for that sha only; any code fix makes a new sha and needs QA again.",
  "lessons": {
   "small_product_P1": "a small product's P1 needs a MEDIUM base (QA: at least ~400x500) that already holds a size anchor (the print beside it, the lamp it replaces), the line \"same height as the lamp it replaces (16 cm)\", and measurement on the raw against the anchor before any crop. A tiny base (100x125) lets the model invent the product and the room; a loose base lets nano keep the composition and inflate the product (x1.8-2.05)."
  }

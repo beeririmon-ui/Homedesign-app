@@ -25,6 +25,7 @@ import { cancelOrder } from '../src/lib/cancel';
 import { customerTrackingUrl } from '../src/lib/shipments';
 import { resetAccessCache } from '../src/lib/access';
 import { errorCode, scrubMessage } from '../src/lib/log';
+import { CodedError } from '../src/lib/errors';
 import { SUPPLIER_FAILING_MS } from '../src/routes/health';
 import type { IssuedRefund, PaymentProvider, RefundInput } from '../src/lib/payments/types';
 import { SupplierRefused, type SupplierClient, type SupplierOrderInput } from '../src/lib/suppliers/types';
@@ -559,7 +560,9 @@ describe('ת38: no customer value in any log row, whatever the error says', () =
     expect(errorCode(new SupplierRefused('cj_order_api_docs_needed'))).toBe('cj_order_api_docs_needed');
     expect(errorCode(Object.assign(new Error('x'), { status: 503 }))).toBe('http_503');
     expect(errorCode(Object.assign(new Error(`no answer`), { name: 'CallTimedOut' }))).toBe('timeout');
-    expect(errorCode(new Error('set_composition_missing: vase-a:default'))).toBe('set_composition_missing');
+    // S19 (QA ת53): our own refusal is a CodedError; the same words from anyone else's error are no code
+    expect(errorCode(new CodedError('set_composition_missing', 'vase-a:default'))).toBe('set_composition_missing');
+    expect(errorCode(new Error('set_composition_missing: vase-a:default'))).toBe('Error');
     expect(errorCode(new Error(`invalid consignee ${BUYER.full_name}`))).toBe('Error');
     expect(scrubMessage(`Unexpected token 'x', "{"full_name":"${BUYER.full_name}"... is not valid JSON`)).not.toContain('נועה');
     expect(scrubMessage(`failed for ${BUYER.full_name}, ${ADDRESS.street} 17, ${ADDRESS.city}`)).toBe('failed for [he], [he] 17, [he]');

@@ -13,9 +13,12 @@
  * - **S17, QA ת46:** when the order is known (`orderLog`, `log.forOrder`), its own customer values are stripped from every
  *   row, in whatever script they were typed, case-insensitive, a phone by its digits. When it is not, production logs an
  *   error by its name and code only. Outside production the scrubbed message stays, for the developer.
+ * - **S19, QA ת52:** a known order's values are stripped as whole words only (Unicode word boundaries; a Hebrew value
+ *   with its one- or two-letter prefix), an e-mail as the whole address and its local part only (never its domain's
+ *   parts), and never from `error_id`, `order_id`, the event or the path: the id the customer quotes finds its row.
+ * - **S19, QA ת53:** `errorCode` and the row's error name come from our own error classes only (lib/errors.ts).
  */
-import { HttpError } from './http';
-import { SupplierRefused } from './suppliers/types';
+import { OwnError } from './errors';
 
 export type LogLevel = 'info' | 'warn' | 'error';
 type Fields = Record<string, unknown>;
@@ -80,6 +83,8 @@ export function scrubMessage(s: string): string {
  * alone, in any of the forms it is written (05…, 5…, 972…, +972…, 00972…, with any separators); a zip code by its digits.
  */
 export type KnownValues = { words: RegExp | null; phones: RegExp[] };
+/** the one-letter words Hebrew writes on the front of a name or a place (ו, ב, כ, ל, מ, ש, ה) */
+const HE_PREFIX = 'ובכלמשה';
 const SEP = '[\\s().-]*';
 const esc = (x: string) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 export function knownValues(v: {
@@ -88,7 +93,8 @@ export function knownValues(v: {
   phone?: string | null;
   address?: Record<string, unknown> | null;
 }): KnownValues {
-  const texts = [v.full_name, v.email, ...Object.values(v.address ?? {}).map((x) => (typeof x === 'string' ? x : null))]
+  // S19 (ת52): the e-mail is not split into words: its domain ("example", "invalid", "gmail") is nobody's detail
+  const texts = [v.full_name, ...Object.values(v.address ?? {}).map((x) => (typeof x === 'string' ? x : null))]
     .filter((x): x is string => !!x && !!x.trim())
     .map((x) => x.trim());
   const parts = new Set<string>();
@@ -97,13 +103,21 @@ export function knownValues(v: {
     if (t.length >= 2 && !/^[\d\s-]+$/.test(t)) parts.add(t);
     for (const w of t.split(/[\s,.;:()"'״׳@/\\־-]+/)) if (w.length >= 3 && !/^\d+$/.test(w)) parts.add(w);
   }
-  if (v.email?.includes('@')) parts.add(v.email.split('@')[0]!);
+  // the whole address, and its local part alone (a person's name is often in it)
+  const email = v.email?.trim();
+  if (email) parts.add(email);
+  if (email?.includes('@')) {
+    const local = email.split('@')[0]!;
+    if (local.length >= 3) parts.add(local);
+  }
+  // S19 (ת52): whole words only, by Unicode letters and digits ("commit" keeps its "com", "hotel" its "tel"); a Hebrew
+  // value also with the one- or two-letter prefix Hebrew writes on it ("לנועה", "ובבאר שבע")
   const words = parts.size
     ? new RegExp(
-        [...parts]
+        `(?<![\\p{L}\\p{N}_])(?:[${HE_PREFIX}]{1,2}(?=[\\u05d0-\\u05ea]))?(?:${[...parts]
           .sort((a, b) => b.length - a.length)
           .map(esc)
-          .join('|'),
+          .join('|')})(?![\\p{L}\\p{N}_])`,
         'giu',
       )
     : null;
@@ -127,8 +141,31 @@ export function stripKnown(s: string, k: KnownValues | undefined): string {
 }
 
 const NAME_RE = /^[A-Za-z]{1,40}$/;
+/** the runtime's own error classes: their names are no one's text */
+const STANDARD_NAMES = new Set([
+  'Error',
+  'TypeError',
+  'RangeError',
+  'SyntaxError',
+  'ReferenceError',
+  'EvalError',
+  'URIError',
+  'AggregateError',
+  'AbortError',
+  'TimeoutError',
+]);
+/**
+ * S19, QA ת53: the name a row gives an error: its class's name when the class is ours (lib/errors.ts) or the runtime's
+ * (TypeError…), else 'Error'. A provider may name its error anything ('Orna'), as it may word its message.
+ */
+export function errorName(err: unknown): string {
+  const name = err && typeof err === 'object' ? (err as { name?: unknown }).name : undefined;
+  if (typeof name !== 'string') return 'Error';
+  if (err instanceof OwnError && NAME_RE.test(name)) return name;
+  return STANDARD_NAMES.has(name) ? name : 'Error';
+}
 function errorFields(err: unknown, known?: KnownValues): Fields {
-  const name = err instanceof Error && NAME_RE.test(err.name) ? err.name : 'Error';
+  const name = errorName(err);
   const code = errorCode(err);
   // S17 (ת46): an order not known, in production: the name and the code, never the text
   if (!known && PRODUCTION) return { error_name: name, error_code: code };
@@ -139,22 +176,26 @@ function errorFields(err: unknown, known?: KnownValues): Fields {
 /**
  * S16, QA ת38/ת39: a provider's error (the supplier, the invoice or payment provider) as a code, never its text. The
  * text stays in D1 (`last_error`), behind Access.
- * S17, QA ת46: the error's own `code` only from our own classes (SupplierRefused, HttpError) or a system code (ECONNRESET,
- * ERR_…): a provider's `code` is its own free text and may carry the buyer ('invalid_consignee:Orna'). Then a timeout,
- * an HTTP status, the code our own messages start with (a snake_case word: "cj_order_api_docs_needed",
- * "set_composition_missing: …"), else the error's class name.
+ * S17, QA ת46: the error's own `code` only from our own classes or a system code (ECONNRESET, ERR_…): a provider's
+ * `code` is its own free text and may carry the buyer ('invalid_consignee:Orna'). Then a timeout, an HTTP status, the
+ * code our own messages start with (a snake_case word: "cj_order_api_docs_needed", "set_composition_missing: …"), else
+ * the error's class name.
+ * S19, QA ת53: "our own" is every class of lib/errors.ts (OwnError: HttpError, SupplierRefused, InvoiceRefused,
+ * RefundRefused, CallTimedOut, CodedError), and the message prefix and the class name are read only from those too. A
+ * provider's error whose message starts "consignee_orna_rejected: …", or whose class it named 'Orna', is logged by its
+ * HTTP status, a system code, or 'Error'.
  */
 export function errorCode(err: unknown): string {
   if (!err || typeof err !== 'object') return 'unknown';
   const e = err as { code?: unknown; status?: unknown; name?: unknown; message?: unknown };
-  const own = err instanceof SupplierRefused || err instanceof HttpError;
+  const own = err instanceof OwnError;
   if (typeof e.code === 'string' && ((own && /^[a-z][a-z0-9_.-]{1,60}$/i.test(e.code)) || /^E[A-Z0-9_]{2,40}$/.test(e.code))) return e.code;
   if (e.name === 'CallTimedOut') return 'timeout';
   if (e.name === 'AbortError' || e.name === 'TimeoutError') return 'aborted';
   if (typeof e.status === 'number' && e.status >= 100 && e.status < 600) return `http_${e.status}`;
-  const prefix = typeof e.message === 'string' ? /^([a-z][a-z0-9]*(?:_[a-z0-9]+)+)(?::|$)/.exec(e.message) : null;
+  const prefix = own && typeof e.message === 'string' ? /^([a-z][a-z0-9]*(?:_[a-z0-9]+)+)(?::|$)/.exec(e.message) : null;
   if (prefix) return prefix[1]!;
-  return typeof e.name === 'string' && NAME_RE.test(e.name) ? e.name : 'Error';
+  return errorName(err);
 }
 
 /** A short id a person can read out: "E-" and eight characters without look-alikes (no 0/O, 1/I/L). */
@@ -164,11 +205,36 @@ export function newErrorId(): string {
   return `E-${[...b].map((x) => abc[x % abc.length]).join('')}`;
 }
 
+/**
+ * S19, QA ת52: the fields of a row no rule may change: the error's id (the customer quotes it), the order's number (it
+ * ties the row to the order), the event and the path. Each is kept as written when it has its own shape; anything else
+ * in its place is redacted like any field.
+ */
+const ERROR_ID = /^E-[2-9A-HJ-NP-Z]{8}$/;
+/** an order number as lib/http.ts `orderId` makes it: ten digits, the first 1–9 (a phone starts with 0, or is longer) */
+const ORDER_ID = /^[1-9]\d{9}$/;
+/** a path keeps its order numbers (/api/orders/<id>); any other piece of it is scrubbed of an e-mail or a phone */
+export const pathForLog = (p: string): string =>
+  p
+    .split('/')
+    .map((seg) => (ORDER_ID.test(seg) ? seg : scrub(seg)))
+    .join('/');
+
 /** The row as it is written (exported for the tests: it is what reaches Workers Logs). */
 export function logRow(level: LogLevel, event: string, fields: Fields = {}, err?: unknown, known?: KnownValues): Fields {
   const f = redact(fields) as Fields;
-  // S17 (ת46): a known order's customer values leave every string of the row too
-  if (known) for (const [k, v] of Object.entries(f)) if (typeof v === 'string') f[k] = stripKnown(v, known);
+  const kept = new Set<string>();
+  const keep = (k: string, v: string) => {
+    f[k] = v;
+    kept.add(k);
+  };
+  if (typeof fields.error_id === 'string' && ERROR_ID.test(fields.error_id)) keep('error_id', fields.error_id);
+  if (typeof fields.order_id === 'string' && ORDER_ID.test(fields.order_id)) keep('order_id', fields.order_id);
+  if (typeof fields.path === 'string') keep('path', pathForLog(fields.path.slice(0, 500)));
+  // a field may not stand in for the row's own event
+  delete f.event;
+  // S17 (ת46): a known order's customer values leave every other string of the row too
+  if (known) for (const [k, v] of Object.entries(f)) if (typeof v === 'string' && !kept.has(k)) f[k] = stripKnown(v, known);
   return { level, event, at: new Date().toISOString(), ...f, ...(err === undefined ? {} : errorFields(err, known)) };
 }
 
