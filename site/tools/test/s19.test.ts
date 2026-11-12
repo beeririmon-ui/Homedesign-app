@@ -313,7 +313,8 @@ describe('ת51: mirrored, trimmed, the fixed domains, and a data: URI read as a 
   });
 
   it('QA’s R15: a data: URI in CSS broken by escaped line breaks is decoded and found; so are whitespace, percent escapes and references inside one', async () => {
-    const b64 = (await sharp(photo).resize(300).jpeg({ quality: 70 }).toBuffer()).toString('base64');
+    // QA's R15 picture: the original at 70%, JPEG q70
+    const b64 = (await sharp(photo).resize(560).jpeg({ quality: 70 }).toBuffer()).toString('base64');
     const css = `.qa-hero{background-image:url("data:image/jpeg;base64,${b64.replace(/(.{76})/g, '$1\\\n')}")}`;
     expect(dataUris(css).map((d) => d.b64)).toContain(b64);
     const html = `<img src="data:image/jpeg;base64,${b64

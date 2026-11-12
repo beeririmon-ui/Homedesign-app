@@ -61,10 +61,13 @@ def load_cut(stem):
     return L[..., :3], L[..., 3], F7.f32(os.path.join(WR7, "shadows", f"{stem}-cut.png"), "L")
 
 
-def pieces(a, thr=0.5, min_area=150):
-    n, lab, st, _ = cv2.connectedComponentsWithStats((a > thr).astype(np.uint8))
-    ids = sorted([i for i in range(1, n) if st[i, 4] >= min_area], key=lambda i: st[i, 0])
-    return [(lab == i) for i in ids]
+def pieces(a, thr=0.5, min_area=150, join=9):
+    """the pieces (left to right): components of the alpha grown by join px, so a tray's ball handles belong to their tray"""
+    m = a > thr
+    grown = cv2.dilate(m.astype(np.uint8), np.ones((join, join), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(grown)
+    ids = sorted([i for i in range(1, n) if (m & (lab == i)).sum() >= min_area], key=lambda i: st[i, 0])
+    return [(lab == i) & m for i in ids]
 
 
 def add_balls(rgb, a, regt, below):
