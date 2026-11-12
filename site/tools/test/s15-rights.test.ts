@@ -110,3 +110,26 @@ describe('materials: "הדפס במרקם" only when the card says it (§5)', ()
     expect(materialsHe(['black iron frame', 'cane/rattan-look perforated sling (material not stated - possibly PVC/printed)'])).toEqual(['מתכת']);
   });
 });
+
+describe('S17, QA ה3: a texture the card denies is no texture', () => {
+  it('"non-textured", "no texture", "without embossing" are a print, never "הדפס במרקם"', () => {
+    for (const raw of [
+      'non-textured print',
+      'smooth print (no texture)',
+      'Un-textured canvas print',
+      'flat printed panel, not embossed',
+      'printed poster without embossing',
+      'print with no raised texture',
+      'non embossed printed film',
+    ])
+      expect(materialHe(raw), raw).toBe('הדפס');
+    // the claim itself stays: an embossed print, and a textured one beside a denied gloss
+    expect(materialHe('printed embossed film')).toBe('הדפס במרקם');
+    expect(materialHe('textured print, no gloss')).toBe('הדפס במרקם');
+  });
+  it('S17, QA ה5: a material the card says is unknown is no material', () => {
+    expect(materialHe('leather-look handles (חומר לא צוין)')).toBeNull();
+    expect(materialHe('faux/real leather tabs (לא צוין)')).toBeNull();
+    expect(materialsHe(['felt', 'leather-look handles (חומר לא צוין)', 'metal snap buttons'])).toEqual(['לבד', 'מתכת']);
+  });
+});

@@ -76,3 +76,21 @@ test('S16 (ת41): in a public build, _redirects names no supplier and no listing
   const lines = readFileSync(join(DIST, '_redirects'), 'utf8').split('\n').filter(Boolean);
   expect(lines.filter((l) => SUPPLIER_IN_ID.test(l) || SUPPLIER_WORD.test(l) || LISTING.test(l))).toEqual([]);
 });
+
+test('S17 (QA ה5): no product page shows a value that says it is unknown, nor a note about a picture it does not have', () => {
+  const pages = existsSync(join(DIST, 'p')) ? readdirSync(join(DIST, 'p')).filter((d) => existsSync(join(DIST, 'p', d, 'index.html'))) : [];
+  expect(pages.length).toBeGreaterThan(0);
+  const found: string[] = [];
+  let withoutPicture = 0;
+  for (const d of pages) {
+    const html = readFileSync(join(DIST, 'p', d, 'index.html'), 'utf8');
+    const m = /לא\s+(?:צוין|מצוין|ידוע)/.exec(html);
+    if (m) found.push(`p/${d}: "${html.slice(Math.max(0, m.index - 40), m.index + 20)}"`);
+    if (!/class="product-noimg"/.test(html)) continue;
+    withoutPicture++;
+    const notes = /<ul class="notes-list">([\s\S]*?)<\/ul>/.exec(html)?.[1] ?? '';
+    if (/בתמונה/.test(notes)) found.push(`p/${d}: a note about the picture on a page without one`);
+  }
+  console.log(`ה5: ${pages.length} product pages, ${withoutPicture} without a picture`);
+  expect(found).toEqual([]);
+});

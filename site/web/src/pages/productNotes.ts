@@ -17,4 +17,4 @@ export const knownValues = (list: readonly string[]): string[] => list.filter(is
 
 /** the product's notes as the page shows them: a note about the picture only when there is one */
 export const visibleNotes = (notes: readonly string[], hasPicture: boolean): string[] =>
-  notes.filter((n) => isKnown(n) && (hasPicture || !/^בתמונה\b/.test(n.trim())));
+  notes.filter((n) => isKnown(n) && (hasPicture || !/^בתמונה(?=[:\s])/.test(n.trim())));
