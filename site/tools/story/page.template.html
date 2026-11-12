@@ -68,7 +68,10 @@
           <button type="button" class="st-close" id="st-cart-close" aria-label="סגירה">×</button>
         </div>
         <ol class="mag-credits st-cart-lines" id="st-cart-lines"></ol>
-        <p class="st-cart-empty mag-cap" id="st-cart-empty">הסל ריק.</p>
+        <!-- S23, QA ת74: a load that failed says so, with "לנסות שוב" (as the shop's cart), never "הסל ריק." -->
+        <p class="st-cart-error mag-cap" id="st-cart-error" role="alert" hidden></p>
+        <p class="st-cart-retry" id="st-cart-retry-row" hidden><button type="button" class="mag-btn mag-btn-secondary" id="st-cart-retry">לנסות שוב</button></p>
+        <p class="st-cart-empty mag-cap" id="st-cart-empty" hidden>הסל ריק.</p>
         <div class="st-cart-held" id="st-cart-held" hidden></div>
         <p class="st-total" id="st-cart-total"></p>
         <p class="mag-cap">המחירים כוללים מע"מ. המשלוח נבחר בשלב הבא, לפני התשלום.</p>

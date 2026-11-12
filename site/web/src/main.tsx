@@ -8,7 +8,7 @@ import './styles/shop.css';
 import { hydrate, render } from 'preact';
 import { App } from './App';
 import { initRouter, match, onLinkClick, path, setBeforeDocumentLoad } from './router';
-import { cartMounted, leaveFor, loadCart } from './state/cart';
+import { cartMounted, cartPageShown, leaveFor, loadCart } from './state/cart';
 import { preloadRoute } from './pages/lazy';
 import { loadHouse } from './house';
 
@@ -16,9 +16,11 @@ import { loadHouse } from './house';
 document.documentElement.lang = 'he';
 document.documentElement.dir = 'rtl';
 initRouter();
-// S21, QA ת63: a full load to the cart or the checkout waits for a cart write on its way, and carries the cart id when
-// this browser keeps no storage
+// S21, QA ת63: a full load to the cart or the checkout waits for a cart write on its way (S23: the cart id of a browser
+// without storage goes in window.name, never in the address)
 setBeforeDocumentLoad(leaveFor);
+// S23, QA ת75: a page restored from the back/forward cache reads the cart again
+addEventListener('pageshow', cartPageShown);
 document.addEventListener('click', onLinkClick);
 
 // S13: a link's page chunk starts loading when the link is pointed at or focused, before the click (pages/lazy.tsx)

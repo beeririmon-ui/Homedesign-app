@@ -100,17 +100,13 @@ test.describe('supplier options on the product page', () => {
     const ok = availableValues(O.axes, O.skus, roomSel, 0);
     const order = first.values.filter((v) => ok.has(v.id)).map((v) => v.id);
     const next = order[(order.indexOf(roomSel[first.id]!) + 1) % order.length]!;
-    // S22 (as S21 for house.spec): on a busy runner the press can land before the page hydrates, and hydration puts the
-    // room's option back. The app is mounted once the header's cart is known (not aria-busy); the press repeats until
-    // it holds
+    // S22: on a busy runner the press can land before the page hydrates, and hydration puts the room's option back. The
+    // app is mounted once the header's cart is known (not aria-busy). S23 (as QA ת77 for house.spec): then the press
+    // is made once, so a press lost after hydration fails
     await expect(page.locator('a[href="/cart/"][aria-busy="true"]')).toHaveCount(0, { timeout: 30_000 });
-    await expect(async () => {
-      if (!(await page.locator(`input[name="${fid(first.id)}"][value="${next}"]`).isChecked())) {
-        await page.locator(`input[name="${fid(first.id)}"][value="${roomSel[first.id]!}"]`).focus();
-        await page.keyboard.press('ArrowDown');
-      }
-      await expect(page.locator(`input[name="${fid(first.id)}"][value="${next}"]`)).toBeChecked({ timeout: 3_000 });
-    }).toPass({ timeout: 30_000 });
+    await page.locator(`input[name="${fid(first.id)}"][value="${roomSel[first.id]!}"]`).focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator(`input[name="${fid(first.id)}"][value="${next}"]`)).toBeChecked({ timeout: 15_000 });
     await expect(page.locator(`input[name="${fid(first.id)}"][value="${next}"]`)).toBeChecked();
     await expect(page.locator(`input[name="${fid(first.id)}"][value="${next}"]`)).toBeFocused();
     const expected = pickSku(O.axes, O.skus, roomSel, 0, next).sku!;

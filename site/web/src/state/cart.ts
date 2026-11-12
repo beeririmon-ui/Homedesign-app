@@ -2,6 +2,7 @@ import { batch, signal, computed } from '@preact/signals';
 import type { Cart, Pack } from '@hd/shared';
 import { api, ApiError } from '../api';
 import { announce } from './ui';
+import { CART_ID, REREAD_MS, carriedCartId, carryCartId, markWrite, settleForeignWrites, writesNotLanded } from './carrier';
 
 const KEY = 'hd.cart';
 export const cart = signal<Cart | null>(null);
@@ -24,8 +25,9 @@ export const justAdded = signal<string | null>(null);
 let addedTimer: ReturnType<typeof setTimeout> | undefined;
 
 /**
- * The cart id this document knows: the one in storage, the one the address's fragment carried (#c=, S21: a browser
- * that keeps no storage), or the one it made. Storage has the last word when it holds one (another tab may have ordered).
+ * The cart id this document knows: the one in storage, the one the page before carried in window.name (S23, QA ת72 (c):
+ * a browser that keeps no storage; S21 carried it in the address's #c=), or the one it made. Storage has the last word
+ * when it holds one (another tab may have ordered).
  */
 let memId: string | null = null;
 function stored(): string | null {
@@ -46,28 +48,31 @@ function usable(): boolean {
   }
 }
 function savedId(): string | null {
-  return stored() ?? memId;
+  return stored() ?? memId ?? carriedCartId();
 }
 function saveId(id: string | null): void {
   memId = id;
+  let kept = false;
   try {
     if (id) localStorage.setItem(KEY, id);
     else localStorage.removeItem(KEY);
+    kept = true;
   } catch {
-    /* storage unavailable: the id lives in this document, and goes to the next one in the address's fragment */
+    /* storage unavailable: the id lives in this document, and goes to the next one in window.name */
   }
+  // S23 (ת72 (c)): never in the address; and once storage keeps it, the tab carries it no more
+  carryCartId(kept ? null : id);
 }
 
-/** a cart id as the API and the mock make them (base64url or hex) */
-const CART_ID = /^[A-Za-z0-9_-]{8,80}$/;
-/** the pages a cart id is carried to when storage keeps none: the cart and the checkout */
+/** the pages that may take a cart id from a link (ת72 (a)): the cart and the checkout */
 const CARRIES_CART = /^\/(?:cart|checkout)(?:\/|$)/;
 
 /**
- * S21, QA ת63 (2): the cart id the page before carried in this address's fragment ("#c=<id>"), because this browser keeps
- * no storage. It is read once, then removed from the address (replaceState: no history entry, and a fragment never
- * reaches a server or a referrer). It is taken only when storage holds no cart of its own (a link with someone else's
- * id never replaces one).
+ * S21 carried the cart id to the next page in the address's fragment ("#c=<id>"); since S23 (QA ת72 (c)) it goes in
+ * window.name (state/carrier.ts), and the site writes no "#c=" anywhere. A "#c=" in an address is still read once and
+ * removed from it (replaceState: no history entry, and a fragment never reaches a server or a referrer), and it is
+ * taken only (QA ת72 (a)) on the cart or the checkout, only by a browser that keeps no storage, and only when this tab
+ * knows no cart of its own: a link with someone else's id plants nothing where storage works, nor on any other page.
  */
 export function adoptFragmentId(): void {
   if (typeof location === 'undefined' || !location.hash) return;
@@ -81,20 +86,7 @@ export function adoptFragmentId(): void {
   } catch {
     /* a sandboxed frame: the fragment stays, and is read again harmlessly */
   }
-  if (CART_ID.test(id) && !stored()) saveId(id);
-}
-
-/**
- * The address to load for a page of its own (S19, ת55: the cart, the checkout), with this document's cart id in its
- * fragment when this browser keeps no storage (S21, ת63 (2)); any other address as it is.
- */
-export function withCartId(href: string): string {
-  const id = cart.value?.id ?? memId;
-  const [base = '', hash = ''] = href.split('#');
-  if (!id || !CARRIES_CART.test(base.split('?')[0] ?? '') || usable()) return href;
-  const params = new URLSearchParams(hash);
-  params.set('c', id);
-  return `${base}#${params.toString()}`;
+  if (CART_ID.test(id) && CARRIES_CART.test(location.pathname) && !usable() && !savedId()) saveId(id);
 }
 
 // ---------- S21, QA ת63 (3): writes still on their way ----------
@@ -118,13 +110,16 @@ export async function cartWritesSettled(ms = LEAVE_WAIT_MS): Promise<void> {
 /**
  * S21, QA ת63: the router's hook before a page of its own is loaded (router.ts `beforeDocumentLoad`). An add or a change
  * still on its way would be cut off by the load, or land after the next page read the cart: the move waits for it
- * (up to LEAVE_WAIT_MS; the writes also go with `keepalive`, api/http.ts). Then the address, with the cart id when
- * storage keeps none.
+ * (up to LEAVE_WAIT_MS; the writes also go with `keepalive`, api/http.ts, and leave their mark for the next page, ה29).
+ * S23 (QA ת72 (b), (c)): the address is never changed (the cart id goes in window.name), so a link to the page itself
+ * stays as it is too.
  */
 export function leaveFor(href: string): string | Promise<string> {
-  if (!writes.size) return withCartId(href);
-  return cartWritesSettled().then(() => withCartId(href));
+  if (!writes.size) return href;
+  return cartWritesSettled().then(() => href);
 }
+/** S23, ה29: this document's own marks of writes on their way (a write of this page is never waited for by its load) */
+const ownMarks = new Set<string>();
 
 // ---------- loading ----------
 let mounted = false;
@@ -141,19 +136,29 @@ export function cartMounted(): void {
 const whenMounted = (): Promise<void> => (mounted ? Promise.resolve() : new Promise((r) => onMounted.push(r)));
 
 let inflight: Promise<void> | null = null;
+type Got = { c: Cart } | { e: unknown } | null;
+const fetchCart = (id: string): Promise<Got> =>
+  api.getCart(id).then(
+    (c) => ({ c }),
+    (e: unknown) => ({ e }),
+  );
+const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));
 /** the cart as the server has it (once at a time: the page and the start of the app share one request) */
 export function loadCart(): Promise<void> {
   if (inflight) return inflight;
   adoptFragmentId();
   const id = savedId();
-  const got: Promise<{ c: Cart } | { e: unknown } | null> = id
-    ? api.getCart(id).then(
-        (c) => ({ c }),
-        (e: unknown) => ({ e }),
-      )
-    : Promise.resolve(null);
+  const got: Promise<Got> = id ? fetchCart(id) : Promise.resolve(null);
   const p = (async () => {
-    const r = await got;
+    let r = await got;
+    // S23, ה29: a write a page before this one left on its way (it took over the 4 s the move waits): the cart is read
+    // again until it shows the write, at most PENDING_WAIT_MS after the write began; meanwhile nothing new is shown (the
+    // first load stays in its loading state: never "empty", never "סל (0)")
+    while (id && r && 'c' in r && writesNotLanded(r.c, ownMarks).length) {
+      await pause(REREAD_MS);
+      r = await fetchCart(id);
+    }
+    settleForeignWrites(ownMarks);
     await whenMounted();
     batch(() => {
       if (r && 'c' in r) {
@@ -166,6 +171,7 @@ export function loadCart(): Promise<void> {
           // the cart is gone (ordered, or expired): the empty cart is the truth now
           if (savedId() === id) saveId(null);
           if (cart.value?.id === id) cart.value = null;
+          cartError.value = null;
           cartStatus.value = 'ready';
         } else {
           // S16, QA ת37: the server's own words (with its error code) when it sent them, else a plain line; never silence
@@ -183,6 +189,14 @@ export function loadCart(): Promise<void> {
   return shared;
 }
 
+/**
+ * S23, QA ת75: a page the browser restores from its back/forward cache shows the cart as it was when the page was left;
+ * another page may have changed it since. It reads the cart again (main.tsx and the story call this on `pageshow`).
+ */
+export function cartPageShown(e: { persisted: boolean }): void {
+  if (e.persisted) void loadCart();
+}
+
 /** the cart's id: the one shown, else the one saved (a load that failed still knows it), else a new cart */
 async function ensureCart(): Promise<string> {
   if (inflight) await inflight;
@@ -196,7 +210,15 @@ async function ensureCart(): Promise<string> {
 }
 
 export function setQty(variantId: string, pack: Pack, qty: number, label?: string, house?: string): Promise<boolean> {
-  return track(write(variantId, pack, qty, label, house));
+  // S23, ה29: the write leaves its mark for the next page until it has its answer
+  const mark = markWrite(variantId, pack, qty);
+  ownMarks.add(mark.key);
+  return track(
+    write(variantId, pack, qty, label, house).finally(() => {
+      mark.done();
+      ownMarks.delete(mark.key);
+    }),
+  );
 }
 async function write(variantId: string, pack: Pack, qty: number, label?: string, house?: string): Promise<boolean> {
   cartBusy.value = true;
@@ -235,6 +257,15 @@ export function addToCart(variantId: string, name: string, qty = 1, pack: Pack =
     (async () => {
       // a saved cart still loading is waited for, so its quantity is added to and never replaced
       if (inflight) await inflight;
+      // S23, QA ת73 (a): after a load that failed the saved quantities are not known (an add would replace them): it loads
+      // again first, and while it still fails the add is refused with the error
+      if (cartStatus.value === 'failed') {
+        await loadCart();
+        if (cartStatus.value === 'failed') {
+          announce(cartError.value ?? 'לא הצלחנו לעדכן את הסל.');
+          return false;
+        }
+      }
       const current = cart.value?.lines.find((l) => l.variant_id === variantId && l.pack === pack)?.qty ?? 0;
       const ok = await setQty(variantId, pack, Math.min(20, current + qty), `נוסף לסל: ${name}${packLabel ? `, ${packLabel}` : ''}`, house);
       if (ok) {

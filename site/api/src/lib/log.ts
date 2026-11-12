@@ -19,6 +19,9 @@
  * - **S19, QA ת53:** `errorCode` and the row's error name come from our own error classes only (lib/errors.ts).
  * - **S21, QA ת64–ת65:** a known order's values end at anything but a letter ("_" and digits too), camel case is split;
  *   a system code only from a closed list.
+ * - **S23, QA ת76:** also a run of capitals before a Camel word ("DANAGat"), a value without its spaces ("danagat"),
+ *   an encoded value (%XX, \uXXXX) and a change of script ("Noaלוי"). The cost (ה36): a name that is an English word
+ *   takes more ordinary tokens with it (S23 README).
  */
 import { contactOf } from '@hd/shared/contact';
 import { OwnError } from './errors';
@@ -105,6 +108,9 @@ export function knownValues(v: {
     // a number alone (a house, a flat) is no one's detail; a zip code is stripped by its digits below
     if (t.length >= 2 && !/^[\d\s-]+$/.test(t)) parts.add(t);
     for (const w of t.split(/[\s,.;:()"'״׳@/\\־-]+/)) if (w.length >= 3 && !/^\d+$/.test(w)) parts.add(w);
+    // S23, QA ת76: a value of several words also without what separates them ("danagat", "TELAVIV", "נועהבןדוד")
+    const glued = t.replace(/[\s.'"״׳־-]+/g, '');
+    if (glued !== t && glued.length >= 3 && !/^\d+$/.test(glued)) parts.add(glued);
   }
   // the whole address, and its local part alone (a person's name is often in it)
   const email = v.email?.trim();
@@ -139,17 +145,65 @@ export function knownValues(v: {
 }
 /** S21 (ת64): a mark between a lower-case and an upper-case letter ("Dana|Gat"), never a letter itself */
 const CAMEL = /(\p{Ll})(?=\p{Lu})/gu;
+/** S23 (QA ת76): and between a run of capitals and the capital that starts a Camel word ("DANA|Gat", "XML|Dana") */
+const CAMEL_AFTER_CAPS = /(\p{Lu})(?=\p{Lu}\p{Ll})/gu;
 const SEAM = '\u2063';
-/** A string without the known order's customer values. */
-export function stripKnown(s: string, k: KnownValues | undefined): string {
-  if (!k) return s;
+/** S23 (QA ת76): the scripts a customer's value is written in; a change from one to another between two letters is a boundary */
+const SCRIPTS = [/\p{Script=Latin}/u, /\p{Script=Hebrew}/u, /\p{Script=Cyrillic}/u, /\p{Script=Arabic}/u, /\p{Script=Greek}/u];
+const LETTER = /\p{L}/u;
+const scriptOf = (ch: string): number => (LETTER.test(ch) ? SCRIPTS.findIndex((re) => re.test(ch)) : -1);
+/** a mark between two letters of different scripts ("Noa|לוי", "נועה|X") */
+function seamScripts(s: string): string {
+  let out = '';
+  let prev = -1;
+  for (const ch of s) {
+    const sc = scriptOf(ch);
+    if (sc >= 0 && prev >= 0 && sc !== prev) out += SEAM;
+    out += ch;
+    prev = sc;
+  }
+  return out;
+}
+/**
+ * S23 (QA ת76): a value written encoded is read decoded: a run of percent escapes ("%D7%A0%D7%95…", a URL or a form) and
+ * JSON's \uXXXX escapes. A run that does not decode stays as it is.
+ */
+export function decodeEscapes(s: string): string {
+  return s
+    .replace(/(?:%[0-9A-Fa-f]{2})+/g, (run) => {
+      try {
+        return decodeURIComponent(run);
+      } catch {
+        return run;
+      }
+    })
+    .replace(/\\u([0-9A-Fa-f]{4})/g, (_, h: string) => String.fromCharCode(parseInt(h, 16)));
+}
+function stripPlain(s: string, k: KnownValues): string {
   let out = s;
   for (const re of k.phones) out = out.replace(re, '[phone]');
   if (!k.words) return out;
   out = out.replace(k.words, '[customer]');
   // S21 (ת64): then camel case as two words ("DanaGat"): an invisible separator (not a letter) between them while
-  // matching, removed after (a value written in camel case, "McDonald", went in the pass before; "iPhone" stays)
-  return out.replace(CAMEL, `$1${SEAM}`).replace(k.words, '[customer]').split(SEAM).join('');
+  // matching, removed after (a value written in camel case, "McDonald", went in the pass before; "iPhone" stays).
+  // S23 (ת76): a run of capitals before a Camel word ("DANAGat") and a change of script ("Noaלוי") part words too.
+  const seamed = seamScripts(out.replace(CAMEL, `$1${SEAM}`).replace(CAMEL_AFTER_CAPS, `$1${SEAM}`));
+  return seamed.replace(k.words, '[customer]').split(SEAM).join('');
+}
+/** invisible format characters a value may carry inside it (a zero-width space, a soft hyphen, a direction mark) */
+const INVISIBLE = /[\u00ad\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]/g;
+/**
+ * A string without the known order's customer values. S23 (QA ת76): when the string carries escapes or invisible
+ * characters, it is read decoded and without them as well, and if that finds a value, the row keeps that reading without
+ * it (else the text as written).
+ */
+export function stripKnown(s: string, k: KnownValues | undefined): string {
+  if (!k) return s;
+  const out = stripPlain(s, k);
+  const dec = decodeEscapes(out).replace(INVISIBLE, '');
+  if (dec === out) return out;
+  const clean = stripPlain(dec, k);
+  return clean === dec ? out : clean;
 }
 
 const NAME_RE = /^[A-Za-z]{1,40}$/;

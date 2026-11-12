@@ -16,7 +16,7 @@ import { prefersReducedMotion } from '../motion';
 import { copyHe } from '../copy';
 import { priceHe } from './story-cart';
 import { removedNoteHe } from '@hd/shared/lines';
-import { apiStoryCart, CART_KEY } from './api-cart';
+import { apiStoryCart, CART_KEY, CartNotLoaded } from './api-cart';
 import type { DetailData, DSku } from './detail-model';
 
 type Item = {
@@ -280,25 +280,38 @@ function wallLabel(st: Stage, id: string | null): void {
 // S7: the story's cart is the shop's (the API, the cart id 'hd.cart'): the server prices and sells, the real /checkout/
 const cart = apiStoryCart();
 // S21, QA ת63: until the saved cart is known, the count is a blank and the cart says nothing (never "0" or "הסל ריק.")
+// S23, QA ת74: a load that failed (a server error, no network) is not an empty cart either: the count stays a blank (no
+// longer busy), and the cart says it could not load, with "לנסות שוב", as the shop's cart does
 let cartKnown = false;
-void cart.load().then(() => {
-  cartKnown = true;
+function cartLoaded(): void {
+  const st = cart.status();
+  if (st === 'loading') return;
+  cartKnown = st === 'ready';
   document.getElementById('st-cart-open')?.removeAttribute('aria-busy');
   showCount(false);
-  mark('cart:loaded');
-});
+  if (document.querySelector<HTMLDialogElement>('#st-cart')?.open) renderCart();
+  mark(st === 'ready' ? 'cart:loaded' : 'cart:failed');
+}
+void cart.load().then(cartLoaded);
 // another tab may change the cart (an order empties it): the count follows
 addEventListener('storage', (e) => {
-  if (e.key === CART_KEY || e.key === null) void cart.load().then(() => showCount(false));
+  if (e.key === CART_KEY || e.key === null) void cart.load().then(cartLoaded);
+});
+// S23, QA ת75: a page restored from the back/forward cache reads the cart again (another page may have changed it)
+addEventListener('pageshow', (e) => {
+  if (e.persisted) void cart.load().then(cartLoaded);
 });
 const countEl = document.getElementById('st-cart-count')!;
 function showCount(animate: boolean): void {
-  // an add before the saved cart loaded makes the cart known too
-  if (!cartKnown && cart.current()) {
+  // an add before the saved cart loaded makes the cart known too (S23: it waits for the load, ת73)
+  if (!cartKnown && cart.status() === 'ready' && cart.current()) {
     cartKnown = true;
     document.getElementById('st-cart-open')?.removeAttribute('aria-busy');
   }
-  if (!cartKnown) return;
+  if (!cartKnown) {
+    countEl.textContent = '';
+    return;
+  }
   const n = cart.current()?.count ?? 0;
   // an open cart follows a change that lands after it opened (an add still on its way to the server, another tab)
   if (document.querySelector<HTMLDialogElement>('#st-cart')?.open) renderCart();
@@ -316,6 +329,8 @@ function showCount(animate: boolean): void {
     ms('--d-micro', 120),
   );
 }
+/** S23 (QA ת73): the words of a write refused because the saved cart could not be loaded */
+const notLoadedHe = (e: unknown): string | null => (e instanceof CartNotLoaded ? e.messageHe : null);
 showCount(false);
 // the test checkout and its confirmation: their own module, loaded only there
 // a detail page: its own module, loaded only there
@@ -478,8 +493,10 @@ addBtn.addEventListener('click', async () => {
     clearTimeout(addTimer);
     addTimer = setTimeout(() => (addBtn.textContent = 'הוספה לסל'), 2500);
     announce(`נוסף לסל: ${it.name_he}. בסל ${items(c.count)}, ${priceHe(c.subtotal_agorot)}.`);
-  } catch {
-    announce('לא הצלחנו להוסיף לסל.');
+  } catch (e) {
+    // S23 (ת73): refused while the saved cart cannot be loaded: its words (and the cart shows them with "לנסות שוב")
+    if (e instanceof CartNotLoaded) cartLoaded();
+    announce(notLoadedHe(e) ?? 'לא הצלחנו להוסיף לסל.');
   }
 });
 for (const b of document.querySelectorAll<HTMLButtonElement>('.st-open')) b.addEventListener('click', () => void openSheet(b.dataset.item!, b));
@@ -566,11 +583,30 @@ function renderCart(): void {
       return p;
     }),
   );
+  // S23 (QA ת74): a load that failed shows its words and "לנסות שוב" (what was shown before it stays), never "הסל ריק."
+  const failed = cart.status() === 'failed';
+  const errEl = $('st-cart-error');
+  const errText = failed ? (cart.error() ?? '') : '';
+  if (errEl.textContent !== errText) errEl.textContent = errText;
+  errEl.hidden = !failed;
+  $('st-cart-retry-row').hidden = !failed;
   $('st-cart-empty').hidden = lines.length > 0 || !cartKnown;
-  $('st-cart-lines').toggleAttribute('aria-busy', !cartKnown);
+  $('st-cart-lines').toggleAttribute('aria-busy', cart.status() === 'loading');
   $('st-cart-total').textContent = lines.length ? `סכום ביניים: ${priceHe(c!.subtotal_agorot)} · ${items(c!.count)}` : '';
   $('st-cart-pay').hidden = !lines.length;
+  $('st-cart-clear').hidden = !cartKnown;
 }
+// S23 (QA ת74): "לנסות שוב" reads the saved cart again
+$('st-cart-retry').addEventListener('click', () => {
+  const b = $('st-cart-retry');
+  b.setAttribute('aria-busy', 'true');
+  void cart.load().then(() => {
+    b.removeAttribute('aria-busy');
+    cartLoaded();
+    renderCart();
+    if (cart.status() === 'ready') $('st-cart-title').focus();
+  });
+});
 $('st-cart-lines').addEventListener('click', (e) => void cartAction(e));
 $('st-cart-held').addEventListener('click', (e) => void cartAction(e));
 async function cartAction(e: Event): Promise<void> {
@@ -600,7 +636,18 @@ async function cartAction(e: Event): Promise<void> {
 for (const b of document.querySelectorAll<HTMLButtonElement>('.st-look-btn'))
   b.addEventListener('click', async () => {
     const ids = (b.dataset.variants ?? '').split(' ').filter(Boolean);
-    const r = await cart.addLook(ids);
+    let r: Awaited<ReturnType<typeof cart.addLook>>;
+    try {
+      r = await cart.addLook(ids);
+    } catch (e) {
+      // S23 (ת73): refused while the saved cart cannot be loaded (its quantities are not known): nothing is written
+      if (e instanceof CartNotLoaded) cartLoaded();
+      const text = b.innerHTML;
+      b.textContent = 'לא נוסף דבר';
+      setTimeout(() => (b.innerHTML = text), 2500);
+      announce(notLoadedHe(e) ?? 'לא נוסף דבר לסל.');
+      return;
+    }
     mark('cart:look', { frame: b.dataset.frame, added: r.added.length, units: r.units, skipped: r.skipped.length });
     showCount(true);
     const text = b.innerHTML;

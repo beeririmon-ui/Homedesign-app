@@ -27,7 +27,7 @@
     "dev": "npm run prepare:data && npm run db:reset -w @hd/api && concurrently -k -n api,web -c yellow,cyan \"npm run dev -w @hd/api\" \"npm run dev -w @hd/web\"",
     "build": "npm run prepare:data && npm run build -w @hd/web && npm run build -w @hd/api && npm run budget && npm run check:rights && npm run check:promises",
     "budget": "tsx tools/check-budget.ts",
-    "check:rights": "tsx tools/check-image-rights.ts",
+    "check:rights": "tsx tools/check-image-rights.ts --json=.generated/check-image-rights.json",
     "check:promises": "tsx tools/check-promises.ts",
     "preview": "npm run db:reset -w @hd/api && npm run preview -w @hd/api",
     "preview:artifact": "npm run prepare:data && npm run build:artifact -w @hd/web && tsx tools/finalize-artifact.ts && tsx tools/check-artifact.ts",

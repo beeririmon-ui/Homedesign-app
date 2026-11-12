@@ -12,8 +12,8 @@ function normalise(to: string): string {
 }
 
 /**
- * S21, QA ת63: what a full load to a page of its own waits for and carries (state/cart.ts `leaveFor`: a cart write still
- * on its way, the cart id in the fragment when storage keeps none). It returns the address to load, or a promise of it.
+ * S21, QA ת63: what a full load to a page of its own waits for (state/cart.ts `leaveFor`: a cart write still on its
+ * way). It returns the address to load, or a promise of it. S23 (QA ת72): the address is never changed on the way.
  * main.tsx sets it; until then the address is loaded as it is.
  */
 type BeforeDocument = (href: string) => string | Promise<string>;
@@ -64,7 +64,7 @@ export function onLinkClick(e: MouseEvent): void {
   const href = a.getAttribute('href');
   if (!href || !href.startsWith('/') || href.startsWith('//')) return;
   if (!MEMORY && loadsAsDocument(href)) {
-    // S21, QA ת63: the browser follows the link, unless a cart write is on its way or the cart id must go along
+    // S21, QA ת63: the browser follows the link, unless a cart write is on its way
     const to = documentFor(href);
     if (to === href) return;
     e.preventDefault();

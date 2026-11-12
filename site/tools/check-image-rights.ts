@@ -17,8 +17,10 @@
  *   data: URI read as a browser reads it (ת51). The nearest picture outside the supplier folders is printed every build.
  * S21, QA S19: rule A between two plain forms only when d ≤ (popcount a + popcount b) / 2 (ת66, QA's P3: a flat picture
  *   never matches an inked one by A); the margin printed counts only the pairs A may judge. Not caught (the known
- *   limits, launch checklist 1.5, tools/lib/rights-content.ts): a crop into the picture, a rotation, a flip upside-down,
- *   a flip with a change of colour, one tile of a collage.
+ *   limits, launch checklist 1.5, tools/lib/rights-content.ts `KNOWN_LIMITS`): a crop into the picture, a rotation, a
+ *   flip upside-down, a flip with a change of colour, one tile of a collage, and (S23, QA ה32) an inverted picture.
+ * S23, QA ה32–ה33: the console says the known limits too, and how many supplier fingerprints are flat (the flat-pair rule
+ *   matters only when there are some); `npm run check:rights` writes its JSON (.generated/check-image-rights.json).
  * Behind the flag the same scan runs as the control: it reports what it finds (the shop's and the story's copies, which
  * the flag build ships) and anything found elsewhere, without failing.
  *
@@ -31,6 +33,8 @@ import { GENERATED, SITE, repoPath, sitePath } from './lib/paths';
 import { rightsIssues, withheld, type Rights } from './lib/image-rights';
 import {
   DhashCache,
+  FLAT_MAX_POP,
+  KNOWN_LIMITS,
   LEDGER_SHOP,
   LEDGER_STORY,
   NEAR_MAX_HAMMING,
@@ -134,7 +138,7 @@ const content = {
     story_ledger: !!ledgers[1],
   },
   pixel_threshold: `dHash 16×16, Hamming ≤ ${PIXEL_MAX_HAMMING} of 256 and ≤ half the set bits of the two (or ≤ ${NEAR_MAX_HAMMING} with a 32×32 grey difference ≤ ${NEAR_MAX_MAD32} when both carry ink ≥ ${NEAR_MIN_INK}); plain and mirrored, and trimmed of margins`,
-  not_caught: 'a crop into the picture, a rotation, a flip upside-down, a flip with a change of colour, one tile of a collage (launch checklist 1.5)',
+  not_caught: `${KNOWN_LIMITS.join(', ')} (launch checklist 1.5)`,
   scanned: { files: scan.stats.files, rasters: scan.stats.rasters, data_uris: scan.stats.data_uris, text_files: scan.stats.text_files },
   found: byHow(scan.findings),
   found_outside_supplier_folders: byHow(elsewhere),
@@ -174,6 +178,13 @@ console.log(
   `  nearest outside the supplier folders: ${n0 ? `${n0.where} dHash ${n0.hamming}/256 from ${n0.picture}${n0.variant ? ` (${n0.variant})` : ''} (rule A at ${PIXEL_MAX_HAMMING}, among the pairs it may judge)` : 'none'}; ` +
     `by grey: ${g0 ? `${g0.where} ${g0.mad32} (rule B at ${NEAR_MAX_MAD32}, with ink)` : 'none'}`,
 );
+// S23 (QA ה33): the flat supplier forms (when there are none, the flat-pair rule of S21 changes nothing)
+console.log(
+  `  flat supplier fingerprints (under ${FLAT_MAX_POP} set bits): ${set.stats.flat_fingerprints} of ${set.stats.fingerprints}, in ${set.stats.flat_pictures} of ${set.stats.pictures} pictures`,
+);
+// S23 (QA ה32): what the scan does not catch, every build (launch checklist 1.5)
+console.log(`  not caught (the known limits, launch checklist 1.5): ${KNOWN_LIMITS.join('; ')}`);
+if (out) console.log(`  the summary: ${relative(process.cwd(), out) || out}`);
 if (!PUBLIC) for (const f of elsewhere.slice(0, 10)) console.warn(`  behind the flag, outside the supplier folders: ${f.where}: by ${f.how}: ${f.what}`);
 if (issues.length) {
   for (const i of issues.slice(0, 30)) console.error(`  ${i.where}: ${i.what}`);

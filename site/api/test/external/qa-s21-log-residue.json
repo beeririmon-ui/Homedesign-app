@@ -1,0 +1,503 @@
+{
+ "_about": "QA S21's redaction probes (qa/reports/2026-11-12-site-track-qa-s21/tools/qa-s21-log.test.ts.txt), word for word, kept out of the code the rule was built on (S23, ת76). The customers are made up; their e-mail addresses are reserved samples (example.com), and no phone number is needed by any probe. 'residue' are the forms QA found left after S21 (ת76); 'claimed' the S19-S21 forms that already went; 'ordinary' QA's 36 words and tokens that must stay whole (TelAvivian is the one QA accepted); 'wordy' the names that are English words (ה36), reported and not asserted.",
+ "customers": {
+  "latin": {
+   "full_name": "Dana Gat",
+   "email": "dana.gat1985@example.com",
+   "address": {
+    "city": "Tel Aviv",
+    "street": "Herzl",
+    "house": "12",
+    "zip": "6100000"
+   }
+  },
+  "hebrew": {
+   "full_name": "נועה בן־דוד",
+   "email": "buyer.qa21@example.com",
+   "address": {
+    "city": "באר שבע",
+    "street": "הערבה",
+    "house": "17",
+    "zip": "8410000"
+   }
+  },
+  "mixed": {
+   "full_name": "Noa לוי",
+   "email": "noa.levi@example.com",
+   "address": {
+    "city": "Haifa",
+    "street": "Rothschild",
+    "house": "7"
+   }
+  },
+  "cyrillic": {
+   "full_name": "Ольга Иванова",
+   "email": "olga.i@example.com",
+   "address": {
+    "city": "Ashdod",
+    "street": "Ha-Atzmaut"
+   }
+  },
+  "wordy": {
+   "full_name": "Max Page",
+   "email": "mp@example.com",
+   "address": {
+    "city": "Rose Valley",
+    "street": "Mark"
+   }
+  }
+ },
+ "residue": [
+  [
+   "latin",
+   "L8 UPPER+Camel",
+   "DANAGat",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L10 acronym before",
+   "XMLDana",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "latin",
+   "L18 all glued lower",
+   "danagat",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L19 city glued",
+   "TELAVIV",
+   [
+    "aviv"
+   ]
+  ],
+  [
+   "latin",
+   "L20 zero-width inside",
+   "Da​na",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "hebrew",
+   "H10 JSON \\u escapes",
+   "{\"name\":\"\\u05e0\\u05d5\\u05e2\\u05d4\"}",
+   [
+    "\\u05e0\\u05d5\\u05e2\\u05d4"
+   ]
+  ],
+  [
+   "hebrew",
+   "H11 percent-encoded",
+   "name=%D7%A0%D7%95%D7%A2%D7%94",
+   [
+    "%D7%A0%D7%95%D7%A2%D7%94"
+   ]
+  ],
+  [
+   "hebrew",
+   "H12 glued Hebrew",
+   "נועהבןדוד",
+   [
+    "נועה"
+   ]
+  ],
+  [
+   "hebrew",
+   "H13 Latin glued to Hebrew",
+   "ID:נועהX",
+   [
+    "נועה"
+   ]
+  ],
+  [
+   "mixed",
+   "M3 latin glued to hebrew",
+   "Noaלוי",
+   [
+    "noa",
+    "לוי"
+   ]
+  ]
+ ],
+ "claimed": [
+  [
+   "latin",
+   "L1 snake",
+   "consignee_dana_rejected",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "latin",
+   "L2 upper snake",
+   "DANA_GAT",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L3 digits after",
+   "dana1985",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "latin",
+   "L4 digits before",
+   "1985dana",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "latin",
+   "L5 digits after (surname)",
+   "gat123",
+   [
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L6 Camel",
+   "DanaGat",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L7 camel",
+   "danaGat",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L9 Camel+UPPER",
+   "DanaGAT",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L11 inside a code",
+   "E_CONSIGNEE_DANA_GAT_TELAVIV",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L12 code with digits",
+   "ERR42DANA7",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "latin",
+   "L13 dotted",
+   "dana.gat",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L14 percent-encoded space",
+   "dana%20gat",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L15 form-encoded",
+   "consignee=Dana+Gat&city=Tel+Aviv",
+   [
+    "dana",
+    "gat",
+    "aviv"
+   ]
+  ],
+  [
+   "latin",
+   "L16 JSON",
+   "{\"consignee\":\"Dana Gat\",\"city\":\"Tel Aviv\",\"street\":\"Herzl 12\"}",
+   [
+    "dana",
+    "gat",
+    "aviv",
+    "herzl"
+   ]
+  ],
+  [
+   "latin",
+   "L17 JSON camel",
+   "{\"consigneeName\":\"DanaGat\"}",
+   [
+    "dana",
+    "gat"
+   ]
+  ],
+  [
+   "latin",
+   "L21 snake, all fields",
+   "dana_gat_tel_aviv_herzl_12",
+   [
+    "dana",
+    "gat",
+    "aviv",
+    "herzl"
+   ]
+  ],
+  [
+   "latin",
+   "L22 email local in a path",
+   "/u/dana.gat1985/orders",
+   [
+    "dana.gat1985"
+   ]
+  ],
+  [
+   "latin",
+   "L23 possessive",
+   "Dana's order",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "latin",
+   "L24 combining mark",
+   "Daná",
+   [
+    "dana"
+   ]
+  ],
+  [
+   "hebrew",
+   "H1 snake",
+   "נועה_בן_דוד",
+   [
+    "נועה",
+    "דוד"
+   ]
+  ],
+  [
+   "hebrew",
+   "H2 prefix",
+   "לנועה",
+   [
+    "נועה"
+   ]
+  ],
+  [
+   "hebrew",
+   "H3 two prefixes",
+   "ולנועה",
+   [
+    "נועה"
+   ]
+  ],
+  [
+   "hebrew",
+   "H4 digits after",
+   "נועה2024",
+   [
+    "נועה"
+   ]
+  ],
+  [
+   "hebrew",
+   "H5 digits before",
+   "2024נועה",
+   [
+    "נועה"
+   ]
+  ],
+  [
+   "hebrew",
+   "H6 city snake",
+   "באר_שבע",
+   [
+    "באר",
+    "שבע"
+   ]
+  ],
+  [
+   "hebrew",
+   "H7 city with prefix and dash",
+   "בבאר-שבע",
+   [
+    "באר",
+    "שבע"
+   ]
+  ],
+  [
+   "hebrew",
+   "H8 JSON",
+   "{\"name\":\"נועה בן־דוד\",\"city\":\"באר שבע\"}",
+   [
+    "נועה",
+    "דוד",
+    "שבע"
+   ]
+  ],
+  [
+   "hebrew",
+   "H9 inside a code",
+   "E_נועה_REJECTED",
+   [
+    "נועה"
+   ]
+  ],
+  [
+   "mixed",
+   "M1 latin_hebrew",
+   "Noa_לוי",
+   [
+    "noa",
+    "לוי"
+   ]
+  ],
+  [
+   "mixed",
+   "M2 hebrew digits",
+   "לוי123",
+   [
+    "לוי"
+   ]
+  ],
+  [
+   "mixed",
+   "M4 street camel",
+   "shipToRothschild7",
+   [
+    "rothschild"
+   ]
+  ],
+  [
+   "mixed",
+   "M5 JSON",
+   "{\"n\":\"Noa לוי\",\"s\":\"Rothschild\"}",
+   [
+    "noa",
+    "לוי",
+    "rothschild"
+   ]
+  ],
+  [
+   "cyrillic",
+   "R1 snake",
+   "olga_ольга_иванова",
+   [
+    "ольга",
+    "иванова"
+   ]
+  ],
+  [
+   "cyrillic",
+   "R2 camel",
+   "ОльгаИванова",
+   [
+    "ольга",
+    "иванова"
+   ]
+  ],
+  [
+   "cyrillic",
+   "R3 digits",
+   "Иванова77",
+   [
+    "иванова"
+   ]
+  ]
+ ],
+ "ordinary": {
+  "customer": "latin",
+  "words": [
+   "commit",
+   "hotel",
+   "complete",
+   "invalid",
+   "gateway",
+   "navigate",
+   "Danaher",
+   "avivit",
+   "gmail",
+   "example",
+   "telemetry",
+   "Herzliya",
+   "Gatorade",
+   "danger",
+   "gather",
+   "Telnet",
+   "hotelier",
+   "gatekeeper",
+   "metadata",
+   "contact",
+   "order_id",
+   "error_id",
+   "http_502",
+   "ECONNRESET",
+   "cart_closed",
+   "supplier.submit_failed",
+   "x-order-token",
+   "utf8",
+   "sha256",
+   "base64",
+   "ipv4",
+   "v2",
+   "iPhone",
+   "McDonald",
+   "JavaScript",
+   "TelAvivian"
+  ],
+  "accepted_changes": [
+   "TelAvivian"
+  ]
+ },
+ "wordy": {
+  "customer": "wordy",
+  "words": [
+   "max_retries",
+   "maxAge",
+   "pageSize",
+   "page_id",
+   "Maximum",
+   "pages",
+   "markPaid",
+   "mark_shipped",
+   "bookmark",
+   "rose_gold",
+   "valley2"
+  ]
+ }
+}

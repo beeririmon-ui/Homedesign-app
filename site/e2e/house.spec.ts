@@ -319,15 +319,14 @@ test.describe('the warm-modern house in the room engine (S10)', () => {
       const page = await ctx.newPage();
       await houseReady(page);
       const dialog = page.getByRole('dialog', { name: SLOT.name_he });
-      // S21 (as QA ה17 for the encoding spec): on a busy runner the press can land before the page hydrates and does
-      // nothing; it is made again until the dialog is open
-      await expect(async () => {
-        if (!(await dialog.isVisible())) {
-          await page.locator(`button.hotspot[data-slot="${SLOT.id}"]`).focus();
-          await page.keyboard.press('Enter');
-        }
-        await expect(dialog).toBeVisible({ timeout: 5_000 });
-      }).toPass({ timeout: 30_000 });
+      // S23, QA ת77: on a busy runner a press made before the page hydrates does nothing (S21 repeated it, after
+      // hydration too). Now the press waits for hydration (the app is mounted once the header's cart is known, no longer
+      // aria-busy: main.tsx hydrates, then the cart state shows), and is made once: a press lost after hydration (a focus
+      // regression) fails. QA measured the open after one such press at ≤ 3.0 s under load; 15 s is its margin.
+      await expect(page.locator('a[href="/cart/"][aria-busy="true"]')).toHaveCount(0, { timeout: 30_000 });
+      await page.locator(`button.hotspot[data-slot="${SLOT.id}"]`).focus();
+      await page.keyboard.press('Enter');
+      await expect(dialog).toBeVisible({ timeout: 15_000 });
       for (const [i, set] of house.sets.entries()) {
         if (i > 0) await page.keyboard.press('ArrowLeft');
         await expect(dialog.getByRole('radio').nth(i)).toHaveAttribute('aria-checked', 'true');

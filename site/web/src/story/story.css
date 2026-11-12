@@ -653,6 +653,17 @@
 .st-cart-empty[hidden] {
   display: none;
 }
+/* S23, QA ת74: the cart that could not be loaded: its words, as the shop's error line (base.css .notice.error) */
+.st-cart-error {
+  margin: 0;
+  padding: var(--s-2) var(--s-3);
+  border-inline-start: 2px solid var(--error);
+  color: var(--ink);
+}
+.st .st-cart-error[hidden],
+.st .st-cart-retry[hidden] {
+  display: none;
+}
 
 /* ---------- reduced motion (§7.4): dissolves only, nothing rises ---------- */
 @media (prefers-reduced-motion: reduce) {

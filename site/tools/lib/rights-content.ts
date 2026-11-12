@@ -41,8 +41,9 @@
  * - a crop into the picture (beyond its uniform margins: 10% off each side, a third off one side);
  * - a rotation (3°: 2 of 78 in QA's study) and a flip upside-down (2 of 78);
  * - a flip combined with a change of colour (brightness and hue: R9c; 67 of 78 still caught in QA's study);
- * - one tile of a collage (the picture as a quarter of a 2×2 grid: R21).
- * These need a person's eye (a page or an asset made from a supplier picture is reviewed before it ships) or a stronger
+ * - one tile of a collage (the picture as a quarter of a 2×2 grid: R21);
+ * - S23 (QA ה32): an inverted picture, a negative (0 of 78 in QA's S21 study, under S20's rule too).
+ * The list is `KNOWN_LIMITS`, printed by the gate every build and written in its JSON. These need a person's eye (a page or an asset made from a supplier picture is reviewed before it ships) or a stronger
  * matcher (local features); the rights themselves are the real fix (1.5: confirmed rights per supplier, or IMG1).
  *
  * A picture whose card's rights are `confirmed` may ship; every other one (unclear, none, or a cached file no ledger
@@ -53,6 +54,19 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync,
 import { dirname, extname, join, relative } from 'node:path';
 import sharp from 'sharp';
 import { shipsPublicly, type Rights } from './image-rights';
+
+/**
+ * S21 (ה15), S23 (QA ה32): what the content scan does not catch, as the gate prints it every build and writes it in its
+ * JSON (`not_caught`), and as launch checklist 1.5 lists it.
+ */
+export const KNOWN_LIMITS: readonly string[] = [
+  'a crop into the picture',
+  'a rotation',
+  'a flip upside-down',
+  'a flip with a change of colour',
+  'one tile of a collage',
+  'an inverted picture (a negative)',
+];
 
 /** where a supplier-derived file came from */
 export type LedgerSource = 'shop' | 'story' | 'cache';
@@ -461,6 +475,12 @@ export type SupplierSet = {
     pictures: number;
     /** S19 (ת51): the fingerprints compared: each picture plain and mirrored, and trimmed when it has margins */
     fingerprints: number;
+    /**
+     * S23 (QA ה33): the flat supplier fingerprints (under FLAT_MAX_POP set bits), and the pictures that have one: the
+     * flat-pair rule (S21) can only matter when this is more than 0
+     */
+    flat_fingerprints: number;
+    flat_pictures: number;
   };
 };
 
@@ -534,6 +554,8 @@ export async function supplierSet(o: { site: string; ledgers: Ledger[]; cacheDir
       withheld_files: [...bySha.values()].filter((v) => !shipsPublicly(v.rights as Rights)).length,
       pictures,
       fingerprints: pixels.length,
+      flat_fingerprints: pixels.filter((p) => (p.pop ?? popcount(p.bits)) < FLAT_MAX_POP).length,
+      flat_pictures: new Set(pixels.filter((p) => (p.pop ?? popcount(p.bits)) < FLAT_MAX_POP).map((p) => p.picture)).size,
     },
   };
 }

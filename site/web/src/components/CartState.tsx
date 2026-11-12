@@ -7,14 +7,24 @@
  */
 import { loadCart } from '../state/cart';
 
+/**
+ * S23, QA ה30: without JavaScript the prerendered cart and checkout would stay in their loading state for ever, saying
+ * nothing: a browser that runs no script reads this line instead (outside the busy region, so it is read). The wording
+ * is a default for master-designer (S23 README). Inner HTML, so hydration leaves the element as the server wrote it.
+ */
+export const NO_SCRIPT_HE = 'הסל והתשלום פועלים עם JavaScript. כדי להמשיך, הפעילו אותו בהגדרות הדפדפן וטענו את הדף מחדש.';
+
 export function CartLoading() {
   return (
-    <div class="cart-loading" aria-busy="true">
-      <span class="sr-only">טוענים את הסל.</span>
-      <span class="cart-loading-line" aria-hidden="true" />
-      <span class="cart-loading-line" aria-hidden="true" />
-      <span class="cart-loading-line short" aria-hidden="true" />
-    </div>
+    <>
+      <noscript dangerouslySetInnerHTML={{ __html: `<p class="notice cart-noscript">${NO_SCRIPT_HE}</p>` }} />
+      <div class="cart-loading" aria-busy="true">
+        <span class="sr-only">טוענים את הסל.</span>
+        <span class="cart-loading-line" aria-hidden="true" />
+        <span class="cart-loading-line" aria-hidden="true" />
+        <span class="cart-loading-line short" aria-hidden="true" />
+      </div>
+    </>
   );
 }
 
