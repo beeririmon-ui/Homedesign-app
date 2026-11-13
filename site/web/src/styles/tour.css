@@ -1,9 +1,20 @@
 /* MOCK1 (2026-11-12): the wow-tour mock-up, behind HD_PUBLIC=0. The room itself, the door's wall and every effect on the
-   picture are drawn by the tour's engine (tour/gl.ts); this is what sits over the picture: the door's words, the marks
-   and labels of the products, the rings, the counter, and the mock-up's own switches.
-   The durations and curves are the designer's motion language for the tour (docs/proposals/wow-tour-experience-2026-11-12.md
-   section 7). They are a proposal: they live here until the owner approves the mock-up, and join styles/system.css then.
-   --tk stretches them for the evidence's slow-motion capture (1 otherwise). */
+   picture are drawn by the tour's engine (tour/gl.ts).
+   MOCK3 (2026-11-13), the owner's feedback FB2 and FB3 (docs/proposals/tour-whole-frame-phone-2026-11-13.md):
+     1. one window: in every phase the frame lives in the same 16:9 box, never cropped. Its size comes from the screen
+        alone (the rules below), so it changes on a resize or a rotation and never while anything moves;
+     2. at rest the frame is clean: on the picture, only the products' marks. The title, the counter, the strip of
+        products and the wheel sit in the bands round the window, and the rest is folded into "המשך הסיור";
+     3. no blur and no filter over a large area: flat colours, and everything round the window is in the page from the
+        start and changes by opacity and transform only, in its own cell.
+   Three layouts, by the screen (tour/layout.ts holds the same numbers):
+     a wide screen      the window in contain, and a band of 64 under it
+     a phone upright    the window at full width; a band over it (72 at least) and a band under it (220 at least); what
+                        is left is shared 1 : 1.618, so the window sits at the optical centre
+     a phone on its side (a height of 500 or less): the window at full height between two rails of 88
+   The durations and curves are the designer's motion language for the tour (wow-tour-experience-2026-11-12.md section
+   7): 160 ms feedback, 320 ms appearing, 600 ms gathering or pulling back, 1.0 s close-up. --tk stretches them for the
+   evidence's slow-motion capture (1 otherwise). */
 .tour {
   --tour-fb: calc(160ms * var(--tk, 1));
   --tour-ui: calc(320ms * var(--tk, 1));
@@ -13,42 +24,73 @@
   --plaster: #ece5da;
   --walnut: #6b4a33;
   --brass: #b8955a;
-  /* the portal on the wall, before the page's script measures the stage (TourPage.tsx doorRect: the same numbers) */
-  --sh: calc(100svh - var(--header-h));
-  --dh: calc(var(--sh) * 0.74);
-  --dw: min(36vw, calc(var(--dh) * 0.7));
-  --dx: 31vw;
-  --dy: calc(var(--sh) * 0.47);
-  --dr: min(calc(var(--dw) * 0.14), 44px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-s: env(safe-area-inset-right, 0px);
+  --safe-e: env(safe-area-inset-left, 0px);
+  /* the page round the window: paper, as a photograph on a magazine page (a switch tries a dark one) */
+  --tour-bg: var(--paper);
+  --tour-fg: var(--ink);
+  --tour-fg2: var(--ink-2);
+  --tour-line: var(--rule-control);
+  --tour-card: #fbfaf7;
+  background: var(--tour-bg);
+  color: var(--tour-fg);
+  /* the window is sized from the stage's own box (cqw, cqh), whatever the browser's bars or an embedding frame do */
+  container-type: size;
 }
-@media (max-aspect-ratio: 11/10) {
-  .tour {
-    --dh: calc(var(--sh) * 0.54);
-    --dw: min(66vw, calc(var(--dh) * 0.62));
-    --dx: 50vw;
-    --dy: calc(var(--sh) * 0.42);
-  }
+.tour[data-bg='dark'] {
+  --tour-bg: #0e0d0c;
+  --tour-fg: var(--paper);
+  --tour-fg2: #cfc9bf;
+  --tour-line: #6f6a62;
+  --tour-card: #1d1b19;
 }
-.tour[data-phase='door'],
-.tour[data-phase='entering'] {
+.tour-g {
+  position: relative;
+  height: 100%;
+  display: grid;
+  /* a wide screen: the window in contain inside (width - 48) x (height - 64), and the band of 64 under it */
+  --wh: min(100cqh - 64px, (100cqw - 48px) * 0.5625);
+  --ww: calc(var(--wh) * 16 / 9);
+  --wy: calc((100cqh - 64px - var(--wh)) / 2);
+  --wx: calc((100cqw - var(--ww)) / 2);
+  grid-template: 'win win win' minmax(0, 1fr) 'top fold count' 64px / minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+/* ---------- the window ---------- */
+.tour-win {
+  grid-area: win;
+  place-self: center;
+  position: relative;
+  width: var(--ww);
+  height: var(--wh);
+  overflow: hidden;
   background: var(--plaster);
-  color: var(--ink);
+  /* the portal's corner before the engine draws (cqw of the window itself) */
+  container-type: inline-size;
+  touch-action: pan-y;
 }
-/* before the engine draws: the same empty room behind the same portal */
+.tour[data-zoomed] .tour-win {
+  /* a zoomed picture is moved by the finger; at x1 the page scrolls */
+  touch-action: none;
+}
+/* before the engine draws: the same empty room behind the same portal (tour/layout.ts doorRect: 84% of the window's
+   height, 0.62 as wide, centred at a third of the width) */
 .tour[data-phase='door'] .tour-poster {
-  clip-path: inset(calc(var(--dy) - var(--dh) / 2) calc(50% - var(--dw) / 2) calc(100% - var(--dy) - var(--dh) / 2) calc(50% - var(--dw) / 2) round var(--dr));
+  clip-path: inset(8% 52.3525% 8% 18.3525% round min(4.1cqw, 44px));
 }
 .tour-portal-line {
   position: absolute;
-  left: calc(var(--dx) - var(--dw) / 2);
-  top: calc(var(--dy) - var(--dh) / 2);
-  width: var(--dw);
-  height: var(--dh);
+  left: 18.3525%;
+  top: 8%;
+  width: 29.295%;
+  height: 84%;
   border: 2px solid var(--walnut);
-  border-radius: var(--dr);
+  border-radius: min(4.1cqw, 44px);
   pointer-events: none;
 }
-.tour:not([data-phase='door']) .tour-portal-line {
+.tour:not([data-phase='door']) .tour-portal-line,
+.tour[data-ready] .tour-portal-line {
   display: none;
 }
 .tour .room-canvas {
@@ -58,95 +100,461 @@
 .tour[data-ready] .room-canvas {
   opacity: 1;
 }
+/* the rubber of a pinch or a drag past the limits springs back; while the finger is down the picture follows it */
+.tour-win.spring .room-canvas {
+  transition:
+    opacity var(--tour-fb) linear,
+    transform var(--tour-ui) var(--tour-appear);
+}
 
-/* ---------- the door's words ---------- */
-.tour-door {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  text-align: center;
+/* ---------- the band over the window: the house and the room ---------- */
+.tour-top {
+  grid-area: top;
+  display: grid;
+  align-items: center;
+  min-width: 0;
+  padding-inline: var(--s-5) var(--s-3);
+}
+.tour-t {
+  grid-area: 1 / 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  /* the pair that comes waits for the pair that goes */
+  transition: opacity var(--tour-ui) var(--tour-appear) var(--tour-fb);
+}
+.tour-t[inert] {
+  opacity: 0;
+  visibility: hidden;
   transition:
     opacity var(--tour-fb) var(--tour-leave),
     visibility 0s linear var(--tour-fb);
 }
-.tour:not([data-phase='door']) .tour-door {
+.tour-t .eyebrow {
+  order: 2;
+  margin: 0;
+  min-width: 0;
+  font: 600 var(--t-run) var(--f-text);
+  color: var(--tour-fg2);
+}
+.tour-t .eyebrow::before {
+  content: '· ';
+}
+.tour-t h1,
+.tour-t .h {
+  margin: 0;
+  font: 600 var(--t-btn) var(--f-text);
+  color: var(--tour-fg);
+  white-space: nowrap;
+}
+.tour-eyes {
+  display: inline-grid;
+}
+.tour-eyes > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity var(--tour-fb) var(--tour-leave);
+}
+.tour-top[data-eye='warm-modern'] .tour-eyes > [data-k='warm-modern'],
+.tour-top[data-eye='nordic'] .tour-eyes > [data-k='nordic'],
+.tour-top[data-eye='rotate'] .tour-eyes > [data-k='rotate'] {
+  opacity: 1;
+  transition: opacity var(--tour-ui) var(--tour-appear) var(--tour-fb);
+}
+.tour-eyes .stage-status {
+  display: inline;
+  margin: 0 var(--s-2) 0 0;
+  font-weight: 400;
+}
+
+/* ---------- the band under the window ---------- */
+.tour-bot,
+.tour-row {
+  display: contents;
+}
+.tour-count {
+  grid-area: count;
+  justify-self: end;
+  align-self: center;
+  margin: 0;
+  padding-inline: var(--s-3) var(--s-5);
+  font: 600 var(--t-run) var(--f-text);
+  color: var(--tour-fg2);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--tour-fb) var(--tour-leave);
+}
+.tour-count[data-on] {
+  opacity: 1;
+  transition: opacity var(--tour-ui) var(--tour-appear);
+}
+.tour-zoom {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-control);
+  background: none;
+  color: var(--tour-fg);
+  place-items: center;
+  cursor: pointer;
+  transition: opacity var(--tour-ui) var(--tour-appear);
+}
+.tour:not([data-phase='room']) .tour-zoom {
   opacity: 0;
   visibility: hidden;
 }
-.tour[data-phase='door'] .tour-door {
-  transition: opacity var(--tour-ui) var(--tour-appear);
+.tour-cell {
+  min-width: 0;
 }
-.tour-door-head,
-.tour-door-act {
-  position: absolute;
-  /* a wide screen: the words stand beside the opening, on the side the room is not */
-  left: calc(var(--dx) + var(--dw) / 2 + var(--s-7));
-  right: var(--s-6);
-}
-.tour-door-head {
-  bottom: calc(100% - var(--dy) + var(--s-2));
-}
-.tour-door-head .eyebrow {
-  margin: 0 0 var(--s-2);
-  color: var(--ink-2);
-}
-.tour-door-head h1 {
-  margin: 0;
-  font: 300 clamp(28px, 4.2vw, 52px) / 1.12 var(--f-display);
-  color: var(--ink);
-}
-.tour-door-act {
-  top: calc(var(--dy) + var(--s-4));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--s-2);
-}
-@media (max-aspect-ratio: 11/10) {
-  /* a phone: above the opening and under it */
-  .tour-door-head,
-  .tour-door-act {
-    left: var(--s-4);
-    right: var(--s-4);
-  }
-  .tour-door-head {
-    bottom: calc(100% - var(--dy) + var(--dh) / 2 + var(--s-3));
-  }
-  .tour-door-act {
-    top: calc(var(--dy) + var(--dh) / 2 + var(--s-4));
-  }
-}
-.tour-door-act .btn {
-  pointer-events: auto;
-  min-width: 180px;
+.tour-strip,
+.tour-none {
+  display: none;
 }
 .tour-temp {
   font: var(--t-run) var(--f-text);
   color: var(--ink-2);
 }
-.tour[data-phase='door'] .stage-ui,
-.tour[data-phase='entering'] .stage-ui {
-  justify-content: center;
+/* the door's one button. A wide screen and a phone on its side: on the wall beside the opening, as before */
+.tour-door-act,
+.tour-t.t-door {
+  position: absolute;
+  inset-inline-start: calc(var(--wx) + var(--ww) * 0.08);
+  width: calc(var(--ww) * 0.38);
+  text-align: center;
 }
-.tour-rooms {
-  flex-wrap: wrap;
+.tour-door-act {
+  top: calc(var(--wy) + var(--wh) * 0.5 + var(--s-4));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+  transition: opacity var(--tour-ui) var(--tour-appear);
+}
+.tour-door-act[inert] {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--tour-fb) var(--tour-leave),
+    visibility 0s linear var(--tour-fb);
+}
+.tour-door-act .btn {
+  min-width: 180px;
+  min-height: 52px;
+}
+.tour-t.t-door {
+  bottom: calc(100cqh - var(--wy) - var(--wh) * 0.5 + var(--s-2));
+  display: block;
+}
+.tour-t.t-door .eyebrow {
+  margin: 0 0 var(--s-2);
+  color: var(--ink-2);
+}
+.tour-t.t-door .eyebrow::before {
+  content: none;
+}
+.tour-t.t-door h1,
+.tour-t.t-door .h {
+  font: 300 clamp(22px, 4.2cqw, 52px) / 1.12 var(--f-display);
+  color: var(--ink);
+  white-space: normal;
+}
+
+/* ---------- the folded control: "המשך הסיור" (FB3) ---------- */
+.tour-fold {
+  grid-area: fold;
+  place-self: center;
+  min-width: 132px;
+  height: 56px;
+  padding: 0 var(--s-4);
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--tour-line);
+  border-radius: var(--r-control);
+  background: var(--tour-bg);
+  color: var(--tour-fg);
+  font: 600 var(--t-btn) var(--f-text);
+  cursor: pointer;
+  transition: opacity var(--tour-ui) var(--tour-appear);
+}
+.tour-fold .short {
+  display: none;
+}
+.tour-fold .arr {
+  transition: transform var(--tour-ui) var(--tour-appear);
+}
+.tour-fold[aria-expanded='true'] .arr {
+  transform: rotate(180deg);
+}
+/* once, after the first reveal: the arrow moves, to say there is more under it */
+.tour-fold[data-hint][aria-expanded='false'] .arr {
+  animation: tour-nudge 2.4s cubic-bezier(0.65, 0, 0.35, 1) 1;
+}
+@keyframes tour-nudge {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.tour-plan rect {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+.tour-plan rect[data-on] {
+  fill: var(--brass);
+}
+/* in the close-up the strip, the counter, the zoom and the folded control give their place up; their cells stay */
+.tour[data-close] .tour-count,
+.tour[data-close] .tour-zoom,
+.tour[data-close] .tour-cell,
+.tour[data-close] .tour-fold {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--tour-fb) var(--tour-leave),
+    visibility 0s linear var(--tour-fb);
+}
+
+/* ---------- the panel of the folded control ---------- */
+.tour-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  visibility: hidden;
+}
+.tour[data-more] .tour-veil {
+  visibility: visible;
+}
+.tour-more {
+  position: absolute;
+  z-index: 8;
+  /* a wide screen: a panel of 360 that rises from the control */
+  left: calc(50% - 180px);
+  width: 360px;
+  bottom: 68px;
+  max-height: calc(100% - 68px - var(--s-4));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--s-4) var(--s-4);
+  border-radius: 12px;
+  background: var(--tour-bg);
+  color: var(--tour-fg);
+  box-shadow:
+    0 0 0 1px var(--tour-line),
+    0 6px 16px rgba(20, 19, 18, 0.16);
+  opacity: 0;
+  transform: translateY(24px);
+  visibility: hidden;
+  transition:
+    transform var(--tour-fb) var(--tour-leave),
+    opacity var(--tour-fb) var(--tour-leave),
+    visibility 0s linear var(--tour-fb);
+}
+.tour[data-more] .tour-more {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    transform var(--tour-ui) var(--tour-appear),
+    opacity var(--tour-ui) var(--tour-appear);
+}
+/* what is in it comes in one after the other, 70 ms apart */
+.tour-more > * {
+  opacity: 0;
+  transition: opacity var(--tour-fb) linear;
+}
+.tour[data-more] .tour-more > * {
+  opacity: 1;
+  transition: opacity var(--tour-ui) var(--tour-appear) calc(var(--i, 0) * 70ms * var(--tk, 1));
+}
+.tour-more > :nth-child(2) {
+  --i: 1;
+}
+.tour-more > :nth-child(3) {
+  --i: 2;
+}
+.tour-more > :nth-child(4) {
+  --i: 3;
+}
+.tour-more > :nth-child(5) {
+  --i: 4;
+}
+.tour-more-head {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 44px;
+  touch-action: none;
+}
+.tour-more-head .grip {
+  position: absolute;
+  left: calc(50% - 18px);
+  top: 8px;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--tour-line);
+}
+.tour-more-x {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--s-2);
+  border: 0;
+  background: none;
+  color: var(--tour-fg);
+  font: 600 var(--t-btn) var(--f-text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.tour-more h2 {
+  margin: 0 0 var(--s-2);
+  font: 600 var(--t-run) var(--f-text);
+  color: var(--tour-fg2);
+}
+.tour-rooms > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(64px, 1fr));
+  gap: var(--s-2);
 }
 .tour-rooms button {
+  min-width: 64px;
+  min-height: 64px;
+  padding: 6px 4px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  border: 1px solid var(--tour-line);
+  border-radius: var(--r-control);
+  background: none;
+  color: var(--tour-fg);
+  font: 600 var(--t-run) var(--f-text);
+  cursor: pointer;
+}
+.tour-rooms button[aria-current='true'] {
+  box-shadow: inset 0 0 0 1px var(--tour-fg);
+  border-color: var(--tour-fg);
+}
+.tour-rooms button[aria-disabled='true'] {
+  color: var(--tour-fg2);
+  cursor: not-allowed;
+}
+.tour-rooms small {
+  font-weight: 400;
+}
+.tour-rooms svg {
+  width: 20px;
+  height: 20px;
+}
+.tour-style {
+  margin-top: var(--s-3);
+}
+.tour-style .segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2);
+  padding: 0;
+}
+.tour-style .segmented button {
+  border: 1px solid var(--tour-line);
+  color: var(--tour-fg2);
+  cursor: pointer;
+}
+.tour-style .segmented button[aria-pressed='true'] {
+  border-color: var(--tour-fg);
+  box-shadow: inset 0 0 0 1px var(--tour-fg);
+  color: var(--tour-fg);
+}
+.tour-links {
+  display: flex;
+  gap: var(--s-2);
+  margin: var(--s-3) 0 0;
+}
+.tour-links .btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 var(--s-3);
+  color: var(--tour-fg);
+}
+.tour-home {
+  display: none;
+}
+
+/* ---------- the mock-up's switches (temporary), last in the panel ---------- */
+.tour-panel {
+  margin-top: var(--s-3);
+  border-top: 1px solid var(--tour-line);
+  font: var(--t-detail) var(--f-text);
+}
+.tour-panel summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tour-panel fieldset {
+  margin: 0;
+  padding: var(--s-1) 0;
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--s-3);
+}
+.tour-panel legend {
+  padding: 0;
+  font-weight: 600;
+  color: var(--tour-fg2);
+}
+.tour-panel label {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0 10px;
+  min-height: 32px;
 }
-.tour-rooms button[aria-current='true'] {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-}
-.tour-rooms svg {
+.tour-panel input {
   width: 18px;
   height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+.tour-panel .btn {
+  margin: var(--s-2) 0 0 var(--s-2);
+  color: var(--tour-fg);
+}
+/* MOCK2: the fallback for a browser that will not copy from script — the report, to select and copy by hand */
+.tour-report {
+  display: block;
+  width: 100%;
+  height: 120px;
+  margin: var(--s-2) 0 0;
+  font: 12px / 1.4 monospace;
+}
+.tour-panel .specs {
+  margin: var(--s-2) 0 0;
+  min-height: 1em;
+  color: var(--tour-fg2);
+  text-align: start;
+}
+.tour-info {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.tour-nogl-note {
+  position: absolute;
+  inset-inline: var(--s-3);
+  bottom: var(--s-3);
+  margin: 0;
+  padding: var(--s-3);
+  text-align: center;
 }
 
 /* ---------- the products' marks: a small still circle (TOUR1), and a label that folds back into it ---------- */
@@ -236,14 +644,29 @@
 .tour-spot .tag .num {
   font-weight: 400;
 }
-@media (max-width: 700px) {
-  /* the phone: no labels in the reveal, only the marks (the designer); the wheel names the product */
+@media (max-width: 700px), (max-height: 500px) {
+  /* the phone, upright or on its side: no labels in the reveal, only the marks (the designer); the strip and the wheel
+     name the product. The mark is a dot of 8 with a halo of 4. It stays still (studio rule ו.4: no pulsing dot). */
   .tour-spot[data-label] .tag {
     opacity: 0;
   }
   .tour-dim {
     display: none;
   }
+  .tour-spot .mark {
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    box-shadow:
+      0 0 0 1px rgba(58, 58, 58, 0.5),
+      0 0 0 4px rgba(244, 241, 236, 0.34);
+  }
+}
+/* while the camera travels or a finger moves the picture, the marks are out; they come back where the camera lands */
+.tour.moving .tour-spot {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--tour-fb) var(--tour-leave);
 }
 
 /* ---------- rings, measure lines, the counter ---------- */
@@ -292,114 +715,810 @@
   font: 600 var(--t-run) var(--f-text);
   white-space: nowrap;
 }
-.tour-count {
-  position: absolute;
-  top: calc(var(--s-3) + 44px);
-  inset-inline-start: var(--s-3);
-  margin: 0;
-  padding: var(--s-2) var(--s-3);
-  font: 600 var(--t-run) var(--f-text);
-}
-.tour.zoomed .tour-count,
-.tour[data-phase='door'] .tour-count,
-.tour[data-phase='entering'] .tour-count,
-.tour-count[hidden] {
-  display: none;
-}
 
-/* ---------- the mock-up's switches (temporary) ---------- */
-.tour-panel {
-  position: absolute;
-  top: var(--s-3);
-  inset-inline-end: var(--s-3);
-  z-index: 6;
-  max-width: min(300px, calc(100% - 2 * var(--s-3)));
-  font: var(--t-detail) var(--f-text);
-}
-.tour-panel summary {
-  min-height: 44px;
-  padding: 0 var(--s-3);
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  cursor: pointer;
-}
-.tour-panel[open] {
-  padding-bottom: var(--s-3);
-}
-.tour-panel fieldset {
-  margin: 0;
-  padding: var(--s-1) var(--s-3);
-  border: 0;
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: var(--s-3);
-}
-.tour-panel legend {
-  padding: 0;
-  font-weight: 600;
-  color: var(--ink-2);
-}
-.tour-panel label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 32px;
-}
-.tour-panel input {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: var(--ink);
-}
-.tour-panel .btn {
-  margin: var(--s-2) var(--s-3) 0;
-}
-/* MOCK2: the fallback for a browser that will not copy from script — the report, to select and copy by hand */
-.tour-report {
-  display: block;
-  width: calc(100% - 2 * var(--s-3));
-  height: 120px;
-  margin: var(--s-2) var(--s-3) 0;
-  font: 12px / 1.4 monospace;
-}
-.tour-panel .specs {
-  margin: var(--s-2) var(--s-3) 0;
-  min-height: 1em;
-  color: var(--ink-2);
-  text-align: start;
-}
-.tour-info {
-  display: flex;
-  gap: var(--s-3);
-  align-items: baseline;
-  flex-wrap: wrap;
-}
-.tour-nogl-note {
-  position: absolute;
-  inset-inline: var(--s-3);
-  bottom: 84px;
-  margin: 0;
-  padding: var(--s-3);
-  text-align: center;
-}
-@media (prefers-reduced-motion: reduce) {
-  .tour-door,
-  .tour-spot,
-  .tour-spot .tag,
-  .tour .room-canvas {
-    transition-duration: 0.01ms;
-  }
-}
-
-/* ---------- the wheel in the tour: under the product, never over it (the close-up shows the product in its room) ---------- */
+/* ---------- the wheel ---------- */
+/* It enters the page unseen on the frame before the camera starts (that is where it is laid out), rises as the camera
+   lands (24 px, 320 ms) and leaves in 160 ms. A wide screen: over the bottom of the picture, under the product, as
+   before; its box is the window's. */
 .tour .picker {
+  inset: var(--wy) auto auto auto;
+  inset-inline-start: var(--wx);
+  width: var(--ww);
+  height: var(--wh);
+  z-index: 6;
+  overflow: visible;
   grid-template-rows: auto minmax(0, 1fr) clamp(96px, 20svh, 148px) auto;
   background: linear-gradient(to top, rgba(14, 13, 12, 0.5), rgba(14, 13, 12, 0) 46%);
+  animation: none;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--tour-fb) var(--tour-leave),
+    transform var(--tour-fb) var(--tour-leave);
+}
+.tour .picker[data-in] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--tour-ui) var(--tour-appear),
+    transform var(--tour-ui) var(--tour-appear);
 }
 .tour .picker .arc {
   grid-row: 3;
 }
 .tour .picker .picker-info {
   grid-row: 4;
+}
+
+/* ================= a phone held upright (and a tablet upright) ================= */
+@media (max-aspect-ratio: 11/10) {
+  .tour {
+    /* a short screen: the stage grows to its minimum and the page scrolls; the window is never cropped */
+    min-height: calc(292px + var(--safe-b) + 56.25vw);
+  }
+  .tour-g {
+    --ww: 100cqw;
+    --wh: calc(100cqw * 0.5625);
+    --wx: 0px;
+    --rest: max(0px, 100cqh - var(--wh) - 292px - var(--safe-b));
+    --wy: calc(72px + var(--rest) * 0.382);
+    grid-template: 'top' var(--wy) 'win' var(--wh) 'bot' minmax(0, 1fr) / 100%;
+  }
+  .tour-top {
+    padding-inline: var(--s-4);
+  }
+  .tour-t,
+  .tour-t.t-door {
+    position: static;
+    width: auto;
+    display: block;
+    text-align: start;
+  }
+  .tour-t .eyebrow,
+  .tour-t.t-door .eyebrow {
+    margin: 0 0 2px;
+    color: var(--tour-fg2);
+  }
+  .tour-t .eyebrow::before {
+    content: none;
+  }
+  .tour-t h1,
+  .tour-t .h,
+  .tour-t.t-door h1,
+  .tour-t.t-door .h {
+    font: 300 clamp(28px, 8cqw, 32px) / 1.15 var(--f-display);
+    color: var(--tour-fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tour-eyes {
+    display: grid;
+  }
+  .tour-eyes > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tour-bot {
+    grid-area: bot;
+    position: relative;
+    display: grid;
+    /* the counter's row, the strip, and the folded control 12 over the safe area */
+    grid-template-rows: 44px 108px minmax(68px, 1fr);
+    min-height: 0;
+    padding-bottom: var(--safe-b);
+  }
+  .tour-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: var(--s-4) 6px;
+  }
+  .tour-count {
+    padding: 0;
+  }
+  .tour-zoom {
+    display: grid;
+  }
+  .tour-cell {
+    position: relative;
+  }
+  .tour-cell > * {
+    position: absolute;
+    inset: 0;
+  }
+  .tour-strip {
+    display: flex;
+    gap: var(--s-2);
+    margin: 0;
+    padding: 0 var(--s-4);
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    transition: opacity var(--tour-ui) var(--tour-appear);
+  }
+  .tour-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .tour-strip li {
+    flex: none;
+  }
+  .tour-strip[inert],
+  .tour-none[inert] {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      visibility 0s linear var(--tour-fb);
+  }
+  .tour[data-pick='dots'] .tour-strip {
+    display: none;
+  }
+  .tour-none {
+    display: grid;
+    place-items: center;
+    margin: 0;
+    font: var(--t-run) var(--f-text);
+    color: var(--tour-fg2);
+    transition: opacity var(--tour-ui) var(--tour-appear);
+  }
+  /* a tile: the product on its own (72 x 72) and its name on two lines; it rises with its product in the reveal */
+  .tour-tile {
+    width: 72px;
+    height: 108px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--tour-fg);
+    display: grid;
+    grid-template-rows: 72px 32px;
+    row-gap: 4px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      transform var(--tour-fb) var(--tour-leave);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-tile[data-on] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--tour-ui) var(--tour-appear),
+      transform var(--tour-ui) var(--tour-appear);
+  }
+  .tour-tile .pic {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--r-control);
+    background: var(--tour-card);
+    box-shadow: inset 0 0 0 1px rgba(138, 132, 123, 0.35);
+  }
+  .tour-tile img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+  }
+  .tour-tile .nm {
+    font: 400 12px / 16px var(--f-text);
+    text-align: center;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .tour-door-act {
+    padding: var(--s-2) var(--s-4) 0;
+    width: auto;
+    justify-content: flex-start;
+  }
+  .tour-door-act .btn {
+    width: 100%;
+  }
+  .tour-temp {
+    color: var(--tour-fg2);
+  }
+  .tour-fold {
+    grid-area: auto;
+    align-self: end;
+    margin-bottom: var(--s-3);
+  }
+  /* the marks are decoration here: the window is the touch target, and the strip is the list */
+  .tour[data-frame='whole'] .tour-spot {
+    pointer-events: none;
+  }
+  /* the panel rises from the bottom at full width, as tall as the band under the window at the most: it covers the
+     strip and never the window */
+  .tour-more {
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    max-height: calc(100% - var(--wy) - var(--wh));
+    padding-bottom: calc(var(--s-4) + var(--safe-b));
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -1px 0 var(--tour-line);
+    opacity: 1;
+    transform: translateY(100%);
+  }
+
+  /* the wheel: under the window, in the strip's place — never on the picture. Its name and its X take the band over
+     the window. */
+  .tour[data-frame='whole'] .picker {
+    inset: 0;
+    width: auto;
+    height: auto;
+    grid-template: 'head' var(--wy) 'win' var(--wh) 'arc' minmax(0, 1fr) 'name' 16px 'info' 16px 'go' auto / 100%;
+    padding-bottom: calc(var(--safe-b) + var(--s-3));
+    background: none;
+    color: var(--tour-fg);
+    pointer-events: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tour[data-frame='whole'] .picker-head {
+    grid-area: head;
+    align-items: center;
+    padding: 0 var(--s-4);
+    pointer-events: auto;
+  }
+  .tour[data-frame='whole'] .picker-head h2 {
+    font: 300 clamp(28px, 8cqw, 32px) / 1.15 var(--f-display);
+  }
+  .tour[data-frame='whole'] .picker-head .eyebrow {
+    margin: 0 0 2px;
+    font: 600 var(--t-run) var(--f-text);
+    color: var(--tour-fg2);
+  }
+  .tour[data-frame='whole'] .picker-info,
+  .tour[data-frame='whole'] .picker-actions {
+    display: contents;
+  }
+  .tour[data-frame='whole'] .picker .arc {
+    grid-area: arc;
+    pointer-events: auto;
+    perspective-origin: 50% 50%;
+  }
+  .tour[data-frame='whole'] .picker .pips,
+  .tour[data-frame='whole'] .picker .arc-nav,
+  .tour[data-frame='whole'] .picker .num-tag {
+    display: none;
+  }
+  .tour[data-frame='whole'] .picker .name,
+  .tour[data-frame='whole'] .picker .tour-info {
+    margin: 0;
+    min-height: 16px;
+    padding-inline: var(--s-4);
+    font: 600 13px / 16px var(--f-text);
+    color: var(--tour-fg);
+    text-align: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: auto;
+  }
+  .tour[data-frame='whole'] .picker .name {
+    grid-area: name;
+  }
+  .tour[data-frame='whole'] .picker .tour-info {
+    grid-area: info;
+    font-weight: 400;
+    color: var(--tour-fg2);
+  }
+  .tour[data-frame='whole'] .picker .tour-info .price {
+    font-size: inherit;
+  }
+  .tour[data-frame='whole'] .picker .btn-primary {
+    grid-area: go;
+    margin: var(--s-2) var(--s-4) 0;
+    min-height: 48px;
+    background: var(--tour-fg);
+    color: var(--tour-bg);
+    pointer-events: auto;
+  }
+  /* the cards on the paper: a quiet card, the product alone on it; a card away from the middle fades into the page */
+  .tour[data-frame='whole'] .arc-card .disc {
+    background: var(--tour-card);
+    border-color: rgba(138, 132, 123, 0.35);
+  }
+  .tour[data-frame='whole'] .arc-card[aria-checked='true'] .disc {
+    border-color: var(--tour-fg);
+  }
+  .tour[data-frame='whole'] .arc-card .veil {
+    background: var(--tour-bg);
+  }
+  .tour[data-frame='whole'] .arc-card img {
+    filter: none;
+  }
+  /* the parts rise; the name over the window only appears */
+  .tour[data-frame='whole'] .picker .picker-head,
+  .tour[data-frame='whole'] .picker .arc,
+  .tour[data-frame='whole'] .picker .name,
+  .tour[data-frame='whole'] .picker .tour-info,
+  .tour[data-frame='whole'] .picker .btn-primary {
+    opacity: 0;
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      transform var(--tour-fb) var(--tour-leave);
+  }
+  .tour[data-frame='whole'] .picker .arc,
+  .tour[data-frame='whole'] .picker .name,
+  .tour[data-frame='whole'] .picker .tour-info,
+  .tour[data-frame='whole'] .picker .btn-primary {
+    transform: translateY(24px);
+  }
+  .tour[data-frame='whole'] .picker[data-in] .picker-head,
+  .tour[data-frame='whole'] .picker[data-in] .arc,
+  .tour[data-frame='whole'] .picker[data-in] .name,
+  .tour[data-frame='whole'] .picker[data-in] .tour-info,
+  .tour[data-frame='whole'] .picker[data-in] .btn-primary {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--tour-ui) var(--tour-appear),
+      transform var(--tour-ui) var(--tour-appear);
+  }
+  /* in the close-up the room's name gives its place to the product's */
+  .tour[data-frame='whole'][data-close] .tour-t.t-room {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      visibility 0s linear var(--tour-fb);
+  }
+}
+/* a tablet upright: the phone's layout with larger tiles (its labels are on: the query that hides them is the phone's) */
+@media (max-aspect-ratio: 11/10) and (min-width: 700px) {
+  .tour-bot {
+    grid-template-rows: 44px 132px minmax(68px, 1fr);
+  }
+  .tour-tile {
+    width: 96px;
+    height: 132px;
+    grid-template-rows: 96px 32px;
+  }
+  .tour-tile .pic {
+    width: 96px;
+    height: 96px;
+  }
+  .tour-tile img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* ================= a phone turned on its side (a height of 500 or less) ================= */
+@media (min-aspect-ratio: 11/10) and (max-height: 500px) {
+  /* the site's header is not shown in the tour here; "לדף הבית" is in the panel */
+  body:has(.tour) .site-header {
+    display: none;
+  }
+  .tour {
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+  }
+  .tour-g {
+    --wh: min(100cqh, (100cqw - 176px - var(--safe-s) - var(--safe-e)) * 0.5625);
+    --ww: calc(var(--wh) * 16 / 9);
+    --wy: calc((100cqh - var(--wh)) / 2);
+    --wx: calc(var(--safe-s) + (100cqw - var(--safe-s) - var(--safe-e) - var(--ww)) / 2);
+    /* the start rail: the house and the room, and the folded square; the end rail: the counter, the strip, the zoom */
+    grid-template:
+      'top win count' auto
+      'top win cell' minmax(0, 1fr)
+      'fold win zoom' auto / minmax(88px, 1fr) var(--ww) minmax(88px, 1fr);
+    padding-inline: var(--safe-s) var(--safe-e);
+  }
+  .tour-top {
+    align-self: start;
+    align-items: start;
+    padding: var(--s-3) var(--s-2) 0;
+  }
+  .tour-t.t-room {
+    display: block;
+  }
+  .tour-t.t-room .eyebrow::before {
+    content: none;
+  }
+  .tour-t.t-room .eyebrow,
+  .tour-t.t-room h1,
+  .tour-t.t-room .h {
+    font: 600 var(--t-run) var(--f-text);
+    white-space: normal;
+  }
+  .tour-eyes > span {
+    white-space: normal;
+  }
+  .tour-count {
+    justify-self: center;
+    padding: var(--s-3) var(--s-1) var(--s-1);
+  }
+  /* the short counter: "13 פריטים" */
+  .tour-count[data-final] .x {
+    display: none;
+  }
+  .tour-zoom {
+    display: grid;
+    grid-area: zoom;
+    place-self: center;
+    margin: var(--s-1) 0 var(--s-2);
+  }
+  .tour-cell {
+    grid-area: cell;
+    min-height: 0;
+  }
+  .tour-strip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-2);
+    height: 100%;
+    margin: 0;
+    padding: var(--s-1) 0;
+    list-style: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+    transition: opacity var(--tour-ui) var(--tour-appear);
+  }
+  .tour-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .tour-strip li {
+    flex: none;
+  }
+  .tour-strip[inert] {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      visibility 0s linear var(--tour-fb);
+  }
+  .tour[data-pick='dots'] .tour-strip {
+    display: none;
+  }
+  /* tiles of 64 without a name (the wheel and the tile's own label name the product) */
+  .tour-tile {
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    border: 0;
+    background: none;
+    display: block;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      transform var(--tour-fb) var(--tour-leave);
+  }
+  .tour-tile[data-on] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--tour-ui) var(--tour-appear),
+      transform var(--tour-ui) var(--tour-appear);
+  }
+  .tour-tile .pic {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--r-control);
+    background: var(--tour-card);
+    box-shadow: inset 0 0 0 1px rgba(138, 132, 123, 0.35);
+  }
+  .tour-tile img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+  }
+  .tour-tile .nm {
+    display: none;
+  }
+  .tour-t.t-door h1,
+  .tour-t.t-door .h {
+    font-size: 22px;
+  }
+  .tour-door-act .btn {
+    min-height: 48px;
+  }
+  /* "the small square at the bottom" (the owner): 72 x 72, the plan and "הסיור" */
+  .tour-fold {
+    min-width: 0;
+    width: 72px;
+    height: 72px;
+    padding: 0;
+    margin: var(--s-1) 0 var(--s-2);
+    flex-direction: column;
+    gap: 4px;
+    font: 600 var(--t-run) var(--f-text);
+  }
+  .tour-fold .long,
+  .tour-fold .arr {
+    display: none;
+  }
+  .tour-fold .short {
+    display: inline;
+  }
+  .tour[data-frame='whole'] .tour-spot {
+    pointer-events: none;
+  }
+  /* the panel: 280 from the start side; it covers the window's side only while the visitor has it open */
+  .tour-more {
+    left: auto;
+    inset-inline-start: 0;
+    top: 0;
+    bottom: 0;
+    width: calc(280px + var(--safe-s));
+    max-height: none;
+    padding: 0 calc(var(--s-4) + var(--safe-s)) var(--s-4) var(--s-4);
+    border-radius: 0;
+    box-shadow: -1px 0 0 var(--tour-line);
+    opacity: 1;
+    transform: translateX(100%);
+  }
+  .tour-home {
+    display: inline-flex;
+  }
+  .tour-links {
+    flex-wrap: wrap;
+  }
+
+  /* the wheel: the arc on the window's bottom edge (128: a card of 88, and the name and price under it), over the same
+     gradient as before and no blur; "בחירה" in the end rail in the strip's place, the X in the start rail */
+  .tour[data-frame='whole'] .picker {
+    inset: 0;
+    width: auto;
+    height: auto;
+    grid-template:
+      'head win go' minmax(0, 1fr)
+      'head arc go' 96px
+      'head name go' 32px / minmax(88px, 1fr) var(--ww) minmax(88px, 1fr);
+    padding: var(--wy) var(--safe-e) var(--wy) var(--safe-s);
+    background: none;
+    color: var(--on-stage);
+    pointer-events: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tour[data-frame='whole'] .picker::before {
+    content: '';
+    grid-area: 2 / 2 / 4 / 3;
+    background: linear-gradient(to top, rgba(14, 13, 12, 0.62), rgba(14, 13, 12, 0));
+    opacity: 0;
+    transition: opacity var(--tour-fb) var(--tour-leave);
+  }
+  .tour[data-frame='whole'] .picker[data-in]::before {
+    opacity: 1;
+    transition: opacity var(--tour-ui) var(--tour-appear);
+  }
+  .tour[data-frame='whole'] .picker-head {
+    grid-area: head;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--s-2);
+    padding: var(--s-3) var(--s-1) 0;
+    color: var(--tour-fg);
+    text-align: center;
+    pointer-events: auto;
+  }
+  .tour[data-frame='whole'] .picker-head h2 {
+    font: 600 var(--t-run) var(--f-text);
+  }
+  .tour[data-frame='whole'] .picker-head .eyebrow {
+    display: none;
+  }
+  .tour[data-frame='whole'] .picker-info,
+  .tour[data-frame='whole'] .picker-actions {
+    display: contents;
+  }
+  .tour[data-frame='whole'] .picker .arc {
+    grid-area: arc;
+    pointer-events: auto;
+    perspective-origin: 50% 50%;
+  }
+  .tour[data-frame='whole'] .picker .pips,
+  .tour[data-frame='whole'] .picker .arc-nav,
+  .tour[data-frame='whole'] .picker .num-tag {
+    display: none;
+  }
+  .tour[data-frame='whole'] .picker .name,
+  .tour[data-frame='whole'] .picker .tour-info {
+    grid-area: name;
+    align-self: center;
+    margin: 0;
+    min-height: 16px;
+    max-width: 48%;
+    font: 600 13px / 16px var(--f-text);
+    color: var(--on-stage);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: auto;
+  }
+  .tour[data-frame='whole'] .picker .name {
+    justify-self: start;
+    padding-inline-start: var(--s-4);
+  }
+  .tour[data-frame='whole'] .picker .tour-info {
+    justify-self: end;
+    padding-inline-end: var(--s-4);
+    font-weight: 400;
+  }
+  .tour[data-frame='whole'] .picker .tour-info .price {
+    font-size: inherit;
+  }
+  .tour[data-frame='whole'] .picker .btn-primary {
+    grid-area: go;
+    place-self: center;
+    width: 72px;
+    min-height: 48px;
+    padding: 0;
+    background: var(--tour-fg);
+    color: var(--tour-bg);
+    pointer-events: auto;
+  }
+  .tour[data-frame='whole'] .picker .picker-head,
+  .tour[data-frame='whole'] .picker .arc,
+  .tour[data-frame='whole'] .picker .name,
+  .tour[data-frame='whole'] .picker .tour-info,
+  .tour[data-frame='whole'] .picker .btn-primary {
+    opacity: 0;
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      transform var(--tour-fb) var(--tour-leave);
+  }
+  .tour[data-frame='whole'] .picker .arc,
+  .tour[data-frame='whole'] .picker .name,
+  .tour[data-frame='whole'] .picker .tour-info {
+    transform: translateY(24px);
+  }
+  .tour[data-frame='whole'] .picker[data-in] .picker-head,
+  .tour[data-frame='whole'] .picker[data-in] .arc,
+  .tour[data-frame='whole'] .picker[data-in] .name,
+  .tour[data-frame='whole'] .picker[data-in] .tour-info,
+  .tour[data-frame='whole'] .picker[data-in] .btn-primary {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--tour-ui) var(--tour-appear),
+      transform var(--tour-ui) var(--tour-appear);
+  }
+  .tour[data-frame='whole'][data-close] .tour-t.t-room {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--tour-fb) var(--tour-leave),
+      visibility 0s linear var(--tour-fb);
+  }
+}
+
+/* ================= "מילוי וגרירה" (a temporary switch, a phone): the mock-up's earlier mode ================= */
+/* The window fills the stage and is cropped; a finger drags it. The title and the counter are labels on the picture,
+   the marks are buttons, and the wheel is over the bottom of the picture. Kept to compare with the whole frame. */
+@media (max-aspect-ratio: 11/10), (max-height: 500px) {
+  .tour[data-frame='fill'] .tour-g {
+    --ww: 100cqw;
+    --wh: 100cqh;
+    --wx: 0px;
+    --wy: 0px;
+    grid-template: 'top' auto 'mid' minmax(0, 1fr) 'bot' auto / 100%;
+    padding: 0;
+  }
+  .tour[data-frame='fill'] .tour-win {
+    grid-area: 1 / 1 / -1 / -1;
+    width: 100%;
+    height: 100%;
+  }
+  .tour[data-frame='fill'] .tour-portal-line,
+  .tour[data-frame='fill'] .tour-strip,
+  .tour[data-frame='fill'] .tour-none,
+  .tour[data-frame='fill'] .tour-zoom {
+    display: none;
+  }
+  .tour[data-frame='fill'] .tour-top {
+    z-index: 2;
+    place-self: start;
+    margin: var(--s-3);
+    padding: var(--s-2) var(--s-3);
+    border-radius: var(--r-control);
+    background: var(--label);
+    box-shadow: var(--sh-label);
+  }
+  .tour[data-frame='fill'] .tour-t .eyebrow,
+  .tour[data-frame='fill'] .tour-t h1,
+  .tour[data-frame='fill'] .tour-t .h {
+    font: 600 var(--t-run) var(--f-text);
+    color: var(--ink);
+  }
+  .tour[data-frame='fill'] .tour-bot {
+    grid-area: bot;
+    z-index: 2;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    justify-items: center;
+    row-gap: var(--s-2);
+    padding-bottom: calc(var(--safe-b) + var(--s-3));
+    pointer-events: none;
+  }
+  .tour[data-frame='fill'] .tour-row {
+    display: block;
+  }
+  .tour[data-frame='fill'] .tour-count {
+    padding: var(--s-2) var(--s-3);
+    border-radius: var(--r-control);
+    background: var(--label);
+    box-shadow: var(--sh-label);
+    color: var(--ink);
+  }
+  .tour[data-frame='fill'] .tour-cell {
+    position: static;
+    grid-area: auto;
+  }
+  .tour[data-frame='fill'] .tour-door-act {
+    position: static;
+    width: auto;
+    padding: 0 var(--s-4);
+    pointer-events: auto;
+  }
+  .tour[data-frame='fill'] .tour-door-act[inert] {
+    display: none;
+  }
+  .tour[data-frame='fill'] .tour-fold {
+    grid-area: auto;
+    margin: 0;
+    width: auto;
+    min-width: 132px;
+    height: 56px;
+    flex-direction: row;
+    pointer-events: auto;
+    background: var(--label);
+    color: var(--ink);
+  }
+  .tour[data-frame='fill'] .tour-fold .long {
+    display: inline;
+  }
+  .tour[data-frame='fill'] .tour-fold .short {
+    display: none;
+  }
+  .tour[data-frame='fill'] .tour-more {
+    max-height: 70%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* opacity only: nothing slides, nothing rises */
+  .tour-tile,
+  .tour-more,
+  .tour .picker,
+  .tour .picker .arc,
+  .tour .picker .name,
+  .tour .picker .tour-info,
+  .tour .picker .btn-primary {
+    transform: none !important;
+  }
+  .tour-more {
+    opacity: 0;
+  }
+  .tour-fold[data-hint] .arr {
+    animation: none;
+  }
+  .tour-spot,
+  .tour-spot .tag,
+  .tour .room-canvas {
+    transition-duration: 0.01ms;
+  }
 }

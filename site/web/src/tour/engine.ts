@@ -52,7 +52,7 @@ export const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
  */
 export const LEGACY = typeof location !== 'undefined' && new URLSearchParams(location.search).get('mock2') === 'off';
 
-type Anim = { label: string; start: number; dur: number; step: (t: number) => void; done: () => void };
+type Anim = { label: string; start: number; dur: number; step: (t: number) => void; done: () => void; quiet: boolean };
 export type FrameLog = { dt: number[]; js: number[]; px: number[]; step: number[] };
 export type Seam = { label: string; first: { max: number; px: number }; last: { max: number; px: number } };
 /** what a slot's two layers look like for now (an effect's pose); absent values are the layer at rest */
@@ -72,6 +72,8 @@ export type TourOptions = {
   canvas: HTMLCanvasElement;
   reduceMotion: boolean;
   onCamera?: (cam: Cam, vp: Viewport) => void;
+  /** MOCK3: the window changed size (a resize, a rotation): the page puts its own camera back (a close-up, a zoom) */
+  onResize?: () => void;
 };
 
 export class TourEngine {
@@ -406,13 +408,13 @@ export class TourEngine {
    * wrote a transform for every mark and measured a label, which is a style recalculation and a layout inside the
    * animation; they are invisible while the camera travels anyway.
    */
-  moveCam(label: string, to: Cam, ms: number, also?: (e: number, t: number) => void): Promise<void> {
+  moveCam(label: string, to: Cam, ms: number, also?: (e: number, t: number) => void, ease: (t: number) => number = EASE.camera): Promise<void> {
     const from = { ...this.cam };
     return this.run(
       label,
       this.reduce ? 0 : ms,
       (t) => {
-        const e = EASE.camera(t);
+        const e = ease(t);
         this.cam = t >= 1 ? { ...to } : lerpCam(from, to, e);
         also?.(e, t);
         if (LEGACY) this.o.onCamera?.(this.cam, this.vp);
@@ -431,25 +433,22 @@ export class TourEngine {
 
   // ---------- the loop ----------
   /** Runs `step` from 0 to 1 over `ms` (the evidence's slow motion stretches it), then `done`. Never rejects. */
-  run(label: string, ms: number, step: (t: number) => void, done?: () => void): Promise<void> {
-    if (this.sync) return Promise.resolve(this.ends(label, step, done));
+  run(label: string, ms: number, step: (t: number) => void, done?: () => void, quiet = false): Promise<void> {
+    if (this.sync) return Promise.resolve(quiet ? done?.() : this.ends(label, step, done));
     ms *= timeScale();
     // the evidence reads the last run of each effect
     this.frames[label] = { dt: [], js: [], px: [], step: [] };
     this.lastLabel = label;
     // MOCK2: what happened while this effect ran — decodes, uploads, compiles, read-backs, layouts (metrics.ts)
-    if (!this.anims.size) {
-      metrics.begin(label);
-      this.minScale = this.scale = 1;
-    }
+    // MOCK3: every effect has a window of its own, so two that overlap are each held to their own counters
+    metrics.begin(label);
+    if (!this.anims.size) this.minScale = this.scale = 1;
     return new Promise((resolve) => {
       const finish = () => {
         done?.();
-        if (!this.anims.size) {
-          const f = this.frames[label]!;
-          this.stat = metrics.end(label, f.dt, f.js, f.px, this.minScale, f.step);
-          this.scale = 1;
-        }
+        const f = this.frames[label]!;
+        this.stat = metrics.end(label, f.dt, f.js, f.px, this.minScale, f.step);
+        if (!this.anims.size) this.scale = 1;
         resolve();
       };
       if (ms <= 0 || this.destroyed) {
@@ -458,9 +457,25 @@ export class TourEngine {
         this.render();
         return;
       }
-      this.anims.add({ label, start: performance.now(), dur: ms, step, done: finish });
+      this.anims.add({ label, start: performance.now(), dur: ms, step, done: finish, quiet });
       if (!this.raf) this.raf = requestAnimationFrame(this.frame);
     });
+  }
+  /**
+   * MOCK3: an effect of the page itself — the panel opening, the wheel rising, the strip coming back. The browser moves
+   * it (transform and opacity); the engine only holds the rule over it: nothing uploads while it runs, its frames are
+   * timed, and its counters are kept like any other effect's. The canvas is not drawn again for it.
+   */
+  ui(label: string, ms: number): Promise<void> {
+    return this.run(label, this.reduce ? 0 : ms, () => undefined, undefined, true);
+  }
+  /**
+   * MOCK3: a gesture — a pinch, a drag of the zoomed picture. It lasts until `stop(label)`; the page sets the camera
+   * from its pointer events and the frame is drawn once per animation frame, under the same rule as every effect.
+   */
+  hold(label: string): void {
+    if (this.sync || [...this.anims].some((a) => a.label === label)) return;
+    void this.run(label, Infinity, () => undefined);
   }
   /** a pause between beats (the designer's 0.2 s of quiet): nothing is drawn meanwhile */
   wait(ms: number): Promise<void> {
@@ -481,6 +496,7 @@ export class TourEngine {
     this.raf = 0;
     const t0 = performance.now();
     const labels = [...this.anims].map((a) => a.label);
+    const draw = [...this.anims].some((a) => !a.quiet);
     for (const a of [...this.anims]) {
       const t = Math.min(1, (now - a.start) / a.dur);
       a.step(t);
@@ -492,7 +508,8 @@ export class TourEngine {
     // MOCK2: the effect's own script time, apart from handing the frame to the driver (which is a software rasteriser
     // on this machine and a few microseconds on a phone with a card)
     const step = performance.now() - t0;
-    const px = this.render();
+    // an effect of the page alone leaves the canvas as it is: the frame it runs over is already there
+    const px = draw ? this.render() : 0;
     const js = performance.now() - t0;
     if (this.last) {
       const dt = now - this.last;
@@ -505,7 +522,7 @@ export class TourEngine {
       }
       // MOCK2: a device that cannot hold the frame draws the next ones smaller rather than late; two long frames in a
       // row take a step down, and the resolution is full again the moment the effect ends
-      if (dt > 20 && !LEGACY) {
+      if (dt > 20 && !LEGACY && draw) {
         if (this.slow++ >= 1 && this.scale > TourEngine.SCALE_FLOOR) {
           this.scale = Math.max(TourEngine.SCALE_FLOOR, this.scale - 0.18);
           this.minScale = Math.min(this.minScale, this.scale);
@@ -546,19 +563,38 @@ export class TourEngine {
   }
 
   // ---------- size ----------
-  private measure(): void {
+  private measure(): boolean {
     const el = this.o.canvas;
-    this.vp = metrics.dom(() => ({ w: Math.max(1, el.clientWidth), h: Math.max(1, el.clientHeight) }));
-    this.gl.resize(this.vp.w, this.vp.h, Math.min(2, devicePixelRatio || 1));
+    const vp = metrics.dom(() => ({ w: Math.max(1, el.clientWidth), h: Math.max(1, el.clientHeight) }));
+    // the same size: nothing to do, and the camera (a close-up, a zoom) stays where it is
+    if (vp.w === this.vp.w && vp.h === this.vp.h) return false;
+    this.vp = vp;
+    this.gl.resize(this.vp.w, this.vp.h, Math.min(this.dprCap, devicePixelRatio || 1));
     this.rest = defaultCam(this.vp, tour.aspect, tour.mobile_center_u);
     this.cam = { ...this.rest };
+    return true;
   }
+  /** the canvas is drawn at the device's own pixels up to this ratio (MOCK3: the sharpness switch raises it) */
+  dprCap = 2;
+  /** MOCK3: the canvas at another pixel ratio, on a frame where nothing moves (the camera stays where it is) */
+  setDprCap(cap: number): void {
+    if (cap === this.dprCap || this.anims.size) return;
+    this.dprCap = cap;
+    this.gl.resize(this.vp.w, this.vp.h, Math.min(cap, devicePixelRatio || 1));
+    this.render();
+  }
+  /**
+   * The window's size is measured here and only here: when the tour starts, and when the window is resized or the
+   * phone is turned (MOCK3: never during an animation of ours — a rotation in the middle of one is the visitor's own
+   * doing and costs one layout). The camera goes back to the whole frame; the page puts a close-up back (onResize).
+   */
   observe(): void {
     this.ro = new ResizeObserver(() => {
-      if (this.cam.z > 1.03 || this.destroyed) return;
+      if (this.destroyed) return;
       const door = this.d.doorAmt > 0;
-      this.measure();
+      if (!this.measure()) return;
       if (door) this.cam = this.atDoor();
+      this.o.onResize?.();
       this.o.onCamera?.(this.cam, this.vp);
       this.render();
     });

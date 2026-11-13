@@ -80,7 +80,8 @@ export class Metrics {
   readonly effects: Record<string, EffectStat> = {};
   /** the order the effects ran in */
   readonly order: string[] = [];
-  private open: { label: string; at: Counts } | null = null;
+  /** MOCK3: a window per effect that is running — two effects may overlap (the wheel rises while the camera lands) */
+  private open = new Map<string, Counts>();
 
   count(k: keyof Counts, n = 1): void {
     this.total[k] += n;
@@ -91,11 +92,12 @@ export class Metrics {
     return f();
   }
   begin(label: string): void {
-    this.open = { label, at: { ...this.total } };
+    this.open.set(label, { ...this.total });
   }
   end(label: string, dt: number[], js: number[], px: number[], minScale: number, step: number[] = []): EffectStat {
-    const counts = this.open && this.open.label === label ? minus(this.total, this.open.at) : zero();
-    this.open = null;
+    const at = this.open.get(label);
+    const counts = at ? minus(this.total, at) : zero();
+    this.open.delete(label);
     const ms = dt.reduce((a, b) => a + b, 0);
     let run = 0;
     let longRun = 0;
@@ -169,7 +171,7 @@ export function report(m: Metrics, env: Record<string, string | number>): string
     ].join(' | ');
   });
   return [
-    'tour mock-up (MOCK2) — frame report',
+    'tour mock-up (MOCK3) — frame report',
     head,
     '',
     'effect | frames | fps | frame p50/p95/max ms | >20/>34 ms | longest run | script mean/max ms | frame work mean/max ms | MP composed | min scale | decode/upload/compile/readback/layout',

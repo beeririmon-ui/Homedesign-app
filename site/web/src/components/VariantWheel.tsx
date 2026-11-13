@@ -34,9 +34,20 @@ type Props = {
   onPreview: (position: number) => void;
   onChoose: (position: number) => void;
   onCancel: () => void;
+  /**
+   * MOCK3: the tour lays the wheel out from numbers it already holds (tour/layout.ts wheelArc), so nothing is measured
+   * when the wheel opens: the card's size, the angle between cards, the ring's radius, and how much a card shrinks per
+   * step away from the middle. Without it the wheel measures its own arc, as in the room.
+   */
+  arc?: { cw: number; step: number; radius: number; shrink: number };
+  /** MOCK3: the wheel sits in the page's own cell (the tour's stylesheet places it), not over the stage's visible part */
+  inline?: boolean;
+  /** MOCK3: the tour's words for the two buttons */
+  chooseLabel?: string;
+  closeLabel?: string;
 };
 
-export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose, onCancel }: Props) {
+export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose, onCancel, arc: fixed, inline, chooseLabel, closeLabel }: Props) {
   const lookup = house?.product ?? product;
   const n = slot.options.length;
   const physics = useRef(new ArcPhysics(n));
@@ -51,7 +62,8 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
     indexRef.current = i;
     setIndexState(i);
   };
-  const [cw, setCw] = useState(150);
+  const [measured, setCw] = useState(150);
+  const cw = fixed?.cw ?? measured;
   const raf = useRef(0);
   const reduce = prefersReducedMotion();
 
@@ -65,10 +77,11 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
   useLayoutEffect(() => {
     const el = arc.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => setCw(Math.max(104, Math.min(200, el.clientHeight * 0.78, el.clientWidth * 0.34))));
-    ro.observe(el);
     physics.current.setIndex(initial - 1);
     paint();
+    if (fixed) return;
+    const ro = new ResizeObserver(() => setCw(Math.max(104, Math.min(200, el.clientHeight * 0.78, el.clientWidth * 0.34))));
+    ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
@@ -77,7 +90,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
   useLayoutEffect(() => {
     const el = dialog.current;
     const st = el?.closest<HTMLElement>('.stage');
-    if (!el || !st) return;
+    if (!el || !st || inline) return;
     const vv = window.visualViewport ?? null;
     const place = () => {
       const r = st.getBoundingClientRect();
@@ -103,7 +116,9 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
     cards.current[initial - 1]?.focus({ preventScroll: true });
   }, []);
 
-  const R = cw * 1.9;
+  const R = fixed?.radius ?? cw * 1.9;
+  const STEP = fixed?.step ?? STEP_DEG;
+  const SHRINK = fixed?.shrink ?? 1;
   function paint() {
     const r = ring.current;
     if (!r) return;
@@ -113,7 +128,9 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
       if (!c) return;
       const d = i - pos;
       // RTL: the next option sits to the left
-      c.style.transform = `rotateY(${-d * STEP_DEG}deg) translateZ(${R}px)`;
+      // MOCK3: in the tour a card away from the middle is also smaller (0.72 a step), so two fit on each side
+      const k = SHRINK < 1 ? ` scale(${Math.pow(SHRINK, Math.min(2, Math.abs(d))).toFixed(4)})` : '';
+      c.style.transform = `rotateY(${-d * STEP}deg) translateZ(${R}px)${k}`;
       const f = Math.max(0, 1 - Math.abs(d) / 2.2);
       // MOCK2: transform and opacity only while the wheel turns. A per-frame `filter` (the brightness and blur this
       // used to set) makes the browser paint every card again on a phone; the dark veil in the card does the same job
@@ -121,7 +138,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
       c.style.setProperty('--veil', String(0.4 * (1 - f)));
     });
   }
-  useLayoutEffect(paint, [cw]);
+  useLayoutEffect(paint, [cw, R, STEP]);
 
   function run() {
     cancelAnimationFrame(raf.current);
@@ -245,7 +262,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
           <p class="eyebrow">{wheelCountHe(n, house?.sets ?? !!house?.info)}</p>
           <h2 id={headingId}>{slot.name_he}</h2>
         </div>
-        <button type="button" class="glass close-btn" onClick={onCancel} aria-label="סגירה וחזרה לחדר בלי שינוי">
+        <button type="button" class="glass close-btn" onClick={onCancel} aria-label={closeLabel ?? 'סגירה וחזרה לחדר בלי שינוי'}>
           <IconClose />
         </button>
       </div>
@@ -358,7 +375,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
             </button>
           </div>
           <button type="button" class="btn btn-primary" onClick={() => onChoose(index + 1)}>
-            בחירה והצגה בחדר
+            {chooseLabel ?? 'בחירה והצגה בחדר'}
           </button>
           {house?.info ? null : p && (slot.on_hold || p.availability.status !== 'available') ? (
             <>

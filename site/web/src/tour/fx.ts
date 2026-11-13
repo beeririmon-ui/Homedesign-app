@@ -17,7 +17,7 @@ export type Swap = 's1' | 's2' | 's3';
 export type Style = 'y1' | 'y2';
 /** what an effect asks of the page: the marks over the room are DOM, moved by CSS */
 export type Ui = {
-  ring(slot: TourSlot, kind: 'burst' | 'small' | 'touch'): void;
+  ring(slot: TourSlot, kind: 'burst' | 'small' | 'touch' | 'tile'): void;
   /** a product's label (name · price) opens, or folds back to its dot; null: all of them */
   label(slot: TourSlot | null, on: boolean): void;
   /** the dots over the products */
@@ -25,6 +25,8 @@ export type Ui = {
   /** the counter: n of 13 while the room fills, or the closing line ("13 פריטים · 26% מהחדר"); null: gone */
   count(n: number | null, final?: boolean): void;
   dims(on: boolean): void;
+  /** MOCK3: the house's name beside the window changes in the middle of a style change (optional: the tests' stubs) */
+  house?(to: HouseId): void;
 };
 
 const FADE = 300;
@@ -372,6 +374,7 @@ export async function style(e: TourEngine, ui: Ui, to: HouseId, kind: Style, how
     ui.label(null, false);
     ui.count(null);
     await e.between('style-fade', FADE, dress);
+    ui.house?.(to);
     return e.mask();
   }
   if (kind === 'y2') {
@@ -380,7 +383,9 @@ export async function style(e: TourEngine, ui: Ui, to: HouseId, kind: Style, how
     ui.label(null, false);
     ui.count(null);
     const { x } = tour.camera.room;
+    const fire = once();
     await e.between('style-y2', 1200, dress, (t) => {
+      fire('house', t >= 0.5, () => ui.house?.(to));
       e.d.fx = FX.wave;
       e.d.t = x[0] - 0.3 + (x[1] - x[0] + 0.6) * EASE.camera(t);
       e.d.amt = bump(t);
@@ -390,6 +395,7 @@ export async function style(e: TourEngine, ui: Ui, to: HouseId, kind: Style, how
   // Y1, strip and dress: the products go (0.6 s), the house changes from the back wall to the front (1.0 s), the next
   // house's products come in (1.4 s)
   await collect(e, ui);
+  const fire = once();
   await e.between(
     'style-y1',
     1000,
@@ -398,6 +404,7 @@ export async function style(e: TourEngine, ui: Ui, to: HouseId, kind: Style, how
       nothing(e)();
     },
     (t) => {
+      fire('house', t >= 0.5, () => ui.house?.(to));
       e.d.fx = FX.depth;
       e.d.t = 6.3 - 4.8 * EASE.camera(t);
       e.d.amt = bump(t);
