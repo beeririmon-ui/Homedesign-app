@@ -138,8 +138,12 @@
   font: 600 var(--t-run) var(--f-text);
   color: var(--tour-fg2);
 }
-.tour-t .eyebrow::before {
-  content: '· ';
+.tour-t.t-room h1::after,
+.tour-t.t-room .h::after {
+  content: '·';
+  margin-inline-start: var(--s-2);
+  font-weight: 400;
+  color: var(--tour-fg2);
 }
 .tour-t h1,
 .tour-t .h {
@@ -248,13 +252,11 @@
 .tour-t.t-door {
   bottom: calc(100cqh - var(--wy) - var(--wh) * 0.5 + var(--s-2));
   display: block;
+  z-index: 2;
 }
 .tour-t.t-door .eyebrow {
   margin: 0 0 var(--s-2);
   color: var(--ink-2);
-}
-.tour-t.t-door .eyebrow::before {
-  content: none;
 }
 .tour-t.t-door h1,
 .tour-t.t-door .h {
@@ -779,7 +781,8 @@
     margin: 0 0 2px;
     color: var(--tour-fg2);
   }
-  .tour-t .eyebrow::before {
+  .tour-t.t-room h1::after,
+  .tour-t.t-room .h::after {
     content: none;
   }
   .tour-t h1,
@@ -967,6 +970,10 @@
     align-items: center;
     padding: 0 var(--s-4);
     pointer-events: auto;
+    justify-self: stretch;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
   }
   .tour[data-frame='whole'] .picker-head h2 {
     font: 300 clamp(28px, 8cqw, 32px) / 1.15 var(--f-display);
@@ -1125,7 +1132,8 @@
   .tour-t.t-room {
     display: block;
   }
-  .tour-t.t-room .eyebrow::before {
+  .tour-t.t-room h1::after,
+  .tour-t.t-room .h::after {
     content: none;
   }
   .tour-t.t-room .eyebrow,
@@ -1134,8 +1142,18 @@
     font: 600 var(--t-run) var(--f-text);
     white-space: normal;
   }
+  .tour-eyes {
+    display: grid;
+  }
   .tour-eyes > span {
     white-space: normal;
+  }
+  .tour-eyes > [data-k='rotate'] {
+    display: none;
+  }
+  .tour-eyes .stage-status {
+    display: block;
+    margin: 0;
   }
   .tour-count {
     justify-self: center;
@@ -1296,7 +1314,8 @@
   .tour[data-frame='whole'] .picker::before {
     content: '';
     grid-area: 2 / 2 / 4 / 3;
-    background: linear-gradient(to top, rgba(14, 13, 12, 0.62), rgba(14, 13, 12, 0));
+    /* dense under the name and the price (ink on a pale sofa must still read), thinning up over the arc */
+    background: linear-gradient(to top, rgba(14, 13, 12, 0.8) 0, rgba(14, 13, 12, 0.8) 30px, rgba(14, 13, 12, 0.28) 70px, rgba(14, 13, 12, 0) 100%);
     opacity: 0;
     transition: opacity var(--tour-fb) var(--tour-leave);
   }
@@ -1314,6 +1333,10 @@
     color: var(--tour-fg);
     text-align: center;
     pointer-events: auto;
+    justify-self: stretch;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
   }
   .tour[data-frame='whole'] .picker-head h2 {
     font: 600 var(--t-run) var(--f-text);

@@ -27,7 +27,7 @@ import { mediaUrl } from '../media';
 import { prefersReducedMotion, timeScale } from '../motion';
 import { announce } from '../state/ui';
 import { NOT_FOR_SALE_HE } from '../set-copy';
-import { IconClose, IconDoor } from '../components/Icons';
+import { IconDoor } from '../components/Icons';
 import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
 import { NORDIC, NORDIC_NAME_HE, WM, cardUrl, tour, type HouseId, type TourOption, type TourSlot } from './data';
@@ -126,7 +126,6 @@ function wheelHouse(s: TourSlot): House {
   };
 }
 
-
 /** the next animation frame: the page has rendered and laid out what was just asked of it */
 const frame = (): Promise<void> => new Promise((r) => requestAnimationFrame(() => r()));
 /** a tiny plan of the house, three cells; the room the visitor is in is brass (FB3: "ריבוע קטן למטה שיסמן את המשך הסיור") */
@@ -138,7 +137,17 @@ const PlanIcon = ({ at }: { at: 'entry' | 'living' | 'rest' }) => (
   </svg>
 );
 const IconZoom = ({ out }: { out: boolean }) => (
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true" focusable="false">
+  <svg
+    viewBox="0 0 24 24"
+    width="22"
+    height="22"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    aria-hidden="true"
+    focusable="false"
+  >
     {out ? <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /> : <path d="M10.5 4a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM15.5 15.5 20 20M8 10.5h5M10.5 8v5" />}
   </svg>
 );
@@ -315,7 +324,7 @@ export function TourPage() {
         dim.style.width = `${Math.max(0, z.x - a.x).toFixed(1)}px`;
       }
     }
-    if (cam.z < 1.001 && !live.current.busy) spread(vp.w);
+    if (cam.z < 1.001 && !live.current.busy) spread();
   }
   /** where a slot's mark is in the window now (CSS px), or null when it is out of view */
   function markOf(s: TourSlot, e: TourEngine): Mark | null {
@@ -325,7 +334,7 @@ export function TourPage() {
   }
   /** the labels never cover one another: a label that would is moved up or down a row (wide screens; a phone has none) */
   const tagW = useRef(new Map<string, number>());
-  function spread(vw: number) {
+  function spread() {
     if (narrow.current?.matches) return;
     const placed: [number, number, number, number][] = [];
     for (const s of tour.slots) {
@@ -346,7 +355,6 @@ export function TourPage() {
       el.style.setProperty('--ty', `${dy}px`);
       placed.push([x0, x0 + w, cy + dy - 15, cy + dy + 15]);
     }
-    void vw;
   }
   const k = () => timeScale();
   /**
@@ -373,9 +381,9 @@ export function TourPage() {
   const ui: Ui = {
     ring(s, kind) {
       if (prefersReducedMotion()) return;
-      let [size, ms] = kind === 'burst' ? [132, 620] : kind === 'small' ? [72, 480] : kind === 'tile' ? [32, 320] : [56, 420];
+      const [full, ms] = kind === 'burst' ? [132, 620] : kind === 'small' ? [72, 480] : kind === 'tile' ? [32, 320] : [56, 420];
       // the phone: a ring of 32 px at the most (the designer; the whole frame is small there)
-      if (narrow.current?.matches) size = Math.min(size, 32);
+      const size = narrow.current?.matches ? Math.min(full, 32) : full;
       s.anchors.forEach((_, i) => {
         const el = rings.current.get(`${s.id}:${i}`)?.firstElementChild as HTMLElement | null;
         if (!el) return;
@@ -490,7 +498,12 @@ export function TourPage() {
       const c = canvas.current;
       if (!c) return null;
       mod.current = m;
-      const e = m.TourEngine.create({ canvas: c, reduceMotion: prefersReducedMotion(), onCamera: place, onResize: () => (live.current.busy ? (resized.current = true) : relayout()) });
+      const e = m.TourEngine.create({
+        canvas: c,
+        reduceMotion: prefersReducedMotion(),
+        onCamera: place,
+        onResize: () => (live.current.busy ? (resized.current = true) : relayout()),
+      });
       if (!e) {
         setNoGl(true);
         return null;
@@ -1075,7 +1088,6 @@ export function TourPage() {
         data-zoomed={zoomed ? '' : undefined}
         style={{ '--cu': String(phase === 'door' ? (prefersReducedMotion() ? tour.mobile_center_u : DOOR_CU) : tour.mobile_center_u) }}
         aria-labelledby="tour-title"
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         onKeyDown={(ev) => {
           if (ev.key !== 'Escape' || !live.current.more) return;
           ev.preventDefault();
@@ -1097,8 +1109,10 @@ export function TourPage() {
             </div>
             <div class="tour-t t-room" {...(phase !== 'door' && !(open && phone) ? {} : off)}>
               <p class="eyebrow tour-eyes">
-                <span data-k={WM}>{tour.name_he}</span>
-                <span data-k={NORDIC}>
+                <span data-k={WM} aria-hidden={eye === WM ? undefined : 'true'}>
+                  {tour.name_he}
+                </span>
+                <span data-k={NORDIC} aria-hidden={eye === NORDIC ? undefined : 'true'}>
                   {NORDIC_NAME_HE}
                   <span class="stage-status">תמונות זמניות</span>
                 </span>
@@ -1118,14 +1132,7 @@ export function TourPage() {
           </div>
 
           {/* the window: one 16:9 frame in every phase. On it, the products' marks and nothing else. */}
-          <div
-            class="tour-win"
-            ref={win}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
-          >
+          <div class="tour-win" ref={win} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
             {/* the first paint, before the engine: the same empty room behind the same portal (CSS), never a dark stage */}
             <picture>
               {__ARTIFACT__ ? null : <source media={WIDE} srcset={poster(tour.widths.hi, 'avif')} type="image/avif" />}
@@ -1242,6 +1249,8 @@ export function TourPage() {
               </button>
             </div>
             <div class="tour-cell">
+              {/* the role is said outright: a list without markers loses it in Safari's screen reader */}
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
               <ul class="tour-strip" role="list" aria-label="פריטים בחדר" {...(listOn ? {} : off)}>
                 {tour.slots.map((s) => {
                   const o = optionOf(s, sel);
@@ -1275,7 +1284,13 @@ export function TourPage() {
               </p>
               {/* the door's one button (temporary door), in the strip's place */}
               <div class="tour-door-act" {...(phase === 'door' ? {} : off)}>
-                <button type="button" class="btn btn-primary" id="tour-enter" onClick={() => void goIn()} aria-busy={busy || (ready && !warm) ? 'true' : undefined}>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  id="tour-enter"
+                  onClick={() => void goIn()}
+                  aria-busy={busy || (ready && !warm) ? 'true' : undefined}
+                >
                   היכנסו לסלון
                 </button>
                 {/* MOCK2: the room is made ready before anything moves; the quiet line says so while it is (FB1) */}
@@ -1298,14 +1313,23 @@ export function TourPage() {
               <PlanIcon at={phase === 'door' ? 'entry' : 'living'} />
               <span class="long">המשך הסיור</span>
               <span class="short">הסיור</span>
-              <svg class="arr" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+              <svg
+                class="arr"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
                 <path d="M6 14l6-6 6 6" />
               </svg>
             </button>
           </div>
 
           {/* a tap outside the open panel closes it, and is swallowed: it never reaches a product */}
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
           <div class="tour-veil" aria-hidden="true" onClick={() => void setMore(false)} />
           <div
             id="tour-more"
