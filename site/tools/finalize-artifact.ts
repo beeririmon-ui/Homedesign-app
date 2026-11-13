@@ -48,12 +48,24 @@ files.add(`${scene.depth.src}.webp`);
 for (const s of Object.values(scene.slots)) for (const set of [s.product, s.shadow, s.light]) for (const src of set?.src ?? []) files.add(`${src}.${lo}.webp`);
 // MOCK1: the walk to the hall (T-E0) is not shipped (web/src/catalog.ts: the Artifact's scene has no transitions); its
 // files' place goes to the tour: the warm-modern base and every layer, shadow and wheel picture of the mock-up
-type Tour = { native: number; base: { src: string }; slots: { src: string; options: { position: number }[] }[] };
+type Tour = {
+  native: number;
+  widths: { lo: number; hi: number };
+  card_width: number;
+  base: { src: string };
+  slots: { src: string; options: { position: number; card: { src: string } }[] }[];
+};
 const tour = JSON.parse(readFileSync(sitePath('.generated/tour.living-room.warm-modern.json'), 'utf8')) as Tour;
-files.add(`${tour.base.src}.${tour.native}.webp`);
+// MOCK2: the preview ships one width, `lo`, and the page composes there (web/src/tour/data.ts widthFor in an artifact
+// build): half the bytes of the layers' own width, and the file count stays inside the Artifact's 200
+const tw = tour.widths.lo;
+files.add(`${tour.base.src}.${tw}.webp`);
 for (const s of tour.slots)
-  for (const o of s.options)
-    for (const kind of [`product.${tour.native}`, `shadow.${tour.native}`, 'thumb.360']) files.add(`${s.src}/${o.position}.${kind}.webp`);
+  for (const o of s.options) {
+    for (const kind of [`product.${tw}`, `shadow.${tw}`]) files.add(`${s.src}/${o.position}.${kind}.webp`);
+    // the wheel's card: the product on its own (a studio picture of ours, or its layer trimmed)
+    files.add(`${o.card.src}.webp`);
+  }
 // FR-I: the supplier's photo of every shown product (one per product, encoded by tools/supplier-images.ts)
 type SupplierManifest = {
   width: number;

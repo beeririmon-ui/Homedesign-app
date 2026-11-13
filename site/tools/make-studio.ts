@@ -3,7 +3,11 @@
  * exists and passed QA. This writes that picture, for the tour's wheel and the room tool's:
  *
  *   web/public/media/tour/studio/<product id>.<w>.webp   the studio image on transparency, longest side CARD px
- *   .generated/studio-images.json                        { width, products: { <product id>: { src, w, h, card, source } } }
+ *   .generated/studio-images.json                        { width, products: { <product id>: { src, w, h } } } — the
+ *                                                        browser's manifest, and nothing more: a card id carries the
+ *                                                        supplier's name in it, and nothing the site serves may
+ *                                                        (e2e/public-scan.spec.ts)
+ *   .generated/studio-images.sources.json                which pilot picture each one came from, for the record
  *
  * The source is render-agent's own-image pilot (IMG1): `assets/renders/products/<pilot>/source-record.json`. Only an
  * image whose record says QA passed is used, and only when the file on disk still has the sha256 the verdict was bound
@@ -38,14 +42,17 @@ const full = read<Full>(join(GENERATED, 'catalog.story.full.json'));
 const productOfCard = new Map<string, string>();
 for (const p of full.products) productOfCard.set(p.card_id ?? p.id, p.id);
 // the shop's own catalog as well (a card the story does not carry)
-for (const p of read<Full>(join(GENERATED, 'catalog.full.json')).products) if (!productOfCard.has(p.card_id ?? p.id)) productOfCard.set(p.card_id ?? p.id, p.id);
+for (const p of read<Full>(join(GENERATED, 'catalog.full.json')).products)
+  if (!productOfCard.has(p.card_id ?? p.id)) productOfCard.set(p.card_id ?? p.id, p.id);
 
 const REL = 'tour/studio';
 const OUT = join(MEDIA_OUT, REL);
 mkdirSync(OUT, { recursive: true });
 
-type Entry = { src: string; w: number; h: number; card: string; source: string };
+type Entry = { src: string; w: number; h: number };
 const products: Record<string, Entry> = {};
+/** the record of where each picture came from; read by people, never bundled into the site */
+const sources: Record<string, { card: string; file: string; sha256: string }> = {};
 const skipped: string[] = [];
 for (const pilot of PILOTS) {
   const recordFile = repoPath(pilot, 'source-record.json');
@@ -81,14 +88,16 @@ for (const pilot of PILOTS) {
     const out = join(OUT, `${id}.${CARD}.webp`);
     mkdirSync(dirname(out), { recursive: true });
     await sharp(trimmed.data).resize(w, h).webp({ quality: 88, alphaQuality: 100, effort: 5 }).toFile(out);
-    products[id] = { src: `${REL}/${id}.${CARD}`, w, h, card: img.card, source: img.file };
+    products[id] = { src: `${REL}/${id}.${CARD}`, w, h };
+    sources[id] = { card: img.card, file: img.file, sha256: img.file_sha256 ?? sha(file) };
   }
 }
 
 mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'studio-images.json'), JSON.stringify({ width: CARD, products }, null, 1));
+writeFileSync(join(GENERATED, 'studio-images.sources.json'), JSON.stringify({ date: new Date().toISOString().slice(0, 10), pilots: PILOTS, sources }, null, 1));
 console.log(
-  `studio: ${Object.keys(products).length} own product pictures that passed QA (${Object.values(products)
+  `studio: ${Object.keys(products).length} own product pictures that passed QA (${Object.values(sources)
     .map((p) => p.card)
     .join(', ')})${skipped.length ? `; not used: ${skipped.length} (${skipped.slice(0, 3).join(' | ')})` : ''}`,
 );

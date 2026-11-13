@@ -10,7 +10,8 @@ import { camForBox, clampCam, defaultCam, lerpCam } from '../engine/camera';
 import { supportsAvif } from '../media';
 import { timeScale } from '../motion';
 import { FX, MASK_PER_M, TourGL, layer, restDisplay, type Display, type LayerDraw, type Px } from './gl';
-import { NORDIC, WM, baseOf, layerUrl, nordicLayers, tour, type Draw, type HouseId, type TourSlot } from './data';
+import { metrics, type EffectStat } from './metrics';
+import { NORDIC, WM, baseOf, layerUrl, nordicLayers, tour, widthFor, type Draw, type HouseId, type TourSlot } from './data';
 
 /** cubic-bezier(x1, y1, x2, y2), as CSS: the designer's curves (section 7) */
 export function bezier(x1: number, y1: number, x2: number, y2: number): (x: number) => number {
@@ -43,8 +44,16 @@ export const EASE = {
 };
 export const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 
+/**
+ * MOCK2: `?mock2=off` puts the scheduling back the way MOCK1 had it — textures upload while the door pushes, the taps
+ * read the mask back inside the call, the programs are only linked, the door opens before the room is ready, the marks
+ * are placed on every frame of a camera move and the display pass never drops resolution. It exists so the
+ * before-and-after table is measured on the same build, by the same tool (tools/mock2-perf.ts --old).
+ */
+export const LEGACY = typeof location !== 'undefined' && new URLSearchParams(location.search).get('mock2') === 'off';
+
 type Anim = { label: string; start: number; dur: number; step: (t: number) => void; done: () => void };
-export type FrameLog = { dt: number[]; js: number[]; px: number[] };
+export type FrameLog = { dt: number[]; js: number[]; px: number[]; step: number[] };
 export type Seam = { label: string; first: { max: number; px: number }; last: { max: number; px: number } };
 /** what a slot's two layers look like for now (an effect's pose); absent values are the layer at rest */
 export type Pose = {
@@ -102,7 +111,17 @@ export class TourEngine {
   private loading = new Map<string, Promise<void>>();
 
   static create(o: TourOptions): TourEngine | null {
-    const gl = TourGL.create(o.canvas, tour.native, tour.camera);
+    // MOCK2: the width is chosen once, from the canvas the tour opens in (data.ts widthFor)
+    const gl = TourGL.create(
+      o.canvas,
+      widthFor(
+        Math.max(
+          1,
+          metrics.dom(() => o.canvas.clientWidth),
+        ),
+      ),
+      tour.camera,
+    );
     return gl ? new TourEngine(o, gl) : null;
   }
   private constructor(
@@ -118,15 +137,22 @@ export class TourEngine {
   private ensure(dr: Draw, priority: number, mips: boolean): Promise<void> {
     let p = this.loading.get(dr.key);
     if (!p) {
-      p = this.loader.load(dr.url, priority).then((img) => this.upload(() => this.gl.upload(dr.key, img, mips)));
+      p = this.loader
+        .load(dr.url, priority)
+        .then((img) => {
+          metrics.count('decode');
+          return this.upload(() => this.gl.upload(dr.key, img, mips));
+        })
+        .then(() => undefined);
       this.loading.set(dr.key, p);
       p.catch(() => this.loading.delete(dr.key));
     }
     return p;
   }
   /**
-   * Textures go to the GPU one at a time, between frames, and never while an effect runs (the door's slow push apart):
-   * an upload in the middle of a move is a dropped frame.
+   * MOCK2: textures go to the GPU one at a time, between frames, and **never while anything moves** — the door's slow
+   * push included, which MOCK1 let through. An upload in the middle of a move is a dropped frame. The same queue
+   * carries the one other thing that stalls the main thread, the taps' read-back of the mask.
    */
   private uploads: (() => void)[] = [];
   private pumping = false;
@@ -139,20 +165,38 @@ export class TourEngine {
       this.pump();
     });
   }
+  /** the queue runs on animation frames, and only on frames where nothing is moving */
   private pump(): void {
-    if (this.pumping) return;
+    if (this.pumping || this.destroyed) return;
     this.pumping = true;
-    const tick = () => {
-      if ([...this.anims].every((a) => a.label === 'door-push')) this.uploads.shift()?.();
-      if (this.uploads.length && !this.destroyed) setTimeout(tick, this.anims.size ? 24 : 0);
+    const tick = (): void => {
+      if (this.destroyed) {
+        this.pumping = false;
+        return;
+      }
+      // MOCK1's rule, kept for the before-and-after measurement: an upload could land inside the door's slow push
+      const idle = LEGACY ? [...this.anims].every((a) => a.label === 'door-push') : !this.anims.size;
+      if (idle) {
+        // as many as fit in a frame's quiet half, so the room is ready soon without a frame of its own running long
+        const t0 = performance.now();
+        do this.uploads.shift()?.();
+        while (this.uploads.length && performance.now() - t0 < 8);
+        if (!this.uploads.length) {
+          this.gl.flushTaps();
+          // and then one more thing to fetch, so its decode lands on a quiet frame too
+          this.starts.shift()?.();
+        }
+      }
+      if (this.uploads.length || this.starts.length || this.gl.tapsDue) requestAnimationFrame(tick);
       else this.pumping = false;
     };
-    setTimeout(tick, 0);
+    requestAnimationFrame(tick);
   }
   private keys(s: TourSlot, pos: number): [Draw, Draw] {
+    const w = this.gl.width;
     return [
-      { key: `${s.id}:${pos}:s`, url: layerUrl(s, pos, 'shadow'), rect: s.rect, shadow: true },
-      { key: `${s.id}:${pos}:p`, url: layerUrl(s, pos, 'product'), rect: s.rect, shadow: false },
+      { key: `${s.id}:${pos}:s`, url: layerUrl(s, pos, 'shadow', w), rect: s.rect, shadow: true },
+      { key: `${s.id}:${pos}:p`, url: layerUrl(s, pos, 'product', w), rect: s.rect, shadow: false },
     ];
   }
   /** an option's layer and shadow, loaded and on the GPU */
@@ -168,14 +212,39 @@ export class TourEngine {
   async start(): Promise<void> {
     this.ext = (await supportsAvif()) ? 'avif' : 'webp';
     this.measure();
-    await this.ensure(baseOf(WM, this.ext), 0, false);
+    await this.ensure(baseOf(WM, this.ext, this.gl.width), 0, false);
     if (this.destroyed) return;
     this.all = true;
     this.ready = true;
     this.render();
-    this.gl.warm();
-    void this.products();
+    // MOCK2: every display program is compiled, linked and drawn with before anything moves
+    this.gl.warm(LEGACY);
+    this.warmP = this.products().then(() => {
+      // the first composition with the products in it, and the mask, are made while the visitor is still at the door
+      if (this.destroyed || this.warmed) return;
+      this.warmed = true;
+      const was = [...this.visible];
+      for (const s of tour.slots) this.settle(s.id, true);
+      this.flush();
+      this.mask(true);
+      this.visible.clear();
+      for (const id of was) this.visible.add(id);
+      for (const s of tour.slots) this.dirty.add(s.id);
+      this.flush();
+    });
   }
+  /**
+   * MOCK2: the room is ready to be animated — every default layer fetched, decoded, uploaded and composed once, every
+   * program compiled and drawn with. The door waits for this before it opens (FB1: nothing loads inside a move).
+   */
+  whenWarm(): Promise<void> {
+    return LEGACY ? Promise.resolve() : (this.warmP ?? Promise.resolve());
+  }
+  get warmReady(): boolean {
+    return this.warmed && !this.uploads.length;
+  }
+  private warmed = false;
+  private warmP: Promise<void> | null = null;
   /**
    * Everything the visitor may ask for next, behind the room that is shown (the skeleton: variants load in the
    * background after the room is on screen): every other option, then the Nordic house. Called once the room rests.
@@ -183,10 +252,18 @@ export class TourEngine {
   background(): void {
     if (this.inBackground || this.destroyed) return;
     this.inBackground = true;
+    // MOCK2: a background load is *started* on a frame where nothing moves, one at a time. Starting them all at once
+    // meant a decode landing in the middle of the door's slow push (FB1: nothing happens inside a move).
     for (const s of tour.slots)
-      for (const o of s.options) if (o.position !== this.selection[s.id]) void this.option(s.id, o.position, 2).catch(() => undefined);
-    void this.otherHouse().catch(() => undefined);
+      for (const o of s.options) if (o.position !== this.selection[s.id]) this.later(() => void this.option(s.id, o.position, 2).catch(() => undefined));
+    this.later(() => void this.otherHouse().catch(() => undefined));
   }
+  /** runs `job` on the next frame where nothing is moving (the same queue the uploads wait in) */
+  private later(job: () => void): void {
+    this.starts.push(job);
+    this.pump();
+  }
+  private starts: (() => void)[] = [];
   private inBackground = false;
   /** the default products are here (the reveal waits for them) */
   products(): Promise<void> {
@@ -194,15 +271,18 @@ export class TourEngine {
   }
   /** the Nordic house's layers (the style change waits for them) */
   otherHouse(): Promise<void> {
-    this.nordic ??= nordicLayers();
-    return Promise.all([this.ensure(baseOf(NORDIC, this.ext), 3, false), ...this.nordic.map((l) => this.ensure(l, 3, false))]).then(() => undefined);
+    this.nordic ??= nordicLayers(this.gl.width);
+    return Promise.all([this.ensure(baseOf(NORDIC, this.ext, this.gl.width), 3, false), ...this.nordic.map((l) => this.ensure(l, 3, false))]).then(
+      () => undefined,
+    );
   }
 
   // ---------- the composition ----------
   /** the layers of a house, the base first; `everything`: every product, shown or not (the mask of a reveal) */
   private list(house: HouseId = this.house, everything = false): LayerDraw[] {
-    if (house === NORDIC) return [layer(baseOf(NORDIC, this.ext).key, [0, 1, 0, 1], false), ...(this.nordic ?? []).map((l) => layer(l.key, l.rect, l.shadow))];
-    const out = [layer(baseOf(WM, this.ext).key, [0, 1, 0, 1], false)];
+    if (house === NORDIC)
+      return [layer(baseOf(NORDIC, this.ext, this.gl.width).key, [0, 1, 0, 1], false), ...(this.nordic ?? []).map((l) => layer(l.key, l.rect, l.shadow))];
+    const out = [layer(baseOf(WM, this.ext, this.gl.width).key, [0, 1, 0, 1], false)];
     for (const s of tour.slots) {
       const code = Math.round(s.depth_m * MASK_PER_M);
       const poses = everything ? [{}] : (this.poses.get(s.id) ?? (this.visible.has(s.id) ? [{}] : []));
@@ -233,6 +313,10 @@ export class TourEngine {
   /** the mask of the products: the ones in the room, or all of them (a reveal lights a product before it is there) */
   mask(everything = false, forTaps = !everything): void {
     this.gl.composeMask(this.list(this.house, everything), forTaps);
+    if (!forTaps) return;
+    // the read-back itself waits for a frame where nothing moves (MOCK2); MOCK1 did it here, inside the effect
+    if (LEGACY) this.gl.flushTaps();
+    else this.pump();
   }
   /** the slot under a point of the canvas, among the products in the room */
   slotAt(u: number, v: number): TourSlot | null {
@@ -249,22 +333,36 @@ export class TourEngine {
       Math.min(h, Math.round(s.rect[3] * h) + pad),
     ];
   }
+  /** the frame's width in the device's own pixels at this camera: what decides whether the mip levels are read */
+  private frameDevicePx(): number {
+    const dpr = Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1);
+    return Math.max(this.vp.w, this.vp.h * tour.aspect) * this.cam.z * dpr;
+  }
   private flush(): number {
     if (!this.all && !this.dirty.size) return 0;
-    this.gl.compose(this.front, this.list(), this.all ? null : [...this.dirty].map((id) => this.rect(this.slot(id))));
+    this.gl.compose(this.front, this.list(), this.all ? null : [...this.dirty].map((id) => this.rect(this.slot(id))), this.gl.needMips(this.frameDevicePx()));
     this.all = false;
     this.dirty.clear();
     return this.gl.shaded;
   }
-  /** composes what changed and draws the frame now */
+  /**
+   * Composes what changed and draws the frame now. MOCK2: while something moves and frames run long, the display pass
+   * is drawn at a fraction of the canvas and stretched (`scale`); at rest it is always the full resolution, so the
+   * frame the room settles on is exactly the composition of its layers.
+   */
   render(): number {
     if (!this.ready || this.destroyed) return 0;
     const px = this.flush();
     this.d.cam = this.cam;
     this.d.vp = this.vp;
-    this.gl.display(this.d, this.front);
+    this.gl.display(this.d, this.front, !LEGACY && this.anims.size ? this.scale : 1);
     return px;
   }
+  /** the resolution of the display pass while moving: 1, or less on a device that cannot keep up */
+  scale = 1;
+  private minScale = 1;
+  /** how far down it may go; the step is taken only after two frames in a row run long */
+  static readonly SCALE_FLOOR = 0.62;
   resetDisplay(): void {
     const { door, doorR, doorAmt } = this.d;
     this.d = { ...restDisplay(this.cam, this.vp, tour.aspect), door, doorR, doorAmt };
@@ -278,9 +376,12 @@ export class TourEngine {
     this.flush();
     change();
     const next = (this.front ? 0 : 1) as 0 | 1;
-    this.gl.compose(next, this.list(), null);
+    // the whole next frame is composed here, which is the room's own area: MOCK2 gives it a frame of its own, so the
+    // first frame of the effect does not carry it
+    this.gl.compose(next, this.list(), null, this.gl.needMips(this.frameDevicePx()));
     this.all = false;
     this.dirty.clear();
+    if (!this.sync) await new Promise((r) => requestAnimationFrame(() => r(null)));
     await this.run(label, ms, step ?? ((t) => (this.d.mix = t)), () => {
       this.front = next;
       this.resetDisplay();
@@ -300,14 +401,24 @@ export class TourEngine {
   camFor(box: Box, reserve: number): Cam {
     return camForBox(box, this.vp, tour.aspect, reserve);
   }
+  /**
+   * MOCK2: the page's marks are placed when the camera lands, not on every frame of the move. Placing them per frame
+   * wrote a transform for every mark and measured a label, which is a style recalculation and a layout inside the
+   * animation; they are invisible while the camera travels anyway.
+   */
   moveCam(label: string, to: Cam, ms: number, also?: (e: number, t: number) => void): Promise<void> {
     const from = { ...this.cam };
-    return this.run(label, this.reduce ? 0 : ms, (t) => {
-      const e = EASE.camera(t);
-      this.cam = t >= 1 ? { ...to } : lerpCam(from, to, e);
-      also?.(e, t);
-      this.o.onCamera?.(this.cam, this.vp);
-    });
+    return this.run(
+      label,
+      this.reduce ? 0 : ms,
+      (t) => {
+        const e = EASE.camera(t);
+        this.cam = t >= 1 ? { ...to } : lerpCam(from, to, e);
+        also?.(e, t);
+        if (LEGACY) this.o.onCamera?.(this.cam, this.vp);
+      },
+      () => this.o.onCamera?.(this.cam, this.vp),
+    );
   }
   panBy(dxCss: number): void {
     if (this.cam.z > 1.001 || this.anims.size) return;
@@ -324,11 +435,21 @@ export class TourEngine {
     if (this.sync) return Promise.resolve(this.ends(label, step, done));
     ms *= timeScale();
     // the evidence reads the last run of each effect
-    this.frames[label] = { dt: [], js: [], px: [] };
+    this.frames[label] = { dt: [], js: [], px: [], step: [] };
     this.lastLabel = label;
+    // MOCK2: what happened while this effect ran — decodes, uploads, compiles, read-backs, layouts (metrics.ts)
+    if (!this.anims.size) {
+      metrics.begin(label);
+      this.minScale = this.scale = 1;
+    }
     return new Promise((resolve) => {
       const finish = () => {
         done?.();
+        if (!this.anims.size) {
+          const f = this.frames[label]!;
+          this.stat = metrics.end(label, f.dt, f.js, f.px, this.minScale, f.step);
+          this.scale = 1;
+        }
         resolve();
       };
       if (ms <= 0 || this.destroyed) {
@@ -368,18 +489,36 @@ export class TourEngine {
         a.done();
       }
     }
+    // MOCK2: the effect's own script time, apart from handing the frame to the driver (which is a software rasteriser
+    // on this machine and a few microseconds on a phone with a card)
+    const step = performance.now() - t0;
     const px = this.render();
     const js = performance.now() - t0;
-    if (this.last)
+    if (this.last) {
+      const dt = now - this.last;
       for (const l of labels) {
-        const f = (this.frames[l] ??= { dt: [], js: [], px: [] });
-        f.dt.push(now - this.last);
+        const f = (this.frames[l] ??= { dt: [], js: [], px: [], step: [] });
+        f.dt.push(dt);
         f.js.push(js);
         f.px.push(px);
+        f.step.push(step);
       }
+      // MOCK2: a device that cannot hold the frame draws the next ones smaller rather than late; two long frames in a
+      // row take a step down, and the resolution is full again the moment the effect ends
+      if (dt > 20 && !LEGACY) {
+        if (this.slow++ >= 1 && this.scale > TourEngine.SCALE_FLOOR) {
+          this.scale = Math.max(TourEngine.SCALE_FLOOR, this.scale - 0.18);
+          this.minScale = Math.min(this.minScale, this.scale);
+          this.slow = 0;
+        }
+      } else this.slow = 0;
+    }
     this.last = this.anims.size ? now : 0;
     if (this.anims.size) this.raf = requestAnimationFrame(this.frame);
   };
+  private slow = 0;
+  /** the last effect's numbers, for the temporary panel */
+  stat: EffectStat | null = null;
 
   /** the tests' run: the effect at 0 against the frame before it, and at 1 against the frame after it */
   private ends(label: string, step: (t: number) => void, done?: () => void): void {
@@ -409,7 +548,7 @@ export class TourEngine {
   // ---------- size ----------
   private measure(): void {
     const el = this.o.canvas;
-    this.vp = { w: Math.max(1, el.clientWidth), h: Math.max(1, el.clientHeight) };
+    this.vp = metrics.dom(() => ({ w: Math.max(1, el.clientWidth), h: Math.max(1, el.clientHeight) }));
     this.gl.resize(this.vp.w, this.vp.h, Math.min(2, devicePixelRatio || 1));
     this.rest = defaultCam(this.vp, tour.aspect, tour.mobile_center_u);
     this.cam = { ...this.rest };

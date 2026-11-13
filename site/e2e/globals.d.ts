@@ -36,6 +36,31 @@ declare global {
 
 /** MOCK1: the hooks of the wow-tour mock-up (web/src/tour/TourPage.tsx), as the tests and the evidence tools use them */
 type TourBox = [number, number, number, number];
+/** MOCK2: what an effect cost and what it interrupted (web/src/tour/metrics.ts) */
+type TourCounts = { decode: number; upload: number; compile: number; readback: number; layout: number };
+type TourStat = {
+  label: string;
+  frames: number;
+  ms: number;
+  fps: number;
+  dt_p50: number;
+  dt_p95: number;
+  dt_max: number;
+  long20: number;
+  long34: number;
+  long_run: number;
+  js_mean: number;
+  js_p95: number;
+  js_max: number;
+  step_mean: number;
+  step_p95: number;
+  step_max: number;
+  step_over8: number;
+  mpx: number;
+  mpx_max: number;
+  counts: TourCounts;
+  min_scale: number;
+};
 type TourSlotT = { id: string; rect: TourBox; depth_m: number; options: { position: number; box: TourBox }[] };
 type TourUi = { ring(): void; label(): void; spots(): void; count(): void; dims(): void };
 type TourCamT = { cu: number; cv: number; z: number };
@@ -53,12 +78,16 @@ type TourEngineT = {
   rest: TourCamT;
   vp: { w: number; h: number };
   d: { vig: number; vigBox: TourBox; door: TourBox; doorR: number; doorAmt: number };
-  gl: { width: number; height: number; readScreen(): { w: number; h: number; data: Uint8Array } };
+  gl: { width: number; height: number; vram: number; bytes: number; readScreen(): { w: number; h: number; data: Uint8Array } };
   read(r: TourBox): Uint8Array;
   render(): number;
   mask(all?: boolean): void;
   slot(id: string): TourSlotT;
   products(): Promise<void>;
+  /** MOCK2: resolves once the room can be animated with nothing left to load */
+  whenWarm(): Promise<void>;
+  warmReady: boolean;
+  stat: TourStat | null;
   otherHouse(): Promise<void>;
   option(slot: string, pos: number): Promise<void>;
   camFor(box: TourBox, reserve: number): TourCamT;
@@ -71,6 +100,9 @@ declare global {
     __hdTourState?: { phase: 'door' | 'entering' | 'room'; busy: boolean; house: string };
     __hdTourFx?: {
       ui: TourUi;
+      /** MOCK2: the counters, per effect (web/src/tour/metrics.ts) */
+      metrics: { total: TourCounts; effects: Record<string, TourStat>; order: string[]; reset(): void };
+      LEGACY: boolean;
       enter(e: TourEngineT): Promise<void>;
       leave(e: TourEngineT, d: { cx: number; cy: number; hw: number; hh: number; r: number }): Promise<void>;
       doorPush(e: TourEngineT): void;

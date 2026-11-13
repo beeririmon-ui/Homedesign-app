@@ -263,6 +263,10 @@
 .tour-ring i {
   position: absolute;
   display: block;
+  /* MOCK2: the size is one custom property the page sets (--ring), not three style writes inside the effect */
+  width: var(--ring, 0px);
+  height: var(--ring, 0px);
+  margin: calc(var(--ring, 0px) / -2) 0 0 calc(var(--ring, 0px) / -2);
   border: 1.5px solid var(--brass);
   border-radius: 50%;
   box-shadow: 0 0 0 1px rgba(244, 241, 236, 0.35);
@@ -296,7 +300,10 @@
   padding: var(--s-2) var(--s-3);
   font: 600 var(--t-run) var(--f-text);
 }
-.tour.zoomed .tour-count {
+.tour.zoomed .tour-count,
+.tour[data-phase='door'] .tour-count,
+.tour[data-phase='entering'] .tour-count,
+.tour-count[hidden] {
   display: none;
 }
 
@@ -347,6 +354,14 @@
 }
 .tour-panel .btn {
   margin: var(--s-2) var(--s-3) 0;
+}
+/* MOCK2: the fallback for a browser that will not copy from script — the report, to select and copy by hand */
+.tour-report {
+  display: block;
+  width: calc(100% - 2 * var(--s-3));
+  height: 120px;
+  margin: var(--s-2) var(--s-3) 0;
+  font: 12px / 1.4 monospace;
 }
 .tour-panel .specs {
   margin: var(--s-2) var(--s-3) 0;

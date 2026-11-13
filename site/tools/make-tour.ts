@@ -138,7 +138,7 @@ const CARD = 360;
 const WIDTHS = { lo: 1920, hi: W } as const;
 const PAD = 8;
 /** our own studio pictures that passed QA, by product (tools/make-studio.ts) */
-type Studio = { width: number; products: Record<string, { src: string; w: number; h: number; card: string }> };
+type Studio = { width: number; products: Record<string, { src: string; w: number; h: number }> };
 const studioFile = join(GENERATED, 'studio-images.json');
 const studio = existsSync(studioFile) ? read<Studio>(studioFile) : { width: CARD, products: {} };
 if (studio.width !== CARD) fail(`studio-images.json is at ${studio.width}, the tour's card at ${CARD}`);

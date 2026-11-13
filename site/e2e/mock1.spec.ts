@@ -326,9 +326,19 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await atRest(page);
     expect(await hashes(page), 'the room after the calm reveal').toEqual(want);
     // nothing moved over the room either: no ring ran
-    expect(
-      await page.evaluate(() => document.getAnimations().filter((a) => (a.effect as KeyframeEffect | null)?.target?.closest?.('.tour-rings')).length),
-    ).toBe(0);
+    // the rings and the measure lines are animated from the page (el.animate); a CSSTransition on them is the
+    // inherited `color` of the stage changing phase, which the reduced-motion rule itself shortens to 0.01 ms
+    const moved = await page.evaluate(() =>
+      document
+        .getAnimations()
+        .filter((a) => a.constructor.name !== 'CSSTransition' && (a.effect as KeyframeEffect | null)?.target?.closest?.('.tour-rings'))
+        .map((a) => {
+          const t = (a.effect as KeyframeEffect).target!;
+          const prop = (a as unknown as { transitionProperty?: string }).transitionProperty ?? '';
+          return `${a.constructor.name} ${prop} ${t.tagName}.${t.className || t.parentElement?.className} ${a.playState}`;
+        }),
+    );
+    expect(moved, moved.join('\n')).toEqual([]);
     await page.locator('.tour-spot[data-slot="framed-art"]').click();
     await expect(page.getByRole('dialog')).toBeVisible();
     await atRest(page);

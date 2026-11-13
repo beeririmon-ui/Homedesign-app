@@ -20,8 +20,9 @@ import { NOT_FOR_SALE_HE } from '../set-copy';
 import { IconDoor, IconLeft, IconRight } from '../components/Icons';
 import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
-import { NORDIC, NORDIC_NAME_HE, WM, thumbUrl, tour, type HouseId, type TourOption, type TourSlot } from './data';
+import { NORDIC, NORDIC_NAME_HE, WM, cardUrl, tour, type HouseId, type TourOption, type TourSlot } from './data';
 import type { TourEngine } from './engine';
+import { metrics, report, statLine } from './metrics';
 import type { Reveal, Style, Swap, Ui } from './fx';
 
 type Stage = typeof import('./stage');
@@ -87,7 +88,9 @@ function wheelHouse(s: TourSlot): House {
     sets: s.options[0]!.set,
     product: () => undefined,
     drawn: () => [],
-    thumb: (pos) => thumbUrl(s, pos),
+    // MOCK2 (FB1): the product on its own — our own studio picture where one passed QA, else its layer trimmed to it
+    thumb: (pos) => cardUrl(s.options[pos - 1]!),
+    cardGround: s.ground,
     info: (pos) => {
       const o = s.options[pos - 1]!;
       // the product's own page, when the shop has one
@@ -110,18 +113,24 @@ export function TourPage() {
   const starting = useRef<Promise<TourEngine | null> | null>(null);
   const spots = useRef(new Map<string, HTMLButtonElement>());
   const rings = useRef(new Map<string, HTMLSpanElement>());
+  /** MOCK2: one Animation per ring, played again rather than built again */
+  const anims = useRef(new Map<HTMLElement, { a: Animation; flat: number; ms: number }>());
+  /** MOCK2: a phone, where the labels over the room are not shown (tour.css) */
+  const narrow = useRef(typeof matchMedia === 'function' ? matchMedia('(max-width: 700px)') : null);
   const dimEls = useRef(new Map<string, HTMLSpanElement>());
   const title = useRef<HTMLHeadingElement>(null);
   const [phase, setPhaseState] = useState<Phase>('door');
   const [busy, setBusyState] = useState(false);
   const [ready, setReady] = useState(false);
+  /** MOCK2: the room can be animated with nothing left to load (the door waits for it) */
+  const [warm, setWarm] = useState(false);
   const [noGl, setNoGl] = useState(false);
   const [house, setHouse] = useState<HouseId>(WM);
   const [cfg, setCfgState] = useState<Cfg>(DEFAULTS);
   const [sel, setSel] = useState<Record<string, number>>(() => Object.fromEntries(tour.slots.map((s) => [s.id, 1])));
   const [open, setOpen] = useState<{ slot: TourSlot; before: number } | null>(null);
   const [Wheel, setWheel] = useState<typeof WheelComponent | null>(null);
-  const [count, setCount] = useState<{ n: number; final: boolean } | null>(null);
+  const countEl = useRef<HTMLParagraphElement>(null);
   const [canPan, setCanPan] = useState(false);
   const [stat, setStat] = useState('');
   // reduced motion: the door looks where the room rests (the wall only fades); known on the client only
@@ -158,13 +167,18 @@ export function TourPage() {
     tell();
   }, [house]);
 
-  // ---------- the marks over the room (DOM, placed by the camera) ----------
+  // ---------- the marks over the room (DOM, placed when the camera lands) ----------
+  /**
+   * MOCK2 (FB1): this runs when the camera lands, on a pan, and on a resize — never on the frames of a move. It writes
+   * a transform for every mark and measures a label, and doing that inside an animation is a style recalculation and a
+   * forced layout in the middle of the frame. The marks are invisible while the camera travels anyway.
+   */
   function place() {
     const st = stage.current;
     const c = canvas.current;
     if (!st || !c) return;
     const e = engine.current;
-    const vp = e?.vp ?? { w: Math.max(1, c.clientWidth), h: Math.max(1, c.clientHeight) };
+    const vp = e?.vp ?? metrics.dom(() => ({ w: Math.max(1, c.clientWidth), h: Math.max(1, c.clientHeight) }));
     const cam = e?.cam ?? defaultCam(vp, tour.aspect, tour.mobile_center_u);
     const d = doorRect(vp.w, vp.h);
     st.style.setProperty('--tk', String(timeScale()));
@@ -211,7 +225,8 @@ export function TourPage() {
       if (!el || !tag || el.style.visibility === 'hidden') continue;
       const text = tag.textContent ?? '';
       let w = tagW.current.get(text);
-      if (w === undefined) tagW.current.set(text, (w = tag.offsetWidth));
+      // measured once per label, and only at rest (MOCK2: a measurement is what forces a layout)
+      if (w === undefined) tagW.current.set(text, (w = metrics.dom(() => tag.offsetWidth)));
       const m = /translate\(([-\d.]+)px, ([-\d.]+)px\)/.exec(el.style.transform);
       if (!m || !w) continue;
       const cx = Number(m[1]) + 23;
@@ -224,6 +239,20 @@ export function TourPage() {
     }
   }
   const k = () => timeScale();
+  /**
+   * MOCK2: the first time a ring is animated the browser resolves its style and sets up a compositor animation, and
+   * that landed inside the reveal's first frames. Every ring is given its animation — and has it cancelled — while
+   * the visitor is still at the door.
+   */
+  function primeRings() {
+    if (prefersReducedMotion()) return;
+    for (const el of rings.current.values()) {
+      const i = el.firstElementChild as HTMLElement | null;
+      if (!i) continue;
+      i.style.setProperty('--ring', '8px');
+      i.animate([{ opacity: 0 }, { opacity: 0 }], { duration: 1 }).cancel();
+    }
+  }
   const ui: Ui = {
     ring(s, kind) {
       if (prefersReducedMotion()) return;
@@ -231,25 +260,62 @@ export function TourPage() {
       s.anchors.forEach((_, i) => {
         const el = rings.current.get(`${s.id}:${i}`)?.firstElementChild as HTMLElement | null;
         if (!el) return;
-        el.style.width = el.style.height = `${size}px`;
-        el.style.margin = `${-size / 2}px 0 0 ${-size / 2}px`;
-        el.animate(
+        // MOCK2: one custom property for the size (the CSS does the rest) and one Animation per ring, played again
+        // instead of built again — a ring fires inside the reveal, on a product's own frame
+        el.style.setProperty('--ring', `${size}px`);
+        const flat = kind === 'touch' ? 0.34 : 1;
+        const was = anims.current.get(el);
+        if (was && was.flat === flat && was.ms === ms) {
+          was.a.currentTime = 0;
+          was.a.play();
+          return;
+        }
+        was?.a.cancel();
+        const a = el.animate(
           [
-            { opacity: 0.95, transform: `scale(0.08) scaleY(${kind === 'touch' ? 0.34 : 1})` },
-            { opacity: 0, transform: `scale(1) scaleY(${kind === 'touch' ? 0.34 : 1})` },
+            { opacity: 0.95, transform: `scale(0.08) scaleY(${flat})` },
+            { opacity: 0, transform: `scale(1) scaleY(${flat})` },
           ],
           { duration: ms * k(), easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
         );
+        anims.current.set(el, { a, flat, ms });
       });
     },
     label(s, on) {
+      // MOCK2: on a phone the labels are not shown at all (tour.css, the designer's rule), so the attribute is not
+      // written either — thirteen style recalculations inside the reveal, for something invisible
+      if (narrow.current?.matches) return;
       for (const el of s ? [spots.current.get(s.id)] : spots.current.values()) el?.toggleAttribute('data-label', on);
       if (s && on) spots.current.get(s.id)?.setAttribute('data-on', '');
     },
     spots(on) {
       for (const el of spots.current.values()) el.toggleAttribute('data-on', on);
     },
-    count: (n, final = false) => setCount(n === null ? null : { n, final }),
+    /**
+     * MOCK2: the counter is written into the page, not through the component's state. It changes once per product
+     * while the room fills, and a state change there re-rendered the whole page — thirteen times, inside the effect
+     * (that was most of the script time of the depth scan: FB1, smoothness).
+     */
+    count(n, final = false) {
+      const el = countEl.current;
+      if (!el) return;
+      el.hidden = n === null;
+      if (n === null) return;
+      const [a, mid, b, tail] = [...el.children] as HTMLElement[];
+      if (final) {
+        a!.textContent = String(n);
+        mid!.textContent = ' פריטים · ';
+        b!.textContent = `${Math.round(tour.cover * 100)}%`;
+        b!.removeAttribute('dir');
+        tail!.textContent = ' מהחדר';
+      } else {
+        a!.textContent = '';
+        mid!.textContent = 'פריטים ';
+        b!.textContent = `${n}/${tour.slots.length}`;
+        b!.setAttribute('dir', 'ltr');
+        tail!.textContent = '';
+      }
+    },
     dims(on) {
       for (const el of dimEls.current.values())
         if (on) el.animate([{ opacity: 0 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }], { duration: 1300 * k() });
@@ -290,9 +356,16 @@ export function TourPage() {
         ui.spots(true);
         e.background();
       } else {
-        m.doorPush(e);
-        // a visitor who stays at the door: the rest of the house loads behind it once the default products are in
-        void e.products().then(() => (idleLoad.current = window.setTimeout(() => e.background(), 5000)));
+        // MOCK2 (FB1): the door waits until the room can be animated — every layer of it fetched, decoded, uploaded
+        // and composed once, every program compiled. Until then the button says so and nothing moves: even the slow
+        // push of the door starts afterwards, so the room's own decodes never land inside it.
+        void e.whenWarm().then(() => {
+          setWarm(true);
+          primeRings();
+          m.doorPush(e);
+          // a visitor who stays at the door: the rest of the house loads behind it, once the room itself is ready
+          idleLoad.current = window.setTimeout(() => e.background(), 5000);
+        });
       }
       return e;
     }));
@@ -333,16 +406,43 @@ export function TourPage() {
     try {
       if (e && mod.current) await fn(e, mod.current);
     } finally {
-      // the last effect's frame times, for whoever holds the phone (the temporary panel)
-      const log = e?.frames[e.lastLabel];
-      if (e && log?.dt.length) {
-        const mean = log.dt.reduce((x, y) => x + y, 0) / log.dt.length;
-        setStat(`${e.lastLabel}: ${(1000 / mean).toFixed(0)} fps, ${log.dt.filter((x) => x > 25).length} long frames of ${log.dt.length}`);
-      }
+      // the last effect's numbers, for whoever holds the phone (the temporary panel; MOCK2 counts the interruptions)
+      if (e?.stat?.frames) setStat(statLine(e.stat));
       setBusy(false);
     }
   }
   const quiet = (e: TourEngine) => e.wait(200);
+
+  // ---------- MOCK2: the report the owner copies off his own phone ----------
+  const [copied, setCopied] = useState('');
+  async function copyReport() {
+    const e = engine.current;
+    const gl = (canvas.current?.getContext('webgl2') ?? null) as WebGL2RenderingContext | null;
+    const dbg = gl?.getExtension('WEBGL_debug_renderer_info');
+    const text = report(metrics, {
+      when: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      browser: navigator.userAgent,
+      screen: `${innerWidth}×${innerHeight} CSS, DPR ${devicePixelRatio}`,
+      canvas: e ? `${Math.round(e.vp.w)}×${Math.round(e.vp.h)} CSS, drawing ${canvas.current?.width}×${canvas.current?.height}` : '—',
+      composition: e ? `${e.gl.width} px wide` : '—',
+      card: dbg ? String(gl?.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : String(gl?.getParameter(gl.RENDERER) ?? '—'),
+      textures: e ? `${(e.gl.vram / 1048576).toFixed(1)} MB` : '—',
+    });
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied('הועתק');
+    } catch {
+      // a browser that will not copy from script: the text goes on the page, selected, to copy by hand
+      const el = document.getElementById('tour-report') as HTMLTextAreaElement | null;
+      if (el) {
+        el.value = text;
+        el.hidden = false;
+        el.select();
+      }
+      setCopied('בחרו והעתיקו');
+    }
+    setTimeout(() => setCopied(''), 4000);
+  }
   /** the room rests: its marks are on; the labels fold after a moment; one ring on the hero if nobody touches */
   function atRest(e: TourEngine) {
     e.background();
@@ -360,6 +460,8 @@ export function TourPage() {
   const goIn = () =>
     live.current.phase === 'door' &&
     beat(async (e, m) => {
+      // nothing starts moving before the room is ready (the button is held until then; a keyboard press waits here)
+      await e.whenWarm();
       setPhase('entering');
       await m.enter(e);
       await quiet(e);
@@ -504,7 +606,7 @@ export function TourPage() {
     const e = engine.current;
     const c = canvas.current;
     if (!p || p.onControl || p.moved > 4 || !e || !c || live.current.phase !== 'room' || live.current.busy || live.current.open) return;
-    const r = c.getBoundingClientRect();
+    const r = metrics.dom(() => c.getBoundingClientRect());
     const { u, v } = screenToFrame(ev.clientX - r.left, ev.clientY - r.top, e.cam, e.vp, tour.aspect);
     const hit = e.slotAt(u, v);
     if (hit) void openSlot(hit);
@@ -512,7 +614,10 @@ export function TourPage() {
 
   const inRoom = phase === 'room';
   const wm = house === WM;
-  const avif = mediaUrl(tour.base.src, tour.native, 'avif');
+  // MOCK2: the first paint is the width the engine will compose at on this screen (data.ts widthFor: a phone takes
+  // `lo`), so the picture the browser already holds is the one the room is built from, not a second download
+  const WIDE = '(min-width: 901px)';
+  const poster = (w: number, ext: 'avif' | 'webp') => mediaUrl(tour.base.src, w, ext);
   const radios = <T extends string>(name: string, legend: string, value: T, options: [T, string][], set: (v: T) => void) => (
     <fieldset>
       <legend>{legend}</legend>
@@ -541,10 +646,12 @@ export function TourPage() {
       >
         {/* the first paint, before the engine: the same empty room behind the same portal (CSS), never a dark stage */}
         <picture>
-          {__ARTIFACT__ ? null : <source srcset={avif} type="image/avif" />}
+          {__ARTIFACT__ ? null : <source media={WIDE} srcset={poster(tour.widths.hi, 'avif')} type="image/avif" />}
+          {__ARTIFACT__ ? null : <source srcset={poster(tour.widths.lo, 'avif')} type="image/avif" />}
+          {__ARTIFACT__ ? null : <source media={WIDE} srcset={poster(tour.widths.hi, 'webp')} type="image/webp" />}
           <img
             class="poster tour-poster"
-            src={mediaUrl(tour.base.src, tour.native, 'webp')}
+            src={poster(tour.widths.lo, 'webp')}
             alt=""
             fetchpriority="high"
             style={{ backgroundImage: `url("${tour.base.placeholder}")` }}
@@ -629,10 +736,13 @@ export function TourPage() {
             </h1>
           </div>
           <div class="tour-door-act">
-            <button type="button" class="btn btn-primary" id="tour-enter" onClick={() => void goIn()} aria-busy={busy ? 'true' : undefined}>
+            <button type="button" class="btn btn-primary" id="tour-enter" onClick={() => void goIn()} aria-busy={busy || (ready && !warm) ? 'true' : undefined}>
               היכנסו לסלון
             </button>
-            <span class="tour-temp">הדלת זמנית</span>
+            {/* MOCK2: the room is made ready before anything moves; the quiet line says so while it is (FB1) */}
+            <span class="tour-temp" role="status">
+              {ready && !warm ? 'מכינים את החדר…' : 'הדלת זמנית'}
+            </span>
           </div>
         </div>
 
@@ -642,19 +752,13 @@ export function TourPage() {
             {wm ? null : <span class="stage-status">שכבות זמניות</span>}
           </h1>
         ) : null}
-        {count && inRoom ? (
-          <p class="glass tour-count" aria-hidden="true">
-            {count.final ? (
-              <>
-                <span class="num">{count.n}</span> פריטים · <span class="num">{Math.round(tour.cover * 100)}%</span> מהחדר
-              </>
-            ) : (
-              <>
-                פריטים <span class="num" dir="ltr">{`${count.n}/${tour.slots.length}`}</span>
-              </>
-            )}
-          </p>
-        ) : null}
+        {/* MOCK2: always in the page, filled by ui.count through the DOM (no render inside an effect) */}
+        <p class="glass tour-count" aria-hidden="true" ref={countEl} hidden>
+          <span class="num" />
+          <span />
+          <span class="num" />
+          <span />
+        </p>
         {noGl ? (
           <p class="glass tour-nogl-note" role="status">
             הסיור צריך דפדפן עם WebGL2. <a href="/rooms/living-room/?style=warm-modern">לסלון בכלי העיצוב</a>
@@ -754,9 +858,15 @@ export function TourPage() {
           <button type="button" class="btn btn-ghost" id="tour-replay" disabled={!inRoom || !wm || !!open} onClick={() => void replay()}>
             הצגה מחדש
           </button>
+          {/* MOCK2: one tap copies the device, the browser, the screen, the card and the table of every effect that
+              ran, as plain text the owner pastes into the chat. That is how the frame rate on a real phone is read. */}
+          <button type="button" class="btn btn-ghost" id="tour-copy" onClick={() => void copyReport()}>
+            {copied || 'העתקת דוח'}
+          </button>
           <p class="specs" id="tour-stat" dir="ltr">
             {stat}
           </p>
+          <textarea id="tour-report" class="tour-report" dir="ltr" readOnly hidden aria-label="דוח הפריימים" />
         </details>
 
         {open && Wheel ? (
@@ -780,7 +890,7 @@ export function TourPage() {
             const o = optionOf(s, sel);
             return (
               <li key={s.id} class="card slot-item">
-                <img class="thumb" src={thumbUrl(s, o.position)} alt="" loading="lazy" width={64} height={64} />
+                <img class="thumb" src={cardUrl(o)} alt="" loading="lazy" width={64} height={64} />
                 <div class="meta">
                   <strong>{s.name_he}</strong>
                   <span class="small">{o.name_he ?? <span class="muted">{NOT_FOR_SALE_HE}</span>}</span>

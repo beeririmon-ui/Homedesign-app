@@ -149,21 +149,33 @@ if (existsSync(housePage) && existsSync(houseData)) {
 const tourPage = join(DIST, 'tour/index.html');
 const tourData = sitePath('.generated/tour.living-room.warm-modern.json');
 if (existsSync(tourPage) && existsSync(tourData)) {
-  const t = JSON.parse(readFileSync(tourData, 'utf8')) as { native: number; base: { src: string }; slots: { src: string }[] };
+  const t = JSON.parse(readFileSync(tourData, 'utf8')) as {
+    native: number;
+    widths: { lo: number; hi: number };
+    card_width: number;
+    base: { src: string };
+    slots: { src: string }[];
+  };
+  // MOCK2: a phone composes at `lo` and loads that width's layers (web/src/tour/data.ts widthFor); the hi width is
+  // what a wider screen loads, and is reported beside it
   const chunks = assets.filter((f) => /^(TourPage|stage)-.*\.(js|css)$/.test(f)).map((f) => gz(join(DIST, 'assets', f)));
-  const tourMedia = (formats: Formats) =>
-    file(t.base.src, t.native, formats) +
+  const tourMedia = (formats: Formats, w: number) =>
+    file(t.base.src, w, formats) +
     t.slots.reduce(
-      (n, sl) =>
-        n + file(`${sl.src}/1.product`, t.native, ['webp']) + file(`${sl.src}/1.shadow`, t.native, ['webp']) + file(`${sl.src}/1.thumb`, 360, ['webp']),
+      (n, sl) => n + file(`${sl.src}/1.product`, w, ['webp']) + file(`${sl.src}/1.shadow`, w, ['webp']) + file(`${sl.src}/1.card`, t.card_width, ['webp']),
       0,
     );
   const page = gz(tourPage) + sum(js) + sum(css) + sum(chunks) + fonts;
   rows.push(
     ["JS and CSS (gzip), the tour's own chunks (its page, its engine and effects)", sum(chunks), null],
-    [`the tour's media (the empty room @${t.native}, ${t.slots.length} default products and their shadows)`, tourMedia(['avif', 'webp']), null],
-    ['first load, the tour (the door, then the room), mobile', page + tourMedia(['avif', 'webp']), BUDGET.firstLoad],
-    ['first load, the tour, mobile, no AVIF', page + tourMedia(['webp']), BUDGET.firstLoad],
+    [
+      `the tour's media on a phone (the empty room @${t.widths.lo}, ${t.slots.length} default products and their shadows)`,
+      tourMedia(['avif', 'webp'], t.widths.lo),
+      null,
+    ],
+    [`the same on a wide screen (@${t.widths.hi})`, tourMedia(['avif', 'webp'], t.widths.hi), null],
+    ['first load, the tour (the door, then the room), mobile', page + tourMedia(['avif', 'webp'], t.widths.lo), BUDGET.firstLoad],
+    ['first load, the tour, mobile, no AVIF', page + tourMedia(['webp'], t.widths.lo), BUDGET.firstLoad],
   );
 }
 // S5: the story's pages (behind the flag; absent from the public build). A story page's own scripts and styles, and its

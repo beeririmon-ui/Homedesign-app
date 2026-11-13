@@ -18,6 +18,7 @@ import { PackPicker, packPrice } from './PackPicker';
 import { defaultVariantId, optionLabelHe, optionsOf } from '../variants';
 import { Waitlist } from './Waitlist';
 import { NORDIC, type House } from '../house';
+import { studioImage } from '../studio';
 import { frameStyle, visibleFrame } from './viewport-frame';
 import { wheelCountHe } from '../set-copy';
 
@@ -114,8 +115,10 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
       // RTL: the next option sits to the left
       c.style.transform = `rotateY(${-d * STEP_DEG}deg) translateZ(${R}px)`;
       const f = Math.max(0, 1 - Math.abs(d) / 2.2);
+      // MOCK2: transform and opacity only while the wheel turns. A per-frame `filter` (the brightness and blur this
+      // used to set) makes the browser paint every card again on a phone; the dark veil in the card does the same job
       c.style.opacity = String(0.25 + 0.75 * f);
-      c.style.filter = `brightness(${0.6 + 0.4 * f}) blur(${(1 - f) * 2}px)`;
+      c.style.setProperty('--veil', String(0.4 * (1 - f)));
     });
   }
   useLayoutEffect(paint, [cw]);
@@ -249,6 +252,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
       <div
         class="arc"
         ref={arc}
+        data-ground={house?.cardGround ? '' : undefined}
         role="radiogroup"
         aria-labelledby={headingId}
         onPointerDown={onPointerDown}
@@ -259,7 +263,9 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
         <div class="arc-ring" ref={ring} style={{ '--cw': `${cw}px` }}>
           {slot.options.map((o, i) => {
             const prod = lookup(o.product_id);
-            const img = house?.thumb ? house.thumb(o.position) : optionImage(slot.id, o.position);
+            // MOCK2 (FB1): the product on its own — our own studio picture first, then the house's card (the tour's,
+            // and a set's: both are the product's own layer, trimmed), then the room layer. Never a supplier photo.
+            const img = studioImage(o.product_id ?? prod?.id)?.src ?? (house?.thumb ? house.thumb(o.position) : optionImage(slot.id, o.position));
             // PRE1 / MED1: an option out of stock stays on the wheel, said on its card and in its name, and is never sold
             const oos = !!prod && (slot.on_hold || prod.availability.status !== 'available');
             const label = `${i + 1} מתוך ${n}: ${
@@ -281,6 +287,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
               >
                 <span class="disc" aria-hidden="true" />
                 {img ? <img src={img} alt="" draggable={false} /> : null}
+                <span class="veil" aria-hidden="true" />
                 {!img || o.placeholder ? (
                   <span class="ph" aria-hidden="true">
                     <span>

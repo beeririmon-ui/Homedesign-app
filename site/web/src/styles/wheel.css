@@ -92,6 +92,29 @@
   filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.45));
   pointer-events: none;
 }
+/* MOCK2: the depth cue of a card away from the middle. A span the wheel fades is a compositor's job; the `filter:
+   brightness() blur()` it replaces made the browser paint the card again on every frame of a drag (FB1, smoothness) */
+.arc-card .veil {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(14, 13, 12, 1);
+  opacity: var(--veil, 0);
+  pointer-events: none;
+}
+/* MOCK2 (FB1): the card is the product on its own, so a product that stands on something gets the quiet ground shadow
+   that tells the eye where it stands; a curtain, a picture or a pendant does not stand on anything and gets none */
+.arc[data-ground] .arc-card::after {
+  content: '';
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 9%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(8, 7, 6, 0.55), rgba(8, 7, 6, 0));
+  pointer-events: none;
+}
 .arc-card .ph {
   position: absolute;
   inset: 18%;

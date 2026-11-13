@@ -17,6 +17,7 @@
 import type { Box, Cam, Viewport } from '../engine/types';
 import type { Decoded } from '../engine/loader';
 import { coverSize } from '../engine/camera';
+import { metrics } from './metrics';
 import type { TourCamera } from './data';
 
 export type LayerDraw = {
@@ -101,6 +102,9 @@ export const restDisplay = (cam: Cam, vp: Viewport, aspect: number): Display => 
 
 const QUAD = new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]);
 const LEVELS = 5;
+/** every display variant the tour's effects ask for: rest and camera (0), the door (1), the plane (2), the mask (4),
+ *  the plane with the mask (6), a dissolve (8), and a dissolve with the mask (12, the calm reveal) */
+const WARM_FLAGS = [0, 1, 2, 4, 6, 8, 12] as const;
 
 const LAYER_VS = `#version 300 es
 in vec2 aPos;
@@ -130,7 +134,11 @@ out vec4 o;
 void main() {
   if (vFrame.x < uClip.x || vFrame.x > uClip.y) discard;
   // at rest a layer is copied texel for texel: the composition is the layers' own pixels
-  vec4 t = uOrg.x == 1 ? texelFetch(uTex, ivec2(int(gl_FragCoord.x) - uOrg.y, uOrg.z - int(gl_FragCoord.y)), 0) : textureLod(uTex, vTex, uLod);
+  // at rest a layer is read texel for texel; the clamp keeps a half-pixel of rounding from reading outside it (a
+  // shadow read outside its own texture is zero, and a zero multiplies the room to black: MOCK2)
+  vec4 t = uOrg.x == 1
+    ? texelFetch(uTex, clamp(ivec2(int(gl_FragCoord.x) - uOrg.y, uOrg.z - int(gl_FragCoord.y)), ivec2(0), textureSize(uTex, 0) - 1), 0)
+    : textureLod(uTex, vTex, uLod);
   if (uMode == 1) o = vec4(mix(vec3(1.0), t.rgb, uOpacity), 1.0);
   else if (uMode == 2) {
     if (t.a < 0.5) discard;
@@ -319,9 +327,22 @@ export class TourGL {
   private edge: { tex: WebGLTexture; fb: WebGLFramebuffer } | null = null;
   private edgeProg: WebGLProgram;
   private codes: Uint8Array | null = null;
+  /** MOCK2: the taps' own copy of the mask, a quarter of its side: 1/16 of the pixels to read back */
+  private tap: { fb: WebGLFramebuffer; w: number; h: number } | null = null;
+  /** MOCK2: the display's own target, when a frame is drawn at less than full resolution */
+  private scaled: { tex: WebGLTexture; fb: WebGLFramebuffer; w: number; h: number } | null = null;
   private loc: Record<string, WebGLUniformLocation | null> = {};
   /** pixels shaded by the last compose (for the frame-rate evidence) */
   shaded = 0;
+  /** a target whose mip levels were skipped while the display was magnifying it (MOCK2) */
+  private mipsStale: [boolean, boolean] = [false, false];
+  /**
+   * Whether the display pass reads the composition's mip levels: only when it makes it smaller than the screen it is
+   * drawn on. `frameDevicePx` is the frame's width on the device's own pixels at this camera.
+   */
+  needMips(frameDevicePx: number): boolean {
+    return this.width > frameDevicePx * 1.02;
+  }
 
   static create(canvas: HTMLCanvasElement, width: number, cam: TourCamera): TourGL | null {
     const gl = canvas.getContext('webgl2', {
@@ -377,6 +398,17 @@ export class TourGL {
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, etex, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     this.edge = { tex: etex, fb: efb };
+    // MOCK2: the taps read a quarter-sided copy of the mask (the code of the product under a finger does not need the
+    // mask's own resolution), so the read-back is 1/16 of the pixels and costs about a millisecond, never 15
+    const tw = Math.max(1, mw >> 2);
+    const th = Math.max(1, mh >> 2);
+    const ttex = this.texture(gl.NEAREST);
+    gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8, tw, th);
+    const tfb = gl.createFramebuffer()!;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, tfb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, ttex, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    this.tap = { fb: tfb, w: tw, h: th };
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
   readonly height: number;
@@ -397,6 +429,7 @@ export class TourGL {
     gl.bindAttribLocation(p, 0, 'aPos');
     gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p) ?? 'link');
+    metrics.count('compile');
     return p;
   }
 
@@ -417,9 +450,43 @@ export class TourGL {
     }
     return p;
   }
-  /** compiles the variants the tour uses, ahead of the first effect (a program linked in the middle of a move is a dropped frame) */
-  warm(): void {
-    for (const f of [0, 1, 2, 4, 6, 8]) this.displayProgram(f);
+  /**
+   * MOCK2: every display program the tour can need, compiled, linked **and drawn with** before the first effect. A
+   * driver finishes the real compile at the first draw, so linking alone is not warm: the first frame of an effect
+   * would pay for it. Each variant draws one pixel into the mask's framebuffer (never the canvas).
+   */
+  warm(linkOnly = false): void {
+    const gl = this.gl;
+    const m = this.mask!;
+    if (linkOnly) {
+      // MOCK1's warm-up, kept for the before-and-after measurement: linked, never drawn with
+      for (const f of WARM_FLAGS) this.displayProgram(f);
+      return;
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, m.fb);
+    gl.viewport(0, 0, 1, 1);
+    gl.enable(gl.SCISSOR_TEST);
+    gl.scissor(0, 0, 1, 1);
+    const rest = restDisplay({ cu: 0.5, cv: 0.5, z: 1 }, { w: 2, h: 2 }, 16 / 9);
+    for (const flags of WARM_FLAGS) {
+      this.displayProgram(flags);
+      this.drawDisplay(
+        {
+          ...rest,
+          fx: flags & 2 ? FX.scan : FX.none,
+          mix: flags & 8 ? 0.5 : 0,
+          outline: flags & 4 ? 0.5 : 0,
+          doorAmt: flags & 1 ? 1 : 0,
+          doorR: flags & 1 ? 8 : 0,
+        },
+        0,
+        flags,
+      );
+    }
+    gl.disable(gl.SCISSOR_TEST);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    // the warm draws left a pixel in the mask; the next composeMask clears it, and nothing reads it before that
+    this.tapPending = false;
   }
 
   private texture(min: number): WebGLTexture {
@@ -458,7 +525,11 @@ export class TourGL {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
     if (mips) gl.generateMipmap(gl.TEXTURE_2D);
     this.textures.set(key, { tex, w: img.width, h: img.height });
+    metrics.count('upload');
+    this.bytes += img.width * img.height * 4 * (mips ? 4 / 3 : 1);
   }
+  /** what the room's textures take on the card, as the engine uploaded them (the mip levels included) */
+  bytes = 0;
   has(key: string): boolean {
     return this.textures.has(key);
   }
@@ -483,10 +554,15 @@ export class TourGL {
       }
       const x0 = Math.round(l.rect[0] * w);
       const y0 = Math.round(l.rect[2] * h);
+      const x1 = Math.round(l.rect[1] * w);
+      const y1 = Math.round(l.rect[3] * h);
       // texel for texel when the layer is at rest and its file is the rectangle's size
-      const exact = mode === 'compose' && l.lod === 0 && l.dy === 0 && t.w === Math.round(l.rect[1] * w) - x0 && t.h === Math.round(l.rect[3] * h) - y0;
+      const exact = mode === 'compose' && l.lod === 0 && l.dy === 0 && t.w === x1 - x0 && t.h === y1 - y0;
       gl.bindTexture(gl.TEXTURE_2D, t.tex);
-      gl.uniform4f(this.loc['l.uRect']!, l.rect[0], l.rect[1], l.rect[2], l.rect[3]);
+      // MOCK2: the quad is placed on whole pixels of the target. At the layers' own width the rectangle already falls
+      // there; at the phone's width it does not, and half a pixel of overhang made the rasteriser cover one row more
+      // than the texture has (and a shadow read past its own edge multiplied the room to black)
+      gl.uniform4f(this.loc['l.uRect']!, x0 / w, x1 / w, y0 / h, y1 / h);
       gl.uniform1f(this.loc['l.uDy']!, l.dy);
       gl.uniform1f(this.loc['l.uOpacity']!, l.opacity);
       gl.uniform1f(this.loc['l.uLod']!, l.lod);
@@ -504,9 +580,18 @@ export class TourGL {
    * Composes `layers` (the base first) into target `n`: the whole of it, or only `rects` (what changed since the last
    * call). The mip levels follow, for the same rectangles.
    */
-  compose(n: 0 | 1, layers: LayerDraw[], rects: Px[] | null): void {
+  compose(n: 0 | 1, layers: LayerDraw[], rects: Px[] | null, mips = true): void {
     const gl = this.gl;
     const t = this.targets[n]!;
+    // MOCK2: the mip levels are only ever read when the display pass makes the composition smaller than the screen —
+    // never on a phone in portrait, where the visible part of the frame is magnified. Rebuilding five levels of every
+    // rectangle on every frame was most of a phone's compose. A level left behind is remembered, and the next frame
+    // that does need them rebuilds the whole target once.
+    if (!mips) this.mipsStale[n] = true;
+    else if (this.mipsStale[n]) {
+      rects = null;
+      this.mipsStale[n] = false;
+    }
     const list: Px[] = rects ?? [[0, 0, t.w, t.h]];
     gl.bindFramebuffer(gl.FRAMEBUFFER, t.fb[0]!);
     gl.viewport(0, 0, t.w, t.h);
@@ -525,6 +610,10 @@ export class TourGL {
       this.shaded += (r[2] - r[0]) * (r[3] - r[1]);
     }
     gl.disable(gl.SCISSOR_TEST);
+    if (!mips) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      return;
+    }
     // the mip levels, level to level: every texel is the mean of its own four (the same for a rectangle and for the whole)
     for (let l = 1; l < LEVELS; l++) {
       gl.bindFramebuffer(gl.READ_FRAMEBUFFER, t.fb[l - 1]!);
@@ -542,8 +631,12 @@ export class TourGL {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 
-  /** The products of a composition, as the display's mask: coverage, and each product's code. Read back for the taps. */
-  composeMask(layers: LayerDraw[], read = true): void {
+  /**
+   * The products of a composition, as the display's mask: coverage, and each product's code. With `forTaps` the quarter
+   * copy the taps read is drawn too, and `flushTaps` reads it back later: a read-back stalls the CPU on the GPU, so it
+   * never happens inside an effect (MOCK2).
+   */
+  composeMask(layers: LayerDraw[], forTaps = true): void {
     const gl = this.gl;
     const m = this.mask!;
     gl.bindFramebuffer(gl.FRAMEBUFFER, m.fb);
@@ -551,12 +644,13 @@ export class TourGL {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     this.drawLayers(layers, m.w, m.h, 'mask');
-    // the taps read the codes on the CPU: only for a mask that stays (a read-back in the middle of an effect stalls it)
-    if (read) {
-      const buf = new Uint8Array(m.w * m.h * 4);
-      gl.readPixels(0, 0, m.w, m.h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
-      const codes = (this.codes ??= new Uint8Array(m.w * m.h));
-      for (let i = 0; i < codes.length; i++) codes[i] = buf[i * 4 + 1]!;
+    if (forTaps) {
+      const t = this.tap!;
+      gl.bindFramebuffer(gl.READ_FRAMEBUFFER, m.fb);
+      gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, t.fb);
+      // NEAREST: a code is a product's name, never an average of two products
+      gl.blitFramebuffer(0, 0, m.w, m.h, 0, 0, t.w, t.h, gl.COLOR_BUFFER_BIT, gl.NEAREST);
+      this.tapPending = true;
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.edge!.fb);
     gl.useProgram(this.edgeProg);
@@ -568,24 +662,88 @@ export class TourGL {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 
-  /** the code of the product at a point of the canvas (0: none) */
+  private tapPending = false;
+  get tapsDue(): boolean {
+    return this.tapPending;
+  }
+  /** reads the taps' quarter mask back to the CPU; the engine calls it between effects, never inside one */
+  flushTaps(): void {
+    if (!this.tapPending) return;
+    this.tapPending = false;
+    const gl = this.gl;
+    const t = this.tap!;
+    const buf = new Uint8Array(t.w * t.h * 4);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, t.fb);
+    gl.readPixels(0, 0, t.w, t.h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    metrics.count('readback');
+    const codes = (this.codes ??= new Uint8Array(t.w * t.h));
+    for (let i = 0; i < codes.length; i++) codes[i] = buf[i * 4 + 1]!;
+  }
+  /** the code of the product at a point of the canvas (0: none, or the taps have not been read back yet) */
   codeAt(u: number, v: number): number {
-    const m = this.mask!;
+    const t = this.tap!;
     if (!this.codes || u < 0 || u >= 1 || v < 0 || v >= 1) return 0;
-    return this.codes[(m.h - 1 - Math.floor(v * m.h)) * m.w + Math.floor(u * m.w)]!;
+    return this.codes[(t.h - 1 - Math.floor(v * t.h)) * t.w + Math.floor(u * t.w)]!;
   }
 
-  display(s: Display, a: 0 | 1 = 0): void {
-    const gl = this.gl;
-    const { fw, fh } = coverSize(s.vp, s.aspect);
-    const c = this.camera;
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    const flags =
+  /** which display program a frame needs: DOOR 1, BOX 2, MASK 4, MIX 8 */
+  private flagsFor(s: Display): number {
+    return (
       (s.doorAmt > 0 ? 1 : 0) |
       (s.fx === FX.scan || s.fx === FX.wave || s.fx === FX.depth ? 2 : 0) |
       (s.fx === FX.scan || s.fx === FX.dim || s.outline > 0 || s.pulse[1] > 0 || s.tint > 0 ? 4 : 0) |
-      (s.mix > 0 ? 8 : 0);
+      (s.mix > 0 ? 8 : 0)
+    );
+  }
+
+  /**
+   * One frame on the canvas. `scale` below 1 (MOCK2, only while something moves and only when frames run long) draws
+   * the pass into a target at that fraction of the canvas and stretches it; at rest `scale` is 1 and the frame is
+   * drawn straight to the canvas, so the settled frame is exactly what it was.
+   */
+  display(s: Display, a: 0 | 1 = 0, scale = 1): void {
+    const gl = this.gl;
+    const W = gl.drawingBufferWidth;
+    const H = gl.drawingBufferHeight;
+    if (scale >= 1) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, W, H);
+      this.drawDisplay(s, a, this.flagsFor(s));
+      return;
+    }
+    const t = this.scaledTarget(W, H);
+    const w = Math.max(1, Math.round(W * scale));
+    const h = Math.max(1, Math.round(H * scale));
+    gl.bindFramebuffer(gl.FRAMEBUFFER, t.fb);
+    gl.viewport(0, 0, w, h);
+    this.drawDisplay(s, a, this.flagsFor(s));
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, t.fb);
+    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+    gl.blitFramebuffer(0, 0, w, h, 0, 0, W, H, gl.COLOR_BUFFER_BIT, gl.LINEAR);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+
+  private scaledTarget(w: number, h: number): { tex: WebGLTexture; fb: WebGLFramebuffer; w: number; h: number } {
+    const gl = this.gl;
+    if (this.scaled && this.scaled.w === w && this.scaled.h === h) return this.scaled;
+    if (this.scaled) {
+      gl.deleteFramebuffer(this.scaled.fb);
+      gl.deleteTexture(this.scaled.tex);
+    }
+    const tex = this.texture(gl.LINEAR);
+    gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8, w, h);
+    const fb = gl.createFramebuffer()!;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    return (this.scaled = { tex, fb, w, h });
+  }
+
+  private drawDisplay(s: Display, a: 0 | 1, flags: number): void {
+    const gl = this.gl;
+    const { fw, fh } = coverSize(s.vp, s.aspect);
+    const c = this.camera;
     const { prog, loc: u } = this.displayProgram(flags);
     gl.useProgram(prog);
     gl.bindVertexArray(this.vao);
@@ -658,10 +816,24 @@ export class TourGL {
     c.height = Math.max(1, Math.round(cssH * dpr));
   }
 
+  /** the memory the whole room holds on the card: the textures, the two targets with their mip levels, and the masks */
+  get vram(): number {
+    const target = this.width * this.height * 4 * (4 / 3) * 2;
+    const m = this.mask ? this.mask.w * this.mask.h * 4 * 2 : 0;
+    const t = this.tap ? this.tap.w * this.tap.h * 4 : 0;
+    const s = this.scaled ? this.scaled.w * this.scaled.h * 4 : 0;
+    return this.bytes + target + m + t + s;
+  }
+
   destroy(): void {
     const gl = this.gl;
     for (const t of this.textures.values()) gl.deleteTexture(t.tex);
     this.textures.clear();
+    if (this.scaled) {
+      gl.deleteFramebuffer(this.scaled.fb);
+      gl.deleteTexture(this.scaled.tex);
+      this.scaled = null;
+    }
     for (const t of this.targets) {
       for (const f of t.fb) gl.deleteFramebuffer(f);
       gl.deleteTexture(t.tex);

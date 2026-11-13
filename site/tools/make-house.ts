@@ -275,11 +275,14 @@ if (cached?.stamp !== stamp) {
           .webp(kind === 'shadow' ? { lossless: true, effort: 5 } : { nearLossless: true, quality: 60, effort: 5 })
           .toFile(out(`slots/${m.slot.id}/${i + 1}.${kind}.${w}.webp`));
     }
-    // the wheel's card: the set on the sofa, from the approved display file (never a layer on its own)
-    await sharp(join(pilot, m.approved.composites[s.id]!))
-      .extract(cut)
-      .resize({ width: THUMB, height: THUMB, fit: 'cover' })
-      .webp({ quality: 80 })
+    // MOCK2 (FB1, the owner: "the products on their own, not a piece of the living room"): the wheel's card is the
+    // set's own layer, trimmed to it and on nothing — never the crop of the room this used to be
+    if (!layered) fail(`the wheel's card is the set's own layer: ${lay} has none`);
+    const trimmed = await sharp(files.product(s.id)).ensureAlpha().trim({ threshold: 1 }).toBuffer({ resolveWithObject: true });
+    const k = THUMB / Math.max(trimmed.info.width, trimmed.info.height);
+    await sharp(trimmed.data)
+      .resize({ width: Math.max(1, Math.round(trimmed.info.width * k)), height: Math.max(1, Math.round(trimmed.info.height * k)) })
+      .webp({ quality: 88, alphaQuality: 100, effort: 5 })
       .toFile(out(`slots/${m.slot.id}/${i + 1}.thumb.${THUMB}.webp`));
   }
   // no depth render for this house yet: a flat map, so the zoom moves without parallax rather than with a wrong one
