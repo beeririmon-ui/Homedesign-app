@@ -76,6 +76,9 @@ export function headFor(route: Route): Head {
     '@type': 'BreadcrumbList',
     itemListElement: items.map(([name, path], i) => ({ '@type': 'ListItem', position: i + 1, name, item: `${ORIGIN}${path}` })),
   });
+  // MOCK1: the tour's door, a mock-up behind the flag, never indexed (a public build folds this away: it has no such page)
+  if (typeof __TOUR__ !== 'undefined' && __TOUR__ && route.name === 'tour')
+    return { title: `סיור בבית · ${SITE}`, description: '', canonical, jsonLd: [], noindex: true };
   switch (route.name) {
     case 'home':
       return {
@@ -165,9 +168,6 @@ export function headFor(route: Route): Head {
         ],
       };
     }
-    case 'tour':
-      // MOCK1: a mock-up behind the flag, never indexed
-      return { title: `סיור בבית · ${SITE}`, description: '', canonical, jsonLd: [], noindex: true };
     case 'cart':
       return { title: `סל הקניות · ${SITE}`, description: '', canonical, jsonLd: [], noindex: true };
     case 'checkout':

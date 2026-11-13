@@ -24,9 +24,10 @@ const executablePath = process.env.PW_CHROMIUM ?? '/opt/pw-browsers/chromium';
 const args = ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--disable-background-networking'];
 const { defaultBrowserType: _b, ...pixel } = devices['Pixel 7'];
 const PROFILES = [
-  { id: '1280', context: { viewport: { width: 1280, height: 720 } }, size: { width: 1280, height: 720 }, slow: 5, slot: 'vase' },
-  // the phone's own screen (412 × 839 CSS px at 2.625), filmed at 1.5 px per CSS px
-  { id: 'phone', context: pixel, size: { width: 618, height: Math.round((pixel.viewport.height * 618) / pixel.viewport.width) }, slow: 8, slot: 'framed-art' },
+  { id: '1280', context: { viewport: { width: 1280, height: 720 } }, size: { width: 1280, height: 720 }, up: 1, slow: 5, slot: 'vase' },
+  // the phone's own screen (412 × 839 CSS px). The browser films a page at one pixel per CSS px, whatever the screen's
+  // density (a larger film size only pads it), so the phone film is doubled afterwards: softer than the phone itself
+  { id: 'phone', context: pixel, size: { ...pixel.viewport }, up: 2, slow: 8, slot: 'framed-art' },
 ] as const;
 type Profile = (typeof PROFILES)[number];
 
@@ -81,7 +82,7 @@ async function film(
       '-i',
       await video.path(),
       '-vf',
-      `setpts=PTS/${p.slow},fps=60,scale=trunc(iw/2)*2:trunc(ih/2)*2`,
+      `setpts=PTS/${p.slow},fps=60,scale=trunc(iw*${p.up}/2)*2:trunc(ih*${p.up}/2)*2:flags=lanczos`,
       '-an',
       '-c:v',
       'libx264',
