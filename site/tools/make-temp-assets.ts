@@ -186,23 +186,38 @@ async function loadRaw(path: string, width: number): Promise<Raw> {
 
 const sceneSlots: Record<string, unknown> = {};
 
-/** The slot's silhouette at the output size: anti-aliased by ~1 px, exactly 0 outside. */
-async function silhouette(slotId: string, width: number, height: number): Promise<Float32Array | null> {
+/**
+ * The slot's silhouette at the output size. `shape` is the traced mask as it always was: it decides the layer's
+ * rectangle. `alpha` is the same, anti-aliased by ~1 px and exactly 0 outside: what the layer is cut with.
+ *
+ * MOCK3 (the owner's FB1, found in MOCK2): where the mask is enlarged to the output (2752) the resize itself softens
+ * the edge, and `alpha` is `shape`. Where it is not — 1920, the mask's own width, which is what a phone composes at —
+ * a blur of 0.5 moves nothing, and the edge was one hard bit: stair-steps round every product, on a phone only. There
+ * the edge is softened by a blur that does act (0.6: about a pixel each side). The rectangle stays the traced shape's,
+ * with the 1 px margin it always had for this edge, so the scene's data and the 2752 files are untouched.
+ */
+async function silhouette(slotId: string, width: number, height: number): Promise<{ shape: Float32Array; alpha: Float32Array } | null> {
   const file = join(MASKS, `${slotId}.png`);
   if (!existsSync(file)) return null;
-  const { data } = await sharp(file).resize(width, height, { kernel: 'linear' }).blur(0.5).toColourspace('b-w').raw().toBuffer({ resolveWithObject: true });
-  const a = new Float32Array(width * height);
-  // below 2/255 is blur spill, not coverage: keep the outside exactly 0
-  for (let i = 0; i < a.length; i++) a[i] = data[i]! < 3 ? 0 : data[i]! / 255;
-  return a;
+  const at = async (sigma: number): Promise<Float32Array> => {
+    const { data } = await sharp(file).resize(width, height, { kernel: 'linear' }).blur(sigma).toColourspace('b-w').raw().toBuffer({ resolveWithObject: true });
+    const a = new Float32Array(width * height);
+    // below 2/255 is blur spill, not coverage: keep the outside exactly 0
+    for (let i = 0; i < a.length; i++) a[i] = data[i]! < 3 ? 0 : data[i]! / 255;
+    return a;
+  };
+  const shape = await at(0.5);
+  const enlarged = ((await sharp(file).metadata()).width ?? 0) < width;
+  return { shape, alpha: enlarged ? shape : await at(0.6) };
 }
 
 /** Product layer cut-outs: the silhouette, recoloured per option. */
 async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, optionColors: (string | null)[]) {
   const W = base.width;
   const H = base.height;
-  const full = await silhouette(slotId, W, H);
-  if (!full) return null;
+  const sil = await silhouette(slotId, W, H);
+  if (!sil) return null;
+  const full = sil.shape;
   let x0 = W;
   let x1 = -1;
   let y0 = H;
@@ -221,7 +236,7 @@ async function makeSlotLayers(base: Raw, key: 'lo' | 'hi', slotId: string, optio
   const w = Math.min(W, x1 + 2) - x0;
   const h = Math.min(H, y1 + 2) - y0;
   const alpha = new Float32Array(w * h);
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) alpha[y * w + x] = full[(y0 + y) * W + x0 + x]!;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) alpha[y * w + x] = sil.alpha[(y0 + y) * W + x0 + x]!;
 
   // the product's own mean luminance (well inside the silhouette)
   let lumSum = 0;

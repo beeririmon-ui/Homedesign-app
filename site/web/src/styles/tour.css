@@ -518,7 +518,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 32px;
+  min-width: 44px;
+  min-height: 44px;
 }
 .tour-panel input {
   width: 18px;
@@ -1292,6 +1293,10 @@
   .tour-links {
     flex-wrap: wrap;
   }
+  /* four rooms of 64 do not fit across 280: two by two */
+  .tour-rooms > div {
+    grid-template-columns: repeat(2, minmax(64px, 1fr));
+  }
 
   /* the wheel: the arc on the window's bottom edge (128: a card of 88, and the name and price under it), over the same
      gradient as before and no blur; "בחירה" in the end rail in the strip's place, the X in the start rail */
@@ -1543,5 +1548,17 @@
   .tour-spot .tag,
   .tour .room-canvas {
     transition-duration: 0.01ms;
+  }
+}
+/* the way to the product's page in the wheel is a line of text; under a finger it is 44 high (the layout is unchanged) */
+@media (max-aspect-ratio: 11/10), (max-height: 500px) {
+  .tour[data-frame='whole'] .picker .tour-info {
+    overflow: visible;
+  }
+  .tour[data-frame='whole'] .picker .tour-info a {
+    display: inline-block;
+    min-width: 44px;
+    margin-block: -22px -6px;
+    padding-block: 22px 6px;
   }
 }

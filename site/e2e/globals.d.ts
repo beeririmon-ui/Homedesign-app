@@ -77,12 +77,14 @@ type TourEngineT = {
   cam: TourCamT;
   rest: TourCamT;
   vp: { w: number; h: number };
+  busy: boolean;
+  dprCap: number;
   d: { vig: number; vigBox: TourBox; door: TourBox; doorR: number; doorAmt: number };
   gl: { width: number; height: number; vram: number; bytes: number; readScreen(): { w: number; h: number; data: Uint8Array } };
   read(r: TourBox): Uint8Array;
   render(): number;
   mask(all?: boolean): void;
-  slot(id: string): TourSlotT;
+  slot(id: string): TourSlotT & { anchors: [number, number][] };
   products(): Promise<void>;
   /** MOCK2: resolves once the room can be animated with nothing left to load */
   whenWarm(): Promise<void>;
@@ -97,7 +99,16 @@ type TourEngineT = {
 declare global {
   interface Window {
     __hdTour?: TourEngineT;
-    __hdTourState?: { phase: 'door' | 'entering' | 'room'; busy: boolean; house: string };
+    __hdTourState?: {
+      phase: 'door' | 'entering' | 'room';
+      busy: boolean;
+      house: string;
+      /** MOCK3: the slot whose close-up is open, whether the picture is zoomed, whether the panel is open, the layout */
+      open: string | null;
+      zoomed: boolean;
+      more: boolean;
+      lay: 'portrait' | 'rails' | 'desk';
+    };
     __hdTourFx?: {
       ui: TourUi;
       /** MOCK2: the counters, per effect (web/src/tour/metrics.ts) */

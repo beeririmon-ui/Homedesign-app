@@ -40,6 +40,11 @@ const note = (name: string, data: unknown) => {
 const ready = (page: Page) => page.waitForFunction(() => window.__hdTour?.ready === true, undefined, { timeout: 30_000 });
 const atRest = (page: Page, phase: 'door' | 'room' = 'room') =>
   page.waitForFunction((p) => window.__hdTourState?.phase === p && window.__hdTourState.busy === false, phase, { timeout: 60_000 });
+/** MOCK3: the rooms, the style and the temporary switches are inside the folded control, "המשך הסיור" */
+async function more(page: Page) {
+  if ((await page.locator('#tour-fold').getAttribute('aria-expanded')) !== 'true') await page.locator('#tour-fold').click();
+  await page.waitForFunction(() => window.__hdTourState?.more === true && window.__hdTour?.busy === false);
+}
 /** the plain composition, no effect ever run: its own pixels and the canvas, as two hashes */
 const hashes = (page: Page) =>
   page.evaluate(() => {
@@ -97,7 +102,14 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await expect(page.getByRole('dialog')).toBeHidden();
     await atRest(page);
     await expect(art).toBeFocused();
-    // the temporary switches
+    // the folded control, from the keyboard: it opens, and the focus is on the first room
+    await page.locator('#tour-fold').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#tour-fold')).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#tour-out')).toBeFocused();
+    await page.waitForFunction(() => window.__hdTour?.busy === false);
+    await audit(page, 'the panel of the folded control');
+    // the temporary switches, last in it
     await page.locator('.tour-panel summary').focus();
     await page.keyboard.press('Enter');
     const s1 = page.locator('input[name="tour-sw"][value="s1"]');
@@ -110,7 +122,9 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await page.locator('#tour-out').focus();
     await page.keyboard.press('Enter');
     await atRest(page, 'door');
+    await expect(page.locator('#tour-fold')).toHaveAttribute('aria-expanded', 'false');
     await expect(page.locator('#tour-enter')).toBeVisible();
+    await more(page);
     await page.locator('#tour-living').focus();
     await page.keyboard.press('Enter');
     await atRest(page);
@@ -346,9 +360,11 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await expect.poll(() => page.evaluate(() => window.__hdTour!.selection['framed-art'])).toBe(2);
     await page.keyboard.press('Enter');
     await atRest(page);
+    await more(page);
     await page.locator('.segmented button[data-house="nordic"]').click();
     await expect.poll(() => page.evaluate(() => window.__hdTourState?.house)).toBe('nordic');
     await atRest(page);
+    await more(page);
     await page.locator('.segmented button[data-house="warm-modern"]').click();
     await expect.poll(() => page.evaluate(() => window.__hdTourState?.house)).toBe('warm-modern');
     await atRest(page);

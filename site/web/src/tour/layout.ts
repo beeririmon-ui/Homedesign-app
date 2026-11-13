@@ -7,6 +7,9 @@
  * The page's stylesheet lays the window out by the same numbers (styles/tour.css); `windowBox` is what the tests hold
  * the rendered box to.
  */
+import { MAX_ZOOM, clampCam, coverSize } from '../engine/camera';
+import type { Box, Cam, Viewport } from '../engine/types';
+
 export type Layout = 'portrait' | 'rails' | 'desk';
 /** the same queries the stylesheet uses: a phone held upright (and a tablet upright), a phone turned on its side */
 export const MQ = {
@@ -115,3 +118,30 @@ export function wheelArc(layout: Layout, win: { w: number; h: number }, vh: numb
  *  window), the arc on its side (the product in the upper 62%), the wheel on a wide screen */
 export const closeReserve = (layout: Layout, winH: number, fill = false): number =>
   layout === 'desk' || fill ? (winH > 520 ? 0.52 : 0.46) : layout === 'rails' ? 0.38 : 0;
+
+/** on its side the arc takes the bottom 128 px of the window (a card of 88, the name and the price under it), and a
+ *  product's box ends 16 px over it at the least */
+export const ARC = { h: 128, clear: 16 } as const;
+/** a product's box with a third of its size round it, kept inside the frame: the close-up shows it at 60% of the view */
+export const padded = (b: Box): Box => {
+  const gu = (b[1] - b[0]) / 3;
+  const gv = (b[3] - b[2]) / 3;
+  return [Math.max(0, b[0] - gu), Math.min(1, b[1] + gu), Math.max(0, b[2] - gv), Math.min(1, b[3] + gv)];
+};
+/**
+ * On its side: the close-up's camera, moved so the product's box `b` ends 16 px over the arc. `cam` is the camera that
+ * frames the product in the upper 62% of the window. The view never goes under the frame, so a product low in the
+ * frame is lifted by zooming in until the frame's own bottom is that far under it — as long as the product still fits
+ * over the arc. A product that reaches the frame's bottom (the rug) cannot be lifted: `cam` comes back as it is, and
+ * the arc is over the product's lower part.
+ */
+export function overArc(cam: Cam, b: Box, vp: Viewport, aspect: number): Cam {
+  const { fw, fh } = coverSize(vp, aspect);
+  const limit = vp.h - ARC.h - ARC.clear;
+  if (vp.h / 2 + (b[3] - cam.cv) * fh * cam.z <= limit) return cam;
+  const need = (vp.h - limit) / ((1 - b[3]) * fh);
+  const fit = Math.min(MAX_ZOOM, limit / ((b[3] - b[2]) * fh), vp.w / ((b[1] - b[0]) * fw));
+  if (!(need <= fit)) return cam;
+  const z = Math.max(cam.z, need);
+  return clampCam({ z, cu: cam.cu, cv: b[3] - (limit - vp.h / 2) / (fh * z) }, vp, aspect);
+}

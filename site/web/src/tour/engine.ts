@@ -74,6 +74,8 @@ export type TourOptions = {
   onCamera?: (cam: Cam, vp: Viewport) => void;
   /** MOCK3: the window changed size (a resize, a rotation): the page puts its own camera back (a close-up, a zoom) */
   onResize?: () => void;
+  /** MOCK3, the sharpness evidence only (?w=hi): compose at this width whatever the screen is */
+  width?: number;
 };
 
 export class TourEngine {
@@ -116,12 +118,13 @@ export class TourEngine {
     // MOCK2: the width is chosen once, from the canvas the tour opens in (data.ts widthFor)
     const gl = TourGL.create(
       o.canvas,
-      widthFor(
-        Math.max(
-          1,
-          metrics.dom(() => o.canvas.clientWidth),
+      o.width ??
+        widthFor(
+          Math.max(
+            1,
+            metrics.dom(() => o.canvas.clientWidth),
+          ),
         ),
-      ),
       tour.camera,
     );
     return gl ? new TourEngine(o, gl) : null;

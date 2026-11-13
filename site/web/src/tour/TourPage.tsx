@@ -34,14 +34,14 @@ import { NORDIC, NORDIC_NAME_HE, WM, cardUrl, tour, type HouseId, type TourOptio
 import type { TourEngine } from './engine';
 import { metrics, report, statLine } from './metrics';
 import type { Reveal, Style, Swap, Ui } from './fx';
-import { MQ, ZOOM, closeReserve, doorRect, pinchZoom, rubber, tapRule, wheelArc, type Layout, type Mark } from './layout';
+import { MQ, ZOOM, closeReserve, doorRect, overArc, padded, pinchZoom, rubber, tapRule, wheelArc, type Layout, type Mark } from './layout';
 
 type Stage = typeof import('./stage');
 declare global {
   interface Window {
     __hdTour?: TourEngine;
     /** the page's state for the tests and the evidence: where the visitor is, and whether anything is moving */
-    __hdTourState?: { phase: Phase; busy: boolean; house: HouseId };
+    __hdTourState?: { phase: Phase; busy: boolean; house: HouseId; open: string | null; zoomed: boolean; more: boolean; lay: Layout };
     /** the effects and the page's marks, for the tests and the frame-rate evidence (they run an effect on its own) */
     __hdTourFx?: Stage & { ui: Ui };
   }
@@ -152,6 +152,8 @@ const IconZoom = ({ out }: { out: boolean }) => (
   </svg>
 );
 type Eye = HouseId | 'rotate';
+/** the house's name beside the window (the designer's words); the style's own short name is the shop's (tour.name_he) */
+const HOUSE_HE: Record<HouseId, string> = { [WM]: 'הבית המודרני החם', [NORDIC]: 'הבית הנורדי' };
 
 export function TourPage() {
   const stage = useRef<HTMLElement>(null);
@@ -201,7 +203,10 @@ export function TourPage() {
   const hint = useRef(0);
   const idleLoad = useRef(0);
   const resized = useRef(false);
-  const tell = () => (window.__hdTourState = { phase: live.current.phase, busy: live.current.busy, house: live.current.house });
+  const tell = () => {
+    const L = live.current;
+    window.__hdTourState = { phase: L.phase, busy: L.busy, house: L.house, open: L.open?.slot.id ?? null, zoomed: L.zoomed, more: L.more, lay: L.lay };
+  };
   const setPhase = (p: Phase) => {
     live.current.phase = p;
     setPhaseState(p);
@@ -228,12 +233,14 @@ export function TourPage() {
   const setOpen = (o: { slot: TourSlot; before: number } | null) => {
     live.current.open = o;
     setOpenState(o);
+    tell();
   };
   const setZoomed = (z: boolean) => {
     if (z) everZoomed.current = true;
     if (live.current.zoomed === z) return;
     live.current.zoomed = z;
     setZoomedState(z);
+    tell();
   };
   const everZoomed = useRef(false);
   /** written to the page directly as well: it changes in the middle of a style change, and that is not a render */
@@ -245,7 +252,8 @@ export function TourPage() {
     live.current.house = house;
     tell();
   }, [house]);
-  const whole = () => live.current.cfg.frame === 'whole';
+  /** "מילוי וגרירה" is a phone's switch: a wide screen always shows the whole frame */
+  const whole = () => live.current.cfg.frame === 'whole' || live.current.lay === 'desk';
   /** a phone's rules: the marks are decoration, the window is the touch target and the strip is the list */
   const phoneRules = () => live.current.lay !== 'desk' && whole();
 
@@ -267,6 +275,7 @@ export function TourPage() {
     box.current = m;
     live.current.lay = m.lay;
     setLay(m.lay);
+    tell();
     setWinSize((was) => (was.w === m.w && was.h === m.h && was.vh === m.vh ? was : { w: m.w, h: m.h, vh: m.vh }));
   }
   /** the camera for the window as it is now: a close-up is put back, a zoom is dropped, the door stays the door */
@@ -275,7 +284,8 @@ export function TourPage() {
     const e = engine.current;
     if (!e) return;
     const o = live.current.open;
-    e.cam = o ? closeCam(e, o.slot) : live.current.phase === 'door' ? e.atDoor() : { ...e.rest };
+    // (the door's own camera only while the door's wall is drawn: ?skip=1 starts in the room)
+    e.cam = o ? closeCam(e, o.slot) : e.d.doorAmt > 0 && live.current.phase === 'door' ? e.atDoor() : { ...e.rest };
     setZoomed(false);
     place();
     e.render();
@@ -311,7 +321,8 @@ export function TourPage() {
         const el = spots.current.get(s.id);
         if (!el) return;
         el.style.transform = `translate(${(p.x - 23).toFixed(1)}px, ${(p.y - 23).toFixed(1)}px)`;
-        el.style.visibility = p.x > 12 && p.x < vp.w - 12 && p.y > 12 && p.y < vp.h - 12 ? 'visible' : 'hidden';
+        // a mark is shown while the whole of its dot is inside the window (a product at the frame's edge keeps its mark)
+        el.style.visibility = p.x > 5 && p.x < vp.w - 5 && p.y > 5 && p.y < vp.h - 5 ? 'visible' : 'hidden';
         // the label opens toward the room's middle
         el.toggleAttribute('data-flip', p.x < vp.w * 0.3);
       });
@@ -324,7 +335,6 @@ export function TourPage() {
         dim.style.width = `${Math.max(0, z.x - a.x).toFixed(1)}px`;
       }
     }
-    if (cam.z < 1.001 && !live.current.busy) spread();
   }
   /** where a slot's mark is in the window now (CSS px), or null when it is out of view */
   function markOf(s: TourSlot, e: TourEngine): Mark | null {
@@ -343,8 +353,12 @@ export function TourPage() {
       if (!el || !tag || el.style.visibility === 'hidden') continue;
       const text = tag.textContent ?? '';
       let w = tagW.current.get(text);
-      // measured once per label, and only at rest (MOCK2: a measurement is what forces a layout)
-      if (w === undefined) tagW.current.set(text, (w = metrics.dom(() => tag.offsetWidth)));
+      // measured once per label, and never inside an effect (MOCK2: a measurement is what forces a layout): before
+      // the way in starts, and when the room rests. A label that is not laid out yet is asked again next time.
+      if (!w) {
+        w = metrics.dom(() => tag.offsetWidth);
+        if (w) tagW.current.set(text, w);
+      }
       const m = /translate\(([-\d.]+)px, ([-\d.]+)px\)/.exec(el.style.transform);
       if (!m || !w) continue;
       const cx = Number(m[1]) + 23;
@@ -503,6 +517,8 @@ export function TourPage() {
         reduceMotion: prefersReducedMotion(),
         onCamera: place,
         onResize: () => (live.current.busy ? (resized.current = true) : relayout()),
+        // the sharpness evidence: the same phone composing at the layers' own width, to compare with (never the default)
+        width: !__ARTIFACT__ && new URLSearchParams(location.search).get('w') === 'hi' ? tour.widths.hi : undefined,
       });
       if (!e) {
         setNoGl(true);
@@ -642,6 +658,7 @@ export function TourPage() {
     otherCards(e);
     if (e.house !== WM) return;
     ui.spots(true);
+    if (e.cam.z < 1.001) spread();
     void e.wait(800).then(() => !live.current.busy && ui.label(null, false));
     clearTimeout(hint.current);
     hint.current = window.setTimeout(() => {
@@ -673,6 +690,7 @@ export function TourPage() {
     if (on === live.current.more) return Promise.resolve();
     live.current.more = on;
     setMoreState(on);
+    tell();
     const moved = engine.current?.ui(on ? 'panel-open' : 'panel-close', on ? 320 : 160) ?? Promise.resolve();
     if (on) void frame().then(() => panel.current?.querySelector<HTMLElement>('.tour-room')?.focus({ preventScroll: true }));
     else if (focus) fold.current?.focus({ preventScroll: true });
@@ -721,6 +739,9 @@ export function TourPage() {
       // nothing starts moving before the room is ready (the button is held until then; a keyboard press waits here)
       await e.whenWarm();
       setPhase('entering');
+      // a wide screen: the labels of the reveal are given their rows now, before anything moves
+      await frame();
+      spread();
       await m.enter(e);
       await quiet(e);
       await m.reveal(e, ui, live.current.cfg.way === 'full' ? 'c' : live.current.cfg.fx);
@@ -805,11 +826,9 @@ export function TourPage() {
   /** the camera of a product's close-up: the product fills about 60% of what the layout leaves free of the window */
   function closeCam(e: TourEngine, s: TourSlot): Cam {
     const b = optionOf(s, e.selection).box;
-    const g = [(b[1] - b[0]) / 3, (b[3] - b[2]) / 3];
-    return e.camFor(
-      [Math.max(0, b[0] - g[0]!), Math.min(1, b[1] + g[0]!), Math.max(0, b[2] - g[1]!), Math.min(1, b[3] + g[1]!)],
-      closeReserve(live.current.lay, e.vp.h, !whole()),
-    );
+    const cam = e.camFor(padded(b), closeReserve(live.current.lay, e.vp.h, !whole()));
+    // on its side the arc is on the window's bottom edge: the product ends 16 px over it wherever the frame allows
+    return live.current.lay === 'rails' && whole() ? overArc(cam, b, e.vp, tour.aspect) : cam;
   }
   const picker = () => stage.current?.querySelector<HTMLElement>('.picker') ?? null;
   const openSlot = (s: TourSlot, from?: HTMLElement | null) =>
@@ -876,9 +895,9 @@ export function TourPage() {
         setOpen(null);
         setZoomed(false);
         closing.current = false;
+        atRest(e);
         // the strip, the counter and the folded control come back in their own cells
         void e.ui('closeup-out', 320);
-        atRest(e);
         if (chosen) announce(`${o.slot.name_he}: ${nameHe(o.slot, optionOf(o.slot, e.selection))} מוצג בחדר`);
         const back = phoneRules() && live.current.cfg.pick === 'list' ? tiles.current.get(o.slot.id) : spots.current.get(o.slot.id);
         void frame().then(() => (back ?? opener.current)?.focus({ preventScroll: true }));
@@ -1064,8 +1083,9 @@ export function TourPage() {
     </fieldset>
   );
   const rooms: { id?: string; name: string; at: 'entry' | 'living' | 'rest'; here?: boolean; go?: () => void }[] = [
-    { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void goOut() },
-    { id: 'tour-living', name: 'סלון', at: 'living', here: inRoom, go: () => void goIn() },
+    // the room the visitor is in: its button only closes the panel
+    { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void (phase === 'door' ? setMore(false) : goOut()) },
+    { id: 'tour-living', name: 'סלון', at: 'living', here: inRoom, go: () => void (inRoom ? setMore(false) : goIn()) },
     { name: 'פינת אוכל', at: 'rest' },
     { name: 'חדר שינה', at: 'rest' },
   ];
@@ -1101,19 +1121,19 @@ export function TourPage() {
               <p class="eyebrow">סיור</p>
               {phase === 'door' ? (
                 <h1 id="tour-title" tabIndex={-1}>
-                  {tour.name_he}
+                  {HOUSE_HE[WM]}
                 </h1>
               ) : (
-                <p class="h">{tour.name_he}</p>
+                <p class="h">{HOUSE_HE[WM]}</p>
               )}
             </div>
             <div class="tour-t t-room" {...(phase !== 'door' && !(open && phone) ? {} : off)}>
               <p class="eyebrow tour-eyes">
                 <span data-k={WM} aria-hidden={eye === WM ? undefined : 'true'}>
-                  {tour.name_he}
+                  {HOUSE_HE[WM]}
                 </span>
                 <span data-k={NORDIC} aria-hidden={eye === NORDIC ? undefined : 'true'}>
-                  {NORDIC_NAME_HE}
+                  {HOUSE_HE[NORDIC]}
                   <span class="stage-status">תמונות זמניות</span>
                 </span>
                 <span data-k="rotate" aria-hidden="true">
@@ -1125,7 +1145,7 @@ export function TourPage() {
               ) : (
                 <h1 id="tour-title" tabIndex={-1} ref={title}>
                   סלון
-                  <span class="sr-only"> · {wm ? tour.name_he : NORDIC_NAME_HE}</span>
+                  <span class="sr-only"> · {HOUSE_HE[house]}</span>
                 </h1>
               )}
             </div>

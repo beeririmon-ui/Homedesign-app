@@ -136,6 +136,9 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
       // used to set) makes the browser paint every card again on a phone; the dark veil in the card does the same job
       c.style.opacity = String(0.25 + 0.75 * f);
       c.style.setProperty('--veil', String(0.4 * (1 - f)));
+      // MOCK3: in the tour a card two steps away is a sliver; it is seen, and reached by a drag or through the card
+      // beside the middle one, but it is not a touch target of its own
+      if (fixed) c.style.pointerEvents = Math.abs(d) > 1.5 ? 'none' : '';
     });
   }
   useLayoutEffect(paint, [cw, R, STEP]);
