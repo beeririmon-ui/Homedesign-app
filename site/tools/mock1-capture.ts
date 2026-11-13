@@ -101,6 +101,8 @@ async function film(
 }
 
 for (const p of PROFILES) {
+  // HD_CAPTURE_PROFILE=phone (or 1280): one size only
+  if (process.env.HD_CAPTURE_PROFILE && process.env.HD_CAPTURE_PROFILE !== p.id) continue;
   // 1–3: the door, the way in and the reveal, once per concept
   for (const fx of ['a', 'b', 'c'] as const)
     await film(p, `reveal-${fx}`, `?fx=${fx}`, async (page, s) => {
