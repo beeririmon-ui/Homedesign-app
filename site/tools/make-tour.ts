@@ -6,10 +6,14 @@
  *                                          with its options (the default first, then the variants in the manifest's order;
  *                                          the cushions: the three sets), each option's layer and shadow, where its ring
  *                                          starts, its depth along the camera's axis, and the shop's record of its card
- *   web/public/media/tour/<room>/<style>/M0/  every layer cut to its slot's rectangle, at the layers' own width (the house
- *                                          composes there, QA finding 1 of 2026-11-10): the product near-lossless WebP, the
- *                                          shadow lossless (the same settings as tools/make-house.ts, S12); and the wheel's
- *                                          picture of every option, cut from the approved composite that shows it
+ *   web/public/media/tour/<room>/<style>/M0/  every layer cut to its slot's rectangle, at two widths (MOCK2): the layers'
+ *                                          own width, where a desktop composes (QA finding 1 of 2026-11-10), and `lo` for
+ *                                          a phone, which is what the room engine already does there (engine/engine.ts:
+ *                                          a viewport ≤ 900 px composes at scene.widths.lo). The product is near-lossless
+ *                                          WebP and the shadow lossless (the same settings as tools/make-house.ts, S12);
+ *                                          and the wheel's card of every option: the product's own layer, trimmed to it
+ *                                          and on nothing (MOCK2, FB1 — never a crop of the room). Where our own studio
+ *                                          picture passed QA (tools/make-studio.ts) the card is that picture instead.
  *
  * The base is the house's own (tools/make-house.ts): the manifest's base.png is the pilot's, byte for byte (checked
  * here), so its encoded files are shared and nothing is encoded twice.
@@ -128,8 +132,16 @@ for (const f of sources) if (!existsSync(f)) fail(`missing ${f}`);
 
 const REL = `tour/${t.room}/${t.style}/M0`;
 const OUT = join(MEDIA_OUT, REL);
-const THUMB = 360;
+/** the wheel's card: the longest side of the picture (tools/make-studio.ts uses the same) */
+const CARD = 360;
+/** MOCK2: a phone composes at `lo`, a wider screen at the layers' own width (`hi`) */
+const WIDTHS = { lo: 1920, hi: W } as const;
 const PAD = 8;
+/** our own studio pictures that passed QA, by product (tools/make-studio.ts) */
+type Studio = { width: number; products: Record<string, { src: string; w: number; h: number; card: string }> };
+const studioFile = join(GENERATED, 'studio-images.json');
+const studio = existsSync(studioFile) ? read<Studio>(studioFile) : { width: CARD, products: {} };
+if (studio.width !== CARD) fail(`studio-images.json is at ${studio.width}, the tour's card at ${CARD}`);
 const stamp = createHash('sha256')
   .update(
     JSON.stringify({
@@ -145,8 +157,14 @@ const stamp = createHash('sha256')
 // ---------- the regions (px): a layer's alpha, and its shadow wherever it darkens ----------
 type Px = { x0: number; y0: number; x1: number; y1: number };
 type Measured = { rect: Px; alpha: Px[]; cover: number };
+type Card = { w: number; h: number };
+/** a slot's rectangle in the pixels of width `Wt`, rounded exactly as the engine rounds it (web/src/tour/gl.ts) */
+const tierRect = (r: Px, Wt: number): Px => {
+  const Ht = Math.round((Wt * H) / W);
+  return { x0: Math.round((r.x0 / W) * Wt), x1: Math.round((r.x1 / W) * Wt), y0: Math.round((r.y0 / H) * Ht), y1: Math.round((r.y1 / H) * Ht) };
+};
 const STAMP = join(OUT, 'stamp.json');
-const cached = existsSync(STAMP) ? read<{ stamp: string; slots: Record<string, Measured>; cover: number }>(STAMP) : null;
+const cached = existsSync(STAMP) ? read<{ stamp: string; slots: Record<string, Measured>; cover: number; cards: Record<string, Card> }>(STAMP) : null;
 const raw = async (f: string) => {
   const { data, info } = await sharp(f).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   if (info.width !== W || info.height !== H) fail(`${f} is ${info.width}×${info.height}, not ${W}×${H}`);
@@ -162,9 +180,11 @@ const grow = (b: Px, x: number, y: number) => {
 
 let measured: Record<string, Measured>;
 let cover: number;
+const cards: Record<string, Card> = {};
 if (cached?.stamp === stamp) {
   measured = cached.slots;
   cover = cached.cover;
+  Object.assign(cards, cached.cards);
 } else {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
@@ -205,34 +225,47 @@ if (cached?.stamp === stamp) {
     measured[s.id] = { rect, alpha, cover: 0 };
     const cut = { left: rect.x0, top: rect.y0, width: rect.x1 - rect.x0, height: rect.y1 - rect.y0 };
     for (const [n, o] of s.options.entries()) {
+      for (const Wt of new Set(Object.values(WIDTHS))) {
+        // the slot's rectangle in that width's pixels, exactly as the engine rounds it (web/src/tour/gl.ts drawLayers)
+        const r = tierRect(rect, Wt);
+        const size = { width: r.x1 - r.x0, height: r.y1 - r.y0 };
+        const layer = sharp(join(dir, o.layer)).ensureAlpha().extract(cut);
+        await (Wt === W ? layer : layer.resize(size))
+          // S12: near-lossless (lossy q86 and q95 missed the tool-layer threshold on the textiles)
+          .webp({ nearLossless: true, quality: 60, effort: 5 })
+          .toFile(out(`slots/${s.id}/${n + 1}.product.${Wt}.webp`));
+        const shadow = sharp(join(dir, o.shadow)).removeAlpha().extract(cut);
+        await (Wt === W ? shadow : shadow.resize(size))
+          // a shadow multiplies the room: lossless, or the codec's noise near white would darken around the product
+          .webp({ lossless: true, effort: 5 })
+          .toFile(out(`slots/${s.id}/${n + 1}.shadow.${Wt}.webp`));
+      }
+      // MOCK2 (FB1): the wheel's card is the product on its own — its layer, trimmed to the product and on nothing.
+      // Never a crop of the room, and never a supplier photo. A card with our own studio picture uses that instead.
+      const a = alpha[n]!;
+      const pad = Math.round(Math.max(a.x1 - a.x0, a.y1 - a.y0) * 0.03) + 2;
+      const left = Math.max(0, a.x0 - pad);
+      const top = Math.max(0, a.y0 - pad);
+      const box = {
+        left,
+        top,
+        width: Math.min(W, a.x1 + 1 + pad) - left,
+        height: Math.min(H, a.y1 + 1 + pad) - top,
+      };
+      const k = CARD / Math.max(box.width, box.height);
       await sharp(join(dir, o.layer))
         .ensureAlpha()
-        .extract(cut)
-        // S12: near-lossless (lossy q86 and q95 missed the tool-layer threshold on the textiles)
-        .webp({ nearLossless: true, quality: 60, effort: 5 })
-        .toFile(out(`slots/${s.id}/${n + 1}.product.${W}.webp`));
-      await sharp(join(dir, o.shadow))
-        .removeAlpha()
-        .extract(cut)
-        // a shadow multiplies the room: lossless, or the codec's noise near white would darken around the product
-        .webp({ lossless: true, effort: 5 })
-        .toFile(out(`slots/${s.id}/${n + 1}.shadow.${W}.webp`));
-      // the wheel's card: the product in the room, from the approved composite that shows it (never a layer on its own)
-      const a = alpha[n]!;
-      const side = Math.min(H, Math.round(Math.max(a.x1 - a.x0, a.y1 - a.y0) * 1.16) + 24);
-      const left = Math.max(0, Math.min(W - side, Math.round((a.x0 + a.x1) / 2 - side / 2)));
-      const top = Math.max(0, Math.min(H - side, Math.round((a.y0 + a.y1) / 2 - side / 2)));
-      await sharp(join(dir, o.truth))
-        .extract({ left, top, width: side, height: side })
-        .resize({ width: THUMB, height: THUMB })
-        .webp({ quality: 80 })
-        .toFile(out(`slots/${s.id}/${n + 1}.thumb.${THUMB}.webp`));
+        .extract(box)
+        .resize({ width: Math.max(1, Math.round(box.width * k)), height: Math.max(1, Math.round(box.height * k)) })
+        .webp({ quality: 88, alphaQuality: 100, effort: 5 })
+        .toFile(out(`slots/${s.id}/${n + 1}.card.${CARD}.webp`));
+      cards[`${s.id}:${n + 1}`] = { w: Math.max(1, Math.round(box.width * k)), h: Math.max(1, Math.round(box.height * k)) };
     }
   }
   let n = 0;
   for (let y = Math.ceil(fy0); y < Math.floor(fy1); y++) for (let x = Math.ceil(fx0); x < Math.floor(fx1); x++) n += covered[y * W + x]!;
   cover = n / ((Math.floor(fx1) - Math.ceil(fx0)) * (Math.floor(fy1) - Math.ceil(fy0)));
-  writeFileSync(STAMP, JSON.stringify({ stamp, slots: measured, cover }));
+  writeFileSync(STAMP, JSON.stringify({ stamp, slots: measured, cover, cards }));
 }
 
 // ---------- the camera and the room's box (the depth of the scan plane is computed from them, in the shader) ----------
@@ -273,6 +306,9 @@ const data = {
   name_he: house.name_he,
   source: lm.id,
   native: W,
+  // MOCK2: the two widths a composition is made at; `lo` is what a phone uses (the room engine's own rule)
+  widths: { lo: Math.min(WIDTHS.lo, W), hi: W },
+  card_width: CARD,
   aspect: W / H,
   mobile_center_u: hm.mobile_center_u,
   base: { src: house.scene.base[0]!.src, widths: house.scene.base[0]!.widths, placeholder },
@@ -290,13 +326,23 @@ const data = {
       kind: s.cfg.kind,
       order_a: s.cfg.order_a,
       hero: !!s.cfg.hero,
+      // MOCK2: a card of something that stands on the floor or on a surface gets the studio card's ground shadow;
+      // a curtain, a picture or a pendant does not stand on anything
+      ground: s.cfg.kind === 'floor' || s.cfg.kind === 'surface',
       anchors: s.cfg.anchors.map(([x, y]) => [+((a0.x0 + (a0.x1 - a0.x0) * x) / W).toFixed(4), +((a0.y0 + (a0.y1 - a0.y0) * y) / H).toFixed(4)]),
       src: `${REL}/slots/${s.id}`,
       options: s.options.map((o, n) => {
         const p = o.card ? shop.get(o.card) : undefined;
         const set = o.set ? hm.sets.find((x) => x.id === o.set) : undefined;
+        const own = p ? studio.products[p.id] : undefined;
+        const card = cards[`${s.id}:${n + 1}`] ?? fail(`no card for ${s.id} ${n + 1}`);
         return {
           position: n + 1,
+          // MOCK2 (FB1): what the wheel shows for this option — our own studio picture where one passed QA, else the
+          // product's own layer trimmed to it. Neither is a crop of the room, and neither is a supplier photo.
+          card: own
+            ? { src: own.src, w: own.w, h: own.h, source: 'studio' as const }
+            : { src: `${REL}/slots/${s.id}/${n + 1}.card.${CARD}`, w: card.w, h: card.h, source: 'layer' as const },
           box: uv({ ...m.alpha[n]!, x1: m.alpha[n]!.x1 + 1, y1: m.alpha[n]!.y1 + 1 }),
           // the shop's public id, name and price; null: the shop does not sell this card yet
           product_id: p?.id ?? null,
@@ -319,17 +365,27 @@ const kb = (f: string) => statSync(f).size / 1024;
 let defaults = 0;
 let all = 0;
 let files = 0;
+const byWidth: Record<number, number> = {};
 for (const s of slots)
   for (const [n] of s.options.entries())
-    for (const kind of ['product', 'shadow'] as const) {
-      const size = kb(join(OUT, `slots/${s.id}/${n + 1}.${kind}.${W}.webp`));
-      all += size;
-      files++;
-      if (n === 0) defaults += size;
-    }
+    for (const Wt of new Set(Object.values(WIDTHS)))
+      for (const kind of ['product', 'shadow'] as const) {
+        const size = kb(join(OUT, `slots/${s.id}/${n + 1}.${kind}.${Wt}.webp`));
+        byWidth[Wt] = (byWidth[Wt] ?? 0) + size;
+        files++;
+        if (Wt !== W) continue;
+        all += size;
+        if (n === 0) defaults += size;
+      }
+const studioCards = data.slots.reduce((n, s) => n + s.options.filter((o) => o.card.source === 'studio').length, 0);
 const unsold = data.slots.flatMap((s) => s.options.filter((o) => !o.set && !o.product_id).map((o) => `${s.id} ${o.position}`));
 console.log(
-  `tour ${t.room}/${t.style}: ${lm.id}; ${slots.length} slots, ${slots.reduce((n, s) => n + s.options.length, 0)} options (${files} layer files, ${all.toFixed(0)} KB; ` +
-    `the default composition's ${slots.length * 2} layers ${defaults.toFixed(0)} KB at ${W}); the products fill ${(cover * 100).toFixed(1)}% of the frame; ` +
+  `tour ${t.room}/${t.style}: ${lm.id}; ${slots.length} slots, ${slots.reduce((n, s) => n + s.options.length, 0)} options (${files} layer files; ` +
+    Object.entries(byWidth)
+      .map(([w, kb_]) => `${kb_.toFixed(0)} KB at ${w}`)
+      .join(', ') +
+    `; the default composition's ${slots.length * 2} layers ${defaults.toFixed(0)} KB of ${all.toFixed(0)} KB at ${W}` +
+    `); the products fill ${(cover * 100).toFixed(1)}% of the frame; the wheel's cards: ${studioCards} our own studio pictures and ` +
+    `${data.slots.reduce((n, s) => n + s.options.length, 0) - studioCards} trimmed layers, no room crops; ` +
     `${unsold.length} options are not in the shop yet (${unsold.join(', ')}) → ${outFile}`,
 );
