@@ -1,0 +1,98 @@
+{
+  "note": "MOCK1 (2026-11-12): the wow-tour mock-up's living room in the warm-modern house: the phase 2 tool layers (manifest-r9: 12 default products and 10 variants, each with its shadow, and the three cushion sets as re-cut on the new stack). Read by tools/make-tour.ts (the layers cut to their regions, the wheel's pictures, .generated/tour.<room>.<style>.json). A product's name and price are the shop's own record of its card (.generated/catalog.story.full.json), when the shop has one; a card the shop does not sell yet is shown under its slot's name, 'עוד לא במכירה'. `slots`: depth_m is the product's distance along M0's axis from the plan's projection (approximate: the reveal's timing and the zoom's focus only); anchors are where a product's ring starts, relative to its default layer's alpha box; order_a is the designer's order for the 'burst' reveal (docs/proposals/wow-tour-experience-2026-11-12.md section 2). Behind HD_PUBLIC=0.",
+  "room": "living-room",
+  "style": "warm-modern",
+  "layers": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers",
+  "manifest": "manifest-r9.json",
+  "house": "tools/house/living-room.warm-modern.json",
+  "plan": "docs/house-plan.json",
+  "camera": "M0",
+  "room_plan": "living",
+  "slots": {
+    "rug": {
+      "depth_m": 2.45,
+      "kind": "floor",
+      "anchors": [[0.42, 0.45]],
+      "order_a": 1,
+      "dims": true
+    },
+    "floor-lamp": {
+      "depth_m": 3.73,
+      "kind": "floor",
+      "anchors": [[0.5, 0.97]],
+      "order_a": 2,
+      "dims": true
+    },
+    "planter": {
+      "depth_m": 5.0,
+      "kind": "floor",
+      "anchors": [[0.5, 0.6]],
+      "order_a": 3
+    },
+    "basket": {
+      "depth_m": 4.53,
+      "kind": "floor",
+      "anchors": [[0.5, 0.9]],
+      "order_a": 4
+    },
+    "magazine-holder": {
+      "depth_m": 2.43,
+      "kind": "floor",
+      "anchors": [[0.5, 0.6]],
+      "order_a": 5
+    },
+    "curtains": {
+      "depth_m": 2.99,
+      "kind": "wall",
+      "anchors": [[0.5, 0.55]],
+      "order_a": 6
+    },
+    "accent-sconces": {
+      "depth_m": 4.5,
+      "kind": "wall",
+      "anchors": [
+        [0.035, 0.5],
+        [0.965, 0.5]
+      ],
+      "order_a": 7
+    },
+    "cushions": {
+      "depth_m": 3.63,
+      "kind": "surface",
+      "anchors": [[0.5, 0.45]],
+      "order_a": 8
+    },
+    "bowl": {
+      "depth_m": 2.54,
+      "kind": "surface",
+      "anchors": [[0.5, 0.8]],
+      "order_a": 9
+    },
+    "candle-holders": {
+      "depth_m": 2.89,
+      "kind": "surface",
+      "anchors": [[0.5, 0.85]],
+      "order_a": 10
+    },
+    "vase": {
+      "depth_m": 4.36,
+      "kind": "surface",
+      "anchors": [[0.5, 0.92]],
+      "order_a": 11
+    },
+    "framed-art": {
+      "depth_m": 4.47,
+      "kind": "wall",
+      "anchors": [[0.5, 0.5]],
+      "order_a": 12,
+      "dims": true,
+      "hero": true
+    },
+    "pendant": {
+      "depth_m": 2.8,
+      "kind": "hang",
+      "anchors": [[0.5, 0.72]],
+      "order_a": 13
+    }
+  }
+}

@@ -165,6 +165,9 @@ export function headFor(route: Route): Head {
         ],
       };
     }
+    case 'tour':
+      // MOCK1: a mock-up behind the flag, never indexed
+      return { title: `סיור בבית · ${SITE}`, description: '', canonical, jsonLd: [], noindex: true };
     case 'cart':
       return { title: `סל הקניות · ${SITE}`, description: '', canonical, jsonLd: [], noindex: true };
     case 'checkout':

@@ -34,6 +34,9 @@ export const scene: Scene = __ARTIFACT__
       widths: { lo: fullScene.widths.lo, hi: fullScene.widths.lo },
       base: fullScene.base.map((b) => ({ ...b, widths: b.widths.filter((w) => w <= fullScene.widths.lo) })),
       hall: { ...fullScene.hall, widths: fullScene.hall.widths.filter((w) => w <= fullScene.widths.lo) },
+      // MOCK1: the preview's files go to the tour's layers; the Nordic walk to the hall (T-E0, 61 frames) is not shipped
+      // there, and the way to the hall is a plain navigation (components/Transition.tsx `go`)
+      transitions: {},
     }
   : fullScene;
 

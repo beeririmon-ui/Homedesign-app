@@ -4,7 +4,7 @@
  */
 
 /** §2 row 4: the wheel's line above its heading, in a house whose options are sets ("3 סטים"), else "3 גרסאות" (§5) */
-export const wheelCountHe = (n: number, sets: boolean): string => `${n} ${sets ? 'סטים' : 'גרסאות'}`;
+export const wheelCountHe = (n: number, sets: boolean): string => (n === 1 ? (sets ? 'סט אחד' : 'גרסה אחת') : `${n} ${sets ? 'סטים' : 'גרסאות'}`);
 
 /** §2 row 6: the list of a set's pieces, as a screen reader names it */
 export const setItemsLabelHe = (n: number): string => `בסט ${n} פריטים`;

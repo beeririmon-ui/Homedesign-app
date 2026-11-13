@@ -12,6 +12,11 @@ import { Legal } from './pages/Legal';
 
 // S13: the prerender renders every page in full; the browser loads a page's chunk before it hydrates (main.tsx)
 registerPages({ product: Product, cart: CartPage, checkout: Checkout, order: OrderPage, 'mock-pay': MockPay, legal: Legal });
+// MOCK1: the tour's door is prerendered too (behind HD_PUBLIC=0; the import is folded away in a public build)
+export const TOUR = typeof __TOUR__ !== 'undefined' && __TOUR__;
+export const loadTour = async (): Promise<void> => {
+  if (typeof __TOUR__ !== 'undefined' && __TOUR__) registerPages({ tour: (await import('./tour/TourPage')).TourPage });
+};
 
 export { ORIGIN } from './head';
 // S10 question 7 (S11): the houses of the room engine, for a prerendered page per house (scripts/prerender.ts)

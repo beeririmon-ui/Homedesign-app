@@ -239,7 +239,7 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
         <div>
           {/* S15 (master-designer §2 row 4, §5): the customer's word, "גרסאות", or "סטים" in a house of sets; "וריאציות",
               "· בחדר" and "מיקום זמני" were the studio's */}
-          <p class="eyebrow">{wheelCountHe(n, !!house?.info)}</p>
+          <p class="eyebrow">{wheelCountHe(n, house?.sets ?? !!house?.info)}</p>
           <h2 id={headingId}>{slot.name_he}</h2>
         </div>
         <button type="button" class="glass close-btn" onClick={onCancel} aria-label="סגירה וחזרה לחדר בלי שינוי">

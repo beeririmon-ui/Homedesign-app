@@ -12,7 +12,7 @@ import type { ComponentType, JSX } from 'preact';
 import { useEffect } from 'preact/hooks';
 import type { Route } from '../router';
 
-export type LazyName = 'product' | 'cart' | 'checkout' | 'order' | 'mock-pay' | 'legal';
+export type LazyName = 'product' | 'cart' | 'checkout' | 'order' | 'mock-pay' | 'legal' | 'tour';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- each page has its own props; the call sites are typed
 type AnyPage = ComponentType<any>;
@@ -63,6 +63,7 @@ export function lazyNameOf(route: Route): LazyName | null {
     case 'order':
     case 'mock-pay':
     case 'legal':
+    case 'tour':
       return route.name;
     default:
       return null;

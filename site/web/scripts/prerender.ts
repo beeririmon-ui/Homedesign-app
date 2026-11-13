@@ -11,7 +11,7 @@ import { ANALYTICS_TOKEN, analyticsTag } from '@hd/shared/analytics';
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../dist');
 const ssrDir = resolve(here, '../.ssr');
-const { render, ORIGIN, HOUSES, NORDIC, loadHouses } = (await import(
+const { render, ORIGIN, HOUSES, NORDIC, loadHouses, TOUR, loadTour } = (await import(
   pathToFileURL(resolve(ssrDir, 'entry-server.js')).href
 )) as typeof import('../src/entry-server');
 const catalog = JSON.parse(readFileSync(resolve(here, '../../.generated/catalog.public.json'), 'utf8')) as {
@@ -78,6 +78,12 @@ for (const h of houses)
     writeFileSync(file, page(`/rooms/${r.id}/?style=${h.style}`));
     housePages.push(`/rooms/${r.id}/?style=${h.style}`);
   }
+// MOCK1: the tour's door (behind HD_PUBLIC=0: a public build has no such page); never in the sitemap
+if (TOUR) {
+  await loadTour();
+  mkdirSync(resolve(dist, 'tour'), { recursive: true });
+  writeFileSync(resolve(dist, 'tour/index.html'), page('/tour/'));
+}
 // /order/<id>/ is served by the Worker from this shell (client-rendered: the id and token live in the browser)
 mkdirSync(resolve(dist, 'order'), { recursive: true });
 writeFileSync(resolve(dist, 'order/index.html'), page('/order/HD-00000000/').replace(/HD-00000000/g, ''));

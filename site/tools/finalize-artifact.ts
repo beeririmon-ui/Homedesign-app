@@ -24,7 +24,7 @@ const page = [
   '<link rel="preconnect" href="https://fonts.googleapis.com">',
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
   `<link rel="stylesheet" href="${FONTS}">`,
-  '<meta name="description" content="תצוגה מקדימה של החנות: הסלון הנורדי, נקודות מוצר, גלגל וריאציות, עמוד מוצר, סל ותשלום מדומה. תמונות ומחירים זמניים.">',
+  '<meta name="description" content="תצוגה מקדימה: הדמיית הסיור בבית המודרני החם (דלת הכניסה, הסלון, חשיפת המוצרים, גלגל הגרסאות ומעבר הסגנון), ומאחוריה החנות. חלקים זמניים מסומנים.">',
   '<div id="app"></div>',
   `<script type="module">${scripts[0]!.replace(/<\/script/gi, '<\\/script')}</script>`,
   '',
@@ -38,7 +38,6 @@ type Scene = {
   slots: Record<string, { product: { src: string[] } | null; shadow: { src: string[] } | null; light: { src: string[] } | null }>;
   depth: { src: string };
   hall: { src: string; widths: number[] };
-  transitions: Record<string, { src: string; frames: number }>;
 };
 const scene = JSON.parse(readFileSync(sitePath('.generated/scene.living-room.nordic.json'), 'utf8')) as Scene;
 const lo = scene.widths.lo;
@@ -47,7 +46,14 @@ for (const b of scene.base) for (const w of b.widths.filter((x) => x <= lo)) fil
 for (const w of scene.hall.widths.filter((x) => x <= lo)) files.add(`${scene.hall.src}.${w}.webp`);
 files.add(`${scene.depth.src}.webp`);
 for (const s of Object.values(scene.slots)) for (const set of [s.product, s.shadow, s.light]) for (const src of set?.src ?? []) files.add(`${src}.${lo}.webp`);
-for (const t of Object.values(scene.transitions)) for (let i = 1; i <= t.frames; i++) files.add(`${t.src}/${String(i).padStart(3, '0')}.webp`);
+// MOCK1: the walk to the hall (T-E0) is not shipped (web/src/catalog.ts: the Artifact's scene has no transitions); its
+// files' place goes to the tour: the warm-modern base and every layer, shadow and wheel picture of the mock-up
+type Tour = { native: number; base: { src: string }; slots: { src: string; options: { position: number }[] }[] };
+const tour = JSON.parse(readFileSync(sitePath('.generated/tour.living-room.warm-modern.json'), 'utf8')) as Tour;
+files.add(`${tour.base.src}.${tour.native}.webp`);
+for (const s of tour.slots)
+  for (const o of s.options)
+    for (const kind of [`product.${tour.native}`, `shadow.${tour.native}`, 'thumb.360']) files.add(`${s.src}/${o.position}.${kind}.webp`);
 // FR-I: the supplier's photo of every shown product (one per product, encoded by tools/supplier-images.ts)
 type SupplierManifest = {
   width: number;

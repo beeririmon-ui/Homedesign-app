@@ -1,0 +1,390 @@
+/* MOCK1 (2026-11-12): the wow-tour mock-up, behind HD_PUBLIC=0. The room itself, the door's wall and every effect on the
+   picture are drawn by the tour's engine (tour/gl.ts); this is what sits over the picture: the door's words, the marks
+   and labels of the products, the rings, the counter, and the mock-up's own switches.
+   The durations and curves are the designer's motion language for the tour (docs/proposals/wow-tour-experience-2026-11-12.md
+   section 7). They are a proposal: they live here until the owner approves the mock-up, and join styles/system.css then.
+   --tk stretches them for the evidence's slow-motion capture (1 otherwise). */
+.tour {
+  --tour-fb: calc(160ms * var(--tk, 1));
+  --tour-ui: calc(320ms * var(--tk, 1));
+  --tour-appear: cubic-bezier(0.16, 1, 0.3, 1);
+  --tour-leave: cubic-bezier(0.7, 0, 0.84, 0);
+  /* the warm-modern Bible's plaster, walnut and brushed brass */
+  --plaster: #ece5da;
+  --walnut: #6b4a33;
+  --brass: #b8955a;
+  /* the portal on the wall, before the page's script measures the stage (TourPage.tsx doorRect: the same numbers) */
+  --sh: calc(100svh - var(--header-h));
+  --dh: calc(var(--sh) * 0.74);
+  --dw: min(36vw, calc(var(--dh) * 0.7));
+  --dx: 31vw;
+  --dy: calc(var(--sh) * 0.47);
+  --dr: min(calc(var(--dw) * 0.14), 44px);
+}
+@media (max-aspect-ratio: 11/10) {
+  .tour {
+    --dh: calc(var(--sh) * 0.54);
+    --dw: min(66vw, calc(var(--dh) * 0.62));
+    --dx: 50vw;
+    --dy: calc(var(--sh) * 0.42);
+  }
+}
+.tour[data-phase='door'],
+.tour[data-phase='entering'] {
+  background: var(--plaster);
+  color: var(--ink);
+}
+/* before the engine draws: the same empty room behind the same portal */
+.tour[data-phase='door'] .tour-poster {
+  clip-path: inset(calc(var(--dy) - var(--dh) / 2) calc(50% - var(--dw) / 2) calc(100% - var(--dy) - var(--dh) / 2) calc(50% - var(--dw) / 2) round var(--dr));
+}
+.tour-portal-line {
+  position: absolute;
+  left: calc(var(--dx) - var(--dw) / 2);
+  top: calc(var(--dy) - var(--dh) / 2);
+  width: var(--dw);
+  height: var(--dh);
+  border: 2px solid var(--walnut);
+  border-radius: var(--dr);
+  pointer-events: none;
+}
+.tour:not([data-phase='door']) .tour-portal-line {
+  display: none;
+}
+.tour .room-canvas {
+  opacity: 0;
+  transition: opacity var(--tour-fb) linear;
+}
+.tour[data-ready] .room-canvas {
+  opacity: 1;
+}
+
+/* ---------- the door's words ---------- */
+.tour-door {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  text-align: center;
+  transition:
+    opacity var(--tour-fb) var(--tour-leave),
+    visibility 0s linear var(--tour-fb);
+}
+.tour:not([data-phase='door']) .tour-door {
+  opacity: 0;
+  visibility: hidden;
+}
+.tour[data-phase='door'] .tour-door {
+  transition: opacity var(--tour-ui) var(--tour-appear);
+}
+.tour-door-head,
+.tour-door-act {
+  position: absolute;
+  /* a wide screen: the words stand beside the opening, on the side the room is not */
+  left: calc(var(--dx) + var(--dw) / 2 + var(--s-7));
+  right: var(--s-6);
+}
+.tour-door-head {
+  bottom: calc(100% - var(--dy) + var(--s-2));
+}
+.tour-door-head .eyebrow {
+  margin: 0 0 var(--s-2);
+  color: var(--ink-2);
+}
+.tour-door-head h1 {
+  margin: 0;
+  font: 300 clamp(28px, 4.2vw, 52px) / 1.12 var(--f-display);
+  color: var(--ink);
+}
+.tour-door-act {
+  top: calc(var(--dy) + var(--s-4));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+}
+@media (max-aspect-ratio: 11/10) {
+  /* a phone: above the opening and under it */
+  .tour-door-head,
+  .tour-door-act {
+    left: var(--s-4);
+    right: var(--s-4);
+  }
+  .tour-door-head {
+    bottom: calc(100% - var(--dy) + var(--dh) / 2 + var(--s-3));
+  }
+  .tour-door-act {
+    top: calc(var(--dy) + var(--dh) / 2 + var(--s-4));
+  }
+}
+.tour-door-act .btn {
+  pointer-events: auto;
+  min-width: 180px;
+}
+.tour-temp {
+  font: var(--t-run) var(--f-text);
+  color: var(--ink-2);
+}
+.tour[data-phase='door'] .stage-ui,
+.tour[data-phase='entering'] .stage-ui {
+  justify-content: center;
+}
+.tour-rooms {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tour-rooms button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+}
+.tour-rooms button[aria-current='true'] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.tour-rooms svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- the products' marks: a small still circle (TOUR1), and a label that folds back into it ---------- */
+.tour-spots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+.tour-spot {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--tour-ui) var(--tour-appear);
+  -webkit-tap-highlight-color: transparent;
+}
+.tour-spot[data-on] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.tour.zoomed .tour-spot {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--tour-fb) var(--tour-leave);
+}
+.tour-spot .mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: rgba(244, 241, 236, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(58, 58, 58, 0.5),
+    0 0 0 5px rgba(244, 241, 236, 0.3);
+}
+.tour-spot:focus-visible .mark,
+.tour-spot:hover .mark {
+  box-shadow:
+    0 0 0 1px rgba(58, 58, 58, 0.7),
+    0 0 0 6px rgba(184, 149, 90, 0.55);
+}
+.tour-spot .tag {
+  position: absolute;
+  top: calc(50% + var(--ty, 0px));
+  inset-inline-start: 36px;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: var(--r-control);
+  background: var(--label);
+  color: var(--ink);
+  box-shadow: var(--sh-label);
+  font: 600 var(--t-run) var(--f-text);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(8px, -50%);
+  transition:
+    opacity var(--tour-fb) var(--tour-leave),
+    transform var(--tour-fb) var(--tour-leave);
+}
+.tour-spot[data-flip] .tag {
+  inset-inline-start: auto;
+  inset-inline-end: 36px;
+  transform: translate(-8px, -50%);
+}
+.tour-spot[data-label] .tag,
+.tour-spot:focus-visible .tag,
+.tour-spot:hover .tag {
+  opacity: 1;
+  transform: translate(0, -50%);
+  transition:
+    opacity var(--tour-ui) var(--tour-appear),
+    transform var(--tour-ui) var(--tour-appear);
+}
+.tour-spot .tag .num {
+  font-weight: 400;
+}
+@media (max-width: 700px) {
+  /* the phone: no labels in the reveal, only the marks (the designer); the wheel names the product */
+  .tour-spot[data-label] .tag {
+    opacity: 0;
+  }
+  .tour-dim {
+    display: none;
+  }
+}
+
+/* ---------- rings, measure lines, the counter ---------- */
+.tour-rings {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.tour-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+.tour-ring i {
+  position: absolute;
+  display: block;
+  border: 1.5px solid var(--brass);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(244, 241, 236, 0.35);
+  opacity: 0;
+}
+.tour-dim {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 9px;
+  border: 1px solid var(--paper);
+  border-top: 0;
+  opacity: 0;
+  text-align: center;
+}
+.tour-dim b {
+  position: relative;
+  top: 12px;
+  padding: 2px 8px;
+  border-radius: var(--r-control);
+  background: var(--label);
+  color: var(--ink);
+  font: 600 var(--t-run) var(--f-text);
+  white-space: nowrap;
+}
+.tour-count {
+  position: absolute;
+  top: calc(var(--s-3) + 44px);
+  inset-inline-start: var(--s-3);
+  margin: 0;
+  padding: var(--s-2) var(--s-3);
+  font: 600 var(--t-run) var(--f-text);
+}
+.tour.zoomed .tour-count {
+  display: none;
+}
+
+/* ---------- the mock-up's switches (temporary) ---------- */
+.tour-panel {
+  position: absolute;
+  top: var(--s-3);
+  inset-inline-end: var(--s-3);
+  z-index: 6;
+  max-width: min(300px, calc(100% - 2 * var(--s-3)));
+  font: var(--t-detail) var(--f-text);
+}
+.tour-panel summary {
+  min-height: 44px;
+  padding: 0 var(--s-3);
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tour-panel[open] {
+  padding-bottom: var(--s-3);
+}
+.tour-panel fieldset {
+  margin: 0;
+  padding: var(--s-1) var(--s-3);
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--s-3);
+}
+.tour-panel legend {
+  padding: 0;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.tour-panel label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+}
+.tour-panel input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+.tour-panel .btn {
+  margin: var(--s-2) var(--s-3) 0;
+}
+.tour-panel .specs {
+  margin: var(--s-2) var(--s-3) 0;
+  min-height: 1em;
+  color: var(--ink-2);
+  text-align: start;
+}
+.tour-info {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.tour-nogl-note {
+  position: absolute;
+  inset-inline: var(--s-3);
+  bottom: 84px;
+  margin: 0;
+  padding: var(--s-3);
+  text-align: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-door,
+  .tour-spot,
+  .tour-spot .tag,
+  .tour .room-canvas {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ---------- the wheel in the tour: under the product, never over it (the close-up shows the product in its room) ---------- */
+.tour .picker {
+  grid-template-rows: auto minmax(0, 1fr) clamp(96px, 20svh, 148px) auto;
+  background: linear-gradient(to top, rgba(14, 13, 12, 0.5), rgba(14, 13, 12, 0) 46%);
+}
+.tour .picker .arc {
+  grid-row: 3;
+}
+.tour .picker .picker-info {
+  grid-row: 4;
+}

@@ -5,7 +5,10 @@ import { signal } from '@preact/signals';
 import { loadsAsDocument } from '@hd/shared/analytics';
 
 export const MEMORY = __ARTIFACT__;
-export const path = signal<string>(typeof location !== 'undefined' && !MEMORY ? location.pathname + location.search : '/');
+/** MOCK1: the wow-tour mock-up is in this build (web/vite.config.ts: every build but the public one; not in a unit test) */
+const TOUR = typeof __TOUR__ !== 'undefined' && __TOUR__;
+/** MOCK1: the Artifact preview opens at the tour's door (its first screen); the site at the address asked for */
+export const path = signal<string>(typeof location !== 'undefined' && !MEMORY ? location.pathname + location.search : TOUR ? '/tour/' : '/');
 
 function normalise(to: string): string {
   return to.startsWith('/') ? to : `/${to}`;
@@ -84,6 +87,8 @@ export type Route =
   | { name: 'order'; id: string }
   | { name: 'mock-pay'; session: string }
   | { name: 'legal'; page: 'accessibility' | 'terms' | 'privacy' | 'returns' }
+  /** MOCK1: the wow-tour mock-up, behind HD_PUBLIC=0 (a public build has no such route) */
+  | { name: 'tour' }
   | { name: 'not-found' };
 
 export function match(full: string): Route {
@@ -104,6 +109,7 @@ export function match(full: string): Route {
     };
   }
   if (seg[0] === 'p' && seg[1]) return { name: 'product', id: seg[1] };
+  if (TOUR && seg[0] === 'tour' && seg.length === 1) return { name: 'tour' };
   if (seg[0] === 'cart') return { name: 'cart' };
   if (seg[0] === 'checkout') return { name: 'checkout', failed: q.has('failed') || q.has('canceled') };
   if (seg[0] === 'order' && seg[1]) return { name: 'order', id: seg[1] };

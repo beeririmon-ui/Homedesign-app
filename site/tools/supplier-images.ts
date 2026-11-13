@@ -44,8 +44,8 @@ const MANIFEST = join(GENERATED, 'supplier-images.json');
 const PUBLIC_MANIFEST = join(GENERATED, 'supplier-images.public.json');
 const UA = 'homedesign-site-build/1.0';
 const MAX_BYTES = 25 * 1024 * 1024;
-/** option pictures shipped with the Artifact (200 files at most there; the room and the products use ~145) */
-const ARTIFACT_OPTION_FILES = 40;
+/** option pictures shipped with the Artifact (200 files at most there; MOCK1: the tour's layers take 76 of them) */
+const ARTIFACT_OPTION_FILES = 30;
 
 const catalog = JSON.parse(readFileSync(join(GENERATED, 'catalog.full.json'), 'utf8')) as FullCatalog;
 const previous: SupplierImageManifest | null = existsSync(MANIFEST) ? (JSON.parse(readFileSync(MANIFEST, 'utf8')) as SupplierImageManifest) : null;

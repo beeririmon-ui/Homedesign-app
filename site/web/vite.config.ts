@@ -54,7 +54,8 @@ function withoutTestPages(): Plugin {
       outDir = resolve(c.root, c.build.outDir);
     },
     closeBundle() {
-      for (const d of ['test', 'story', 'media/test', 'media/story', 'media/house']) rmSync(resolve(outDir, d), { recursive: true, force: true });
+      for (const d of ['test', 'story', 'tour', 'media/test', 'media/story', 'media/house', 'media/tour'])
+        rmSync(resolve(outDir, d), { recursive: true, force: true });
       // S15: a supplier picture the public manifest does not list (its rights are not confirmed) does not ship
       const media = resolve(outDir, 'media');
       const dir = resolve(media, 'products');
@@ -118,6 +119,8 @@ export default defineConfig(({ mode }) => {
       __MEDIA_BASE__: JSON.stringify(artifact ? 'media/' : '/media/'),
       // S10: the houses beside the Nordic one (DIR2) are behind the flag: a public build has no code path to them
       __HD_PUBLIC__: JSON.stringify(PUBLIC || artifact),
+      // MOCK1: the wow-tour mock-up is in every build but the public one; the Artifact preview opens on it
+      __TOUR__: JSON.stringify(!PUBLIC),
     },
     resolve: {
       alias: [

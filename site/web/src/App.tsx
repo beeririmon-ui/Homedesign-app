@@ -16,6 +16,8 @@ const Checkout = lazyPage('checkout', () => import('./pages/Checkout').then((m) 
 const OrderPage = lazyPage('order', () => import('./pages/Order').then((m) => m.OrderPage));
 const MockPay = lazyPage('mock-pay', () => import('./pages/MockPay').then((m) => m.MockPay));
 const Legal = lazyPage('legal', () => import('./pages/Legal').then((m) => m.Legal));
+// MOCK1: the wow-tour mock-up, a chunk of its own, behind HD_PUBLIC=0 (__TOUR__ folds the import away in a public build)
+const Tour = typeof __TOUR__ !== 'undefined' && __TOUR__ ? lazyPage('tour', () => import('./tour/TourPage').then((m) => m.TourPage)) : null;
 
 export function Page({ route }: { route: Route }) {
   switch (route.name) {
@@ -40,6 +42,8 @@ export function Page({ route }: { route: Route }) {
       return <MockPay session={route.session} />;
     case 'legal':
       return <Legal page={route.page} />;
+    case 'tour':
+      return Tour ? <Tour /> : <NotFound />;
     default:
       return <NotFound />;
   }

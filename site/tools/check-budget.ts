@@ -141,6 +141,31 @@ if (existsSync(housePage) && existsSync(houseData)) {
     ['first load, the warm-modern house, mobile, no AVIF', page + mediaNoAvif, BUDGET.firstLoad],
   );
 }
+// MOCK1: the wow-tour mock-up (behind the flag: a public build has no tour page). Its first load on the same phone: the
+// door's page, the room's entry, the tour's two chunks (the page, and the engine with its effects) and stylesheet, the
+// fonts, the empty room the door looks into (the house's base at the layers' own width) and, behind it, the default
+// composition: every slot's first option, its layer and its shadow, and the pictures of the list under the room. The
+// other options and the Nordic house load after the room rests, and are not a first load.
+const tourPage = join(DIST, 'tour/index.html');
+const tourData = sitePath('.generated/tour.living-room.warm-modern.json');
+if (existsSync(tourPage) && existsSync(tourData)) {
+  const t = JSON.parse(readFileSync(tourData, 'utf8')) as { native: number; base: { src: string }; slots: { src: string }[] };
+  const chunks = assets.filter((f) => /^(TourPage|stage)-.*\.(js|css)$/.test(f)).map((f) => gz(join(DIST, 'assets', f)));
+  const tourMedia = (formats: Formats) =>
+    file(t.base.src, t.native, formats) +
+    t.slots.reduce(
+      (n, sl) =>
+        n + file(`${sl.src}/1.product`, t.native, ['webp']) + file(`${sl.src}/1.shadow`, t.native, ['webp']) + file(`${sl.src}/1.thumb`, 360, ['webp']),
+      0,
+    );
+  const page = gz(tourPage) + sum(js) + sum(css) + sum(chunks) + fonts;
+  rows.push(
+    ["JS and CSS (gzip), the tour's own chunks (its page, its engine and effects)", sum(chunks), null],
+    [`the tour's media (the empty room @${t.native}, ${t.slots.length} default products and their shadows)`, tourMedia(['avif', 'webp']), null],
+    ['first load, the tour (the door, then the room), mobile', page + tourMedia(['avif', 'webp']), BUDGET.firstLoad],
+    ['first load, the tour, mobile, no AVIF', page + tourMedia(['webp']), BUDGET.firstLoad],
+  );
+}
 // S5: the story's pages (behind the flag; absent from the public build). A story page's own scripts and styles, and its
 // first view on the phone: HTML, scripts, styles, fonts and the first frame's phone picture at 412 @2x (AVIF, which
 // every browser the site supports reads). A detail page the same way, with its first picture.

@@ -30,6 +30,8 @@ export type House = {
   thumb?: (position: number) => string | null;
   /** the wheel's panel for an option sold as a set of pieces, in place of the one product's */
   info?: (position: number) => ComponentChildren;
+  /** MOCK1: whether the options on the wheel are sets ("3 סטים"); absent: a house with a panel of its own has sets */
+  sets?: boolean;
   /** S12, ת21: the variants the layer of a slot's option draws (a set: every piece of it), as rendered; [] for none */
   drawn: (slotId: string, position: number) => string[];
   /** S15: the products the house sells, in its own order (for the page's ItemList); absent: the room's slots say it */
