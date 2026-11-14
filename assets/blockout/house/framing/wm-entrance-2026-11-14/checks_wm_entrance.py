@@ -13,6 +13,7 @@ import json
 import math
 import os
 
+import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
@@ -90,6 +91,16 @@ def slope(f, p):
     dx, dy = p[0] - f["loc"][0], p[1] - f["loc"][1]
     d = -math.sin(y) * dx - math.cos(y) * dy
     return None if d <= 1e-6 else (math.cos(y) * dx - math.sin(y) * dy) / d
+
+
+def past_edge(f, p, u_edge):
+    """x - t d for the frame column u_edge (t = its slope): changes sign when the plan point p crosses that column; continuous
+    through the camera plane (d = 0), which u itself is not."""
+    y = math.radians(f["yaw"])
+    dx, dy = p[0] - f["loc"][0], p[1] - f["loc"][1]
+    d = -math.sin(y) * dx - math.cos(y) * dy
+    x = math.cos(y) * dx - math.sin(y) * dy
+    return x - (u_edge - f["u0"]) / K_U * d
 
 
 def ray_dir(f, u):
@@ -177,10 +188,6 @@ class Passes:
         return rgb @ np.array([0.2126, 0.7152, 0.0722])
 
 
-def row_entry(P, cid, lo, hi, n=1):
-    return None
-
-
 # ---------------------------------------------------------------------------------------------------------------
 # 1. the designer's projected values against the clay
 # ---------------------------------------------------------------------------------------------------------------
@@ -239,9 +246,9 @@ def table_designer(F, PF, PS):
         c = A.col(u_at)
         yb = A.step_y(c, (14,), (10,))
         if yb:
-            Xw, Yw = float(X[yb - 1, c]), float(Y[yb - 1, c])
-            add(lab, "H0", r4(uv(h0, (Xw, 6.335, 0.0))[1]), A.v(yb), "v", "id pass: skirting foot (the skirting is 1.5 cm proud: Y 6.335); "
-                "designer column = the plan projection of that point", "the measured floor line in the clay", 0.003)
+            Xw = float(X[yb - 1, c])
+            add(lab, "H0", None, A.v(yb), "v", "id pass: the skirting foot (1.5 cm in front of the wall, Y 6.365)",
+                f"the floor line one sees; plan projection of that point {uv(h0, (Xw, 6.365, 0.0))[1]:.4f}, of the wall face behind it {uv(h0, (Xw, 6.35, 0.0))[1]:.4f}")
     vL, vR = uv(h0, (0.95, 6.35, 2.40))[1], uv(h0, (2.15, 6.35, 2.40))[1]
     c = A.col(A.u(xl) + 0.004) if xl else None
     yh = A.step_y(c, (12,), LINING + LIVING_ALL) if c else None
@@ -249,10 +256,16 @@ def table_designer(F, PF, PS):
         "id pass (in the overscan)" if yh else "plan projection", f"projection: {vL:.4f} at the left jamb, {vR:.4f} at the right edge; the head is above the frame along its whole length")
     # where the head leaves the canvas (top edge of the overscan)
     top = A.cls[0]
-    xs = [x for x in range(CANVAS[0] - 1) if top[x] in LINING + LIVING_ALL]
+    xs = [x for x in range(xl or 0, xr or CANVAS[0]) if top[x] in LINING + LIVING_ALL]
     if xs:
-        add("head inside the overscan (above v 0) from the left jamb to u (H0)", "H0", None, A.u(max(xs) + 1), "u", "id pass, top row of the canvas (v -0.030)",
-            "to the right of this the head is above the canvas too")
+        add("head line (hall face) leaves the top of the CANVAS at u (H0)", "H0", None, A.u(min(xs)), "u", "id pass, top row of the canvas (v -0.030)",
+            "left of this the head line is inside the overscan; right of it, above the canvas")
+    fbx = (slice(int(round(OY)), int(round(OY + FY))), slice(int(round(OX)), int(round(OX + FX))))
+    sy, sx = np.nonzero(A.cls[fbx] == 22)
+    if len(sy):
+        add("walnut soffit inside the FRAME: a wedge at the top, down to v (H0)", "H0", 0.01, A.v(int(round(OY)) + sy.max() + 1), "v", "id pass, inside the camera frame",
+            f"{int(sy.max()) + 1} px high at the left jamb, running out at u {A.u(int(round(OX)) + sx.max() + 1):.3f}; designer 1.2: 'v between -0.05 and +0.01', "
+            f"'if an edge of it enters, it is the walnut soffit'", 0.005)
     # the two points of clean plaster
     for lab, pt, dv, want in (("wall-sconce point (0.80, 6.95, 1.94) (H0)", (0.80, 6.95, 1.94), (0.09, 0.106), 11),
                               ("pendant hang point (0.20, 1.72, 3.00) (H0)", (0.20, 1.72, 3.00), (0.425, 0.18), 35)):
@@ -265,11 +278,20 @@ def table_designer(F, PF, PS):
             f"depth {A.depth[cy, cx]:.3f} against {d_:.3f}", 0.004)
     # the living ceiling strip in the view
     cols = [A.col(u_) for u_ in np.linspace(A.u(xv) + 0.01, A.u(xr) - 0.01, 12)] if xv and xr else []
-    lows = [max(np.nonzero(np.isin(A.cls[:, c], (35, 36)))[0]) for c in cols if np.isin(A.cls[:, c], (35, 36)).any()]
-    tops = [min(np.nonzero(np.isin(A.cls[:, c], (35, 36)))[0]) for c in cols if np.isin(A.cls[:, c], (35, 36)).any()]
-    if lows:
-        add("living ceiling in the view, lowest v (H0)", "H0", 0.23, A.v(max(lows) + 1), "v", "id pass, 12 columns of the view", "designer 1.2: 'about v 0-0.23'", 0.01)
-        add("living ceiling in the view, highest v (H0)", "H0", 0.0, A.v(min(tops)), "v", "id pass", "the ceiling fills the view up to the canvas top (the soffit is above it)")
+    view = slice(xv, xr) if xv and xr else slice(0, 0)
+    rows35 = np.nonzero((A.cls[:, view] == 35).any(axis=1))[0]
+    rows36 = np.nonzero((A.cls[:, view] == 36).any(axis=1))[0]
+    if len(rows35):
+        add("living ceiling in the view, lowest v (H0)", "H0", 0.23, A.v(rows35.max() + 1), "v", "id pass, the columns of the view",
+            f"designer 1.2: 'about v 0-0.23'; the ceiling / back-wall line runs from v {uv(h0, (0.44, 0.0, 3.0))[1]:.3f} (X 0.44) to "
+            f"{uv(h0, (-2.0, 0.0, 3.0))[1]:.3f} (the corner)", 0.02)
+        add("living ceiling in the view, highest v (H0)", "H0", 0.0, A.v(rows35.min()), "v", "id pass", "the ceiling fills the view up to the canvas top; the soffit is above the frame")
+    if len(rows36):
+        add("dropped band over the window wall in the view, lowest v (H0)", "H0", None, A.v(rows36.max() + 1), "v", "id pass", "the band's underside (Z 2.82) reaches lower than the ceiling")
+    cb = A.col(0.5)
+    rb = A.row(1.0) - 1
+    add("floor at the bottom frame edge: its depth d (H0)", "H0", r4(K_V * 1.20 / (1 - h0["v0"])), float(A.depth[rb, cb]), "m", "depth pass, bottom row of the frame",
+        "plan conventions: floor visible from d >= 1.1852 Hc / (1 - v0)", 0.01)
     # plank lines
     for lab, f, dv in (("plank lines converge at (H0)", h0, (0.66, 0.46)), ("plank lines converge at (M0)", F["b/S11"], (0.78, 0.50))):
         u_ = f["u0"] + K_U * math.tan(math.radians(f["yaw"]))
@@ -278,9 +300,11 @@ def table_designer(F, PF, PS):
     # shares of the frame
     fb = (slice(int(round(OY)), int(round(OY + FY))), slice(int(round(OX)), int(round(OX + FX))))
     cl = A.cls[fb]
-    add("quiet plaster (hall walls) share of the frame (H0)", "H0", 0.50, float(np.isin(cl, HALL_WALLS).mean()), "share", "id pass, inside the camera frame",
-        "designer 1.2: 'the empty space is about 50 %'", 0.08)
-    add("the living view share of the frame (H0)", "H0", None, float(np.isin(cl, tuple(range(30, 44)) + (0,)).mean()), "share", "id pass")
+    add("bare plaster (the three hall walls) share of the frame (H0)", "H0", 0.50, float(np.isin(cl, HALL_WALLS).mean()), "share", "id pass, inside the camera frame",
+        "designer 1.2: 'the empty space is about 50 % of the frame'; left wall {:.1%}, front wall {:.1%}, right wall {:.1%}".format(
+            float((cl == 11).mean()), float((cl == 12).mean()), float((cl == 13).mean())), 0.08)
+    add("the living view share of the frame (H0)", "H0", None, float(np.isin(cl, tuple(range(30, 44)) + (0,)).mean()), "share", "id pass",
+        "walnut lining {:.1%}, hall floor {:.1%}, hall skirting {:.1%}".format(float(np.isin(cl, LINING).mean()), float(np.isin(cl, (10, 25)).mean()), float((cl == 14).mean())))
     # ---- H0x ----
     openings(XA, hxa, "H0x-a", dict(l=0.395, r=0.636), "designer 3.1")
     openings(XB, hxb, "H0x-b", dict(l=0.345, r=0.586), "motion-agent 1")
@@ -309,8 +333,18 @@ def table_designer(F, PF, PS):
         d2, x2 = math.cos(a) + t * math.sin(a), -math.sin(a) + t * math.cos(a)
         u2, v2 = h0["u0"] + K_U * x2 / d2, h0["v0"] - K_V * w / d2
         inside = (u2 >= 0) & (u2 <= 1) & (v2 >= 0) & (v2 <= 1)
-        add(f"share of {tag} that H0 covers", tag, 0.84 if tag == "H0x-b" else None, float(inside.mean()), "share", "rotation of 13 deg about the lens, both frames",
-            "motion-agent 2: 84 % (strip of 16 % on the left, about 1 % at the top)" if tag == "H0x-b" else "", 0.02)
+        lo_u, hi_u, lo_v, hi_v = -OX / FX, (CANVAS[0] - OX) / FX, -OY / FY, (CANVAS[1] - OY) / FY
+        inside_c = (u2 >= lo_u) & (u2 <= hi_u) & (v2 >= lo_v) & (v2 <= hi_v)
+        left = float((~inside).all(axis=0).mean())
+        cov = inside[:, ~(~inside).all(axis=0)]
+        t_unc = cov.argmax(axis=0) / cov.shape[0]                       # rows above the first covered row, per column
+        b_unc = cov[::-1].argmax(axis=0) / cov.shape[0]
+        add(f"share of the {tag} frame that the H0 frame covers", tag, 0.84 if tag == "H0x-b" else None, float(inside.mean()), "share",
+            "rotation of 13 deg about the lens, frame to frame",
+            f"not covered: a strip of {left:.1%} of the width on the left; next to it a wedge at the top ({t_unc[0]:.1%} of the height, gone at u "
+            f"{float(np.linspace(0, 1, 801)[~(~inside).all(axis=0)][(t_unc > 0).sum() if (t_unc > 0).sum() < len(t_unc) else -1]):.2f}) and one at the bottom "
+            f"({b_unc[0]:.1%}); with H0's overscan canvas the cover is {float(inside_c.mean()):.1%}"
+            + ("; motion-agent 2: 84 % (16 % on the left, about 1 % at the top)" if tag == "H0x-b" else ""), 0.02)
     return rows
 
 
@@ -360,10 +394,10 @@ def path_events(PF):
         E["head_hall_edge_leaves_top_s"] = r4(bisect(lambda s: uv(cam(s), (OPEN["x0"], OPEN["y1"], OPEN["h"]))[1], 0.0, 2.5))
         E["soffit_far_edge_leaves_top_s"] = r4(bisect(lambda s: uv(cam(s), (OPEN["x0"], OPEN["y0"], OPEN["h"]))[1], 0.0, 2.5))
         # jambs: the hall-face edge reaches the frame edge (the jamb starts to be cut), the living-face edge reaches it (the jamb is out)
-        E["left_jamb_cut_from_s"] = r4(bisect(lambda s: uv(cam(s), (OPEN["x0"], OPEN["y1"]))[0], 0.0, s_face - 0.01))
-        E["left_jamb_out_at_s"] = r4(bisect(lambda s: uv(cam(s), (OPEN["x0"], OPEN["y0"]))[0], 0.0, s_liv - 0.01))
-        E["right_jamb_cut_from_s"] = r4(bisect(lambda s: uv(cam(s), (OPEN["x1"], OPEN["y1"]))[0] - 1.0, 0.0, s_face - 0.01))
-        E["right_jamb_out_at_s"] = r4(bisect(lambda s: uv(cam(s), (OPEN["x1"], OPEN["y0"]))[0] - 1.0, 0.0, s_liv - 0.01))
+        E["left_jamb_cut_from_s"] = r4(bisect(lambda s: past_edge(cam(s), (OPEN["x0"], OPEN["y1"]), 0.0), 0.0, s_liv))
+        E["left_jamb_out_at_s"] = r4(bisect(lambda s: past_edge(cam(s), (OPEN["x0"], OPEN["y0"]), 0.0), 0.0, s_liv))
+        E["right_jamb_cut_from_s"] = r4(bisect(lambda s: past_edge(cam(s), (OPEN["x1"], OPEN["y1"]), 1.0), 0.0, s_liv))
+        E["right_jamb_out_at_s"] = r4(bisect(lambda s: past_edge(cam(s), (OPEN["x1"], OPEN["y0"]), 1.0), 0.0, s_liv))
         # the dining opening in the frame
         ss = np.arange(0.0, L + 1e-9, 0.005)
         sh = np.array([dining_share(cam(s)) for s in ss])
@@ -418,17 +452,65 @@ def verticals(PS):
                 pass_=bool(worst is not None and worst <= 1))
 
 
+def stations(F, PS):
+    out = {}
+    fb = (slice(int(round(OY)), int(round(OY + FY))), slice(int(round(OX)), int(round(OX + FX))))
+    for fid, f in F.items():
+        if fid not in PS:
+            continue
+        cl = PS[fid].cls[fb]
+        cy = f["loc"][1]
+        sh = lambda ids: round(float(np.isin(cl, ids).mean()), 4)
+        out[fid] = dict(s_m=r4(f["s"]), camera_xy=[r4(f["loc"][0]), r4(f["loc"][1])], shift=[round(f["u0"], 4), round(f["v0"], 4)],
+                        camera_is="in the hall" if cy > OPEN["y1"] else ("inside the wall depth" if cy > OPEN["y0"] else "in the living room"),
+                        to_the_hall_face_m=r4((cy - OPEN["y1"]) / math.cos(math.radians(f["yaw"]))) if cy > OPEN["y1"] else None,
+                        share_of_frame=dict(hall_plaster=sh(HALL_WALLS), hall_floor_skirting=sh((10, 14, 25)), walnut_lining=sh((20, 21, 22)),
+                                            lining_gap_and_bead=sh((23, 24)), living_room=sh(tuple(range(30, 44)) + (0,)), dining_room=sh((50,)),
+                                            hall_ceiling=sh((15,))),
+                        soffit_in_frame=bool((cl == 22).any()), left_jamb_in_frame=bool((cl == 20).any()), right_jamb_in_frame=bool((cl == 21).any()))
+    return out
+
+
+def reprojection(PS, F, src, dst):
+    """The depth pass used as motion-agent will use it: every pixel of src is lifted to the world with its depth and projected into dst.
+    Where the point is the one dst sees (depth agrees), the two id passes must name the same surface."""
+    if src not in PS or dst not in PS:
+        return None
+    A, B = PS[src], PS[dst]
+    X, Y, Z = A.world()
+    f = B.f
+    y = math.radians(f["yaw"])
+    dx, dy = X - f["loc"][0], Y - f["loc"][1]
+    d = -math.sin(y) * dx - math.cos(y) * dy
+    with np.errstate(invalid="ignore", divide="ignore"):
+        u = f["u0"] + K_U * (math.cos(y) * dx - math.sin(y) * dy) / d
+        v = f["v0"] + K_V * (f["loc"][2] - Z) / d
+        px, py = np.floor(OX + u * FX), np.floor(OY + v * FY)
+        ok = np.isfinite(d) & (d > 0.05) & (px >= 0) & (px < CANVAS[0]) & (py >= 0) & (py < CANVAS[1])
+    pxi, pyi = px[ok].astype(int), py[ok].astype(int)
+    db = B.depth[pyi, pxi]
+    same = np.abs(db - d[ok]) < (0.01 + 0.01 * d[ok])
+    agree = B.cls[pyi, pxi][same] == A.cls[ok][same]
+    return dict(src=src, dst=dst, src_pixels_with_depth=int(np.isfinite(d).sum()), land_in_dst_canvas=int(ok.sum()), seen_by_dst=int(same.sum()),
+                same_surface_id=round(float(agree.mean()), 5), depth_residual_mm_median=round(float(np.median(np.abs(db - d[ok])[same]) * 1000), 2),
+                note="'seen by dst' = the projected depth agrees with dst's depth pass within 1 cm + 1 %; the rest is hidden from dst or lies on a depth step")
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # 4. the seam with M0
 # ---------------------------------------------------------------------------------------------------------------
-PAIRS = {(31, 35): "back wall | ceiling", (31, 38): "back wall | skirting top", (38, 30): "skirting foot | floor", (31, 41): "back wall | sofa",
-         (30, 41): "floor | sofa", (30, 42): "floor | coffee table", (41, 42): "sofa | coffee table", (30, 43): "floor | armchair",
-         (40, 43): "bench | armchair", (39, 43): "glazing | armchair", (32, 39): "window wall | glazing frame", (0, 39): "sky | glazing frame",
-         (36, 35): "dropped band | ceiling", (36, 32): "dropped band | window wall", (36, 39): "dropped band | glazing", (36, 31): "dropped band | back wall",
-         (39, 40): "glazing | bench", (30, 40): "floor | bench", (32, 40): "window wall | bench", (31, 43): "back wall | armchair",
-         (32, 43): "window wall | armchair", (31, 42): "back wall | coffee table", (32, 38): "window wall | skirting", (37, 38): "rounded corner | skirting",
-         (37, 40): "rounded corner | bench", (37, 35): "rounded corner | ceiling", (37, 36): "rounded corner | band", (0, 43): "sky | armchair",
-         (0, 40): "sky | bench", (40, 38): "bench | skirting"}
+_PAIRS = {(31, 35): "back wall | ceiling", (31, 38): "back wall | skirting top", (30, 38): "skirting foot | floor", (31, 41): "back wall | sofa",
+          (30, 41): "floor | sofa", (30, 42): "floor | coffee table", (41, 42): "sofa | coffee table", (30, 43): "floor | armchair",
+          (40, 43): "window bench | armchair", (39, 43): "glazing | armchair", (32, 39): "window wall | glazing frame (reveal)",
+          (0, 39): "sky | glazing frame", (35, 36): "ceiling | dropped band", (32, 36): "window wall | dropped band", (36, 39): "dropped band | glazing",
+          (31, 36): "back wall | dropped band", (39, 40): "glazing | window bench", (30, 40): "floor | window bench", (32, 40): "window wall | window bench",
+          (31, 43): "back wall | armchair", (32, 43): "window wall | armchair", (31, 42): "back wall | coffee table", (32, 38): "window wall | skirting",
+          (37, 38): "rounded corner | skirting", (37, 40): "rounded corner | window bench", (35, 37): "ceiling | rounded corner",
+          (36, 37): "dropped band | rounded corner", (0, 43): "sky | armchair", (0, 40): "sky | window bench", (38, 40): "skirting | window bench",
+          (0, 32): "sky | window wall (reveal arris)", (38, 41): "skirting | sofa", (38, 43): "skirting | armchair", (42, 43): "coffee table | armchair",
+          (38, 42): "skirting | coffee table", (41, 43): "sofa | armchair", (0, 36): "sky | dropped band"}
+PAIRS = {tuple(sorted(k)): v for k, v in _PAIRS.items()}
+TANGENT = {(31, 37), (32, 37)}            # where the rounded corner runs into the flat walls: no edge exists there
 
 
 def structure_samples(cls, step=16):
@@ -451,6 +533,8 @@ def structure_samples(cls, step=16):
     out = []
     r = 7
     for (x, y, pair) in pts:
+        if pair in TANGENT:
+            continue
         xi, yi = int(x), int(y)
         if xi < r + 12 or yi < r + 12 or xi >= Ww - r - 12 or yi >= Hh - r - 12:
             continue
@@ -473,22 +557,29 @@ def bilinear(img, x, y):
     return (img[y0, x0] * (1 - fx) * (1 - fy) + img[y0, x0 + 1] * fx * (1 - fy) + img[y0 + 1, x0] * (1 - fx) * fy + img[y0 + 1, x0 + 1] * fx * fy)
 
 
-def edge_offsets(samples, lum, search=8.0, min_grad=1.5):
-    """Along each sample's normal: where is the strongest luminance step of the image, within +-search px. Image arrays are indexed at
-    pixel centres, so the canvas point (x, y) is the array position (x - 0.5, y - 0.5)."""
+def grad_mag(img, sigma=1.0):
+    """Gradient magnitude of a luminance image (or the strongest of the three channels of an RGB image), after a small blur."""
+    if img.ndim == 3:
+        return np.max([grad_mag(img[..., k], sigma) for k in range(3)], axis=0)
+    b = cv2.GaussianBlur(img.astype(np.float32), (0, 0), sigma)
+    return np.hypot(cv2.Sobel(b, cv2.CV_32F, 1, 0, ksize=3), cv2.Sobel(b, cv2.CV_32F, 0, 1, ksize=3)) / 8.0
+
+
+def edge_offsets(samples, gm, search=6.0, min_grad=1.0):
+    """Along each sample's normal: the nearest clear ridge of the gradient-magnitude image gm, within +-search px (a ridge counts if it
+    reaches half of the strongest one in the window). Arrays are indexed at pixel centres: the canvas point (x, y) is array (x - 0.5, y - 0.5)."""
     ks = np.arange(-search - 1.0, search + 1.0 + 1e-9, 0.5)
     res = []
     for (x, y, nx, ny, pair) in samples:
-        prof = bilinear(lum, x - 0.5 + ks * nx, y - 0.5 + ks * ny)
-        g = np.abs(np.convolve(prof, [1, 0, -1], mode="same"))[2:-2]       # derivative over 1 px
-        kk = ks[2:-2]
-        i = int(g.argmax())
-        if g[i] < min_grad or i in (0, len(g) - 1) or g[i] < 2.5 * np.median(g):
+        g = bilinear(gm, x - 0.5 + ks * nx, y - 0.5 + ks * ny)
+        pk = [i for i in range(2, len(g) - 2) if g[i] >= g[i - 1] and g[i] >= g[i + 1] and g[i] >= max(min_grad, 0.5 * g[2:-2].max())]
+        if not pk:
             res.append((x, y, pair, None))
             continue
+        i = min(pk, key=lambda j: abs(ks[j]))
         den = g[i - 1] - 2 * g[i] + g[i + 1]
         sub = 0.0 if abs(den) < 1e-9 else 0.5 * (g[i - 1] - g[i + 1]) / den
-        res.append((x, y, pair, float(kk[i] + 0.5 * sub)))
+        res.append((x, y, pair, float(ks[i] + 0.5 * max(-1.0, min(1.0, sub)))))
     return res
 
 
@@ -497,101 +588,192 @@ def summarise_offsets(res, limit=2.0):
     for (x, y, pair, off) in res:
         by.setdefault(pair, []).append((x, y, off))
     lines = {}
-    worst = None
     for pair, L_ in sorted(by.items()):
         offs = [(x, y, o) for x, y, o in L_ if o is not None]
         if len(L_) < 8:
             continue
         name = PAIRS.get(pair, f"id {pair[0]} | id {pair[1]}")
         if len(offs) < max(6, 0.3 * len(L_)):
-            lines[name] = dict(samples=len(L_), measured=len(offs), note="edge not readable in this image (no clear luminance step)")
+            lines[name] = dict(samples=len(L_), measured=len(offs), note="edge not readable in this image (no clear step)")
             continue
         a = np.array([o for _, _, o in offs])
         i = int(np.abs(a).argmax())
-        p90 = float(np.percentile(np.abs(a), 90))
-        lines[name] = dict(samples=len(L_), measured=len(offs), median_px=round(float(np.median(a)), 2), p90_abs_px=round(p90, 2),
-                           max_abs_px=round(float(np.abs(a).max()), 2), max_at_px=[round(offs[i][0]), round(offs[i][1])],
-                           max_at_uv=[round((offs[i][0] - OX) / FX, 3), round((offs[i][1] - OY) / FY, 3)], over_limit=bool(p90 > limit))
-        if worst is None or p90 > worst[1]:
-            worst = (name, p90)
+        lines[name] = dict(samples=len(L_), measured=len(offs), median_px=round(float(np.median(a)), 2),
+                           p90_abs_px=round(float(np.percentile(np.abs(a), 90)), 2), max_abs_px=round(float(np.abs(a).max()), 2),
+                           max_at_px=[int(round(offs[i][0])), int(round(offs[i][1]))],
+                           over_2px_by_median=bool(abs(float(np.median(a))) > limit))
     allo = np.array([o for (_, _, _, o) in res if o is not None])
-    return dict(lines=lines, all_samples=len(res), all_measured=int(len(allo)), median_abs_px=round(float(np.median(np.abs(allo))), 2) if len(allo) else None,
-                p90_abs_px=round(float(np.percentile(np.abs(allo), 90)), 2) if len(allo) else None,
-                p99_abs_px=round(float(np.percentile(np.abs(allo), 99)), 2) if len(allo) else None,
-                share_within_2px=round(float((np.abs(allo) <= limit).mean()), 4) if len(allo) else None,
-                worst_line_by_p90=dict(line=worst[0], p90_abs_px=round(worst[1], 2)) if worst else None)
+    if not len(allo):
+        return dict(lines=lines, all_samples=len(res), all_measured=0)
+    return dict(lines=lines, all_samples=len(res), all_measured=int(len(allo)), median_abs_px=round(float(np.median(np.abs(allo))), 2),
+                p90_abs_px=round(float(np.percentile(np.abs(allo), 90)), 2), share_within_2px=round(float((np.abs(allo) <= limit).mean()), 4),
+                lines_over_2px_by_median=[k for k, v in lines.items() if v.get("over_2px_by_median")])
+
+
+def tile_shifts(A, B, cls=None, tile=128, stride=96, search=8, min_energy=0.6, min_score=0.5):
+    """Registration tile by tile: where does tile A sit in B (normalised correlation of two gradient-magnitude images, sub-pixel peak).
+    A tile that holds one straight edge only fixes the shift across that edge: there the shift along the edge is dropped."""
+    Hh, Ww = A.shape
+    gx, gy = cv2.Sobel(A, cv2.CV_32F, 1, 0, ksize=3), cv2.Sobel(A, cv2.CV_32F, 0, 1, ksize=3)
+    out = []
+    for y in range(search, Hh - tile - search, stride):
+        for x in range(search, Ww - tile - search, stride):
+            t = A[y:y + tile, x:x + tile]
+            if t.std() < min_energy:
+                continue
+            r = cv2.matchTemplate(B[y - search:y + tile + search, x - search:x + tile + search], t, cv2.TM_CCOEFF_NORMED)
+            _, mx, _, loc = cv2.minMaxLoc(r)
+            if mx < min_score or loc[0] in (0, 2 * search) or loc[1] in (0, 2 * search):
+                out.append((x + tile / 2, y + tile / 2, None, None, float(mx)))
+                continue
+            cx, cy = loc
+
+            def sub(a, b_, c):
+                den = a - 2 * b_ + c
+                return 0.0 if abs(den) < 1e-9 else max(-0.5, min(0.5, 0.5 * (a - c) / den))
+            dx = cx - search + sub(r[cy, cx - 1], r[cy, cx], r[cy, cx + 1])
+            dy = cy - search + sub(r[cy - 1, cx], r[cy, cx], r[cy + 1, cx])
+            jx, jy = gx[y:y + tile, x:x + tile], gy[y:y + tile, x:x + tile]
+            J = np.array([[float((jx * jx).sum()), float((jx * jy).sum())], [float((jx * jy).sum()), float((jy * jy).sum())]])
+            w, v = np.linalg.eigh(J)
+            if w[0] < 0.08 * w[1]:                      # one edge direction only
+                e = v[:, 1]
+                k = dx * e[0] + dy * e[1]
+                dx, dy = k * e[0], k * e[1]
+            out.append((x + tile / 2, y + tile / 2, float(dx), float(dy), float(mx)))
+    return out
+
+
+def summarise_tiles(T, cls=None, limit=2.0):
+    ok = [(x, y, dx, dy, sc) for (x, y, dx, dy, sc) in T if dx is not None]
+    if not ok:
+        return dict(tiles=len(T), registered=0)
+    m = np.array([math.hypot(dx, dy) for (_, _, dx, dy, _) in ok])
+    i = int(m.argmax())
+    worst = sorted(ok, key=lambda q: -math.hypot(q[2], q[3]))[:6]
+
+    def what(x, y):
+        if cls is None:
+            return None
+        c = cls[int(y) - 48:int(y) + 48, int(x) - 48:int(x) + 48]
+        ids, cnt = np.unique(c, return_counts=True)
+        return [IDS_SHORT.get(int(k), str(int(k))) for k in ids[np.argsort(-cnt)][:3]]
+    return dict(tiles=len(T), registered=len(ok), median_px=round(float(np.median(m)), 2), p90_px=round(float(np.percentile(m, 90)), 2),
+                max_px=round(float(m.max()), 2), share_within_2px=round(float((m <= limit).mean()), 4),
+                mean_shift_px=[round(float(np.mean([q[2] for q in ok])), 2), round(float(np.mean([q[3] for q in ok])), 2)],
+                largest=[dict(at_px=[int(q[0]), int(q[1])], at_uv=[round((q[0] - OX) / FX, 3), round((q[1] - OY) / FY, 3)],
+                              shift_px=[round(q[2], 2), round(q[3], 2)], score=round(q[4], 2), surfaces=what(q[0], q[1])) for q in worst])
+
+
+IDS_SHORT = {0: "sky", 30: "floor", 31: "back wall", 32: "window wall", 33: "right wall", 35: "ceiling", 36: "dropped band", 37: "rounded corner",
+             38: "skirting", 39: "glazing", 40: "window bench", 41: "sofa", 42: "coffee table", 43: "armchair"}
 
 
 def plank_joints(lum, P11, floor_id=30):
-    """Joint lines of the floor in an M0 image: every floor pixel votes its high-passed luminance into a histogram over the world X
-    (planks run along Y, so a joint is a line of constant X). Returns the period and phase of the dips."""
+    """Joint lines of the floor in an M0 image. Planks run along Y, so a joint is a line of constant world X: every floor pixel adds its
+    luminance to a 4 mm bin of X (X from the depth pass of station 11); a joint is a narrow dip of that profile."""
     X, Y, Z = P11.world()
-    m = (P11.cls == floor_id) & np.isfinite(X) & (Y > 0.25) & (Y < 3.2)
-    hp = lum - (np.cumsum(np.pad(lum, ((0, 0), (16, 16)), mode="edge"), axis=1)[:, 32:] - np.cumsum(np.pad(lum, ((0, 0), (16, 16)), mode="edge"), axis=1)[:, :-32]) / 32.0
-    bw = 0.004
-    xs = X[m]
-    lo, hi = -2.2, 2.2
-    b = np.floor((xs - lo) / bw).astype(int)
-    ok = (b >= 0) & (b < int((hi - lo) / bw))
-    n = int((hi - lo) / bw)
-    s = np.bincount(b[ok], weights=hp[m][ok], minlength=n)
+    m = (P11.cls == floor_id) & np.isfinite(X)
+    bw, lo, hi = 0.004, -2.30, 2.50
+    n = int(round((hi - lo) / bw))
+    b = np.floor((X[m] - lo) / bw).astype(int)
+    ok = (b >= 0) & (b < n)
+    s = np.bincount(b[ok], weights=lum[m][ok], minlength=n)
     c = np.bincount(b[ok], minlength=n)
-    prof = np.where(c > 200, s / np.maximum(c, 1), np.nan)
-    valid = np.isfinite(prof)
-    if valid.sum() < 100:
-        return dict(note="floor not readable")
-    p = np.where(valid, prof, 0.0)
-    p = p - p[valid].mean()
-    best = None
-    scores = {}
-    for per in np.arange(0.12, 0.40, 0.001):
-        ph = (np.arange(n) * bw + lo) / per * 2 * math.pi
-        cs, sn = (p * np.cos(ph) * valid).sum(), (p * np.sin(ph) * valid).sum()
-        amp = math.hypot(cs, sn) / valid.sum()
-        scores[round(per, 3)] = amp
-        if best is None or amp > best[1]:
-            best = (per, amp, math.atan2(sn, cs))
-    per, amp, phase = best
-    # dips (dark joints): cos(2 pi x / per - phase) = -1  ->  x = per (phase + pi) / (2 pi) + k per
-    x0 = per * (phase + math.pi) / (2 * math.pi)
-    k = np.round((np.arange(-2.2, 2.2, per) - x0) / per)
-    joints = sorted(set(round(float(x0 + kk * per), 3) for kk in k if -2.2 <= x0 + kk * per <= 2.2))
-    top = sorted(scores.items(), key=lambda q: -q[1])[:1]
-    med = float(np.median(list(scores.values())))
-    return dict(period_m=round(float(per), 3), amplitude=round(float(amp), 3), peak_over_median=round(float(amp / max(med, 1e-9)), 1),
-                joint_x_m=joints, x_range_seen=[round(float(np.nanmin(np.where(valid, np.arange(n) * bw + lo, np.nan))), 2),
-                                                round(float(np.nanmax(np.where(valid, np.arange(n) * bw + lo, np.nan))), 2)],
-                method="floor pixels of M0 vote a 32 px high-passed luminance into 4 mm bins of world X (depth pass of station 11); period by the strongest harmonic 12-40 cm")
+    prof = np.where(c > 150, s / np.maximum(c, 1), np.nan)
+    xs = lo + (np.arange(n) + 0.5) * bw
+    dips = []
+    k = 10                                             # +-4 cm neighbourhood
+    for i in range(k, n - k):
+        w = prof[i - k:i + k + 1]
+        if not np.isfinite(w).all():
+            continue
+        side = np.concatenate([w[:k - 2], w[k + 3:]])
+        depth = float(np.median(side) - prof[i])
+        if prof[i] == w.min() and depth > max(3.0, 4.0 * float(np.median(np.abs(side - np.median(side))))):
+            wt = np.clip(np.median(side) - w[k - 2:k + 3], 0, None)          # centre of the dip over +-2 bins
+            dips.append((float((xs[i - 2:i + 3] * wt).sum() / wt.sum()), depth))
+    merged = []
+    for x, d in dips:
+        if merged and x - merged[-1][0] < 0.03:
+            if d > merged[-1][1]:
+                merged[-1] = (x, d)
+        else:
+            merged.append((x, d))
+    model = [-2.32 + 0.22 * q for q in range(0, 23)]
+    rows = []
+    for x, d in merged:
+        j = min(model, key=lambda q: abs(q - x))
+        rows.append(dict(x_m=round(x, 3), dip_levels=round(d, 1), nearest_clay_joint_m=round(j, 2), offset_mm=round((x - j) * 1000, 1)))
+    on = [r_ for r_ in rows if abs(r_["offset_mm"]) <= 10.0]
+    off = [r_ for r_ in rows if abs(r_["offset_mm"]) > 10.0]
+    sp = np.diff([r_["x_m"] for r_ in on])
+    sp = sp[(sp > 0.15) & (sp < 0.30)]
+    offs = np.array([r_["offset_mm"] for r_ in on]) if on else np.array([0.0])
+    return dict(dips_found=len(rows), on_a_clay_joint_line=len(on), joints=on, dips_elsewhere=off,
+                spacing_m_median=round(float(np.median(sp)), 3) if len(sp) else None,
+                offset_to_clay_joint_mm=dict(median=round(float(np.median(offs)), 1), max_abs=round(float(np.abs(offs).max()), 1)),
+                floor_seen_x=[round(float(xs[np.isfinite(prof)].min()), 2), round(float(xs[np.isfinite(prof)].max()), 2)],
+                method="floor pixels of the M0 frame, mean 8-bit luminance per 4 mm bin of world X; a joint = a local minimum at least 3 levels and "
+                       "4 MAD under its +-4 cm neighbourhood, placed at the dip's centre; 'on a clay joint line' = within 10 mm of X = -2.32 + 0.22 k")
 
 
 def seam(PS, F):
     P11 = PS["b/S11"]
     out = dict(camera_station_11=dict(loc=[r4(x) for x in F["b/S11"]["loc"]], yaw=F["b/S11"]["yaw"], u0=F["b/S11"]["u0"], v0=F["b/S11"]["v0"]),
-               camera_M0_plan="(0.83, 4.64, 1.20), yaw 25, 24 mm, u0 0.47, v0 0.50")
+               camera_M0_plan="(0.83, 4.64, 1.20), yaw 25, 24 mm, u0 0.47, v0 0.50",
+               limit="2 px on the 2720 x 1530 canvas (0.078 % of the frame width)")
+    lum = np.array([0.2126, 0.7152, 0.0722])
+    s11 = np.asarray(Image.open(P11.png).convert("RGB")).astype(np.float32) @ lum.astype(np.float32)
+    furn = np.asarray(Image.open(M0_FURN).convert("RGB").resize(CANVAS, Image.LANCZOS)).astype(np.float32) @ lum.astype(np.float32)
+    base_rgb = np.asarray(Image.open(BASE_PNG).convert("RGB")).astype(np.float32)
+    base = base_rgb @ lum.astype(np.float32)
+    assert base.shape == (CANVAS[1], CANVAS[0])
+    g11, gfurn, gbase = grad_mag(s11), grad_mag(furn), grad_mag(base_rgb, 1.2)
+    # (1) station 11 against the existing M0 clay (furn layer): the two lit clays, tile by tile
+    T = tile_shifts(g11, gfurn)
+    out["station11_vs_M0_clay"] = dict(what="lit clay of station 11 against framing/warm-modern-r4/layers/furn/M0.png (4072 x 2290, scaled to the canvas), "
+                                            "128 px tiles, gradient images", **summarise_tiles(T, P11.cls))
+    diff = np.abs(s11 - furn)
+    out["station11_vs_M0_clay"]["pixels"] = dict(mean_abs_diff_levels=round(float(diff.mean()), 2), p99_abs_diff_levels=round(float(np.percentile(diff, 99)), 1))
+    # the same camera, checked on depth where the M0 clay's passes are still in the scratchpad (not a repo file)
+    npz = os.path.join(os.path.dirname(SCRATCH), "wm-r4-furn-idx", "M0.npz")
+    if os.path.exists(npz):
+        d4 = np.load(npz)["depth"]
+        if d4.shape == (M0_CANVAS[1], M0_CANVAS[0]):
+            yy = np.clip(np.rint((np.arange(CANVAS[1]) + 0.5) * M0_CANVAS[1] / CANVAS[1] - 0.5).astype(int), 0, M0_CANVAS[1] - 1)
+            xx = np.clip(np.rint((np.arange(CANVAS[0]) + 0.5) * M0_CANVAS[0] / CANVAS[0] - 0.5).astype(int), 0, M0_CANVAS[0] - 1)
+            dm = d4[yy][:, xx].astype(np.float64)
+            E = np.asarray(Image.open(os.path.join(HERE, P11.fid + "-edges.png"))) < 128
+            far = cv2.dilate(E.astype(np.uint8), np.ones((9, 9), np.uint8)) == 0
+            okm = far & np.isfinite(P11.depth) & (dm < 1e4)
+            rel = (dm[okm] - P11.depth[okm]) / P11.depth[okm]
+            out["station11_vs_M0_clay"]["depth"] = dict(
+                what="depth pass of station 11 against the M0 clay's depth pass (scratchpad wm-r4-furn-idx/M0.npz), pixels more than 4 px from a structure edge",
+                pixels=int(okm.sum()), median_relative=round(float(np.median(rel)), 6), p99_abs_relative=round(float(np.percentile(np.abs(rel), 99)), 5),
+                median_abs_mm=round(float(np.median(np.abs(dm[okm] - P11.depth[okm])) * 1000), 2))
+    # (2) the model's structure edges (id pass of station 11) against base.png
     samples = structure_samples(P11.cls)
-    lum11 = P11.lum()
-    furn = np.asarray(Image.open(M0_FURN).convert("RGB").resize(CANVAS, Image.LANCZOS)).astype(np.float64) @ np.array([0.2126, 0.7152, 0.0722])
-    base_rgb = np.asarray(Image.open(BASE_PNG).convert("RGB")).astype(np.float64)
-    base = base_rgb @ np.array([0.2126, 0.7152, 0.0722])
-    o_self = edge_offsets(samples, lum11)
-    o_furn = edge_offsets(samples, furn)
-    o_base = edge_offsets(samples, base, min_grad=2.5)
     out["structure_samples"] = len(samples)
-    out["station11_own_lit_clay"] = summarise_offsets(o_self)
-    out["vs_M0_clay_furn_layer"] = summarise_offsets(o_furn)
-    out["vs_base_png"] = summarise_offsets(o_base)
-    # station 11 against the M0 clay, the direct way: where each sample's step sits in the two clays
-    d = [(x, y, pair, b - a) for (x, y, pair, a), (_, _, _, b) in zip(o_self, o_furn) if a is not None and b is not None]
-    out["station11_vs_M0_clay_same_edge"] = summarise_offsets(d)
-    dd = np.array([o for (_, _, _, o) in d])
-    i = int(np.abs(dd).argmax())
-    out["station11_vs_M0_clay_same_edge"]["largest"] = dict(px=round(float(dd[i]), 2), at_px=[round(d[i][0]), round(d[i][1])], line=PAIRS.get(d[i][2], str(d[i][2])))
-    diff = np.abs(lum11 - furn)
-    out["station11_vs_M0_clay_pixels"] = dict(mean_abs_diff_levels=round(float(diff.mean()), 2), p99_abs_diff_levels=round(float(np.percentile(diff, 99)), 1),
-                                              note="8-bit luminance; the M0 clay was scaled from 4072 x 2290 with Lanczos, 16 samples each, different noise")
-    out["floor_joints"] = dict(base_png=plank_joints(base, P11), station_11_clay=plank_joints(lum11, P11),
-                               clay_model="X = -2.32 + 0.22 k (build_alts.Shell.planks: the first board starts 2 cm under the window wall)")
-    return out, (samples, o_furn, o_base)
+    ob = edge_offsets(samples, gbase, min_grad=1.2)
+    out["structure_vs_base_png"] = dict(
+        what="structure edges of station 11 (id pass, exact model geometry) against base.png: at a sample every 16 px along each edge, the nearest clear "
+             "step of base.png across the edge, searched +-6 px (so 6 px is the most this can report). Indicative: cast shadows and texture also make steps",
+        **summarise_offsets(ob))
+    shell = {"back wall | ceiling", "back wall | skirting top", "skirting foot | floor", "ceiling | dropped band", "window wall | dropped band",
+             "back wall | dropped band", "window wall | skirting", "window wall | window bench", "floor | window bench", "skirting | window bench"}
+    L_ = out["structure_vs_base_png"]["lines"]
+    grp = lambda names: [v for k, v in L_.items() if (k in shell) == names and "median_px" in v]
+    for tag, names in (("shell_lines", True), ("glazing_and_furniture_lines", False)):
+        g = grp(names)
+        if g:
+            w = max(g, key=lambda v: v["p90_abs_px"])
+            out["structure_vs_base_png"][tag] = dict(lines=len(g), worst_median_px=max(abs(v["median_px"]) for v in g), worst_p90_px=w["p90_abs_px"],
+                                                     worst_line=[k for k, v in L_.items() if v is w][0], worst_at_px=w["max_at_px"])
+    out["floor_joints"] = dict(base_png=plank_joints(base.astype(np.float64), P11), M0_clay=plank_joints(furn.astype(np.float64), P11),
+                               clay_model="X = -2.32 + 0.22 k (build_alts.Shell.planks: the first board starts 2 cm under the window wall); the hall's "
+                                          "planks in this clay continue the same lines")
+    return out, (samples, T)
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -685,7 +867,7 @@ def main():
     old = json.load(open(sc_path)) if os.path.exists(sc_path) else {}
     rep = {}
     meta_p = os.path.join(SCRATCH, "meta.json")
-    rep.update(json.load(open(meta_p)) if os.path.exists(meta_p) else {k: old[k] for k in old if k not in ("frames", "designer_values", "path", "verticals", "seam_M0", "summary")})
+    rep.update(json.load(open(meta_p)) if os.path.exists(meta_p) else {k: old[k] for k in old if k not in ("frames", "designer_values", "path", "verticals", "stations", "depth_reprojection", "seam_M0", "summary", "objects_seen_in_any_frame", "cameras", "depth_pass")})
     frames = dict(old.get("frames", {}))
     for fid in F:
         p = os.path.join(SCRATCH, "frames", fid.replace("/", "_") + ".json")
@@ -702,6 +884,9 @@ def main():
     rep["designer_values"] = table_designer(F, PF, PS)
     rep["path"] = path_events(PF)
     rep["verticals"] = verticals(PS)
+    rep["stations"] = stations(F, PS)
+    rep["depth_reprojection"] = [r for r in (reprojection(PS, F, "H0x-b", "H0"), reprojection(PS, F, "b/S00", "b/S03"), reprojection(PS, F, "b/S05", "b/S07"),
+                                             reprojection(PS, F, "b/S09", "b/S11"), reprojection(PS, F, "a/S08", "b/S11")) if r]
     na = {k: v.get("not_allowed_px") for k, v in rep["frames"].items() if v.get("not_allowed_px")}
     osc = {k: v.get("outside_scope_px") for k, v in rep["frames"].items() if v.get("outside_scope_px")}
     seam_res = None
@@ -709,10 +894,19 @@ def main():
         rep["seam_M0"], seam_res = seam(PS, F)
     elif "seam_M0" in old:
         rep["seam_M0"] = old["seam_M0"]
+    seen = {}
+    for k, v in rep["frames"].items():
+        for i, c in v.get("pass_indices_px", {}).items():
+            seen.setdefault(str(i), dict(px_max=0, frames=0))
+            seen[str(i)]["px_max"] = max(seen[str(i)]["px_max"], c)
+            seen[str(i)]["frames"] += 1
+    nm = rep.get("pass_index_names", {})
+    rep["objects_seen_in_any_frame"] = {i: dict(name=(nm.get(i) or ["sky / background" if i == "0" else "?"])[0], **v) for i, v in sorted(seen.items(), key=lambda q: int(q[0]))}
     rep["summary"] = dict(
         frames_rendered=len([k for k in rep["frames"]]), camera_vs_plan_projection_max=max((v.get("camera_vs_plan_projection_max_px_or_mm", 0) for v in rep["frames"].values()), default=None),
         frames_with_not_allowed_surfaces=na, frames_showing_the_dining_room_px=osc,
         verticals_worst_spread_px=rep["verticals"]["worst_spread_px"],
+        hall_ceiling_px_in_any_frame=int(sum(v["share_of_frame"]["hall_ceiling"] > 0 for v in rep["stations"].values())),
         designer_values_flagged=[r["key"] for r in rep["designer_values"] if r["flag"]])
     json.dump(rep, open(sc_path, "w"), indent=1, ensure_ascii=False)
     if not a.no_sheet and all(os.path.exists(os.path.join(HERE, fid + ".png")) for fid in F):

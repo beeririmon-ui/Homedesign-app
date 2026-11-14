@@ -53,7 +53,7 @@ r4, r3, fr, r2, bh = W4.r4, W4.r3, W4.fr, W4.r2, W4.bh
 ba, bs, M = W4.ba, W4.bs, W4.M
 
 OUT = os.path.join(HERE, "framing", "wm-entrance-2026-11-14")
-SCRATCH = os.path.join(W4.SCRATCH, "wm-entrance")
+SCRATCH = os.environ.get("WM_ENTRANCE_SCRATCH") or os.path.join(W4.SCRATCH, "wm-entrance")
 PLAN_JSON = os.path.join(bh.REPO, "docs", "house-plan.json")
 
 # the canvas of base.png (assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/base.png)
@@ -80,7 +80,7 @@ IDS = {0: "sky / outside (through the glazing)",
        34: "living front wall (Y 6.20)", 35: "living ceiling", 36: "living dropped band + track slot", 37: "living rounded corner",
        38: "living skirting", 39: "living window (frame, mullions, reveal)", 40: "living window bench",
        41: "sofa", 42: "coffee table", 43: "armchair",
-       50: "dining room seen through O-living-dining (plan 1.1 clay as it stands: no warm-modern design exists)",
+       50: "O-living-dining and the dining room behind it (the plan-1.1 clay as it stands: no warm-modern design exists)",
        98: "geometry without a pass index", 99: "anything else (must be 0 px)"}
 ALLOWED = set(IDS) - {50, 98, 99}                     # 50 is reported apart (outside_scope_px): no document shows it
 PALETTE = {0: (255, 255, 255), 10: (150, 120, 95), 11: (236, 229, 218), 12: (222, 212, 198), 13: (205, 196, 184), 14: (190, 180, 165),
@@ -358,49 +358,61 @@ def world_of(depth, f, cv):
     return X, Y, Z
 
 
-def classify(idx, depth, normal, f, cv, S):
+def index_map(names=None):
+    """Pass index of every group the id pass tells apart. From the scene (fr.REG) after a build, or from a saved meta.json."""
+    SI = ba.SHELL_IDX
+    m = {k.replace("-", "_"): int(v) for k, v in SI.items()}
+    m.update({"house_" + k: int(v) for k, v in bh.IDX.items()})
+    m.update(walnut=PIDX["lining"], walnut_gap=PIDX["lining_gap"], hall_cgap=PIDX["hall_cgap"])      # "lining" = the living window reveal
+    for key, nm in (("living/window-bench", "window_bench"), ("living/rounded-corner", "rounded_corner"), ("living/curtain-track", "curtain_track"),
+                    ("G-H1 roof light", "roof_light")):
+        if names is None:
+            m[nm] = int(fr.REG[key]["pidx"])
+        else:
+            m[nm] = next(int(i) for i, v in names.items() if v[0] == key)
+    return m
+
+
+def classify(idx, depth, normal, f, cv, IM):
     with np.errstate(invalid="ignore"):
-        return _classify(idx, depth, normal, f, cv, S)
+        return _classify(idx, depth, normal, f, cv, IM)
 
 
-def _classify(idx, depth, normal, f, cv, S):
+def _classify(idx, depth, normal, f, cv, IM):
     X, Y, Z = world_of(depth, f, cv)
     nx, ny, nz = normal[..., 0], normal[..., 1], normal[..., 2]
     e = 2e-3
     in_hall = Y >= OPEN["y1"] - e
     in_living = Y <= OPEN["y0"] + e
     out = np.full(idx.shape, 99, np.uint8)
-    SI = ba.SHELL_IDX
-    for pidx, cid in ((SI["sofa"], 41), (SI["coffee-table"], 42), (SI["armchair"], 43), (SI["window"], 39), (SI["sill"], 39),
-                      (SI["lining"], 39), (SI["back-wall"], 31), (SI["left-wall"], 32), (SI["right-wall"], 33), (SI["ceiling"], 35),
-                      (SI["skirting"], 38), (PIDX["lining_gap"], 23)):
-        out[idx == pidx] = cid
-    for key, cid in (("living/window-bench", 40), ("living/rounded-corner", 37), ("living/curtain-track", 36)):
-        if key in fr.REG:
-            out[idx == fr.REG[key]["pidx"]] = cid
-    for pidx in (PIDX["hall_cgap"], bh.IDX["ceiling"], fr.REG["G-H1 roof light"]["pidx"]):
-        out[(idx == pidx) & in_hall] = 15
-    m = (idx == SI["floor"]) | (idx == bh.IDX["floor"]) | (idx == bh.IDX["threshold"])
+    for key, cid in (("sofa", 41), ("coffee_table", 42), ("armchair", 43), ("window", 39), ("sill", 39), ("lining", 39), ("back_wall", 31),
+                     ("left_wall", 32), ("right_wall", 33), ("ceiling", 35), ("skirting", 38), ("walnut_gap", 23), ("window_bench", 40),
+                     ("rounded_corner", 37), ("curtain_track", 36)):
+        out[idx == IM[key]] = cid
+    for key in ("hall_cgap", "house_ceiling", "roof_light"):
+        out[(idx == IM[key]) & in_hall] = 15
+    m = (idx == IM["floor"]) | (idx == IM["house_floor"]) | (idx == IM["house_threshold"])
     out[m & in_living] = 30
     out[m & in_hall] = 10
     out[m & ~in_living & ~in_hall] = 25
-    m = idx == SI["front-wall"]
+    m = idx == IM["front_wall"]
     out[m & in_hall] = 12
     out[m & in_living] = 34
     out[m & ~in_living & ~in_hall] = 24
-    m = (idx == bh.IDX["wall"]) & in_hall
+    m = (idx == IM["house_wall"]) & in_hall
     out[m & (nx > 0.7)] = 11
     out[m & (ny > 0.7)] = 12
     out[m & (nx < -0.7)] = 13
     out[m & (ny < -0.7)] = 17
-    out[(idx == bh.IDX["trim"]) & in_hall] = 14
-    m = idx == PIDX["lining"]
+    out[(idx == IM["house_trim"]) & in_hall] = 14
+    m = idx == IM["walnut"]
     out[m & (nx > 0.7)] = 20
     out[m & (nx < -0.7)] = 21
     out[m & (nz < -0.7)] = 22
     out[m & (np.abs(ny) > 0.7)] = 23                   # the wood's end face, seen inside the 3 mm gap
-    # beyond the living room's right wall: the dining room through O-living-dining (plan geometry, not part of this clay's design)
-    out[(out == 99) & (X > 2.50 + e) & (Y < OPEN["y0"])] = 50
+    # beyond the living room's right wall plane: O-living-dining and the dining room behind it (plan geometry, not designed in warm
+    # modern, in no document of this pilot). The reveal faces of the opening belong to the living room's right wall (33).
+    out[(X > 2.50 + e) & (Y < OPEN["y0"]) & (idx != IM["right_wall"])] = 50
     sky = depth >= 1e4
     out[sky] = 0
     out[(idx == 0) & ~sky] = 98
@@ -426,12 +438,12 @@ def edges_of(cls, depth, normal):
     return E
 
 
-def save_passes(fid, png, depth, idx, normal, f, cv, S, out_dir):
+def save_passes(fid, png, depth, idx, normal, f, cv, IM, out_dir, write_npz=True):
     from PIL import Image
     base = os.path.join(out_dir, fid)
     d16 = np.clip(np.rint(np.where(depth < 1e4, depth, 1e9) * DEPTH_UNITS_PER_M), 0, 65535).astype(np.uint16)
     Image.fromarray(d16).save(base + "-depth.png", optimize=True)
-    cls, (X, Y, Z) = classify(idx, depth, normal, f, cv, S)
+    cls, (X, Y, Z) = classify(idx, depth, normal, f, cv, IM)
     im = Image.frombytes("P", (cls.shape[1], cls.shape[0]), np.ascontiguousarray(cls).tobytes())
     pal = [0] * 768
     for k, c in PALETTE.items():
@@ -441,9 +453,10 @@ def save_passes(fid, png, depth, idx, normal, f, cv, S, out_dir):
     E = edges_of(cls, depth, normal)
     Image.fromarray(np.where(E, 0, 255).astype(np.uint8)).save(base + "-edges.png", optimize=True)
     npz = os.path.join(SCRATCH, "passes", fid.replace("/", "_") + ".npz")
-    os.makedirs(os.path.dirname(npz), exist_ok=True)
-    np.savez_compressed(npz, depth=depth.astype(np.float32), idx=idx.astype(np.int32),
-                        normal=np.clip(np.rint(normal * 127), -127, 127).astype(np.int8), cls=cls)
+    if write_npz:
+        os.makedirs(os.path.dirname(npz), exist_ok=True)
+        np.savez_compressed(npz, depth=depth.astype(np.float32), idx=idx.astype(np.int32),
+                            normal=np.clip(np.rint(normal * 127), -127, 127).astype(np.int8), cls=cls)
     ids, cnt = np.unique(cls, return_counts=True)
     vis = {int(i): int(c) for i, c in zip(ids, cnt)}
     raw_ids, raw_cnt = np.unique(idx, return_counts=True)
@@ -458,8 +471,34 @@ def save_passes(fid, png, depth, idx, normal, f, cv, S, out_dir):
 # ---------------------------------------------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------------------------------------------
+def reclassify(a, F, alias):
+    """The id and edge passes again from the saved float passes (scratchpad), without a render: after a change of the id rules."""
+    meta = json.load(open(os.path.join(SCRATCH, "meta.json")))
+    IM = index_map(meta["pass_index_names"])
+    for fid in ([k for k in F if k not in alias] if a.frames == "all" else [alias.get(k, k) for k in a.frames.split(",")]):
+        os.makedirs(os.path.dirname(os.path.join(a.out, fid)), exist_ok=True)
+        npz = os.path.join(SCRATCH, "passes", fid.replace("/", "_") + ".npz")
+        jp = os.path.join(SCRATCH, "frames", fid.replace("/", "_") + ".json")
+        if not (os.path.exists(npz) and os.path.exists(jp)):
+            print("reclassify: no passes for", fid)
+            continue
+        z = np.load(npz)
+        rec = json.load(open(jp))
+        rec.update(save_passes(fid, os.path.join(a.out, fid + ".png"), z["depth"], z["idx"], z["normal"].astype(np.float32) / 127.0, F[fid], rec["canvas"],
+                               IM, a.out, write_npz=False))
+        json.dump(rec, open(jp, "w"), indent=1, ensure_ascii=False)
+        print("RECLASSIFIED", fid, "not allowed", rec["not_allowed_px"], "outside scope", rec["outside_scope_px"], flush=True)
+    for dst, src in alias.items():
+        for suf in ("-depth.png", "-id.png", "-edges.png"):
+            if os.path.exists(os.path.join(a.out, src + suf)):
+                shutil.copyfile(os.path.join(a.out, src + suf), os.path.join(a.out, dst + suf))
+    meta["ids"] = IDS
+    json.dump(meta, open(os.path.join(SCRATCH, "meta.json"), "w"), indent=1, ensure_ascii=False)
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
+    ap.add_argument("--reclassify", action="store_true", help="rewrite the id and edge passes from the saved float passes; no render")
     ap.add_argument("--frames", default="all")
     ap.add_argument("--res", type=int, default=CANVAS[0])
     ap.add_argument("--samples", type=int, default=16)
@@ -472,6 +511,8 @@ def main(argv):
     ap.add_argument("--out", default=OUT)
     a = ap.parse_args(argv)
     F, alias, pinfo = plan_frames()
+    if a.reclassify:
+        return reclassify(a, F, alias)
     want = [k for k in F if k not in alias] if a.frames == "all" else a.frames.split(",")
     want = [alias.get(k, k) for k in want]
     os.makedirs(a.out, exist_ok=True)
@@ -479,6 +520,7 @@ def main(argv):
     r4.EXR_DIR = os.path.join(SCRATCH, "exr")
     t0 = time.time()
     S, R, cfg, notes = build(a)
+    IM = index_map()
     names = {int(k): list(v) for k, v in r2.names_by_pidx(S).items()}
     names.update({PIDX["lining"]: ["hall/O-entry-living walnut lining", "architecture"], PIDX["lining_gap"]: ["hall/O-entry-living lining shadow gap", "architecture"],
                   PIDX["hall_cgap"]: ["hall ceiling shadow gap", "architecture"]})
@@ -517,10 +559,12 @@ def main(argv):
             exr = os.path.join(r4.EXR_DIR, nm + ".exr")
             if os.path.exists(exr):
                 os.remove(exr)                               # the composite EXR is not kept (disk)
+        from PIL import Image
+        Image.open(png).save(png, optimize=True)             # the same pixels, about a quarter smaller than Blender's PNG
         rec = dict(frame=fid, camera=dict(loc=[round(x, 4) for x in f["loc"]], yaw=f["yaw"], lens=24, u0=round(f["u0"], 6), v0=round(f["v0"], 6),
                                            s_m=None if f["s"] is None else round(f["s"], 4), source=f["src"]),
                    canvas=cv, samples=smp, camera_vs_plan_projection_max_px_or_mm=round(dev, 4), mean_L=fr.mean_L(png))
-        rec.update(save_passes(fid, png, depth, idx, normal, f, cv, S, a.out))
+        rec.update(save_passes(fid, png, depth, idx, normal, f, cv, IM, a.out))
         rec["runtime_s"] = round(time.time() - t1)
         os.makedirs(os.path.join(SCRATCH, "frames"), exist_ok=True)
         json.dump(rec, open(os.path.join(SCRATCH, "frames", fid.replace("/", "_") + ".json"), "w"), indent=1, ensure_ascii=False)
