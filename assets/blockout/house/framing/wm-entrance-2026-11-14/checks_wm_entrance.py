@@ -30,6 +30,7 @@ M0_CANVAS, M0_CROP = (4072, 2290), (116, 65, 3956, 2225)
 OX, OY = M0_CROP[0] * CANVAS[0] / M0_CANVAS[0], M0_CROP[1] * CANVAS[1] / M0_CANVAS[1]
 FX, FY = (M0_CROP[2] - M0_CROP[0]) * CANVAS[0] / M0_CANVAS[0], (M0_CROP[3] - M0_CROP[1]) * CANVAS[1] / M0_CANVAS[1]
 K_U, K_V = 24.0 / 36.0, 24.0 / 36.0 * 16.0 / 9.0
+DEPTH_UNITS_PER_M = 5000.0
 OPEN = dict(x0=0.95, x1=2.15, y0=6.20, y1=6.35, h=2.40)
 DINING = dict(x=2.50, x_out=2.65, y0=2.97, y1=4.57)
 HALL = dict(x=(0.80, 3.60), y=(6.35, 9.80))
@@ -118,7 +119,8 @@ class Passes:
     def __init__(self, fid, f, folder=HERE):
         self.fid, self.f = fid, f
         self.cls = np.asarray(Image.open(os.path.join(folder, fid + "-id.png")))
-        self.depth = np.asarray(Image.open(os.path.join(folder, fid + "-depth.png"))).astype(np.float64) / 1000.0
+        d16 = np.asarray(Image.open(os.path.join(folder, fid + "-depth.png")))
+        self.depth = np.where(d16 == 65535, np.inf, d16.astype(np.float64) / DEPTH_UNITS_PER_M)
         self.png = os.path.join(folder, fid + ".png")
         assert self.cls.shape == (CANVAS[1], CANVAS[0]) == self.depth.shape, (fid, self.cls.shape)
         self._w = None
@@ -618,7 +620,7 @@ def tile(path, w, label, sub="", frame_box=True):
 
 
 def depth_tile(path, w, label):
-    d = np.asarray(Image.open(path)).astype(np.float64) / 1000.0
+    d = np.asarray(Image.open(path)).astype(np.float64) / DEPTH_UNITS_PER_M
     g = np.clip(1.0 - np.minimum(d, 10.0) / 10.0, 0, 1)
     im = Image.fromarray((g * 255).astype(np.uint8)).convert("RGB").resize((w, round(w * d.shape[0] / d.shape[1])), Image.BILINEAR)
     dr = ImageDraw.Draw(im)
@@ -695,7 +697,8 @@ def main():
             frames[dst] = dict(frames[src], frame=dst, copy_of=src)
     rep["frames"] = {k: frames[k] for k in F if k in frames}
     rep["cameras"] = {k: dict(loc=[r4(x) for x in v["loc"]], yaw=v["yaw"], lens=24, u0=round(v["u0"], 6), v0=round(v["v0"], 6), s_m=r4(v["s"])) for k, v in F.items()}
-    rep["depth_pass"] = "16-bit PNG, value = planar depth (along the optical axis, the plan's d) in millimetres; 65535 = beyond 65.5 m or sky"
+    rep["depth_pass"] = ("16-bit PNG; planar depth (along the optical axis, the plan's d) in metres = value / 5000 (0.2 mm per unit); "
+                         "65535 = sky (nothing in the model is farther than 13.1 m); taken at the pixel centres")
     rep["designer_values"] = table_designer(F, PF, PS)
     rep["path"] = path_events(PF)
     rep["verticals"] = verticals(PS)

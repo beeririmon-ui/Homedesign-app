@@ -19,7 +19,7 @@ Cameras: read from docs/house-plan.json (cameras H0, H0x, M0; transitions T-E0).
   0.52 / 0.46 to 0.47 / 0.50 with the distance; b: 0.47 / 0.50 throughout. S00 = H0x-a / H0x-b, S11 = M0 (rendered once).
 Canvas: the canvas of base.png, 2720 x 1530 with the 16:9 camera frame at [77.49, 43.43, 2642.51, 1486.57] (the 4072 x 2290 overscan
 canvas of the M0 clay scaled to 2720 x 1530; the 0.02 % difference between the two scales is kept, as a pixel aspect).
-Per frame: <id>.png (lit clay), <id>-depth.png (16-bit, planar depth in mm, 65535 = beyond 65.5 m or sky), <id>-id.png (surface ids,
+Per frame: <id>.png (lit clay), <id>-depth.png (16-bit, planar depth, metres = value / 5000, 65535 = sky), <id>-id.png (surface ids,
 palette PNG; legend in selfcheck.json), <id>-edges.png (structure edges, 1 px); the float passes as npz in the scratchpad.
 
   python3 framing_wm_entrance.py --frames all                       # 24 renders (about 5 min each at 16 samples)
@@ -62,6 +62,7 @@ M0_CANVAS, M0_CROP = (4072, 2290), (116, 65, 3956, 2225)          # framing_r4 o
 FRAME_BOX = (M0_CROP[0] * CANVAS[0] / M0_CANVAS[0], M0_CROP[1] * CANVAS[1] / M0_CANVAS[1],
              M0_CROP[2] * CANVAS[0] / M0_CANVAS[0], M0_CROP[3] * CANVAS[1] / M0_CANVAS[1])
 K_U, K_V = 24.0 / 36.0, 24.0 / 36.0 * 16.0 / 9.0                  # house plan 'projection': 0.6667, 1.1852
+DEPTH_UNITS_PER_M = 5000.0                                         # depth PNG: 0.2 mm per unit, 65535 = sky or beyond 13.1 m
 
 # the opening and its lining (designer 1.1; BEAD and LINING_T are the clay's reading, see the README)
 OPEN = dict(x0=0.95, x1=2.15, y0=6.20, y1=6.35, h=2.40)
@@ -428,7 +429,7 @@ def edges_of(cls, depth, normal):
 def save_passes(fid, png, depth, idx, normal, f, cv, S, out_dir):
     from PIL import Image
     base = os.path.join(out_dir, fid)
-    d16 = np.clip(np.rint(np.where(depth < 1e4, depth, 1e9) * 1000.0), 0, 65535).astype(np.uint16)
+    d16 = np.clip(np.rint(np.where(depth < 1e4, depth, 1e9) * DEPTH_UNITS_PER_M), 0, 65535).astype(np.uint16)
     Image.fromarray(d16).save(base + "-depth.png", optimize=True)
     cls, (X, Y, Z) = classify(idx, depth, normal, f, cv, S)
     im = Image.frombytes("P", (cls.shape[1], cls.shape[0]), np.ascontiguousarray(cls).tobytes())
