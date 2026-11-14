@@ -1,0 +1,56 @@
+{
+ "file": "depth.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 2.2416415214538574,
+ "d_far_m": 5.429370403289795,
+ "camera": {
+  "id": "M0",
+  "loc": [
+   0.83,
+   4.64,
+   1.2
+  ],
+  "yaw_deg_left": 25.0,
+  "lens_mm": 24,
+  "u0": 0.47,
+  "v0": 0.5
+ },
+ "canvas": "the canvas of the image; the 16:9 camera frame at frame_box (pixels)",
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "image": "phase2-2026-11-10/layers/base.png",
+ "source": {
+  "clay_depth": "wm-r4-furn-idx/M0.npz: the float depth of the M0 'furn' clay of 2026-11-07, 4072 x 2290 (scratchpad, not in the repo)",
+  "rule": "clay depth pass, edges snapped to the image (site/tools/transitions/room_depth.py)"
+ },
+ "covers": "the room as the image shows it (the empty room for base.png): shell and fixed furniture, no product layers",
+ "snap": {
+  "band_px": 207988,
+  "moved_px": 5877,
+  "to_near_px": 1726,
+  "to_far_px": 4151
+ },
+ "crispness": {
+  "before": {
+   "step_px": 32686,
+   "between_px": 662,
+   "between_share": 0.0202533194639907
+  },
+  "after": {
+   "step_px": 36712,
+   "between_px": 706,
+   "between_share": 0.019230769230769232
+  }
+ },
+ "no_surface_px": 539004,
+ "note": "motion-agent, 2026-11-14, 0 tokens. The clay depth is the float pass of the M0 'furn' clay of 2026-11-07 (assets/blockout/house/framing_wm_r4_layers.py --layer furn; the clay base.png was locked to), kept in the scratchpad (wm-r4-furn-idx/M0.npz, 4072 x 2290). The same camera is station b/S11 of framing_wm_entrance.py: when b/S11-depth.png is in the repo, rebuild from it with --clay-depth (the two must agree). Empty room only: the product layers get their depth from the M0 clay with proxies once the 12 default layers are final.",
+ "roundtrip_rel_err_max": 1.0742493941506837e-05
+}

@@ -94,15 +94,26 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     b = sub.add_parser("base")
-    b.add_argument("--clay-depth", required=True)
+    b.add_argument("--clay-depth", help="a clay depth pass, 16-bit PNG, metres = value / 5000, on the image's canvas")
+    b.add_argument("--clay-npz", help="or the float depth the clay scripts keep (npz with 'depth' in metres, >= 1e4 = no surface), on a canvas "
+                                      "with the same frame; it is brought to the image's size with nearest sampling")
     b.add_argument("--image", required=True, help="the render the map belongs to (base.png), on the same canvas")
     b.add_argument("--camera", default="M0")
     b.add_argument("--out", required=True)
     b.add_argument("--preview")
     b.add_argument("--note", default="")
     a = ap.parse_args(argv)
-    depth, valid = cg.load_depth_png(a.clay_depth)
     img = cv2.cvtColor(cv2.imread(a.image, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
+    if a.clay_npz:
+        raw = np.load(a.clay_npz)["depth"].astype(np.float32)
+        raw = cv2.resize(raw, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_NEAREST)
+        valid = raw < 1e4
+        depth = np.where(valid, raw, np.inf).astype(np.float32)
+        a.clay_depth = a.clay_npz
+    elif a.clay_depth:
+        depth, valid = cg.load_depth_png(a.clay_depth)
+    else:
+        raise SystemExit("give --clay-depth or --clay-npz")
     if img.shape[:2] != depth.shape[:2]:
         raise SystemExit(f"the clay depth is {depth.shape[1]} x {depth.shape[0]}, the image {img.shape[1]} x {img.shape[0]}: they must share a canvas")
     before = edge_sharpness(depth, valid)
