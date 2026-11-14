@@ -1,0 +1,1582 @@
+{
+ "stage": "warm-modern court + front door clay and the S1 cameras (briefs/wm-door-clay-and-d0-still-2026-11-14.md); framing_wm_door.py on framing_wm_entrance.py; 0 var2 tokens",
+ "date": "2026-11-14",
+ "clip1_length_m": 4.938000000000001,
+ "canvases": {
+  "reg": {
+   "px": [
+    2720,
+    1530
+   ],
+   "frame_box_px": [
+    77.4853,
+    43.4279,
+    2642.5147,
+    1486.5721
+   ]
+  },
+  "tall": {
+   "px": [
+    2496,
+    1664
+   ],
+   "frame_box_px": [
+    71.11,
+    170.0,
+    2424.89,
+    1494.0
+   ]
+  }
+ },
+ "render": "Cycles CPU seed 7, OIDN, AgX Medium High Contrast, exposure 0.75 for every frame (one locked exposure)",
+ "light": "the entrance clay's light: sky 7.0, living window x1.0, hall roof light x1.6; every lamp off; the court lit by the sky only",
+ "build_notes": {
+  "wm_entrance": [
+   "removed 42 objects: oak portal + casing (G-H4), cornice, console (G-H3), bench, threshold strip, hall planks 25",
+   "O-entry-living: clear opening X 0.95-2.15, Z 0-2.4 unchanged; walnut #6B4A33 on both jambs and the soffit, Y 6.206-6.344, flush with the reveal plane; shadow gap 3 mm (8 mm deep) and a 3 mm plaster bead at each face; lining 2 cm inside the wall; no casing, no leaf",
+   "8 hall skirting boards in the wall material (WMC10); ceiling 3.0 with a 1 cm shadow gap, no cornice",
+   "floor: 31 plank boxes, 22 cm, along Y, on the living room's joint lines X = -2.32 + 0.22 k (hall joints at X 0.98 .. 3.40); the living planks' last boards run on through the opening (no threshold strip); replay vs built living planks: max 0.000 mm"
+  ],
+  "door": [
+   "removed 6 objects: ['front_door_closed_h2', 'leaf_hall_work_folded', 'O-front-door_threshold', 'O-front-door_threshold_base', 'O-hall-work_threshold', 'O-hall-work_threshold_base']",
+   "court floor: 27 limestone pieces 1.2 x 0.6, rows on Y [6.55, 6.8, 7.4, 8.0, 8.6, 9.2, 9.6], slab joints across X at [3.66, 4.86, 6.0600000000000005, 7.26, 7.6]; stone into the reveal to the leaf (X 3.66)",
+   "ground plane outside (south of X 7.6; west gap X (6.6, 7.6)); court ceiling 3.0; 1 cm dark line at the wall feet",
+   "reveal: plaster (the house wall), 0.29 visible depth X 3.66-3.95; 3 cm fillets at the jamb / head inside corners",
+   "front door: walnut leaf X 3.6-3.66, Y 7.8-8.8, Z 0-2.4; bar pull d 0.025 Z (0.75, 1.35) at Y 7.9 on 4 cm standoffs; hinge axis (3.6, 8.8), opens inward",
+   "W-bath: 8 frame / sash objects in bronze #3A322C (clay profile 6 cm; the render asks for 45 mm)",
+   "O-hall-work: closed jib leaf flush with X 0.8, Y 8.103-8.997, Z 0-2.397, 3 mm gap on both sides and at the head (no skirting on the leaf)",
+   "oak floor carried into the opening to X 3.66 on the hall's joint line X 3.62; no threshold strip",
+   "winlight_W-bath off: the round-2 rig put the bath window's outside light in the court (3.85, 8.40); the court is lit by the sky alone"
+  ]
+ },
+ "ids": {
+  "0": "sky / outside (through the glazing)",
+  "10": "hall floor",
+  "11": "hall left wall (X 0.80)",
+  "12": "hall front wall (Y 6.35)",
+  "13": "hall right wall (X 3.60)",
+  "14": "hall skirting",
+  "15": "hall ceiling, roof-light well",
+  "17": "hall back wall",
+  "20": "lining, walnut: left jamb (X 0.95)",
+  "21": "lining, walnut: right jamb (X 2.15)",
+  "22": "lining, walnut: soffit (Z 2.40)",
+  "23": "lining shadow gap (3 mm)",
+  "24": "plaster bead on the reveal (3 mm)",
+  "25": "floor inside the wall depth (Y 6.20-6.35)",
+  "30": "living floor",
+  "31": "living back wall (Y 0)",
+  "32": "living window wall (X -2.30)",
+  "33": "living right wall (X 2.50)",
+  "34": "living front wall (Y 6.20)",
+  "35": "living ceiling",
+  "36": "living dropped band + track slot",
+  "37": "living rounded corner",
+  "38": "living skirting",
+  "39": "living window (frame, mullions, reveal)",
+  "40": "living window bench",
+  "41": "sofa",
+  "42": "coffee table",
+  "43": "armchair",
+  "50": "O-living-dining and the dining room behind it (the plan-1.1 clay as it stands: no warm-modern design exists)",
+  "98": "geometry without a pass index",
+  "99": "anything else (must be 0 px)",
+  "60": "court floor, limestone (incl. the reveal floor)",
+  "61": "court wall with the door (X 3.95)",
+  "62": "court left wall (Y 9.60)",
+  "63": "court right wall (Y 6.55)",
+  "64": "door reveal, plaster (jambs, head, fillets)",
+  "65": "court ceiling",
+  "66": "court wall foot line (1 cm)",
+  "67": "ground outside the court",
+  "70": "front door leaf, face",
+  "71": "front door leaf, edge",
+  "72": "door pull (bronze)",
+  "75": "bath window frame (bronze)",
+  "76": "bath window, fluted glass",
+  "82": "jib door of the study (closed)",
+  "83": "jib door shadow gap"
+ },
+ "door": {
+  "x_in": 3.6,
+  "x_leaf": 3.66,
+  "x_out": 3.95,
+  "y0": 7.8,
+  "y1": 8.8,
+  "h": 2.4,
+  "hinge": [
+   3.6,
+   8.8
+  ]
+ },
+ "court": {
+  "x": [
+   3.95,
+   7.6
+  ],
+  "y": [
+   6.55,
+   9.6
+  ],
+  "h": 3.0,
+  "west_gap_x": [
+   6.6,
+   7.6
+  ]
+ },
+ "stone": {
+  "hex": "#D8C8AE",
+  "along_x": 1.2,
+  "along_y": 0.6,
+  "y_ref": 8.0,
+  "x_ref": 3.66,
+  "joint": 0.003
+ },
+ "pull": {
+  "y": 7.9,
+  "z": [
+   0.75,
+   1.35
+  ],
+  "d": 0.025,
+  "standoff": 0.04
+ },
+ "jib": {
+  "x": [
+   0.65,
+   0.8
+  ],
+  "y": [
+   8.1,
+   9.0
+  ],
+  "h": 2.4,
+  "gap": 0.003
+ },
+ "depth_pass": "16-bit PNG; planar depth in metres = value / 5000; 65535 = sky; at the pixel centres",
+ "cameras": {
+  "D0-closed": {
+   "loc": [
+    7.4,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": null
+  },
+  "D0-none": {
+   "loc": [
+    7.4,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": null
+  },
+  "D0-open": {
+   "loc": [
+    7.4,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": null
+  },
+  "HD": {
+   "loc": [
+    2.462,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "tall",
+   "s_m": null
+  },
+  "HDx": {
+   "loc": [
+    2.462,
+    8.15,
+    1.2
+   ],
+   "yaw": 25.0,
+   "lens": 24,
+   "u0": 0.47,
+   "v0": 0.5,
+   "canvas": "tall",
+   "s_m": null
+  },
+  "HD57": {
+   "loc": [
+    2.462,
+    8.15,
+    1.2
+   ],
+   "yaw": 57.5,
+   "lens": 24,
+   "u0": 0.415,
+   "v0": 0.49,
+   "canvas": "reg",
+   "s_m": null
+  },
+  "HT": {
+   "loc": [
+    3.6,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": null
+  },
+  "c1/S00": {
+   "loc": [
+    7.4,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 0.0
+  },
+  "c1/S01": {
+   "loc": [
+    6.9511,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 0.4489
+  },
+  "c1/S02": {
+   "loc": [
+    6.5022,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 0.8978
+  },
+  "c1/S03": {
+   "loc": [
+    6.0533,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 1.3467
+  },
+  "c1/S04": {
+   "loc": [
+    5.6044,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 1.7956
+  },
+  "c1/S05": {
+   "loc": [
+    5.1555,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 2.2445
+  },
+  "c1/S06": {
+   "loc": [
+    4.7065,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 2.6935
+  },
+  "c1/S07": {
+   "loc": [
+    4.2576,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 3.1424
+  },
+  "c1/S08": {
+   "loc": [
+    3.8087,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 3.5913
+  },
+  "c1/S09": {
+   "loc": [
+    3.3598,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 4.0402
+  },
+  "c1/S10": {
+   "loc": [
+    2.9109,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 4.4891
+  },
+  "c1/S11": {
+   "loc": [
+    2.462,
+    8.15,
+    1.2
+   ],
+   "yaw": 90.0,
+   "lens": 24,
+   "u0": 0.36,
+   "v0": 0.48,
+   "canvas": "reg",
+   "s_m": 4.938
+  }
+ },
+ "frames": {
+  "D0-closed": {
+   "frame": "D0-closed",
+   "camera": {
+    "loc": [
+     7.4,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "closed",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "camera_vs_plan_projection_max_px_or_mm": 0.0008,
+   "mean_L": 207.3,
+   "surfaces_px": {
+    "10 hall floor": 466,
+    "60 court floor, limestone (incl. the reveal floor)": 372620,
+    "61 court wall with the door (X 3.95)": 1418340,
+    "62 court left wall (Y 9.60)": 364677,
+    "63 court right wall (Y 6.55)": 1388845,
+    "64 door reveal, plaster (jambs, head, fillets)": 66307,
+    "66 court wall foot line (1 cm)": 8661,
+    "70 front door leaf, face": 496369,
+    "72 door pull (bronze)": 3353,
+    "75 bath window frame (bronze)": 14365,
+    "76 bath window, fluted glass": 27132,
+    "99 anything else (must be 0 px)": 465
+   },
+   "not_allowed_px": {
+    "99 anything else (must be 0 px)": 465
+   },
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 3236687,
+    "101": 466,
+    "103": 883,
+    "155": 13482,
+    "370": 27132,
+    "710": 496369,
+    "711": 3353,
+    "712": 372620,
+    "717": 8661,
+    "718": 1947
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 3.75,
+    "sky_px": 0
+   },
+   "runtime_s": 483
+  },
+  "D0-none": {
+   "frame": "D0-none",
+   "camera": {
+    "loc": [
+     7.4,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "none",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "camera_vs_plan_projection_max_px_or_mm": 0.0008,
+   "mean_L": 215.9,
+   "surfaces_px": {
+    "10 hall floor": 106789,
+    "11 hall left wall (X 0.80)": 195361,
+    "14 hall skirting": 8815,
+    "15 hall ceiling, roof-light well": 34200,
+    "60 court floor, limestone (incl. the reveal floor)": 372620,
+    "61 court wall with the door (X 3.95)": 1418340,
+    "62 court left wall (Y 9.60)": 364677,
+    "63 court right wall (Y 6.55)": 1388845,
+    "64 door reveal, plaster (jambs, head, fillets)": 76405,
+    "66 court wall foot line (1 cm)": 8661,
+    "75 bath window frame (bronze)": 14365,
+    "76 bath window, fluted glass": 27132,
+    "82 jib door of the study (closed)": 144072,
+    "83 jib door shadow gap": 620,
+    "99 anything else (must be 0 px)": 698
+   },
+   "not_allowed_px": {
+    "99 anything else (must be 0 px)": 698
+   },
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 3442379,
+    "101": 106789,
+    "102": 28752,
+    "103": 9698,
+    "155": 13482,
+    "300": 4548,
+    "370": 27132,
+    "702": 900,
+    "712": 372620,
+    "715": 144072,
+    "716": 620,
+    "717": 8661,
+    "718": 1947
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 6.75,
+    "sky_px": 0
+   },
+   "runtime_s": 313
+  },
+  "D0-open": {
+   "frame": "D0-open",
+   "camera": {
+    "loc": [
+     7.4,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "camera_vs_plan_projection_max_px_or_mm": 0.0008,
+   "mean_L": 213.8,
+   "surfaces_px": {
+    "10 hall floor": 91145,
+    "11 hall left wall (X 0.80)": 140445,
+    "14 hall skirting": 5760,
+    "15 hall ceiling, roof-light well": 30743,
+    "60 court floor, limestone (incl. the reveal floor)": 372620,
+    "61 court wall with the door (X 3.95)": 1418340,
+    "62 court left wall (Y 9.60)": 364677,
+    "63 court right wall (Y 6.55)": 1388845,
+    "64 door reveal, plaster (jambs, head, fillets)": 76405,
+    "66 court wall foot line (1 cm)": 8661,
+    "70 front door leaf, face": 54114,
+    "71 front door leaf, edge": 29133,
+    "72 door pull (bronze)": 2105,
+    "75 bath window frame (bronze)": 14365,
+    "76 bath window, fluted glass": 27132,
+    "82 jib door of the study (closed)": 135802,
+    "83 jib door shadow gap": 620,
+    "99 anything else (must be 0 px)": 688
+   },
+   "not_allowed_px": {
+    "99 anything else (must be 0 px)": 688
+   },
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 3387453,
+    "101": 91145,
+    "102": 25423,
+    "103": 6643,
+    "155": 13482,
+    "300": 4548,
+    "370": 27132,
+    "702": 772,
+    "710": 83247,
+    "711": 2105,
+    "712": 372620,
+    "715": 135802,
+    "716": 620,
+    "717": 8661,
+    "718": 1947
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 6.75,
+    "sky_px": 0
+   },
+   "runtime_s": 330
+  },
+  "HD": {
+   "frame": "HD",
+   "camera": {
+    "loc": [
+     2.462,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2496,
+    "H": 1664,
+    "fx": 2353.7799999999997,
+    "fy": 1324.0,
+    "ox": 71.11,
+    "oy": 170.0,
+    "canvas": [
+     2496,
+     1664
+    ],
+    "frame_box": [
+     71.11,
+     170.0,
+     2424.89,
+     1494.0
+    ],
+    "pixel_aspect": [
+     1.0,
+     1.0000009536743164
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "camera_vs_plan_projection_max_px_or_mm": 0.0006,
+   "mean_L": 185.0,
+   "surfaces_px": {
+    "11 hall left wall (X 0.80)": 2738944,
+    "12 hall front wall (Y 6.35)": 1664,
+    "17 hall back wall": 4992,
+    "82 jib door of the study (closed)": 1404416,
+    "83 jib door shadow gap": 3328
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 2745600,
+    "715": 1404416,
+    "716": 3328
+   },
+   "depth_m": {
+    "min": 1.662,
+    "max_finite": 1.682,
+    "sky_px": 0
+   },
+   "runtime_s": 259
+  },
+  "HDx": {
+   "frame": "HDx",
+   "camera": {
+    "loc": [
+     2.462,
+     8.15,
+     1.2
+    ],
+    "yaw": 25.0,
+    "lens": 24,
+    "u0": 0.47,
+    "v0": 0.5,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2496,
+    "H": 1664,
+    "fx": 2353.7799999999997,
+    "fy": 1324.0,
+    "ox": 71.11,
+    "oy": 170.0,
+    "canvas": [
+     2496,
+     1664
+    ],
+    "frame_box": [
+     71.11,
+     170.0,
+     2424.89,
+     1494.0
+    ],
+    "pixel_aspect": [
+     1.0,
+     1.0000009536743164
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "camera_vs_plan_projection_max_px_or_mm": 153.5918,
+   "mean_L": 175.9,
+   "surfaces_px": {
+    "0 sky / outside (through the glazing)": 21879,
+    "10 hall floor": 860,
+    "11 hall left wall (X 0.80)": 1111018,
+    "12 hall front wall (Y 6.35)": 1611462,
+    "14 hall skirting": 22298,
+    "20 lining, walnut: left jamb (X 0.95)": 96682,
+    "22 lining, walnut: soffit (Z 2.40)": 5887,
+    "23 lining shadow gap (3 mm)": 3330,
+    "24 plaster bead on the reveal (3 mm)": 1880,
+    "25 floor inside the wall depth (Y 6.20-6.35)": 6221,
+    "30 living floor": 448778,
+    "31 living back wall (Y 0)": 228715,
+    "32 living window wall (X -2.30)": 23042,
+    "34 living front wall (Y 6.20)": 1723,
+    "35 living ceiling": 383855,
+    "36 living dropped band + track slot": 12268,
+    "37 living rounded corner": 32694,
+    "38 living skirting": 3504,
+    "39 living window (frame, mullions, reveal)": 36860,
+    "40 living window bench": 4357,
+    "41 sofa": 54510,
+    "42 coffee table": 21090,
+    "43 armchair": 20431
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "0": 21879,
+    "1": 54510,
+    "2": 21090,
+    "3": 20431,
+    "4": 13595,
+    "5": 228715,
+    "6": 23042,
+    "8": 451711,
+    "9": 383855,
+    "10": 987737,
+    "11": 3504,
+    "14": 23265,
+    "100": 1738346,
+    "101": 4148,
+    "103": 22298,
+    "520": 4357,
+    "521": 32694,
+    "522": 12268,
+    "700": 105899
+   },
+   "depth_m": {
+    "min": 1.427,
+    "max_finite": 9.3,
+    "sky_px": 21879
+   },
+   "runtime_s": 371
+  },
+  "c1/S00": {
+   "frame": "c1/S00",
+   "camera": {
+    "loc": [
+     7.4,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "camera_vs_plan_projection_max_px_or_mm": 0.0008,
+   "mean_L": 213.8,
+   "surfaces_px": {
+    "10 hall floor": 91145,
+    "11 hall left wall (X 0.80)": 140445,
+    "14 hall skirting": 5760,
+    "15 hall ceiling, roof-light well": 30743,
+    "60 court floor, limestone (incl. the reveal floor)": 372620,
+    "61 court wall with the door (X 3.95)": 1418340,
+    "62 court left wall (Y 9.60)": 364677,
+    "63 court right wall (Y 6.55)": 1388845,
+    "64 door reveal, plaster (jambs, head, fillets)": 76405,
+    "66 court wall foot line (1 cm)": 8661,
+    "70 front door leaf, face": 54114,
+    "71 front door leaf, edge": 29133,
+    "72 door pull (bronze)": 2105,
+    "75 bath window frame (bronze)": 14365,
+    "76 bath window, fluted glass": 27132,
+    "82 jib door of the study (closed)": 135802,
+    "83 jib door shadow gap": 620,
+    "99 anything else (must be 0 px)": 688
+   },
+   "not_allowed_px": {
+    "99 anything else (must be 0 px)": 688
+   },
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 3387453,
+    "101": 91145,
+    "102": 25423,
+    "103": 6643,
+    "155": 13482,
+    "300": 4548,
+    "370": 27132,
+    "702": 772,
+    "710": 83247,
+    "711": 2105,
+    "712": 372620,
+    "715": 135802,
+    "716": 620,
+    "717": 8661,
+    "718": 1947
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 6.75,
+    "sky_px": 0
+   },
+   "runtime_s": 330,
+   "copy_of": "D0-open"
+  }
+ },
+ "D0_designer_values": [
+  {
+   "key": "left frame edge meets the court's left wall at X",
+   "designer": 4.72,
+   "clay": 4.7148,
+   "diff": -0.0052,
+   "unit": "m",
+   "method": "depth pass, frame column u 0, row v0",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "left corner X 3.95 / Y 9.60, u",
+   "designer": 0.08,
+   "clay": null,
+   "diff": null,
+   "unit": "u",
+   "method": "id pass, row v0",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "bath window (frame + glass), u left",
+   "designer": 0.053,
+   "clay": 0.0532,
+   "diff": 0.0002,
+   "unit": "u",
+   "method": "id pass, extent in the frame",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "bath window, u right",
+   "designer": 0.08,
+   "clay": 0.0797,
+   "diff": -0.0003,
+   "unit": "u",
+   "method": "id pass",
+   "note": "its right side is the corner",
+   "over_gate": false
+  },
+  {
+   "key": "bath window, v top",
+   "designer": 0.12,
+   "clay": 0.123,
+   "diff": 0.003,
+   "unit": "v",
+   "method": "id pass",
+   "note": "Z 2.15 at the far jamb X 4.25",
+   "over_gate": false
+  },
+  {
+   "key": "bath window, v bottom",
+   "designer": 0.55,
+   "clay": 0.5644,
+   "diff": 0.0144,
+   "unit": "v",
+   "method": "id pass",
+   "note": "Z 1.00 at the corner X 3.95",
+   "over_gate": false
+  },
+  {
+   "key": "outer opening (X 3.95), u left (Y 8.80)",
+   "designer": 0.234,
+   "clay": 0.2345,
+   "diff": 0.0005,
+   "unit": "u",
+   "method": "id pass, row v0, door wall -> reveal",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "outer opening (X 3.95), u right (Y 7.80)",
+   "designer": 0.428,
+   "clay": 0.4275,
+   "diff": -0.0005,
+   "unit": "u",
+   "method": "id pass, row v0, reveal -> door wall",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "door centre (Y 8.30), u (left third 0.333)",
+   "designer": 0.331,
+   "clay": 0.331,
+   "diff": -0.0,
+   "unit": "u",
+   "method": "id pass: middle of the outer opening (a frontal plane: exact)",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "outer opening, head v (Z 2.40)",
+   "designer": 0.068,
+   "clay": null,
+   "diff": null,
+   "unit": "v",
+   "method": "id pass, column at the door centre",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "outer opening, floor v (Z 0)",
+   "designer": 0.892,
+   "clay": 0.8922,
+   "diff": 0.0002,
+   "unit": "v",
+   "method": "plan projection (the stone runs on into the reveal: no id step at X 3.95 on the door axis)",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf (X 3.66), u left",
+   "designer": 0.244,
+   "clay": 0.2443,
+   "diff": 0.0003,
+   "unit": "u",
+   "method": "id pass, leaf extent",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf, u right",
+   "designer": 0.422,
+   "clay": 0.422,
+   "diff": 0.0,
+   "unit": "u",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf, v top",
+   "designer": 0.1,
+   "clay": 0.1002,
+   "diff": 0.0002,
+   "unit": "v",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf, v bottom",
+   "designer": 0.86,
+   "clay": 0.8596,
+   "diff": -0.0004,
+   "unit": "v",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf rectangle for motion-agent: u 0.2441-0.4224, v 0.0997-0.8603 (left)",
+   "designer": 0.2441,
+   "clay": 0.2443,
+   "diff": 0.0002,
+   "unit": "u",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf rectangle: right",
+   "designer": 0.4224,
+   "clay": 0.422,
+   "diff": -0.0004,
+   "unit": "u",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf rectangle: top",
+   "designer": 0.0997,
+   "clay": 0.1002,
+   "diff": 0.0005,
+   "unit": "v",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "leaf rectangle: bottom",
+   "designer": 0.8603,
+   "clay": 0.8596,
+   "diff": -0.0007,
+   "unit": "v",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "vanishing point (0.36, 0.48) inside the leaf",
+   "designer": "inside",
+   "clay": "inside",
+   "diff": null,
+   "unit": "",
+   "method": "u0 / v0 against the leaf extent",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "pull, u (centre)",
+   "designer": 0.405,
+   "clay": 0.4053,
+   "diff": 0.0003,
+   "unit": "u",
+   "method": "id pass, pull extent (bar + standoffs)",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "pull, v top",
+   "designer": 0.43,
+   "clay": 0.4314,
+   "diff": 0.0014,
+   "unit": "v",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "pull, v bottom",
+   "designer": 0.62,
+   "clay": 0.6254,
+   "diff": 0.0054,
+   "unit": "v",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "right corner X 3.95 / Y 6.55, u (right third 0.667)",
+   "designer": 0.669,
+   "clay": 0.6692,
+   "diff": 0.0002,
+   "unit": "u",
+   "method": "id pass, row v0",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "right frame edge on the court's right wall at X",
+   "designer": 5.73,
+   "clay": 5.7324,
+   "diff": 0.0024,
+   "unit": "m",
+   "method": "depth pass, frame column u 1",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "floor line at the door wall, v",
+   "designer": 0.892,
+   "clay": 0.8922,
+   "diff": 0.0002,
+   "unit": "v",
+   "method": "id pass, column u 0.55: plaster / foot line -> stone",
+   "note": "the 1 cm dark line sits above it (v of its top 0.8887)",
+   "over_gate": false
+  },
+  {
+   "key": "court floor seen to X (bottom frame edge, centre)",
+   "designer": 4.67,
+   "clay": 4.661,
+   "diff": -0.009,
+   "unit": "m",
+   "method": "depth pass, bottom row of the frame",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "top frame edge on the door wall at Z",
+   "designer": 2.6,
+   "clay": 2.5971,
+   "diff": -0.0029,
+   "unit": "m",
+   "method": "depth pass, top row of the frame, u 0.55",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "court ceiling or sky in the frame (px)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id pass inside the frame",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "court ceiling or sky in the canvas overscan (px)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id pass, whole canvas",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "plaster share of the frame (designer: about 60 %)",
+   "designer": 0.6,
+   "clay": 0.7759,
+   "diff": 0.1759,
+   "unit": "share",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "stone + walnut share (designer: about 30 %)",
+   "designer": 0.3,
+   "clay": 0.2118,
+   "diff": -0.0882,
+   "unit": "share",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  },
+  {
+   "key": "bronze share (designer: under 1 %)",
+   "designer": 0.01,
+   "clay": 0.0048,
+   "diff": -0.0052,
+   "unit": "share",
+   "method": "id pass",
+   "note": "",
+   "over_gate": false
+  }
+ ],
+ "D0_gate": {
+  "composition": {
+   "door_on_left_third": true,
+   "corner_on_right_third": true,
+   "vanishing_point_inside_the_door": true,
+   "leaf_rectangle_within_0_002": true,
+   "no_ceiling_or_sky": true
+  },
+  "values_over_0_02": [],
+  "passed": true,
+  "rule": "brief 2: the composition holds (door on the left third, corner on the right third, vanishing point inside the door, the leaf's rectangle) and no value off by more than 0.02 of the frame"
+ },
+ "D0_light_linear_medians": {
+  "D0-closed": {
+   "door wall": 0.7497,
+   "left wall": 0.6929,
+   "right wall": 0.7492,
+   "stone": 0.6754,
+   "leaf": 0.209,
+   "court_over_leaf_stops": 1.84
+  },
+  "D0-open": {
+   "door wall": 0.7497,
+   "left wall": 0.6986,
+   "right wall": 0.7492,
+   "stone": 0.6809,
+   "leaf": 0.0988,
+   "hall far wall (through the door)": 0.5241,
+   "jib door": 0.4936,
+   "court_over_hall_stops": 0.52,
+   "court_over_leaf_stops": 2.92
+  },
+  "D0-none": {
+   "door wall": 0.7497,
+   "left wall": 0.6986,
+   "right wall": 0.7497,
+   "stone": 0.6814,
+   "hall far wall (through the door)": 0.5193,
+   "jib door": 0.5115,
+   "court_over_hall_stops": 0.53
+  }
+ },
+ "clip1_events": {
+  "outer opening head (X 3.95, Z 2.40) leaves the top": {
+   "clay_s_m": 0.487,
+   "motion_agent_s_m": 0.49,
+   "diff_m": -0.003
+  },
+  "outer opening floor (X 3.95, Z 0) leaves the bottom": {
+   "clay_s_m": 0.715,
+   "motion_agent_s_m": 0.71,
+   "diff_m": 0.005
+  },
+  "left jamb: the arris (3.95, 8.80) leaves the left edge": {
+   "clay_s_m": 2.246,
+   "motion_agent_s_m": 2.25,
+   "diff_m": -0.004
+  },
+  "left jamb: the leaf line (3.60, 8.80) leaves the left edge": {
+   "clay_s_m": 2.596,
+   "motion_agent_s_m": 2.6,
+   "diff_m": -0.004
+  },
+  "right jamb: the arris (3.95, 7.80) leaves the right edge": {
+   "clay_s_m": 3.085,
+   "motion_agent_s_m": 3.09,
+   "diff_m": -0.005
+  },
+  "right jamb: the inner edge (3.60, 7.80) leaves the right edge": {
+   "clay_s_m": 3.435,
+   "motion_agent_s_m": 3.44,
+   "diff_m": -0.005
+  },
+  "the hall corner (0.80, 6.35) appears past the right jamb": {
+   "clay_s_m": 3.124,
+   "motion_agent_s_m": null,
+   "diff_m": null
+  },
+  "the opening to the living (0.95, 6.35) appears past the right jamb": {
+   "clay_s_m": 3.16,
+   "motion_agent_s_m": 3.16,
+   "diff_m": 0.0
+  },
+  "the open leaf's far end (2.60, 8.74) leaves the left edge": {
+   "clay_s_m": 3.707,
+   "motion_agent_s_m": 3.71,
+   "diff_m": -0.003
+  },
+  "the hall floor at the far wall (0.80, Z 0) leaves the bottom": {
+   "clay_s_m": 3.865,
+   "motion_agent_s_m": 3.86,
+   "diff_m": 0.005
+  },
+  "the opening to the living (0.95, 6.35) leaves the right edge": {
+   "clay_s_m": 4.575,
+   "motion_agent_s_m": null,
+   "diff_m": null
+  },
+  "the hall corner (0.80, 6.35) leaves the right edge": {
+   "clay_s_m": 4.725,
+   "motion_agent_s_m": 4.73,
+   "diff_m": -0.005
+  }
+ },
+ "clip1_stations": {},
+ "turn_point": {
+  "HD": {
+   "ids_in_frame": [
+    11,
+    12,
+    17,
+    82,
+    83
+   ],
+   "ids_in_canvas": [
+    11,
+    12,
+    17,
+    82,
+    83
+   ],
+   "front_door_or_leaf_px_in_canvas": 0,
+   "wall_Z_in_canvas": [
+    0.2913,
+    2.0526
+   ],
+   "designer_Z_in_frame": "0.5-1.9",
+   "motion_agent_Z_in_canvas": "0.29-2.05",
+   "floor_ceiling_corner_px_in_canvas": 1664,
+   "jib_seams_u": [
+    0.019,
+    0.3801
+   ],
+   "corner_Y635_u": 1.082,
+   "id_steps_on_the_v0_row_u": [
+    0.0191,
+    0.0203,
+    0.3789,
+    0.3798,
+    0.3802
+   ]
+  },
+  "HDx": {
+   "ids_in_frame": [
+    0,
+    11,
+    12,
+    20,
+    23,
+    24,
+    30,
+    31,
+    32,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43
+   ],
+   "ids_in_canvas": [
+    0,
+    10,
+    11,
+    12,
+    14,
+    20,
+    22,
+    23,
+    24,
+    25,
+    30,
+    31,
+    32,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43
+   ],
+   "front_door_or_leaf_px_in_canvas": 0,
+   "soffit_or_lining_in_the_canvas_top_row_px": 232,
+   "head_corner_at_the_left_jamb_v": -0.1264,
+   "canvas_top_v": -0.1284,
+   "id_steps_on_the_v0_row_u": [
+    0.257,
+    0.2914,
+    0.2922,
+    0.3177,
+    0.3182,
+    0.3186,
+    0.3254,
+    0.3492,
+    0.3505,
+    0.3789,
+    0.3972,
+    0.4269,
+    0.6508
+   ],
+   "opening_u_hall_face": [
+    0.291,
+    0.6507
+   ]
+  }
+ },
+ "HDx_on_the_T-E0_line": {
+  "s_from_H0x_m": 0.9811,
+  "off_the_line_m": 0.0012,
+  "designer_s": 0.981,
+  "between": "b/S02 (s 0.882) and b/S03 (s 1.323)"
+ },
+ "HDx_vs_entrance_stations": [
+  {
+   "src": "HDx",
+   "dst": "b/S02",
+   "edge_px_projected": 27615,
+   "median_px": 0.0,
+   "p90_px": 1.0,
+   "share_within_2px": 0.9979,
+   "max_px": 7.1969,
+   "note": "pixel-centre sampling on both sides puts a perfect match at 0-1 px"
+  },
+  {
+   "src": "b/S02",
+   "dst": "HDx",
+   "edge_px_projected": 32560,
+   "median_px": 0.0,
+   "p90_px": 1.0,
+   "share_within_2px": 0.9538,
+   "max_px": 19.0,
+   "note": "pixel-centre sampling on both sides puts a perfect match at 0-1 px"
+  },
+  {
+   "src": "HDx",
+   "dst": "b/S03",
+   "edge_px_projected": 27294,
+   "median_px": 0.0,
+   "p90_px": 1.0,
+   "share_within_2px": 0.9481,
+   "max_px": 89.0,
+   "note": "pixel-centre sampling on both sides puts a perfect match at 0-1 px"
+  },
+  {
+   "src": "b/S03",
+   "dst": "HDx",
+   "edge_px_projected": 32164,
+   "median_px": 0.0,
+   "p90_px": 1.0,
+   "share_within_2px": 0.9968,
+   "max_px": 6.0,
+   "note": "pixel-centre sampling on both sides puts a perfect match at 0-1 px"
+  }
+ ],
+ "HD_vs_HDx": [
+  {
+   "src": "HDx",
+   "dst": "HD",
+   "edge_px_projected": 0,
+   "note": "no structure edge of the source lies in what the destination sees"
+  },
+  {
+   "src": "HD",
+   "dst": "HDx",
+   "edge_px_projected": 0,
+   "note": "no structure edge of the source lies in what the destination sees"
+  }
+ ],
+ "pass_indices_seen_max_px": {
+  "100": 3442379,
+  "101": 106789,
+  "103": 22298,
+  "155": 13482,
+  "370": 27132,
+  "710": 496369,
+  "711": 3353,
+  "712": 372620,
+  "717": 8661,
+  "718": 1947,
+  "102": 28752,
+  "300": 4548,
+  "702": 900,
+  "715": 1404416,
+  "716": 3328,
+  "0": 21879,
+  "1": 54510,
+  "2": 21090,
+  "3": 20431,
+  "4": 13595,
+  "5": 228715,
+  "6": 23042,
+  "8": 451711,
+  "9": 383855,
+  "10": 987737,
+  "11": 3504,
+  "14": 23265,
+  "520": 4357,
+  "521": 32694,
+  "522": 12268,
+  "700": 105899
+ },
+ "summary": {
+  "frames": [
+   "D0-closed",
+   "D0-none",
+   "D0-open",
+   "HD",
+   "HDx",
+   "c1/S00"
+  ],
+  "D0_gate_passed": true,
+  "D0_values_over_0_02": [],
+  "not_allowed_px": {
+   "D0-closed": {
+    "99 anything else (must be 0 px)": 465
+   },
+   "D0-none": {
+    "99 anything else (must be 0 px)": 698
+   },
+   "D0-open": {
+    "99 anything else (must be 0 px)": 688
+   },
+   "c1/S00": {
+    "99 anything else (must be 0 px)": 688
+   }
+  },
+  "camera_vs_plan_projection_max": {
+   "D0-closed": 0.0008,
+   "D0-none": 0.0008,
+   "D0-open": 0.0008,
+   "HD": 0.0006,
+   "HDx": 153.5918,
+   "c1/S00": 0.0008
+  }
+ }
+}

@@ -1,0 +1,76 @@
+{
+ "date": "2026-11-14",
+ "brief": "briefs/wm-door-clay-and-d0-still-2026-11-14.md (step 3)",
+ "decisions": [
+  "DOOR1",
+  "FB4",
+  "storyboard S1 (manager)"
+ ],
+ "budget": {
+  "cap_this_run": 1300,
+  "spent": 1300,
+  "rule": "one render and at most one fix"
+ },
+ "note": "TEST, not for the site: the owner sees D0 first (FB4); QA (qa-agent) and the designer's rejection list before anything else",
+ "references": {
+  "clay": "assets/blockout/house/framing/wm-door-2026-11-14/D0-closed.png (+ -id, -depth, -edges)",
+  "input_r1": {
+   "local": "assets/renders/hall/warm-modern/door-2026-11-14/d0-input.png",
+   "sha256_20": "36f0c38efa17e428df0d",
+   "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/148b9e54-2e5c-4389-ba92-306f4fe7318b.png",
+   "made": "the clay D0-closed.png with two code edits on its id pass: the leaf to oiled-walnut Lab (L* 44, a* 14, b* 24; the clay's was orange-brown 53 / 17 / 30), the fluted glass from black to soft grey"
+  },
+  "input_fix1": {
+   "local": "assets/renders/hall/warm-modern/door-2026-11-14/d0-fix-input.png",
+   "sha256_20": "463a31c9a55784d1e7b4",
+   "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5630b5af-aef9-4aca-b02e-7bf5394e45f8.png",
+   "made": "raw/d0-r1-locked.png (r1 warped onto the clay lines by lock_d0.py) with the floor (clay id 60) replaced by the clay's paving layout in r1's stone tone"
+  }
+ },
+ "jobs": [
+  {
+   "id": "wm-door-d0-r1",
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "estimate": 650,
+   "image_refs": 0,
+   "placeholder_id": "f8161ce5-025f-4cf8-8ffd-45199143eca0",
+   "task_id": "0ca9bca4b1f87d43d9675c912f87133b",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-0ca9bca4b1f87d43d9675c912f87133b-0-1794697764510-67b25fe4.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "raw/d0-r1-seedream.png",
+   "prompt": "assets/prompts/warm-modern-door-2026-11-14/d0.txt",
+   "verdict": "rejected on item 4 of the designer's list (slabs laid across the view in running bond, tumbled edges, a separate stone in the reveal); lines before the lock: left corner +25.7 px, floor line +11 to +12 px, leaf left +5.3, head +3.7; everything else on the list passed",
+   "locked": "raw/d0-r1-locked.png (lock_d0.py warp; worst named line 1.84 px)"
+  },
+  {
+   "id": "wm-door-d0-fix1-paving",
+   "model": "seedream-5-pro i2i 2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "estimate": 650,
+   "image_refs": 0,
+   "placeholder_id": "d0bf4dd3-09f9-4cc3-aefa-fa782cf6bbb3",
+   "task_id": "0c9a374eb31e0dcbe2eac065a9de8d9d",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-0c9a374eb31e0dcbe2eac065a9de8d9d-0-1794698035112-4cc56eac.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "raw/d0-fix1-seedream.png",
+   "prompt": "assets/prompts/warm-modern-door-2026-11-14/d0-fix-paving.txt",
+   "out": "d0.png (byte copy of the raw fix: no warp needed) and d0-graded.png (display toe, d0-grade.json)",
+   "lock": {
+    "record": "d0-lock.json",
+    "worst_median_offset_px": 1.92,
+    "pass_2px": true
+   },
+   "outside_the_floor_vs_r1_locked": "mean abs 2.35 levels (p99 7.7): the rest of r1 kept"
+  }
+ ],
+ "tokens_total": 1300
+}

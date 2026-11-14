@@ -1,120 +1,219 @@
 {
-  "version": "2026-11-14",
-  "author": "motion-agent",
-  "status": "prepared, nothing sent, 0 tokens spent. No job is sent before its gate is met.",
-  "decision": "FB4 (owner, 2026-11-14): TR-P1 = (b), cap 9,900 for the two transitions; DOOR1 = yes, cap 4,000 more for the door. Pilot cap 13,900.",
-  "plan": "docs/proposals/wm-arrival-from-door-2026-11-14.md (S1) and docs/proposals/wm-arrival-entrance-to-living-2026-11-13.md",
-  "rule": "Every job starts with var2_estimate_cost with exactly the type and params written here (SPEND2). If the live price is above `estimate` stop and report. Estimates below were taken live on 2026-11-14 (fromLiveLookup: true); an estimate is an upper-bound guide, the charge is set when the job runs.",
-  "tools": "site/tools/transitions/: camgeo.py (cameras, canvases, reprojection), turn_door.py (the turn and the door in code), walk_test.py, assemble.py (bank: end locks, grade, resample), arrival_timeline.py, export_arrival.py (sequences, manifest, master). proxy_house.py is the test fixture.",
-  "canvases": {
-    "base": "2720 x 1530, the 16:9 camera frame at [77.49, 43.43, 2642.51, 1486.57] (the canvas of base.png): D0, D0o, HT, MB0, MB-in",
-    "tall": "3:2 (seedream-5-pro 2K: 2496 x 1664 expected; read the returned size), the frame centred with 3.02 % overscan left and right, so 12.84 % above and below; at 2496 x 1664 the frame is at [71.11, 170.00, 2424.89, 1494.00]: HD, HDx",
-    "to_the_video_model": "the 16:9 frame of each still at 1920 x 1080, cut with camgeo.Canvas.crop_frame (the same call the end locks use)"
-  },
-  "estimates_live_2026-11-14": {
-    "seedream-5-pro image-to-image 2K, aspect 16:9 or 3:2": 650,
-    "nano-banana-2 image-to-image 4K, aspect 16:9 or 3:2": 450,
-    "kling-3-omni image-to-video 1080p sound:false, per second": 324,
-    "kling-3-omni 3 s / 4 s / 5 s / 6 s": [972, 1296, 1620, 1944],
-    "minimax-h3 image-to-video 2K, per second (audio always on, stripped)": 280,
-    "minimax-h3 4 s / 5 s": [1120, 1400],
-    "ltx-2.3 image-to-video 6 s": 1020,
-    "kling-4 image-to-video (keyframes) 1080p 3 s / 5 s": [2340, 3900],
-    "wan-3 image-to-video 1080p 5 s": 4000,
-    "gemini-omni-flash-1-1 image-to-video 1080p 4 s / 6 s": [1500, 2000],
-    "veo-3.1 image-to-video 8 s": 1200
-  },
-  "stills": {
-    "owner": "render-agent (prompts: docs/proposals/wm-front-door-2026-11-14.md section 6; requirements: the plan, section 2)",
-    "order": ["D0", "D0o", "HDx", "HD", "HT (only if the split of clip 1 is adopted)", "MB0", "MB-in"],
-    "model": "seedream-5-pro image-to-image 2K (650 each, live); nano-banana-2 4K (450) is render-agent's choice if it locks to the clay as well",
-    "seeds_from_motion_agent": {
-      "D0o": "the mask of the edit = the opening at the leaf plane, D0 frame u 0.2441-0.4224, v 0.0997-0.8603; every pixel outside it is copied back from D0",
-      "HDx": "the living room inside the opening = base.png reprojected through the M0 depth map: python3 site/tools/transitions/seeds.py hdx --base <base.png> --depth assets/renders/living-room/warm-modern/depth.png --out <dir>",
-      "HD": "the right 28 % of the HD canvas (u >= 0.716) = HDx reprojected, exact: python3 site/tools/transitions/seeds.py hd --hdx <HDx.png> --out <dir>"
-    }
-  },
-  "jobs": [
-    {
-      "id": "clip2",
-      "order": 1,
-      "what": "the dolly HDx -> M0, 3.87 m (also the first leg of the bedroom transition, backward)",
-      "gate": "HDx and HD passed QA and the designer; the turn built from them has 0 holes and a tone gain at the seam within 3 % (turn_door.py turn --match)",
-      "model": "kling-3-omni",
-      "type": "image-to-video",
-      "params": {"duration": 4, "resolution": "1080p", "sound": false, "first_frame_url": "<HDx 16:9 frame, 1920x1080>", "last_frame_url": "<base.png 16:9 frame, 1920x1080>"},
-      "prompt": "assets/prompts/transitions.warm-modern/clip2-hdx--m0.txt",
-      "estimate": 1296,
-      "then": [
-        "python3 site/tools/transitions/walk_test.py test --frames assets/video/raw/clip2.kling-3-omni.mp4 --route clip2 --stations assets/blockout/house/framing/wm-entrance-2026-11-14 --ids b/S02,b/S03,b/S04,b/S05,b/S06,b/S07,b/S08,b/S09,b/S10,b/S11 --line t-e0 --line-count 12 --line-first 2 --out <scratch>/clip2-walk.json",
-        "WALK: python3 site/tools/transitions/assemble.py bank --frames ... --report <scratch>/clip2-walk.json --first <HDx> --canvas-first tall --last <base.png> --canvas-last base --n 145 --out <scratch>/bank2",
-        "NOT A WALK: stop. Retry per `on_fail`; nothing else is sent."
-      ],
-      "on_fail": {
-        "a walk with local defects (flicker, a jamb that shakes)": "one retry, same model, prompt tightened on the defect: 1,296",
-        "a dissolve or a zoom": "minimax-h3, 2K, 4 s: 1,120 (another family); if it fails the same way, a threshold still in the wall and two 3 s clips: 650 + 2 x 972"
-      },
-      "status": "not sent"
-    },
-    {
-      "id": "clip1",
-      "order": 2,
-      "what": "the walk in through the door, D0o + open leaf -> HD, 4.94 m, as ONE clip (S1 as chosen)",
-      "gate": "clip2 passed the walk test; D0 and D0o passed QA; the owner saw D0",
-      "model": "kling-3-omni",
-      "type": "image-to-video",
-      "params": {"duration": 5, "resolution": "1080p", "sound": false, "first_frame_url": "<D0o + leaf at 90 deg, code composite, 1920x1080>", "last_frame_url": "<HD 16:9 frame, 1920x1080>"},
-      "prompt": "assets/prompts/transitions.warm-modern/clip1-d0--hd.txt (ONE CLIP)",
-      "estimate": 1620,
-      "risk": "from 3.16 m to 4.73 m the hall's front wall and the opening to the living room are in frame on the right, and neither end frame shows them (plan, section 3). Check those frames by eye against the clay stations before anything else.",
-      "status": "not sent"
-    },
-    {
-      "id": "clip1a",
-      "order": 2,
-      "alternative_to": "clip1 (recommended: with the threshold still HT)",
-      "what": "D0o + open leaf -> HT, 3.80 m",
-      "model": "kling-3-omni",
-      "type": "image-to-video",
-      "params": {"duration": 4, "resolution": "1080p", "sound": false, "first_frame_url": "<D0o + leaf at 90 deg>", "last_frame_url": "<HT 16:9 frame>"},
-      "prompt": "assets/prompts/transitions.warm-modern/clip1-d0--hd.txt (SPLIT, CLIP 1a)",
-      "estimate": 1296,
-      "estimate_at_3s": 972,
-      "status": "not sent"
-    },
-    {
-      "id": "clip1b",
-      "order": 3,
-      "alternative_to": "clip1",
-      "what": "HT -> HD, 1.14 m",
-      "model": "kling-3-omni",
-      "type": "image-to-video",
-      "params": {"duration": 3, "resolution": "1080p", "sound": false, "first_frame_url": "<HT 16:9 frame>", "last_frame_url": "<HD 16:9 frame>"},
-      "prompt": "assets/prompts/transitions.warm-modern/clip1-d0--hd.txt (SPLIT, CLIP 1b)",
-      "estimate": 972,
-      "status": "not sent"
-    },
-    {
-      "id": "clip3",
-      "order": 4,
-      "what": "the bedroom: the slide MB-in -> MB0, 3.15 m to the left, sinking 0.15",
-      "gate": "the arrival's clip2 passed the walk test (TR-P1 (b): staged); MB0 and MB-in passed QA; clay stations of the slide exist",
-      "model": "kling-3-omni",
-      "type": "image-to-video",
-      "params": {"duration": 4, "resolution": "1080p", "sound": false, "first_frame_url": "<MB-in 16:9 frame>", "last_frame_url": "<MB0 16:9 frame>"},
-      "prompt": "assets/prompts/transitions.warm-modern/clip3-mbin--mb0.txt (draft until the stills' clay exists)",
-      "estimate": 1296,
-      "status": "not sent"
-    }
+ "version": "2026-11-14",
+ "author": "motion-agent",
+ "status": "prepared, nothing sent, 0 tokens spent. No job is sent before its gate is met.",
+ "decision": "FB4 (owner, 2026-11-14): TR-P1 = (b), cap 9,900 for the two transitions; DOOR1 = yes, cap 4,000 more for the door. Pilot cap 13,900.",
+ "plan": "docs/proposals/wm-arrival-from-door-2026-11-14.md (S1) and docs/proposals/wm-arrival-entrance-to-living-2026-11-13.md",
+ "rule": "Every job starts with var2_estimate_cost with exactly the type and params written here (SPEND2). If the live price is above `estimate` stop and report. Estimates below were taken live on 2026-11-14 (fromLiveLookup: true); an estimate is an upper-bound guide, the charge is set when the job runs.",
+ "tools": "site/tools/transitions/: camgeo.py (cameras, canvases, reprojection, room depth I/O), turn_door.py (the turn and the door in code), walk_test.py (the clay is the ruler: --stations with -depth and -edges passes), assemble.py (bank: exposure tracking, end locks, resample in DIS), arrival_timeline.py, export_arrival.py (sequences, manifest, master), seeds.py (frames for the video model, the HD and HDx seeds), room_depth.py, clay_walk.py. proxy_house.py is the test fixture.",
+ "canvases": {
+  "base": "2720 x 1530, the 16:9 camera frame at [77.49, 43.43, 2642.51, 1486.57] (the canvas of base.png): D0, D0o, HT, MB0, MB-in",
+  "tall": "3:2 (seedream-5-pro 2K: 2496 x 1664 expected; read the returned size), the frame centred with 3.02 % overscan left and right, so 12.84 % above and below; at 2496 x 1664 the frame is at [71.11, 170.00, 2424.89, 1494.00]: HD, HDx",
+  "to_the_video_model": "the 16:9 frame of each still at 1920 x 1080, cut with camgeo.Canvas.crop_frame (the same call the end locks use)"
+ },
+ "estimates_live_2026-11-14": {
+  "seedream-5-pro image-to-image 2K, aspect 16:9 or 3:2": 650,
+  "nano-banana-2 image-to-image 4K, aspect 16:9 or 3:2": 450,
+  "kling-3-omni image-to-video 1080p sound:false, per second": 324,
+  "kling-3-omni 3 s / 4 s / 5 s / 6 s": [
+   972,
+   1296,
+   1620,
+   1944
   ],
-  "code_only": [
-    {"id": "door", "what": "the leaf opening over D0o", "command": "python3 site/tools/transitions/turn_door.py door --d0 <D0> --d0o <D0o> --canvas base --out <dir>", "tokens": 0},
-    {"id": "turn", "what": "the 65 degree turn HD -> HDx", "command": "python3 site/tools/transitions/turn_door.py turn --hd <HD> --hdx <HDx> --canvas tall --match --blur --out <dir>", "tokens": 0},
-    {"id": "arrival", "what": "door + bank 1 + turn + bank 2 -> sequences, manifest, master", "command": "python3 site/tools/transitions/export_arrival.py ... (see its docstring)", "tokens": 0}
+  "minimax-h3 image-to-video 2K, per second (audio always on, stripped)": 280,
+  "minimax-h3 4 s / 5 s": [
+   1120,
+   1400
   ],
-  "first_round_tokens": {
-    "S1 as chosen": {"stills D0, D0o, HDx, HD": 2600, "clip2 (4 s)": 1296, "clip1 (5 s)": 1620, "arrival": 5516, "bedroom: MB0, MB-in, clip3 (4 s)": 2596, "total": 8112},
-    "S1 with the threshold still HT (recommended)": {"stills D0, D0o, HDx, HD, HT": 3250, "clip2 (4 s)": 1296, "clip1a (4 s) + clip1b (3 s)": 2268, "arrival": 6814, "bedroom": 2596, "total": 9410},
-    "cap": 13900
+  "ltx-2.3 image-to-video 6 s": 1020,
+  "kling-4 image-to-video (keyframes) 1080p 3 s / 5 s": [
+   2340,
+   3900
+  ],
+  "wan-3 image-to-video 1080p 5 s": 4000,
+  "gemini-omni-flash-1-1 image-to-video 1080p 4 s / 6 s": [
+   1500,
+   2000
+  ],
+  "veo-3.1 image-to-video 8 s": 1200
+ },
+ "stills": {
+  "owner": "render-agent (prompts: docs/proposals/wm-front-door-2026-11-14.md section 6; requirements: the plan, section 2)",
+  "order": [
+   "D0",
+   "D0o",
+   "HDx",
+   "HD",
+   "HT (only if the split of clip 1 is chosen on the clay)",
+   "MB0",
+   "MB-in"
+  ],
+  "model": "seedream-5-pro image-to-image 2K (650 each, live); nano-banana-2 4K (450) is render-agent's choice if it locks to the clay as well",
+  "seeds_from_motion_agent": {
+   "D0o": "the mask of the edit = the opening at the leaf plane, D0 frame u 0.2441-0.4224, v 0.0997-0.8603; every pixel outside it is copied back from D0",
+   "HDx": "the living room inside the opening = base.png reprojected through the M0 depth map: python3 site/tools/transitions/seeds.py hdx --base <base.png> --depth assets/renders/living-room/warm-modern/depth.png --out <dir>",
+   "HD": "the right 28 % of the HD canvas (u >= 0.716) = HDx reprojected, exact: python3 site/tools/transitions/seeds.py hd --hdx <HDx.png> --out <dir>"
   }
+ },
+ "jobs": [
+  {
+   "id": "clip2",
+   "order": 1,
+   "what": "the dolly HDx -> M0, 3.87 m (also the first leg of the bedroom transition, backward)",
+   "gate": "HDx and HD passed QA and the designer; the turn built from them has 0 holes and a tone gain at the seam within 3 % (turn_door.py turn --match)",
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "params": {
+    "duration": 4,
+    "resolution": "1080p",
+    "sound": false,
+    "first_frame_url": "<HDx 16:9 frame, 1920x1080>",
+    "last_frame_url": "<base.png 16:9 frame, 1920x1080>"
+   },
+   "prompt": "assets/prompts/transitions.warm-modern/clip2-hdx--m0.txt",
+   "estimate": 1296,
+   "then": [
+    "python3 site/tools/transitions/walk_test.py test --frames assets/video/raw/clip2.kling-3-omni.mp4 --route clip2 --stations assets/blockout/house/framing/wm-entrance-2026-11-14 --ids b/S02,b/S03,b/S04,b/S05,b/S06,b/S07,b/S08,b/S09,b/S10,b/S11 --line t-e0 --line-count 12 --line-first 2 --out <scratch>/clip2-walk.json",
+    "WALK: python3 site/tools/transitions/assemble.py bank --frames ... --report <scratch>/clip2-walk.json --first <HDx> --canvas-first tall --last <base.png> --canvas-last base --n 145 --out <scratch>/bank2",
+    "NOT A WALK: stop. Retry per `on_fail`; nothing else is sent."
+   ],
+   "on_fail": {
+    "a walk with local defects (flicker, a jamb that shakes)": "one retry, same model, prompt tightened on the defect: 1,296",
+    "a dissolve or a zoom": "minimax-h3, 2K, 4 s: 1,120 (another family); if it fails the same way, a threshold still in the wall and two 3 s clips: 650 + 2 x 972"
+   },
+   "status": "not sent"
+  },
+  {
+   "id": "clip1",
+   "order": 2,
+   "what": "the walk in through the door, D0o + open leaf -> HD, 4.94 m, as ONE clip (S1 as chosen)",
+   "gate": "clip2 passed the walk test; D0 and D0o passed QA; the owner saw D0",
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "params": {
+    "duration": 5,
+    "resolution": "1080p",
+    "sound": false,
+    "first_frame_url": "<D0o + leaf at 90 deg, code composite, 1920x1080>",
+    "last_frame_url": "<HD 16:9 frame, 1920x1080>"
+   },
+   "prompt": "assets/prompts/transitions.warm-modern/clip1-d0--hd.txt (ONE CLIP)",
+   "estimate": 1620,
+   "risk": "from 3.16 m to 4.73 m the hall's front wall and the opening to the living room are in frame on the right, and neither end frame shows them (plan, section 3). Check those frames by eye against the clay stations before anything else.",
+   "status": "not sent"
+  },
+  {
+   "id": "clip1a",
+   "order": 2,
+   "alternative_to": "clip1 (the split at the threshold still HT; one form or the other is decided on the clay)",
+   "what": "D0o + open leaf -> HT, 3.80 m",
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "params": {
+    "duration": 4,
+    "resolution": "1080p",
+    "sound": false,
+    "first_frame_url": "<D0o + leaf at 90 deg>",
+    "last_frame_url": "<HT 16:9 frame>"
+   },
+   "prompt": "assets/prompts/transitions.warm-modern/clip1-d0--hd.txt (SPLIT, CLIP 1a)",
+   "estimate": 1296,
+   "estimate_at_3s": 972,
+   "status": "not sent"
+  },
+  {
+   "id": "clip1b",
+   "order": 3,
+   "alternative_to": "clip1",
+   "what": "HT -> HD, 1.14 m",
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "params": {
+    "duration": 3,
+    "resolution": "1080p",
+    "sound": false,
+    "first_frame_url": "<HT 16:9 frame>",
+    "last_frame_url": "<HD 16:9 frame>"
+   },
+   "prompt": "assets/prompts/transitions.warm-modern/clip1-d0--hd.txt (SPLIT, CLIP 1b)",
+   "estimate": 972,
+   "status": "not sent"
+  },
+  {
+   "id": "clip3",
+   "order": 4,
+   "what": "the bedroom: the slide MB-in -> MB0, 3.15 m to the left, sinking 0.15",
+   "gate": "the arrival's clip2 passed the walk test (TR-P1 (b): staged); MB0 and MB-in passed QA; clay stations of the slide exist",
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "params": {
+    "duration": 4,
+    "resolution": "1080p",
+    "sound": false,
+    "first_frame_url": "<MB-in 16:9 frame>",
+    "last_frame_url": "<MB0 16:9 frame>"
+   },
+   "prompt": "assets/prompts/transitions.warm-modern/clip3-mbin--mb0.txt (draft until the stills' clay exists)",
+   "estimate": 1296,
+   "status": "not sent"
+  }
+ ],
+ "code_only": [
+  {
+   "id": "door",
+   "what": "the leaf opening over D0o",
+   "command": "python3 site/tools/transitions/turn_door.py door --d0 <D0> --d0o <D0o> --canvas base --out <dir>",
+   "tokens": 0
+  },
+  {
+   "id": "turn",
+   "what": "the 65 degree turn HD -> HDx",
+   "command": "python3 site/tools/transitions/turn_door.py turn --hd <HD> --hdx <HDx> --canvas tall --match --blur --out <dir>",
+   "tokens": 0
+  },
+  {
+   "id": "arrival",
+   "what": "door + bank 1 + turn + bank 2 -> sequences, manifest, master",
+   "command": "python3 site/tools/transitions/export_arrival.py ... (see its docstring)",
+   "tokens": 0
+  }
+ ],
+ "first_round_tokens": {
+  "S1 as chosen": {
+   "stills D0, D0o, HDx, HD": 2600,
+   "clip2 (4 s)": 1296,
+   "clip1 (5 s)": 1620,
+   "arrival": 5516,
+   "bedroom: MB0, MB-in, clip3 (4 s)": 2596,
+   "total": 8112
+  },
+  "S1 with the threshold still HT (decided on the clay of HT and the clip-1 stations)": {
+   "stills D0, D0o, HDx, HD, HT": 3250,
+   "clip2 (4 s)": 1296,
+   "clip1a (4 s) + clip1b (3 s)": 2268,
+   "arrival": 6814,
+   "bedroom": 2596,
+   "total": 9410
+  },
+  "cap": 13900
+ },
+ "prepared_2026-11-14": {
+  "depth_map": "assets/renders/living-room/warm-modern/depth.png + depth.json (the M0 furn clay depth, edges snapped to base.png; room_depth.py)",
+  "animatic": {
+   "clay": [
+    "assets/video/animatic/animatic-clay-turn-dolly-hd--m0.7.3s.mp4",
+    "assets/video/animatic/animatic-clay-turn-dolly-hd--m0.5.5s.mp4"
+   ],
+   "proxy_whole_route": [
+    "assets/video/animatic/animatic-proxy-d0--m0.7.3.mp4",
+    "assets/video/animatic/animatic-proxy-d0--m0.5.5.mp4",
+    "assets/video/animatic/animatic-proxy-d0--m0.7.3-cut.mp4",
+    "assets/video/animatic/animatic-proxy-d0--m0.5.5-cut.mp4"
+   ],
+   "note": "internal, for the designer and the manager; the proxy ones show the rhythm only (flat grey test house)"
+  },
+  "tests": "docs/proposals/wm-arrival-from-door-2026-11-14.md section 9 (C.2): a real clay walk of clip 2 (41 renders) passes the walk test; a dissolve and a flat zoom of it fail; the bank from it keeps both ends identical to the stills; on the door clay (wm-door-2026-11-14): the code door at 90 deg matches D0-open (edges on the same pixel), and the 65 deg turn from HD + HDx on 3:2 has 0 holes and a 2-level seam",
+  "waits": "the 12 stations of clip 1 and HT (the walk-in on clay, the HT decision, the clip-1 ruler); HD57 (the mid-turn reference)"
+ }
 }

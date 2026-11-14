@@ -43,7 +43,11 @@ import camgeo as cg  # noqa: E402
 
 # front door, warm modern (wm-front-door-2026-11-14.md 1.1, 4.3; plan entry 1.3.9 proposed)
 DOOR = dict(hinge=(3.60, 8.80), width=1.00, height=2.40, thick=0.06, reveal_plane_x=3.66, y=(7.80, 8.80),
-            shade_stops_open=1.0, open_s=0.9)
+            # the outside face at 90 deg against closed: 0.41 stop darker in render-agent's door clay (D0-open vs D0-closed,
+            # the house's light rig, exposure locked to base.png); the designer wrote "about 1 stop" (his 4.3): he decides
+            shade_stops_open=0.4, open_s=0.9,
+            # the bar pull (designer 1.1): at Y 7.90, Z 0.75-1.35, d 25 mm, on two 4 cm standoffs (at Z 0.78 and 1.32)
+            pull=dict(y=7.90, z=(0.75, 1.35), d=0.025, standoff=0.04, standoff_z=(0.78, 1.32), standoff_t=0.012))
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -291,6 +295,54 @@ def _quad(cam: cg.Cam, cv: cg.Canvas, p0, p1, z0, z1):
     return np.stack([x, y], axis=1).astype(np.float32)
 
 
+def _local(theta_deg: float, door, x: float, y: float):
+    """A point given in the CLOSED leaf's plan coordinates, carried round the hinge to the opening angle."""
+    t = math.radians(theta_deg)
+    hx, hy = door["hinge"]
+    lx, ly = x - hx, y - hy
+    return (hx + lx * math.cos(t) + ly * math.sin(t), hy - lx * math.sin(t) + ly * math.cos(t))
+
+
+def _pull_quads(theta_deg: float, door=DOOR):
+    """The pull as camera-facing quads in plan coordinates: the bar, and the two standoffs (which show once the leaf
+    has turned). Each: (p0, p1, z0, z1)."""
+    P = door["pull"]
+    xf = door["hinge"][0] + door["thick"]                     # the outside face of the closed leaf
+    xc = xf + P["standoff"] + P["d"] / 2                      # the bar's axis
+    out = []
+    # the bar: a strip d wide, across the line of sight (for a camera looking along -X this is along Y)
+    c = _local(theta_deg, door, xc, P["y"])
+    out.append(((c[0], c[1] + P["d"] / 2), (c[0], c[1] - P["d"] / 2), P["z"][0], P["z"][1]))
+    for zc in P["standoff_z"]:
+        a = _local(theta_deg, door, xf, P["y"])
+        b = _local(theta_deg, door, xc, P["y"])
+        out.append((a, b, zc - P["standoff_t"] / 2, zc + P["standoff_t"] / 2))
+    return out
+
+
+_LEAF_CACHE: dict = {}
+
+
+def leaf_texture(d0: np.ndarray, d0_cam: cg.Cam, d0_cv: cg.Canvas, door=DOOR):
+    """D0 with the pull painted out of the leaf (the pull is drawn as its own object, so that it stands off the
+    face when the leaf turns), and the pull's colour. Cached per image."""
+    key = (id(d0), d0.shape)
+    if key in _LEAF_CACHE:
+        return _LEAF_CACHE[key]
+    H, W = d0.shape[:2]
+    m = np.zeros((H, W), np.uint8)
+    for q in _pull_quads(0.0, door):
+        quad = _quad(d0_cam, d0_cv, q[0], q[1], q[2], q[3])
+        if quad is not None:
+            cv2.fillConvexPoly(m, np.round(quad).astype(np.int32), 255)
+    col = np.median(d0[cv2.erode(m, np.ones((3, 3), np.uint8)) > 0], axis=0) if m.any() else np.array([0.23, 0.2, 0.17], np.float32)
+    m = cv2.dilate(m, np.ones((7, 7), np.uint8))
+    tex = cv2.inpaint(np.clip(np.rint(d0 * 255), 0, 255).astype(np.uint8), m, 5, cv2.INPAINT_TELEA).astype(np.float32) / 255.0
+    _LEAF_CACHE.clear()
+    _LEAF_CACHE[key] = (tex, col.astype(np.float32))
+    return _LEAF_CACHE[key]
+
+
 def door_frame(base: np.ndarray, d0: np.ndarray, cam: cg.Cam, cv: cg.Canvas, theta_deg: float, d0_cam: cg.Cam = cg.D0,
                d0_cv: cg.Canvas | None = None, door=DOOR) -> np.ndarray:
     """The leaf at `theta_deg` (0 closed, 90 open) drawn over `base` as seen by `cam`.
@@ -331,15 +383,25 @@ def door_frame(base: np.ndarray, d0: np.ndarray, cam: cg.Cam, cv: cg.Canvas, the
         col = strip.reshape(-1, 3).mean(axis=0) * shade * 0.8 if strip.size else np.array([0.3, 0.2, 0.15], np.float32)
         m = (m * mask)[..., None]
         out = out * (1 - m) + col[None, None] * m
-    # 2) the outside face
+    # 2) the outside face (its texture without the pull)
+    leaf, pull_col = leaf_texture(d0, d0_cam, d0_cv, door)
     if face_w > 0.3:
         Hm = cv2.getPerspectiveTransform(q_src, q_face)
-        tex = cv2.warpPerspective(d0, Hm, (W, H), flags=cv2.INTER_AREA if face_w < 0.5 * abs(q_src[1, 0] - q_src[0, 0]) else cv2.INTER_LINEAR,
+        tex = cv2.warpPerspective(leaf, Hm, (W, H), flags=cv2.INTER_AREA if face_w < 0.5 * abs(q_src[1, 0] - q_src[0, 0]) else cv2.INTER_LINEAR,
                                   borderMode=cv2.BORDER_REPLICATE)
         m = np.zeros((H, W), np.float32)
         cv2.fillConvexPoly(m, np.round(q_face * 16).astype(np.int32), 1.0, lineType=cv2.LINE_AA, shift=4)
         m = (m * mask)[..., None]
         out = out * (1 - m) + tex * shade * m
+    # 3) the pull: the standoffs first, then the bar, in front of the face, seen through the opening only
+    for q in _pull_quads(theta_deg, door)[1:] + _pull_quads(theta_deg, door)[:1]:
+        quad = _quad(cam, cv, q[0], q[1], q[2], q[3])
+        if quad is None:
+            continue
+        m = np.zeros((H, W), np.float32)
+        cv2.fillConvexPoly(m, np.round(quad * 16).astype(np.int32), 1.0, lineType=cv2.LINE_AA, shift=4)
+        m = (m * mask)[..., None]
+        out = out * (1 - m) + pull_col[None, None] * m
     return np.clip(out, 0, 1)
 
 

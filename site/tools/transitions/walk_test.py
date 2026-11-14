@@ -19,7 +19,9 @@ The four checks
               it at the frame's position; more than 5 % off fails.
  2 dissolve   Each middle frame is fitted as a mix of the first and the last frame (on gradients, so that plaster
               that is the same colour everywhere does not count as agreement). In a walk the middle frames are not a
-              mix of the ends (R2 low); in a dissolve they are (R2 near 1).
+              mix of the ends (R2 low); in a dissolve they are (R2 near 1). The same fit with the first frame
+              enlarged and the last frame reduced as flat pictures (the best scale of each) catches the flat zoom
+              even where the structure is too shallow for check 1 (flat_zoom_r2).
  3 progress   s must rise all the time. A stretch where the picture changes but s does not is a morph. Uneven speed
               does not fail (the assembly resamples to constant speed); s per frame is written out for that.
  4 verticals  A level camera keeps every vertical edge vertical in every frame: long segments within 10 degrees of
@@ -227,6 +229,52 @@ def dissolve_r2(frames: list[np.ndarray]) -> list[float]:
     return out
 
 
+def flat_zoom_r2(frames: list[np.ndarray], cam0: cg.Cam, step: int = 2) -> list[float]:
+    """For each middle frame (25-75 % of the clip): the best FLAT zoom of the first frame (scale 1-6 about the
+    vanishing point) and the best flat zoom-out of the last frame (scale 1/6-1), and the R2 of the frame's gradients
+    as a mix of the two. A flat picture that grows (with or without a melt into the last frame) is explained well
+    (R2 near 1). A real walk is not: near and far structure grow at different rates, so no one scale aligns them."""
+    W, H = 480, 270
+    cx, cy = cam0.u0 * W, cam0.v0 * H
+
+    def gray(im):
+        g = cv2.cvtColor(cv2.resize(im, (W, H), interpolation=cv2.INTER_AREA), cv2.COLOR_RGB2GRAY).astype(np.float32)
+        return cv2.GaussianBlur(g, (0, 0), 1.0)
+
+    def grad(g):
+        return np.concatenate([cv2.Sobel(g, cv2.CV_32F, 1, 0).ravel(), cv2.Sobel(g, cv2.CV_32F, 0, 1).ravel()])
+
+    def zoomed(g, k):
+        M = np.array([[k, 0, cx * (1 - k)], [0, k, cy * (1 - k)]], np.float32)
+        return grad(cv2.warpAffine(g, M, (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE))
+
+    gA, gB = gray(frames[0]), gray(frames[-1])
+    sA, sB = np.geomspace(1.0, 6.0, 31), np.geomspace(1 / 6.0, 1.0, 31)
+    KA = [zoomed(gA, k) for k in sA]
+    KB = [zoomed(gB, k) for k in sB]
+    nA = [float(x @ x) + 1e-9 for x in KA]
+    nB = [float(x @ x) + 1e-9 for x in KB]
+
+    def best(g, scales, K, nK, y):
+        i = int(np.argmax([(x @ y) / np.sqrt(n) for x, n in zip(K, nK)]))
+        lo, hi = scales[max(0, i - 1)], scales[min(len(scales) - 1, i + 1)]
+        cand = [(K[i], (K[i] @ y) / np.sqrt(nK[i]))]
+        for k in np.geomspace(lo, hi, 13):                      # refine to about 0.5 % of scale
+            x = zoomed(g, float(k))
+            cand.append((x, (x @ y) / np.sqrt(float(x @ x) + 1e-9)))
+        return max(cand, key=lambda c: c[1])[0]
+
+    T = len(frames)
+    out = []
+    for t in range(int(T * 0.25), max(int(T * 0.25) + 1, int(T * 0.75)), step):
+        y = grad(gray(frames[t]))
+        X = np.stack([best(gA, sA, KA, nA, y), best(gB, sB, KB, nB, y)], axis=1)
+        coef = np.linalg.solve(X.T @ X + 1e-6 * np.eye(2), X.T @ y)
+        r = y - X @ coef
+        out.append(float(1 - (r @ r) / max(1e-9, y @ y)))
+    return out
+
+
 def verticals(frames: list[np.ndarray], step: int = 4) -> dict:
     """Tilt (degrees from vertical) of long near-vertical segments: the length-weighted median per sampled frame."""
     try:
@@ -284,7 +332,7 @@ def walk_test(frames: list[np.ndarray], R: Ruler, limits: dict = LIMITS) -> dict
     # a single wild frame (edges that fit two places) is replaced by its neighbours' median for the tables
     med = np.array([np.median(s_filled[max(0, i - 2):i + 3]) for i in range(T)])
     typical_step = float(np.median(np.abs(np.diff(s_filled)))) if T > 1 else 0.0
-    wild = np.abs(s_filled - med) > max(0.12, 3.0 * typical_step)
+    wild = np.abs(s_filled - med) > max(0.12, 2.0 * typical_step)
     s_table = np.where(wild, med, s_filled)
 
     # 1 parallax: sizes of the near and of the far structure against the plan at the frame's position
@@ -312,6 +360,8 @@ def walk_test(frames: list[np.ndarray], R: Ruler, limits: dict = LIMITS) -> dict
     r2 = dissolve_r2(frames)
     mid = r2[int(T * 0.25):max(int(T * 0.25) + 1, int(T * 0.75))]
     dis = dict(r2_mid_median=float(np.median(mid)), r2_mid_max=float(np.max(mid)))
+    zr = flat_zoom_r2(frames, R.cam0)
+    dis["flat_zoom_r2_mid_median"] = float(np.median(zr)) if zr else None
 
     # 3 progress
     ds = np.diff(s_table)
@@ -334,6 +384,9 @@ def walk_test(frames: list[np.ndarray], R: Ruler, limits: dict = LIMITS) -> dict
     fails, defects = [], []
     if dis["r2_mid_median"] > limits["dissolve_r2"]:
         fails.append(f"dissolve: the middle frames are a mix of the end frames (R2 {dis['r2_mid_median']:.2f} > {limits['dissolve_r2']})")
+    if dis["flat_zoom_r2_mid_median"] is not None and dis["flat_zoom_r2_mid_median"] > limits["dissolve_r2"] and dis["r2_mid_median"] <= limits["dissolve_r2"]:
+        fails.append(f"flat zoom: the middle frames are the first frame enlarged as one flat picture (R2 {dis['flat_zoom_r2_mid_median']:.2f} > "
+                     f"{limits['dissolve_r2']}): no parallax, not a walk")
     if par["p90_abs"] is not None and par["p90_abs"] > limits["parallax_dev"]:
         fails.append(f"parallax: near and far structure are up to {par['p90_abs']:.0%} off the sizes the plan gives them (limit 5 %): a zoom, not a walk")
     if prog["stall_frac"] > limits["stall_frac"]:

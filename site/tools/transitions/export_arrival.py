@@ -43,6 +43,7 @@ import turn_door as td  # noqa: E402
 PHONE_BUDGET_PER_2S = 1.5e6      # bytes, phone, AVIF (motion-agent standing brief)
 FIRST_LOAD_BUDGET = 3.0e6        # bytes, phone (docs/skeleton-spec.md, "יעדי ביצועים": first load of a room)
 ROOM_FIRST_LOAD = 1.13e6         # bytes, the living room's own first load on the phone as measured in MOCK2
+D0_BYTES = 0.12e6                # bytes, the door image at 1080 (AVIF), an estimate until D0 exists
 
 
 class Bank:
@@ -94,6 +95,8 @@ def main(argv=None) -> int:
     ap.add_argument("--canvas-turn", default="tall", choices=["base", "tall", "frame"])
     ap.add_argument("--version", default="7.3", choices=sorted(tl.VERSIONS), help="the -cut versions are for a preview clip (--mp4-only): "
                     "on the site the cut is the same frames with the turn skipped")
+    ap.add_argument("--desktop-fps", type=int, default=60, choices=[30, 60], help="stored frames per second of the 1920 sequence: 60, or 30 "
+                    "with the same blur and neighbour blend as the phone (half the weight)")
     ap.add_argument("--mp4-only", action="store_true", help="write only the clip (--mp4), no sequences and no manifest")
     ap.add_argument("--out", required=True)
     ap.add_argument("--w", type=int, default=1920)
@@ -138,7 +141,7 @@ def main(argv=None) -> int:
             return f
         return b2.at(st["s2"])
 
-    variants = {"1920": dict(w=W, h=H, fps=60, step=1), "1080": dict(w=1080, h=608, fps=30, step=2)}
+    variants = {"1920": dict(w=W, h=H, fps=a.desktop_fps, step=60 // a.desktop_fps), "1080": dict(w=1080, h=608, fps=30, step=2)}
     if a.only:
         variants = {a.only: variants[a.only]}
     if a.mp4_only:
@@ -169,11 +172,12 @@ def main(argv=None) -> int:
         if ff:
             g = f if (mw, mh) == (W, H) else cv2.resize(f, (mw, mh), interpolation=cv2.INTER_AREA)
             ff.stdin.write(to8(g).tobytes())
-        if "1920" in variants:
+        if "1920" in variants and a.desktop_fps == 60:
             q = last_q if i >= n60 - 10 else a.aq
             futs["1920"].append(pool.submit(encode, to8(f), os.path.join(a.out, "1920", f"{i + 1:04d}"), q, 72))
         # the 30 fps frame j sits at 60 fps frame 2j and is the mean of frames 2j-1, 2j, 2j+1
-        if "1080" in variants:
+        half = [k for k in variants if variants[k]["fps"] == 30]
+        if half:
             emit = []
             if i >= 1 and (i - 1) % 2 == 0:
                 emit.append((i - 1) // 2)
@@ -185,9 +189,11 @@ def main(argv=None) -> int:
                     g = ring[c]                                   # the two end frames stay exact
                 else:
                     g = 0.25 * ring[c - 1] + 0.5 * ring[c] + 0.25 * ring[c + 1]
-                g = cv2.resize(g, (1080, 608), interpolation=cv2.INTER_AREA)
                 q = last_q if jj >= n30 - 5 else a.aq
-                futs["1080"].append((jj, pool.submit(encode, to8(g), os.path.join(a.out, "1080", f"{jj + 1:04d}"), q, 60)))
+                for k in half:
+                    vw, vh = variants[k]["w"], variants[k]["h"]
+                    gk = g if (vw, vh) == (W, H) else cv2.resize(g, (vw, vh), interpolation=cv2.INTER_AREA)
+                    futs[k].append((jj, pool.submit(encode, to8(gk), os.path.join(a.out, k, f"{jj + 1:04d}"), q, 60 if k == "1080" else 72)))
     if ff:
         ff.stdin.close()
         ff.wait()
@@ -197,7 +203,7 @@ def main(argv=None) -> int:
     bytes_ = {}
     counts = {}
     for k in variants:
-        if k == "1920":
+        if variants[k]["fps"] == 60:
             res = [x.result() for x in futs[k]]
         else:
             seen = {}
@@ -231,7 +237,7 @@ def main(argv=None) -> int:
         first_frame="D0: identical to the door still at this size", last_frame="M0: identical to the 16:9 frame of base.png at this size",
         cut_version=None if V.cut else dict(rule="the version inside U5: skip the frames of segment 'turn' (a cut HD -> HDx); play_s is shorter by the turn",
                                             play_s=round(play - V.turn_s, 3)),
-        loading=dict(before_the_press="frame 1 (it is the resting door image) and segments door, door+walk, walk",
+        loading=dict(before_the_press="the door image (frame 1 is the same picture) and segments door, door+walk, walk",
                      stream="segments turn, dolly, landing, hold: requested at once, in play order; the button waits until they are in, or until "
                             "the measured rate puts their arrival before they are due with a 1.5x margin",
                      never="no frame is waited for during play: a late frame is skipped and counted"),
@@ -245,8 +251,12 @@ def main(argv=None) -> int:
         man["phone_budget"] = dict(per_2s_limit=PHONE_BUDGET_PER_2S, per_2s=man["bytes_per_2s"]["1080"]["avif"],
                                    per_2s_ok=man["bytes_per_2s"]["1080"]["avif"] <= PHONE_BUDGET_PER_2S,
                                    before_the_press_frames=pre_last, before_the_press_bytes=pre, streamed_bytes=bytes_["1080"]["avif"] - pre,
-                                   first_load_with_room=int(ROOM_FIRST_LOAD + pre), first_load_limit=FIRST_LOAD_BUDGET,
-                                   first_load_ok=(ROOM_FIRST_LOAD + pre) <= FIRST_LOAD_BUDGET)
+                                   first_load=int(D0_BYTES + pre), first_load_limit=FIRST_LOAD_BUDGET,
+                                   first_load_ok=(D0_BYTES + pre) <= FIRST_LOAD_BUDGET,
+                                   room_layers_stream_during_the_walk=int(ROOM_FIRST_LOAD),
+                                   all_by_the_landing=int(D0_BYTES + bytes_["1080"]["avif"] + ROOM_FIRST_LOAD),
+                                   rule="first load = the door image and the frames up to the turn; the rest of the frames and the living room's "
+                                        "layers stream from the press, in play order (they are needed from the turn and from the landing)")
     with open(os.path.join(a.out, "manifest.json"), "w") as fh:
         json.dump(man, fh, indent=1, ensure_ascii=False)
     print(json.dumps(dict(version=V.name, frames=counts, bytes=bytes_, bytes_per_2s=man["bytes_per_2s"], phone_budget=man.get("phone_budget"),

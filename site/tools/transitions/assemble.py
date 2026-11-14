@@ -118,25 +118,58 @@ def robust_gain(src: np.ndarray, dst: np.ndarray) -> np.ndarray:
     return np.array(g, np.float32)
 
 
-def grade(frames: list[np.ndarray], s: np.ndarray, first: np.ndarray | None, last: np.ndarray | None, window: int = 9) -> dict:
-    """In place: the anchored gain, then deflicker. Call BEFORE end_lock (it measures the model's own end frames)."""
+def exposure_track(frames: list[np.ndarray], work_w: int = 480) -> tuple[np.ndarray, dict]:
+    """The clip's own exposure, frame by frame, measured on the SAME surfaces: each frame is moved onto the previous
+    one along the optical flow, and the median log-ratio of the matched pixels (mid-tones, away from edges, flow
+    consistent both ways) is that step's exposure change, per channel. In a real walk with the exposure locked a
+    surface keeps its brightness, so every change found here is the model's breathing or flicker. Returns the
+    cumulative log exposure (frames, 3), relative to frame 1."""
+    E = np.zeros((len(frames), 3), np.float64)
+    used = []
+    prev = None
+    for t, f in enumerate(frames):
+        h = int(round(f.shape[0] * work_w / f.shape[1]))
+        cur = cv2.resize(f, (work_w, h), interpolation=cv2.INTER_AREA)
+        if prev is not None:
+            f01 = flow(prev, cur, 1.0)
+            f10 = flow(cur, prev, 1.0)
+            back = backwarp(f10, f01)
+            ok = np.hypot(*(f01 + back).transpose(2, 0, 1)) < 0.75
+            cw = backwarp(cur, f01).astype(np.float32)
+            pv = prev.astype(np.float32)
+            g = cv2.cvtColor(prev, cv2.COLOR_RGB2GRAY).astype(np.float32)
+            edge = np.hypot(cv2.Sobel(g, cv2.CV_32F, 1, 0), cv2.Sobel(g, cv2.CV_32F, 0, 1)) > 40
+            ok &= ~cv2.dilate(edge.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
+            ok &= (pv.min(axis=2) > 18) & (pv.max(axis=2) < 238) & (cw.min(axis=2) > 18) & (cw.max(axis=2) < 238)
+            ok[:8], ok[-8:], ok[:, :8], ok[:, -8:] = False, False, False, False
+            used.append(float(ok.mean()))
+            if ok.sum() > 400:
+                r = np.median(np.log(cw[ok]) - np.log(pv[ok]), axis=0)
+            else:
+                r = np.zeros(3)
+            E[t] = E[t - 1] + r
+        prev = cur
+    return E, dict(matched_share_min=min(used) if used else None, matched_share_median=float(np.median(used)) if used else None)
+
+
+def grade(frames: list[np.ndarray], s: np.ndarray, first: np.ndarray | None, last: np.ndarray | None) -> dict:
+    """In place: (1) the model's own exposure changes are taken out (exposure_track: a surface keeps its brightness
+    in a real walk, so the change from the hall to the brighter living room stays, because it is a change of WHAT
+    is in frame, not of HOW it is exposed); (2) a gain per channel takes the first frame to the first still and the
+    last frame to the last still, interpolated along the walk. Call BEFORE end_lock."""
     L = max(1e-6, float(s[-1] - s[0]))
+    E, info = exposure_track(frames)
+    corr = np.exp(-E).astype(np.float32)                                         # back to frame 1's exposure
+    f_last = np.clip(frames[-1].astype(np.float32) * corr[-1][None, None], 0, 255).astype(np.uint8)
     g0 = robust_gain(frames[0], first) if first is not None else np.ones(3, np.float32)
-    g1 = robust_gain(frames[-1], last) if last is not None else np.ones(3, np.float32)
-    # brightness trend: the walk has a real one (hall -> living); only what leaves the smooth trend is flicker
-    lum = np.array([float(np.median(cv2.resize(f, (96, 54), interpolation=cv2.INTER_AREA).astype(np.float32).mean(axis=2))) for f in frames])
-    k = window // 2
-    pad = np.pad(np.log(np.maximum(lum, 1.0)), (k, k), mode="edge")
-    trend = np.array([np.median(pad[i:i + window]) for i in range(len(lum))])
-    trend = np.convolve(np.pad(trend, (k, k), mode="edge"), np.ones(window) / window, mode="valid")
-    flick = np.exp(trend - np.log(np.maximum(lum, 1.0)))
-    flick = np.clip(flick, 0.93, 1.07)
+    g1 = robust_gain(f_last, last) if last is not None else np.ones(3, np.float32)
     for i, f in enumerate(frames):
         p = float((s[i] - s[0]) / L)
-        g = np.exp(np.log(g0) * (1 - p) + np.log(g1) * p) * flick[i]
+        g = corr[i] * np.exp(np.log(g0) * (1 - p) + np.log(g1) * p)
         frames[i] = np.clip(f.astype(np.float32) * g[None, None] + 0.5, 0, 255).astype(np.uint8)
     return dict(gain_first=[round(float(x), 4) for x in g0], gain_last=[round(float(x), 4) for x in g1],
-                flicker_max=float(np.abs(flick - 1).max()), flicker_rms=float(np.sqrt(((flick - 1) ** 2).mean())))
+                exposure_drift_max_stops=round(float(np.abs(E).max() / math.log(2)), 4),
+                exposure_end_stops=[round(float(x / math.log(2)), 4) for x in E[-1]], **info)
 
 
 def monotone(s: np.ndarray, smooth: int = 5) -> np.ndarray:
@@ -181,9 +214,11 @@ def build_bank(frames: list[np.ndarray], s: np.ndarray, first: np.ndarray | None
     rep["grade"] = grade(frames, s, first, last)
     rep["end_lock"] = end_lock(frames, first, last, lock_n)
     L = float(s[-1]) if length is None else length
-    # the model's end frames ARE the stills' cameras: pin the table to 0 and L
-    s = s - s[0]
-    s = s * (L / max(1e-6, s[-1]))
+    # the walk test measures every frame against the clay, so its positions are absolute: keep them. Only the two end
+    # frames, which become the stills, are pinned to 0 and L (a model end frame a few pixels off reads as a few cm
+    # off; shifting the whole table by that would make every frame lag).
+    s = np.clip(np.asarray(s, np.float64).copy(), 0.0, L)
+    s[0], s[-1] = 0.0, L
     bank, pos = resample(frames, s, n, 0.0, L)
     if first is not None:
         bank[0] = first.copy()
@@ -281,14 +316,20 @@ def selftest(out_dir: str, w: int = 960, n_src: int = 61, n_bank: int = 49) -> d
         r2 = wt.walk_test(bank, R)
         sb = np.array(r2["s_filled"])
         ideal = np.linspace(0, L, n_bank)
-        step = np.diff(sb)
-        mid = slice(2, n_bank - 3)
+        # speed over 4-frame spans: the walk test's own scatter (a few mm per frame) is not a change of speed
+        step = (sb[4:] - sb[:-4]) / 4.0
+        mid = slice(1, len(step) - 1)
+        lv = [float(b_.astype(np.float32).mean() - to8(ph.render(cg.lerp_cam(c0, c1, k / (n_bank - 1)), fr, "open")[0]).astype(np.float32).mean())
+              for k, b_ in list(enumerate(bank))[::6]]
         rep[route] = dict(walk_test_raw=r["verdict"], walk_test_bank=r2["verdict"], bank=brep,
                           first_identical=bool(np.array_equal(bank[0], first8)), last_identical=bool(np.array_equal(bank[-1], last8)),
                           psnr_vs_exact=dict(min=round(min(ps[1:-1]), 2), mean=round(float(np.mean(ps[1:-1])), 2)),
                           raw_speed_max_over_min=round(float(np.diff(prog).max() / max(1e-9, np.diff(prog).min())), 2),
-                          bank_position_error_m=dict(mean=round(float(np.abs(sb - ideal).mean()), 4), max=round(float(np.abs(sb - ideal).max()), 4)),
-                          bank_speed_dev_from_constant=round(float(np.abs(step[mid] / np.median(step[mid]) - 1).max()), 4))
+                          bank_position_error_m=dict(mean=round(float(np.abs(sb - ideal).mean()), 4), p90=round(float(np.percentile(np.abs(sb - ideal), 90)), 4),
+                                                     max=round(float(np.abs(sb - ideal).max()), 4)),
+                          bank_speed_dev_from_constant=dict(p90=round(float(np.percentile(np.abs(step[mid] / np.median(step[mid]) - 1), 90)), 4),
+                                                            max=round(float(np.abs(step[mid] / np.median(step[mid]) - 1).max()), 4)),
+                          bank_mean_level_vs_exact_every6=[round(x, 2) for x in lv])
         write_frames(bank[::6], os.path.join(out_dir, f"{route}-bank-every6"), "jpg", 90)
     with open(os.path.join(out_dir, "assemble-selftest.json"), "w") as fh:
         json.dump(rep, fh, indent=1)
