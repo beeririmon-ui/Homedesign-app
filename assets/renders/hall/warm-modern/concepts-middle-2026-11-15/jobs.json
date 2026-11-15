@@ -1,0 +1,158 @@
+{
+ "date": "2026-11-15",
+ "brief": "briefs/wm-entrance-middle-concepts-2026-11-15.md",
+ "decisions": [
+  "FB5",
+  "FB6"
+ ],
+ "purpose": "CONCEPT ONLY: for the owner to choose one of the three \"middle\" entrance variants (M1, M2, M3). Not for the site, not locked, not keyframes.",
+ "model": "flux-2",
+ "model_choice": "Set by the brief: the same model as the first round (concepts-2026-11-15), so the owner compares like with like.",
+ "params": {
+  "type": "text-to-image",
+  "aspect_ratio": "16:9",
+  "resolution": "1K",
+  "image_url": null,
+  "image_refs": null,
+  "seed": "not exposed by var2 for flux-2 (each sample is random; a re-send of the same prompt gives a different image)"
+ },
+ "output_note": "flux-2 \"16:9\" at 1K returns 1344x768 (7:4, 1.75:1), JPEG. Files are the bytes var2 delivered, not re-encoded.",
+ "budget": {
+  "cap_this_run": 750,
+  "hard_cap_with_one_retry": 1000,
+  "estimate_per_image": 250,
+  "estimates": "var2_estimate_cost before the first three (3 x 250 = 750) and again before the retry (250)",
+  "spent": 1000,
+  "calls": 4,
+  "retries_used": 1,
+  "retries_left": 0
+ },
+ "jobs": [
+  {
+   "id": "M1-r1",
+   "file": "M1-r1.jpg",
+   "variant": "M1",
+   "role": "first try of M1; kept as an alternate, not on the sheets",
+   "placeholder_id": "24c39025-57e4-4e0d-87a8-b7e7cf8bb43a",
+   "task_id": "fa5d711a6da5b4a08814af107cf7c01c",
+   "batch_id": "ac551127-71e1-4b3f-b9d2-7bd0c5f7dabc",
+   "idempotency_key": "wm-entrance-middle-2026-11-15-M1-r1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-fa5d711a6da5b4a08814af107cf7c01c-0-1794768907353-6a7b5712.jpg",
+   "created_at": "2026-11-15T18:52:48Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "0a319a48340cf0d4b14c260c76d96b9c6feab0c8a5b2c95242a08244c742beff",
+   "bytes": 408436,
+   "share_url": "https://www.var2.ai/image/24c39025-57e4-4e0d-87a8-b7e7cf8bb43a",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §10.4.8 (line 707), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "2464f31bbfbd288fb856b0706538b3120d222b5bcce9a967c98ee24484016237",
+   "prompt_chars": 2057,
+   "prompt": "House-tour photograph of the front entrance of an ordinary single-storey family home in a quiet Mediterranean suburb, 16:9. The camera stands on the front garden path at eye height 1.2 m, 24 mm lens, perfectly level, verticals straight, everything sharp, looking straight into a small covered entrance porch about 3 m wide and 3.5 m deep that fills the frame edge to edge: its two side walls, its back wall, and its flat plaster ceiling at normal room height, seen only as a thin pale band at the top centre. The walls are warm bone limewash plaster (#ECE5DA) with a soft hand-trowelled texture and gently rounded inside corners; the floor is large honed pale limestone slabs (#D8C8AE), continuing out as the path under the camera. In the back wall, on the left third of the frame, the front door: a normal single house door, about 1 m wide and 2.4 m high, about a third of the wall's width, with plain wall above it up to the ceiling. The top of the door opening is a simple half-circle and the door fills it exactly. The leaf is flush matte-oiled walnut (#6B4A33) with vertical grain and a slim vertical dark-bronze bar pull, set straight into the plaster in a plain rounded reveal. Just right of the door, one small cylindrical dark-bronze wall light, switched on, glowing warm up and down the plaster. Low, warm winter-afternoon sun from behind-left lights the lower half of the right-hand wall, printed with the soft, lacy shadow of olive leaves; the back wall and the door are in soft, even shade. In the left foreground, cut by the frame edge, the gnarled silver-grey trunk of one old olive tree growing in the garden beside the path, a few grey-green branches crossing the top-left corner in front of the plaster. On the left side wall near the back corner, in shade, a narrow fluted-glass window in a slim dark-bronze frame. Calm, warm, lived-in, human scale. Nothing else: no niche, portal or frame around the door, no curved or wavy walls, no water feature, no light strips, no pots, no furniture, no doormat, no house number, no text, no people."
+  },
+  {
+   "id": "M2",
+   "file": "M2.jpg",
+   "variant": "M2",
+   "role": "delivered: M2 \"קיר האבן\" (no retry left for it)",
+   "placeholder_id": "6909c285-d6f9-442e-b4b2-9aa163362d56",
+   "task_id": "95248b00e250e15d56fbe21e5d9462de",
+   "batch_id": "e999bd1d-0cc1-4ff6-941c-62ffc7aba28d",
+   "idempotency_key": "wm-entrance-middle-2026-11-15-M2-r1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-95248b00e250e15d56fbe21e5d9462de-0-1794768818387-ae1fba07.jpg",
+   "created_at": "2026-11-15T18:52:53Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "92c0df0fdb25c9c68ce2bece5c3ef6ae44e032a126b6a69cf82cfc243df3a0ed",
+   "bytes": 323588,
+   "share_url": "https://www.var2.ai/image/6909c285-d6f9-442e-b4b2-9aa163362d56",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §10.5.8 (line 781), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "f380bbdd4024a8d69d094e16042bdd0d2a5ef793e829ade8e6b8164f9d8ecf5e",
+   "prompt_chars": 1873,
+   "prompt": "House-tour photograph of the front entrance of an ordinary single-storey family home in a quiet Mediterranean suburb, 16:9. The camera stands just outside a small covered entrance porch, about 3 m wide and 3.5 m deep, at eye height 1.2 m, 24 mm lens, perfectly level, verticals straight, everything sharp, looking straight in; the porch fills the frame edge to edge, its flat plaster ceiling at normal room height showing only as a thin line at the top. The back wall, the face of the house, is clad from floor to ceiling in smooth, honed, warm pale limestone (#D8C8AE), laid in long flat horizontal courses of different heights with fine recessed joints: flush and calm, not rustic, not stepped. The two side walls are bone limewash plaster (#ECE5DA); the floor is large honed limestone slabs. Left of centre, the front door: a normal single hinged house door, about 1 m wide and 2.4 m high, rectangular, with stone above it up to the ceiling; one flush slab of matte-oiled walnut (#6B4A33) with book-matched vertical grain and a slim recessed dark-bronze pull. Immediately to its right, a narrow fixed sidelight of vertically fluted glass in a thin dark-bronze frame, glowing softly warm from the lit hall inside; nothing behind it is legible. Left of the door, one small cylindrical dark-bronze wall light, switched on, its warm light grazing the stone so the joints show. In the right back corner, one large, plain, round planter in a pale stone finish holding a small multi-stem olive tree. Low, warm winter-afternoon sun from behind-left lights the lower part of the right-hand plaster wall with soft olive-leaf shadows; the stone wall and the door are in soft, even shade with warm reflected light. Calm, warm, lived-in, human scale. Nothing else: no water feature, no niche, no light strips, no canopy, no furniture, no doormat, no house number, no text, no people."
+  },
+  {
+   "id": "M3",
+   "file": "M3.jpg",
+   "variant": "M3",
+   "role": "delivered: M3 \"הספסל הבנוי\"",
+   "placeholder_id": "5ecc7855-d0fb-4bab-a8fe-4ca1781565b4",
+   "task_id": "dc1ce16fff17b4a40ab1878a8c452ddb",
+   "batch_id": "f018d33e-f624-454c-845c-c34bb8364d2a",
+   "idempotency_key": "wm-entrance-middle-2026-11-15-M3-r1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-dc1ce16fff17b4a40ab1878a8c452ddb-0-1794768820401-3b8b5bf0.jpg",
+   "created_at": "2026-11-15T18:52:58Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "712f6d51bf7aea8c5b44a4125ffda9b29e55c4a151d8868698835214b71bb68a",
+   "bytes": 422690,
+   "share_url": "https://www.var2.ai/image/5ecc7855-d0fb-4bab-a8fe-4ca1781565b4",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §10.6.8 (line 843), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "6cc5e097626ba78c27dcff8c4fb7a99a3882a87382abe924b20210f67e4dbd41",
+   "prompt_chars": 1652,
+   "prompt": "House-tour photograph of the front door of an ordinary single-storey family home in a quiet Mediterranean suburb, 16:9. The camera stands inside a small covered entrance porch, facing the door straight on from about 3.5 m, eye height 1.2 m, 24 mm lens, perfectly level, verticals straight, everything sharp. Walls of warm bone limewash plaster (#ECE5DA) with a visible hand-trowelled texture and softly rounded inside corners; a floor of large honed pale limestone slabs (#D8C8AE). On the left third, the front door: a normal single house door, about 1 m wide and 2.4 m high, rectangular, set in a plain plaster reveal with no frame or surround; the leaf is matte-oiled walnut (#6B4A33) with fine vertical reeding of narrow rounded flutes, not planks, and a slim vertical dark-bronze bar pull. On the floor in front of it, a plain, flat natural-fibre doormat. To the right of the door, one small cylindrical dark-bronze wall light, switched on, glowing warm up and down the plaster. Along the right-hand wall runs a low built-in plaster bench with a thin honed limestone top; at the back corner it steps up into a built-in plaster planter of rosemary and lavender. Low, warm winter-afternoon sun from behind-left falls across the lower right wall, the bench and the herbs, printed with the soft shadow of olive leaves from a tree out of view; the door wall and the door are in soft, even shade. Far left, a narrow fluted-glass window in a slim dark-bronze frame. Calm, warm, lived-in, human scale. Nothing else: no niche or arch around the door, no water feature, no light strips, no pots, no cushions, no lanterns, no house number, no text, no people."
+  },
+  {
+   "id": "M1",
+   "file": "M1.jpg",
+   "variant": "M1",
+   "role": "delivered: M1 \"הזית בשביל\" (the one allowed retry of M1, same prompt, new sample)",
+   "retry_reason": "r1 broke rejection items: no olive trunk in the foreground (10.4.9.2), a raised plaster band framing the arched door (10.8.1 \"frame\"), no olive-leaf shadow anywhere (10.8.2), a corner of sky (10.8.3, 0.7% of pixels) and garden flowers/agave not in the description (10.8.4). M1 was chosen for the single retry over M2 because it is the designer's recommendation (10.7) and r1 lacked its namesake, the olive. r2 fixes the door frame (only a slim walnut lining now) and brings olive branches and a soft leaf shadow, but shows more sky (about 2.3%) and neighbouring terracotta roofs; no further retry is allowed.",
+   "placeholder_id": "91d83e53-1baa-4850-b9a3-a4bf300a6923",
+   "task_id": "93a5c8094b231ae3ca7a3406c7e8d94b",
+   "batch_id": "98144d99-8cd6-4114-afbe-95375613c3d0",
+   "idempotency_key": "wm-entrance-middle-2026-11-15-M1-r2",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-93a5c8094b231ae3ca7a3406c7e8d94b-0-1794769028803-51770793.jpg",
+   "created_at": "2026-11-15T18:56:20Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "1126fbd4ba6e64232ec4bad54bbf52c937dc8295896fd1e85bfe0cb6e78f7e42",
+   "bytes": 391022,
+   "share_url": "https://www.var2.ai/image/91d83e53-1baa-4850-b9a3-a4bf300a6923",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §10.4.8 (line 707), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "2464f31bbfbd288fb856b0706538b3120d222b5bcce9a967c98ee24484016237",
+   "prompt_chars": 2057,
+   "prompt": "House-tour photograph of the front entrance of an ordinary single-storey family home in a quiet Mediterranean suburb, 16:9. The camera stands on the front garden path at eye height 1.2 m, 24 mm lens, perfectly level, verticals straight, everything sharp, looking straight into a small covered entrance porch about 3 m wide and 3.5 m deep that fills the frame edge to edge: its two side walls, its back wall, and its flat plaster ceiling at normal room height, seen only as a thin pale band at the top centre. The walls are warm bone limewash plaster (#ECE5DA) with a soft hand-trowelled texture and gently rounded inside corners; the floor is large honed pale limestone slabs (#D8C8AE), continuing out as the path under the camera. In the back wall, on the left third of the frame, the front door: a normal single house door, about 1 m wide and 2.4 m high, about a third of the wall's width, with plain wall above it up to the ceiling. The top of the door opening is a simple half-circle and the door fills it exactly. The leaf is flush matte-oiled walnut (#6B4A33) with vertical grain and a slim vertical dark-bronze bar pull, set straight into the plaster in a plain rounded reveal. Just right of the door, one small cylindrical dark-bronze wall light, switched on, glowing warm up and down the plaster. Low, warm winter-afternoon sun from behind-left lights the lower half of the right-hand wall, printed with the soft, lacy shadow of olive leaves; the back wall and the door are in soft, even shade. In the left foreground, cut by the frame edge, the gnarled silver-grey trunk of one old olive tree growing in the garden beside the path, a few grey-green branches crossing the top-left corner in front of the plaster. On the left side wall near the back corner, in shade, a narrow fluted-glass window in a slim dark-bronze frame. Calm, warm, lived-in, human scale. Nothing else: no niche, portal or frame around the door, no curved or wavy walls, no water feature, no light strips, no pots, no furniture, no doormat, no house number, no text, no people."
+  }
+ ],
+ "contact_sheet": {
+  "file": "contact-sheet.jpg",
+  "made": "code (Pillow + raqm, 0 tokens): one row, tiles 960x549, right to left M1, M2, M3 (M1 = M1.jpg, the retry); Hebrew labels \"מ1 · הזית בשביל\", \"מ2 · קיר האבן\", \"מ3 · הספסל הבנוי\" with a second line from the designer's 10.0 table (\"צעד אחד מתחת ל-A\", \"צעד אחד מתחת ל-B\", \"צעד אחד מעל D0\"); background #EFE9DF (STY2); JPEG q92",
+  "px": [
+   2992,
+   789
+  ],
+  "sha256": "9ce5fdefee4faf6753cdacbd1d04880b27bfd30120e22162c9c377f3b4e07a1b",
+  "bytes": 453501
+ },
+ "scale_sheet": {
+  "file": "scale-sheet.jpg",
+  "made": "code (Pillow + raqm, 0 tokens): one row, tiles 560x320, right to left in the order of the designer's scale (10.3): D0, M3, M2, M1, A-out, B-out. Brackets: \"פשוט מדי (FB5)\" under D0, \"באמצע (FB6): לבחירה\" under M3-M1 (walnut outline), \"מפואר מדי (FB6)\" under A and B; an arrow from \"יותר פשוט\" to \"יותר מפואר\". D0 (2720x1530, 16:9) is centre-cropped by 21 px a side to the 1.75 tile; the others are 1.75 already. Background #EFE9DF; JPEG q92",
+  "sources": [
+   "assets/renders/hall/warm-modern/door-2026-11-14/d0.png",
+   "assets/renders/hall/warm-modern/concepts-2026-11-15/A-out.jpg",
+   "assets/renders/hall/warm-modern/concepts-2026-11-15/B-out.jpg",
+   "M3.jpg",
+   "M2.jpg",
+   "M1.jpg"
+  ],
+  "px": [
+   3540,
+   686
+  ],
+  "sha256": "f7463fbf1e696483b7c402afeb575c83f58ed5ae2f558d97b987ee6076f0558e",
+  "bytes": 377708
+ },
+ "phone_check": "390x220 Lanczos copies of all six scale images looked at side by side in the scratchpad (not kept in the repo)"
+}
