@@ -339,3 +339,174 @@
 **מה לא נכנס לכאן, ולמה:** חזית מלאה ומוצרי חוץ (הבריף: "רק מה שהמצלמה רואה"); יציאה מהבית כהליכה אמיתית (סבב אחרי הפיילוט).
 
 **נוגע למסמך חדר השינה שלי:** הכנף של O-corridor-master, שכתבתי שהיא "לא נראית מתוך החדר", נראית דרך הפתח ב-MB-in. הצד שלה נקבע ברשומת המסדרון: `docs/proposals/wm-corridor-architecture-2026-11-14.md`.
+
+---
+
+## 10. תוספת 2026-11-15: הנקודות הפתוחות של D0, הסטיל HT, ‏HDx ו-HD על קנבס 3:2, והמבט לפינת האוכל בקליפ 2
+
+**master-designer, 2026-11-15. 0 טוקנים. לא נערך שום מסמך מחייב, ולא נגעתי בקובצי הפרומפט של motion-agent.** הבריף: `briefs/wm-door-open-points-2026-11-15.md`.
+**הקלט:**
+- הסטיל: `assets/renders/hall/warm-modern/door-2026-11-14/` (‏`d0.png`, ‏`d0-graded.png`, ‏README).
+- ה-clay: `assets/blockout/house/framing/wm-door-2026-11-14/` (‏`HT`, ‏`HD`, ‏`HDx`, ‏`D0-none`, ‏`c1/S07`–`S10`, הגיליון) ו-`wm-entrance-2026-11-14/` (‏`b/S05`, ‏`b/S06`, הגיליון), עם ה-README שלהם.
+- `wm-arrival-from-door-2026-11-14.md` (פרקים 1–4), ‏`clip1-d0--hd.txt`, ‏`clip2-hdx--m0.txt`.
+- ה-Bible של המודרני החם 1.0.2; תוכנית הבית (`O-entry-living`, ‏`O-living-dining`, ‏`W-living`, ‏`W-dining`, ‏`RL-hall`, ‏`furniture.kitchen-dining`).
+
+**התשובה של הבעלים על D0 (FB4) גוברת על כל מה שכתוב כאן.** אם הוא יבקש שינוי, הבקשה שלו מחליפה את 10.1.
+
+### 10.0 בקצרה
+- **D0: כל חמש הנקודות מתקבלות, בלי תיקון ובלי טוקנים.** בשלוש מהן הטעות היא במספר שכתבתי במסמך הזה, ולא בסטיל. אני מתקן אותן כאן.
+- **HT:** תיאור מוכן לפרומפט ורשימת דחייה (10.2).
+- **HDx ו-HD:** תיאורים מעודכנים לקנבס 3:2, שמחליפים את אלה שבפרק 6. ל-D0o נוספו שלוש תוספות קטנות מה-clay (10.3).
+- **פינת האוכל:** פסקה [DINING] לפרומפט של קליפ 2. **שורת פרומפט מספיקה, ואין צורך בסטיל ביניים** (10.4).
+- **אין שאלה לבעלים.**
+
+### 10.1 D0: חמש ההכרעות
+
+**1. המישקים לרוחב ברצפה: מתקבלים.**
+- **האבן שבתוך הספים** נמצאת באותו מפלס של הרצפה וממשיכה את המישקים הארוכים. היא נקראת כאבן סף אחת, פרט בנייה אמיתי שנראה מכוון. כל מה שסעיף 4 ברשימת הדחייה נועד למנוע לא קרה: אין מדרגה, אין פס סף ואין הנחה בהיסט, והלוח הממורכז מגיע עד הכנף.
+- **ההיסט של כ-25 פיקסלים בצד ימין** הוא כ-4 פיקסלים בחלון הטלפון ב-×1, וכ-8 ב-×2. מדובר במישק דק בגוון האבן, ב-11% התחתונים של הפריים, משני צדי הלוח הממורכז ולא על אותו קו. הוא נקרא כלוחות אבן באורכים מעט שונים, ולא כטעות. גם המנהל כתב שהמישקים "נראים רק כשמחפשים אותם" (הלוח, 2026-11-14).
+- **הרצפה היא אדריכלות ולא מוצר,** ולכן חוק הנאמנות לא חל עליה. תיקון שני עולה 650 שאינם בתקרת הריצה, וכשניסו להסיר את המישקים בקוד, המישקים הארוכים נשברו.
+- **מה משתנה:** סעיף 4 ברשימת הדחייה מקבל חריג: המישקים לרוחב של D0 מתקבלים כמו שהם. ב-D0o הם מחוץ למסכה ולכן מועתקים מ-D0. הניסוח "the stone threshold" בפרומפט של קליפ 1 מתאים להם.
+
+**2. הכנף 3.5 סטופ מתחת לקיר: מתקבל. כתבתי "כ-1 סטופ", וזה היה שגוי.**
+- אגוז #6B4A33 מול טיח #ECE5DA הם 3.3 סטופ מהאלבדו לבדו (Y ‏0.083 מול 0.789). עוד כ-0.3 סטופ באים מהצל של ראש הספים, וזה הצל שביקשתי. כלומר 3.5 סטופ הם מה שאגוז אמיתי נותן באור מעונן. הערך 1.84 של ה-clay נמדד על כנף ה-clay, שהיא כתומה ובהירה מאגוז.
+- הבדיקות שבאמת קובעות עוברות: הכנף 18 L* מעל נקודת השחור (המינימום 8), הסיבים נקראים ב-×1, וה-Lab הוא 30 / 13 / 17 מול 34.5 / 11 / 19 של היעד. כלומר היא לא כתומה ולא שחורה. הבהרה של הכנף הייתה הופכת אותה לכתומה, וזה דחייה לפי סעיף 2 ברשימה.
+- **מה משתנה בפרק 2:** במקום "הכנף כ-1 סטופ מתחת לקיר" נכתב: **הכנף ב-L* ‏28–35, לפחות 8 L* מעל נקודת השחור, והסיבים נקראים ב-×1.** הניגוד בפריים הוא 58 L* (בפרק 3.3 כתבתי כ-50).
+
+**3. מסגרת החלון המחורץ עבה מ-45 מ"מ ובעלת עומק פנימי: מתקבל.**
+- החלון נמצא בקיר השמאלי של החצר, ומ-D0 רואים אותו בזווית של כ-24° לקיר (3.30 מ' לאורך X ו-1.45 מ' לרוחב, לפי הטלה). בזווית כזו החזית של הפרופיל (45 מ"מ) מתקצרת, ועומק המסגרת פונה אל המצלמה. כלומר "העומק הפנימי" נובע מהגאומטריה ואינו טעות.
+- ברינדור המסגרת רחבה מזו של ה-clay בכ-15–20 פיקסלים בקנבס (הערכה בעין). בחלון הטלפון זה כ-3 פיקסלים ב-×1 וכ-6 ב-×2, בפרט משני שנמצא בשוליים. היא נקראת כמסגרת ברונזה מעט כבדה יותר, ולא כפגם. הפינה נשארה במקומה (סטייה של עד פיקסל), והמראה של W-bath מבחוץ הוא הצעה שלי ולא ערך מחייב ב-Bible.
+- הברונזה מופיעה פעמיים, בידית ובמסגרת, כמו שנדרש מצבע הדגשה, ומסגרת מעט כבדה רק מחזקת את החזרה הזו. הברונזה תופסת 0.5% מהפריים, הרבה מתחת ל-3% שה-Bible מתיר.
+
+**4. הכניסה 0.52 סטופ מתחת לחצר, והטיח 78% מהפריים: שניהם מתקבלים.**
+- **0.52 סטופ:** הערך בתוך טווח ה-QA שקבעתי בפרק 6 (2/3 ±1/6, כלומר 0.50–0.83). זה מה שה-clay חישב באור אחד ובחשיפה נעולה אחת.
+  - **מעכשיו זה היעד של כל סטילס הכניסה (D0o, ‏HT, ‏HD):** הקיר הרחוק של הכניסה נמצא 0.52 סטופ ±1/6 מתחת לקיר הדלת בחצר.
+  - החצר שווה ל-`base.png` (‏‎−0.04 סטופ), ולכן הסלון בהיר מהכניסה בכ-0.56 סטופ. זה בתוך "שני שליש סטופ ±1/6" של HDx.
+  - ב-D0o אין צורך בגריידינג מקומי בתוך הפתח.
+- **78% טיח:** כתבתי 60% כי ספרתי את האבן יחד עם ה"ריק". בפריים עצמו יש 78% טיח, 11% אבן, 10% אגוז ו-0.5% ברונזה. 60-30-10 הוא חוק לחדר מרוהט. בפריים אדריכלי של סף יש שני חוקים חזקים ממנו, "מוקד אחד" ו"המרחב הריק הוא חלק מהעיצוב", ושניהם מתקיימים:
+  - הדלת היא המוקד, בניגוד של 58 L*.
+  - הטיח אינו משטח אחד. אלה שלושה מישורים בשלוש רמות אור (L* ‏78.4 / 88.6 / 91.0), עם תנועת מלג שנראית ב-×1, ולכן ה-78% נקראים כעומק ולא כריקנות.
+  - את היחס אפשר לשנות רק בהזזת המצלמה, וזה היה פותח מחדש את ה-clay, את השער (עד 1.92 פיקסל), את D0o ואת 12 התחנות.
+- **מה משתנה בפרק 3.3:** טיח 78% (בסיס), אבן 11% (משני), אגוז 10% (ההדגשה), ברונזה 0.5% (תכשיט, מופיעה פעמיים).
+
+**5. הכנף הפתוחה כהה מהסגורה ב-0.4 סטופ ולא בכ-1 סטופ: מתקבל, `shade_stops_open = 0.4`.**
+- את ה"סטופ אחד" הערכתי בלי מודל אור. ה-clay מחשב את הכנף באותו אור שמאיר את קירות הכניסה סביבה, ובפריים הראשון של קליפ 1 הכנף צריכה להתאים בדיוק לקירות האלה.
+- **ההבדל לא נראה ב-×1–×2:** ב-90° הכנף היא פס ברוחב 4% מהפריים (u ‏0.246–0.285), וההפרש בין 0.4 ל-1 סטופ על הפס הזה הוא כ-6 L*.
+- **שני תנאים:** ההצללה גדלה ברציפות עם הזווית, בלי הבזק; והכנף ב-90° נשארת לפחות 8 L* מעל נקודת השחור (כ-26 מול 12).
+
+**בדקתי עוד נקודה אחת, והיא מתקבלת:** ה-b* של הטיח בחצר הוא 7, מול 4 בקיר של `base.png`. ה-H הוא 36, בתוך הטווח 33–42 של ה-Bible. זה טיח בחוץ שמואר מהשמיים, והוא אף פעם לא מוצג ליד `base.png`. ב-D0o הכניסה מכוילת לפי היחס שבסעיף 4, ולא לפי ה-b* של החצר.
+
+### 10.2 HT, סף הדלת
+**המצלמה:** ‏(3.60, 8.15, 1.20), ‏yaw 90, ‏24 מ"מ, שיפט (0.36, 0.48), הכנף פתוחה. קנבס רגיל 2720×1530, והפריים ב-[77.49, 43.43, 2642.51, 1486.57]. זה הסטיל האחרון בסדר העבודה, אחרי HD.
+
+**מה נמצא איפה.** ערך שמסומן (הטלה) חישבתי בנוסחת התוכנית ובדקתי מול `HT.png`. השאר לקוח מה-README של ה-clay.
+
+| מה | u | v |
+| --- | --- | --- |
+| הקיר הרחוק (X ‏0.80), במרחק 2.80 מ' | 0–0.789 (74%) | כל הגובה |
+| הדלת הנסתרת, שני התפרים (הטלה) | 0.158 / 0.372 | מעל הפריים (הראש ב-‎−0.028) ועד הרצפה |
+| שיפולים 15 בצבע הקיר (הטלה) | לאורך הקיר, נעצרים בשני התפרים | 0.924–0.988 |
+| פס הרצפה בכניסה | | 0.988–1.0 (0.8%) |
+| הפינה (0.80 / 6.35) | 0.789 | |
+| הקטע של הקיר הקדמי שבין הפינה לפתח, 15 ס"מ (הטלה) | 0.789–0.814 | |
+| ציפוי האגוז, פני הסף (הטלה) | 0.814–0.850 | מהקצה העליון עד התחתון (הראש ב-‎−0.057) |
+| הסלון, בזווית חדה | 0.850–1.0 | קיר החלון בטיח (Y ‏3.81–2.85); הזיגוג מ-u ‏0.959 (השדה הקרוב); ספסל האבן מתחתיו; התקרה עד v כ-0.12, עם הפס המונמך; הרצפה מ-v כ-0.72 |
+| הכורסה | ב-overscan מימין, לכל היותר נוגעת בקצה הפריים | |
+| הכנף הפתוחה | רק ב-overscan משמאל (7,552 פיקסלים בקנבס, 0 בפריים) | |
+
+**התיאור (ל-render-agent):**
+> Empty entrance hall of a warm-minimal architect's house, same materials, light and grading as the hall stills and the reference living-room plate. The camera stands on the threshold of the open front door, just inside the hall; the doorway itself is behind the camera and not in frame. Eye height 1.20 m, 24 mm full-frame, level (no tilt, no roll, all verticals vertical), looking straight across the hall at its far wall 2.80 m away, with the same lens shift as the door still. Everything sharp, no depth of field, no grain, no vignette. The left three quarters of the frame, up to 79% of its width, are the far wall in matte bone limewash plaster #ECE5DA with a very soft trowel movement; it runs off the top and left edges. In it, from 16% to 37% of the width, the 3 mm shadow-gap outline of a closed flush jib door in the same plaster, no handle, no frame; its two vertical seams run from the top edge down to the floor. A 15 cm skirting in the wall colour, barely proud, runs along the base of the wall and stops at both seams. Below it, only a thin strip of smoked oak floor (#8B6F55, matte oil, 22 cm planks running left to right). The wall is brightest along the top, from the centre to a little right of it, where an opal roof light out of frame washes it from above, and fades gently downward and toward both sides; soft daylight from the open door behind the camera fills it evenly. On the right, at 79% of the width: a sharp inside corner, then a 15 cm return of the hall's front wall in the same plaster, then the side of a wide opening into the living room, lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap. The walnut reads as a warm vertical band from 81% to 85% of the width, running off the top and bottom edges; no architrave, no casing, no door leaf, no threshold strip. Beyond it, to the right edge and at a steep angle, the brighter living room exactly as in the reference plate: its bone plaster window wall, the near end of the dark espresso-bronze steel glazing with 45 mm sight lines and the same pale, misty winter view of bare birches, the end of the honed limestone bench #D8C8AE under it, the smoked oak floor running on through the opening, and the bone plaster ceiling with its lowered band along the window wall. At the very right edge, at most the edge of the walnut and bone bouclé armchair. The living room is two-thirds of a stop brighter than the hall, and its light falls softly on the short plaster return and on the walnut. Winter 15:00, bright overcast, no sun, no sun patches, no hard shadows, white balance 4600 K, warm brown-grey shadows, all lamps off and absent. Empty hall: no furniture, no bench, no hooks, no console, no lamp, no switch, no art, no rug, no objects, no people, no text.
+
+**איך לבנות אותו (המלצה; ההחלטה הטכנית של render-agent ו-motion-agent):**
+- **הקיר הרחוק והדלת הנסתרת** נלקחים מ-HD. זה מישור אחד, ולכן ההטלה מדויקת.
+- **הפינה, האגוז והסלון** נלקחים מ-HDx ומ-`base.png`, דרך העומק.
+- **חדש** נוצר רק מה שאף אחד משלושתם לא מכסה.
+- **למה:** כך קליפ 1b (HT ← HD) עובר על אותו קיר באותו מרקם, והסלון שרואים ב-HT הוא אותו סלון שמגיעים אליו בסוף.
+
+הפסקאות [RIGHT, 1a] ו-1b ב-`clip1-d0--hd.txt` מתאימות ל-HT כפי שהוא מתואר כאן, ואין בהן מה לשנות.
+
+**אני דוחה את HT אם:**
+1. יש בכניסה רהיט, ספסל, מתלה, קונסולה, מנורה, מתג, אמנות, שטיח או חפץ; או שיש בסלון משהו ש-`base.png` לא מראה (וילון, כרית, אגרטל, מנורה דולקת).
+2. הדלת הנסתרת פתוחה, או שיש לה ידית, משקוף או מסגרת; התפרים לא ב-u ‏0.158 / 0.372 ±0.01; או שהשיפולים עוברים על פני הכנף.
+3. רואים בפריים את דלת הכניסה, את הכנף הפתוחה, את הספים שלה או את החצר. (ב-overscan משמאל מותר פס של קצה הכנף, כמו ב-clay.)
+4. הפינה לא ב-u ‏0.789 ±0.01, או שהאגוז לא ב-0.814–0.850 ±0.01; הסף מטויח, מאלון או צבוע; יש ארכיטרב, משקוף או כנף; סופיט האגוז נכנס לפריים; או שהאגוז נקרא ככתם שחור ב-×1 (הוא חייב להיות לפחות 8 L* מעל נקודת השחור).
+5. הסלון שונה מ-`base.png` ומ-HDx: טיח בגוון אחר, מסגרת שאינה ברונזה, זיגוג עם משקוף אופקי, נוף עם שמש או עם שמיים כחולים, ספסל חסר או ספסל שאינו מאבן גיר, או רצפה שאינה אלון מעושן.
+6. הסלון לא בהיר מהכניסה בכ-2/3 סטופ (0.50–0.83, כשמשווים טיח לטיח); או שיש שמש, כתם אור, צל קשה או מנורה.
+7. האנכיים נוטים ביותר מ-0.5°; רואים את תקרת הכניסה; הרצפה בכניסה רחבה מפס (יותר מ-2% מגובה הפריים); או שיש עומק שדה, גרעין או וינייטה.
+
+**מה QA מודד (רק מה שהשתנה):**
+- המיקומים שבטבלה (±0.01) והאנכיים (±0.5°).
+- הקיר הרחוק ב-HT מול אותו קיר ב-HD: עד 1/6 סטופ הפרש.
+- הסלון מול `base.png` דרך העומק, כמו ב-HDx.
+- ב-×1 וב-×2: האגוז נקרא כעץ, והתפרים של הדלת הנסתרת נראים.
+
+### 10.3 HDx ו-HD על קנבס 3:2 (במקום התיאורים שבפרק 6), ותוספות ל-D0o
+**מה ה-clay מוסיף על פרק 6:**
+- **HDx:** סופיט האגוז נכנס לשורה העליונה של הקנבס (232 פיקסלים), כטריז מעל החלק השמאלי של הפתח. בשוליים התחתונים, ליד הפינה, נכנסים השיפולים ופס רצפה. מימין לפתח, הקיר הקדמי יורד עד מתחת לתחתית הקנבס.
+- **HD:** הקנבס מראה את הקיר מ-Z ‏0.29 עד 2.05, בלי שיפולים, רצפה, תקרה או פינה. התפרים של הדלת הנסתרת ב-u ‏0.019 ו-0.380.
+- **האור על הקיר הרחוק (ב-HD וב-HT):** הקיר בהיר ביותר בחלקו העליון, מהמרכז ומעט ימינה ממנו, מתחת לחלון הגג (Y ‏6.70–8.30). משם הוא נחלש כלפי מטה ולשני הצדדים.
+
+**HDx:**
+> Empty entrance hall of a warm-minimal architect's house, same materials, light and grading as the reference hall plate. Camera at eye height 1.20 m, 24 mm, level, everything sharp, standing in the middle of the hall about 2 m from a 1.20 x 2.40 m opening into a brighter living room, and looking straight through it. The picture is a tall 3:2 canvas: the usual 16:9 view with a band of extra wall above and below it. The opening is near the centre of the view and its head is above the view; only along the very top edge of the canvas does the walnut head of the opening appear, as a thin wedge over the left part of the opening that tapers to nothing toward the right. The left reveal is lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap, and shows as a warm vertical band. The right side ends in a clean plaster arris. No architrave, casing, door leaf or threshold strip; the smoked oak floor (#8B6F55, 22 cm planks) runs straight on into the living room. Left of the opening: a 15 cm return of bare plaster, a sharp inside corner, then the bare left wall; in the bottom band of the canvas, near the corner, their 15 cm skirting in the wall colour and a sliver of floor. Right of the opening: the bare plaster front wall, from the opening to the right edge and from the top to the bottom of the canvas. Through the opening, exactly as in the reference living-room plate: the bone plaster back wall, the bronze steel glazing over an empty limestone bench, part of the greige bouclé sofa, the walnut armchair, the walnut coffee table, smoked oak floor. The living room is two-thirds of a stop brighter than the hall. Winter 15:00, overcast, no sun, 4600 K, lamps off and absent. No furniture in the hall, no objects, no switches, no people, no text.
+
+**HD:**
+> Same empty hall, same camera point as HDx, turned 65 degrees to the left. A close, level view of the hall's far wall 1.66 m away, on the same tall 3:2 canvas: the canvas shows the wall from about 0.3 m to 2.05 m high, the 16:9 view inside it from about 0.5 m to 1.9 m. No floor, no skirting, no ceiling and no corner anywhere on the canvas. Bone limewash plaster #ECE5DA with a soft trowel movement. It is brightest along the top, from the centre to a little right of it, where an opal roof light out of frame washes the wall from above, and it fades gently downward and toward both sides; the far right is a little darker. A faint, soft daylight brightening from the open front door behind the camera lies over the centre-left. The 3 mm shadow-gap outline of a closed flush jib door in the same plaster, no handle: its two vertical seams run from the top to the bottom of the canvas, one very close to the left edge (about 2% of the width), the other a little past the left third (about 38%). Nothing else: no bench, no hooks, no lamp, no switch, no art, no objects.
+
+**נוסף לרשימת הדחייה (סעיף 10 בפרק 6):**
+- **HD:**
+  - שיפולים, רצפה, תקרה או פינה בכל מקום בקנבס;
+  - התפרים לא ב-u ‏0.019 / 0.380 ±0.01;
+  - הגוון בתפר (yaw 57.5 ±4°) שונה מזה של HDx ביותר מ-3%. לפי הכלל של motion-agent, HD כזה חוזר ל-render-agent.
+- **HDx:**
+  - בשוליים העליונים, עד 11% מעל הפריים (האזור שהסיבוב קורא ממנו), יש משהו שאינו אגוז, טיח הקיר או הסלון, למשל קורת ראש מטויחת, משקוף או ארכיטרב;
+  - הפתח לא ב-u ‏0.291–0.651 ±0.01.
+
+**D0o: שלוש תוספות מה-clay (`D0-none.png`) לתיאור שבפרק 6:**
+> A 15 cm skirting in the wall colour runs along the base of the far wall and stops at both seams of the closed jib door, which runs clean to the floor. At the top of the doorway, a strip of the hall's plaster ceiling with a 1 cm shadow gap where it meets the far wall; the soft bright band of the light well sits in the right half of that strip. Outside the doorway everything stays pixel for pixel D0, including the stone inside the reveal and its joints.
+
+### 10.4 המבט לפינת האוכל בקליפ 2
+**איפה ומתי** (ה-clay של הכניסה, וריאנט b):
+- **המרחק:** ‏s ‏1.99–2.74 מ-H0x, כלומר 1.01–1.76 מ' מ-HDx.
+- **הרוחב:** 8.5% מרוחב הפריים ב-`b/S05`, ‏3.9% ב-`b/S06`, ועד 9.4% ב-s ‏2.27.
+- **הזמן בנגינה:** כ-0.47 ש' בגרסת 7.3 ש', וכ-0.34 ש' בגרסת 5.5 ש' (הטלה, לפי ציר הזמן של motion-agent).
+
+**מה רואים** (מה-clay, ועוד הטלה שלי מהתוכנית; כשיש סתירה, ה-clay גובר):
+- **הפתח O-living-dining** בקיר הימני של הסלון (X ‏2.50–2.65, ‏Y ‏2.97–4.57), בזווית חדה, ליד הקצה הימני של הפריים. הסף הרחוק שלו פונה אל המצלמה ונראה כמשטח טיח.
+- **דרך הפתח:** הקיר הרחוק של פינת האוכל (Y ‏0), ברצועה שבין X כ-3.1 לכ-4.3. הרצועה כולה בתוך החלון W-dining (‏X ‏2.95–4.75, אדן 0.75, ראש 2.70). לכן רוב מה שרואים הוא זיגוג בהיר: מתחתיו קיר ורצפה, ומעליו קיר ותקרה.
+- **הכנפיים של הפתח** (בתוכנית הן מקופלות ב-180° אל הצד של פינת האוכל) פונות הרחק מהמצלמה ולא נראות, לכל היותר כקו בפינת הסף.
+- **השולחן** (מרכז ב-4.30, 1.70) **והתלויה** (4.60, 1.65) מחוץ לקו הראייה. ברגע שהרצועה רחבה ביותר, בגובה ציר השולחן (Y ‏1.70) רואים רק את X ‏2.88–3.19.
+
+**הפסקה לפרומפט של קליפ 2** (נכנסת אחרי הפסקה השנייה; motion-agent מכניס אותה, בסגנון [RIGHT] של קליפ 1):
+> [DINING] As the right edge of the walnut-lined opening slides out past the right side of the frame, the living room's right-hand wall is uncovered behind it at a steep, glancing angle, and in it, for about half a second, a plain opening into the next room, its reveal wrapped in the same bone limewash plaster: no door leaf, no frame, no casing.
+> Through it, a narrow upright slice of an empty, quiet dining room in the same skin as the living room: the smoked oak floor running on through the opening with no threshold, bone plaster walls and ceiling, and on the far wall part of a tall window in a thin dark bronze frame, its glass reading as soft, near-white overcast daylight, as bright as the living-room glazing and no brighter.
+> Nothing else is in it: no table, no chairs, no pendant, no lamp, no curtains, no kitchen, no objects, no colour, no sun patch, no view detail beyond faint misty bare trees.
+> The slice never grows beyond a tenth of the frame and never moves toward the centre: it slides steadily out past the right edge before the camera enters the wall, and the heading never turns toward it.
+
+**ההחלטות שמאחורי הפסקה, ומה הן קובעות לעיצוב פינת האוכל במודרני החם:**
+- **הסף בטיח, בלי ציפוי אגוז.**
+  - ה-Bible עוטף ספים בטיח הקיר, וכך גם ה-clay.
+  - ציפוי האגוז שמור לפתחים שיוצאים מהכניסה (O-entry-living, ‏O-hall-corridor), ומסמן את המעבר מהכניסה אל חדר. הסלון ופינת האוכל הם אזור יום אחד, ולכן הפתח ביניהם נשאר בטיח.
+  - ובקליפ עצמו: פס אגוז שני שנכנס מימין, רגע אחרי שהסף הימני יצא, עלול להתערבב אצל המודל עם הסף.
+- **אלון מעושן ממשיך,** כי זו הרצפה שה-Bible קובע. **מסגרת ברונזה כהה לחלון,** כי זה התפקיד של צבע ההדגשה ב-Bible ("מסגרת החלון"). בית אחד, עור אחד.
+- **החדר ריק,** כמו הכניסה. בדרך לא רואים מוצרים, ועמדות `fixed-product` נשארות ריקות עד שיש להן מוצר.
+- **כשיעוצב חדר האוכל במודרני החם:** שלושת הפרטים האלה נשמרים. אם רהיט קבוע ייכנס לקו הראייה הזה (X מתחת לכ-3.6, בטווח Y כ-1–2.5, לפי הטלה), חצי השנייה הזו תעודכן יחד עם המוצרים של הכניסה, כמו H0, שגם היא תקבל את המוצרים שלה מאוחר יותר. זו הצעה ולא שינוי במסמך מחייב, והיא תירשם יחד עם 1.3.9.
+
+**שורת פרומפט או סטיל ביניים: שורת פרומפט מספיקה.**
+- **התוכן דל:** רצועה ברוחב של עד עשירית מהפריים, בקצה שלו, במשך פחות מחצי שנייה ובתנועה. רובה זיגוג בהיר וטיח בהיר, ואין בה צורה שהעין מספיקה לקרוא.
+- **כשל אפשר לזהות:** QA רואה אותו באותם פריימים.
+- **סטיל ביניים יקר ומסוכן יותר מהמבט עצמו:** 650 לסטיל, ועוד פיצול של קליפ 2 לשני חלקים (2×972 במקום 1,296), כלומר תוספת של כ-1,300. הוא גם מוסיף תפר בלב ההגעה, בקליפ שמשמש גם את המעבר לחדר השינה.
+- **כלל הקבלה לחצי השנייה הזו (EFF1.3):** מותר שהמבט ייעדר (הקיר נמשך חלק) או ייצא פשוט יותר; אסור שייצא שגוי. הקליפ נכשל אם מופיעים שם חור כהה, כנף, משקוף אגוז, רהיט, מנורה או תלויה, צבע רווי, נוף עם שמש או עם שמיים כחולים, הבזק של יותר מ-1/3 סטופ בבהירות הפריים, או רצועה שמתרחבת או זזה לכיוון המרכז. ניסיון חוזר רק על כשל כזה.
+- **למבחן ההליכה (motion-agent):** כדאי להוציא את פתח פינת האוכל (`id` ‏50 ב-clay) מההתאמה בקטע 1.0–1.8 מ' מ-HDx, כדי שמבט חסר לא יזיז את המיקום המחושב.
+
+**הערה קטנה על `clip2-hdx--m0.txt`:** כתוב שם "first the plain plaster edge on the right". לפי ה-clay, פני האגוז של הסף הימני נכנסים לפריים ב-0.74 מ' מ-HDx ויוצאים ב-1.17–1.22 מ' (ובמסמך הכניסה שלי, פרק 3: "שני ספי האגוז ממסגרים את הסלון"). ההצעה: "first the right edge, its walnut lining turning into view for a moment". הפסקה [DINING] כבר כתובה לפי זה.
+
+### 10.5 למנהל
+- **אין שאלה לבעלים.** התשובה שלו על D0 גוברת.
+- **ללוח:**
+  - הנקודות הפתוחות של D0 נסגרו: חמש קבלות, 0 טוקנים.
+  - HT מוכן: תיאור ורשימת דחייה.
+  - HDx ו-HD עודכנו לקנבס 3:2, ו-D0o קיבל שלוש תוספות.
+  - הפסקה [DINING] מוכנה לקליפ 2.
+- **ל-render-agent:** פרקים 10.2 ו-10.3, ופרק 6 עם התיקונים של 10.1.
+- **ל-motion-agent:** `shade_stops_open = 0.4`; הפסקה [DINING], ההוצאה של פתח פינת האוכל ממבחן ההליכה, וההערה על הסף הימני (10.4).
+- **ל-1.3.9, כשיגיע הרישום:** הסף של O-living-dining מטויח; אלון מעושן ומסגרת ברונזה בפינת האוכל; וקו הראייה של קליפ 2.
