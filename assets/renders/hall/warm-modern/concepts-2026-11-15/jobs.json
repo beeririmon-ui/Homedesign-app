@@ -1,0 +1,157 @@
+{
+ "date": "2026-11-15",
+ "brief": "briefs/wm-entrance-concepts-2026-11-15.md",
+ "decisions": [
+  "FB5"
+ ],
+ "purpose": "CONCEPT ONLY: for the owner to choose an entrance direction (A, B or C). Not for the site, not locked, not keyframes.",
+ "model": "flux-2",
+ "model_choice": "Live var2_estimate_cost on 2026-11-15: flux-2 1K 250, nano-banana-2 1K 350 (2K 400), gpt-image-2 1K 400. Four images inside the 1,200 cap are possible only with flux-2 (1,000); nano-banana-2 would be 1,400 and gpt-image-2 1,600. flux-2 also leaves room for the one allowed retry (1,250 <= 1,400).",
+ "params": {
+  "type": "text-to-image",
+  "aspect_ratio": "16:9",
+  "resolution": "1K",
+  "image_url": null,
+  "image_refs": null,
+  "seed": "not exposed by var2 for flux-2 (each sample is random; a re-send of the same prompt gives a different image)"
+ },
+ "output_note": "flux-2 \"16:9\" at 1K returns 1344x768 (7:4, 1.75:1), JPEG. Files are the bytes var2 delivered, not re-encoded.",
+ "budget": {
+  "cap_this_run": 1200,
+  "hard_cap_with_one_retry": 1400,
+  "estimate_per_image": 250,
+  "estimates": "var2_estimate_cost before the first four (4 x 250 = 1,000) and again before the retry (250)",
+  "spent": 1250,
+  "calls": 5,
+  "retries_used": 1,
+  "retries_left": 0
+ },
+ "jobs": [
+  {
+   "id": "A-out-r1",
+   "file": "A-out-r1.jpg",
+   "role": "first try of A-out; kept as an alternate (sky band at the top, 3.6% of pixels); the light line under the bench is here, not in A-out",
+   "placeholder_id": "4a76b7d9-6447-4452-a077-3b8e15233e67",
+   "task_id": "57680c1d3a5d4df54215e33498b590d3",
+   "batch_id": "27053906-64d9-42ae-80a8-61c2fdf8b15d",
+   "idempotency_key": "wm-entrance-concept-2026-11-15-A-out-r1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-57680c1d3a5d4df54215e33498b590d3-0-1794705458056-50d42e31.jpg",
+   "created_at": "2026-11-15T01:16:52Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "be277d901c95cd720a2448e24e62caa4521b22530707258ec9eff3069bd1e407",
+   "bytes": 377269,
+   "share_url": "https://www.var2.ai/image/4a76b7d9-6447-4452-a077-3b8e15233e67",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §3.9, paragraph 1 (line 216), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "afa4a390fccdc8276f16e3b183a32c3c7d0219a663b756ed506e0a8076deec41",
+   "prompt_chars": 2271,
+   "prompt": "Architectural editorial photograph for a leading interior design magazine, 16:9. The entrance courtyard of a warm-minimal Mediterranean-modern house, seen from just outside its open south end. Camera at eye height 1.20 m, 24 mm full-frame lens, perfectly level, all verticals vertical, slight lens rise, everything sharp, no depth of field. A walled courtyard open to the sky, its walls in bone limewash plaster (#ECE5DA) with a visible soft trowel texture, tall enough that no sky shows. On the left third of the frame, a thick sculpted plaster portal with softly rounded edges stands proud of the back wall; carved into it, a tall round-headed niche, and at the back of the niche a round-headed front door, 1.0 by 2.7 m, in vertically reeded, matte-oiled walnut (#6B4A33), with one large cast dark-bronze ring pull at hip height: an arch within an arch. The door sits in soft, even shade, gently washed from above by warm light hidden in the head of the niche. The courtyard's right-hand back corner is a smooth, generous curve of plaster sweeping into the long right wall, and that wall is caught by low, warm, late-afternoon winter sun from behind and to the left of the camera, softened by a thin haze. Golden light rakes across the plaster texture, and the soft, lacy shadow of olive leaves and branches is printed across the curve and the upper wall. Along the foot of the right wall runs a long built-in bench, one monolithic slab of honed travertine (#D8C8AE) floating on a recessed plinth, with a thin line of warm light glowing beneath it. In the left foreground, cut by the frame edge, the twisted silver-grey trunk of an old olive tree planted in the ground, its dusty grey-green crown overhanging the top-left corner. Underfoot, a straight path of large honed limestone slabs leads to the door between beds of warm pale gravel with low silver-green planting. Far left, in shade, a narrow vertical window of reeded glass in a slim dark-bronze frame. Palette: bone, sand, travertine, walnut, olive grey-green, a touch of dark bronze; warm brown shadows; calm, sunlit, inviting. No sky, no sun disc, no lens flare. No furniture, no pots or planters, no lanterns, no lamps or wall lights as objects, no cushions, no doormat, no house number, no text, no people."
+  },
+  {
+   "id": "A-in",
+   "file": "A-in.jpg",
+   "role": "delivered: A, inside",
+   "placeholder_id": "1d183239-d63b-4fc8-b1fd-b91ec6ddf67d",
+   "task_id": "b6b006c4172dbd8241ef68e470b45955",
+   "batch_id": "12e06157-ecdc-48d7-bc59-da07ef2993ab",
+   "idempotency_key": "wm-entrance-concept-2026-11-15-A-in-r1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-b6b006c4172dbd8241ef68e470b45955-0-1794705455772-9eec5d4e.jpg",
+   "created_at": "2026-11-15T01:17:15Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "91d500a5b9787caf909348b5829244631e25fb2cb22ea2da1efda02891e83949",
+   "bytes": 237867,
+   "share_url": "https://www.var2.ai/image/1d183239-d63b-4fc8-b1fd-b91ec6ddf67d",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §3.9, paragraph 2 (\"optional, inside\") (line 219), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "10bb992b05f1bbb58056d346fe88572ae68e71fbc2bcd2894f171d0575b3657a",
+   "prompt_chars": 799,
+   "prompt": "Same house and materials, inside the entrance hall, camera standing on the threshold and looking straight ahead, eye height 1.20 m, 24 mm, level, everything sharp. The floor is the same large honed limestone slabs, continuing from the courtyard. Bone limewash walls. Ahead, a little right of centre, a wide round-headed alcove 1.25 m wide, 2.45 m high and 20 cm deep, washed by warm light hidden in its head, empty. To its left, the hairline outline of a flush plaster jib door with no handle. At the right edge, a deep opening lined in matte walnut leads into a brighter living room, seen at a steep angle: bone plaster, dark bronze steel glazing over a limestone window bench, smoked oak floor. Soft daylight from a hidden roof light above. No furniture or objects in the hall, no people, no text."
+  },
+  {
+   "id": "B-out",
+   "file": "B-out.jpg",
+   "role": "delivered: B, outside",
+   "placeholder_id": "f454705a-793b-4df9-bc9f-0f7427629b82",
+   "task_id": "dbdbf7fa610f6ce4474e00a2ae422fae",
+   "batch_id": "3e5cae8a-1e49-4911-878d-c5a4e88b845e",
+   "idempotency_key": "wm-entrance-concept-2026-11-15-B-out-r1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-dbdbf7fa610f6ce4474e00a2ae422fae-0-1794705500783-0357cee2.jpg",
+   "created_at": "2026-11-15T01:17:19Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "79e86e9b59f0b50599cdba81abe240e6c49b04cea20ab2b50c29d7d5eb052b7b",
+   "bytes": 398171,
+   "share_url": "https://www.var2.ai/image/f454705a-793b-4df9-bc9f-0f7427629b82",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §4.9, paragraph 1 (line 324), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "1221487957ca033d319dc8d6db75ffd0b4b62911a48eba2c2a50a5f215717ebf",
+   "prompt_chars": 2139,
+   "prompt": "Architectural editorial photograph for a leading design magazine, 16:9, perfectly symmetrical and frontal. The entrance court of a warm-minimal house, conceived as a calm water court. Camera at eye height 1.20 m, 24 mm full-frame lens, level, centred on the axis, everything sharp, no depth of field. Dead centre at the end of the court stands an oversized pivot front door, 1.4 m wide and 3.0 m high: a single flush slab of book-matched, matte-oiled walnut (#6B4A33) with vertical grain and a full-height recessed pull channel lined in dark bronze along its right edge. It is set flush in a facade of honed travertine (#D8C8AE) laid in long horizontal courses of varying height, each course stepped back a few millimetres so that every joint draws a fine horizontal shadow line. The two side walls of the court are the same stepped travertine and converge on the door, filling the left and right thirds. Overhead, a thin cantilevered roof slab with a bone limewash soffit runs from the house out over the camera, showing as a pale band across the top of the frame; a narrow skylight slot in it lets a single blade of warm low sun fall across the stone above the door. The whole floor of the court is a still, shallow reflecting pool with a dark espresso lining (#2E2824) that turns the water into a dark mirror, reflecting the base of the door and the stone. A straight line of large honed travertine stepping slabs, each floating a few centimetres above the water on a hidden base, leads from the bottom of the frame to a stone landing at the door, with a thin warm light line glowing under the edge of every slab and doubled in the water. Low sun on the open front of the pool throws soft rippling reflections of light onto the soffit and the stone walls. Narrow beds of low silvery grasses run along the foot of both side walls. The door itself is in soft, even shade. Palette: travertine, bone, walnut, dark espresso water, silver-green, warm light; serene, architectural, expensive. No sky, no fountain or jets, no fish or lilies, no furniture, no planters, no lanterns or wall lights as objects, no house number, no text, no people."
+  },
+  {
+   "id": "C-out",
+   "file": "C-out.jpg",
+   "role": "delivered: C, outside",
+   "placeholder_id": "c0487024-e7be-4a72-8d0c-b6a0762829e5",
+   "task_id": "40d4cd8a1c59a214bd643b53ab6da430",
+   "batch_id": "c90584ac-8997-4176-8b54-a7f7b8666f16",
+   "idempotency_key": "wm-entrance-concept-2026-11-15-C-out-r1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-40d4cd8a1c59a214bd643b53ab6da430-0-1794705491194-03aec85c.jpg",
+   "created_at": "2026-11-15T01:17:23Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "a771c40d7531e6f277ebadd48b584f619a7bbfd3afb64a81c01a7be8660f7f8d",
+   "bytes": 329397,
+   "share_url": "https://www.var2.ai/image/c0487024-e7be-4a72-8d0c-b6a0762829e5",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §5.9, paragraph 1 (line 444), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "bf8e994d56256bf556ed7aba4066a375ecd9030b9e6bed9454a5c54a5c49c7ac",
+   "prompt_chars": 1808,
+   "prompt": "Architectural editorial photograph for a leading design magazine, 16:9. The entrance of a warm-minimal house built around a tall plaster drum. Camera at eye height 1.20 m, 24 mm full-frame lens, level, all verticals vertical, everything sharp, no depth of field. A covered entrance court in deep, warm shade: its two side walls and its ceiling are lined in slim vertical battens of matte-oiled walnut (#6B4A33), and the ceiling shows only as a thin dark-wood band along the top of the frame. Filling the centre and a little left of it, the convex face of a tall cylindrical volume in bone limewash plaster (#ECE5DA) with a soft trowel texture rises out of the top of the frame. Its curvature reads as a smooth gradient from a softly lit front to darker flanks that turn into deep, shadowed pockets where it meets the walnut walls. Set into the front of the drum, a tall, narrow front door, 1.1 by 3.2 m, in flush matte-oiled walnut with a slim vertical dark-bronze edge pull, deep in a plaster reveal. Just to its right, a full-height narrow slot of vertically fluted glass in a thin dark-bronze frame glows warm amber from the light-filled interior; nothing inside is legible. The drum seems to float: a thin line of warm light runs along its base, where it meets a floor of warm taupe honed limestone. A single warm slice of low winter sun from behind-left grazes the lower right flank of the drum and the floor in front of it; everything else is soft shade. In the right-hand pocket, a bed of tall, soft grasses, gently lit from below. Palette: walnut, bone plaster, warm amber light, dark bronze, taupe stone; rich warm shadows; intimate and luminous, daytime in deep shade, not night. No sky, no furniture, no pots, no lanterns, no wall lamps as objects, no doormat, no house number, no text, no people."
+  },
+  {
+   "id": "A-out",
+   "file": "A-out.jpg",
+   "role": "delivered: A, outside (the one allowed retry of A-out, same prompt, new sample)",
+   "retry_reason": "r1 showed a band of sky across the top centre; the prompt says \"No sky\" and the brief names a forbidden sky as a retry case (also the designer's rejection item 3.10.2). The retry still shows a smaller wedge of sky (1.8% of pixels); no further retry is allowed.",
+   "placeholder_id": "2f1f5616-879c-4c76-a246-4e969780f6ee",
+   "task_id": "fe93bef1e419607893967164d35c640b",
+   "batch_id": "c3572e25-9a5d-4102-8ec6-83f10979e055",
+   "idempotency_key": "wm-entrance-concept-2026-11-15-A-out-r2",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/flux2-fe93bef1e419607893967164d35c640b-0-1794705609699-6fad46a1.jpg",
+   "created_at": "2026-11-15T01:19:38Z",
+   "tokens": 250,
+   "output_px": [
+    1344,
+    768
+   ],
+   "sha256": "bb75b4cf6778d1eae254fdc24d8fa15be4b0428221f35a96e00ee7956224b0bf",
+   "bytes": 349590,
+   "share_url": "https://www.var2.ai/image/2f1f5616-879c-4c76-a246-4e969780f6ee",
+   "prompt_source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §3.9, paragraph 1 (line 216), copied verbatim without the leading \"> \"",
+   "prompt_sha256": "afa4a390fccdc8276f16e3b183a32c3c7d0219a663b756ed506e0a8076deec41",
+   "prompt_chars": 2271,
+   "prompt": "Architectural editorial photograph for a leading interior design magazine, 16:9. The entrance courtyard of a warm-minimal Mediterranean-modern house, seen from just outside its open south end. Camera at eye height 1.20 m, 24 mm full-frame lens, perfectly level, all verticals vertical, slight lens rise, everything sharp, no depth of field. A walled courtyard open to the sky, its walls in bone limewash plaster (#ECE5DA) with a visible soft trowel texture, tall enough that no sky shows. On the left third of the frame, a thick sculpted plaster portal with softly rounded edges stands proud of the back wall; carved into it, a tall round-headed niche, and at the back of the niche a round-headed front door, 1.0 by 2.7 m, in vertically reeded, matte-oiled walnut (#6B4A33), with one large cast dark-bronze ring pull at hip height: an arch within an arch. The door sits in soft, even shade, gently washed from above by warm light hidden in the head of the niche. The courtyard's right-hand back corner is a smooth, generous curve of plaster sweeping into the long right wall, and that wall is caught by low, warm, late-afternoon winter sun from behind and to the left of the camera, softened by a thin haze. Golden light rakes across the plaster texture, and the soft, lacy shadow of olive leaves and branches is printed across the curve and the upper wall. Along the foot of the right wall runs a long built-in bench, one monolithic slab of honed travertine (#D8C8AE) floating on a recessed plinth, with a thin line of warm light glowing beneath it. In the left foreground, cut by the frame edge, the twisted silver-grey trunk of an old olive tree planted in the ground, its dusty grey-green crown overhanging the top-left corner. Underfoot, a straight path of large honed limestone slabs leads to the door between beds of warm pale gravel with low silver-green planting. Far left, in shade, a narrow vertical window of reeded glass in a slim dark-bronze frame. Palette: bone, sand, travertine, walnut, olive grey-green, a touch of dark bronze; warm brown shadows; calm, sunlit, inviting. No sky, no sun disc, no lens flare. No furniture, no pots or planters, no lanterns, no lamps or wall lights as objects, no cushions, no doormat, no house number, no text, no people."
+  }
+ ],
+ "contact_sheet": {
+  "file": "contact-sheet.jpg",
+  "made": "code (Pillow, 0 tokens): 2x2, tiles 960x549, right-to-left order (A-out top right, A-in top left, B-out bottom right, C-out bottom left), Hebrew labels \"A · חצר הזית · מבחוץ\", \"A · חצר הזית · מבפנים\", \"B · מראת המים · מבחוץ\", \"C · הפנס · מבחוץ\"; background #EFE9DF (STY2); JPEG q92",
+  "px": [
+   2004,
+   1374
+  ],
+  "sha256": "d5735250f53341cee8a2926b3f2c40b1b50b786e428e80f551e07f704f6a9562"
+ },
+ "phone_check": "390x220 Lanczos copies looked at in the scratchpad (not kept in the repo)"
+}
