@@ -138,8 +138,8 @@ def table_d0(P, gate_tol=0.02):
     X, Y, Z = P.world()
     r0 = P.row(f["v0"])
     add("left frame edge meets the court's left wall at X", 4.72, float(X[r0, P.col(0.0)]), "m", "depth pass, frame column u 0, row v0")
-    lc = P.step_x(r0, (62,), (61,))
-    add("left corner X 3.95 / Y 9.60, u", 0.080, P.u(lc) if lc else None, "u", "id pass, row v0")
+    lc = P.step_x(P.row(0.7), (62,), (61,))
+    add("left corner X 3.95 / Y 9.60, u", 0.080, P.u(lc) if lc else None, "u", "id pass, row v 0.7 (below the window)")
     e = P.extent((75, 76))
     if e:
         add("bath window (frame + glass), u left", 0.053, e[0], "u", "id pass, extent in the frame")
@@ -276,7 +276,7 @@ def stations(F, PS):
         right = {}
         for nm, ids in (("hall front wall (Y 6.35)", HALL_FRONT), ("walnut lining of O-entry-living", (20, 21, 22, 23, 24)),
                         ("living room seen through it", tuple(range(30, 44)) + (0, 50)), ("hall right wall (X 3.60, inside face)", (13,)),
-                        ("front-door right jamb, plaster", (64,)), ("court", (60, 61, 62, 63, 65, 66, 67))):
+                        ("front-door reveal, plaster (jambs and head)", (64,)), ("court", (60, 61, 62, 63, 65, 66, 67))):
             m = np.isin(cl, ids)
             if m.any():
                 xs = np.nonzero(m.any(0))[0]

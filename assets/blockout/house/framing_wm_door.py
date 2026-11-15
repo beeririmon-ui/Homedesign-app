@@ -309,8 +309,8 @@ def classify_door(idx, depth, normal, f, cv, IM):
         out[wallm & (X > DOOR["x_out"] - e) & (nx > 0.7)] = 61
         out[wallm & (ny < -0.7) & (Y > COURT["y"][1] - 0.05)] = 62
         out[wallm & (ny > 0.7) & (Y < COURT["y"][0] + 0.05)] = 63
-        rev = wallm & (X < DOOR["x_out"] - e) & (Y > DOOR["y0"] - e) & (Y < DOOR["y1"] + e)
-        out[rev] = 64
+        rev = (idx == IM["house_wall"]) & (X > DOOR["x_in"] - 0.05) & (X < DOOR["x_out"] - e) & (Y > DOOR["y0"] - e) & (Y < DOOR["y1"] + e)
+        out[rev] = 64                                                      # the whole reveal, also its inner 6 cm behind the leaf line
         out[(idx == IM["house_ceiling"]) & court] = 65
         for key, cid in (("stone", 60), ("court_ceiling", 65), ("ground", 67), ("foot_line", 66), ("fillet", 64), ("pull", 72), ("jib", 82), ("jib_gap", 83)):
             out[idx == PIDX[key]] = cid
@@ -323,7 +323,7 @@ def classify_door(idx, depth, normal, f, cv, IM):
         out[(idx == IM["house_trim"]) & court] = 75                      # the bath window's sill board seen from the court side
         jibside = (idx == IM["house_wall"]) & (X < JIB["x"][1] + e) & (Y > JIB["y"][0] - e) & (Y < JIB["y"][1] + e) & (Z < JIB["h"] + e)
         out[jibside] = 83                                                  # the wall's end faces seen inside the jib door's 3 mm gap
-        rest = (out == 99) & (idx == IM["house_wall"]) & court             # arris pixels whose normal is neither face's
+        rest = (out == 99) & (idx == IM["house_wall"]) & (X > DOOR["x_in"] - 0.05)   # arris pixels, and the head's soffit seen from the sill
         out[rest & (X > DOOR["x_out"] - 0.01)] = 61
         out[rest & (X <= DOOR["x_out"] - 0.01)] = 64
     return out, (X, Y, Z)

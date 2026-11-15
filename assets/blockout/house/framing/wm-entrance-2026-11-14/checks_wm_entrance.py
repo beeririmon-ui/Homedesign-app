@@ -436,7 +436,7 @@ def verticals(PS):
                            ("H0", (12,), (13,), "hall corner X 3.60 / Y 6.35"), ("H0x-a", (11,), (12,), "hall corner X 0.80 / Y 6.35"),
                            ("H0x-a", (12,), LINING + LIVING_ALL, "left jamb, hall face"), ("H0x-b", (11,), (12,), "hall corner X 0.80 / Y 6.35"),
                            ("H0x-b", (12,), LINING + LIVING_ALL, "left jamb, hall face"), ("b/S04", (12,), LINING + LIVING_ALL, "left jamb, hall face"),
-                           ("b/S11", (39,), (32, 31, 37), "glazing front jamb / window wall"), ("b/S11", (0,), (39,), "mullion edge")):
+                           ("b/S11", (0,), (39,), "mullion edge"), ("b/S11", (37,), (31,), "rounded corner / back wall (tangent line)")):
         if fid not in PS:
             continue
         Pp = PS[fid]
