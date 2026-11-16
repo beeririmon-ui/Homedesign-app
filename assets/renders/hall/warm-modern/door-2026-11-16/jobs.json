@@ -1,0 +1,68 @@
+{
+ "date": "2026-11-16",
+ "brief": "briefs/wm-door-final-d0-2026-11-16.md (step 2)",
+ "spec": "docs/proposals/wm-entrance-magazine-2026-11-15.md ch. 11.3 (prompt), 11.4 (rejection list)",
+ "decisions": [
+  "ENT2",
+  "FB5",
+  "FB6",
+  "manager: the wall light and the doormat drawn as generic items, no hotspot, no buy"
+ ],
+ "budget": {
+  "cap_this_run": 1300,
+  "spent": 650,
+  "rule": "one render and at most one fix, the fix only for an item on the rejection list; var2_estimate_cost before each send",
+  "fix": "not needed: r1 passed every item of 11.4 (README)"
+ },
+ "note": "for the owner first (the brief: the owner sees D0 before anything else); then qa-agent and master-designer's rejection list; not on the site before QA (rule 6.7)",
+ "references": {
+  "clay": "assets/blockout/house/framing/wm-door-2026-11-16/D0-closed.png (+ -id, -depth, -edges, -sun)",
+  "input_r1": {
+   "local": "assets/renders/hall/warm-modern/door-2026-11-16/d0-input.png",
+   "sha256_20": "bff844c8e40886dad662",
+   "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b4306f01-e13f-4d13-9115-e767e87f36cd.png",
+   "made": "prep_input.py: the clay D0-closed.png with two colour edits through its id pass, as in 2026-11-14: the leaf (ids 70, 71) to oiled-walnut Lab 44 / 14 / 24 (the clay's AgX render showed the #6B4A33 leaf at L* 50, orange), the fluted glass (76) from L* 23 to a bone grey L* 62; 0 levels outside the two masks"
+  },
+  "image_refs": "none: no concept image (11.3: the concepts' geometry is wrong and the model copies geometry from a reference)"
+ },
+ "model_choice": "seedream-5-pro i2i 2K (650) over nano-banana-2 i2i 4K (450): quality first for the site's first frame, and seedream-5-pro is the one model with evidence in this studio of locking on our clays (M0S1 2026-11-05: 'the first model that does not enlarge the furniture'; D0 2026-11-14: locked to 1.92 px); nano-banana-2 has never been tested for a clay lock here. aspect 'auto' returns the base.png canvas 2720 x 1530 exactly",
+ "jobs": [
+  {
+   "id": "wm-door-d0-final-r1",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 0,
+   "seed": "not exposed by the model (only seedream-v4 is seedable, docs/var2-models.md)",
+   "idempotency_key": "wm-door-d0-final-r1-2026-11-16",
+   "estimate": 650,
+   "tokens": 650,
+   "placeholder_id": "bd4f91ac-2863-4c4d-9095-e5ca1c9c5928",
+   "task_id": "72e6953a809e0192e6e409e17b6ab9ac",
+   "batch_id": "9d2ce9ef-a4be-4f93-8343-0335b0911e99",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-72e6953a809e0192e6e409e17b6ab9ac-0-1794860612521-4d95faca.png",
+   "share": "https://www.var2.ai/image/bd4f91ac-2863-4c4d-9095-e5ca1c9c5928",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "assets/renders/hall/warm-modern/door-2026-11-16/raw/d0-r1-seedream.png",
+   "raw_sha256_20": "6c3d5dec41a5a1cf37cf",
+   "prompt": "assets/prompts/warm-modern-door-2026-11-16/d0.txt",
+   "prompt_chars": 3999,
+   "prompt_sha256_20": "807183441b4c217885e2",
+   "prompt_vs_designer": "11.3 verbatim is 4,347 characters; var2's prompt field takes 4,000, so the text was tightened word by word (articles, 'is', 'the'), no instruction dropped or added (designer text: d0-designer-verbatim.txt, sha256_20 6413ebb26d05fd216a5b)",
+   "verdict": "accepted: every item of the rejection list 11.4 passes at x1 and x2 (README); the lock passes without a warp",
+   "lock": {
+    "record": "assets/renders/hall/warm-modern/door-2026-11-16/d0-lock.json",
+    "gate_lines_worst_px": 1.74,
+    "joints_worst_px": 1.28,
+    "verticals_worst_tilt_deg": 0.389,
+    "pass": true
+   },
+   "out": "d0.png (byte copy of the raw: no warp needed), d0-graded.png (WM-G1 toe, d0-grade.json)"
+  }
+ ],
+ "tokens_total": 650
+}

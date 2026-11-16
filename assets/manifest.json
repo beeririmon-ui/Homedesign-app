@@ -15678,6 +15678,46 @@
    "status": "CONCEPT ONLY, not for the site: for the owner to choose one of the three \"middle\" entrance variants (FB6); not locked, not a keyframe; no QA needed for site use",
    "sha256": "f7463fbf1e696483b7c402afeb575c83f58ed5ae2f558d97b987ee6076f0558e",
    "bytes": 377708
+  },
+  {
+   "id": "wm-door-d0-final-2026-11-16",
+   "path": "assets/renders/hall/warm-modern/door-2026-11-16/d0.png",
+   "kind": "arrival still D0, FINAL entrance (ENT2: M3 with M2's stone door wall, no sidelight; the closed door, S1 rest frame)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-16",
+   "model": "seedream-5-pro i2i 2K, one render, no fix (650 tokens)",
+   "prompt_record": "assets/prompts/warm-modern-door-2026-11-16/d0.json, d0.txt (designer's ch. 11.3 text: d0-designer-verbatim.txt)",
+   "recipe": "assets/renders/hall/warm-modern/door-2026-11-16/jobs.json, prep_input.py, lock_d0.py",
+   "status": "for the owner first (brief: the owner sees D0 before anything else), then qa-agent and master-designer (rejection list 11.4 passed by render-agent at x1 / x2); locked on the clay wm-door-2026-11-16/D0-closed without a warp (gate lines <= 1.74 px, joints <= 1.28 px, d0-lock.json); not for the site before QA; the wall light and the doormat are generic items, no hotspot",
+   "sha256": "6c3d5dec41a5a1cf37cfd90702464d8fc23308b522efbe2cfa6d0469a6bdb698",
+   "bytes": 7209654
+  },
+  {
+   "id": "wm-door-d0-final-graded-2026-11-16",
+   "path": "assets/renders/hall/warm-modern/door-2026-11-16/d0-graded.png",
+   "kind": "display grade of the final D0 (WM-G1 toe only)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-16",
+   "model": "code",
+   "recipe": "assets/renders/hall/warm-modern/door-2026-11-16/grade_d0.py, d0-grade.json",
+   "status": "awaiting the owner and QA; the shaded-plaster level is open for the designer (README)",
+   "sha256": "c43b5f69012907fe426698345684acf971f0dd17e386fef3b7b11c2a9bb2ea03",
+   "bytes": 6387701
+  },
+  {
+   "id": "wm-door-clay-final-2026-11-16",
+   "path": "assets/blockout/house/framing/wm-door-2026-11-16/",
+   "kind": "clay set: the FINAL entrance (ch. 11.2) - D0 closed / none / open (+ direct-sun pass), HD and HDx (3:2), HD57, HT, clip 1 stations S00-S11; each with depth, id, edges",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-16",
+   "model": "Blender Cycles (0 tokens)",
+   "recipe": "assets/blockout/house/framing_wm_door_final.py, assets/blockout/house/framing/wm-door-2026-11-16/checks_wm_door_final.py",
+   "status": "clay: the gate passed (the 2026-11-14 lines within 1 px, untouched depth identical); the designer's projections hold (README); two light ratios collide in display terms - back to master-designer (README); a working input, not for the site",
+   "sha256_D0_closed": "f6d44ca63a878aca23a1a3f03812883756270c58466a6118279e1200ef029c2f",
+   "bytes_D0_closed": 3283049
   }
  ]
 }

@@ -1,0 +1,3965 @@
+{
+ "stage": "warm-modern FINAL entrance clay (ENT2; master-designer ch. 11), briefs/wm-door-final-d0-2026-11-16.md step 1; framing_wm_door_final.py on framing_wm_door.py; 0 var2 tokens",
+ "date": "2026-11-16",
+ "clip1_length_m": 4.938000000000001,
+ "canvases": {
+  "reg": {
+   "px": [
+    2720,
+    1530
+   ],
+   "frame_box_px": [
+    77.4853,
+    43.4279,
+    2642.5147,
+    1486.5721
+   ]
+  },
+  "tall": {
+   "px": [
+    2496,
+    1664
+   ],
+   "frame_box_px": [
+    71.11,
+    170.0,
+    2424.89,
+    1494.0
+   ]
+  }
+ },
+ "render": "Cycles CPU seed 7, OIDN, AgX Medium High Contrast, exposure 0.75 for every frame (one locked exposure, as 2026-11-14)",
+ "light": {
+  "D0-closed": {
+   "display": {
+    "shaded plaster (right wall u 0.68-0.74, v 0.10-0.30)": 0.6874,
+    "sunlit plaster (right wall, direct sun >= 85 %, u > 0.70)": 0.8816,
+    "sun over shade, stops (designer 1.3-2.0)": 0.36,
+    "wall-light fan up: p98 over the stone beside, stops (designer 1.0-1.5)": 0.26,
+    "wall-light fan down: p98 over the stone beside, stops": 0.29,
+    "door-wall stone over the shaded plaster, stops (designer: about -0.4 in albedo, not graded)": 0.07,
+    "leaf under the shaded plaster, stops": 1.82,
+    "shaded plaster vs base.png back wall, stops (designer +-1/3)": -0.13,
+    "sunlit plaster: any channel at 255 (share; designer: none burnt)": 0.0,
+    "sunlit plaster: highest channel (0-255)": 251,
+    "leaf L* median (still: 28-35)": 51.3,
+    "frame L* p0.5 (black point; still: 11-14)": 24.0
+   },
+   "scene": {
+    "shaded plaster (right wall u 0.68-0.74, v 0.10-0.30)": 0.7957,
+    "sunlit plaster (right wall, direct sun >= 85 %, u > 0.70)": 2.1295,
+    "sun over shade, stops (designer 1.3-2.0)": 1.42,
+    "wall-light fan up: p98 over the stone beside, stops (designer 1.0-1.5)": 1.29,
+    "wall-light fan down: p98 over the stone beside, stops": 1.4,
+    "door-wall stone over the shaded plaster, stops (designer: about -0.4 in albedo, not graded)": 0.29,
+    "leaf under the shaded plaster, stops": 2.62
+   },
+   "regions": {
+    "shaded_px": 44352,
+    "sunlit_px": 131963,
+    "fan_up_px": 23745,
+    "fan_down_px": 22351,
+    "beside_px": 93596
+   }
+  },
+  "D0-none: court shaded plaster over the hall (jib door), stops": {
+   "display": 0.39,
+   "scene": 0.99,
+   "designer": "0.52 +-1/6 (the 2026-11-14 clay's display-decoded value)"
+  },
+  "D0-open: court shaded plaster over the hall (jib door), stops": {
+   "display": 0.44,
+   "scene": 1.09,
+   "designer": "0.52 +-1/6 (the 2026-11-14 clay's display-decoded value)"
+  },
+  "HDx: living over hall, stops": {
+   "designer": "2/3 +-1/6, as today",
+   "display_all_surfaces": 0.68,
+   "display_walls": 0.88,
+   "today_display_all_surfaces": 0.58,
+   "today_display_walls": 0.78,
+   "scene_all_surfaces": 1.2
+  },
+  "HT vs HD: far wall, stops (designer: within 1/6)": {
+   "plaster": -0.07,
+   "jib": 0.01,
+   "stone": 0.0
+  }
+ },
+ "build_notes": {
+  "wm_entrance": [
+   "removed 42 objects: oak portal + casing (G-H4), cornice, console (G-H3), bench, threshold strip, hall planks 25",
+   "O-entry-living: clear opening X 0.95-2.15, Z 0-2.4 unchanged; walnut #6B4A33 on both jambs and the soffit, Y 6.206-6.344, flush with the reveal plane; shadow gap 3 mm (8 mm deep) and a 3 mm plaster bead at each face; lining 2 cm inside the wall; no casing, no leaf",
+   "8 hall skirting boards in the wall material (WMC10); ceiling 3.0 with a 1 cm shadow gap, no cornice",
+   "floor: 31 plank boxes, 22 cm, along Y, on the living room's joint lines X = -2.32 + 0.22 k (hall joints at X 0.98 .. 3.40); the living planks' last boards run on through the opening (no threshold strip); replay vs built living planks: max 0.000 mm"
+  ],
+  "door": [
+   "removed 6 objects: ['front_door_closed_h2', 'leaf_hall_work_folded', 'O-front-door_threshold', 'O-front-door_threshold_base', 'O-hall-work_threshold', 'O-hall-work_threshold_base']",
+   "court floor: 27 limestone pieces 1.2 x 0.6, rows on Y [6.55, 6.8, 7.4, 8.0, 8.6, 9.2, 9.6], slab joints across X at [3.66, 4.86, 6.0600000000000005, 7.26, 7.6]; stone into the reveal to the leaf (X 3.66)",
+   "ground plane outside (south of X 7.6; west gap X (6.6, 7.6)); court ceiling 3.0; 1 cm dark line at the wall feet",
+   "reveal: plaster (the house wall), 0.29 visible depth X 3.66-3.95; 3 cm fillets at the jamb / head inside corners",
+   "front door: walnut leaf X 3.6-3.66, Y 7.8-8.8, Z 0-2.4; bar pull d 0.025 Z (0.75, 1.35) at Y 7.9 on 4 cm standoffs; hinge axis (3.6, 8.8), opens inward",
+   "W-bath: 8 frame / sash objects in bronze #3A322C (clay profile 6 cm; the render asks for 45 mm)",
+   "O-hall-work: closed jib leaf flush with X 0.8, Y 8.103-8.997, Z 0-2.397, 3 mm gap on both sides and at the head (no skirting on the leaf)",
+   "oak floor carried into the opening to X 3.66 on the hall's joint line X 3.62; no threshold strip"
+  ],
+  "ch11": [
+   "removed ['court_foot_door_wall_a', 'court_foot_door_wall_b', 'court_foot_jamb_a', 'court_foot_jamb_b', 'hwall_53', 'hwall_54', 'hwall_55', 'reveal_fillet_a', 'reveal_fillet_b']",
+   "door wall: 45 limestone pieces #D8C8AE on X 3.9450000000000003-3.95 (face on X 3.95), 11 courses [0.4, 0.3, 0.15, 0.4, 0.2, 0.15, 0.4, 0.15, 0.25, 0.4, 0.2], joints 5 x 5 mm, head joints {2: [7.05], 4: [7.05], 6: [7.05], 8: [7.05], 10: [7.3, 9.3], 11: [8.05]}; the reveal in the same stone to X 3.66 with every horizontal joint, the head one stone, sharp corners; core behind the stone in joint colour #8F826F",
+   "5 mm shadow grooves where the side walls meet the stone (right: above the planter; left: below and above the bath window); the 1 cm dark foot line stays on the side walls only; the reveal fillets (r 3 cm) are gone",
+   "leaf: 48 vertical rounded flutes, pitch 19.96 mm, groove 14 mm wide x 4 mm deep (arc r 8.1 mm), 20 mm flat margins, full height; walnut material 'walnut_wm' base colour linear (0.1470, 0.0685, 0.0331) = #6B4A33, luminance Y 0.0826 (the designer's real-walnut albedo 0.083: already so in the 2026-11-14 clay; its orange look was the AgX display curve on a bright sky-lit leaf, not the albedo)",
+   "planter: plaster X 3.95-4.75, Y 6.55-7.03, Z 0.03-0.62; limestone rim 8 x 8 cm on four sides (Z 0.62-0.7), its front at Y 7.05; soil at Z 0.65 in 0.64 x 0.34",
+   "bench: plaster base X 4.75-6.4, face Y 7.03, to Z 0.37; limestone seat Z 0.37-0.45 to Y 7.05 (2 cm proud, its shadow line under it); free seat 1.65 m, nothing on it",
+   "a 3 x 3 cm shadow recess at the floor under the planter and the bench (one body, one foot line; the designer names it for the bench, the clay runs it on under the planter so the front line does not step at X 4.75)",
+   "herbs: 2 upright rosemary + 3 lavender volumes (displaced icospheres, grey-green herbs_clay), top Z 1.148 (limit 1.15), X 4.026-4.771 (spill past the rim X 4.75: 2.1 cm), front Y 7.084 (past Y 7.05: 3.4 cm; limit 10)",
+   "wall light: bronze cylinder d 100 x 250 on a 15 mm round plate d 80, centre (4.02, 7.4, 1.8); two 2700 K spots up / down, beam 25.0 deg, tilted 10.0 deg toward the stone, 22.0 W each; lit diffusers at both ends (emission 6.0); lit in every frame",
+   "doormat: 0.60 x 0.90 x 0.015 at X (3.95, 4.55), Y (7.85, 8.75), coir #A88B64",
+   "sun: azimuth 228.0 (from north, clockwise; north = -X), altitude 21.0, angle 1.5 deg, 4000 K, strength 8.0; toward the sun (0.6247, 0.6938, 0.3584); the clay's sky unchanged",
+   "olive: 9000 leaf cards 5 x 1.2 cm in 90 twig clusters (r 0.26), crown centred (8.2, 10.0), d 3.0, Z 1.8-4.0; trunk d 0.25 at (8.65, 9.60) to Z 2.2, 0.6 m off the crown axis across the sun (its shadow leaves the court's right wall at X > 5.8, out of every frame)",
+   "hall panel: 15 limestone pieces + 11 returns, face X 0.81 (10 mm proud of X 0.80), Y 6.35-7.75, Z 0.0-3.0, the porch courses, head joints {2: [7.05], 4: [7.05], 6: [7.05], 8: [7.05]}, joints 5 x 5 mm, no skirting on it; skirtings trimmed: ['hall_skirt_x00 [0.8, 6.35, 0.0]-[0.815, 8.1, 0.15] -> X 0.8-0.815, Y 7.755-8.1', 'hall_skirt_y00 [0.8, 6.35, 0.0]-[0.95, 6.365, 0.15] -> X 0.8150000000000001-0.95, Y 6.35-6.365']",
+   "RL-hall out (['hall_ceilpc0', 'hall_ceilpc1', 'hall_ceilpc2', 'hall_ceilpc3', 'hall_ceilpc4', 'hall_ceilpc5', 'hall_ceilpc6', 'hall_ceilpc7', 'well0a', 'well0b', 'well0c', 'well0d', 'wmh_cgap_x0', 'opal0']); RL-hall-slot: X (0.8, 1.1), Y (6.35, 9.8), well 0.45 (Z 3.0-3.45), opal emission 20.0 (sky colour); hall ceiling X 1.1-3.60; the ceiling shadow gap along X 0.80 removed and the two end ones start at X 1.1"
+  ]
+ },
+ "ids": {
+  "0": "sky / outside (through the glazing)",
+  "10": "hall floor",
+  "11": "hall left wall (X 0.80)",
+  "12": "hall front wall (Y 6.35)",
+  "13": "hall right wall (X 3.60)",
+  "14": "hall skirting",
+  "15": "hall ceiling, roof-light well",
+  "17": "hall back wall",
+  "20": "lining, walnut: left jamb (X 0.95)",
+  "21": "lining, walnut: right jamb (X 2.15)",
+  "22": "lining, walnut: soffit (Z 2.40)",
+  "23": "lining shadow gap (3 mm)",
+  "24": "plaster bead on the reveal (3 mm)",
+  "25": "floor inside the wall depth (Y 6.20-6.35)",
+  "30": "living floor",
+  "31": "living back wall (Y 0)",
+  "32": "living window wall (X -2.30)",
+  "33": "living right wall (X 2.50)",
+  "34": "living front wall (Y 6.20)",
+  "35": "living ceiling",
+  "36": "living dropped band + track slot",
+  "37": "living rounded corner",
+  "38": "living skirting",
+  "39": "living window (frame, mullions, reveal)",
+  "40": "living window bench",
+  "41": "sofa",
+  "42": "coffee table",
+  "43": "armchair",
+  "50": "O-living-dining and the dining room behind it (the plan-1.1 clay as it stands: no warm-modern design exists)",
+  "98": "geometry without a pass index",
+  "99": "anything else (must be 0 px)",
+  "60": "court floor, limestone (incl. the reveal floor)",
+  "61": "door wall, plaster (none left after ch. 11)",
+  "62": "court left wall (Y 9.60)",
+  "63": "court right wall (Y 6.55)",
+  "64": "door reveal, plaster behind the leaf line (X 3.60-3.66)",
+  "65": "court ceiling",
+  "66": "court wall foot line (1 cm)",
+  "67": "ground outside the court",
+  "70": "front door leaf, face",
+  "71": "front door leaf, edge",
+  "72": "door pull (bronze)",
+  "75": "bath window frame (bronze)",
+  "76": "bath window, fluted glass",
+  "82": "jib door of the study (closed)",
+  "83": "jib door shadow gap",
+  "84": "door wall, limestone face (X 3.95)",
+  "85": "door reveal, limestone (jambs + head, X 3.66-3.95)",
+  "86": "limestone joints (5 mm recess; court and hall panel)",
+  "87": "built planter, plaster body",
+  "88": "built bench, plaster base",
+  "89": "limestone caps (planter rim, bench seat)",
+  "90": "herbs (rosemary + lavender volume)",
+  "91": "wall light porch-wall-light (body + lit diffusers)",
+  "92": "planter soil",
+  "93": "doormat porch-doormat (coir)",
+  "94": "hall limestone panel (X 0.81)",
+  "95": "hall roof-light slot (well + opal)",
+  "96": "olive (must be 0 px)",
+  "97": "shadow recesses (bench / planter foot, stone-to-plaster grooves)"
+ },
+ "courses": [
+  [
+   0.0,
+   0.4
+  ],
+  [
+   0.4,
+   0.7
+  ],
+  [
+   0.7,
+   0.85
+  ],
+  [
+   0.85,
+   1.25
+  ],
+  [
+   1.25,
+   1.45
+  ],
+  [
+   1.45,
+   1.6
+  ],
+  [
+   1.6,
+   2.0
+  ],
+  [
+   2.0,
+   2.15
+  ],
+  [
+   2.15,
+   2.4
+  ],
+  [
+   2.4,
+   2.8
+  ],
+  [
+   2.8,
+   3.0
+  ]
+ ],
+ "heads_court": {
+  "2": [
+   7.05
+  ],
+  "4": [
+   7.05
+  ],
+  "6": [
+   7.05
+  ],
+  "8": [
+   7.05
+  ],
+  "10": [
+   7.3,
+   9.3
+  ],
+  "11": [
+   8.05
+  ]
+ },
+ "heads_hall": {
+  "2": [
+   7.05
+  ],
+  "4": [
+   7.05
+  ],
+  "6": [
+   7.05
+  ],
+  "8": [
+   7.05
+  ]
+ },
+ "planter": {
+  "x": [
+   3.95,
+   4.75
+  ],
+  "y": [
+   6.55,
+   7.05
+  ],
+  "h": 0.7,
+  "rim": 0.08,
+  "rim_t": 0.08,
+  "soil": 0.65,
+  "body_face": 7.03
+ },
+ "bench": {
+  "x": [
+   4.75,
+   6.4
+  ],
+  "y": [
+   6.55,
+   7.05
+  ],
+  "seat": 0.45,
+  "slab": 0.08,
+  "body_face": 7.03,
+  "recess": 0.03
+ },
+ "lamp": {
+  "c": [
+   4.02,
+   7.4,
+   1.8
+  ],
+  "d": 0.1,
+  "h": 0.25,
+  "plate_t": 0.015,
+  "plate_d": 0.08,
+  "beam_deg": 25.0,
+  "tilt_deg": 10.0,
+  "kelvin": 2700
+ },
+ "doormat": {
+  "x": [
+   3.95,
+   4.55
+  ],
+  "y": [
+   7.85,
+   8.75
+  ],
+  "t": 0.015,
+  "hex": "#A88B64"
+ },
+ "olive": {
+  "c": [
+   8.2,
+   10.0
+  ],
+  "d": 3.0,
+  "z": [
+   1.8,
+   4.0
+  ],
+  "trunk_d": 0.25,
+  "leaf": [
+   0.05,
+   0.012
+  ],
+  "clusters": 90,
+  "per_cluster": 100,
+  "cluster_r": 0.26,
+  "seed": 228,
+  "trunk_offset": 0.6
+ },
+ "panel": {
+  "x_face": 0.81,
+  "y": [
+   6.35,
+   7.75
+  ],
+  "z": [
+   0.0,
+   3.0
+  ]
+ },
+ "slot": {
+  "x": [
+   0.8,
+   1.1
+  ],
+  "y": [
+   6.35,
+   9.8
+  ],
+  "well": 0.45,
+  "ceiling": 3.0
+ },
+ "flutes": {
+  "n": 48,
+  "pitch": 0.02,
+  "depth": 0.004,
+  "width": 0.014,
+  "margin": 0.02
+ },
+ "depth_pass": "16-bit PNG; planar depth in metres = value / 5000; 65535 = sky; at the pixel centres",
+ "gate": {
+  "lines_old_vs_new_px": {
+   "left corner (X 3.95 / Y 9.60)": {
+    "old_px": 282,
+    "new_px": 283,
+    "diff_px": 1
+   },
+   "outer opening, left (Y 8.80)": {
+    "old_px": 679,
+    "new_px": 679,
+    "diff_px": 0
+   },
+   "leaf, left": {
+    "old_px": 704,
+    "new_px": 704,
+    "diff_px": 0
+   },
+   "leaf, right": {
+    "old_px": 1160,
+    "new_px": 1160,
+    "diff_px": 0
+   },
+   "outer opening, right (Y 7.80)": {
+    "old_px": 1174,
+    "new_px": 1174,
+    "diff_px": 0
+   },
+   "right corner (X 3.95 / Y 6.55)": {
+    "old_px": 1794,
+    "new_px": 1793,
+    "diff_px": -1
+   },
+   "outer opening, head (Z 2.40)": {
+    "old_px": 142,
+    "new_px": 141,
+    "diff_px": -1
+   },
+   "leaf, top": {
+    "old_px": 188,
+    "new_px": 188,
+    "diff_px": 0
+   },
+   "leaf, bottom": {
+    "old_px": 1284,
+    "new_px": 1284,
+    "diff_px": 0
+   },
+   "floor line, door wall left of the door": {
+    "old_px": 1331,
+    "new_px": 1331,
+    "diff_px": 0
+   },
+   "floor line, door wall right of the door": {
+    "old_px": 1331,
+    "new_px": 1331,
+    "diff_px": 0
+   }
+  },
+  "worst_px": 1,
+  "leaf_rectangle": {
+   "designer": [
+    0.2441,
+    0.4224,
+    0.0997,
+    0.8603
+   ],
+   "clay": [
+    0.2443,
+    0.422,
+    0.1002,
+    0.8596
+   ],
+   "diff_px": [
+    0.3895,
+    -0.9542,
+    0.6889,
+    -0.9633
+   ]
+  },
+  "untouched_surfaces_depth_old_vs_new": {
+   "D0-closed": {
+    "px_compared": 1820442,
+    "depth_equal_within_1mm": 1.0,
+    "max_mm": 0.0
+   },
+   "D0-none": {
+    "px_compared": 1976221,
+    "depth_equal_within_1mm": 1.0,
+    "max_mm": 0.0
+   },
+   "D0-open": {
+    "px_compared": 1921888,
+    "depth_equal_within_1mm": 1.0,
+    "max_mm": 0.0
+   },
+   "HD": {
+    "px_compared": 735584,
+    "depth_equal_within_1mm": 1.0,
+    "max_mm": 0.0
+   },
+   "HDx": {
+    "px_compared": 2822819,
+    "depth_equal_within_1mm": 1.0,
+    "max_mm": 0.0
+   },
+   "HT": {
+    "px_compared": 1580902,
+    "depth_equal_within_1mm": 1.0,
+    "max_mm": 0.0
+   }
+  },
+  "passed": true,
+  "rule": "brief step 1: the geometry does not move; the stone face stays on X 3.95; the leaf's rectangle (u 0.2441-0.4224, v 0.0997-0.8603) within 2 px. The named lines of the D0 lock found in the old (2026-11-14) and the new id pass, in canvas px at 2720 x 1530"
+ },
+ "D0_designer_ch11": [
+  {
+   "key": "door wall limestone incl. reveal: u left",
+   "designer": 0.08,
+   "clay": 0.0797,
+   "diff": -0.0003,
+   "unit": "u",
+   "method": "id pass extent (84, 85, 86) in the frame",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "door wall limestone: u right",
+   "designer": 0.669,
+   "clay": 0.6688,
+   "diff": -0.0002,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "door wall limestone: v bottom (floor line)",
+   "designer": 0.892,
+   "clay": 0.8929,
+   "diff": 0.0009,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "door wall limestone: v top",
+   "designer": 0.0,
+   "clay": -0.0003,
+   "diff": -0.0003,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.002,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "leaf u left",
+   "designer": 0.244,
+   "clay": 0.2443,
+   "diff": 0.0003,
+   "unit": "u",
+   "method": "id pass extent (70, 71)",
+   "tol": 0.002,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "leaf u right",
+   "designer": 0.422,
+   "clay": 0.422,
+   "diff": 0.0,
+   "unit": "u",
+   "method": "id pass extent (70, 71)",
+   "tol": 0.002,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "leaf v top",
+   "designer": 0.1,
+   "clay": 0.1002,
+   "diff": 0.0002,
+   "unit": "v",
+   "method": "id pass extent (70, 71)",
+   "tol": 0.002,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "leaf v bottom",
+   "designer": 0.86,
+   "clay": 0.8596,
+   "diff": -0.0004,
+   "unit": "v",
+   "method": "id pass extent (70, 71)",
+   "tol": 0.002,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light body: u left",
+   "designer": 0.498,
+   "clay": 0.4973,
+   "diff": -0.0007,
+   "unit": "u",
+   "method": "id pass extent (91: body, plate, arm, diffusers)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light body: u right",
+   "designer": 0.518,
+   "clay": 0.5179,
+   "diff": -0.0001,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light body: v top",
+   "designer": 0.226,
+   "clay": 0.2221,
+   "diff": -0.0039,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light body: v bottom",
+   "designer": 0.313,
+   "clay": 0.3157,
+   "diff": 0.0027,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light centre u (projection of the built centre)",
+   "designer": 0.508,
+   "clay": 0.5079,
+   "diff": -0.0001,
+   "unit": "u",
+   "method": "plan projection of (4.02, 7.40, 1.80)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light centre v",
+   "designer": 0.27,
+   "clay": 0.2696,
+   "diff": -0.0004,
+   "unit": "v",
+   "method": "plan projection",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light: share of the frame (V7Q6 counts at 0.15 % with 6 % height)",
+   "designer": 0.0017,
+   "clay": 0.0018,
+   "diff": 0.0001,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.0006,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "wall light: height share of the frame",
+   "designer": 0.087,
+   "clay": 0.0935,
+   "diff": 0.0065,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "planter: u left",
+   "designer": 0.573,
+   "clay": 0.5725,
+   "diff": -0.0005,
+   "unit": "u",
+   "method": "id pass (87, 92, and 89 at X < 4.755)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "planter: u right",
+   "designer": 0.763,
+   "clay": 0.7628,
+   "diff": -0.0002,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "planter rim, top back corner (3.95, 7.05, 0.70): v",
+   "designer": 0.652,
+   "clay": 0.6518,
+   "diff": -0.0002,
+   "unit": "v",
+   "method": "plan projection of the built corner (the herbs hide the rim's top edge in the id pass)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "planter rim, top front corner (4.75, 7.05, 0.70): v",
+   "designer": 0.704,
+   "clay": 0.7036,
+   "diff": -0.0004,
+   "unit": "v",
+   "method": "plan projection of the built corner (the herbs hide the rim's top edge in the id pass)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "herbs: u left",
+   "designer": 0.55,
+   "clay": 0.5858,
+   "diff": 0.0358,
+   "unit": "u",
+   "method": "id pass (90)",
+   "tol": 0.02,
+   "over": true,
+   "note": "designer: 'about'",
+   "gate": false
+  },
+  {
+   "key": "herbs: u right",
+   "designer": 0.78,
+   "clay": 0.7503,
+   "diff": -0.0297,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.02,
+   "over": true,
+   "note": "designer: 'about'",
+   "gate": false
+  },
+  {
+   "key": "herbs: v top",
+   "designer": 0.5,
+   "clay": 0.4993,
+   "diff": -0.0007,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.02,
+   "over": false,
+   "note": "designer: 'up to about'",
+   "gate": false
+  },
+  {
+   "key": "bench seat, far edge at the planter: v",
+   "designer": 0.815,
+   "clay": 0.816,
+   "diff": 0.001,
+   "unit": "v",
+   "method": "id pass: first row of the seat's top face",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bench seat, far edge: u left (Y 7.05)",
+   "designer": 0.637,
+   "clay": 0.6368,
+   "diff": -0.0002,
+   "unit": "u",
+   "method": "id pass, 2 rows under the far edge",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bench seat, far edge: u right (Y 6.55)",
+   "designer": 0.763,
+   "clay": 0.7651,
+   "diff": 0.0021,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bench seat (top face) at the bottom edge: u left",
+   "designer": 0.789,
+   "clay": 0.7854,
+   "diff": -0.0036,
+   "unit": "u",
+   "method": "id pass, bottom row of the frame; the slab's front face reaches further left",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bench seat at the bottom edge: u right",
+   "designer": 0.984,
+   "clay": 0.983,
+   "diff": -0.001,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bench seat seen: X near",
+   "designer": 4.75,
+   "clay": 4.753,
+   "diff": 0.003,
+   "unit": "m",
+   "method": "depth pass on the seat pixels",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bench seat seen: X far (designer 5.69)",
+   "designer": 5.69,
+   "clay": 5.6904,
+   "diff": 0.0004,
+   "unit": "m",
+   "method": "depth pass on the seat pixels",
+   "tol": 0.02,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "doormat u left",
+   "designer": 0.22,
+   "clay": 0.2197,
+   "diff": -0.0003,
+   "unit": "u",
+   "method": "id pass (93)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "doormat u right",
+   "designer": 0.43,
+   "clay": 0.4302,
+   "diff": 0.0002,
+   "unit": "u",
+   "method": "id pass (93)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "doormat v top",
+   "designer": 0.892,
+   "clay": 0.8873,
+   "diff": -0.0047,
+   "unit": "v",
+   "method": "id pass (93)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "doormat v bottom",
+   "designer": 0.979,
+   "clay": 0.9788,
+   "diff": -0.0002,
+   "unit": "v",
+   "method": "id pass (93)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "right wall: u left (the corner, above the herbs)",
+   "designer": 0.669,
+   "clay": 0.6696,
+   "diff": 0.0006,
+   "unit": "u",
+   "method": "id pass (63)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "olive in the frame (px)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id pass",
+   "tol": 0,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "olive in the canvas (px)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id pass",
+   "tol": 0,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "olive shadow: the crown axis on the right wall, u",
+   "designer": 0.82,
+   "clay": 0.8226,
+   "diff": 0.0026,
+   "unit": "u",
+   "method": "sun ray through the crown centre (8.20, 10.00, 2.90) -> (5.09, 6.55, 1.12)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "olive shadow: the crown axis on the right wall, v",
+   "designer": 0.52,
+   "clay": 0.5227,
+   "diff": 0.0027,
+   "unit": "v",
+   "method": "same",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bath window: u left",
+   "designer": 0.053,
+   "clay": 0.0532,
+   "diff": 0.0002,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bath window: u right",
+   "designer": 0.08,
+   "clay": 0.0801,
+   "diff": 0.0001,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bath window: v top",
+   "designer": 0.12,
+   "clay": 0.123,
+   "diff": 0.003,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "bath window: v bottom",
+   "designer": 0.56,
+   "clay": 0.5644,
+   "diff": 0.0044,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "floor: v top (court floor at the door wall, column u 0.55)",
+   "designer": 0.892,
+   "clay": 0.8922,
+   "diff": 0.0002,
+   "unit": "v",
+   "method": "id pass (60); the reveal floor runs on to the leaf (v 0.860)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 0.40, left of the door (Y 9.2): v",
+   "designer": 0.755,
+   "clay": 0.7547,
+   "diff": -0.0003,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 0.70, left of the door (Y 9.2): v",
+   "designer": 0.652,
+   "clay": 0.6518,
+   "diff": -0.0002,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 0.85, left of the door (Y 9.2): v",
+   "designer": 0.6,
+   "clay": 0.6001,
+   "diff": 0.0001,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 1.25, left of the door (Y 9.2): v",
+   "designer": 0.463,
+   "clay": 0.4629,
+   "diff": -0.0001,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 1.45, left of the door (Y 9.2): v",
+   "designer": 0.394,
+   "clay": 0.394,
+   "diff": -0.0,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 1.60, left of the door (Y 9.2): v",
+   "designer": 0.343,
+   "clay": 0.3427,
+   "diff": -0.0003,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 2.00, left of the door (Y 9.2): v",
+   "designer": 0.205,
+   "clay": 0.2055,
+   "diff": 0.0005,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 2.15, left of the door (Y 9.2): v",
+   "designer": 0.154,
+   "clay": 0.1539,
+   "diff": -0.0001,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 2.40, left of the door (Y 9.2): v",
+   "designer": 0.068,
+   "clay": 0.068,
+   "diff": -0.0,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.157",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "Z 2.40 = the head of the opening; beside the door a joint",
+   "gate": false
+  },
+  {
+   "key": "joint Z 0.40, right of the door (Y 7.6): v",
+   "designer": 0.755,
+   "clay": 0.7547,
+   "diff": -0.0003,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 0.70, right of the door (Y 7.6): v",
+   "designer": 0.652,
+   "clay": 0.6518,
+   "diff": -0.0002,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 0.85, right of the door (Y 7.6): v",
+   "designer": 0.6,
+   "clay": 0.6001,
+   "diff": 0.0001,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 1.25, right of the door (Y 7.6): v",
+   "designer": 0.463,
+   "clay": 0.4629,
+   "diff": -0.0001,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 1.45, right of the door (Y 7.6): v",
+   "designer": 0.394,
+   "clay": 0.394,
+   "diff": -0.0,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 1.60, right of the door (Y 7.6): v",
+   "designer": 0.343,
+   "clay": 0.3427,
+   "diff": -0.0003,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 2.00, right of the door (Y 7.6): v",
+   "designer": 0.205,
+   "clay": 0.2055,
+   "diff": 0.0005,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 2.15, right of the door (Y 7.6): v",
+   "designer": 0.154,
+   "clay": 0.1539,
+   "diff": -0.0001,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "joint Z 2.40, right of the door (Y 7.6): v",
+   "designer": 0.068,
+   "clay": 0.068,
+   "diff": -0.0,
+   "unit": "v",
+   "method": "id pass, runs of 86 in the column u 0.466",
+   "tol": 0.00207880068168032,
+   "over": false,
+   "note": "Z 2.40 = the head of the opening; beside the door a joint",
+   "gate": false
+  },
+  {
+   "key": "head joint Y 7.05 in course 2: u",
+   "designer": 0.573,
+   "clay": 0.5725,
+   "diff": -0.0005,
+   "unit": "u",
+   "method": "id pass, runs of 86 along a row in the course",
+   "tol": 0.001169579882227984,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "head joint Y 7.05 in course 4: u",
+   "designer": 0.573,
+   "clay": 0.5725,
+   "diff": -0.0005,
+   "unit": "u",
+   "method": "id pass, runs of 86 along a row in the course",
+   "tol": 0.001169579882227984,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "head joint Y 7.05 in course 6: u",
+   "designer": 0.573,
+   "clay": 0.5725,
+   "diff": -0.0005,
+   "unit": "u",
+   "method": "id pass, runs of 86 along a row in the course",
+   "tol": 0.001169579882227984,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "head joint Y 7.05 in course 8: u",
+   "designer": 0.573,
+   "clay": 0.5725,
+   "diff": -0.0005,
+   "unit": "u",
+   "method": "id pass, runs of 86 along a row in the course",
+   "tol": 0.001169579882227984,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "share of the frame: stone",
+   "designer": 0.42,
+   "clay": 0.4431,
+   "diff": 0.0231,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.03,
+   "over": false,
+   "note": "designer: 'approximately'",
+   "gate": false
+  },
+  {
+   "key": "share of the frame: plaster",
+   "designer": 0.35,
+   "clay": 0.3684,
+   "diff": 0.0184,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.03,
+   "over": false,
+   "note": "designer: 'approximately'",
+   "gate": false
+  },
+  {
+   "key": "share of the frame: walnut",
+   "designer": 0.135,
+   "clay": 0.134,
+   "diff": -0.001,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.03,
+   "over": false,
+   "note": "designer: 'approximately'",
+   "gate": false
+  },
+  {
+   "key": "share of the frame: green",
+   "designer": 0.04,
+   "clay": 0.0227,
+   "diff": -0.0173,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.03,
+   "over": false,
+   "note": "designer: 'approximately'",
+   "gate": false
+  },
+  {
+   "key": "share of the frame: coir",
+   "designer": 0.02,
+   "clay": 0.0177,
+   "diff": -0.0023,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.03,
+   "over": false,
+   "note": "designer: 'approximately'",
+   "gate": false
+  },
+  {
+   "key": "share of the frame: bronze",
+   "designer": 0.006,
+   "clay": 0.0066,
+   "diff": 0.0006,
+   "unit": "share",
+   "method": "id pass",
+   "tol": 0.03,
+   "over": false,
+   "note": "designer: 'approximately'",
+   "gate": false
+  }
+ ],
+ "D0_phone_391x220": {
+  "leaf_px_at_391x220": [
+   70,
+   167
+  ],
+  "designer_leaf": "70 x 167",
+  "lamp_px": [
+   8.1,
+   20.6
+  ],
+  "designer_lamp": "8 x 19",
+  "herbs_px": [
+   64,
+   110
+  ],
+  "designer_herbs": "a patch of about 75"
+ },
+ "D0_sun": {
+  "sun line on the right wall (top-most sunlit v per column; the olive's lace can lower it locally)": {
+   "u 0.68": 0.3988,
+   "u 0.7": 0.403,
+   "u 0.75": 0.3711,
+   "u 0.8": 0.3323,
+   "u 0.85": 0.2485,
+   "u 0.9": 0.1418,
+   "u 0.95": 0.0538,
+   "u 0.99": 0.0087
+  },
+  "designer: below a diagonal from about (0.67, 0.40) at the corner up to the top edge near the right edge": true,
+  "sun on the door-wall stone: px": 10143,
+  "sun on the door-wall stone: Y from the corner (m)": [
+   6.5529,
+   6.682
+  ],
+  "designer: allowed a strip of about 10 cm at the right corner, behind the herbs": true,
+  "sun on the leaf: px (designer: none)": 0,
+  "sun on the reveal (jambs, head): px (designer: none)": 0,
+  "sun on the doormat: px (designer: none)": 0,
+  "sun on the door-wall stone left of the planter (Y > 7.07): px (designer: none)": 0,
+  "sunlit share of the bench seat": 0.6281,
+  "sunlit share of the herbs": 0.235,
+  "sunlit share of the front face of the built body (planter + bench plaster)": 0.8594,
+  "sunlit share of the right wall": 0.6063,
+  "sunlit share of the floor": 0.0735
+ },
+ "inside_ch11_5_2": [
+  {
+   "key": "D0o: hall ceiling v top (at the head of the opening)",
+   "designer": 0.106,
+   "clay": 0.1057,
+   "diff": -0.0003,
+   "unit": "v",
+   "method": "id pass column u 0.33 (15)",
+   "tol": 0.01,
+   "over": false,
+   "note": "the head of the opening hides the ceiling above",
+   "gate": false
+  },
+  {
+   "key": "D0o: hall ceiling v bottom",
+   "designer": 0.141,
+   "clay": 0.1411,
+   "diff": 0.0001,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: slot (well + opal) v top",
+   "designer": 0.141,
+   "clay": 0.1411,
+   "diff": 0.0001,
+   "unit": "v",
+   "method": "id pass column u 0.33 (95)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: slot v bottom",
+   "designer": 0.157,
+   "clay": 0.157,
+   "diff": -0.0,
+   "unit": "v",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: jib seam (Y 9.00) u",
+   "designer": 0.274,
+   "clay": 0.2739,
+   "diff": -0.0001,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: jib seam (Y 8.10) u",
+   "designer": 0.365,
+   "clay": 0.3651,
+   "diff": 0.0001,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: stone panel seen inside the right jamb, u left",
+   "designer": 0.4,
+   "clay": 0.4006,
+   "diff": 0.0006,
+   "unit": "u",
+   "method": "id pass row v 0.45 (94, 86)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: stone panel, u right (behind the jamb)",
+   "designer": 0.422,
+   "clay": 0.4212,
+   "diff": -0.0008,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: oak floor v top (at the far wall)",
+   "designer": 0.696,
+   "clay": 0.6954,
+   "diff": -0.0006,
+   "unit": "v",
+   "method": "id pass column u 0.30 (10)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: skirting v top (u 0.26)",
+   "designer": 0.669,
+   "clay": 0.6684,
+   "diff": -0.0006,
+   "unit": "v",
+   "method": "id pass column u 0.26 (14)",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: skirting on the stone (px; designer: none)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id pass column u 0.41",
+   "tol": 0,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "D0o: panel joints v (designer: 0.192 0.264 0.309 0.336 0.408 0.435 0.471 0.543 0.570 0.624)",
+   "designer": "list",
+   "clay": "0.193 0.264 0.309 0.336 0.408 0.435 0.471 0.543 0.570 0.624 0.695",
+   "diff": null,
+   "unit": "v",
+   "method": "id pass column u 0.41",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: stone panel u left",
+   "designer": 0.456,
+   "clay": 0.4552,
+   "diff": -0.0008,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: stone panel u right (the corner)",
+   "designer": 0.79,
+   "clay": 0.7901,
+   "diff": 0.0001,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: front wall plaster (12) u left",
+   "designer": 0.79,
+   "clay": 0.7901,
+   "diff": 0.0001,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: walnut lining u left",
+   "designer": 0.814,
+   "clay": 0.8134,
+   "diff": -0.0006,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: living u left",
+   "designer": 0.85,
+   "clay": 0.8501,
+   "diff": 0.0001,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: head joint Y 7.05 (course 2) u",
+   "designer": 0.623,
+   "clay": 0.6226,
+   "diff": -0.0004,
+   "unit": "u",
+   "method": "id pass row in course 2",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: jib seam (Y 9.00) u",
+   "designer": 0.158,
+   "clay": 0.1573,
+   "diff": -0.0007,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: jib seam (Y 8.10) u",
+   "designer": 0.372,
+   "clay": 0.3725,
+   "diff": 0.0005,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: panel joints v (designer: 0.076 0.140 0.310 0.374 0.459 0.629 0.692 0.820)",
+   "designer": "list",
+   "clay": "-0.029 0.077 0.140 0.310 0.374 0.459 0.629 0.692 0.819 0.988",
+   "diff": null,
+   "unit": "v",
+   "method": "id pass column u 0.70",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HT: skirting on the stone (px; designer: none)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id pass column u 0.70",
+   "tol": 0,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HD: stone panel u left",
+   "designer": 0.521,
+   "clay": 0.5204,
+   "diff": -0.0006,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HD: stone panel to the canvas edge",
+   "designer": "1.03",
+   "clay": 1.0302,
+   "diff": null,
+   "unit": "u",
+   "method": "id pass",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HD: head joint Y 7.05 (course 4) u",
+   "designer": 0.804,
+   "clay": 0.8033,
+   "diff": -0.0007,
+   "unit": "u",
+   "method": "id pass row in course 4",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HD: panel joints v in the canvas (designer frame: 0.193 0.301 0.444 0.731 0.839; canvas -0.094, 1.054)",
+   "designer": "list",
+   "clay": "-0.093 0.193 0.301 0.444 0.731 0.838 1.053",
+   "diff": null,
+   "unit": "v",
+   "method": "id pass column u 0.90",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HD: jib seam (Y 9.00) u",
+   "designer": 0.019,
+   "clay": 0.0182,
+   "diff": -0.0008,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HD: jib seam (Y 8.10) u",
+   "designer": 0.38,
+   "clay": 0.381,
+   "diff": 0.001,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HD: floor, skirting, ceiling, slot or corner in the canvas (px)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id pass",
+   "tol": 0,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HDx: far-wall stone u right (the corner)",
+   "designer": 0.259,
+   "clay": 0.2591,
+   "diff": 0.0001,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HDx: front-wall plaster return u right",
+   "designer": 0.291,
+   "clay": 0.2914,
+   "diff": 0.0004,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HDx: walnut (left jamb) u right",
+   "designer": 0.319,
+   "clay": 0.3177,
+   "diff": -0.0013,
+   "unit": "u",
+   "method": "id pass row v 0.45",
+   "tol": 0.01,
+   "over": false,
+   "note": "",
+   "gate": false
+  },
+  {
+   "key": "HDx: a head joint near the left edge, u (designer about 0.064)",
+   "designer": 0.064,
+   "clay": 0.0633,
+   "diff": -0.0007,
+   "unit": "u",
+   "method": "id pass row v 0.30",
+   "tol": 0.02,
+   "over": false,
+   "note": "designer: 'about'",
+   "gate": false
+  },
+  {
+   "key": "HDx: skirting on the stone (px; skirting pixels on the far wall, X < 0.815)",
+   "designer": 0,
+   "clay": 0,
+   "diff": 0.0,
+   "unit": "px",
+   "method": "id + depth pass (the front-wall skirting is 15 mm proud and shows a few px left of the corner line)",
+   "tol": 0,
+   "over": false,
+   "note": "",
+   "gate": false
+  }
+ ],
+ "joints_near_an_edge": {
+  "D0-closed": [
+   {
+    "z": 0.005,
+    "v": 0.8905,
+    "px": 1328.6,
+    "nearest_edge_px": 158.0,
+    "under_15": false
+   },
+   {
+    "z": 0.4,
+    "v": 0.7548,
+    "px": 1132.7,
+    "nearest_edge_px": 353.8,
+    "under_15": false
+   },
+   {
+    "z": 0.7,
+    "v": 0.6518,
+    "px": 984.0,
+    "nearest_edge_px": 502.6,
+    "under_15": false
+   },
+   {
+    "z": 0.85,
+    "v": 0.6002,
+    "px": 909.7,
+    "nearest_edge_px": 576.9,
+    "under_15": false
+   },
+   {
+    "z": 1.25,
+    "v": 0.4628,
+    "px": 711.3,
+    "nearest_edge_px": 667.9,
+    "under_15": false
+   },
+   {
+    "z": 1.45,
+    "v": 0.3941,
+    "px": 612.2,
+    "nearest_edge_px": 568.8,
+    "under_15": false
+   },
+   {
+    "z": 1.6,
+    "v": 0.3426,
+    "px": 537.8,
+    "nearest_edge_px": 494.4,
+    "under_15": false
+   },
+   {
+    "z": 2.0,
+    "v": 0.2052,
+    "px": 339.5,
+    "nearest_edge_px": 296.1,
+    "under_15": false
+   },
+   {
+    "z": 2.15,
+    "v": 0.1536,
+    "px": 265.2,
+    "nearest_edge_px": 221.7,
+    "under_15": false
+   },
+   {
+    "z": 2.4,
+    "v": 0.0678,
+    "px": 141.2,
+    "nearest_edge_px": 97.8,
+    "under_15": false
+   }
+  ],
+  "HD": [
+   {
+    "z": 0.4,
+    "v": 1.0539,
+    "px": 1565.4,
+    "nearest_edge_px": 71.4,
+    "under_15": false
+   },
+   {
+    "z": 0.7,
+    "v": 0.8387,
+    "px": 1280.5,
+    "nearest_edge_px": 213.5,
+    "under_15": false
+   },
+   {
+    "z": 0.85,
+    "v": 0.7311,
+    "px": 1138.0,
+    "nearest_edge_px": 356.0,
+    "under_15": false
+   },
+   {
+    "z": 1.25,
+    "v": 0.4441,
+    "px": 758.0,
+    "nearest_edge_px": 588.0,
+    "under_15": false
+   },
+   {
+    "z": 1.45,
+    "v": 0.3006,
+    "px": 568.1,
+    "nearest_edge_px": 398.1,
+    "under_15": false
+   },
+   {
+    "z": 1.6,
+    "v": 0.193,
+    "px": 425.6,
+    "nearest_edge_px": 255.6,
+    "under_15": false
+   },
+   {
+    "z": 2.0,
+    "v": -0.0939,
+    "px": 45.6,
+    "nearest_edge_px": 45.6,
+    "under_15": false
+   }
+  ],
+  "HT": [
+   {
+    "z": 0.005,
+    "v": 0.9876,
+    "px": 1468.7,
+    "nearest_edge_px": 17.8,
+    "under_15": false
+   },
+   {
+    "z": 0.4,
+    "v": 0.8198,
+    "px": 1226.6,
+    "nearest_edge_px": 260.0,
+    "under_15": false
+   },
+   {
+    "z": 0.7,
+    "v": 0.6924,
+    "px": 1042.7,
+    "nearest_edge_px": 443.9,
+    "under_15": false
+   },
+   {
+    "z": 0.85,
+    "v": 0.6287,
+    "px": 950.7,
+    "nearest_edge_px": 535.9,
+    "under_15": false
+   },
+   {
+    "z": 1.25,
+    "v": 0.4588,
+    "px": 705.5,
+    "nearest_edge_px": 662.1,
+    "under_15": false
+   },
+   {
+    "z": 1.45,
+    "v": 0.3738,
+    "px": 582.9,
+    "nearest_edge_px": 539.4,
+    "under_15": false
+   },
+   {
+    "z": 1.6,
+    "v": 0.3101,
+    "px": 490.9,
+    "nearest_edge_px": 447.5,
+    "under_15": false
+   },
+   {
+    "z": 2.0,
+    "v": 0.1402,
+    "px": 245.7,
+    "nearest_edge_px": 202.3,
+    "under_15": false
+   },
+   {
+    "z": 2.15,
+    "v": 0.0764,
+    "px": 153.7,
+    "nearest_edge_px": 110.3,
+    "under_15": false
+   },
+   {
+    "z": 2.4,
+    "v": -0.0298,
+    "px": 0.5,
+    "nearest_edge_px": 0.5,
+    "under_15": true
+   }
+  ]
+ },
+ "S1_events_ch11_1_10": {
+  "doormat (its far edge X 3.95, Z 0.015) leaves the bottom": {
+   "clay_s_m": 0.749,
+   "designer_s_m": 0.72,
+   "diff_m": 0.029
+  },
+  "the seat's corner (4.75, 7.05, 0.45) leaves the bottom": {
+   "clay_s_m": 0.941,
+   "designer_s_m": 0.94,
+   "diff_m": 0.001
+  },
+  "the planter's corner (4.75, 7.05, 0.70) leaves the right edge": {
+   "clay_s_m": 1.504,
+   "designer_s_m": 1.5,
+   "diff_m": 0.004
+  },
+  "the wall light's top (4.07, 7.40, 1.925) leaves the top": {
+   "clay_s_m": 1.54,
+   "designer_s_m": 1.59,
+   "diff_m": -0.05
+  },
+  "the wall light's bottom (3.97, 7.40, 1.675) leaves the top": {
+   "clay_s_m": 2.257,
+   "designer_s_m": 2.21,
+   "diff_m": 0.047
+  },
+  "the herbs' last point, at the back against the door wall (4.05, 7.03, 0.90), leaves the right edge": {
+   "clay_s_m": 2.183,
+   "designer_s_m": 2.35,
+   "diff_m": -0.167
+  }
+ },
+ "frames": {
+  "D0-closed": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0177,
+    "seat+rim": 0.0428,
+    "planter": 0.0237,
+    "wall light": 0.0018,
+    "herbs": 0.0227,
+    "door-wall stone": 0.3508,
+    "hall panel": 0.0,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "D0-none": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0177,
+    "seat+rim": 0.0428,
+    "planter": 0.0237,
+    "wall light": 0.0018,
+    "herbs": 0.0227,
+    "door-wall stone": 0.3509,
+    "hall panel": 0.011,
+    "slot": 0.0028
+   },
+   "undefined_px": 0
+  },
+  "D0-open": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0177,
+    "seat+rim": 0.0428,
+    "planter": 0.0237,
+    "wall light": 0.0018,
+    "herbs": 0.0227,
+    "door-wall stone": 0.3509,
+    "hall panel": 0.011,
+    "slot": 0.0024
+   },
+   "undefined_px": 0
+  },
+  "HD": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.007,
+    "hall panel": 0.4726,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "HDx": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.0042,
+    "hall panel": 0.255,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "HD57": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.0059,
+    "hall panel": 0.4013,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "HT": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.0048,
+    "hall panel": 0.3259,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "c1/S00": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0177,
+    "seat+rim": 0.0428,
+    "planter": 0.0237,
+    "wall light": 0.0018,
+    "herbs": 0.0227,
+    "door-wall stone": 0.3509,
+    "hall panel": 0.011,
+    "slot": 0.0024
+   },
+   "undefined_px": 0
+  },
+  "c1/S01": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0111,
+    "seat+rim": 0.0351,
+    "planter": 0.0339,
+    "wall light": 0.0026,
+    "herbs": 0.0338,
+    "door-wall stone": 0.4183,
+    "hall panel": 0.0149,
+    "slot": 0.003
+   },
+   "undefined_px": 0
+  },
+  "c1/S02": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0217,
+    "planter": 0.0449,
+    "wall light": 0.0036,
+    "herbs": 0.0549,
+    "door-wall stone": 0.4892,
+    "hall panel": 0.0206,
+    "slot": 0.004
+   },
+   "undefined_px": 0
+  },
+  "c1/S03": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.022,
+    "planter": 0.0185,
+    "wall light": 0.0056,
+    "herbs": 0.0752,
+    "door-wall stone": 0.5272,
+    "hall panel": 0.0296,
+    "slot": 0.0053
+   },
+   "undefined_px": 0
+  },
+  "c1/S04": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0142,
+    "planter": 0.0049,
+    "wall light": 0.0064,
+    "herbs": 0.0366,
+    "door-wall stone": 0.5957,
+    "hall panel": 0.0444,
+    "slot": 0.0075
+   },
+   "undefined_px": 0
+  },
+  "c1/S05": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0009,
+    "planter": 0.0,
+    "wall light": 0.0001,
+    "herbs": 0.0,
+    "door-wall stone": 0.5546,
+    "hall panel": 0.0705,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "c1/S06": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.4186,
+    "hall panel": 0.1187,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "c1/S07": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.2537,
+    "hall panel": 0.2375,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "c1/S08": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.005,
+    "hall panel": 0.2915,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "c1/S09": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.0057,
+    "hall panel": 0.3606,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "c1/S10": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.0077,
+    "hall panel": 0.4369,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  },
+  "c1/S11": {
+   "olive_px_canvas": 0,
+   "in_frame": {
+    "doormat": 0.0,
+    "seat+rim": 0.0,
+    "planter": 0.0,
+    "wall light": 0.0,
+    "herbs": 0.0,
+    "door-wall stone": 0.0074,
+    "hall panel": 0.4723,
+    "slot": 0.0
+   },
+   "undefined_px": 0
+  }
+ },
+ "render_records": {
+  "D0-closed": {
+   "frame": "D0-closed",
+   "camera": {
+    "loc": [
+     7.4,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "closed",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 207.6,
+   "surfaces_px": {
+    "10 hall floor": 468,
+    "11 hall left wall (X 0.80)": 25,
+    "60 court floor, limestone (incl. the reveal floor)": 255538,
+    "62 court left wall (Y 9.60)": 363933,
+    "63 court right wall (Y 6.55)": 1159539,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 1583,
+    "66 court wall foot line (1 cm)": 1596,
+    "70 front door leaf, face": 496423,
+    "72 door pull (bronze)": 3353,
+    "75 bath window frame (bronze)": 14366,
+    "76 bath window, fluted glass": 27142,
+    "84 door wall, limestone face (X 3.95)": 1276503,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 68895,
+    "86 limestone joints (5 mm recess; court and hall panel)": 19266,
+    "87 built planter, plaster body": 87865,
+    "88 built bench, plaster base": 39508,
+    "89 limestone caps (planter rim, bench seat)": 185394,
+    "90 herbs (rosemary + lavender volume)": 84200,
+    "91 wall light porch-wall-light (body + lit diffusers)": 6832,
+    "93 doormat porch-doormat (coir)": 65512,
+    "97 shadow recesses (bench / planter foot, stone-to-plaster grooves)": 3659
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 1525080,
+    "101": 468,
+    "103": 883,
+    "155": 13483,
+    "370": 27142,
+    "710": 496423,
+    "711": 3353,
+    "712": 255538,
+    "717": 1596,
+    "720": 1345398,
+    "722": 19266,
+    "723": 87865,
+    "724": 39508,
+    "725": 185394,
+    "726": 84200,
+    "727": 6616,
+    "729": 65512,
+    "733": 3659,
+    "734": 216
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 3.75,
+    "sky_px": 0
+   },
+   "sun_pass": {
+    "ref_linear": 0.03783,
+    "note": "direct sun only (no sky, no lamp, no bounce), Standard view at exposure -5, linear luminance normalised to its 99th percentile = 255 (so it carries albedo and incidence: a plaster wall facing the sun near 255, the floor lower); > 64 = in direct sun"
+   },
+   "runtime_s": 186
+  },
+  "D0-none": {
+   "frame": "D0-none",
+   "camera": {
+    "loc": [
+     7.4,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "none",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 217.9,
+   "surfaces_px": {
+    "10 hall floor": 106846,
+    "11 hall left wall (X 0.80)": 156677,
+    "14 hall skirting": 6615,
+    "15 hall ceiling, roof-light well": 22950,
+    "60 court floor, limestone (incl. the reveal floor)": 255538,
+    "62 court left wall (Y 9.60)": 363933,
+    "63 court right wall (Y 6.55)": 1159539,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 11735,
+    "66 court wall foot line (1 cm)": 1596,
+    "75 bath window frame (bronze)": 14366,
+    "76 bath window, fluted glass": 27142,
+    "82 jib door of the study (closed)": 144072,
+    "83 jib door shadow gap": 1436,
+    "84 door wall, limestone face (X 3.95)": 1276503,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 68895,
+    "86 limestone joints (5 mm recess; court and hall panel)": 19890,
+    "87 built planter, plaster body": 87865,
+    "88 built bench, plaster base": 39508,
+    "89 limestone caps (planter rim, bench seat)": 185394,
+    "90 herbs (rosemary + lavender volume)": 84200,
+    "91 wall light porch-wall-light (body + lit diffusers)": 6832,
+    "93 doormat porch-doormat (coir)": 65512,
+    "94 hall limestone panel (X 0.81)": 40600,
+    "95 hall roof-light slot (well + opal)": 10297,
+    "97 shadow recesses (bench / planter foot, stone-to-plaster grooves)": 3659
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 1702997,
+    "101": 106846,
+    "102": 22950,
+    "103": 7498,
+    "155": 13483,
+    "370": 27142,
+    "712": 255538,
+    "715": 144072,
+    "716": 620,
+    "717": 1596,
+    "720": 1345398,
+    "722": 19890,
+    "723": 87865,
+    "724": 39508,
+    "725": 185394,
+    "726": 84200,
+    "727": 6616,
+    "729": 65512,
+    "730": 40600,
+    "733": 3659,
+    "734": 216
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 6.75,
+    "sky_px": 0
+   },
+   "sun_pass": {
+    "ref_linear": 0.03783,
+    "note": "direct sun only (no sky, no lamp, no bounce), Standard view at exposure -5, linear luminance normalised to its 99th percentile = 255 (so it carries albedo and incidence: a plaster wall facing the sun near 255, the floor lower); > 64 = in direct sun"
+   },
+   "runtime_s": 200
+  },
+  "D0-open": {
+   "frame": "D0-open",
+   "camera": {
+    "loc": [
+     7.4,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 215.4,
+   "surfaces_px": {
+    "10 hall floor": 91225,
+    "11 hall left wall (X 0.80)": 102222,
+    "14 hall skirting": 3560,
+    "15 hall ceiling, roof-light well": 20965,
+    "60 court floor, limestone (incl. the reveal floor)": 255538,
+    "62 court left wall (Y 9.60)": 363933,
+    "63 court right wall (Y 6.55)": 1159539,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 11735,
+    "66 court wall foot line (1 cm)": 1596,
+    "70 front door leaf, face": 54066,
+    "71 front door leaf, edge": 29133,
+    "72 door pull (bronze)": 2105,
+    "75 bath window frame (bronze)": 14366,
+    "76 bath window, fluted glass": 27142,
+    "82 jib door of the study (closed)": 135802,
+    "83 jib door shadow gap": 843,
+    "84 door wall, limestone face (X 3.95)": 1276503,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 68895,
+    "86 limestone joints (5 mm recess; court and hall panel)": 19890,
+    "87 built planter, plaster body": 87865,
+    "88 built bench, plaster base": 39508,
+    "89 limestone caps (planter rim, bench seat)": 185394,
+    "90 herbs (rosemary + lavender volume)": 84200,
+    "91 wall light porch-wall-light (body + lit diffusers)": 6832,
+    "93 doormat porch-doormat (coir)": 65512,
+    "94 hall limestone panel (X 0.81)": 40600,
+    "95 hall roof-light slot (well + opal)": 8972,
+    "97 shadow recesses (bench / planter foot, stone-to-plaster grooves)": 3659
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 1646624,
+    "101": 91225,
+    "102": 20965,
+    "103": 4443,
+    "155": 13483,
+    "370": 27142,
+    "710": 83199,
+    "711": 2105,
+    "712": 255538,
+    "715": 135802,
+    "716": 620,
+    "717": 1596,
+    "720": 1345398,
+    "722": 19890,
+    "723": 87865,
+    "724": 39508,
+    "725": 185394,
+    "726": 84200,
+    "727": 6616,
+    "729": 65512,
+    "730": 40600,
+    "733": 3659,
+    "734": 216
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 6.75,
+    "sky_px": 0
+   },
+   "sun_pass": {
+    "ref_linear": 0.03783,
+    "note": "direct sun only (no sky, no lamp, no bounce), Standard view at exposure -5, linear luminance normalised to its 99th percentile = 255 (so it carries albedo and incidence: a plaster wall facing the sun near 255, the floor lower); > 64 = in direct sun"
+   },
+   "runtime_s": 192
+  },
+  "HD": {
+   "frame": "HD",
+   "camera": {
+    "loc": [
+     2.462,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2496,
+    "H": 1664,
+    "fx": 2353.7799999999997,
+    "fy": 1324.0,
+    "ox": 71.11,
+    "oy": 170.0,
+    "canvas": [
+     2496,
+     1664
+    ],
+    "frame_box": [
+     71.11,
+     170.0,
+     2424.89,
+     1494.0
+    ],
+    "pixel_aspect": [
+     1.0,
+     1.0000009536743164
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 178.7,
+   "surfaces_px": {
+    "11 hall left wall (X 0.80)": 735584,
+    "82 jib door of the study (closed)": 1404416,
+    "83 jib door shadow gap": 16640,
+    "86 limestone joints (5 mm recess; court and hall panel)": 27985,
+    "94 hall limestone panel (X 0.81)": 1968719
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 748896,
+    "715": 1404416,
+    "716": 3328,
+    "722": 27985,
+    "730": 1968719
+   },
+   "depth_m": {
+    "min": 1.652,
+    "max_finite": 1.682,
+    "sky_px": 0
+   },
+   "runtime_s": 174
+  },
+  "HDx": {
+   "frame": "HDx",
+   "camera": {
+    "loc": [
+     2.462,
+     8.15,
+     1.2
+    ],
+    "yaw": 25.0,
+    "lens": 24,
+    "u0": 0.47,
+    "v0": 0.5,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2496,
+    "H": 1664,
+    "fx": 2353.7799999999997,
+    "fy": 1324.0,
+    "ox": 71.11,
+    "oy": 170.0,
+    "canvas": [
+     2496,
+     1664
+    ],
+    "frame_box": [
+     71.11,
+     170.0,
+     2424.89,
+     1494.0
+    ],
+    "pixel_aspect": [
+     1.0,
+     1.0000009536743164
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 171.3,
+   "surfaces_px": {
+    "0 sky / outside (through the glazing)": 21879,
+    "10 hall floor": 1091,
+    "12 hall front wall (Y 6.35)": 1603990,
+    "14 hall skirting": 8219,
+    "20 lining, walnut: left jamb (X 0.95)": 96682,
+    "22 lining, walnut: soffit (Z 2.40)": 5887,
+    "23 lining shadow gap (3 mm)": 3330,
+    "24 plaster bead on the reveal (3 mm)": 1880,
+    "25 floor inside the wall depth (Y 6.20-6.35)": 6221,
+    "30 living floor": 448778,
+    "31 living back wall (Y 0)": 228715,
+    "32 living window wall (X -2.30)": 23042,
+    "34 living front wall (Y 6.20)": 1723,
+    "35 living ceiling": 383855,
+    "36 living dropped band + track slot": 12268,
+    "37 living rounded corner": 32694,
+    "38 living skirting": 3504,
+    "39 living window (frame, mullions, reveal)": 36860,
+    "40 living window bench": 4357,
+    "41 sofa": 54510,
+    "42 coffee table": 21090,
+    "43 armchair": 20431,
+    "86 limestone joints (5 mm recess; court and hall panel)": 17258,
+    "94 hall limestone panel (X 0.81)": 1115080
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "0": 21879,
+    "1": 54510,
+    "2": 21090,
+    "3": 20431,
+    "4": 13595,
+    "5": 228715,
+    "6": 23042,
+    "8": 451711,
+    "9": 383855,
+    "10": 980265,
+    "11": 3504,
+    "14": 23265,
+    "100": 627328,
+    "101": 4379,
+    "103": 8219,
+    "520": 4357,
+    "521": 32694,
+    "522": 12268,
+    "700": 105899,
+    "722": 17258,
+    "730": 1115080
+   },
+   "depth_m": {
+    "min": 1.427,
+    "max_finite": 9.3,
+    "sky_px": 21879
+   },
+   "runtime_s": 164
+  },
+  "HD57": {
+   "frame": "HD57",
+   "camera": {
+    "loc": [
+     2.462,
+     8.15,
+     1.2
+    ],
+    "yaw": 57.5,
+    "lens": 24,
+    "u0": 0.415,
+    "v0": 0.49,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 182.2,
+   "surfaces_px": {
+    "0 sky / outside (through the glazing)": 30469,
+    "11 hall left wall (X 0.80)": 654955,
+    "12 hall front wall (Y 6.35)": 125230,
+    "14 hall skirting": 361,
+    "20 lining, walnut: left jamb (X 0.95)": 105570,
+    "23 lining shadow gap (3 mm)": 1530,
+    "24 plaster bead on the reveal (3 mm)": 4590,
+    "30 living floor": 438253,
+    "31 living back wall (Y 0)": 371938,
+    "32 living window wall (X -2.30)": 35060,
+    "34 living front wall (Y 6.20)": 1530,
+    "35 living ceiling": 311418,
+    "36 living dropped band + track slot": 18371,
+    "37 living rounded corner": 54946,
+    "38 living skirting": 5439,
+    "39 living window (frame, mullions, reveal)": 53627,
+    "40 living window bench": 6296,
+    "41 sofa": 73308,
+    "42 coffee table": 47331,
+    "43 armchair": 29994,
+    "82 jib door of the study (closed)": 182070,
+    "83 jib door shadow gap": 10710,
+    "86 limestone joints (5 mm recess; court and hall panel)": 23011,
+    "94 hall limestone panel (X 0.81)": 1575593
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "0": 30469,
+    "1": 73308,
+    "2": 47331,
+    "3": 29994,
+    "4": 18603,
+    "5": 371938,
+    "6": 35060,
+    "8": 438253,
+    "9": 311418,
+    "10": 131350,
+    "11": 5439,
+    "14": 35024,
+    "100": 659545,
+    "103": 361,
+    "520": 6296,
+    "521": 54946,
+    "522": 18371,
+    "700": 107100,
+    "715": 182070,
+    "716": 6120,
+    "722": 23011,
+    "730": 1575593
+   },
+   "depth_m": {
+    "min": 1.383,
+    "max_finite": 8.387,
+    "sky_px": 30469
+   },
+   "runtime_s": 164
+  },
+  "HT": {
+   "frame": "HT",
+   "camera": {
+    "loc": [
+     3.6,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": null
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 176.3,
+   "surfaces_px": {
+    "0 sky / outside (through the glazing)": 88192,
+    "10 hall floor": 126788,
+    "11 hall left wall (X 0.80)": 949808,
+    "12 hall front wall (Y 6.35)": 84223,
+    "14 hall skirting": 71205,
+    "20 lining, walnut: left jamb (X 0.95)": 134479,
+    "23 lining shadow gap (3 mm)": 3019,
+    "24 plaster bead on the reveal (3 mm)": 4531,
+    "25 floor inside the wall depth (Y 6.20-6.35)": 1823,
+    "30 living floor": 200177,
+    "32 living window wall (X -2.30)": 221394,
+    "34 living front wall (Y 6.20)": 1511,
+    "35 living ceiling": 88051,
+    "36 living dropped band + track slot": 35036,
+    "38 living skirting": 13395,
+    "39 living window (frame, mullions, reveal)": 28244,
+    "40 living window bench": 22727,
+    "43 armchair": 7830,
+    "72 door pull (bronze)": 7552,
+    "82 jib door of the study (closed)": 799344,
+    "83 jib door shadow gap": 10170,
+    "86 limestone joints (5 mm recess; court and hall panel)": 19389,
+    "94 hall limestone panel (X 0.81)": 1242712
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "0": 88192,
+    "3": 7830,
+    "4": 23041,
+    "6": 221394,
+    "8": 200590,
+    "9": 88051,
+    "10": 90265,
+    "11": 13395,
+    "14": 5203,
+    "100": 958522,
+    "101": 128198,
+    "103": 71205,
+    "520": 22727,
+    "522": 35036,
+    "700": 137498,
+    "711": 7552,
+    "715": 799344,
+    "716": 1456,
+    "722": 19389,
+    "730": 1242712
+   },
+   "depth_m": {
+    "min": 0.898,
+    "max_finite": 6.319,
+    "sky_px": 88192
+   },
+   "runtime_s": 162
+  },
+  "c1/S01": {
+   "frame": "c1/S01",
+   "camera": {
+    "loc": [
+     6.9511,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 0.4489
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 210.8,
+   "surfaces_px": {
+    "10 hall floor": 125075,
+    "11 hall left wall (X 0.80)": 117943,
+    "14 hall skirting": 4032,
+    "15 hall ceiling, roof-light well": 39427,
+    "60 court floor, limestone (incl. the reveal floor)": 142259,
+    "62 court left wall (Y 9.60)": 193061,
+    "63 court right wall (Y 6.55)": 982247,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 18576,
+    "66 court wall foot line (1 cm)": 955,
+    "70 front door leaf, face": 74573,
+    "71 front door leaf, edge": 37944,
+    "72 door pull (bronze)": 2604,
+    "75 bath window frame (bronze)": 23214,
+    "76 bath window, fluted glass": 41814,
+    "82 jib door of the study (closed)": 160876,
+    "83 jib door shadow gap": 913,
+    "84 door wall, limestone face (X 3.95)": 1493331,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 102253,
+    "86 limestone joints (5 mm recess; court and hall panel)": 29110,
+    "87 built planter, plaster body": 131108,
+    "88 built bench, plaster base": 12061,
+    "89 limestone caps (planter rim, bench seat)": 156784,
+    "90 herbs (rosemary + lavender volume)": 125114,
+    "91 wall light porch-wall-light (body + lit diffusers)": 9481,
+    "93 doormat porch-doormat (coir)": 66361,
+    "94 hall limestone panel (X 0.81)": 55144,
+    "95 hall roof-light slot (well + opal)": 11133,
+    "97 shadow recesses (bench / planter foot, stone-to-plaster grooves)": 4207
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 1323208,
+    "101": 125075,
+    "102": 39427,
+    "103": 5417,
+    "155": 21829,
+    "370": 41814,
+    "710": 112517,
+    "711": 2604,
+    "712": 142259,
+    "715": 160876,
+    "716": 665,
+    "717": 955,
+    "720": 1595584,
+    "722": 29110,
+    "723": 131108,
+    "724": 12061,
+    "725": 156784,
+    "726": 125114,
+    "727": 9145,
+    "729": 66361,
+    "730": 55144,
+    "733": 4207,
+    "734": 336
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 6.285,
+    "sky_px": 0
+   },
+   "runtime_s": 112
+  },
+  "c1/S02": {
+   "frame": "c1/S02",
+   "camera": {
+    "loc": [
+     6.5022,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 0.8978
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 208.9,
+   "surfaces_px": {
+    "10 hall floor": 178794,
+    "11 hall left wall (X 0.80)": 140851,
+    "14 hall skirting": 5055,
+    "15 hall ceiling, roof-light well": 71378,
+    "60 court floor, limestone (incl. the reveal floor)": 44845,
+    "62 court left wall (Y 9.60)": 19712,
+    "63 court right wall (Y 6.55)": 701845,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 26141,
+    "70 front door leaf, face": 109546,
+    "71 front door leaf, edge": 49455,
+    "72 door pull (bronze)": 3205,
+    "75 bath window frame (bronze)": 3917,
+    "76 bath window, fluted glass": 19296,
+    "82 jib door of the study (closed)": 189631,
+    "83 jib door shadow gap": 2358,
+    "84 door wall, limestone face (X 3.95)": 1849608,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 118545,
+    "86 limestone joints (5 mm recess; court and hall panel)": 29963,
+    "87 built planter, plaster body": 180032,
+    "89 limestone caps (planter rim, bench seat)": 105029,
+    "90 herbs (rosemary + lavender volume)": 203444,
+    "91 wall light porch-wall-light (body + lit diffusers)": 13424,
+    "94 hall limestone panel (X 0.81)": 76196,
+    "95 hall roof-light slot (well + opal)": 14684,
+    "97 shadow recesses (bench / planter foot, stone-to-plaster grooves)": 4646
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 904873,
+    "101": 178794,
+    "102": 71378,
+    "103": 5548,
+    "155": 3424,
+    "370": 19296,
+    "710": 159001,
+    "711": 3205,
+    "712": 44845,
+    "715": 189631,
+    "716": 718,
+    "720": 1968153,
+    "722": 29963,
+    "723": 180032,
+    "725": 105029,
+    "726": 203444,
+    "727": 12888,
+    "730": 76196,
+    "733": 4646,
+    "734": 536
+   },
+   "depth_m": {
+    "min": 1.592,
+    "max_finite": 5.852,
+    "sky_px": 0
+   },
+   "runtime_s": 111
+  },
+  "c1/S03": {
+   "frame": "c1/S03",
+   "camera": {
+    "loc": [
+     6.0533,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 1.3467
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 205.3,
+   "surfaces_px": {
+    "10 hall floor": 225745,
+    "11 hall left wall (X 0.80)": 174447,
+    "14 hall skirting": 6529,
+    "15 hall ceiling, roof-light well": 65970,
+    "63 court right wall (Y 6.55)": 359914,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 27586,
+    "70 front door leaf, face": 166865,
+    "71 front door leaf, edge": 64260,
+    "72 door pull (bronze)": 4265,
+    "82 jib door of the study (closed)": 224814,
+    "83 jib door shadow gap": 2278,
+    "84 door wall, limestone face (X 3.95)": 1990590,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 159515,
+    "86 limestone joints (5 mm recess; court and hall panel)": 34178,
+    "87 built planter, plaster body": 100245,
+    "89 limestone caps (planter rim, bench seat)": 91838,
+    "90 herbs (rosemary + lavender volume)": 309035,
+    "91 wall light porch-wall-light (body + lit diffusers)": 20848,
+    "94 hall limestone panel (X 0.81)": 109672,
+    "95 hall roof-light slot (well + opal)": 19820,
+    "97 shadow recesses (bench / planter foot, stone-to-plaster grooves)": 3186
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 582717,
+    "101": 225745,
+    "102": 66520,
+    "103": 6529,
+    "710": 231125,
+    "711": 4265,
+    "715": 224814,
+    "716": 778,
+    "720": 2150105,
+    "722": 34178,
+    "723": 100245,
+    "725": 91838,
+    "726": 309035,
+    "727": 19889,
+    "730": 109672,
+    "733": 3186,
+    "734": 959
+   },
+   "depth_m": {
+    "min": 1.283,
+    "max_finite": 5.403,
+    "sky_px": 0
+   },
+   "runtime_s": 112
+  },
+  "c1/S04": {
+   "frame": "c1/S04",
+   "camera": {
+    "loc": [
+     5.6044,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 1.7956
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 200.5,
+   "surfaces_px": {
+    "10 hall floor": 235799,
+    "11 hall left wall (X 0.80)": 222905,
+    "14 hall skirting": 8510,
+    "15 hall ceiling, roof-light well": 33751,
+    "63 court right wall (Y 6.55)": 48536,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 41382,
+    "70 front door leaf, face": 251501,
+    "71 front door leaf, edge": 78030,
+    "72 door pull (bronze)": 5678,
+    "82 jib door of the study (closed)": 272107,
+    "83 jib door shadow gap": 2348,
+    "84 door wall, limestone face (X 3.95)": 2170633,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 244525,
+    "86 limestone joints (5 mm recess; court and hall panel)": 37003,
+    "87 built planter, plaster body": 31055,
+    "89 limestone caps (planter rim, bench seat)": 66007,
+    "90 herbs (rosemary + lavender volume)": 185296,
+    "91 wall light porch-wall-light (body + lit diffusers)": 28855,
+    "94 hall limestone panel (X 0.81)": 164426,
+    "95 hall roof-light slot (well + opal)": 27628,
+    "97 shadow recesses (bench / planter foot, stone-to-plaster grooves)": 5625
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 341313,
+    "101": 235799,
+    "102": 34386,
+    "103": 8510,
+    "710": 329531,
+    "711": 5678,
+    "715": 272107,
+    "716": 851,
+    "720": 2415158,
+    "722": 37003,
+    "723": 31055,
+    "725": 66007,
+    "726": 185296,
+    "727": 26866,
+    "730": 164426,
+    "733": 5625,
+    "734": 1989
+   },
+   "depth_m": {
+    "min": 1.095,
+    "max_finite": 4.857,
+    "sky_px": 0
+   },
+   "runtime_s": 110
+  },
+  "c1/S05": {
+   "frame": "c1/S05",
+   "camera": {
+    "loc": [
+     5.1555,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 2.2445
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 195.0,
+   "surfaces_px": {
+    "10 hall floor": 251594,
+    "11 hall left wall (X 0.80)": 296336,
+    "14 hall skirting": 11890,
+    "17 hall back wall": 1191,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 65918,
+    "70 front door leaf, face": 386768,
+    "71 front door leaf, edge": 100980,
+    "72 door pull (bronze)": 7686,
+    "82 jib door of the study (closed)": 330291,
+    "83 jib door shadow gap": 4413,
+    "84 door wall, limestone face (X 3.95)": 1920791,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 432529,
+    "86 limestone joints (5 mm recess; court and hall panel)": 42980,
+    "89 limestone caps (planter rim, bench seat)": 13356,
+    "91 wall light porch-wall-light (body + lit diffusers)": 7215,
+    "94 hall limestone panel (X 0.81)": 264718,
+    "95 hall roof-light slot (well + opal)": 22944
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 389864,
+    "101": 251594,
+    "103": 11890,
+    "710": 487748,
+    "711": 7686,
+    "715": 330291,
+    "716": 938,
+    "720": 2353320,
+    "722": 42980,
+    "725": 13356,
+    "727": 2229,
+    "730": 264718,
+    "734": 4986
+   },
+   "depth_m": {
+    "min": 1.095,
+    "max_finite": 4.505,
+    "sky_px": 0
+   },
+   "runtime_s": 114
+  },
+  "c1/S06": {
+   "frame": "c1/S06",
+   "camera": {
+    "loc": [
+     4.7065,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 2.6935
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 181.8,
+   "surfaces_px": {
+    "10 hall floor": 273001,
+    "11 hall left wall (X 0.80)": 380441,
+    "14 hall skirting": 17389,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 47514,
+    "70 front door leaf, face": 660412,
+    "71 front door leaf, edge": 137700,
+    "72 door pull (bronze)": 12072,
+    "82 jib door of the study (closed)": 410550,
+    "83 jib door shadow gap": 5907,
+    "84 door wall, limestone face (X 3.95)": 1390144,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 339058,
+    "86 limestone joints (5 mm recess; court and hall panel)": 32162,
+    "94 hall limestone panel (X 0.81)": 455250
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 431770,
+    "101": 273001,
+    "103": 17389,
+    "710": 798112,
+    "711": 12072,
+    "715": 410550,
+    "716": 2092,
+    "720": 1729202,
+    "722": 32162,
+    "730": 455250
+   },
+   "depth_m": {
+    "min": 0.757,
+    "max_finite": 4.057,
+    "sky_px": 0
+   },
+   "runtime_s": 113
+  },
+  "c1/S07": {
+   "frame": "c1/S07",
+   "camera": {
+    "loc": [
+     4.2576,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 3.1424
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 167.9,
+   "surfaces_px": {
+    "10 hall floor": 302179,
+    "11 hall left wall (X 0.80)": 496648,
+    "12 hall front wall (Y 6.35)": 21507,
+    "14 hall skirting": 29148,
+    "64 door reveal, plaster behind the leaf line (X 3.60-3.66)": 139385,
+    "70 front door leaf, face": 598497,
+    "72 door pull (bronze)": 20608,
+    "82 jib door of the study (closed)": 524212,
+    "83 jib door shadow gap": 6672,
+    "84 door wall, limestone face (X 3.95)": 5,
+    "85 door reveal, limestone (jambs + head, X 3.66-3.95)": 1086405,
+    "86 limestone joints (5 mm recess; court and hall panel)": 26587,
+    "94 hall limestone panel (X 0.81)": 909747
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "10": 21507,
+    "100": 641525,
+    "101": 302179,
+    "103": 29148,
+    "710": 598497,
+    "711": 20608,
+    "715": 524212,
+    "716": 1180,
+    "720": 1086410,
+    "722": 26587,
+    "730": 909747
+   },
+   "depth_m": {
+    "min": 0.348,
+    "max_finite": 3.608,
+    "sky_px": 0
+   },
+   "runtime_s": 117
+  },
+  "c1/S08": {
+   "frame": "c1/S08",
+   "camera": {
+    "loc": [
+     3.8087,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 3.5913
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 170.9,
+   "surfaces_px": {
+    "0 sky / outside (through the glazing)": 115986,
+    "10 hall floor": 214140,
+    "11 hall left wall (X 0.80)": 737021,
+    "12 hall front wall (Y 6.35)": 70688,
+    "14 hall skirting": 51133,
+    "20 lining, walnut: left jamb (X 0.95)": 119188,
+    "22 lining, walnut: soffit (Z 2.40)": 1505,
+    "23 lining shadow gap (3 mm)": 2907,
+    "24 plaster bead on the reveal (3 mm)": 2923,
+    "25 floor inside the wall depth (Y 6.20-6.35)": 7005,
+    "30 living floor": 242815,
+    "32 living window wall (X -2.30)": 245301,
+    "34 living front wall (Y 6.20)": 1458,
+    "35 living ceiling": 116409,
+    "36 living dropped band + track slot": 39816,
+    "38 living skirting": 14631,
+    "39 living window (frame, mullions, reveal)": 26803,
+    "40 living window bench": 21808,
+    "43 armchair": 17637,
+    "70 front door leaf, face": 236178,
+    "72 door pull (bronze)": 42962,
+    "82 jib door of the study (closed)": 691896,
+    "83 jib door shadow gap": 8181,
+    "86 limestone joints (5 mm recess; court and hall panel)": 18606,
+    "94 hall limestone panel (X 0.81)": 1114603
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "0": 115986,
+    "3": 17637,
+    "4": 21398,
+    "6": 245301,
+    "8": 244904,
+    "9": 116409,
+    "10": 75069,
+    "11": 14631,
+    "14": 5405,
+    "100": 743846,
+    "101": 219056,
+    "103": 51133,
+    "520": 21808,
+    "522": 39816,
+    "700": 123600,
+    "710": 236178,
+    "711": 42962,
+    "715": 691896,
+    "716": 1356,
+    "722": 18606,
+    "730": 1114603
+   },
+   "depth_m": {
+    "min": 1.009,
+    "max_finite": 6.525,
+    "sky_px": 115986
+   },
+   "runtime_s": 113
+  },
+  "c1/S09": {
+   "frame": "c1/S09",
+   "camera": {
+    "loc": [
+     3.3598,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 4.0402
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 175.1,
+   "surfaces_px": {
+    "0 sky / outside (through the glazing)": 50988,
+    "11 hall left wall (X 0.80)": 955303,
+    "12 hall front wall (Y 6.35)": 105486,
+    "14 hall skirting": 66273,
+    "20 lining, walnut: left jamb (X 0.95)": 149940,
+    "23 lining shadow gap (3 mm)": 3060,
+    "24 plaster bead on the reveal (3 mm)": 4590,
+    "30 living floor": 142149,
+    "32 living window wall (X -2.30)": 179150,
+    "34 living front wall (Y 6.20)": 3060,
+    "35 living ceiling": 55945,
+    "36 living dropped band + track slot": 26800,
+    "38 living skirting": 10897,
+    "39 living window (frame, mullions, reveal)": 27731,
+    "40 living window bench": 18890,
+    "82 jib door of the study (closed)": 913410,
+    "83 jib door shadow gap": 10437,
+    "86 limestone joints (5 mm recess; court and hall panel)": 20950,
+    "94 hall limestone panel (X 0.81)": 1416541
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "0": 50988,
+    "4": 23892,
+    "6": 179150,
+    "8": 142149,
+    "9": 55945,
+    "10": 113136,
+    "11": 10897,
+    "14": 3839,
+    "100": 962680,
+    "103": 66273,
+    "520": 18890,
+    "522": 26800,
+    "700": 153000,
+    "715": 913410,
+    "716": 3060,
+    "722": 20950,
+    "730": 1416541
+   },
+   "depth_m": {
+    "min": 2.41,
+    "max_finite": 6.079,
+    "sky_px": 50988
+   },
+   "runtime_s": 119
+  },
+  "c1/S10": {
+   "frame": "c1/S10",
+   "camera": {
+    "loc": [
+     2.9109,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 4.4891
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 10,
+   "exposure": 0.75,
+   "mean_L": 172.2,
+   "surfaces_px": {
+    "11 hall left wall (X 0.80)": 907361,
+    "12 hall front wall (Y 6.35)": 162262,
+    "20 lining, walnut: left jamb (X 0.95)": 183600,
+    "23 lining shadow gap (3 mm)": 4590,
+    "24 plaster bead on the reveal (3 mm)": 7650,
+    "30 living floor": 7581,
+    "32 living window wall (X -2.30)": 16663,
+    "34 living front wall (Y 6.20)": 1530,
+    "35 living ceiling": 2204,
+    "36 living dropped band + track slot": 1672,
+    "38 living skirting": 950,
+    "82 jib door of the study (closed)": 1107720,
+    "83 jib door shadow gap": 12240,
+    "86 limestone joints (5 mm recess; court and hall panel)": 28748,
+    "94 hall limestone panel (X 0.81)": 1716829
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "6": 16663,
+    "8": 7581,
+    "9": 2204,
+    "10": 171442,
+    "11": 950,
+    "100": 916541,
+    "522": 1672,
+    "700": 188190,
+    "715": 1107720,
+    "716": 3060,
+    "722": 28748,
+    "730": 1716829
+   },
+   "depth_m": {
+    "min": 1.961,
+    "max_finite": 5.211,
+    "sky_px": 0
+   },
+   "runtime_s": 121
+  },
+  "c1/S11": {
+   "frame": "c1/S11",
+   "camera": {
+    "loc": [
+     2.462,
+     8.15,
+     1.2
+    ],
+    "yaw": 90.0,
+    "lens": 24,
+    "u0": 0.36,
+    "v0": 0.48,
+    "s_m": 4.938
+   },
+   "leaf": "open",
+   "canvas": {
+    "W": 2720,
+    "H": 1530,
+    "fx": 2565.0294695481334,
+    "fy": 1443.1441048034935,
+    "ox": 77.4852652259332,
+    "oy": 43.42794759825327,
+    "canvas": [
+     2720,
+     1530
+    ],
+    "frame_box": [
+     77.4852652259332,
+     43.427947598253276,
+     2642.5147347740667,
+     1486.5720524017468
+    ],
+    "pixel_aspect": [
+     1.0002182722091675,
+     1.0
+    ]
+   },
+   "samples": 16,
+   "exposure": 0.75,
+   "mean_L": 178.2,
+   "surfaces_px": {
+    "11 hall left wall (X 0.80)": 737575,
+    "82 jib door of the study (closed)": 1407600,
+    "83 jib door shadow gap": 15300,
+    "86 limestone joints (5 mm recess; court and hall panel)": 29019,
+    "94 hall limestone panel (X 0.81)": 1972106
+   },
+   "not_allowed_px": {},
+   "outside_scope_px": 0,
+   "pass_indices_px": {
+    "100": 748285,
+    "715": 1407600,
+    "716": 4590,
+    "722": 29019,
+    "730": 1972106
+   },
+   "depth_m": {
+    "min": 1.652,
+    "max_finite": 1.682,
+    "sky_px": 0
+   },
+   "runtime_s": 173
+  }
+ },
+ "summary": {
+  "gate_passed": true,
+  "gate_worst_px": 1,
+  "ch11_values_over_tolerance": [
+   "herbs: u left",
+   "herbs: u right"
+  ],
+  "olive_px_anywhere": 0,
+  "undefined_px": {}
+ },
+ "HD_vs_HDx_shared_edges": {
+  "new": [
+   {
+    "src": "HDx",
+    "dst": "HD",
+    "edge_px_projected": 15643,
+    "median_px": 0.0,
+    "p90_px": 1.0,
+    "share_within_2px": 1.0,
+    "max_px": 1.0,
+    "note": "pixel-centre sampling on both sides puts a perfect match at 0-1 px"
+   },
+   {
+    "src": "HD",
+    "dst": "HDx",
+    "edge_px_projected": 16417,
+    "median_px": 0.0,
+    "p90_px": 1.0,
+    "share_within_2px": 1.0,
+    "max_px": 1.4,
+    "note": "pixel-centre sampling on both sides puts a perfect match at 0-1 px"
+   }
+  ],
+  "old_2026_11_14": [
+   {
+    "src": "HDx",
+    "dst": "HD",
+    "edge_px_projected": 0,
+    "note": "no structure edge of the source lies in what the destination sees"
+   }
+  ],
+  "note": "structure edges of one lifted by its depth and projected into the other, where both see the same point; ch. 11.5.1: the joints give the HD <- HDx seam lines to lock on"
+ }
+}
