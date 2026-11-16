@@ -3,6 +3,8 @@
 **master-designer, 2026-11-15. מסמך תכנון בלבד: 0 טוקנים, אין commit, ולא נערך שום מסמך מחייב.**
 
 > **תוספת, 2026-11-15 (FB6):** על תמונות הקונספט אמר הבעלים: "עכשיו הדלת מפוארת מידי..משהו באמצע אולי?". שלושת הכיוונים בפרקים 0–9 נשארים לתיעוד. **ההצעה הפעילה היא פרק 10, "הכיוון האמצעי".**
+>
+> **תוספת, 2026-11-16 (ENT2):** הבעלים ענה "מ3 או מ2", והמנהל בחר מ3 עם קיר האבן של מ2, בלי צוהר. **המפרט הפעיל הוא פרק 11, "הכניסה הסופית".** פרקים 0–10 נשארים לתיעוד.
 
 **למה:**
 - FB5: "זאת הדלת הכי פשוטה ולא מעוצבת ..לא קשור למגזין עיצוב..תמונה פשוטה ומשעממת ...זה לא הכוון שלנו".
@@ -908,3 +910,599 @@
 - **ללוח:**
   - "הכיוון האמצעי": מ1 "הזית בשביל", מ2 "קיר האבן", מ3 "הספסל הבנוי". ההמלצה: מ1.
   - 0 טוקנים. לא נערך שום מסמך מחייב. הרישום המוצע בפרק 10.9 עובר לבעלים יחד עם הבחירה.
+
+---
+
+## 11. תוספת 2026-11-16: הכניסה הסופית: מ3 עם קיר האבן (ENT2)
+
+**master-designer, 2026-11-16. תכנון בלבד: 0 טוקנים, אין commit, ולא נערך שום מסמך מחייב.** הבריף: `briefs/wm-entrance-final-spec-2026-11-16.md`.
+
+**למה:**
+- **ENT2, הבעלים:** "מ3 או מ2".
+- **הכרעת המנהל:**
+  - מ3 "הספסל הבנוי" היא הבסיס, כי המצלמה, הפתח, המסלול S1 וה-clay נשארים.
+  - קיר הדלת באבן גיר מושחזת, כמו ב-מ2.
+  - בלי צוהר, כדי לא לשנות את O-front-door.
+  - הבעלים רואה את הסטיל הסופי של D0 לפני כל דבר אחר, ועדיין יכול לבקש מ3 או מ2 נקיות.
+
+**הקלט:**
+- פרקים 10.5, ‏10.6 ו-10.8 כאן.
+- ‏`M2.jpg`, ‏`M3.jpg` וה-README של `assets/renders/hall/warm-modern/concepts-middle-2026-11-15/`.
+- ה-clay וה-README של `assets/blockout/house/framing/wm-door-2026-11-14/`.
+- ‏`wm-front-door-2026-11-14.md` (פרקים 1–6 ו-10) ו-`wm-arrival-from-door-2026-11-14.md` (פרק 2).
+- תוכנית הבית (`porch`, ‏`outer_blocks`, ‏`rooms.hall`, ‏`openings`, ‏`roof_lights`), ‏`data/slots/hall.json`, ‏Bible המודרני החם 1.0.2, וחוקי העיצוב.
+
+**על המספרים:**
+- **בלי סימון:** מהתוכנית, או מה-clay הקיים (ה-README שלו).
+- **(הטלה):** בנוסחת התוכנית. ב-D0: ‏u = 0.36 + 0.6667·(8.15 − Y)/d, ‏v = 0.48 + 1.1852·(1.20 − Z)/d, ‏d = 7.40 − X. בפנים: אותה נוסחה, עם המצלמה והשיפט של כל פריים.
+- **(מוצע):** מידה חדשה שלי. ה-clay בונה אותה ובודק אותה.
+- **ה-clay גובר.** סטייה של יותר מ-0.01 ממה שכתוב כאן חוזרת אליי.
+
+### 11.0 בקצרה
+- **הפריים:**
+  - המצלמה, הפתח והדלת של D0 נשארים בלי שינוי.
+  - קיר הדלת כולו אבן גיר מושחזת בנדבכים ארוכים, והאבן עוטפת גם את הספים.
+  - דלת אגוז מחורצת על השליש השמאלי, ומימינה מנורה דולקת על האבן.
+  - בפינה הימנית אדנית בנויה של רוזמרין ולבנדר, שיורדת לספסל בנוי לאורך הקיר הימני.
+  - הקיר הימני בשמש נמוכה, עם צל עלי זית. לפני הדלת שטיחון.
+- **S1 לא משתנה:** ‏7.3 ש', אותן תחנות ואותו HD. פני האבן נשארים על הקו של התוכנית (X ‏3.95), ולכן מלבן הכנף של motion-agent נשאר עד הפיקסל.
+- **שלוש הכרעות שלי מול הקונספט:**
+  1. **הספסל על הקיר הימני,** כמו ב-10.6.3, ולא לאורך קיר הדלת כמו בתמונה. מימין לדלת יש רק 1.25 מ' של קיר, והמודל הרחיב את החצר כדי להכניס לשם ספסל.
+  2. **האדנית תופסת 0.80 מהגוף הבנוי, ו-1.65 מ' של מושב נשארים פנויים.** בקונספט הספסל שתול לכל אורכו.
+  3. **בפנים האבן ממשיכה בפאנל אחד מאחורי אזור הספסל, וחלון הגג נהיה חריץ אור לאורך הקיר הרחוק.** כך הסיבוב נפתח על אבן מוארת, ולא על קיר ריק (11.5).
+- **הצוהר: לא צריך** (11.6).
+- **מה מתעדכן במסמכים הקודמים שלי:**
+  - כיסוי האבן של הספסל ושל האדנית בעובי 8, כמו ספסל החלון ב-Bible. ב-10.6.3 כתבתי 6, וזו הייתה טעות.
+  - המנורה ב-Z ‏1.80 (באמצע נדבך) ובגודל Ø ‏100×250, ולא ב-1.85.
+  - האדנית ב-X ‏3.95–4.75, ובאותו עומק כמו הספסל (0.50).
+  - המנורה והשטיחון מצוירים בסטיל, בלי נקודה, עד שיהיה להם כרטיס. זה מחליף את 10.2.2 בחוץ (11.1.6).
+  - התיאורים של D0o, ‏HT, ‏HD ו-HDx בפרקים 6 ו-10 של מסמך הדלת מוחלפים בפרק 11.5.
+- **אין שאלה לבעלים.**
+
+### 11.1 פריים D0: המפרט
+
+#### 11.1.1 מה יש בפריים
+| מה | סוג | איפה בפריים (הטלה) |
+| --- | --- | --- |
+| קיר הדלת באבן גיר, כולל הספים | אדריכלות | u ‏0.080–0.669, ‏v ‏0–0.892 |
+| הדלת: כנף אגוז מחורצת, ידית מוט | אדריכלות | הכנף u ‏0.244–0.422, ‏v ‏0.100–0.860 (ה-clay) |
+| מנורת קיר, דולקת | עמדה עתידית, `porch-wall-light` | מרכז u ‏0.508, ‏v ‏0.270 |
+| אדנית בנויה | אדריכלות | u ‏0.573–0.763; השפה העליונה ב-v ‏0.652–0.704 |
+| רוזמרין ולבנדר | נוף | u כ-0.55–0.78, עד v כ-0.50 |
+| ספסל בנוי (המושב) | אדריכלות | מ-u ‏0.637–0.763 ב-v ‏0.815, עד השוליים התחתונים ב-u ‏0.789–0.984 |
+| שטיחון | עמדה עתידית, `porch-doormat` | u ‏0.220–0.430, ‏v ‏0.892–0.979 |
+| כרית לספסל | עמדה עתידית, **לא מצוירת** | |
+| הקיר הימני בטיח, בשמש ובצל עלים | אדריכלות ואור | u ‏0.669–1.0 |
+| הזית | נוף, **מחוץ לפריים** | רק הצל, סביב (0.82, 0.52) |
+| חלון הרחצה המחורץ, בקיר השמאלי | אדריכלות | u ‏0.053–0.080, ‏v ‏0.12–0.56 (ה-clay) |
+| רצפת אבן גיר | אדריכלות | v ‏0.892–1.0 |
+| תקרת החצר, שמיים, גינה, העץ | — | **לא בפריים** |
+
+#### 11.1.2 קיר הדלת: האבן
+- **החומר:** אבן גיר מושחזת #D8C8AE, האבן של הרצפה ושל ספסל החלון בסלון.
+  - מט (עד 10 GU), חלקה וצפופה.
+  - בלי נקבוביות של טרוורטין, בלי עורקים, בלי סיתות ובלי מדרגות.
+  - אבן מנוסרת, לא אריחים.
+- **הנדבכים:** אופקיים וארוכים, בגבהים 15–40, בקצב "גדול, בינוני, קטן", שבו הבינוני משתנה. המישק 5 מ"מ ברוחב ו-5 מ"מ בעומק.
+
+| נדבך | Z | גובה | מישק אנכי | v של המישק העליון ב-D0 (הטלה) |
+| --- | --- | --- | --- | --- |
+| 1 | 0–0.40 | 40 | — | 0.755 |
+| 2 | 0.40–0.70 | 30 | Y ‏7.05 | 0.652 (בקו השפה של האדנית) |
+| 3 | 0.70–0.85 | 15 | — | 0.600 |
+| 4 | 0.85–1.25 | 40 | Y ‏7.05 | 0.463 |
+| 5 | 1.25–1.45 | 20 | — | 0.394 |
+| 6 | 1.45–1.60 | 15 | Y ‏7.05 | 0.343 |
+| 7 | 1.60–2.00 | 40 | — (המנורה באמצעו) | 0.205 |
+| 8 | 2.00–2.15 | 15 | Y ‏7.05 | 0.154 |
+| 9 | 2.15–2.40 | 25 | — | 0.068 (ראש הפתח) |
+| 10 | 2.40–2.80 | 40 | Y ‏7.30 ו-9.30 (אבן אחת של 2.00 מעל הדלת) | מעל הפריים |
+| 11 | 2.80–3.00 | 20 | חופשי | מעל הפריים |
+
+- **המישקים האנכיים:**
+  - **מימין לדלת (1.25 מ'):** בנדבכים האי-זוגיים אבן אחת. בזוגיים שתיים (0.50 ו-0.75), עם מישק ב-Y ‏7.05 (u ‏0.573, הטלה). המישק הזה ממשיך את קו החזית של האדנית.
+  - **משמאל לדלת (0.80):** אבן אחת בכל נדבך.
+  - **הכלל:** אין מישק אנכי במרחק של פחות מ-0.20 מספים, מפינה או מהמנורה.
+- **למה הקצב הזה:**
+  - ראש הדלת (2.40) ושפת האדנית (0.70) יושבים על מישק. המנורה יושבת באמצע נדבך, ולא חוצה מישק.
+  - אין מישק שמשיק לשפה של פריים או של קנבס ב-D0, ב-HD או ב-HT (11.2, סעיף 18).
+  - הנדבכים לא שווים בגובה. ב-מ2 המודל יישר אותם לגובה אחד, וזה נקרא כחיפוי של קבלן.
+- **בפינות:** האבן רצה לכל רוחב הקיר (Y ‏6.55–9.60) ונעצרת בקו אנכי ישר.
+  - הטיח של קירות הצד נעצר 5 מ"מ לפניה, בחריץ צל. הפינות חדות.
+  - הרדיוס 0.15 של 10.2.1 נועד לפינה של טיח מול טיח, ובפריים אין כזו.
+- **בתקרה:** האבן עולה עד 3.00, עם חריץ צל של 10 מ"מ. זה לא נראה באף פריים של S1.
+- **ברצפה:** הנדבך התחתון יושב על אבן הרצפה במישק של 5 מ"מ, בלי שיפולים. קו הצל של 1 ס"מ נשאר רק בקירות הטיח.
+- **העובי:** האבן (30 מ"מ ועוד 10 מ"מ הדבקה) מחליפה את הטיח בתוך עובי הקיר (0.35), ולא נוספת עליו. **הפנים הגמורים נשארים על X ‏3.95,** ולכן אף קו בטבלה של D0 לא זז.
+- **הספים:**
+  - **אותה אבן בשני הספים ובראש,** בעומק הגלוי של 0.29 (X ‏3.66–3.95).
+  - **כל מישק אופקי ממשיך סביב הפינה אל תוך הסף, עד הכנף.** כך הקיר נקרא כגוש אבן, ולא כחיפוי. הראש הוא אבן אחת.
+  - **הפינות חדות,** בשבירה של 2 מ"מ ובחיבור גרונג. הרדיוס של 3 ס"מ בין הספים לראש, שמתאים לטיח, מתבטל.
+  - **הפתח הנקי נשאר 1.00×2.40, כמו בתוכנית.** הפתח הבנוי רחב ממנו ב-6 ס"מ וגבוה ב-3, ולא ממדלים אותו.
+  - **הסף:** אבן הרצפה נכנסת עד הכנף, כמו היום. המישקים לרוחב שהתקבלו (10.1.1 במסמך הדלת) נשארים.
+  - **בלי משקוף, ארכיטרב, מסגרת או פורטל.**
+
+#### 11.1.3 הדלת
+- **[אדריכלות] הכנף:** אגוז #6B4A33 בשמן מט, 1.00×2.40, בפנים הפנימי (X ‏3.60–3.66). צירים נסתרים ב-Y ‏8.80, נפתחת פנימה. הקוד כמו היום.
+- **החריצים (מוצע):**
+  - 48 חריצים אנכיים מעוגלים: פסיעה של 20 מ"מ, עומק של כ-4.
+  - לכל הגובה, עד הקצה העליון והתחתון. שוליים שטוחים של 20 מ"מ בשני הצדדים.
+  - לא קרשים, לא פאנלים, לא זכוכית.
+- **הידית:** מוט אנכי בברונזה כהה #3A322C סאטן, ‏Ø25, באורך 60 (Z ‏0.75–1.35), על שתי רגליות של 4 ס"מ, ב-Y ‏7.90. כמו ב-clay.
+- **הגוון:** ‏L* ‏28–35, לפחות 8 L* מעל נקודת השחור. החריצים נקראים ב-×1 כקווים אנכיים דקים (10.1.2 במסמך הדלת).
+- **הכנף תמיד בצל אחיד:** בלי שמש, בלי כתם עלים ובלי אור מהמנורה (§2.2: הקוד מסובב אותה).
+
+#### 11.1.4 הספסל והאדנית
+**[אדריכלות] גוף בנוי אחד בטיח, לאורך הקיר הימני (Y ‏6.55), עם קו חזית אחד ב-Y ‏7.05.**
+- האדנית "עולה" רק בקו העליון.
+- הכיסוי באבן הגיר של הקיר, בעובי 8, כמו ספסל החלון בסלון (Bible).
+
+| (מוצע) | X | Y | Z |
+| --- | --- | --- | --- |
+| האדנית | 3.95–4.75 (0.80) | 6.55–7.05 | 0–0.70 |
+| הספסל | 4.75–6.40 (1.65) | 6.55–7.05 | המושב ב-0.45 |
+
+- **האדנית:**
+  - שפת אבן ברוחב 8 ובעובי 8 (Z ‏0.62–0.70), בארבעת הצדדים. גם לאורך הקירות, כך שהאדמה לא נוגעת באבן ובטיח.
+  - האדמה ב-Z ‏0.65, בפתח של כ-0.64×0.34.
+  - המדרגה מהמושב לאדנית: 0.25.
+- **הספסל:**
+  - בסיס טיח עד 0.37, ומעליו לוח אבן (Z ‏0.37–0.45) שבולט 2 ס"מ מפני הטיח, עם קו צל מתחתיו.
+  - בבסיס, ברצפה, שקע צל של 3×3 ס"מ.
+  - הקצה הקרוב (X ‏6.40) מחוץ לפריים.
+- **השפות:** פינות הטיח מעוגלות קלות (כ-1 ס"מ, עבודת יד). פינות האבן ישרות, בשבירה של 3 מ"מ.
+- **כמה מושב פנוי:** כל הספסל, 1.65 מ'. **אין עליו שום צמח ושום חפץ.** ב-D0 רואים ממנו כ-0.95 מ' (X ‏4.75–5.69, הטלה), בשמש ובצל העלים.
+- **למה כך:**
+  - **הספסל על הקיר הימני ולא על קיר הדלת:** מימין לדלת יש 1.25 מ' בין הספים לפינה. ספסל שם היה קצר משלושה מושבים, נצמד לדלת, ומסתיר את הנדבכים התחתונים של האבן, שהיא הגיבור. על הקיר הימני הוא יושב בשמש.
+  - **קו חזית אחד:** אילו האדנית בלטה מהספסל, הבסיס של הפאה שלה שפונה למצלמה היה נופל על v ‏0.98–1.02 (הטלה). זה קו אופקי שנצמד לשוליים התחתונים. בקו חזית אחד הפאה הזו היא רק המדרגה שמעל המושב (v ‏0.70–0.82).
+  - **אדנית של 0.80:** מסת הירק יושבת על קו השליש הימני (u ‏0.57–0.76).
+  - **מושב פנוי של 1.65:** זה מה שהופך אותו לספסל, ולא לערוגה.
+
+#### 11.1.5 מה גדל
+- **[נוף] באדנית בלבד:** שני שיחי רוזמרין זקופים, ושלושה שיחים של לבנדר משונן (*Lavandula dentata*).
+  - **רוב המסה עלווה,** כסופה וירוקה-אפורה.
+  - **הפריחה:** בלבנדר מעט שיבולים סגולות-אפורות ועמומות, עד כשליש מהמסה. ברוזמרין פריחה תכלכלה זעירה, שכמעט לא נראית.
+    - לא שדה סגול: ה-Bible אוסר צבעים רוויים, וירוק בא רק מצמחים.
+  - **הגובה:** עד Z ‏1.15 (v כ-0.50, הטלה). נשפכים לכל היותר 10 ס"מ מעבר לשפה.
+  - **למה אלה:** שניהם פורחים בחורף בישראל, ולכן הם אמינים ביום של DL1. ואלה צמחים שמשפחה שותלת ליד הדלת.
+- **[נוף] הזית: בגינה, מחוץ לכל פריים,** מאחורי המצלמה ומשמאל.
+  - **התחלה ל-clay (מוצע):** מרכז הצמרת ב-(8.20, 10.00), ‏Ø כ-3.0, ‏Z ‏1.8–4.0.
+  - **למה לא (7.80, 8.85) של 10.6.4:** משם הצל נופל בקצה הימני של הפריים (u כ-0.98, הטלה).
+  - **מהמיקום החדש:** מרכז הצל נופל על הקיר הימני ב-(5.10, 6.55, 1.12), כלומר (0.82, 0.52) בפריים (הטלה).
+  - ה-clay מזיז את העץ עד שהצל ממורכז סביב u ‏0.80–0.85, ונוגע במושב.
+
+#### 11.1.6 העמדות העתידיות: המנורה והשטיחון
+- **[עמדה עתידית] `porch-wall-light`:**
+  - **מה:** מנורת קיר גלילית שמאירה למעלה ולמטה, בברונזה כהה #3A322C מט, על פלטה עגולה. ‏Ø ‏100, גובה 250 (מוצע).
+  - **איפה:** מרכז ב-(4.02, 7.40, 1.80). על האבן, מימין לדלת בצד הידית, 0.40 מהפתח, באמצע נדבך 7.
+    - ‏u ‏0.508, ‏v ‏0.270. הגוף ב-u ‏0.498–0.518, ‏v ‏0.226–0.313 (הטלה).
+  - **דולקת, 2700K:**
+    - שתי מניפות קצרות של אור חם על האבן: למעלה עד כ-Z ‏2.4, ולמטה עד כ-1.2. כל אחת ברוחב של כ-0.30 בבסיס.
+    - המישקים שבתוכן תופסים את האור.
+    - **השיא של כל מניפה 1.0–1.5 סטופ מעל האבן המוצלת שלידה.** בלי כוכב ובלי הבזק עדשה.
+  - **למה הגודל:** ב-Ø ‏100×250 היא נספרת לפי V7Q6: כ-0.17% מהפריים, וגובה של כ-8.7% (הטלה). בגודל של הקונספט (כ-70×170) היא לא הייתה נספרת.
+- **[עמדה עתידית] `porch-doormat`:**
+  - ‏60×90, ‏X ‏3.95–4.55, ‏Y ‏7.85–8.75, ממורכז על ציר הדלת.
+  - קויר טבעי לא צבוע, שטוח וצפוף, בלי שוליים, בלי דוגמה ובלי טקסט. הגוון בין טאופ #9C8B7A לקרמל #A0663A.
+  - **החומר:** קויר הוא סיב קוקוס. הוא לא קש ולא ראטן, שה-Bible אוסר כחומר עיקרי.
+  - **הליקוט:** ג.3 דורש סיבים טבעיים, 80% לפחות, ולכן בודקים את הגב, שהוא לרוב PVC.
+- **[עמדה עתידית] כרית לספסל:** לא מצוירת.
+- **איך המנורה והשטיחון מצוירים עכשיו (מחליף את 10.2.2 בחוץ):**
+  - **בסטיל הם פריטים פשוטים, בלי נקודה ובלי "קנה",** כמו מילוי שאין לו מוצר (D2: "בלי מוצר: בלי נקודה").
+  - **הבסיס:**
+    - הקריאה של המנהל ל-FB5: בחוץ, חפץ מצויר הוא אדריכלות, צמחייה, או מוצר עתידי לעמדה.
+    - בלי מנורה דולקת הפריים חוזר להיות ה-D0 שנדחה, והבעלים ביקש במפורש "גופי תאורה דולקים".
+  - **כשיהיה כרטיס:** המוצר מחליף את הפריט כשכבה בתוך מסכה, ומחוצה לה ההפרש 0 רמות (RND2). המסכות (הטלה):
+    - המנורה והמניפות: u ‏0.47–0.55, ‏v ‏0.05–0.48.
+    - השטיחון: u ‏0.21–0.44, ‏v ‏0.88–1.0.
+  - **כדי שההחלפה תהיה קטנה,** הליקוט מחפש מוצר בתוך המעטפה הזו (11.8).
+
+#### 11.1.7 שאר הפריים
+- **הקיר הימני ופס הקיר השמאלי:** טיח סיד #ECE5DA, עם תנועת מלג של עד 6 נקודות L, שהשמש המשיקה מציירת. בלי שיפולים; קו צל של 1 ס"מ מעל הרצפה.
+- **חלון הרחצה:** בלי שינוי, כמו ב-clay (כולל האדן).
+  - פרופיל ברונזה כהה וזכוכית מחורצת אנכית: שקט, אפור-עצם, בלי נוף ובלי זוהר.
+  - מסגרת הברונזה פוגשת את קצה האבן בפינה השמאלית בקו אנכי אחד.
+- **הרצפה:** אבן הגיר 60×120 של ה-clay, בלי שינוי.
+
+#### 11.1.8 האור
+- **הזמן:** אחר צהריים של חורף, **שמש נמוכה דרך אובך דק** (§2.3). אותו יום ואותה שעה בכל הבית (DL1).
+- **השמש ל-clay (מוצע):** אזימוט כ-228° (מצפון, עם כיוון השעון), גובה כ-21°, זווית שמש של כ-1.5° (האובך מרכך את הצל), כ-4000K.
+  - ה-clay רשאי לזוז בתוך 222°–235° ו-17°–25°, כדי שהצל ינחת במקום. **קודם מזיזים את העץ, ורק אחר כך את השמש** (§2.3).
+  - **בדקתי את הכנף:** השמש נוגעת בה רק באזימוט של כ-210° ומטה (הטלה), כלומר מחוץ לטווח.
+- **איפה השמש נופלת (הטלה, ב-228° וב-21°):**
+  - **על הקיר הימני, מתחת לקו אלכסוני:** מכ-(0.67, 0.40) בפינה, עד השוליים העליונים ליד הקצה הימני.
+    - מעל הקו, ליד הפינה, הקיר בצל.
+    - **המשולש המואר הוא השליש הימני של הפריים.**
+  - **על המושב, על העשבים, ועל חלק מהפאה הקדמית של הגוף הבנוי.**
+  - **מותר:** פס של כ-10 ס"מ על האבן בפינה הימנית, מאחורי העשבים.
+  - **אסור:** על הכנף, על הספים, על השטיחון, ועל האבן משמאל לאדנית. האגף המערבי מצל עליהם.
+- **צל הזית:** תחרה רכה של עלים על השמש של הקיר הימני ועל המושב, סביב (0.82, 0.52). רכה ולא חדה. **את העץ לא רואים.**
+- **קיר האבן והכנף:** בצל רך ואחיד, עם החזר חם מהקיר המואר ומהרצפה.
+  - האבן נשארת בגוון שלה. באלבדו היא כהה מהטיח בכ-0.4 סטופ, ולא מגרידים אותה כדי להשוות.
+- **המנורה:** 11.1.6.
+- **החשיפה, איזון הלבן והיחסים (QA מודד):**
+  - **החשיפה נעולה כמו ב-clay (0.75), ואיזון הלבן 4600K.** השמש נוספת על השמיים של ה-clay, והשמיים לא משתנים.
+  - **הטיח המוצל בחצר** (הקיר הימני מעל קו השמש, u ‏0.68–0.74, ‏v ‏0.10–0.30) שווה לקיר האחורי ב-`base.png`, ‏±1/3 סטופ. זה היעד הקודם של D0, והוא עובר מקיר הדלת אל הטיח.
+  - **הטיח בשמש:** 1.3–2.0 סטופ מעל הטיח המוצל, ושום ערוץ לא נשרף (מחוץ לגוף המנורה).
+  - **הכנף:** ‏L* ‏28–35.
+  - **נקודת השחור:** ‏L ‏11–14 (WM-G1). הצללים חומים-אפורים וחמים. טיח קר או אפור (H ‏180–260) נדחה.
+
+#### 11.1.9 הקומפוזיציה
+- **מוקד אחד: הדלת,** על קו השליש השמאלי (מרכז u ‏0.331). כנף כהה ומחורצת, בקיר אבן בהיר ומפוספס.
+- **משולש:**
+  - הדלת: גדולה, כהה, משמאל.
+  - המנורה: קטנה, חמה, גבוהה (u ‏0.51).
+  - העשבים: בינוניים, נמוכים, על קו השליש הימני.
+  - שלושה פריטים בשלושה גבהים, והכבדים למטה.
+- **האור מוביל:** השמש באה מאחור ומשמאל, ונוחתת מימין.
+  - העין עוברת מהקיר המואר, דרך המנורה, אל הדלת.
+  - קווי האבן והרצפה מתכנסים אל (0.36, 0.48) שבתוך הכנף, שהיא גם כיוון ההליכה.
+- **החומרים (הטלה, בקירוב):** אבן כ-42% (קיר, ספים, רצפה, כיסויים), טיח כ-35%, אגוז כ-13.5%, ירק כ-4%, קויר כ-2%, ברונזה כ-0.6%.
+  - **בסיס טונאלי:** אבן וטיח באותה משפחה של עצם.
+  - **מוקד:** האגוז.
+  - **הדגשה:** הברונזה, שלוש פעמים (ידית, מנורה, מסגרת החלון), והירק.
+  - **ארבע טקסטורות:** אבן מושחזת, טיח, חריצי אגוז ועלווה.
+- **בטלפון (391×220):**
+  - הכנף כ-70×167 פיקסלים.
+  - המנורה נקודה חמה של כ-8×19, והמניפות יחד כ-90 פיקסלים לגובה.
+  - העשבים כתם של כ-75 פיקסלים.
+  - קווי האבן נראים ב-×1 כפסים דקים, והמישקים ב-×2.
+
+#### 11.1.10 מה זה עושה ל-S1
+- **במסלול: כלום.** אותה מצלמה, אותו מלבן כנף ואותה הליכה (7.3 ש').
+- **אירועים חדשים בקליפ 1a (הטלה, מטרים מ-D0):**
+
+| מטרים | מה יוצא מהפריים |
+| --- | --- |
+| 0.72 | השטיחון, מלמטה, יחד עם הרצפה |
+| 0.94 | פינת המושב, מלמטה |
+| 1.50 | פינת האדנית, מימין |
+| 1.59–2.21 | המנורה, מלמעלה |
+| 2.3–2.4 | העשבים, מימין |
+
+- **הפרלקסה בצעדים הראשונים** (מושב, אדנית, מנורה) היא מה שאומר "הולכים בבית".
+- **בפתח:** מההתחלה רואים בקצה הימני של הפתח את קצה פאנל האבן שבפנים. הוא גדל עד חצי מ-HD (11.5).
+
+### 11.2 השינויים ב-clay (לבנייה, 0 טוקנים)
+**הגאומטריה הקיימת לא זזה.** אף שורה בטבלת D0 שב-README לא משתנה. את השער (עד 2 פיקסלים) בודקים שוב רק כדי לוודא.
+
+**א. קיר הדלת והכנף**
+1. **הקיר X ‏3.95** (‏Y ‏6.55–9.60, ‏Z ‏0–3.00): החומר הופך לאבן #D8C8AE מט. **המישור לא זז.**
+2. **המישקים:** חריצים של 5×5 מ"מ, לפי הטבלה של 11.1.2.
+   - ‏11 נדבכים.
+   - מישקים אנכיים ב-Y ‏7.05 בנדבכים 2, 4, 6 ו-8, וב-Y ‏7.30 וב-9.30 בנדבך 10.
+3. **בפינות:** חריץ צל אנכי של 5 מ"מ בין האבן לטיח. בתקרה: 10 מ"מ. ברצפה: מישק של 5 מ"מ, וקו הצל הכהה של 1 ס"מ יוצא מהקיר הזה בלבד.
+4. **הספים והראש:** אותו חומר.
+   - המישקים האופקיים ממשיכים סביב הפינה ואל תוך הסף, עד X ‏3.66.
+   - הרדיוס של 3 ס"מ בין הספים לראש מתבטל.
+5. **הכנף:** 48 חריצים אנכיים (פסיעה 20, עומק 4, שוליים 20), לכל הגובה.
+   - **אלבדו של אגוז אמיתי** (Y כ-0.083), ולא הכתום של היום.
+   - כך היחס בין הכנף לקיר ב-clay נכון (10.1.2 במסמך הדלת).
+
+**ב. הגוף הבנוי, המנורה והשטיחון** (מוצע; 11.1.4 ו-11.1.6)
+
+6. **האדנית:** קופסת טיח X ‏3.95–4.75, ‏Y ‏6.55–7.05, ‏Z ‏0–0.70, עם שפת אבן של 8×8 מסביב. האדמה ב-Z ‏0.65.
+7. **הספסל:** X ‏4.75–6.40, ‏Y ‏6.55–7.05.
+   - בסיס טיח עד Z ‏0.37, פניו ב-Y ‏7.03, ושקע צל של 3×3 ס"מ ברצפה.
+   - לוח אבן ב-Z ‏0.37–0.45, עד Y ‏7.05.
+8. **העשבים:** חמש גבעות אפורות עם displacement, בתוך האדנית.
+   - הראש עד Z ‏1.15, ונשפכים עד 10 ס"מ מעבר לשפה.
+   - **זה נפח בלבד,** כדי שהמודל יידע איפה הירק וכמה ממנו יש.
+9. **המנורה:** גליל Ø ‏100 ובגובה 250, על פלטה של 15 מ"מ, מרכז ב-(4.02, 7.40, 1.80).
+   - בתוכו שני ספוטים, למעלה ולמטה: ‏2700K, אלומה של כ-25°.
+   - **דולקת בכל פריימי החצר.**
+   - ה-clay מכייל את העוצמה לשיא של 1.0–1.5 סטופ מעל האבן המוצלת.
+10. **השטיחון:** לוח של 0.60×0.90×0.015 ב-X ‏3.95–4.55, ‏Y ‏7.85–8.75, באלבדו של קויר (כ-#A88B64).
+
+**ג. השמש והזית**
+
+11. **השמש:** אזימוט 228°, גובה 21°, זווית 1.5°, ‏4000K. השמיים של ה-clay נשארים.
+12. **הזית:** צמרת מכרטיסי עלים (עלה של 4–6 ס"מ, צפיפות כ-60%), ממורכזת ב-(8.20, 10.00), ‏Ø ‏3.0, ‏Z ‏1.8–4.0, עם גזע של Ø ‏0.25.
+    - **הכלל:** הצל ממורכז סביב u ‏0.80–0.85 על הקיר הימני, ונוגע במושב.
+    - **העץ לא נראה באף פריים ובאף תחנה.**
+    - אם הצל לא נוחת במקום, מזיזים קודם את העץ.
+
+**ד. בפנים** (11.5)
+
+13. **פאנל אבן על הקיר הרחוק (X ‏0.80):**
+    - ‏Y ‏6.35–7.75, ‏Z ‏0–3.00. פניו ב-X ‏0.81: אבן של 20 מ"מ במקום הטיח, ולכן היא בולטת 10 מ"מ.
+    - אותם נדבכים ואותם גבהים כמו בחוץ. מישקים אנכיים ב-Y ‏7.05 בנדבכים 2, 4, 6 ו-8.
+    - קצה נקי ב-Y ‏7.75. בלי שיפולים על האבן; השיפולים של הטיח נעצרים 5 מ"מ לפניה.
+14. **חלון הגג:** ‏RL-hall (X ‏0.95–1.85, ‏Y ‏6.70–8.30) יוצא.
+    - במקומו חריץ: ‏X ‏0.80–1.10, ‏Y ‏6.35–9.80, באר בעומק 0.45, זיגוג חלבי.
+    - המעבירות מכוילת לפי היחסים של 11.5.2.
+15. **הדלת הנסתרת, השיפולים והאלון:** בלי שינוי.
+
+**ה. מה מרנדרים מחדש, ומה כותבים ב-README**
+
+16. **הפריימים:** ‏D0-closed, ‏D0-none, ‏D0-open, ‏HT, ‏HD, ‏HDx, ‏HD57 ו-12 התחנות של קליפ 1.
+    - לכל אחד: עומק, ‏id ו-edges, במוסכמות של היום.
+    - **ה-id החדשים:** אבן החצר, אבן הספים, האדנית, הספסל, העשבים, המנורה, השטיחון, פאנל האבן והחריץ.
+17. **טבלת D0:** השורות של היום (השער), ועוד השורות של 11.1.1, ‏11.1.2 ו-11.1.6: המעצב, ה-clay וההפרש.
+18. **משיקות:** אף מישק לא עובר במרחק של פחות מ-15 פיקסלים משפה של פריים או של קנבס. בדקתי ביד (הטלה):
+    - ב-HD המישק 2.00 עובר כ-45 פיקסלים מתחת לשפה העליונה של הקנבס, והמישק 0.40 כ-98 פיקסלים מעל השפה התחתונה.
+    - ב-HT המישק 2.40 נוגע בשפה העליונה של הקנבס. זה בשוליים, שהקליפים לא משתמשים בהם (`seeds.py frame`), ולכן זה מקובל ונרשם.
+    - ב-D0 אין משיקות.
+19. **אור:**
+    - **מה מודדים:** ארבעת היחסים של 11.1.8, ועוד שני היחסים של 11.5.2: הכניסה דרך הדלת ב-D0o, והסלון מעל הכניסה ב-HDx.
+    - **אם יחס אחד לא מתקיים,** ה-clay משנה את עוצמת השמש או את המעבירות של החריץ. לא גריידינג.
+    - **אם שניים מתנגשים,** זה חוזר אליי.
+20. **הגיליון:** ‏D0-closed החדש, לצד `M3.jpg` ו-`M2.jpg` באותה שורה, כדי שהמנהל יראה מה זז מהקונספט ולמה.
+
+### 11.3 הפרומפט ל-D0 הסופי
+- **הקלט:** ה-clay המואר והחדש, `D0-closed.png`, כתמונה היחידה (תמונה-לתמונה).
+- **בלי הקונספטים כרפרנס.** הגאומטריה שלהם שגויה (ספסל על קיר הדלת, עץ בפריים, צוהר), והמודל מעתיק גאומטריה מרפרנס.
+- **המודל והרזולוציה:** ההחלטה של render-agent, לפי הלוח: ‏seedream-5-pro ב-650, או nano-banana-2 כשהוא ננעל על ה-clay. **`var2_estimate_cost` לפני כל שליחה.**
+- **ניסיון אחד, ותיקון אחד לכל היותר,** ורק על סעיף מ-11.4.
+
+> Photorealistic photograph made from this clay render. Keep the camera, the perspective and every edge of the input exactly: the walls, the corners, the door opening and leaf, every stone joint, the floor joints, the window, the planter, the bench, the wall light and the doormat stay exactly where they are and the same size. Only add real materials, light and plants.
+>
+> House-tour photograph of the front door of an ordinary single-storey family home in a quiet Mediterranean suburb, on a winter afternoon. The camera stands inside a small covered entrance porch, facing the front wall of the house straight on, eye height 1.2 m, 24 mm lens, perfectly level, verticals vertical, everything sharp, no depth of field, no grain, no vignette.
+>
+> The front wall facing the camera, from the far-left corner to the inside corner on the right third, is clad from the floor to above the top of the frame in smooth, honed, warm pale limestone (#D8C8AE), laid in long flat horizontal courses of different heights on the joint lines of the input, with fine recessed joints: flush, dense and precise, no open pores or travertine holes, no veining, not rustic, not split-face, not tiles. The stone stops in a clean vertical line at both inside corners; the two side walls are plaster.
+>
+> On the left third, the front door: a normal single house door, 1 m wide and 2.4 m high, set about 30 cm deep in the wall. Both jambs and the head of the reveal are lined in the same limestone with crisp square edges, the horizontal joints wrapping around into the reveal; no frame, casing or architrave. The floor stone runs into the reveal up to the leaf, with no step and no threshold strip. The leaf is matte-oiled walnut (#6B4A33) with fine vertical reeding of narrow rounded flutes over its full height, not planks, no panels, no glass, and one slim vertical dark-bronze bar pull near its right edge at hip height. The leaf is in soft, even shade: a rich mid-dark walnut whose flutes read as fine vertical lines.
+>
+> To the right of the door, on the stone at head height, one cylindrical up-and-down wall light in matte dark bronze (#3A322C), switched on: two short fans of warm 2700 K light on the stone above and below it, the joints inside them catching the light. No flare, no starburst.
+>
+> In the right back corner, a built-in plaster planter capped in honed limestone stands against both walls. Toward the camera it steps down, in the same plaster body and with the same front face, into a long, low built-in bench along the right-hand wall, whose honed limestone seat runs out of the frame at the bottom right. The planter holds rosemary and toothed lavender: mostly soft silver and grey-green foliage, upright, with a few muted grey-violet flower spikes; the plants stay inside the planter and spill only slightly over its rim. The bench seat is bare stone: nothing grows on it and nothing lies on it.
+>
+> On the floor in front of the door, a plain, flat, natural coir doormat, undyed, with no border, pattern or text.
+>
+> The right-hand wall and the narrow strip of the left-hand wall are warm bone limewash plaster (#ECE5DA) with a visible hand-trowelled texture. In the left-hand wall, tight against the corner, a narrow window of vertically fluted glass in a slim dark-bronze frame, quiet and soft grey: no view, no glow. The floor is large honed pale limestone slabs, the same stone as the wall.
+>
+> Light: low, warm winter sun through a thin haze, from behind the camera and to the left, falls across the right-hand wall below a soft diagonal edge that rises toward the right, across the bench seat and over the herbs, all printed with the soft, lacy shadow of olive leaves from a tree that is out of view. Near the corner, the upper part of the right-hand wall is in soft shade. The stone wall and the door are in soft, even shade, with warm light bounced from the sunlit wall and floor; no sun touches the door. White balance 4600 K, warm brown-grey shadows, the plaster never cold, blue or grey.
+>
+> Calm, warm, lived-in, human scale. Nothing else: no sky, no tree, trunk or branches anywhere in the frame, no garden, hedge, roofs or neighbouring houses, no ceiling or canopy edge, no sidelight or glass beside the door, no niche, portal or arch, no light strips, no pots, cushions, lanterns or furniture, no house number, bell, intercom, mailbox, sign or text, no people.
+
+### 11.4 רשימת הדחייה של D0 הסופי
+**בכל סעיף, בסוגריים, הקונספט שנכשל בו.** את הרשימה הזו כתבתי ממה שהמודל ניפח או השמיט.
+1. **הגאומטריה (השער):**
+   - מלבן הכנף, הפתח החיצוני, שתי הפינות או קו הרצפה רחוקים מה-clay ביותר מ-2 פיקסלים.
+   - אנכיים נוטים ביותר מ-0.5°.
+   - האדנית, הספסל, המנורה או השטיחון זזים ביותר מ-0.01 מטבלת ה-clay.
+   - המישקים לא על הקווים של ה-clay (±3 פיקסלים).
+2. **האבן:**
+   - לא אבן גיר מושחזת בבהירות של #D8C8AE: אפורה, מלוטשת, טרוורטין עם חורים, עורקים, סיתות, מדרגות, או אריחים דקים עם רובה.
+   - נדבכים בגובה אחד (מ2).
+   - האבן עולה על קירות הצד, או על הגוף של הספסל או של האדנית (רק הכיסויים שלהם מאבן).
+   - הספים בטיח או בעץ, או שהפינות שלהם מעוגלות.
+3. **מפואר:** מסגרת, פורטל, נישה או קשת סביב הדלת; מסגרת אגוז סביב הכנף (מ3); פריים סימטרי סביב הדלת (מ2).
+4. **הדלת:**
+   - חריצים אופקיים, קרשים, פאנלים או זכוכית.
+   - הכנף כתומה, אדמדמה או שחורה, בהירה מ-L* ‏35 או כהה מ-28.
+   - ידית שאינה מוט.
+5. **הספסל והאדנית:**
+   - צמחים על המושב או לאורכו (מ3: "הספסל שתול לכל אורכו").
+   - משהו מונח על המושב.
+   - האדנית ארוכה מ-0.80, או בולטת מקו החזית.
+   - עציצים, ספסל-רהיט או כריות במקום הגוף הבנוי.
+6. **הצמחים:** שדה סגול (סגול ביותר משליש המסה, או סגול רווי); פרחים אחרים; צמחים מחוץ לאדנית.
+7. **האור:**
+   - אין שמש על הקיר הימני, או שאין עליו צל עלים (מ2: "אין שמש ואין צל עלים בשום מקום").
+   - שמש או כתם עלים על הכנף או על הספים (מ3: "פס בהיר ורך על ראש הכנף").
+   - שמש על האבן, מעבר לפס שבפינה.
+   - המנורה כבויה, בלי מניפות, או עם כוכב, הבזק או כתם שרוף.
+   - הטיח שבשמש שרוף.
+   - טיח קר, כחלחל או אפור.
+8. **מחוץ לחצר:**
+   - שמיים, דיסקת שמש, או העץ (גזע או ענפים) בפריים (מ3).
+   - גדר חיה, גינה, גגות או בתים של שכנים (מ1).
+   - תקרה, שפת גג, או צד פתוח של החצר (מ2).
+9. **חפצים:** צוהר או זכוכית ליד הדלת; מספר בית, פעמון, אינטרקום, תיבת דואר, שלט או טקסט; עציץ נוסף, פנס, רהיט או כרית; אנשים.
+10. **החלון:** חסר, שקוף, מראה נוף, זוהר, או שהמסגרת שלו לא ברונזה.
+11. **הצילום:** עומק שדה, גרעין או וינייטה.
+
+**מה QA מודד (רק מה שהשתנה, EFF1.2):**
+- השער והמיקומים של 11.1.1 (±0.01), המישקים (±3 פיקסלים) והאנכיים (±0.5°).
+- ארבעת היחסים של 11.1.8, ואת מניפות המנורה מול ה-clay (±1/2 סטופ).
+- נקודת השחור (L ‏11–14).
+- ב-×1 וב-×2 (EFF1.3): הכנף נקראת כאגוז מחורץ, המנורה דולקת, האבן נקראת כנדבכים, והמושב פנוי.
+
+### 11.5 בפנים: D0o, ‏HT, ‏HD ו-HDx
+
+#### 11.5.1 ההחלטה: פאנל אבן אחד, וחריץ אור
+- **הבעיה:** ב-10.6.7 השארתי את הסיבוב על קיר טיח שמואר מלמעלה. זה עדיין קיר ריק. ‏HD יוצא פריים של טיח ודלת נסתרת, בדיוק ברגע שהמבקר עוצר ומסתובב.
+- **הפתרון:**
+  - **פאנל אבן, Y ‏6.35–7.75:**
+    - אותה אבן ואותם נדבכים כמו בחוץ, מהפינה של הקיר הקדמי ועד סוף הספסל של `hall.json` (Y ‏6.55–7.75).
+    - זה אזור הספסל, המתלה ומנורת הקיר. כשיגיעו מוצרי הכניסה, הם יעמדו על רקע של אבן.
+  - **חריץ אור חלבי לאורך הקיר הרחוק (מ-10.6.7), במקום RL-hall:**
+    - הוא מלחך את האבן, וכל מישק מטיל קו צל דק.
+    - אלה "גופי התאורה הדולקים" של הפנים, בלי מנורה.
+- **למה זה עדיין "באמצע":**
+  - זה אותו מהלך אחד, האבן, שממשיך פנימה בקטע אחד.
+  - אין נישה, אין קשת ואין LED נסתר.
+  - החריץ הוא חלון גג, כמו במסדרון (G-C1b).
+- **מה זה נותן לתנועה:**
+  1. **D0o ו-HD רואים את אותה אבן:** בפתח היא פס צר בקצה הימני, וב-HD היא כמחצית הפריים. שני הקצוות של קליפ 1 רואים זה את זה, וזה מה שמבחן ההליכה מחפש.
+  2. **ל-HD ול-HDx יש עכשיו קצוות משותפים:**
+     - המישקים האופקיים, והמישק האנכי ב-Y ‏7.05, נמצאים ברצועה ש-HD לוקח מ-HDx (u ‏0.716 ומעלה).
+     - לפי ה-README של ה-clay, עד עכשיו לא היה להם אף קצה משותף, ואת התפר שפטו רק לפי הגוון. עכשיו אפשר לנעול אותו על קווים.
+  3. **הסיבוב נפתח על אבן מוארת, שמובילה ימינה,** לכיוון הסיבוב.
+- **הדלת הנסתרת נשארת בטיח.** בין האבן לתפר שלה (Y ‏8.10) יש 0.35 של טיח, ולא רצועה דקה.
+
+#### 11.5.2 מה נמצא איפה (הטלה)
+**D0o** (הקיר הרחוק במרחק 6.60):
+
+| מה | u | v |
+| --- | --- | --- |
+| תקרת הכניסה | לכל רוחב הפתח | 0.106–0.141 |
+| קו האור של החריץ (פני הבאר) | לכל רוחב הפתח | 0.141–0.157 |
+| הדלת הנסתרת: התפרים | 0.274 / 0.365 | הראש ב-0.265 |
+| קצה פאנל האבן | 0.400–0.422 | מישקים ב-0.192, ‏0.264, ‏0.309, ‏0.336, ‏0.408, ‏0.435, ‏0.471, ‏0.543, ‏0.570, ‏0.624 |
+| שיפולים, רק על הטיח (נעצרים בתפרים ולפני האבן) | 0.244–0.274 ו-0.365–0.400 | 0.669–0.696 |
+| רצפת האלון | | 0.696–0.860 |
+
+**HT** (הקיר הרחוק במרחק 2.80):
+
+| מה | u | v |
+| --- | --- | --- |
+| טיח, עם הדלת הנסתרת (התפרים 0.158 / 0.372) | 0–0.456 | |
+| שיפולים, רק על הטיח | 0–0.158 ו-0.372–0.456 | 0.926–0.990 |
+| **פאנל האבן** | **0.456–0.790**; מישק אנכי ב-0.623 בנדבכים הזוגיים | מישקים ב-0.076, ‏0.140, ‏0.310, ‏0.374, ‏0.459, ‏0.629, ‏0.692, ‏0.820 |
+| הפינה | 0.790 | |
+| הקיר הקדמי בטיח, כ-14 ס"מ | 0.790–0.814 | |
+| ציפוי האגוז | 0.814–0.850 | |
+| הסלון | 0.850–1.0 | |
+
+**HD** (קנבס 3:2; הקיר הרחוק במרחק 1.65):
+
+| מה | u | v |
+| --- | --- | --- |
+| טיח, עם הדלת הנסתרת (התפרים 0.019 / 0.380) | 0–0.521 | |
+| **פאנל האבן** | **0.521 עד קצה הקנבס (1.03)**; מישק אנכי ב-0.804 בנדבכים הזוגיים | בפריים: 0.193, ‏0.301, ‏0.444, ‏0.731, ‏0.839. בשולי הקנבס: ‎−0.094 ו-1.054 |
+| הרצועה שבאה מ-HDx | 0.716 ומעלה | |
+
+**HDx** (קנבס 3:2):
+
+| מה | u |
+| --- | --- |
+| הקיר הרחוק, באבן (Y ‏7.20–6.35) | 0–0.259; מישק אנכי ב-u כ-0.064 |
+| הפינה | 0.259 |
+| הקיר הקדמי בטיח, כ-14 ס"מ, עם שיפולים | 0.259–0.291 |
+| ציפוי האגוז השמאלי | 0.291–0.319 |
+| הפתח לסלון | 0.291–0.651 |
+
+**האור בכניסה:**
+- החריץ שוטף את הקיר הרחוק מלמעלה, לכל אורכו (ולא רק במרכז, כמו RL-hall). הקיר בהיר ביותר בחלקו העליון, ונחלש כלפי מטה.
+- על האבן, כל מישק אופקי הוא קו צל דק מתחת לנדבך שמעליו.
+- **היחסים:**
+  - **הכניסה דרך הדלת:** 0.52 סטופ ±1/6 מתחת לטיח המוצל של החצר (11.1.8). מודדים ב-D0o על הדלת הנסתרת, u ‏0.28–0.36, ‏v ‏0.40–0.55.
+  - **הסלון ב-HDx:** 2/3 סטופ ±1/6 מעל הכניסה, כמו היום.
+  - **הקיר הרחוק ב-HT מול HD:** הפרש של עד 1/6 סטופ.
+
+#### 11.5.3 D0o (מחליף את התיאור בפרק 6 ואת התוספות בפרק 10.3 של מסמך הדלת)
+> The same photograph, identical pixel for pixel outside the door opening, including the stone inside the reveal and its joints. Inside the opening the door leaf is gone and the doorway is clear. Through it you see the entrance hall, lit by daylight only. A smoked oak floor (#8B6F55, matte oil, 22 cm planks running left to right across the view) starts at the leaf line, with no threshold strip. About 6.6 m away is the hall's far wall in bone limewash plaster (#ECE5DA) with a soft trowel movement and a 15 cm skirting in the wall colour. At the very top of the doorway, a strip of the hall's plaster ceiling; below it, along the whole width of the doorway where the ceiling meets the far wall, a thin, soft, bright line of daylight from an opal roof-light slot that runs along the top of that wall, with no glass or frame visible. The far wall is washed from that line downward: brightest at the top, fading gently toward the floor. In the middle of the view, slightly left, the 3 mm shadow-gap outline of a closed flush jib door in the same plaster, no handle, running to the floor; the skirting stops at both its seams. At the right edge of the doorway, just inside the right jamb, the end of a panel of the same honed pale limestone as the porch wall (#D8C8AE), in the same horizontal courses with fine recessed joints, its clean edge catching the light; the skirting stops just short of it. The hall is about half a stop darker than the shaded plaster of the porch. No lamps. Empty: no furniture, no bench, no hooks, no console, no art, no rug, no objects, no people.
+
+#### 11.5.4 HT (מחליף את התיאור בפרק 10.2 של מסמך הדלת)
+> Empty entrance hall of a warm-minimal family house, same materials, light and grading as the hall stills and the reference living-room plate. The camera stands on the threshold of the open front door, just inside the hall; the doorway itself is behind the camera and not in frame. Eye height 1.20 m, 24 mm full-frame, level (no tilt, no roll, all verticals vertical), looking straight across the hall at its far wall 2.80 m away, with the same lens shift as the door still. Everything sharp, no depth of field, no grain, no vignette. The far wall fills the frame up to 79% of its width and runs off the top and left edges. Its left part, up to 46% of the width, is matte bone limewash plaster #ECE5DA with a very soft trowel movement; in it, from 16% to 37% of the width, the 3 mm shadow-gap outline of a closed flush jib door in the same plaster, no handle, no frame, its two seams running from the top edge down to the floor. A 15 cm skirting in the wall colour, barely proud, runs along the plaster and stops at both seams and just short of the stone. From 46% to 79% of the width, the wall is clad in the same honed pale limestone as the porch outside (#D8C8AE), from the floor to above the frame, in long horizontal courses of different heights with fine 5 mm recessed joints, with a vertical joint at about 62% of the width in every other course and a clean edge where it meets the plaster; the stone has no skirting and runs straight down to the floor. Below, only a thin strip of smoked oak floor (#8B6F55, 22 cm planks running left to right). The whole far wall is washed from above by daylight from an opal roof-light slot that runs along its top, out of frame: brightest along the top edge across its full width, fading gently downward; on the stone, each joint shows as a fine shadow line under the course above. Soft daylight from the open door behind the camera fills it evenly. On the right, at 79% of the width: a sharp inside corner, then a 14 cm return of the hall's front wall in plaster, then the side of a wide opening into the living room, lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap. The walnut reads as a warm vertical band from 81% to 85% of the width, running off the top and bottom edges; no architrave, no casing, no door leaf, no threshold strip. Beyond it, to the right edge and at a steep angle, the brighter living room exactly as in the reference plate: its bone plaster window wall, the near end of the dark espresso-bronze steel glazing with 45 mm sight lines and the same pale, misty winter view of bare birches, the end of the honed limestone bench #D8C8AE under it, the smoked oak floor running on through the opening, and the bone plaster ceiling with its lowered band along the window wall. At the very right edge, at most the edge of the walnut and bone bouclé armchair. The living room is two-thirds of a stop brighter than the hall, and its light falls softly on the short plaster return and on the walnut. Winter afternoon, no sun inside the house, no sun patches, no hard shadows, white balance 4600 K, warm brown-grey shadows, all lamps off and absent. Empty hall: no furniture, no bench, no hooks, no console, no lamp, no switch, no art, no rug, no objects, no people, no text.
+
+#### 11.5.5 HD (מחליף את התיאור בפרק 10.3 של מסמך הדלת)
+> Same empty hall, same camera point as HDx, turned 65 degrees to the left. A close, level view of the hall's far wall about 1.65 m away, on the same tall 3:2 canvas: the canvas shows the wall from about 0.3 m to 2.05 m high, and the 16:9 view inside it from about 0.5 m to 1.9 m. No floor, no skirting, no ceiling and no corner anywhere on the canvas. The left part, up to 52% of the width, is bone limewash plaster #ECE5DA with a soft trowel movement; in it, the 3 mm shadow-gap outline of a closed flush jib door in the same plaster, no handle: its two vertical seams run from the top to the bottom of the canvas, one very close to the left edge (about 2% of the width), the other at about 38%. From 52% to the right edge, the wall is clad in honed pale limestone #D8C8AE, the same stone as the porch outside, in long horizontal courses of different heights with fine 5 mm recessed joints; in the 16:9 view the joints run at about 19%, 30%, 44%, 73% and 84% of its height, and a vertical joint at about 80% of the width appears in every other course. The stone's clean vertical edge at 52% catches the light as a hairline. The whole wall is washed from above by daylight from an opal roof-light slot along its top, out of frame: brightest at the top, fading gently downward, even along its length; on the stone, each joint casts a fine shadow line under the course above. A faint, soft daylight brightening from the open front door behind the camera lies over the centre-left. Nothing else: no bench, no hooks, no lamp, no switch, no art, no objects.
+
+#### 11.5.6 HDx (מחליף את התיאור בפרק 10.3 של מסמך הדלת)
+> Empty entrance hall of a warm-minimal family house, same materials, light and grading as the reference hall plate. Camera at eye height 1.20 m, 24 mm, level, everything sharp, standing in the middle of the hall about 2 m from a 1.20 x 2.40 m opening into a brighter living room, and looking straight through it. The picture is a tall 3:2 canvas: the usual 16:9 view with a band of extra wall above and below it. The opening is near the centre of the view and its head is above the view; only along the very top edge of the canvas does the walnut head of the opening appear, as a thin wedge over the left part of the opening that tapers to nothing toward the right. The left reveal is lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap, and shows as a warm vertical band. The right side ends in a clean plaster arris. No architrave, casing, door leaf or threshold strip; the smoked oak floor (#8B6F55, 22 cm planks) runs straight on into the living room. Left of the opening: a 14 cm return of bare plaster with its 15 cm skirting in the wall colour, a sharp inside corner, then the hall's left wall, clad in the same honed pale limestone as the porch outside (#D8C8AE), in long horizontal courses of different heights with fine recessed joints that converge toward the corner, running straight down to the floor with no skirting, washed softly from above by daylight from a roof-light slot out of view so that the joints show as fine lines; near the left edge, a vertical joint in every other course; in the bottom band of the canvas, near the corner, a sliver of floor. Right of the opening: the bare plaster front wall, from the opening to the right edge and from the top to the bottom of the canvas. Through the opening, exactly as in the reference living-room plate: the bone plaster back wall, the bronze steel glazing over an empty limestone bench, part of the greige bouclé sofa, the walnut armchair, the walnut coffee table, smoked oak floor. The living room is two-thirds of a stop brighter than the hall. Winter afternoon, no sun inside the house, 4600 K, lamps off and absent. No furniture in the hall, no objects, no switches, no people, no text.
+
+#### 11.5.7 רשימות הדחייה בפנים
+**מה שבמסמך הדלת נשאר** (פרק 6 סעיפים 9–10, ‏10.2, ‏10.3), **חוץ מהשינויים כאן:**
+- **בכל ארבעת הפריימים:**
+  - פאנל האבן חסר, במקום אחר, או מאבן אחרת (אפורה, מלוטשת, טרוורטין, אריחים).
+  - יש שיפולים על האבן, או שלפאנל יש מסגרת, כרכוב, נישה או בליטה של יותר מקצה דק.
+  - רואים את הזיגוג או את המסגרת של החריץ, או קווי LED.
+  - האור נופל ככתם, כמו מ-RL-hall, ולא לאורך כל ראש הקיר.
+  - המישקים רחוקים מה-clay ביותר מ-3 פיקסלים.
+- **D0o (במקום הסעיף על חלון הגג):**
+  - קו האור בראש הפתח לא לכל רוחבו, או שרואים בו זיגוג.
+  - פס האבן לא ב-u ‏0.400–0.422 ±0.01, או חסר.
+  - התפרים של הדלת הנסתרת לא ב-0.274 / 0.365 ±0.01.
+  - **נשאר:** כל פיקסל מחוץ למסכה זהה ל-D0; אין כנף; הכניסה לא בהירה מהחצר.
+- **HT (מעדכן את סעיף 4 ב-10.2, ומוסיף לסעיף 2):**
+  - **חדש:** האבן לא ב-u ‏0.456–0.790 ±0.01, או שהמישק האנכי לא ב-0.623 ±0.01; שיפולים על האבן.
+  - **בסעיף 4 משתנה רק מיקום הפינה:** 0.790 ±0.01 במקום 0.789. שאר התנאים שם נשארים (האגוז ב-0.814–0.850 ±0.01, ולפחות 8 L* מעל נקודת השחור).
+- **HD (במקום "שופטים בגוון"):**
+  - האבן לא ב-u ‏0.521 ±0.01.
+  - ברצועה u ‏0.716 ומעלה, המישקים רחוקים מאלה של HDx ביותר מ-2 פיקסלים.
+  - **נשאר:** הגוון בתפר עד 3%; בלי רצפה, שיפולים, תקרה או פינה בקנבס; התפרים ב-0.019 / 0.380 ±0.01.
+- **HDx:**
+  - הקיר השמאלי בטיח ולא באבן, או שיש שיפולים על האבן.
+  - הפינה לא ב-0.259 ±0.01.
+  - **נשאר:** הפתח ב-0.291–0.651 ±0.01, והשוליים העליונים כמו ב-10.3.
+
+#### 11.5.8 לקליפים (motion-agent; מה שמשתנה בפרומפטים שלו)
+- **קליפ 1** (`clip1-d0--hd.txt`):
+  - קצה האבן בקצה הימני של הפתח, שגדל עם ההליכה עד כמחצית הקיר ב-HD.
+  - קו האור בראש הפתח, שיוצא מלמעלה עד כ-2.2 מ' מ-D0 (הטלה).
+  - האירועים של 11.1.10 נכנסים לטבלת מבחן ההליכה.
+- **קליפ 2** (`clip2-hdx--m0.txt`): הקיר השמאלי בפריימים הראשונים הוא אבן ולא טיח.
+- **הסיבוב:** הנעילה של התפר HD ← HDx על המישקים, ולא רק על הגוון.
+
+### 11.6 הצוהר: לא צריך
+**קיר האבן לא צריך צוהר, ואני ממליץ לא להוסיף אותו.**
+1. **הוא לא נותן משהו שחסר:** ב-מ2 הצוהר היה הנקודה החמה. כאן יש מנורה דולקת שמלחכת את האבן, ואת החום שבפנים רואים ברגע שהדלת נפתחת (קו האור של החריץ ב-D0o).
+2. **הוא מושך לגודל ולסימטריה:**
+   - דלת וצוהר הם יחד 1.40 מ' של פתח.
+   - ב-מ2 המודל הרחיב את הצוהר לכמעט חצי מרוחב הדלת, ומרכז את שניהם (README של הקונספטים). זה בדיוק ה"מפואר" של FB6.
+3. **הוא חותך את האבן:**
+   - מימין לדלת יש 1.25 מ'. צוהר של 0.30 ופס של 0.10 משאירים 0.85, עם שלושה קווים אנכיים צפופים (דלת, צוהר, מנורה) ואדנית מתחתם.
+   - הנדבכים הארוכים, שהם כל הסיפור של הקיר, נקטעים.
+4. **הוא עולה בתוכנית ובתנועה:** פתח חדש; ‏O-front-door רחב יותר; מסכה נוספת ב-D0o; וחלון בקיר הדרומי של הכניסה, שצריך בדיקה ב-H0 ובסיבוב.
+5. **הוא צריך אור דולק בפנים** (העמדה `ceiling-light`), כלומר מוצר שאין לו כרטיס, באמצע המעבר.
+- **אם הבעלים יבקש מ2 נקייה,** הצוהר חוזר איתה (10.5), עם הגבול של שליש מרוחב הדלת.
+
+### 11.7 רישום מוצע בתוכנית (לבעלים אחרי שיראה את הפיילוט; שום דבר לא נערך)
+**מה נשאר מההצעות הקודמות:**
+- **מ-1.3.9** (מסמך הדלת, פרק 7): המצלמות D0, ‏HD, ‏HDx ו-HT; המעבר T-D0; החריגות (65°, כ-7 ש').
+- **מ-10.9, "משותף לשלוש":** השמש של ההגעה ב-`conventions.sun`; הפרק "הסיור: החוץ והכניסה" ב-Bible ושלושת הכללים; קבוצת עמדות החוץ.
+
+**מה מתחלף:** החלקים של החצר, הדלת והאור ב-1.3.9, והחלק של מ3 ב-10.9.
+
+**הטקסט ל-md, כתיקון ל-1.3.9:**
+> **1.3.9 (ממתין לאישור), תיקון 2026-11-16: הכניסה הסופית במודרני חם (ENT2).** הגאומטריה של החצר, הדלת והפתחים לא זזה.
+> - **קיר הדלת (X ‏3.95):** אבן גיר מושחזת #D8C8AE, בתוך עובי הקיר (הפנים נשארים על X ‏3.95). ‏11 נדבכים (40/30/15/40/20/15/40/15/25/40/20), מישקים שקועים של 5 מ"מ, מישקים אנכיים ב-Y ‏7.05 בנדבכים הזוגיים. האבן עוטפת את הספים בפינות חדות. בלי צוהר.
+> - **O-front-door:** כנף אגוז מחורצת (48 חריצים, פסיעה 20), ידית מוט, פתח נקי 1.00×2.40.
+> - **החצר:** קירות הצד בטיח סיד, בלי שיפולים. גוף בנוי לאורך הקיר המזרחי: אדנית X ‏3.95–4.75 (גובה 0.70, רוזמרין ולבנדר), וספסל X ‏4.75–6.40 (מושב 0.45), בעומק 0.50, עם כיסוי אבן של 8.
+> - **הכניסה:** פאנל אבן על הקיר X ‏0.80, ‏Y ‏6.35–7.75. ‏RL-hall מוחלף בחריץ חלבי, X ‏0.80–1.10, ‏Y ‏6.35–9.80. ‏H0 נבדקת מחדש (H-HC6).
+> - **הגינה:** זית מחוץ לפריימים, בערך ב-(8.20, 10.00). המיקום נקבע ב-clay.
+> - **האור בהגעה:** אחר צהריים של חורף, שמש נמוכה דרך אובך (אזימוט כ-228°, גובה כ-21°), ‏4600K.
+
+**הטקסט ל-JSON:**
+```json
+"front_door_1_3_9_rev_2026_11_16": {
+  "status": "proposed; revises the porch, O-front-door and light parts of 1.3.9 (wm-front-door-2026-11-14.md §7) and the M3 part of wm-entrance-magazine-2026-11-15.md §10.9; pending owner approval after the arrival pilot",
+  "source": "docs/proposals/wm-entrance-magazine-2026-11-15.md §11",
+  "unchanged": ["porch, walls and openings geometry", "cameras D0, HD, HDx, HT", "T-D0", "O-entry-living", "O-hall-work (jib)", "base.png"],
+  "porch_warm_modern": {
+    "door_wall": {"x": 3.95, "y": [6.55, 9.60], "z": [0, 3.00], "finish": "honed limestone #D8C8AE, 30 mm on a 10 mm bed within the wall thickness; finished face stays at X 3.95", "courses_m": [0.40, 0.30, 0.15, 0.40, 0.20, 0.15, 0.40, 0.15, 0.25, 0.40, 0.20], "joints": "5 mm wide, 5 mm recessed", "head_joints": "courses 2, 4, 6, 8 at Y 7.05; course 10 at Y 7.30 and 9.30; none left of the door", "corners": "stone full width, 5 mm shadow gap to the plaster side walls", "ceiling": "10 mm shadow gap", "floor": "5 mm joint, no skirting"},
+    "side_walls": "limewash #ECE5DA, trowel up to 6 L, no skirting (1 cm shadow line)",
+    "built_planter": {"x": [3.95, 4.75], "y": [6.55, 7.05], "z": [0, 0.70], "body": "plaster", "rim": "honed limestone 80 x 80 mm", "planting": "2 rosemary, 3 Lavandula dentata, top <= Z 1.15"},
+    "built_bench": {"x": [4.75, 6.40], "y": [6.55, 7.05], "seat_z": 0.45, "top": "honed limestone 80 mm, 20 mm overhang", "base": "plaster, 30 x 30 mm shadow recess at the floor", "free_seat_m": 1.65},
+    "sidelight": "none",
+    "products": "slots porch-wall-light, porch-doormat, porch-bench-cushion"
+  },
+  "O-front-door_warm_modern": {"leaf": "walnut #6B4A33 matte oil, 48 vertical rounded flutes at 20 mm, 20 mm flat margins, 60 mm thick, at the inner face X 3.60-3.66", "hinges": "concealed, Y 8.80, opens inward", "pull": "vertical bar #3A322C satin, d 25 mm, 600 mm, Z 0.75-1.35, at Y 7.90", "reveal_outside": "0.29 deep, lined in the door-wall limestone, joints wrapped, sharp 2 mm arris, no casing", "clear_opening": [1.00, 2.40]},
+  "hall_warm_modern": {"far_wall_stone_panel": {"x": 0.81, "y": [6.35, 7.75], "z": [0, 3.00], "finish": "honed limestone #D8C8AE 20 mm replacing the plaster (10 mm proud); porch courses; head joints Y 7.05 in courses 2, 4, 6, 8; no skirting"}},
+  "roof_lights": {"RL-hall": "replaced by RL-hall-slot", "RL-hall-slot": {"room": "hall", "x": [0.80, 1.10], "y": [6.35, 9.80], "well_depth": 0.45, "glazing": "opal, diffusing", "in_frame": "D0o: thin bright line at the top of the doorway; not in HT, HD, HDx; H0 to be re-checked (H-HC6)"}},
+  "landscape": {"olive": "front garden, outside every S1 frame, crown about (8.20, 10.00), set by the clay so that the leaf shadow lands on the porch's east wall"},
+  "light_arrival": "winter afternoon, low sun through thin haze (az ~228, alt ~21, set by the clay), white balance 4600 K; the porch's shaded plaster = base.png back wall +-1/3 stop; the hall through the door 0.52 stop +-1/6 below it"
+}
+```
+
+**העמדות (`data/slots/`):**
+- **עמדות החוץ** (`porch.json` חדש, או קבוצת `porch` ב-`hall.json`):
+  - `porch-wall-light` ב-(4.02, 7.40, 1.80): מעטפה Ø ‏80–100 ובגובה 200–250; למעלה ולמטה; ‏2700K; ‏IP44 לפחות; ‏CE ‏220–240V; מחווטת, בלי כבל גלוי; ברונזה כהה.
+  - `porch-doormat`: ‏X ‏3.95–4.55, ‏Y ‏7.85–8.75; ‏60×90; סיבים טבעיים, 80% לפחות; שטוח, לא צבוע, בלי טקסט.
+  - `porch-bench-cushion`: על המושב, X כ-4.85–6.30. לא מצוירת עד שיש כרטיס.
+- **`hall.json`, ‏`by_style` למודרני החם:**
+  - נקודת `wall-sconce` מ-Z ‏1.94 ל-1.80, באמצע נדבך 7 של פאנל האבן.
+  - בתיאור ה-`shell`: פאנל האבן והחריץ במקום RL-hall.
+
+**ה-Bible, בפרק "הסיור: החוץ והכניסה":** כלל רביעי: "אבן גיר מושחזת #D8C8AE בנדבכים שטוחים וארוכים (15–40), מישקים שקועים של 5 מ"מ, פינות חדות, עוטפת את הספים; אף פעם לא על קירות הצד; פאנל אחד בפנים, ממשיך את החוץ".
+
+### 11.8 למנהל
+- **אין שאלה לבעלים.**
+- **הכרעות שלי, שכדאי שתדע:**
+  1. **הספסל על הקיר הימני** (הקונספט שם אותו על קיר הדלת, ושם יש רק 1.25 מ').
+  2. **אדנית של 0.80, ומושב פנוי של 1.65.**
+  3. **האבן ממשיכה פנימה בפאנל אחד, וחלון הגג נהיה חריץ.** בלי זה הסיבוב נפתח על קיר ריק. זה משנה את H0, שלא בפיילוט, והרישום מוצע (11.7).
+  4. **המנורה והשטיחון מצוירים בסטיל כפריטים בלי נקודה,** עד שיהיה להם כרטיס. הבסיס הוא הקריאה שלך ל-FB5. זה מחליף את 10.2.2 בחוץ.
+  5. **מנורה בגודל Ø ‏100×250 ב-Z ‏1.80,** וכיסוי אבן של 8 (תיקון שלי ל-10.6).
+- **ל-render-agent, לפי הסדר:**
+  1. ה-clay של 11.2 (0 טוקנים), עם ה-README והגיליון.
+  2. הסטיל D0 לפי 11.3 ו-11.4: ‏650 ותיקון אחד לכל היותר, כמו בלוח. אין תוספת לשרשרת.
+  3. **הבעלים רואה את D0 לפני כל דבר אחר.** ‏D0o, ‏HDx, ‏HD ו-HT רק אחריו, לפי 11.5.
+- **מה render-agent לא יכול לפספס:**
+  1. **הגאומטריה לא זזה.** פני האבן על X ‏3.95, השער עד 2 פיקסלים, ומלבן הכנף של motion-agent נשאר.
+  2. **הספסל על הקיר הימני,** בקו חזית אחד עם האדנית, **והמושב פנוי.**
+  3. **השמש על הקיר הימני ולא על הכנף.** עץ, שמיים וגגות לא נכנסים לפריים.
+  4. **המנורה דולקת,** עם שתי מניפות על האבן.
+  5. **אלבדו של אגוז אמיתי לכנף ב-clay,** ובדיקת משיקות של המישקים.
+- **ל-motion-agent:** ‏11.1.10 ו-11.5.8. הקליפים והסיבוב לא משתנים; משתנים התיאורים בפרומפטים, ונוסף עוגן לתפר.
+- **ל-sourcing-agent, כשתחליט:** מנורת הקיר לפי המעטפה של 11.7 (היא ראשונה; תאורה בעדיפות, ג.3), והשטיחון, עם בדיקת הגב.
+- **אם הבעלים יבקש גרסה נקייה:**
+  - **מ3 נקייה:** ה-clay מחזיר את קיר הדלת והספים לטיח (רדיוס 3 בספים), ומוריד את פאנל האבן שבפנים. כל השאר בפרק הזה נשאר. עולה סטיל אחד.
+  - **מ2 נקייה:** פרק 10.5. מצלמה DM2 וקליפ 1a ארוך יותר, ו-motion-agent מאמת את העלות.
+- **לבעלים, עם הסטיל (הצעת נוסח):** "זו הדלת הסופית: הבסיס הוא מ3, עם קיר האבן של מ2, בלי הצוהר. אם תעדיף מ3 או מ2 נקיות, עוד אפשר."
+- **ללוח:**
+  - המפרט הסופי של הכניסה: פרק 11. ‏0 טוקנים. לא נערך שום מסמך מחייב.
+  - הבא: ה-clay, ואז הסטיל D0.
+  - הרישום המוצע (11.7) עובר לבעלים אחרי הפיילוט.
