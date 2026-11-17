@@ -1,0 +1,32 @@
+# CLIP 1b of the arrival T-D0 (storyboard S1): the last steps to the turn, HT -> HD, warm modern. motion-agent, 2026-11-17.
+# The final entrance (ENT2): docs/proposals/wm-entrance-magazine-2026-11-15.md 11.5.2 (HT and HD), 11.5.8, 11.9.3.
+# Plan: docs/proposals/wm-arrival-from-door-2026-11-14.md, sections 3 and 10. Job record: jobs.json, "clip1b".
+# RECOMMENDED FIRST: 1b BUILT IN CODE, 0 tokens (section 10): moving forward from HT nothing new comes into view, so every frame of
+#   1b is HT carried forward through its clay depth, with HD's wall (tested on the clay: 35-42 dB against exact renders). This
+#   prompt is for the model only if the code version fails QA, or if the manager prefers the model.
+# Strip every line starting with # before sending. Sendable text: 1,965 characters (under 2,500).
+# Move: (3.60, 8.15, 1.20) -> (2.462, 8.15, 1.20), yaw 90, 1.138 m, shift (0.36, 0.48) constant.
+# First frame: HT, its 16:9 frame at 1920 x 1080 (seeds.py frame --canvas base): the same pixels as the last frame of clip 1a.
+# Last frame:  HD, its 16:9 frame at 1920 x 1080 from the 3:2 canvas (seeds.py frame --canvas tall).
+# Model: kling-3-omni, image-to-video, first_frame_url + last_frame_url, duration 3 (the shortest it takes), resolution 1080p,
+#        sound false. Live price 2026-11-17: 972. 1.14 m in 3 s is slower than the other clips; the bank resamples to the walk's
+#        speed, so this only gives more source frames.
+# THE WALK TEST (metres from HT; from D0 add 3.80; projection, checked on the clay c1/S08-S11):
+#   0.07           the floor strip leaves past the bottom
+#   0.41           the skirting leaves past the bottom
+#   0.62           the bright living room is covered by the walnut edge and gone past the right edge
+#   0.78           the walnut lining leaves past the right edge
+#   0.93           the inside corner and the plaster return leave past the right edge (from here: wall only)
+#   whole clip     the stone panel's edge moves only from u 0.456 to 0.521; its vertical joint from 0.623 to 0.804; the jib door's
+#                  left seam from 0.158 to 0.019; the wall grows 1.70 x (2.80 m -> 1.65 m)
+# Light: the far wall at HT and at HD within 1/6 stop (11.9.3); no change of level is intended in this clip.
+
+One continuous, very slow, perfectly straight forward dolly inside an empty entrance hall. The camera stands just inside the open front door and travels 1.1 m straight ahead toward the far wall at one constant pace, eye height 1.20 m, 24 mm lens, level, and arrives exactly on the last frame: a close, level view of that wall.
+
+The heading never changes: the wall grows around one fixed point of the frame. Its left part is bone limewash plaster with the fine shadow-gap outline of a flush, handle-less door, whose left seam moves toward the left edge. Its right part is a panel of pale honed limestone in long horizontal courses with fine recessed joints; its clean edge moves only a little to the right while the stone grows to fill the right half of the frame. The thin strip of smoked oak floor and the skirting drop out past the bottom edge in the first steps. On the right, the bright living room seen through the walnut-lined opening slips behind the walnut edge, then the walnut, the short plaster return and the inside corner slide out past the right edge; they are gone before the last fifth of the move.
+
+Real parallax: the bright room beyond the opening moves slower than the walnut edge in front of it. The whole wall is washed softly from above by daylight from a roof-light slot out of sight, brightest at the top; every stone joint is a fine shadow line. Exposure and white balance are locked; the light does not change.
+
+Camera: locked, on a straight track. 24 mm, no zoom, no focus change, all sharp, horizon level, verticals vertical, no tilt, roll, pan, shake, drift or arc. One constant speed.
+
+Scene: the hall is completely still and empty. Every wall, stone course, joint, seam and edge keeps its place, size, shape, colour and material from the two frames; nothing appears, disappears, melts, cross-fades or is redesigned. No people, no furniture, no objects, no lamps. A physical walk through real space, never a blend between two pictures.

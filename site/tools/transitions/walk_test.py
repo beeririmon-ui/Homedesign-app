@@ -29,7 +29,7 @@ The four checks
 Also reported: how far the house's structure lines are from the frame's edges at the best s (% of the frame width;
 QA limit 1 %). Shapes of furniture and "nothing is born or vanishes" stay an eye check at 100 %.
 
-Options added 2026-11-17 (the final entrance, ENT2; docs/proposals/wm-arrival-from-door-2026-11-14.md section 13):
+Options added 2026-11-17 (the final entrance, ENT2; docs/proposals/wm-arrival-from-door-2026-11-14.md section 10):
   --exclude ID:A-B   the clay id ID (the station's -id.png palette index) does not take part in the fit while the
                      candidate position is between A and B metres from the route's first camera. For a part of the
                      house the model may simplify or leave out without failing the clip (id 50, the dining glimpse

@@ -1,0 +1,40 @@
+# CLIP 1a of the arrival T-D0 (storyboard S1): the walk in through the open front door, D0o + leaf -> HT, warm modern. motion-agent, 2026-11-17.
+# The final entrance (ENT2, DOOR2 2026-11-17): docs/proposals/wm-entrance-magazine-2026-11-15.md ch. 11 (11.1.10, 11.5, 11.5.8, 11.9).
+# Plan: docs/proposals/wm-arrival-from-door-2026-11-14.md, sections 3 and 10. Job record: jobs.json, "clip1a".
+# Strip every line starting with # before sending. Sendable text: 2,492 characters (kept under 2,500 in case the provider caps
+#   there; var2's own limit is 4,000).
+# Move: (7.40, 8.15, 1.20) -> (3.60, 8.15, 1.20), yaw 90 (toward -X), 3.80 m, shift (0.36, 0.48) constant, through O-front-door
+#       0.35 from the right jamb and 0.59 from the open leaf. HT stands on the leaf line, just inside the hall.
+# First frame: D0o with the leaf at 90 degrees, composed in code: seeds.py clip1-first --d0 d0.png --d0o D0o.png (1920 x 1080).
+# Last frame:  HT, its 16:9 frame at 1920 x 1080: seeds.py frame --still HT.png --canvas base.
+# Model: kling-3-omni, image-to-video, first_frame_url + last_frame_url, duration 4, resolution 1080p, sound false.
+#        Live price 2026-11-17: 1,296 (324 a second, fromLiveLookup). Unchanged from 2026-11-14.
+# THE WALK TEST (metres from D0; projection checked on the clay wm-door-2026-11-16, c1 stations S00-S08):
+#   0.49           the stone head of the doorway leaves past the top (its outer arris; the soffit's inner edge at 0.78)
+#   0.71 / 0.75    the stone threshold / the doormat leave past the bottom (clay: 0.75)
+#   0.94           the corner of the bench seat leaves past the bottom
+#   1.50           the corner of the planter leaves past the right edge
+#   1.54-2.26      the wall light leaves past the top (top first, then its bottom)
+#   1.86-2.16      the light line of the slot (top of the opening) leaves past the top (clay: in S04 at 1.80, gone at S05 2.24)
+#   2.15-2.40      the herbs leave past the right edge: ACCEPTANCE WINDOW (11.9.4; clay 2.18, the still's mass 2.26, spill 2.33)
+#   2.25-2.60      the left stone reveal leaves past the left edge
+#   3.09-3.44      the right stone reveal leaves past the right edge
+#   3.16           the corner, the walnut lining and the bright living room enter from behind the right reveal
+#   3.45-3.80      the camera is inside the wall thickness
+#   3.71           the open leaf leaves past the left edge
+#   whole clip     the hall's stone panel: a strip at the right of the doorway (1.1 % of the frame), 7 % at 2.24, 24 % at 3.14, 33 % at HT
+# Parallax: after 2.0 m the doorway (3.45 m away) is 2.38 x its first size, the hall's far wall (6.60 m) 1.43 x.
+# Light (11.9.3, 11.9.6): the exposure lines stay. The frame mean falls by about 0.6 stop along this clip (the clay walk: -0.64)
+#   because the bright court leaves the frame: intended, and assemble.py keeps it (tested 2026-11-17, section 10).
+
+One continuous, slow, perfectly straight forward dolly through the open front door of a family house. The camera starts in the covered entrance court, square-on to the doorway, and travels 3.8 m straight ahead at one constant walking pace, eye height 1.20 m, 24 mm, level, until it stands on the threshold just inside the hall, exactly on the last frame.
+
+The heading never changes: the doorway grows around one fixed point. First the court passes in real depth: the coir doormat and the stone threshold drop out past the bottom, then the corner of the stone bench; the planter of rosemary and lavender slides out past the right edge, its last leaves gone soon after the halfway point; the lit bronze wall light rises out past the top. The honed limestone wall opens around the camera: the stone head leaves past the top, then the deep stone reveals sweep out past both sides. The open walnut leaf, folded back flat inside on the left with its bronze bar pull, slides out past the left edge just before the end.
+
+Through the doorway: a thin line of daylight along the top of the hall's far wall, from a roof-light slot out of sight, rising out past the top near the halfway point; the far wall brightest at the top; and at the right of the doorway the clean edge of a pale limestone panel, which widens steadily. In the last third the hall's front wall turns into view from behind the right reveal: an inside corner, a short plaster return, then a walnut-lined opening with a brighter living room beyond, exactly as in the last frame.
+
+Real parallax: near things sweep past fast, the far wall grows slowly. Winter afternoon, low sun through thin haze; the sunlight and soft olive-leaf shadows on the court's right wall stay put, and the wall light stays lit. Exposure and white balance locked: the court bright, the hall two-thirds of a stop under it; the picture darkens only because the hall fills the frame.
+
+Camera: locked, on a straight track. 24 mm, no zoom, no focus change, all sharp, horizon level, verticals vertical, no tilt, roll, pan, shake, drift or arc. One constant speed, no pause at the door.
+
+Scene: completely still; the leaf, plants and shadows do not move. Every wall, stone course, joint, edge, plank and plant keeps its place, size, shape, colour and material from the two frames; nothing appears, disappears, melts, cross-fades or is redesigned. No people, no furniture inside, no added objects. A physical walk through real space, never a blend between two pictures.

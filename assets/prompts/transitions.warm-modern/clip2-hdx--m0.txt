@@ -1,21 +1,41 @@
-# CLIP 2 of the arrival T-D0 (storyboard S1): the dolly HDx -> M0, warm modern. motion-agent, 2026-11-14.
-# Plan: docs/proposals/wm-arrival-from-door-2026-11-14.md, section 4. Job record: jobs.json, "clip2". Strip every line starting with # before sending.
-# Sent FIRST of the two clips. It is also the first leg of the bedroom transition, played backward.
+# CLIP 2 of the arrival T-D0 (storyboard S1): the dolly HDx -> M0, warm modern. motion-agent, 2026-11-14; revised 2026-11-17 for the
+# final entrance (ENT2: docs/proposals/wm-entrance-magazine-2026-11-15.md 11.5.6 and 11.5.8; the [DINING] paragraph from
+# docs/proposals/wm-front-door-2026-11-14.md 10.4). Plan: docs/proposals/wm-arrival-from-door-2026-11-14.md, sections 4 and 10.
+# Job record: jobs.json, "clip2". Strip every line starting with # before sending. Sendable text: 2,492 characters (under 2,500).
+# Sent FIRST of the clips. It is also the first leg of the bedroom transition, played backward.
 # Move: (2.462, 8.15, 1.20) -> (0.83, 4.64, 1.20), heading = yaw 25, 3.87 m, shift (0.47, 0.50) constant, through O-entry-living
 #       (min jamb clearance 0.478). It is the approved T-E0 dolly from s 0.981.
-# First frame: HDx still, its 16:9 frame at 1920 x 1080 (cut with camgeo.Canvas.crop_frame from the 3:2 canvas).
+# First frame: HDx still, its 16:9 frame at 1920 x 1080 (seeds.py frame --canvas tall).
 # Last frame:  base.png (assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/base.png), its 16:9 frame at 1920 x 1080.
-# Model: kling-3-omni, image-to-video, first_frame_url + last_frame_url, duration 4, resolution 1080p, sound false. Estimate first.
-# What the walk test expects on this line (distance from HDx): right jamb out of frame at 1.16-1.22 m, left jamb at 1.40-1.63 m,
-#   the camera inside the wall at 1.99-2.15 m, landing 3.51-3.87 m. After 1.0 m the opening is 1.98 x its first size,
-#   the living room's back wall 1.125 x.
+# Model: kling-3-omni, image-to-video, first_frame_url + last_frame_url, duration 4, resolution 1080p, sound false.
+#        Live price 2026-11-17: 1,296 (unchanged).
+# What changed on 2026-11-17: the hall's left wall in the first frames is the limestone panel, not plaster (11.5.8); "the plain
+#   plaster edge on the right" -> the right edge with its walnut lining turning into view (designer, 10.4); the [DINING] paragraph;
+#   the light line ("soft winter daylight, no sun inside" instead of "overcast"). The paragraph after "The heading"
+#   is [DINING], condensed from the designer's text to fit (every exclusion and limit of his text kept).
+# THE WALK TEST (metres from HDx; stations b/S02-b/S11 of wm-entrance-2026-11-14, the geometry did not move in ENT2: the panel
+#   stands 10 mm proud of the old plaster):
+#   0.23           the stone's vertical joint (Y 7.05) leaves past the left edge
+#   0.74           the walnut face of the right jamb turns into view (clay)
+#   1.01-1.76      the dining glimpse at the right edge (up to 9.4 % of the width): id 50 takes NO part in the fit from 1.0 to 1.8 m
+#                  (walk_test.py --exclude 50:1.0-1.8). It may be missing or simpler; it may not be wrong (10.4).
+#   1.16-1.22      the right jamb leaves past the right edge
+#   1.21-1.28      the limestone wall leaves past the left edge (the inside corner at 1.275)
+#   1.40           the plaster return leaves past the left edge; the walnut band on the left at 1.40-1.63
+#   1.99-2.15      the camera is inside the wall thickness
+#   3.51-3.87      the landing on M0
+# Parallax: after 1.0 m the opening is 1.98 x its first size, the living room's back wall 1.125 x.
+# Light (11.9.3, 11.9.6): the exposure lines stay. The frame mean RISES along this clip (the hall's stone at -1.0, its plaster at
+#   -0.6, the living room at 0, against base.png): intended, and assemble.py keeps it (tested 2026-11-17, section 10).
 
-One continuous, slow, perfectly straight forward dolly through an empty architect's house, from the entrance hall into the living room. The camera travels 3.9 m straight ahead along its own viewing direction at one constant walking pace, eye height 1.20 m, 24 mm lens, level. It passes through the middle of the walnut-lined opening and arrives exactly on the last frame.
+One continuous, slow, perfectly straight forward dolly from an empty entrance hall into the living room: 3.9 m straight ahead at one constant walking pace, eye height 1.20 m, 24 mm, level, through the middle of the walnut-lined opening, arriving exactly on the last frame.
 
-The heading never changes: the centre of the opening stays on the same point of the frame while the opening grows, until its two edges slide out past the sides of the frame, first the plain plaster edge on the right, then the walnut band on the left. For a moment the camera is inside the thickness of the wall; then the hall is gone and only the living room remains. Inside, the room keeps coming forward at the same pace: the window wall slides out past the left edge, the legs of the armchair sink out past the bottom edge, and the back wall with the sofa settles into the last frame.
+The heading never changes: the centre of the opening stays on one point of the frame while it grows. On the left, the hall's pale limestone wall, its joints converging toward the corner, slides out past the left edge; about then the opening's right edge leaves on the right, its walnut lining turning into view for a moment; then the plaster return and the walnut band on the left leave on the left. For a moment the camera is inside the wall; then only the living room remains, still coming forward: the window wall slides out left, the armchair's legs sink out past the bottom, and the back wall and sofa settle into the last frame.
 
-Real parallax throughout: the opening grows much faster than the far back wall seen through it; near surfaces sweep past the camera, far ones barely move. The hall is the dimmer room and the living room the brighter one. Exposure and white balance are locked, so the picture brightens only because the bright room fills more of the frame.
+As the opening's right edge slides out, it uncovers in the living room's right-hand wall, at a steep angle, for about half a second, a plain opening into the next room, its reveal in the same bone plaster, no door leaf, no frame. Through it, a narrow upright slice of an empty dining room in the same skin: smoked oak floor running on with no threshold, bone plaster walls, part of a tall window in a thin dark bronze frame, its glass soft near-white daylight, no brighter than the living-room glazing. Nothing else: no table, chairs, pendant, lamp, curtains, kitchen, objects, colour or sun. The slice never grows beyond a tenth of the frame or moves toward the centre: it slides out past the right edge before the camera enters the wall, and the heading never turns toward it.
 
-Camera: a locked architectural camera on a straight track. 24 mm throughout, no zoom, no focus change, everything sharp, horizon level, verticals vertical, no tilt, no roll, no pan, no shake, no sideways drift, no arc. One constant speed, no pause at the doorway.
+Real parallax: the opening grows much faster than the back wall beyond it. Soft winter daylight, no sun inside, constant. Exposure and white balance locked: the hall is dimmer, and the picture brightens only because the brighter living room fills more of the frame.
 
-Scene: the house is completely still and empty. Every wall, edge, floor plank, window bar and piece of furniture keeps its exact place, size, shape, colour and material from the two frames; nothing appears, disappears, melts, cross-fades or is redesigned. No people, no added objects, no lamps, no moving curtains. Soft overcast winter daylight, constant. This is a physical walk through real space, never a blend between two pictures.
+Camera: locked on a straight track, 24 mm, no zoom or focus change, all sharp, horizon level, verticals vertical, no tilt, roll, pan, shake, drift or arc; one constant speed, no pause.
+
+Scene: still and empty. Every wall, joint, edge, plank, window bar and piece of furniture keeps its place, size, shape, colour and material from both frames; nothing appears, disappears, melts, cross-fades or is redesigned. No people, no added objects, no lamps, no moving curtains. A physical walk through real space, never a blend of two pictures.
