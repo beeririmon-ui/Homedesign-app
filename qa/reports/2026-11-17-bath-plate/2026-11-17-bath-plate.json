@@ -1924,5 +1924,232 @@
   "var2": false,
   "commits": false
  },
- "verdict_latest": "fail (round 2: BP-M1)"
+ "verdict_latest": "pass (round 3)",
+ "round3": {
+  "date": "2026-11-17",
+  "scope": "BP-M1 re-check against the round-2 acceptance criteria (EFF1.2)",
+  "curve": "f(L)=L+11*(1-L/30)^2 below L* 30; a*,b* += lift*(5.1/14.4, 6.4/14.4); unchanged at L*>=30",
+  "verdict": "pass",
+  "status_line": "פלייט B2: עבר QA (סבב 3, 2026-11-17; הפלייט בלבד; לא לאתר לפני רישום 1.3.9 ואישור 3)",
+  "criteria": {
+   "p0_5_in_11_14": {
+    "result": "pass",
+    "p_frame": {
+     "0.01": 11.02,
+     "0.1": 11.17,
+     "0.5": 11.41,
+     "1": 11.66,
+     "5": 18.58
+    },
+    "p0_5_canvas": 11.41,
+    "px_below_L11_frame": 339
+   },
+   "zero_change_at_or_above_30": {
+    "result": "pass",
+    "px": 3786730,
+    "changed_outside_led": 0,
+    "changed_in_led": 224
+   },
+   "neighbour_contrast_p90_le_1": {
+    "result": "pass",
+    "ungraded": {
+     "px": 18563,
+     "median": 0.176,
+     "p90": 0.451
+    },
+    "graded": {
+     "px": 18563,
+     "median": 0.079,
+     "p90": 0.212
+    },
+    "zone_out_L_p10_p90": [
+     11.11,
+     11.41
+    ]
+   },
+   "shelf_walnut_L10_20_dE00_le_3": {
+    "result": "pass",
+    "shelf_box": {
+     "px": 97157,
+     "median_Lab": [
+      11.95,
+      5.36,
+      6.89
+     ],
+     "dE00_to_target": 1.64,
+     "C_over_L": 0.731,
+     "hab": 52.1
+    },
+    "carcass_all": {
+     "px": 181177,
+     "median_Lab": [
+      13.61,
+      6.4,
+      9.02
+     ],
+     "dE00_to_target": 2.24,
+     "C_over_L": 0.803,
+     "hab": 54.6
+    },
+    "vs_base_walnut_shadow_matchedL": [
+     [
+      12,
+      [
+       11.7,
+       5.0,
+       6.4
+      ],
+      [
+       12.6,
+       3.7,
+       3.9
+      ],
+      2.42
+     ],
+     [
+      14,
+      [
+       13.7,
+       7.1,
+       9.5
+      ],
+      [
+       13.9,
+       5.4,
+       6.3
+      ],
+      2.64
+     ],
+     [
+      16,
+      [
+       15.9,
+       7.4,
+       11.0
+      ],
+      [
+       15.8,
+       5.2,
+       7.4
+      ],
+      2.99
+     ],
+     [
+      18,
+      [
+       18.0,
+       8.5,
+       12.2
+      ],
+      [
+       17.9,
+       8.3,
+       10.2
+      ],
+      1.4
+     ]
+    ]
+   },
+   "reads_as_walnut_in_shadow_x1_x2": {
+    "result": "pass",
+    "note": "x1 warm dark brown, grain in the lit part; x2 smooth, no speckle or soot; stretched view: no contour bands",
+    "levels_below_L16": {
+     "n": 467,
+     "max_gap": 0.14
+    }
+   }
+  },
+  "also": {
+   "formula_residual": {
+    "L_p99": 0.201,
+    "L_max": 0.234,
+    "a_p99": 0.543,
+    "b_p99": 0.507,
+    "dE00_p99": 0.731,
+    "dE00_max": 1.047
+   },
+   "apply_reproduces_plate": "0 px outside the BP-L1 box (224 inside)",
+   "bronze_vs_base": [
+    [
+     15.5,
+     [
+      15.4,
+      3.2,
+      4.6
+     ],
+     [
+      16.1,
+      3.9,
+      6.2
+     ],
+     1.57
+    ],
+    [
+     19.8,
+     [
+      19.8,
+      5.4,
+      7.2
+     ],
+     [
+      20.7,
+      3.9,
+      6.3
+     ],
+     1.89
+    ],
+    [
+     25.1,
+     [
+      25.0,
+      5.1,
+      7.8
+     ],
+     [
+      25.1,
+      4.2,
+      6.6
+     ],
+     1.24
+    ],
+    [
+     35.7,
+     [
+      35.5,
+      5.2,
+      8.4
+     ],
+     [
+      35.9,
+      7.0,
+      11.7
+     ],
+     2.67
+    ]
+   ],
+   "frame_mean_8bit": 170.4,
+   "plate_frame": {
+    "shift": [
+     0.027,
+     0.036
+    ],
+    "mean_abs": 0.846
+   },
+   "dark_px_a_negative": [
+    11279,
+    2244
+   ]
+  },
+  "open": [
+   "BP-L2 (low, backlog)",
+   "BP-I1..I6 (info; BP-I4 checked in output 2)"
+  ],
+  "rule_for_derived_assets": "grade_plate.py apply with plate-grade.json on every derived asset; never re-solve (RND2)",
+  "evidence": [
+   "r3-bp-m1-shelf-x1-x2.jpg"
+  ],
+  "tokens": 0,
+  "var2": false,
+  "commits": false
+ }
 }
