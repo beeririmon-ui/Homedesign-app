@@ -1779,5 +1779,150 @@
    "px_below_L11_raw": 126660,
    "frame_px": 3701295
   }
- }
+ },
+ "round2": {
+  "date": "2026-11-17",
+  "scope": "BP-M1 re-check and BP-L1 glance only (EFF1.2)",
+  "inputs": {
+   "graded": "assets/renders/bath/warm-modern/stage1-2026-11-17/plate.png",
+   "ungraded": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/plate-ungraded.png",
+   "curve": "assets/renders/bath/warm-modern/stage1-2026-11-17/plate-grade.json"
+  },
+  "verdict": "fail",
+  "blocking": [
+   "BP-M1 (round 2)"
+  ],
+  "status_line": "פלייט B2: נכשל QA בסבב 2 על BP-M1 (בינוני; נקודת השחור בטווח, אבל הטו מותח את השחור לפיח ומאפיר את האגוז; עקומה אחרת ב-0 טוקנים). BP-L1 נסגר.",
+  "checks": {
+   "1_black_point": {
+    "result": "pass",
+    "p0_5_frame": 12.4,
+    "p0_5_canvas": 12.51,
+    "p0_1_frame": 6.98,
+    "px_below_L11_frame": 13888,
+    "px_below_L4_frame": 681
+   },
+   "2_shelf_reads_as_walnut_x1": {
+    "result": "fail",
+    "shelf_L_med": [
+     3.8,
+     14.0
+    ],
+    "C_dark_med": [
+     3.97,
+     3.77
+    ],
+    "C_over_L": [
+     1.244,
+     0.285
+    ],
+    "base_walnut_shadow": {
+     "px": 99139,
+     "Lab": [
+      14.4,
+      5.1,
+      6.4
+     ],
+     "C_over_L": 0.586
+    },
+    "dE00_vs_base_walnut_shadow": 4.15
+   },
+   "3_no_banding_posterisation": {
+    "result": "fail (speckle, not bands)",
+    "histogram_levels_occupied": 138,
+    "histogram_max_gap_L": 0.61,
+    "steep_zone_px": 18563,
+    "steep_zone_src_L_p10_p90": [
+     0.63,
+     1.35
+    ],
+    "steep_zone_out_L_p10_p90": [
+     5.52,
+     11.94
+    ],
+    "neighbour_dL_3x3_median": [
+     0.18,
+     1.19
+    ],
+    "neighbour_dL_3x3_p90": [
+     0.45,
+     3.14
+    ],
+    "bbox_canvas": [
+     992,
+     770,
+     2103,
+     1507
+    ]
+   },
+   "4_nothing_above_knee": {
+    "result": "pass",
+    "px_at_or_above_30": 3786730,
+    "changed_outside_led_box": 0,
+    "changed_in_led_box": 224,
+    "changed_below_knee": 368382,
+    "curve_residual_L_max": 0.241,
+    "ab_kept_max": [
+     0.69,
+     0.63
+    ],
+    "frame_mean_8bit": 170.8,
+    "plate_frame_shift_px": [
+     0.027,
+     0.035
+    ]
+   }
+  },
+  "bronze_after_grade_dE00_vs_base_matchedL": [
+   [
+    22.8,
+    1.06
+   ],
+   [
+    26.8,
+    0.53
+   ],
+   [
+    35.7,
+    2.67
+   ]
+  ],
+  "BP-L1": {
+   "result": "fixed, closed",
+   "local_excess_peak_L": [
+    24.2,
+    9.1
+   ],
+   "px_over_6": [
+    191,
+    44
+   ]
+  },
+  "BP-I2": "accepted by the manager (plaster left of the mirror 91.2, dE00 ~0.1)",
+  "finding": {
+   "id": "BP-M1 (round 2)",
+   "severity": "medium",
+   "cause": "segment (0,0)-(1.42,12.5) expands black quantisation noise x8.8; a*,b* kept while L* rises -> grey shadow",
+   "fix": "0 tokens: no expansion (slope <= 1 below the knee), e.g. f(L)=L+11*(1-L/30)^2 (p0.5 ~11.4, C1 at the knee); pointwise warm-brown shadow chroma toward base walnut shadow (hab ~50-55, C/L ~0.5-0.6), no blur so `apply` stays exact for derived assets",
+   "acceptance": [
+    "p0.5 in 11-14",
+    "0 change at L*>=30",
+    "neighbour dL 3x3 p90 <= 1 L* in the former L*<1.42 zone",
+    "shelf walnut L* 10-20 within dE00 3 of 14.4/5.1/6.4",
+    "reads as walnut in shadow at x1, no stains"
+   ],
+   "owner": "render-agent",
+   "evidence": [
+    "r2-bp-m1-shelf-x1-x2.jpg"
+   ]
+  },
+  "evidence": [
+   "r2-bp-m1-shelf-x1-x2.jpg",
+   "r2-bp-l1-niche-led-x2.jpg"
+  ],
+  "tokens": 0,
+  "var2": false,
+  "commits": false
+ },
+ "verdict_latest": "fail (round 2: BP-M1)"
 }
