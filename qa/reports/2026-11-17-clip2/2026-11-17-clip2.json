@@ -5,8 +5,6 @@
  "tokens": 0,
  "brief": "briefs/qa-clip2-repaired-2026-11-17.md",
  "asset": "assets/video/transitions/warm-modern/clip2-hdx--m0/ (preview-desktop.1920.60fps.mp4, preview-phone.1080.30fps.mp4; take 1 3c70d4ab + repair_right_wall.py option B)",
- "status": "לא עבר QA",
- "status_line": "קליפ 2 (טייק 1 + תיקון B): לא עבר QA (2026-11-17). 3 בינוניים, כולם תיקון קוד ב-0 טוקנים: C2-M1 הבזק קו המתאר של המשקוף (דסקטופ 49–50, טלפון 25); C2-M2 לשונית בכף המשקוף (דסקטופ 35–47, טלפון 18–24); C2-M3 תפר בתקרה ובקו המפגש (דסקטופ 40–116, טלפון 21–58). טייק שני (CLIP2-R) לא נדרש.",
  "retake_needed": false,
  "method": {
   "frames": "ffmpeg PNG, desktop 30-160 and phone 15-85, repaired and .unrepaired",
@@ -229,5 +227,265 @@
    "owner": "master-designer (info)"
   }
  ],
- "next": "motion-agent fixes C2-M1..M3 in code (0 tokens), optionally C2-L1/L2 in the same pass; QA re-checks only desktop 30-60 and 40-116 and phone 15-60. CLIP2-R can close as not needed. Not for the site yet (rule 7)."
+ "next": "motion-agent fixes C2-M1..M3 in code (0 tokens), optionally C2-L1/L2 in the same pass; QA re-checks only desktop 30-60 and 40-116 and phone 15-60. CLIP2-R can close as not needed. Not for the site yet (rule 7).",
+ "status_round1": "לא עבר QA",
+ "status_line_round1": "קליפ 2 (טייק 1 + תיקון B): לא עבר QA (2026-11-17). 3 בינוניים, כולם תיקון קוד ב-0 טוקנים: C2-M1 הבזק קו המתאר של המשקוף (דסקטופ 49–50, טלפון 25); C2-M2 לשונית בכף המשקוף (דסקטופ 35–47, טלפון 18–24); C2-M3 תפר בתקרה ובקו המפגש (דסקטופ 40–116, טלפון 21–58). טייק שני (CLIP2-R) לא נדרש.",
+ "status": "עבר QA (תצוגה זמנית, לא לאתר עדיין)",
+ "status_line": "קליפ 2 (טייק 1 + תיקון בקוד r2): עבר QA (2026-11-17). תצוגה זמנית, לא לאתר עדיין. נמוכים ב-backlog: C2-L2 (חלקי), C2-L3.",
+ "round2": {
+  "date": "2026-11-17",
+  "input": "manager message on r2; repair.json version r2; selfcheck.r1/r2/unrepaired.json; r1 previews taken from git a5f10f78",
+  "method": "same as round 1: PNG frames desktop 28-145 (r2), 28-120 (r1, unrepaired), phone 14-62 (r1, r2); x1/x2/x3 consecutive frames, x-t and y-t slices (also x6 high-pass), per-frame measurement",
+  "items": {
+   "1a_M1_outline": {
+    "result": "closed",
+    "f49_50_rows_with_dark_line": {
+     "r2": [
+      3,
+      0
+     ],
+     "r1": 493
+    },
+    "selfcheck_outline_worst": {
+     "r1": [
+      152.5,
+      49
+     ],
+     "r2": [
+      17.1,
+      30
+     ]
+    },
+    "frames_over_12": {
+     "r1": 6,
+     "r2": 1
+    },
+    "phone_f25": "clean (r1 dip 79 over 223 rows)"
+   },
+   "1b_M2_jamb_foot": {
+    "result": "closed",
+    "edge_spread_rows_200_1070_px": "0 in f31-38, f42-43, f50-56 (r1 up to 19)",
+    "selfcheck_tab_worst": {
+     "r1": [
+      23.0,
+      34
+     ],
+     "r2": [
+      -11.0,
+      30
+     ]
+    },
+    "frames_over_3": {
+     "r1": 10,
+     "r2": 1
+    },
+    "phone_18_24": "clean"
+   },
+   "1c_M3_ceiling": {
+    "result": "closed",
+    "contact_line_8bit_X1.95_2.46_f44_68": {
+     "r2": [
+      118,
+      131
+     ],
+     "r1_right_of_X2.1": [
+      163,
+      171
+     ]
+    },
+    "ceiling_max_adjacent_step_3cm_8bit": {
+     "r2": 1.5,
+     "r1": 4.3
+    },
+    "selfcheck": {
+     "contact": [
+      -48.1,
+      -11.3
+     ],
+     "ceiling": [
+      8.8,
+      -5.7
+     ]
+    },
+    "phone_30_38_50": "continuous"
+   },
+   "1d_new_ceiling_blend_and_clone": {
+    "result": "pass",
+    "flicker_rms_second_difference_Lstar": {
+     "ceiling_clone": 0.19,
+     "ceiling_blend": 0.27,
+     "ceiling_clip": 0.21,
+     "back_wall_top_clone": 0.2,
+     "back_wall_top_clip": 0.17,
+     "right_wall": 0.14
+    },
+    "texture_repeat": "best NCC of a cloned ceiling patch elsewhere 0.70-0.71 at ~190 px (f64, f82) vs clip baseline 0.54-0.59; no recognizable repeat at x8 contrast; none at x1"
+   },
+   "1e_new_floor": {
+    "result": "pass",
+    "floor_patch_old_bottom_edge_step_8bit": {
+     "r2": [
+      5,
+      8
+     ],
+     "r1": [
+      21,
+      31
+     ]
+    },
+    "C2-L1": "closed",
+    "dark_wedge_f36_39": "gone",
+    "last_strip_plank_step_Lstar": "5-6, f38-f46 (to ~f82), moves with the floor, reads as a board end (C2-I5)"
+   },
+   "1f_dining_L2": {
+    "result": "partly fixed",
+    "dark_band": "now soft wood",
+    "remaining": "translucent strip f54-57, grey wedge at reveal foot f47-50 (smaller)"
+   },
+   "2_I1_hold_f40": {
+    "result": "not visible as a jump; low as part of C2-L3",
+    "visible_edge_x_f34_41": [
+     1548.5,
+     1568.5,
+     1586.5,
+     1605.5,
+     1620.5,
+     1632.5,
+     1632.5,
+     1649.5
+    ],
+    "steps": [
+     20,
+     18,
+     19,
+     15,
+     12,
+     0,
+     17
+    ],
+    "r1": "-8 back-step",
+    "note": "the walnut lining pops in at the same frame 40 (C2-L3); phone has no frame 40 (20->21)"
+   },
+   "3_walk_test": {
+    "result": "pass",
+    "desktop": {
+     "verdict": "WALK",
+     "check5": "0/37",
+     "check6": "0 frames (worst 0.188 at -1.2 deg, frame 41)"
+    },
+    "phone": {
+     "verdict": "WALK",
+     "check5": "0/19",
+     "check6": "0 frames (worst 0.134)"
+    },
+    "bank_walk_repaired_json": {
+     "verdict": "WALK",
+     "check5": "0/37",
+     "check6": "0 (worst 0.195)"
+    }
+   },
+   "4_repair_selfcheck": {
+    "result": "pass: catches r1, passes r2",
+    "runs_on_previews": true,
+    "r1": {
+     "outline_dip_worst": [
+      152.5,
+      49
+     ],
+     "frames_outline_over_12": [
+      30,
+      31,
+      33,
+      37,
+      38,
+      49
+     ],
+     "foot_tab_worst": [
+      23.0,
+      34
+     ],
+     "frames_tab_over_3": [
+      31,
+      33,
+      34,
+      35,
+      36,
+      37,
+      39,
+      40,
+      47,
+      48
+     ],
+     "contact_contrast_step_worst": [
+      -48.1,
+      40
+     ],
+     "ceiling_step_worst": [
+      8.8,
+      63
+     ]
+    },
+    "r2": {
+     "outline_dip_worst": [
+      17.1,
+      30
+     ],
+     "frames_outline_over_12": [
+      30
+     ],
+     "foot_tab_worst": [
+      -11.0,
+      30
+     ],
+     "frames_tab_over_3": [
+      30
+     ],
+     "contact_contrast_step_worst": [
+      -11.3,
+      59
+     ],
+     "ceiling_step_worst": [
+      -5.7,
+      62
+     ]
+    },
+    "reproduces": "selfcheck.r1.json and selfcheck.r2.json exactly"
+   }
+  },
+  "findings": [
+   {
+    "id": "C2-L3",
+    "severity": "low",
+    "backlog": true,
+    "what": "jamb edge in r2: (1) the cut covers the model's walnut lining (5-20 px) f31-f39; it pops back at f40 at 22 px, the same frame as the one-frame hold (r1: popped at f38, 18 px); (2) f30 transition frame: 12 px light strip with a thin grey line (L 124, 8-bit) above the floor (the selfcheck's 17.1 / -11); (3) f56: 3x10 px black speck at the jamb edge (x 1884, y 693-702, L 45), remnant of the model's mullion, desktop only. None reads as a jump or flash at real speed; seen when stepping at x1-x2",
+    "fix": "keep the lining (cut left of it or let it grow from 0), cover the f56 mullion, smooth f30; 0 tokens; only if the bank is reopened, or before launch",
+    "owner": "motion-agent",
+    "evidence": "r2-l3-jamb-lining-f36-42-and-f56.jpg"
+   },
+   {
+    "id": "C2-L1",
+    "severity": "closed",
+    "what": "closed in r2"
+   },
+   {
+    "id": "C2-L2",
+    "severity": "low",
+    "backlog": true,
+    "what": "partly fixed: dark band now soft wood; translucent strip f54-57 and grey wedge f47-50 remain",
+    "owner": "motion-agent"
+   },
+   {
+    "id": "C2-I4",
+    "severity": "info",
+    "what": "motion-agent README states r2 outline worst 8.8 / 0 frames and tab worst 1 px / 0 frames; the tool and selfcheck.r2.json give 17.1 and -11, one frame each (f30)",
+    "owner": "motion-agent"
+   },
+   {
+    "id": "C2-I5",
+    "severity": "info",
+    "what": "5-6 L* step across the last plank by the right wall, f38-f46 (to ~f82), from the new strip source; moves with the floor, reads as a board end"
+   }
+  ],
+  "next": "clip 2 passed QA as a temporary preview; CLIP2-R can close as not needed; not for the site yet; C2-L2 and C2-L3 in backlog"
+ }
 }
