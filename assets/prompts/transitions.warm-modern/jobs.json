@@ -21,7 +21,9 @@
   "r2 of turn_door.py joints (the manager's follow-up): joint lines only, on the clay's lines, one threshold for both stills",
   "D0o's mask has one more column (x 1161, render-agent): the door in code and clip 1a's first frame need nothing, since everything outside the drawn leaf is D0o's own pixels (checked: at 90 deg the composite equals D0o except x 708-809)",
   "assemble.py end_lock: the end correction travels with the picture along the flow (it stayed on screen and left a faint second joint line in bank frames 4-12); selftest unchanged (ends identical, PSNR 28.6 / 33.3)",
-  "export_arrival.py --segment dolly: clip 2 alone on the same timeline, needs only --bank2"
+  "export_arrival.py --segment dolly: clip 2 alone on the same timeline, needs only --bank2",
+  "repair_right_wall.py (new): clip 2 take 1's right edge repainted from the clay (option B)",
+  "walk_test.py: check 5 (an excluded id is gone after its window) and check 6 (local verticals at the frame edges); verdict WALK, LOCAL FAIL"
  ],
  "tools": "site/tools/transitions/: camgeo.py (cameras, canvases, reprojection, room depth I/O), turn_door.py (the turn and the door in code), walk_test.py (the clay is the ruler: --stations with -depth and -edges passes), assemble.py (bank: exposure tracking, end locks, resample in DIS), arrival_timeline.py, export_arrival.py (sequences, manifest, master), seeds.py (frames for the video model, the HD and HDx seeds), room_depth.py, clay_walk.py. proxy_house.py is the test fixture. 2026-11-17: walk_test.py routes clip1a / clip1b, --exclude ID:A-B, --events; turn_door.py joints (and the joints gate in turn); seeds.py ht; camgeo.HT.",
  "canvases": {
@@ -168,7 +170,7 @@
     "a walk with local defects (flicker, a jamb that shakes)": "one retry, same model, prompt tightened on the defect: 1,296",
     "a dissolve or a zoom": "minimax-h3, 2K, 4 s: 1,120 (another family); if it fails the same way, a threshold still in the wall and two 3 s clips: 650 + 2 x 972"
    },
-   "status": "sent 2026-11-17, take 1: FAILED on a local defect (no retake inside the go)",
+   "status": "sent 2026-11-17, take 1 (1,296 tokens); right edge repaired in code (option B, 0 tokens); waiting for QA",
    "take1": {
     "var2": "3c70d4ab-0af5-414f-bb89-de0539a58af7",
     "tokens": 1296,
@@ -183,6 +185,15 @@
     "fix_options": {
      "A, retake 1,296": "same model; the [DINING] paragraph replaced by one plain right wall with no opening (10.4 allows the glimpse to be missing); verticals sentence kept",
      "B, code repair 0 tokens": "paint the right wall plane over f28-f76 from the clay geometry (its baseboard and ceiling lines per frame) with the clip's own bone plaster; the glimpse becomes missing (allowed)"
+    },
+    "repair_B": {
+     "tool": "site/tools/transitions/repair_right_wall.py",
+     "out": "assets/video/transitions/warm-modern/clip2-hdx--m0/ (README.md, preview-*.mp4, repair.json)",
+     "what": "bank 24-141: the back wall to the corner, the right wall with O-living-dining (straight jamb, plaster reveal, a quiet room beyond), the ceiling and the floor by the model's free-standing pillar (and its shadow); the clip's own near jamb kept",
+     "walk": "repaired bank: WALK; check 5 (exclusion closed) 0 of 37 frames, check 6 (edge verticals) 1 frame (the clip's own jamb, b37), limit 2; take 1: LOCAL FAIL (25/25 and 35 frames)",
+     "stability": "motion-compensated residual p95: repaired area 1.3 (max 2.0) vs the clip's plaster 3.7 (max 4.3) levels",
+     "phone_weight": "549 KB per 2 s (AVIF 1080)",
+     "remaining": "a few-px light notch at the skirting foot (bank 133-139); one mirrored plank; the repaired plaster slightly smoother than the model's"
     }
    }
   },

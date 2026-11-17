@@ -1,0 +1,133 @@
+{
+ "id": "T-D0 clip 2 alone",
+ "from": "HDx",
+ "to": "M0",
+ "style": "warm-modern",
+ "version": "7.3",
+ "play_s": 2.631,
+ "hold_s": 0.2,
+ "timeline": {
+  "name": "7.3",
+  "play_s": 7.3,
+  "v_m_s": 1.609,
+  "door": [
+   0.0,
+   0.9
+  ],
+  "camera_leaves_rest": [
+   0.35,
+   0.85
+  ],
+  "door_angle_when_camera_starts": 26.9,
+  "walk_const": [
+   0.85,
+   3.669
+  ],
+  "turn": [
+   3.669,
+   4.669
+  ],
+  "turn_speed_deg_s": {
+   "start": 24.8,
+   "peak": 102.0,
+   "end": 20.8
+  },
+  "dolly_const": [
+   4.669,
+   6.852
+  ],
+  "landing": [
+   6.852,
+   7.3
+  ],
+  "hold_s": 0.2,
+  "cut": false,
+  "segment": "dolly",
+  "segment_starts_at_s": 4.669,
+  "note": "the camera enters at walking speed, as it leaves the turn in the whole arrival"
+ },
+ "sampling": "uniform in time: frame i (1-based) of a variant is shown at (i - 1) / fps seconds; ramps, the turn's speed curve and the landing are baked in. Reverse = the same frames from last to first.",
+ "path": "{variant}/{index:04d}.{ext}",
+ "formats": [
+  "avif",
+  "webp"
+ ],
+ "variants": {
+  "1920": {
+   "w": 1920,
+   "h": 1080,
+   "fps": 60,
+   "frames": 171,
+   "avif_quality": 40,
+   "last_frames_quality": 60,
+   "segments": {
+    "dolly": [
+     1,
+     131
+    ],
+    "landing": [
+     132,
+     158
+    ],
+    "hold": [
+     159,
+     171
+    ]
+   }
+  },
+  "1080": {
+   "w": 1080,
+   "h": 608,
+   "fps": 30,
+   "frames": 86,
+   "avif_quality": 40,
+   "last_frames_quality": 60,
+   "segments": {
+    "dolly": [
+     1,
+     66
+    ],
+    "landing": [
+     67,
+     79
+    ],
+    "hold": [
+     80,
+     86
+    ]
+   }
+  }
+ },
+ "bytes": {
+  "1920": {
+   "avif": 4505661,
+   "webp": 7541748
+  },
+  "1080": {
+   "avif": 808242,
+   "webp": 1199236
+  }
+ },
+ "bytes_per_2s": {
+  "1920": {
+   "avif": 3183563,
+   "webp": 5328769
+  },
+  "1080": {
+   "avif": 571079,
+   "webp": 847344
+  }
+ },
+ "first_frame": "HDx: identical to the 16:9 frame of HDx (bank frame 1) at this size",
+ "last_frame": "M0: identical to the 16:9 frame of base.png at this size",
+ "cut_version": null,
+ "loading": null,
+ "turn_worst_hole_frac": 0.0,
+ "swap": {
+  "blend_out_ms": 200,
+  "rule": "after the hold, a soft swap to the live layers of the empty room (the same picture)"
+ },
+ "qa": "pending",
+ "temporary": true,
+ "note": "clip 2 alone, raw kling-3-omni take 1 (3c70d4ab), NOT QA'd: the right-edge defect f30-f72 is in it"
+}

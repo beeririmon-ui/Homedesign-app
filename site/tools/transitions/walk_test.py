@@ -34,6 +34,18 @@ Options added 2026-11-17 (the final entrance, ENT2; docs/proposals/wm-arrival-fr
                      candidate position is between A and B metres from the route's first camera. For a part of the
                      house the model may simplify or leave out without failing the clip (id 50, the dining glimpse
                      of clip 2, 1.0-1.8 m: wm-front-door-2026-11-14.md 10.4). Repeatable.
+  checks 5 and 6 (2026-11-17, after clip 2 take 1: a leaning pier and a glass wall at the right edge that checks 1-4 let
+  through, because they are extra structure in a small part of the frame):
+  5 exclusion closed  for every --exclude ID:A-B: in the frames up to 1 m after B, in the band where the id was last in
+                      view (out to the frame edge it left by), long near-vertical lines of the frame that no clay
+                      structure explains (median distance > 1.2 % of the width), not counting lines through the room's
+                      vanishing points (floor joints, ceiling lines). Fails when 3 frames or more carry over 0.20 of the
+                      frame height of such lines: the excluded part (or something else the clay does not have) is still there.
+  6 edge verticals    in the outer fifth of the frame on each side, long lines (> 0.12 of the height) leaning 1-25 deg
+                      from vertical that do not point at a room vanishing point and that no clay structure explains (a
+                      chair's slanted frame is in the clay): a level camera has none. Fails when 2
+                      frames or more have one longer than 0.20 of the height (the median check 4 does not see a local lean).
+  A local fail gives the verdict "WALK, LOCAL FAIL": a real walk with a part that must be repaired or retaken.
   --events FILE[:JOB] the clip's event table (jobs.json "walk_events" of job JOB, or a JSON list): for every event
                      ("at_m", or a "window_m" [a, b]), the clip frames where the solved position reaches it, so the
                      eye check at 100 % looks at the right frames (e.g. the herbs must be gone by 2.40 m in clip 1a).
@@ -59,7 +71,8 @@ import camgeo as cg  # noqa: E402
 ROUTES = {"clip1": (cg.D0, cg.HD), "clip1a": (cg.D0, cg.HT), "clip1b": (cg.HT, cg.HD), "clip2": (cg.HDX, cg.M0),
           "t-e0": (cg.H0X, cg.M0)}
 LIMITS = dict(parallax_dev=0.05, dissolve_r2=0.55, vertical_deg=0.5, structure_w=0.01, stall_frac=0.12, back_m=0.04,
-              jump_frac=0.25)
+              jump_frac=0.25, excl_after_m=1.0, excl_tol_w=0.012, excl_len_h=0.20, excl_frames=3,
+              edge_band=0.20, edge_tilt=(1.0, 25.0), edge_len_h=0.20, edge_frames=2)
 TRUNC = 0.008          # chamfer truncation, fraction of the frame width (7.7 px at 960)
 
 
@@ -359,6 +372,133 @@ def verticals(frames: list[np.ndarray], step: int = 4) -> dict:
                 p90_worst_deg=float(np.percentile([p["worst_deg"] for p in per], 90)))
 
 
+def _segments(gray: np.ndarray, min_len: float):
+    """Long straight segments (LSD): x0, y0, x1, y1, length, tilt from vertical in degrees (signed)."""
+    lsd = cv2.createLineSegmentDetector(cv2.LSD_REFINE_STD)
+    L = lsd.detect(gray)[0]
+    if L is None:
+        return np.zeros((0, 6))
+    L = L.reshape(-1, 4).astype(np.float64)
+    dx, dy = L[:, 2] - L[:, 0], L[:, 3] - L[:, 1]
+    ln = np.hypot(dx, dy)
+    ang = np.degrees(np.arctan2(dx, np.abs(dy) + 1e-9)) * np.sign(dy + 1e-9)
+    keep = ln >= min_len
+    return np.column_stack([L[keep], ln[keep], ang[keep]])
+
+
+def room_vps(cam: cg.Cam, w: int, h: int) -> list[tuple[float, float]]:
+    """Image points the house's horizontal axes (world X and Y) converge to, for a level camera of that heading."""
+    out = []
+    for d in (np.array([1.0, 0, 0]), np.array([0, 1.0, 0])):
+        fd = float(d @ cam.f)
+        if abs(fd) > 1e-6:
+            out.append(((cam.u0 + cg.KU * float(d @ cam.r) / fd) * w, cam.v0 * h))
+    return out
+
+
+def _through_vp(seg: np.ndarray, vps, tol: float) -> np.ndarray:
+    x0, y0, x1, y1 = seg[:, 0], seg[:, 1], seg[:, 2], seg[:, 3]
+    n = np.hypot(x1 - x0, y1 - y0) + 1e-9
+    hit = np.zeros(len(seg), bool)
+    for vx, vy in vps:
+        dist = np.abs((x1 - x0) * (y0 - vy) - (x0 - vx) * (y1 - y0)) / n
+        hit |= dist < tol
+    return hit
+
+
+def clay_dt(R: Ruler, s: float, w: int, h: int) -> np.ndarray:
+    """Distance (pixels) from every pixel to the nearest clay structure point seen from position s (all ids)."""
+    k = R.station_for(float(np.clip(s, 0, R.L)))
+    px, py, d, _ = R.project(k, float(s), w, h)
+    ok = (d > 0.08) & (px >= 0) & (px <= w - 1) & (py >= 0) & (py <= h - 1)
+    m = np.full((h, w), 255, np.uint8)
+    m[np.round(py[ok]).astype(int), np.round(px[ok]).astype(int)] = 0
+    return cv2.distanceTransform(m, cv2.DIST_L2, 3)
+
+
+def _explained(seg: np.ndarray, dt: np.ndarray, tol: float) -> np.ndarray:
+    h, w = dt.shape
+    out = np.zeros(len(seg), bool)
+    for i, (x0, y0, x1, y1, ln, _) in enumerate(seg):
+        n = max(2, int(ln / 3))
+        xs, ys = np.linspace(x0, x1, n), np.linspace(y0, y1, n)
+        out[i] = float(np.median(dt[np.clip(np.round(ys).astype(int), 0, h - 1), np.clip(np.round(xs).astype(int), 0, w - 1)])) <= tol
+    return out
+
+
+def exclusion_closed(frames: list[np.ndarray], R: Ruler, s_table: np.ndarray, limits: dict = LIMITS) -> list[dict]:
+    """Check 5 (see the module text)."""
+    out = []
+    if not R.exclude:
+        return out
+    h, w = frames[0].shape[:2]
+    vps = room_vps(R.cam0, w, h)
+    for cid, a, b in R.exclude:
+        # where the id was last in view: the last position of its window where its points are in frame
+        region = None
+        for s_try in np.arange(b, a - 1e-9, -0.05):
+            k = R.station_for(float(np.clip(s_try, 0, R.L)))
+            px, py, d, _ = R.project(k, float(s_try), w, h)
+            vis = (R.ids[k] == cid) & (d > 0.08) & (px >= 1) & (px <= w - 2) & (py >= 1) & (py <= h - 2)
+            if vis.sum() >= 5:
+                lo, hi = float(px[vis].min()), float(px[vis].max())
+                region = (max(0, int(lo - 0.10 * w)), w) if (lo + hi) / 2 > w / 2 else (0, min(w, int(hi + 0.10 * w)))
+                break
+        rep = dict(id=cid, window_m=[a, b], after_m=limits["excl_after_m"], region_x=region, frames=[], worst=None, over=0, passed=True)
+        if region is None:
+            rep["note"] = "the id is never in view inside its window"
+            out.append(rep)
+            continue
+        for t, s in enumerate(s_table):
+            if not (b < s <= b + limits["excl_after_m"]):
+                continue
+            dt = clay_dt(R, float(s), w, h)
+            g = cv2.cvtColor(frames[t], cv2.COLOR_RGB2GRAY)
+            seg = _segments(g, 0.06 * h)
+            if len(seg):
+                mx = (seg[:, 0] + seg[:, 2]) / 2
+                seg = seg[(mx >= region[0]) & (mx < region[1]) & (np.abs(seg[:, 5]) < 30) & ~_through_vp(seg, vps, 0.02 * w)]
+            unexplained = float(seg[~_explained(seg, dt, limits["excl_tol_w"] * w), 4].sum()) if len(seg) else 0.0
+            frac = unexplained / h
+            rep["frames"].append(dict(frame=t, s=round(float(s), 3), unexplained_h=round(frac, 3)))
+        if rep["frames"]:
+            fr = [x["unexplained_h"] for x in rep["frames"]]
+            rep["worst"] = max(rep["frames"], key=lambda x: x["unexplained_h"])
+            rep["over"] = int(sum(f > limits["excl_len_h"] for f in fr))
+            rep["passed"] = rep["over"] < limits["excl_frames"]
+        out.append(rep)
+    return out
+
+
+def edge_verticals(frames: list[np.ndarray], cam0: cg.Cam, limits: dict = LIMITS, R: Ruler | None = None,
+                   s_table: np.ndarray | None = None) -> dict:
+    """Check 6 (see the module text). With the ruler, a leaning line the clay has too (a chair's slanted frame) is
+    not counted."""
+    h, w = frames[0].shape[:2]
+    vps = room_vps(cam0, w, h)
+    lo, hi = limits["edge_tilt"]
+    per = []
+    for t, f in enumerate(frames):
+        seg = _segments(cv2.cvtColor(f, cv2.COLOR_RGB2GRAY), 0.12 * h)
+        best = None
+        if len(seg):
+            mx = (seg[:, 0] + seg[:, 2]) / 2
+            band = (mx < limits["edge_band"] * w) | (mx > (1 - limits["edge_band"]) * w)
+            lean = band & (np.abs(seg[:, 5]) >= lo) & (np.abs(seg[:, 5]) <= hi) & ~_through_vp(seg, vps, 0.02 * w)
+            if lean.any() and R is not None and s_table is not None:
+                idx = np.nonzero(lean)[0]
+                lean[idx[_explained(seg[idx], clay_dt(R, float(s_table[t]), w, h), limits["excl_tol_w"] * w)]] = False
+            if lean.any():
+                i = int(np.argmax(np.where(lean, seg[:, 4], -1)))
+                best = dict(len_h=round(float(seg[i, 4] / h), 3), tilt_deg=round(float(seg[i, 5]), 2),
+                            x=round(float((seg[i, 0] + seg[i, 2]) / 2 / w), 3))
+        per.append(dict(frame=t, longest_leaning=best))
+    over = [p for p in per if p["longest_leaning"] and p["longest_leaning"]["len_h"] > limits["edge_len_h"]]
+    worst = max((p for p in per if p["longest_leaning"]), key=lambda p: p["longest_leaning"]["len_h"], default=None)
+    return dict(band=limits["edge_band"], tilt_deg=[lo, hi], frames_over=len(over), over_frames=[p["frame"] for p in over],
+                worst=worst, passed=len(over) < limits["edge_frames"])
+
+
 # ----------------------------------------------------------------------------------------------------------------
 def walk_test(frames: list[np.ndarray], R: Ruler, limits: dict = LIMITS) -> dict:
     T = len(frames)
@@ -452,9 +592,21 @@ def walk_test(frames: list[np.ndarray], R: Ruler, limits: dict = LIMITS) -> dict
         defects.append(f"verticals lean up to {ver['max_abs_median_deg']:.2f} deg (limit 0.5)")
     if res["p90_w"] is not None and res["p90_w"] > limits["structure_w"] * 0.5:
         defects.append(f"structure lines sit up to {res['p90_w']:.2%} of the width from the frame's edges (the chamfer truncates at {TRUNC:.1%}; QA limit 1 %)")
-    verdict = "NOT A WALK" if fails else ("WALK, WITH DEFECTS" if defects else "WALK")
-    return dict(verdict=verdict, fails=fails, defects=defects, frames=T, size=[w, h], length_m=L, parallax=par, dissolve=dis,
-                progress=prog, structure_residual=res, verticals=ver,
+    excl = exclusion_closed(frames, R, s_table, limits)
+    edge = edge_verticals(frames, R.cam0, limits, R, s_table)
+    local_fails = []
+    for e in excl:
+        if not e["passed"]:
+            local_fails.append(f"exclusion closed: id {e['id']} (window {e['window_m'][0]}-{e['window_m'][1]} m): {e['over']} frames within "
+                               f"{limits['excl_after_m']} m after the window carry over {limits['excl_len_h']:.2f} of the height of near-vertical "
+                               f"lines the clay does not have in that band (worst {e['worst']['unexplained_h']:.2f} at {e['worst']['s']} m, frame {e['worst']['frame']})")
+    if not edge["passed"]:
+        wv = edge["worst"]["longest_leaning"]
+        local_fails.append(f"edge verticals: {edge['frames_over']} frames with a line leaning {lo_hi(limits)} at the frame edge longer than "
+                           f"{limits['edge_len_h']:.2f} of the height (worst {wv['len_h']:.2f}, {wv['tilt_deg']} deg, frame {edge['worst']['frame']})")
+    verdict = "NOT A WALK" if fails else ("WALK, LOCAL FAIL" if local_fails else ("WALK, WITH DEFECTS" if defects else "WALK"))
+    return dict(verdict=verdict, fails=fails, local_fails=local_fails, defects=defects, frames=T, size=[w, h], length_m=L, parallax=par,
+                dissolve=dis, progress=prog, structure_residual=res, verticals=ver, exclusion_closed=excl, edge_verticals=edge,
                 s_per_frame=[None if not np.isfinite(x) else round(float(x), 4) for x in s],
                 s_filled=[round(float(x), 4) for x in s_table],
                 detail=dict(dev_near=[None if x is None else round(x, 4) for x in dev_near],
@@ -469,6 +621,10 @@ def walk_test(frames: list[np.ndarray], R: Ruler, limits: dict = LIMITS) -> dict
 # ----------------------------------------------------------------------------------------------------------------
 # the two known failures, built from the end frames (to test the test)
 # ----------------------------------------------------------------------------------------------------------------
+def lo_hi(limits: dict) -> str:
+    return f"{limits['edge_tilt'][0]:g}-{limits['edge_tilt'][1]:g} deg"
+
+
 def parse_exclude(x: str) -> tuple[int, float, float]:
     """'50:1.0-1.8' -> (50, 1.0, 1.8)."""
     cid, rng = x.split(":")
