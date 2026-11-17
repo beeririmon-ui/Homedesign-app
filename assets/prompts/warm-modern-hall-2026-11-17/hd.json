@@ -1,7 +1,7 @@
 {
  "asset_id": "wm-hall-hd-2026-11-17",
- "status": "r1 REJECTED (11.9.3 level +0.63 from the target); HD not delivered in this run",
- "model": "seedream-5-pro",
+ "status": "accepted render: r2 (nano-banana-2, run 3); r1 rejected (level), its exposure correction failed the seam (README)",
+ "model": "seedream-5-pro (r1), nano-banana-2 (r2)",
  "type": "image-to-image",
  "resolution": "2K",
  "aspect_ratio": "auto",
@@ -24,9 +24,33 @@
    "estimate": 650,
    "tokens": 650,
    "verdict": "rejected: jib door +0.03 vs -0.60 +-1/6; locked (joints <= 0.91 px)"
+  },
+  {
+   "id": "r2",
+   "run": 3,
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "3:2",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7de8b57c-7eb2-403f-a2d2-bafc4049bd7d.png",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-17/hd-r2.txt",
+   "prompt": "Photorealistic photograph made from this render. Keep the camera and every edge of the input exactly: both seams of the jib door, the edge of the stone panel and every stone joint stay exactly where they are and the same size. The right part of the picture is already the finished photograph of the same wall: keep it exactly as it is, including its brightness, and continue its stone, its light and its tone seamlessly to the left.\n\nSame empty hall, same camera point as HDx, turned 65 degrees to the left. A close, level view of the hall's far wall about 1.65 m away, on the same tall 3:2 canvas: the canvas shows the wall from about 0.3 m to 2.05 m high, and the 16:9 view inside it from about 0.5 m to 1.9 m. No floor, no skirting, no ceiling and no corner anywhere on the canvas. The left part, up to 52% of the width, is bone limewash plaster #ECE5DA with a soft trowel movement; in it, the 3 mm shadow-gap outline of a closed flush jib door in the same plaster, no handle: its two vertical seams run from the top to the bottom of the canvas, one very close to the left edge (about 2% of the width), the other at about 38%. From 52% to the right edge, the wall is clad in honed pale limestone #D8C8AE, the same stone as the door wall outside: smooth, dense and matte, uniform in tone across each stone and from stone to stone, with at most a few fine fossil dots; no veins, streaks, bands or sweeps of colour, no open pores or travertine holes, not travertine; in long horizontal courses of different heights with fine 5 mm recessed joints; in the 16:9 view the joints run at about 19%, 30%, 44%, 73% and 84% of its height, and a vertical joint at about 80% of the width appears in every other course. The stone's clean vertical edge at 52% catches the light as a hairline. The whole wall is washed from above by daylight from an opal roof-light slot along its top, out of frame: one even, diffuse wash, the lower half of the wall only slightly darker than the upper half, never falling off to dark, even along its length, with no beams, cones, spots or pools of light; on the stone, each joint casts a fine shadow line under the course above. The wall is in soft shade: a quiet mid-tone, exactly the brightness of the photograph on the right, well below white; the plaster only a little lighter than the stone. Nothing else: no bench, no hooks, no lamp, no switch, no art, no objects.",
+   "prompt_chars": 2391,
+   "prompt_vs_designer": "hd.txt with the two brightening sentences out and the manager's wording in (hd-r2-edits.json)",
+   "idempotency_key": "wm-hall-hd-r2-nano-2026-11-17",
+   "placeholder_id": "cc7ba6f4-d8c3-4a85-a6ce-8d741c4ee8c2",
+   "task_id": "b2788ef751dee6fd097c88acd7c7af68",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-b2788ef751dee6fd097c88acd7c7af68-0-1794897034712-b489ce9a.png",
+   "estimate": 400,
+   "tokens": 400,
+   "returned_px": [
+    2528,
+    1696
+   ],
+   "verdict": "accepted: jib -0.50 (in band), stone 0.28 under it, locked (joints <= 0.61 px), turn_door.py joints exit 0"
   }
  ],
- "tokens": 650,
+ "tokens": 1050,
  "date": "2026-11-17",
  "jobs_file": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json"
 }

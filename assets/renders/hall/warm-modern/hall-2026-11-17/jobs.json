@@ -171,13 +171,71 @@
     "rejected": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hd-r1.png",
     "record": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hd-r1-lock.json"
    }
+  },
+  {
+   "id": "wm-hall-hd-r2-nano",
+   "run": 3,
+   "still": "HD",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "3:2",
+   "estimate": 400,
+   "tokens": 400,
+   "input": "the same as HD r1",
+   "placeholder_id": "cc7ba6f4-d8c3-4a85-a6ce-8d741c4ee8c2",
+   "task_id": "b2788ef751dee6fd097c88acd7c7af68",
+   "batch_id": "e2f1e0f3-4f3b-45ed-9a20-3fd3f32d3be1",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-b2788ef751dee6fd097c88acd7c7af68-0-1794897034712-b489ce9a.png",
+   "share": "https://www.var2.ai/image/cc7ba6f4-d8c3-4a85-a6ce-8d741c4ee8c2",
+   "returned_px": [
+    2528,
+    1696
+   ],
+   "raw_sha256_20": "13d9bcb96411406d7a5d",
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/hd-r2.txt",
+   "verdict": "accepted (hd-lock.json)",
+   "out": {
+    "master": "assets/renders/hall/warm-modern/hall-2026-11-17/hd.png",
+    "master_sha256_20": "5776efa6d41fb9fbe0cb",
+    "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/hd-frame.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/hd-lock.json",
+    "made": "tools/align_affine.py (resample only), tools/compose_hd.py (HDx's projection on a 70 px ramp)"
+   }
+  },
+  {
+   "id": "wm-hall-ht-r1-nano",
+   "run": 3,
+   "still": "HT",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "estimate": 400,
+   "tokens": 400,
+   "input": {
+    "made": "seeds.py ht, then tools/prep_ht.py",
+    "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/c930c46a-a04a-4787-827d-2834a71aad00.png",
+    "sha256_20": "9d1ef2967e11355a4783"
+   },
+   "placeholder_id": "bdc31b48-bc60-4998-be58-46869afe418d",
+   "task_id": "5c59f48f81971cf48849426a1076fcc5",
+   "batch_id": "cc1b26ed-5049-44c9-b612-d083d70df024",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-5c59f48f81971cf48849426a1076fcc5-0-1794897443755-4effff37.jpg",
+   "share": "https://www.var2.ai/image/bdc31b48-bc60-4998-be58-46869afe418d",
+   "returned": "2730 x 1536 JPEG",
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/ht.txt",
+   "verdict": "REJECTED at x1: a double jib door with a head line at v 0.12, and a tone step at v ~0.86 (rejected/ht-r1-check.json); locked and in level otherwise",
+   "out": {
+    "rejected": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/ht-r1.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/ht-r1-check.json"
+   }
   }
  ],
  "not_rendered": {
-  "HD": "r1 rejected; a second HD needs a decision and money (README)",
-  "HT": "built from HD (seeds.py ht, the addendum); not rendered, 0 tokens"
+  "HT": "r1 rejected; a second HT needs a decision and money"
  },
- "tokens_total": 3250,
+ "tokens_total": 4050,
  "run_1": {
   "cap": 2600,
   "spent": 1950,
@@ -193,6 +251,20 @@
  },
  "tokens_by_run": {
   "run_1": 1950,
-  "run_2": 1300
+  "run_2": 1300,
+  "run_3": 800
+ },
+ "run_3": {
+  "brief": "the manager's decision on the second hand-back: HD by a uniform exposure correction of r1 first (0 tokens), else one nano-banana-2 HD; then HT (cap 650); D0o's multiplier once HD and HT are in; cap 1,000",
+  "cap": 1000,
+  "spent": 800,
+  "unspent": 200,
+  "steps": [
+   "HD exposure correction of r1 (0 tokens): failed (b), the seam to HDx (one factor cannot hold 3 % at all heights)",
+   "HD r2, nano-banana-2 (live price 400, not 350): accepted",
+   "HT r1, nano-banana-2 (400; seedream's 650 no longer fitted the cap): rejected at x1; stopped (the manager: no fix inside this run)",
+   "D0o's multiplier not applied: the manager's condition is HD AND HT in"
+  ],
+  "disk": "the disk was full for a while during this run: every PNG and JSON of this folder and the scratch inputs re-read in full afterwards (35 PNGs, all decode; masters byte-identical to their sources)"
  }
 }
