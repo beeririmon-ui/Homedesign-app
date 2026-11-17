@@ -3,7 +3,7 @@
 repair_strip_1a.py: clip 1a (D0o + leaf -> HT, kling-3-omni take 1), the living room seen past the walnut edge, repainted
 from the real stills through their clay depth, and the door's right jamb replaced by one consistent jamb. 0 var2 tokens.
 Briefs: briefs/wm-clip1a-strip-repair-2026-11-17.md (round 1), briefs/wm-clip1a-strip-repair-r2-2026-11-17.md (round 2,
-QA C1A-M1, M2, M3).
+QA C1A-M1, M2, M3), briefs/wm-clip1a-strip-repair-r3-2026-11-17.md (round 3, QA C1A-M4: the bench at the end lock; C1A-L4).
 
 The model drew a plain wall where the living room shows through O-entry-living (right of the walnut lining), its right door
 jamb changes look in every frame from 120 to 125 (and carries a black contour line), and the end lock melted the wall into
@@ -20,8 +20,9 @@ living room past the walnut lining, Y < 6.20) every frame gets:
                mullion, so HT gives the left pane and base.png the right pane, and the seam sits on the mullion, outside
                the glass (round 2, C1A-M3).
   the armchair the clay has no living-room furniture; base.png's room depth has the walnut armchair (CHAIR_BOX): its points are
-               splatted forward (direct hits only, no hole filling) where they lie in front of the clay, and HT and HDx give
-               nothing they see through that box (they would show the armchair as a decal on the floor).
+               splatted forward (direct hits only, no hole filling) where they lie in front of the clay, and HDx gives nothing
+               it sees through that box (it would show the armchair as a decal on the floor). HT is not cut by the box: its
+               16:9 frame has no armchair, and everything frame 143 shows comes from HT (round 3, C1A-M4).
   the plate    what no still sees outside HT's frame (the top right ceiling corner, bits of floor by the armchair) is
                painted ONCE, at bank frame 130: first the same clay plane further along the window wall (+Y: the ceiling,
                the soffit and the boards do not change along it, so the soffit's edge runs on), then an inpaint that stays
@@ -33,7 +34,8 @@ living room past the walnut lining, Y < 6.20) every frame gets:
                122, mapped as the plane of the reveal under the forward walk (a 1-D homography about the focus of
                expansion), its edge moving at a constant acceleration from the clip's own edge and speed at 122 to out of
                the frame at 131 (the clay's jamb is out at ~130), with an edge blur of 0.15 of its speed (round 2,
-               C1A-M1: the clip's black line at 123-124 lies under it, and no frame has the model's changing jamb). What the
+               C1A-M1: the clip's black line at 123-124 lies under it, and no frame has the model's changing jamb); it starts at
+               the tone of the model's jamb in the frame before and reaches its own over five frames (round 3, C1A-L4). What the
                clay's jamb still covers left of the new edge (122-127) is HT splatted forward (it is past the jamb).
   register     the paint moves with the clip's own walnut edge (dark-to-bright step, sub-pixel, per frame, lightly smoothed),
                so the border is the clip's line.
@@ -370,10 +372,13 @@ def seg_inpaint(img: np.ndarray, known: np.ndarray, hole: np.ndarray, lab: np.nd
 class Jamb:
     """The clip's jamb at JAMB_SRC, its face from `e_src` (right of the contour line), placed with its edge at x_j: the
     plane of the reveal seen from a camera walking along its optical axis maps by 1/(x - CX) -> 1/(x - CX) + c (and y about
-    CY by the same local scale). Out of the source frame the face is mirrored (the shaded face is uniform there)."""
+    CY by the same local scale). Past the source frame's right edge the shaded face goes on: its last 80 columns mirrored
+    back and forth (round 3, C1A-L4: a plain mirror at the frame edge brought the lit face back as a bright band at 122)."""
 
-    def __init__(self, img: np.ndarray, e_src: float):
-        self.img = img
+    def __init__(self, img: np.ndarray, e_src: float, tail: int = 80, ext: int = 640):
+        t = img[:, W - tail:W]
+        reps = [t[:, ::-1] if i % 2 == 0 else t for i in range(int(np.ceil(ext / tail)))]
+        self.img = np.ascontiguousarray(np.concatenate([img[:, :W]] + reps, axis=1))
         self.e = float(e_src)
         X, Y = np.meshgrid(np.arange(W, dtype=np.float64), np.arange(H, dtype=np.float64))
         self.X, self.Y = X, Y
@@ -386,6 +391,7 @@ class Jamb:
         lam = (Xs - CX) / (xs - CX)
         ys = CY + (self.Y - CY) / lam
         out = cv2.remap(self.img, xs.astype(np.float32), ys.astype(np.float32), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT_101)
+        assert float(xs.max()) < self.img.shape[1] - 2, "the jamb's face is extended too little"
         a = np.clip((self.X - xj) / max(w, 1.0) + 0.5, 0, 1).astype(np.float32)
         return out, a
 
@@ -400,8 +406,10 @@ def jamb_path(x0: float, v0: float, k0: int, k1: int, x_out: float = W + 40.0) -
 # ----------------------------------------------------------------------------------------------------------------
 def paint_stills(tg: dict, src: list, sel: np.ndarray):
     """The stills looked up backward over `sel`, in order, SEAM px feathers inside the earlier coverage. HDx gives neither
-    the glass nor the ceiling (its ceiling is a darker, textured render of the same plaster: a seam against HT's); HT and HDx
-    give nothing they see through the armchair's box. Returns (image, covered, who 1..n, HT occluded)."""
+    the glass nor the ceiling (its ceiling is a darker, textured render of the same plaster: a seam against HT's), nor anything it
+    sees through the armchair's box. HT is not cut by the box: its 16:9 frame has no armchair (QA HT-M2), and cutting it took
+    the bench and the bottom of the window from base.png until the end lock (round 3, C1A-M4). Returns (image, covered,
+    who 1..n, HT occluded)."""
     out = np.zeros((H, W, 3), np.float32)
     cov = np.zeros((H, W), bool)
     who = np.zeros((H, W), np.uint8)
@@ -410,8 +418,8 @@ def paint_stills(tg: dict, src: list, sel: np.ndarray):
         s = sel
         if st["name"] == "HDx":
             s = s & ~tg["glass"] & (tg["P"][..., 2] < 2.55)
-        if st["name"] in ("HT", "HDx"):
-            s = s & ~ray_crosses_box(st["cam"].loc, tg["P"])
+        if st["name"] == "HDx":
+            s = s & ~ray_crosses_box(st["cam"].loc, tg["P"])       # HDx shows the armchair; HT's 16:9 frame has none (HT-M2)
         im, ok, occ = backward(st, tg["P"], s)
         if st["name"] == "HT":
             occ_ht = occ
@@ -484,8 +492,15 @@ def main(argv=None) -> int:
     wj = {k: max(1.0, 0.15 * vj[k]) for k in xj}
     e_src = line[JAMB_SRC]["x"] + 4.0
     jamb = Jamb(rgb(os.path.join(a.bank, names[JAMB_SRC - 1])), e_src)
+    # the handover from the model's jamb (C1A-L4): the new jamb starts at the tone the model's jamb had in the frame before (its
+    # mean colour over the columns the new jamb takes), and reaches its own tone over five frames, like an eye adapting
+    x_a = int(np.ceil(xj[kj0] + wj[kj0]))
+    prev = rgb(os.path.join(a.bank, names[kj0 - 2]))[:, x_a:W].reshape(-1, 3).mean(0)
+    ours = jamb.render(xj[kj0], wj[kj0])[0][:, x_a:W].reshape(-1, 3).mean(0)
+    ratio = np.clip(prev / np.maximum(ours, 1e-3), 0.6, 1.4)
+    jgain = {k: ratio ** (max(0, kj0 + 5 - k) / 5.0) for k in xj}
 
-    rep = dict(tool="repair_strip_1a.py", round=2, date="2026-11-17", first_frame=k0, y_cut=Y_CUT, glazing_plane_x=XG,
+    rep = dict(tool="repair_strip_1a.py", round=3, date="2026-11-17", first_frame=k0, y_cut=Y_CUT, glazing_plane_x=XG,
                sources_order=[s_["name"] for s_ in src],
                registration=dict(dx_measured={k: round(dx_raw[k], 2) for k in ks}, dx_used={k: round(dx[k], 2) for k in ks},
                                  note="dx: the clip's walnut edge (sub-pixel) minus the clay's (px), smoothed 1-2-1 over the frames (the first "
@@ -493,6 +508,7 @@ def main(argv=None) -> int:
                jamb=dict(source_frame=JAMB_SRC, source_edge_x=e_src, frames=[kj0, kj1], start_x=round(x0, 1), start_speed=round(v0, 1),
                          accel_px_per_frame2=round(acc, 2), edge_x={k: round(v, 1) for k, v in xj.items()},
                          speed_px_per_frame={k: round(v, 1) for k, v in vj.items()}, edge_blur_px={k: round(v, 1) for k, v in wj.items()},
+                         handover_gain_rgb={k: [round(float(g), 3) for g in v] for k, v in jgain.items() if k < kj0 + 5},
                          clip_edge_measured={k: rv[k] for k in sorted(rv)},
                          clip_line_measured={k: line[k] for k in sorted(line) if k <= kj1 + 2},
                          note=f"one jamb from {kj0}: the clip's face at {JAMB_SRC} (right of its contour line), on the plane of the reveal; "
@@ -618,9 +634,12 @@ def main(argv=None) -> int:
         res = img * (1 - alpha[..., None]) + paint * alpha[..., None]
         if kj0 <= k < kj1:
             jim, ja = jamb.render(xj[k], wj[k])
+            jim = np.clip(jim * jgain[k][None, None, :].astype(np.float32), 0, 1)
             res = res * (1 - ja[..., None]) + jim * ja[..., None]
         tot = float((region | hole_keep).sum()) or 1.0
         whoi = cv2.warpAffine(c["who"], np.float32([[1, 0, dx[k]], [0, 1, 0]]), (W, H), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_REPLICATE)
+        if a.debug:
+            cv2.imwrite(os.path.join(a.debug, f"who-k{k}.png"), whoi)
         rep["frames"][k] = dict(region_px=int(region.sum()), holes_kept_clip_frac=round(float(hole_keep.sum()) / tot, 4),
                                 dx=round(dx[k], 2), jamb_edge=round(xj[k], 1) if k in xj and k < kj1 else None,
                                 sources={nm: round(float(((whoi == i + 1) & region).sum()) / tot, 4)
@@ -660,6 +679,7 @@ def check_main(argv=None) -> int:
     ap.add_argument("--repair", required=True)
     ap.add_argument("--clay", required=True)
     ap.add_argument("--out")
+    ap.add_argument("--who", help="the repair's --debug folder (who-k%%d.png: 4 = the armchair), to leave the armchair out of the bench steps")
     a = ap.parse_args(argv)
     rep = json.load(open(a.repair))
     fr = {int(k): v for k, v in rep["frames"].items()}
@@ -720,8 +740,46 @@ def check_main(argv=None) -> int:
         r = cv2.matchTemplate(win, t, cv2.TM_CCOEFF_NORMED)
         return round(float(r.max()), 3)
 
+    # the bench under the window (C1A-M4), step to step after motion alignment through the clay: each pixel of frame k (paint
+    # coordinates: x - dx) is carried to frame k+1 by its clay world point; |dL*| and signed dL*, the armchair and the jamb left out
+    def bench_steps(lo=128, hi=N, box=(620, 820, 1780, 1915), lab="after", L=LA):
+        y0, y1, x0, x1 = box
+        res = {}
+        jx = {int(k): v for k, v in rep["jamb"]["edge_x"].items()}
+        for k in range(lo, hi):
+            tgk = target(a.clay, k)
+            dxk = fr[k]["dx"] if k in fr else 0.0
+            dxn = fr[k + 1]["dx"] if (k + 1) in fr else 0.0
+            ys_, xs_ = np.mgrid[y0:y1, x0:x1]
+            xc = (xs_ - dxk).astype(np.float32)
+            P = np.stack([cv2.remap(tgk["P"][..., i].astype(np.float32), xc, ys_.astype(np.float32), cv2.INTER_LINEAR) for i in range(3)], -1)
+            vv = cv2.remap(tgk["v"].astype(np.uint8), xc, ys_.astype(np.float32), cv2.INTER_NEAREST) > 0
+            u2, v2, d2 = cam_at(k + 1).project(P)
+            mx, my = cg.Canvas.frame(W, H).px(u2, v2)
+            mx = (mx + dxn).astype(np.float32)
+            my = my.astype(np.float32)
+            Ln = cv2.remap(L[k + 1], mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=-1)
+            Lk = L[k][y0:y1, x0:x1]
+            ok = vv & (Ln >= 0) & (mx > 2) & (mx < W - 3)
+            if k in jx and k < 131:
+                ok &= xs_ < jx[k] - 12
+            if (k + 1) in jx and k + 1 < 131:
+                ok &= mx < jx[k + 1] - 12
+            if a.who:
+                for kk, xx, yy in ((k, xs_.astype(np.float32), ys_.astype(np.float32)), (k + 1, mx, my)):
+                    pw = os.path.join(a.who, f"who-k{kk}.png")
+                    if os.path.exists(pw):
+                        wch = cv2.dilate((cv2.imread(pw, 0) == 4).astype(np.uint8), np.ones((13, 13), np.uint8))
+                        ok &= cv2.remap(wch, xx, yy, cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0) == 0
+            d = (Ln - Lk)[ok]
+            res[k] = dict(step=f"{k}->{k + 1}", px=int(ok.sum()), mean_abs=round(float(np.abs(d).mean()), 2) if ok.any() else None,
+                          mean_signed=round(float(d.mean()), 2) if ok.any() else None, px_over_8=int((np.abs(d) > 8).sum()))
+        return res
+
     zones = dict(ceiling=(0, 140, 1786, 1920), floor=(760, 860, 1840, 1900))
     out = dict(frames=[])
+    out["bench_steps_after"] = bench_steps()
+    out["bench_steps_before"] = bench_steps(L=LB)
     la, lb = [], []
     for k in sorted(set(fr) | set(range(118, N))):
         A, B = LA[k], LB[k]
@@ -782,8 +840,12 @@ def check_main(argv=None) -> int:
     F = out["frames"]
     mx = lambda key: max((f[key] for f in F if f.get(key) is not None), default=None, key=abs)
     r130 = [f for f in F if 130 <= f["frame"] <= 141]
+    ba = out["bench_steps_after"]
     out["summary"] = dict(
         frames=[F[0]["frame"], F[-1]["frame"]],
+        bench_steps_after={v["step"]: [v["mean_abs"], v["mean_signed"]] for v in ba.values()},
+        bench_steps_before={v["step"]: [v["mean_abs"], v["mean_signed"]] for v in out["bench_steps_before"].values()},
+        bench_step_max_after=max(v["mean_abs"] for v in ba.values() if v["mean_abs"] is not None),
         lines_after={f["frame"]: f["line_max_after"] for f in F if 118 <= f["frame"] <= 135},
         lines_before={f["frame"]: f["line_max_before"] for f in F if 118 <= f["frame"] <= 135},
         at_clip_line={f["frame"]: f["at_clip_line"] for f in F if "at_clip_line" in f},
