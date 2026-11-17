@@ -1,0 +1,311 @@
+{
+ "still": "HDx candidate (fix 1, seed pasted)",
+ "status": "NOT ACCEPTED: the 11.9.3 level misses by more than 1/3 stop after the one fix; back to master-designer (11.9.3)",
+ "lock_vs_clay": {
+  "architecture_worst_px": 0.33,
+  "joints_n": 15,
+  "joints_worst_px": 1.11,
+  "positions_u": {
+   "inside corner (u 0.259)": {
+    "clay_u": 0.2593,
+    "still_u": 0.2593
+   },
+   "return / walnut lining (u 0.291)": {
+    "clay_u": 0.2916,
+    "still_u": 0.2917
+   },
+   "walnut / living room (u 0.318)": {
+    "clay_u": 0.318,
+    "still_u": 0.3181
+   },
+   "opening, right arris (u 0.651)": {
+    "clay_u": 0.651,
+    "still_u": 0.651
+   }
+  },
+  "tolerance": "11.5.7: corner 0.259 +-0.01, opening 0.291-0.651 +-0.01, joints within 3 px"
+ },
+ "levels_11_9_3": {
+  "reference": "stone panel, left wall",
+  "stops_vs_base": -1.478,
+  "L_star": 58.9,
+  "px": 251878,
+  "target": -1.0,
+  "tol": 0.167,
+  "within": false,
+  "off_by": -0.478,
+  "second": {
+   "surface": "living back wall in the opening",
+   "stops_vs_base": 0.011,
+   "px": 228715,
+   "vs_reference": 1.489,
+   "band": null,
+   "within": true,
+   "target": "0 +-1/12"
+  }
+ },
+ "living_over_hall_plaster_equivalent_stops": 1.069,
+ "living_over_hall_designer": "2/3 +-1/6 (BIB2; 11.9.3: 0.58-0.60 expected)",
+ "stone_by_height_stops": {
+  "z_165_240": -0.41,
+  "z_080_165": -1.48,
+  "z_030_080": -2.04,
+  "note": "the model read 'washed from above, fading downward' as a 1.6-stop falloff; the input had about 0.2"
+ },
+ "seed": {
+  "source": "base.png through M0's depth (seeds.py hdx), kept only on the clay's living-room ids 30-43; 158,210 px the tool put on the hall dropped",
+  "artifacts_replaced_by_model_px": 54165,
+  "seam_tone_pct": {
+   "floor": 7.83,
+   "ceiling": 0.8,
+   "dropped_band": 6.98
+  },
+  "note": "floor 7.8 % is measured on a band that now includes the shaded floor under the furniture taken from the model; along the open floor the seam is 2.6 % (before the artifact swap) and not visible at x1"
+ },
+ "r1_for_the_record": {
+  "levels": {
+   "reference": "stone panel, left wall",
+   "stops_vs_base": -0.402,
+   "L_star": 80.1,
+   "px": 251878,
+   "target": -1.0,
+   "tol": 0.167,
+   "within": false,
+   "off_by": 0.598,
+   "second": {
+    "surface": "living back wall in the opening",
+    "stops_vs_base": -0.033,
+    "px": 228715,
+    "vs_reference": 0.369,
+    "band": null,
+    "within": true,
+    "target": "0 +-1/12"
+   }
+  },
+  "architecture_worst_px": 0.28,
+  "joints_worst_px": 0.98,
+  "rejected_for": [
+   "11.5.7: the light falls as two cones from above, not as one wash along the wall head (x1)",
+   "11.5.7: the stone reads as vein-cut travertine (horizontal veins, open pores) (x1)",
+   "11.9.3: stone -0.40 vs -1.0 +-1/6: 0.43 stop outside the band (> 1/3)"
+  ]
+ },
+ "lines": {
+  "inside corner (u 0.259)": {
+   "kind": "vertical",
+   "clay_px": 681,
+   "median_offset_px": -0.14,
+   "p90_abs_px": 0.47,
+   "n": 29,
+   "mean_corr": 0.96,
+   "tilt_deg_vs_clay": 0.024
+  },
+  "return / walnut lining (u 0.291)": {
+   "kind": "vertical",
+   "clay_px": 757,
+   "median_offset_px": 0.1,
+   "p90_abs_px": 0.24,
+   "n": 29,
+   "mean_corr": 0.972,
+   "tilt_deg_vs_clay": -0.009
+  },
+  "walnut / living room (u 0.318)": {
+   "kind": "vertical",
+   "clay_px": 819,
+   "median_offset_px": 0.33,
+   "p90_abs_px": 1.05,
+   "n": 13,
+   "mean_corr": 0.87,
+   "tilt_deg_vs_clay": 0.156
+  },
+  "opening, right arris (u 0.651)": {
+   "kind": "vertical",
+   "clay_px": 1603,
+   "median_offset_px": 0.01,
+   "p90_abs_px": 0.17,
+   "n": 29,
+   "mean_corr": 0.983,
+   "tilt_deg_vs_clay": -0.004
+  },
+  "stone joint 1 (clay row 45 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 5,
+   "median_offset_px": -0.12,
+   "p90_abs_px": 0.52,
+   "mean_corr": 0.939,
+   "clay_row_mid": 45.0,
+   "cols": [
+    9,
+    218
+   ]
+  },
+  "stone joint 2 (clay row 95 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 9,
+   "median_offset_px": -0.22,
+   "p90_abs_px": 0.46,
+   "mean_corr": 0.824,
+   "clay_row_mid": 95.0,
+   "cols": [
+    309,
+    677
+   ]
+  },
+  "stone joint 3 (clay row 192 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 11,
+   "median_offset_px": 0.21,
+   "p90_abs_px": 0.31,
+   "mean_corr": 0.946,
+   "clay_row_mid": 191.5,
+   "cols": [
+    221,
+    677
+   ]
+  },
+  "stone joint 4 (clay row 438 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 1,
+   "median_offset_px": 0.16,
+   "p90_abs_px": 0.16,
+   "mean_corr": 0.618,
+   "clay_row_mid": 437.5,
+   "cols": [
+    0,
+    218
+   ]
+  },
+  "stone joint 5 (clay row 512 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 11,
+   "median_offset_px": 0.0,
+   "p90_abs_px": 0.27,
+   "mean_corr": 0.784,
+   "clay_row_mid": 512.0,
+   "cols": [
+    221,
+    677
+   ]
+  },
+  "stone joint 6 (clay row 585 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 5,
+   "median_offset_px": -0.22,
+   "p90_abs_px": 0.38,
+   "mean_corr": 0.707,
+   "clay_row_mid": 585.0,
+   "cols": [
+    0,
+    218
+   ]
+  },
+  "stone joint 7 (clay row 632 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 11,
+   "median_offset_px": 0.03,
+   "p90_abs_px": 0.27,
+   "mean_corr": 0.805,
+   "clay_row_mid": 631.5,
+   "cols": [
+    221,
+    677
+   ]
+  },
+  "stone joint 8 (clay row 782 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 5,
+   "median_offset_px": -0.11,
+   "p90_abs_px": 0.27,
+   "mean_corr": 0.757,
+   "clay_row_mid": 782.0,
+   "cols": [
+    0,
+    218
+   ]
+  },
+  "stone joint 9 (clay row 792 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 11,
+   "median_offset_px": 0.2,
+   "p90_abs_px": 0.41,
+   "mean_corr": 0.768,
+   "clay_row_mid": 791.5,
+   "cols": [
+    221,
+    677
+   ]
+  },
+  "stone joint 10 (clay row 1111 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 11,
+   "median_offset_px": -0.27,
+   "p90_abs_px": 0.47,
+   "mean_corr": 0.757,
+   "clay_row_mid": 1111.0,
+   "cols": [
+    221,
+    677
+   ]
+  },
+  "stone joint 11 (clay row 1176 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 5,
+   "median_offset_px": -1.11,
+   "p90_abs_px": 1.23,
+   "mean_corr": 0.864,
+   "clay_row_mid": 1176.5,
+   "cols": [
+    0,
+    218
+   ]
+  },
+  "stone joint 12 (clay row 1231 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 11,
+   "median_offset_px": -0.13,
+   "p90_abs_px": 2.89,
+   "mean_corr": 0.715,
+   "clay_row_mid": 1231.0,
+   "cols": [
+    221,
+    677
+   ]
+  },
+  "stone joint 13 (clay row 1324 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 5,
+   "median_offset_px": -0.41,
+   "p90_abs_px": 0.47,
+   "mean_corr": 0.669,
+   "clay_row_mid": 1324.5,
+   "cols": [
+    0,
+    218
+   ]
+  },
+  "stone joint 14 (clay row 1472 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 11,
+   "median_offset_px": -0.18,
+   "p90_abs_px": 0.25,
+   "mean_corr": 0.923,
+   "clay_row_mid": 1471.5,
+   "cols": [
+    221,
+    677
+   ]
+  },
+  "stone joint 15 (clay row 1618 mid)": {
+   "kind": "joint (followed per column)",
+   "n": 5,
+   "median_offset_px": -0.26,
+   "p90_abs_px": 0.44,
+   "mean_corr": 0.875,
+   "clay_row_mid": 1618.0,
+   "cols": [
+    9,
+    218
+   ]
+  }
+ }
+}

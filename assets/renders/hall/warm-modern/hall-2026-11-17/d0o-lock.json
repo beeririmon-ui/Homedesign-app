@@ -1,0 +1,237 @@
+{
+ "still": "D0o (the door open, no leaf; D0's canvas 2720 x 1530)",
+ "status": "rendered, locked; for qa-agent and master-designer; not for the site before QA",
+ "mask": {
+  "file": "d0o-mask.png",
+  "rect_motion_agent": "u 0.2441-0.4224, v 0.0997-0.8603 (pixel centres: x 704-1160, y 187-1284)",
+  "plus": "column x 1161: D0's leaf runs 1.17 px past the rectangle (door-2026-11-16/d0-lock.json); without it a 1 px walnut line (L* ~23) stays on the right jamb. Mask = 1,098 x 458 = 502,884 px",
+  "outside_the_mask_vs_d0_max_diff_levels": 0
+ },
+ "level_multiplier": {
+  "applied": false,
+  "gain": 1.0,
+  "note": "11.9.3 allows one linear multiplier inside the mask, up to +-1/4 stop; not needed (inside the band). It can centre the jib band once HT and HD exist (0 tokens), e.g. x1.087 (+0.12) to land on -0.60"
+ },
+ "levels_11_9_3": {
+  "reference": "jib door",
+  "stops_vs_base": -0.721,
+  "L_star": 73.3,
+  "px": 44280,
+  "target": -0.6,
+  "tol": 0.167,
+  "within": true,
+  "off_by": -0.121
+ },
+ "d0_stone_beside_the_door_stops": -0.181,
+ "d0_stone_note": "measured in 11.9.2's region (id 84, u 0.45-0.56, v 0.52-0.75) on the approved d0.png: -0.18 (L* 85), not the -0.41 quoted in 11.9.2; the stone left of the door reads -0.45. Inside the -0.42 +-1/4 band, at its bright edge (for qa-agent, who measures D0)",
+ "hall_not_brighter_than_the_porch": true,
+ "lock_vs_clay": {
+  "lines_worst_px": 3.39,
+  "joints_worst_px": 0.58,
+  "positions_u": {
+   "jib door seam left": {
+    "clay_u": 0.2741,
+    "still_u": 0.2741
+   },
+   "jib door seam right": {
+    "clay_u": 0.3649,
+    "still_u": 0.3649
+   },
+   "stone panel edge": {
+    "clay_u": 0.4008,
+    "still_u": 0.4021
+   }
+  },
+  "rejection_11_5_7": {
+   "stone_edge_u_0400_0422": {
+    "clay_u": 0.4008,
+    "still_u": 0.4021
+   },
+   "jib_seams_0274_0365": [
+    {
+     "clay_u": 0.2741,
+     "still_u": 0.2741
+    },
+    {
+     "clay_u": 0.3649,
+     "still_u": 0.3649
+    }
+   ],
+   "joints_within_3px": true
+  },
+  "note": "the stone edge sits 3.4 px right of the clay's (u 0.4021 vs 0.4008): its lit arris; spec u 0.400-0.422 +-0.01"
+ },
+ "lines": {
+  "jib door seam left": {
+   "kind": "vertical",
+   "clay_px": 780,
+   "median_offset_px": 0.09,
+   "p90_abs_px": 0.28,
+   "n": 21,
+   "mean_corr": 0.885,
+   "tilt_deg_vs_clay": 0.036
+  },
+  "jib door seam right": {
+   "kind": "vertical",
+   "clay_px": 1013,
+   "median_offset_px": 0.06,
+   "p90_abs_px": 0.35,
+   "n": 21,
+   "mean_corr": 0.885,
+   "tilt_deg_vs_clay": -0.092
+  },
+  "stone panel edge": {
+   "kind": "vertical",
+   "clay_px": 1105,
+   "median_offset_px": 3.39,
+   "p90_abs_px": 4.15,
+   "n": 27,
+   "mean_corr": 0.916,
+   "tilt_deg_vs_clay": -0.124
+  },
+  "jib door head": {
+   "kind": "horizontal",
+   "clay_px": 425,
+   "median_offset_px": 0.0,
+   "p90_abs_px": 0.08,
+   "n": 7,
+   "mean_corr": 0.948
+  },
+  "ceiling to the line of light": {
+   "kind": "horizontal",
+   "clay_px": 247,
+   "median_offset_px": 0.71,
+   "p90_abs_px": 4.0,
+   "n": 15,
+   "mean_corr": 0.883
+  },
+  "line of light to the wall": {
+   "kind": "horizontal",
+   "clay_px": 270,
+   "median_offset_px": -0.79,
+   "p90_abs_px": 4.0,
+   "n": 15,
+   "mean_corr": 0.94
+  },
+  "skirting top, left of the jib door": {
+   "kind": "horizontal",
+   "clay_px": 1008,
+   "median_offset_px": 0.12,
+   "p90_abs_px": 0.25,
+   "n": 2,
+   "mean_corr": 0.757
+  },
+  "floor line, left of the jib door": {
+   "kind": "horizontal",
+   "clay_px": 1048,
+   "median_offset_px": -0.42,
+   "p90_abs_px": 0.48,
+   "n": 2,
+   "mean_corr": 0.901
+  },
+  "skirting top, right of the jib door": {
+   "kind": "horizontal",
+   "clay_px": 1008,
+   "median_offset_px": -0.09,
+   "p90_abs_px": 0.09,
+   "n": 2,
+   "mean_corr": 0.964
+  },
+  "floor line, right of the jib door": {
+   "kind": "horizontal",
+   "clay_px": 1048,
+   "median_offset_px": -0.56,
+   "p90_abs_px": 0.62,
+   "n": 2,
+   "mean_corr": 0.884
+  },
+  "panel joint v 0.193": {
+   "kind": "horizontal",
+   "clay_px": 321,
+   "median_offset_px": 0.14,
+   "p90_abs_px": 0.14,
+   "n": 2,
+   "mean_corr": 0.933
+  },
+  "panel joint v 0.264": {
+   "kind": "horizontal",
+   "clay_px": 424,
+   "median_offset_px": 0.04,
+   "p90_abs_px": 0.05,
+   "n": 2,
+   "mean_corr": 0.984
+  },
+  "panel joint v 0.309": {
+   "kind": "horizontal",
+   "clay_px": 489,
+   "median_offset_px": -0.11,
+   "p90_abs_px": 0.11,
+   "n": 2,
+   "mean_corr": 0.973
+  },
+  "panel joint v 0.336": {
+   "kind": "horizontal",
+   "clay_px": 528,
+   "median_offset_px": -0.58,
+   "p90_abs_px": 0.6,
+   "n": 2,
+   "mean_corr": 0.715
+  },
+  "panel joint v 0.408": {
+   "kind": "horizontal",
+   "clay_px": 632,
+   "median_offset_px": 0.03,
+   "p90_abs_px": 0.07,
+   "n": 2,
+   "mean_corr": 0.981
+  },
+  "panel joint v 0.435": {
+   "kind": "horizontal",
+   "clay_px": 671,
+   "median_offset_px": -0.21,
+   "p90_abs_px": 0.23,
+   "n": 2,
+   "mean_corr": 0.839
+  },
+  "panel joint v 0.471": {
+   "kind": "horizontal",
+   "clay_px": 723,
+   "median_offset_px": -0.06,
+   "p90_abs_px": 0.06,
+   "n": 2,
+   "mean_corr": 0.968
+  },
+  "panel joint v 0.543": {
+   "kind": "horizontal",
+   "clay_px": 826,
+   "median_offset_px": 0.07,
+   "p90_abs_px": 0.08,
+   "n": 2,
+   "mean_corr": 0.963
+  },
+  "panel joint v 0.570": {
+   "kind": "horizontal",
+   "clay_px": 865,
+   "median_offset_px": 0.0,
+   "p90_abs_px": 0.01,
+   "n": 2,
+   "mean_corr": 0.982
+  },
+  "panel joint v 0.624": {
+   "kind": "horizontal",
+   "clay_px": 943,
+   "median_offset_px": -0.19,
+   "p90_abs_px": 0.2,
+   "n": 2,
+   "mean_corr": 0.925
+  },
+  "panel joint v 0.695": {
+   "kind": "horizontal",
+   "clay_px": 1046,
+   "median_offset_px": -0.25,
+   "p90_abs_px": 0.27,
+   "n": 2,
+   "mean_corr": 0.873
+  }
+ }
+}
