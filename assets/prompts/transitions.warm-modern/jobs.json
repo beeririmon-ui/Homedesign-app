@@ -2,7 +2,7 @@
  "version": "2026-11-17",
  "previous_version": "2026-11-14 (in git; what changed is under changes_2026-11-17)",
  "author": "motion-agent",
- "status": "Phase A done (prompts and jobs brought to the final entrance), nothing sent, 0 tokens spent. Phase B starts only on the manager's go, after the four stills are back and checked.",
+ "status": "2026-11-17 Phase B: clip2 sent (take 1, 1,296) and repaired in code (r2, passed QA); door, turn and clip 1b done in code (0 tokens); a partial arrival preview with a labelled 1a placeholder; clip1a sent (take 1, 1,296), then STOP (FB7): no tokens on clips until the owner approves an updated route. Phase B tokens spent: 2,592. Was: Phase A done (prompts and jobs brought to the final entrance), nothing sent, 0 tokens spent. Phase B starts only on the manager's go, after the four stills are back and checked.",
  "decision": "FB4 (owner, 2026-11-14): TR-P1 = (b), cap 9,900 for the two transitions; DOOR1 = yes, cap 4,000 more for the door; pilot cap 13,900. HT adopted, clip 1 split into 1a + 1b (2026-11-15). ENT2 (2026-11-16) and DOOR2 (2026-11-17, 'מאושרת'): the final entrance, docs/proposals/wm-entrance-magazine-2026-11-15.md ch. 11.",
  "brief": "briefs/wm-arrival-clips-2026-11-17.md (Phase A now, Phase B on the manager's go)",
  "plan": "docs/proposals/wm-arrival-from-door-2026-11-14.md (sections 3-4, and section 10 for 2026-11-17)",
@@ -309,7 +309,7 @@
     "a dissolve or a zoom": "minimax-h3 2K 4 s: 1,120 (another family)",
     "the herbs out of their window, or the court objects change shape": "a retry only if it shows at x1-x2 (EFF1.3)"
    },
-   "status": "sent 2026-11-17, take 1 (1,296 tokens, one take, no retake per the Phase B brief)",
+   "status": "sent 2026-11-17, take 1 (1,296 tokens). STOPPED after it: FB7 (owner, 2026-11-17) pushed back on the route; the STOP reached motion-agent after the take had rendered. No bank in the assets, no full arrival, no retake",
    "prompt_reread_2026-11-17": {
     "why": "Phase B brief step 6: the lesson of clip 2 (its [DINING] paragraph made the model build a column and a glass wall that neither end frame shows)",
     "removed": [
@@ -326,7 +326,11 @@
     "quote": 1296,
     "quote_live": "2026-11-17 (324 a second, fromLiveLookup)",
     "seeds": "first: seeds.py clip1-first (d0.png + d0o.png of hall-2026-11-17), sha256 bcfc373b..., 0 levels from D0o outside the leaf rectangle x 472-548, y 114-923; last: seeds.py frame --still ht.png --canvas base, sha256 e38780ac...",
-    "out": "assets/video/transitions/warm-modern/clip1a-d0o--ht/ (README.md)"
+    "out": "assets/video/transitions/warm-modern/clip1a-d0o--ht/clip1a.kling-3-omni.mp4 (README.md, walk.json)",
+    "walk": "WALK, no fails, no local fails, no defects: parallax p90 3.3 % (limit 5), dissolve R2 0.001, flat zoom R2 0.11, verticals median 0.057 deg, structure p90 0.30 %, check 6 pass; check 5 (id 50) n/a, id 50 is not in the c1 clay",
+    "herbs": "last herb at frame 60 (2.24 m), gone at 61 (2.29 m): inside 2.15-2.40, acceptance passes",
+    "exposure": "frame mean dips to -0.48 stop at frame 81 (the reveals) and ends at -0.14, the same as the two seeds (-0.14); the 0.6 drop of the clay walk is not in the stills",
+    "bank_scratch": "assemble.py bank --n 143: grade drift max 0.006 stop; end lock first: shift median 0.2 px; LAST: shift median 6.6 px, p95 12.6 px (the model's last frame is 22.7 dB from HT): QA must look at the end-lock ramp before any use. The bank was deleted (rebuild: 0 tokens)"
    }
   },
   {
@@ -427,7 +431,13 @@
    "id": "door",
    "what": "the leaf opening over D0o",
    "command": "python3 site/tools/transitions/turn_door.py door --d0 <D0> --d0o <D0o> --canvas base --out <dir>",
-   "tokens": 0
+   "tokens": 0,
+   "done_2026-11-17": {
+    "out": "assets/video/transitions/warm-modern/door-d0--d0o/ (README.md)",
+    "frames": 55,
+    "checks": "frame 1 = D0 (0 levels); outside the opening 0 levels in all 55 frames; frame 55 = D0o except the leaf rectangle x 472-548, y 114-923; max 3.12 deg a frame",
+    "found_in_export": "a double pull in frames 44-54 (bank 1 starts from clip1a-first, whose leaf is already at 90 deg): fixed in export_arrival.py (--d0o, --d0o-depth paint the resting leaf out); after: <= 3 px over 60 levels inside the opening vs the ideal (was 1,350)"
+   }
   },
   {
    "id": "turn",
@@ -435,19 +445,42 @@
    "command": "python3 site/tools/transitions/turn_door.py turn --hd <HD> --hdx <HDx> --canvas tall --match --blur --out <dir>",
    "gate": "seam_joints.pass: the stills' JOINT LINES only (their own edges inside a +-6 px corridor around the clay's -edges lines, the gradient across the line, one Canny threshold for both stills), carried by the exact rotation, p90 <= 2 px both ways (exit 3 otherwise, HD back to render-agent: 11.5.7); seam_match gain within 3 %; worst_hole_frac 0",
    "check_alone": "python3 site/tools/transitions/turn_door.py joints --hd <HD> --hdx <HDx> [--clay assets/blockout/house/framing/wm-door-2026-11-16]. r2 (2026-11-17): clay p90 1.0 / 1.0 px, pass; HD shifted 4 px or its strip 3 px: fail; real hd-r1 vs hdx.png: p90 1.0 / 1.0 px, pass (r1 of the tool gave 1.0 / 15.8: it counted HD's stone and plaster texture as joints)",
-   "tokens": 0
+   "tokens": 0,
+   "done_2026-11-17": {
+    "out": "assets/video/transitions/warm-modern/turn-hd--hdx/ (README.md, turn.json)",
+    "frames": 61,
+    "joints": "pass: p90 1.0 / 1.0 px both ways (shared strip and seam band), medians 0; HD lines vs clay p90 2.0, HDx 1.0",
+    "seam_gain": [
+     0.9999,
+     1.0013,
+     0.9993
+    ],
+    "worst_hole_frac": 0.0
+   }
   },
   {
    "id": "clip1b-code",
    "what": "clip 1b in code from HT (+ clay depth) and HD (see jobs clip1b.recommended_first)",
-   "command": "to build in Phase B (a dibr walk like assemble.py clay-bank, on the stills)",
-   "tokens": 0
+   "command": "python3 site/tools/transitions/assemble.py still-bank --first <HT> --first-depth <clay>/HT-depth.png --cam-first HT --canvas-first base --last <HD> --last-depth <clay>/HD-depth.png --cam-last HD --canvas-last tall --n 43 --glass-plane --out <scratch>/bank1b",
+   "tokens": 0,
+   "done_2026-11-17": {
+    "out": "assets/video/transitions/warm-modern/clip1b-ht--hd/ (README.md, walk.json, bank.json, bank-preview.1920.60fps.mp4)",
+    "ends": "frame 1 = HT frame, frame 43 = HD frame (<= 1 level, rounding)",
+    "glass_plane": "the living-room window (no clay behind the glass, a 1.3 % hole filled by a smear in frames 2-11) carried on the plane of its rim; holes now one 1 px column along the walnut edge (0.05 %), profile like the source edge",
+    "ht_l2": "1b reads HT up to x 2634.2 (frame 2); the margin (x >= 2643) is never read",
+    "walk": "NOT A WALK on the flat-zoom check only (R2 0.75): HD faces a flat wall (depth 1.65-1.68 m), so a forward move IS a zoom there; an exact proxy walk on the same route fails it too (R2 0.60). Progress, structure (p90 0.23 %), verticals, dissolve (R2 0.003) and check 6 pass. A fake zoom fails on progress (stall 14 %). For QA to judge by eye; the 972 model job would not change this"
+   }
   },
   {
    "id": "arrival",
    "what": "door + bank 1 + turn + bank 2 -> sequences, manifest, master",
    "command": "python3 site/tools/transitions/export_arrival.py ... (see its docstring)",
-   "tokens": 0
+   "tokens": 0,
+   "partial_2026-11-17": {
+    "out": "assets/video/transitions/warm-modern/arrival-s1/ (*.PLACEHOLDER-no-1a.*, README.md)",
+    "what": "door + a labelled still placeholder for 1a + 1b + turn + clip 2 r2; export_arrival.py --bank1 DIR:3.80,DIR:1.138 --placeholder-1a --d0o --d0o-depth",
+    "status": "preview only, temporary; sequences deleted from scratch"
+   }
   }
  ],
  "phase_b_tokens": {
@@ -499,5 +532,6 @@
    "assets/prompts/transitions.warm-modern/clip2-hdx--m0.txt (revised)"
   ],
   "tests": "plan section 10: the walk test on the new clay (c1 stations as frames: 1a within 1 cm), id 50 exclusion, the joints check (clay passes, shifted HD fails), the exposure tracking on clay walks (1a keeps -0.64, clip 2 keeps +0.19 under a 50 % auto-exposure model), the code 1b, the HT seed"
- }
+ },
+ "stop_2026-11-17": "FB7 (owner): no tokens on clips until the owner approves an updated route. clip1a take 1 had already been sent and rendered (1,296). Nothing else was sent."
 }
