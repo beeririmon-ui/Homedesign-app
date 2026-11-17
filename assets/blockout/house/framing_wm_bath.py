@@ -112,6 +112,7 @@ FRAMES = {"B2": dict(placeholders=PRODUCTS_B2, lamps=["bath/vanity-sconces", "ba
           "B2-plate": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=True),
           "B2-shell": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=False)}
 CAPTURE = {}
+LIGHT = dict(window=18.0, downlight_x=2.0, downlight_size=0.25, b1_lamp_x=0.4, sconce_w=5.0, niche_led_w=2.4, plate_target_L=84.0)
 
 
 def mat(name, key, rough=0.9):
@@ -303,14 +304,22 @@ def wm_bath(R):
                                       bx("ni_r", cxs, NICHE["back"], ny1 - 0.002, ny1, nz0, nz1, st),
                                       bx("ni_b", cxs, NICHE["back"], ny0, ny1, nz0, nz0 + 0.002, st),
                                       bx("ni_t", cxs, NICHE["back"], ny0, ny1, nz1 - 0.002, nz1, st)], 14)
-    led = r2.mk_light("bath_wm_niche_led_L", "AREA", (6.262, (ny0 + ny1) / 2, nz1 - 0.006), 0.6, size=0.56, size_y=0.012,
+    led = r2.mk_light("bath_wm_niche_led_L", "AREA", (6.262, (ny0 + ny1) / 2, nz1 - 0.006), LIGHT["niche_led_w"], size=0.56, size_y=0.012,
                       aim=(0.45, 0, -1), long_axis=(0, 1, 0), shape="RECTANGLE")
     led.data.color = r2.WARM
     r2.lamp("bath/niche-led", "bath", "cabinet", [], [led], "hidden LED at the niche head, 2700 K (proposal, change 11)", shell=True)
     dlk = r2.LAMPS.get("bath/shower-downlight")
     for li in (dlk or {}).get("lights", []):
-        li.data.energy *= 0.5
-    notes.append("shower downlight: light x0.5 (7.8: 'lit low, a soft gradient down the stone, no warm spot on the floor')")
+        li.data.energy *= LIGHT["downlight_x"]
+        if li.data.type == "AREA":
+            li.data.size = LIGHT["downlight_size"]
+        else:
+            li.data.shadow_soft_size = LIGHT["downlight_size"] / 2
+    b1 = r2.LAMPS.get("bath/wall-sconce")
+    for li in (b1 or {}).get("lights", []):
+        li.data.energy *= LIGHT["b1_lamp_x"]
+    notes.append(f"light balance (daylight the key, 7.8): bath window x{LIGHT['window']} (the round-4 clay: x4.5); downlight x{LIGHT['downlight_x']}, "
+                 f"area {LIGHT['downlight_size']} m (soft); B1 lamp x{LIGHT['b1_lamp_x']}; sconces {LIGHT['sconce_w']} W each; niche LED {LIGHT['niche_led_w']} W")
     notes.append("shower: limestone 12 mm floor to ceiling on both walls, joints Y 10.30 / 10.90 full height and Z 1.40; niche lined; "
                  "LED as an area light at the niche head (no visible strip)")
     # ---- shower fittings, bronze ----
@@ -400,7 +409,7 @@ def wm_products(R):
         b = bx(f"sconce_{i}", px - SCONCE["proj"], px, py - SCONCE["w"] / 2, py + SCONCE["w"] / 2, pz - SCONCE["h"] / 2, pz + SCONCE["h"] / 2,
                C["trav"], 0.006)
         (sw if i == 0 else se).append(b)
-        li = r2.mk_light(f"bath_wm_sconce_L{i}", "POINT", (px - 0.06, py, pz - SCONCE["h"] / 2 - 0.02), 12.0, size=0.04)
+        li = r2.mk_light(f"bath_wm_sconce_L{i}", "POINT", (px - 0.06, py, pz - SCONCE["h"] / 2 - 0.02), LIGHT["sconce_w"], size=0.04)
         li.data.color = r2.WARM
         lights.append(li)
     r3.reg(R, "bath/vanity-sconces", sw + se, "bath", src="7.7 + sconce gate open: blocks 12 x 22 x 10 on the plates, provisional")
@@ -732,17 +741,17 @@ def tone_frames(frames, cam, ref_frame, out_dir):
     m = patch.mean(0)
     tgt = srgb_to_lin([0xEC, 0xE5, 0xDA])
     gains = (tgt / tgt[1]) / (m / m[1])
-    lo, hi = 0.2, 3.5
+    lo, hi = -3.0, 6.0
     for _ in range(22):
         e = (lo + hi) / 2
         t = toner.tone(img, lin, e, gains)
         L = np.mean([T.L_hsl(T.patch(t, uu, vv, 0.010)) for uu, vv in zip(u, v)])
-        if L < 86.0:
+        if L < LIGHT["plate_target_L"]:
             lo = e
         else:
             hi = e
     bpy.data.images.remove(img)
-    post = dict(exposure=round(e, 4), wb_gains=[round(float(g), 4) for g in gains], reference=dict(xyz=ref_pts, frame=ref_frame, target_L_hsl=86.0),
+    post = dict(exposure=round(e, 4), wb_gains=[round(float(g), 4) for g in gains], reference=dict(xyz=ref_pts, frame=ref_frame, target_L_hsl=LIGHT["plate_target_L"]),
                 note="gains make the plaster patch read #ECE5DA's chroma; one exposure and one balance for every frame (one camera point)")
     for fid in frames:
         img, lin = toner.load(os.path.join(r4.EXR_DIR, f"{fid}.exr"))
@@ -790,7 +799,7 @@ def main(argv):
     ap.add_argument("--exposure", type=float, default=1.0)
     ap.add_argument("--living-boost", type=float, default=1.0)
     ap.add_argument("--hall-roof", type=float, default=1.6)
-    ap.add_argument("--bath-window", type=float, default=4.5)
+    ap.add_argument("--bath-window", type=float, default=LIGHT["window"])
     ap.add_argument("--out", default=OUT)
     a, _ = ap.parse_known_args(argv)
     out = a.out
