@@ -1,0 +1,46 @@
+{
+ "asset_id": "wm-hall-hdx-2026-11-17",
+ "status": "not accepted: back to master-designer (11.9.3 level after the one fix)",
+ "model": "seedream-5-pro",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "auto",
+ "seed": null,
+ "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4e37cd4f-d576-483e-80fd-fcf9a4c4f2e4.png",
+ "input_made_by": "tools/prep_hdx.py from seeds.py hdx (base.png + assets/renders/living-room/warm-modern/depth.png)",
+ "input_sha256_20": "6837220bebddcc227b78",
+ "image_refs": [],
+ "jobs": [
+  {
+   "id": "r1",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-17/hdx.txt",
+   "prompt": "Photorealistic photograph made from this render. Keep the camera, perspective and every edge of the input exactly: the inside corner, every stone joint, the plaster return and its skirting, the opening and its walnut lining, the floor joints, and everything seen through the opening stay exactly where they are and the same size. The living room seen through the opening is already the finished reference photograph: keep it as it is and only complete what it does not show. Add real materials and light to the hall.\n\nEmpty entrance hall of a warm-minimal family house, same materials, light and grading as the reference hall plate. Camera at eye height 1.20 m, 24 mm, level, everything sharp, standing in the middle of the hall about 2 m from a 1.20 x 2.40 m opening into a brighter living room, and looking straight through it. The picture is a tall 3:2 canvas: the usual 16:9 view with a band of extra wall above and below it. The opening is near the centre of the view and its head is above the view; only along the very top edge of the canvas does the walnut head of the opening appear, as a thin wedge over the left part of the opening that tapers to nothing toward the right. The left reveal is lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap, and shows as a warm vertical band. The right side ends in a clean plaster arris. No architrave, casing, door leaf or threshold strip; the smoked oak floor (#8B6F55, 22 cm planks) runs straight on into the living room. Left of the opening: a 14 cm return of bare plaster with its 15 cm skirting in the wall colour, a sharp inside corner, then the hall's left wall, clad in the same honed pale limestone as the porch outside (#D8C8AE), in long horizontal courses of different heights with fine recessed joints that converge toward the corner, running straight down to the floor with no skirting, washed softly from above by daylight from a roof-light slot out of view so that the joints show as fine lines; near the left edge, a vertical joint in every other course; in the bottom band of the canvas, near the corner, a sliver of floor. Right of the opening: the bare plaster front wall, from the opening to the right edge and from the top to the bottom of the canvas. Through the opening, exactly as in the reference living-room plate: the bone plaster back wall, the bronze steel glazing over an empty limestone bench, part of the greige bouclé sofa, the walnut armchair, the walnut coffee table, smoked oak floor. The living room is two-thirds of a stop brighter than the hall. Winter afternoon, no sun inside the house, 4600 K, lamps off and absent. No furniture in the hall, no objects, no switches, no people, no text.",
+   "prompt_chars": 2734,
+   "prompt_vs_designer": "11.5.6 verbatim plus a lock preamble; nothing shortened",
+   "idempotency_key": "wm-hall-hdx-r1-2026-11-17",
+   "placeholder_id": "836ba16b-9c68-4be2-93b1-325a71208f21",
+   "task_id": "23cbd8c1186dfca2e5d3394e165d9790",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-23cbd8c1186dfca2e5d3394e165d9790-0-1794895031471-06c4a3bf.png",
+   "estimate": 650,
+   "tokens": 650,
+   "verdict": "rejected: light cones and vein-cut travertine (11.5.7, x1); stone -0.40 vs -1.0 +-1/6"
+  },
+  {
+   "id": "fix1",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-17/hdx-fix1.txt",
+   "prompt": "Photorealistic photograph made from this render. Keep the camera, perspective and every edge of the input exactly: the inside corner, every stone joint, the plaster return and its skirting, the opening and its walnut lining, the floor joints, and everything seen through the opening stay exactly where they are and the same size. The living room seen through the opening is already the finished reference photograph: keep it as it is and only complete what it does not show. Add real materials and light to the hall.\n\nEmpty entrance hall of a warm-minimal family house, same materials, light and grading as the reference hall plate. Camera at eye height 1.20 m, 24 mm, level, everything sharp, standing in the middle of the hall about 2 m from a 1.20 x 2.40 m opening into a brighter living room, and looking straight through it. The picture is a tall 3:2 canvas: the usual 16:9 view with a band of extra wall above and below it. The opening is near the centre of the view and its head is above the view; only along the very top edge of the canvas does the walnut head of the opening appear, as a thin wedge over the left part of the opening that tapers to nothing toward the right. The left reveal is lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap, and shows as a warm vertical band. The right side ends in a clean plaster arris. No architrave, casing, door leaf or threshold strip; the smoked oak floor (#8B6F55, 22 cm planks) runs straight on into the living room. Left of the opening: a 14 cm return of bare plaster with its 15 cm skirting in the wall colour, a sharp inside corner, then the hall's left wall, clad in the same honed pale limestone as the porch outside (#D8C8AE), smooth and dense with a fine even grain: no veins, streaks or bands, no open pores or travertine holes, not travertine, not polished, not tiles; in long horizontal courses of different heights with fine recessed joints that converge toward the corner, running straight down to the floor with no skirting, washed softly from above by daylight from a roof-light slot out of view: one even, diffuse wash along the whole length of the wall, brightest only along its very top edge and fading smoothly downward, with no beams, cones, spots or pools of light; the joints show as fine lines; near the left edge, a vertical joint in every other course; in the bottom band of the canvas, near the corner, a sliver of floor. Right of the opening: the bare plaster front wall, from the opening to the right edge and from the top to the bottom of the canvas. Through the opening, exactly as in the reference living-room plate: the bone plaster back wall, the bronze steel glazing over an empty limestone bench, part of the greige bouclé sofa, the walnut armchair, the walnut coffee table, smoked oak floor. The living room is two-thirds of a stop brighter than the hall. The hall is in soft shade: the stone wall reads as a quiet, warm mid-tone, about one stop darker than the living room's back wall and a little darker than the plaster return beside it, never bright. Winter afternoon, no sun inside the house, no sun patches on any wall or floor, 4600 K, lamps off and absent. No furniture in the hall, no objects, no switches, no people, no text.",
+   "prompt_chars": 3283,
+   "prompt_vs_designer": "r1's text with four edits for the rejection items and the level in words (11.9.3), each logged designer -> sent in hdx-fix1-edits.json",
+   "idempotency_key": "wm-hall-hdx-fix1-2026-11-17",
+   "placeholder_id": "b51d74e5-4fd6-41cb-8cc7-8a15112d64d7",
+   "task_id": "945a49894ef568a43a2b2da572657c2e",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-945a49894ef568a43a2b2da572657c2e-0-1794895286456-6f9fefd5.png",
+   "estimate": 650,
+   "tokens": 650,
+   "verdict": "rejection items cleared; stone -1.48 vs -1.0 +-1/6 (0.48 from the target): not accepted, back to master-designer"
+  }
+ ],
+ "tokens": 1300,
+ "date": "2026-11-17",
+ "jobs_file": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json"
+}
