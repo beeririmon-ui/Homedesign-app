@@ -15718,6 +15718,60 @@
    "status": "clay: the gate passed (the 2026-11-14 lines within 1 px, untouched depth identical); the designer's projections hold (README); two light ratios collide in display terms - back to master-designer (README); a working input, not for the site",
    "sha256_D0_closed": "f6d44ca63a878aca23a1a3f03812883756270c58466a6118279e1200ef029c2f",
    "bytes_D0_closed": 3283049
+  },
+  {
+   "id": "wm-hall-d0o-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/d0o.png",
+   "kind": "arrival still D0o: the front door open with no leaf (the code draws the leaf), the hall seen through it; D0's canvas 2720 x 1530; the first frame of clip 1a",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "seedream-5-pro i2i 2K, one render, no fix (650 tokens)",
+   "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/d0o.json, d0o.txt (designer's 11.5.3 text with 11.9.3's sentence: d0o-designer-11.9.txt; verbatim: d0o-designer-verbatim.txt)",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_d0o.py, tools/lock_d0o.py; mask assets/renders/hall/warm-modern/hall-2026-11-17/d0o-mask.png (the leaf rectangle plus column x 1161)",
+   "status": "rendered by render-agent; outside the mask identical to the approved D0 (0 levels); locked on the clay D0-none (joints <= 0.58 px, jib seams 0.274 / 0.365, stone edge u 0.402); jib door -0.72 vs -0.60 +-1/6 (in band, no multiplier); rejection list 11.5.7 passed at x1 (README); for qa-agent and master-designer; not for the site before QA",
+   "sha256": "90a289bcb00b4bdc1829bdef27ae73ec3b3ba51317c1e302ad5a012ad14de562",
+   "bytes": 6364106
+  },
+  {
+   "id": "wm-hall-d0o-frame-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/d0o-frame.png",
+   "kind": "the 16:9 frame of D0o at 1920 x 1080 for the video model (seeds.py frame --canvas base)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "code",
+   "recipe": "site/tools/transitions/seeds.py frame",
+   "status": "cut from d0o.png; same status as the master",
+   "sha256": "927fb7c9ad430cc721bde879e46e8ab8f835fbae9fc997d28aef1f2553c5063f",
+   "bytes": 3278576
+  },
+  {
+   "id": "wm-hall-hdx-candidate-fix1-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1.png",
+   "kind": "arrival still HDx CANDIDATE (after the one fix): the hall looking through the opening into the living room; tall 3:2 canvas 2496 x 1664; the living room is base.png's seed",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "seedream-5-pro i2i 2K: r1 rejected + fix 1 (1,300 tokens)",
+   "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/hdx.json, hdx.txt, hdx-fix1.txt, hdx-fix1-edits.json (designer's 11.5.6: hdx-designer-verbatim.txt)",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_hdx.py, tools/compose_hdx.py, tools/check_hdx.py; seed: site/tools/transitions/seeds.py hdx",
+   "status": "NOT ACCEPTED - back to master-designer: locked (architecture <= 0.36 px, 15 joints <= 1.11 px) and the 11.5.7 items pass at x1, but the stone panel reads -1.48 vs -1.0 +-1/6 after the one fix (11.9.3); no multiplier allowed; HD and HT not rendered because they are built from HDx; not for the site",
+   "sha256": "a905dea80efe7be638116e8b021a8c0fa48e532457ff81b0d819fcbab8b053a1",
+   "bytes": 6115307
+  },
+  {
+   "id": "wm-hall-hdx-candidate-fix1-frame-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1-frame.png",
+   "kind": "the 16:9 frame of the HDx candidate at 1920 x 1080 (seeds.py frame --canvas tall), for review only",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "code",
+   "recipe": "site/tools/transitions/seeds.py frame",
+   "status": "NOT ACCEPTED (see the candidate); not for the video model until master-designer decides",
+   "sha256": "d2b623bb4a70dfdeae305b1485a925cfd5a29b108ff5c26bf71b55f8e022b97e",
+   "bytes": 2983099
   }
  ]
 }

@@ -1,0 +1,121 @@
+{
+ "date": "2026-11-17",
+ "brief": "briefs/wm-hall-stills-2026-11-17.md (+ the manager's addendum from motion-agent's phase A)",
+ "spec": [
+  "docs/proposals/wm-entrance-magazine-2026-11-15.md ch. 11.5 (what each still shows, 11.5.7 rejection lists) and 11.9 (levels, 11.9.3)",
+  "docs/proposals/wm-arrival-from-door-2026-11-14.md section 2 (stills, items 1-7)"
+ ],
+ "clay": "assets/blockout/house/framing/wm-door-2026-11-16/",
+ "budget": {
+  "cap": 2600,
+  "hard_cap_with_one_fix": 3250,
+  "spent": 1950,
+  "unspent_under_cap": 650,
+  "rule": "var2_estimate_cost before every send (SPEND2); one fix only for a rejection-list item at x1-x2 or a level more than 1/3 stop outside the 11.9.3 band",
+  "fix_used": "HDx (r1 failed 11.5.7 at x1 twice and its level by 0.43 stop outside the band)",
+  "stopped": "after the fix HDx still misses 11.9.3 by 0.48 stop from the target: back to master-designer (11.9.3: 'if that too fails, it comes back to me'); HD and HT depend on HDx (HD's right 28 % and HT's seed come from it), so neither was rendered"
+ },
+ "model_choice": "seedream-5-pro i2i 2K (650) for D0o and HDx: the only model with lock evidence on our clay (D0 2026-11-14 and 2026-11-16), aspect auto returns the input canvas exactly (2720 x 1530; 2496 x 1664). nano-banana-2 was kept for HD / HT, where the still is mostly projection; not reached",
+ "jobs": [
+  {
+   "id": "wm-hall-d0o-r1",
+   "still": "D0o",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "estimate": 650,
+   "tokens": 650,
+   "input": {
+    "made": "tools/prep_d0o.py",
+    "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/aee6276e-52cf-4835-b08d-19d74cadf570.png",
+    "sha256_20": "2bf8cd73e672c4bc0d6f"
+   },
+   "placeholder_id": "817b6432-5dd2-4b65-a375-e299e050603e",
+   "task_id": "f05a04b9e6789715c21a591d78f76482",
+   "batch_id": "ec3369a5-70b5-4525-94c1-281339243d9b",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-f05a04b9e6789715c21a591d78f76482-0-1794894644495-773c5342.png",
+   "share": "https://www.var2.ai/image/817b6432-5dd2-4b65-a375-e299e050603e",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw_sha256_20": "6530321be49fc1834f44",
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/d0o.txt",
+   "verdict": "accepted: rejection list 11.5.7 passes at x1; locked; level inside the band",
+   "out": {
+    "master": "assets/renders/hall/warm-modern/hall-2026-11-17/d0o.png",
+    "master_sha256_20": "90a289bcb00b4bdc1829",
+    "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/d0o-frame.png",
+    "mask": "assets/renders/hall/warm-modern/hall-2026-11-17/d0o-mask.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/d0o-lock.json",
+    "made": "tools/lock_d0o.py compose: D0 outside the mask (0 levels), the model inside, gain 1.0"
+   }
+  },
+  {
+   "id": "wm-hall-hdx-r1",
+   "still": "HDx",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "estimate": 650,
+   "tokens": 650,
+   "input": {
+    "made": "tools/prep_hdx.py",
+    "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4e37cd4f-d576-483e-80fd-fcf9a4c4f2e4.png",
+    "sha256_20": "6837220bebddcc227b78"
+   },
+   "placeholder_id": "836ba16b-9c68-4be2-93b1-325a71208f21",
+   "task_id": "23cbd8c1186dfca2e5d3394e165d9790",
+   "batch_id": "22b7ba98-752e-45c6-a8bc-0a8f3da2a392",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-23cbd8c1186dfca2e5d3394e165d9790-0-1794895031471-06c4a3bf.png",
+   "share": "https://www.var2.ai/image/836ba16b-9c68-4be2-93b1-325a71208f21",
+   "returned_px": [
+    2496,
+    1664
+   ],
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/hdx.txt",
+   "verdict": "rejected: two light cones on the stone (11.5.7 'light as a patch'), vein-cut travertine (11.5.7 'another stone'), stone -0.40 vs -1.0 +-1/6",
+   "lock": {
+    "architecture_worst_px": 0.28,
+    "joints_worst_px": 0.98
+   }
+  },
+  {
+   "id": "wm-hall-hdx-fix1",
+   "still": "HDx",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "estimate": 650,
+   "tokens": 650,
+   "input": "the same as r1",
+   "placeholder_id": "b51d74e5-4fd6-41cb-8cc7-8a15112d64d7",
+   "task_id": "945a49894ef568a43a2b2da572657c2e",
+   "batch_id": "bc6ae200-98bf-4cb2-baea-78f4b90cef0a",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-945a49894ef568a43a2b2da572657c2e-0-1794895286456-6f9fefd5.png",
+   "share": "https://www.var2.ai/image/b51d74e5-4fd6-41cb-8cc7-8a15112d64d7",
+   "returned_px": [
+    2496,
+    1664
+   ],
+   "raw_sha256_20": "ab61a563c47c708c952b",
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/hdx-fix1.txt (edits: hdx-fix1-edits.json)",
+   "verdict": "NOT ACCEPTED: the cones and the travertine are gone and the lock holds, but the stone reads -1.48 vs -1.0 +-1/6 (0.48 from the target, beyond the 1/3 that passes with a note); back to master-designer",
+   "out": {
+    "candidate": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1.png",
+    "candidate_sha256_20": "a905dea80efe7be63811",
+    "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1-frame.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1-lock.json",
+    "made": "tools/compose_hdx.py: the seed (base.png via M0's depth, living-room ids only) pasted back; around the furniture the seed's reprojection artifacts (dE > 12 vs the model) replaced by the model's pixels"
+   }
+  }
+ ],
+ "not_rendered": {
+  "HD": "depends on HDx (right 28 % = HDx projected, seeds.py hd); 0 tokens spent",
+  "HT": "depends on HD and HDx (seeds.py ht, the addendum); 0 tokens spent"
+ },
+ "tokens_total": 1950
+}
