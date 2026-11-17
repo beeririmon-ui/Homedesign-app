@@ -2684,5 +2684,332 @@
   "dark px L<20": 90550,
   "C*<4 share among them (after)": 0.085,
   "C*<4 share among L<20 (before)": 0.067
- }
+ },
+ "round2": {
+  "date": "2026-11-17",
+  "scope": "MP-D2 re-check, the sill only (EFF1.2)",
+  "inputs": {
+   "plate": "assets/renders/master/warm-modern/stage1-2026-11-17/plate.png",
+   "before": "assets/renders/master/warm-modern/stage1-2026-11-17/raw/plate-r1-steps1-3.png",
+   "code": "tools/fix_sill.py (step 4 of tools/compose_plate.py)"
+  },
+  "verdict": "pass",
+  "MP-D2": "closed",
+  "status_line": "פלייט MB0: עבר QA (סבב 2, 2026-11-17; הפלייט בלבד; לא לאתר לפני רישום 1.3.9 ואישור 3). MP-D2 נסגר. נשארה הכרעת המעצב על MP-D1 (סיבי ראש המיטה) לפני ברירות המחדל.",
+  "checks": {
+   "only_inside_mask": {
+    "result": "pass",
+    "changed_px": 15381,
+    "outside_mask_px": 0,
+    "by_clay_id": {
+     "14 sill": 12366,
+     "2 window-wall plaster under the nose": 3015
+    },
+    "bbox": {
+     "x": [
+      0,
+      444
+     ],
+     "y": [
+      878,
+      1004
+     ]
+    },
+    "in_frame_px": 12316,
+    "steps1_3_file_equals_round1_rebuild_max_levels": 1,
+    "plate_frame_equals_crop": true
+   },
+   "four_cm": {
+    "result": "pass",
+    "face_between_clay_analytic_lines": true,
+    "face_px": {
+     "x80": 32.4,
+     "x220": 28.9,
+     "x425": 23.7
+    },
+    "columns": [
+     {
+      "x": 80,
+      "analytic": [
+       950.6,
+       983.0,
+       32.4
+      ],
+      "plate_top_drop": 951.5,
+      "plate_shadow_min_row": 984
+     },
+     {
+      "x": 110,
+      "analytic": [
+       944.9,
+       976.6,
+       31.6
+      ],
+      "plate_top_drop": 945.5,
+      "plate_shadow_min_row": 977
+     },
+     {
+      "x": 160,
+      "analytic": [
+       935.4,
+       965.8,
+       30.4
+      ],
+      "plate_top_drop": 936.5,
+      "plate_shadow_min_row": 967
+     },
+     {
+      "x": 220,
+      "analytic": [
+       924.0,
+       952.9,
+       28.9
+      ],
+      "plate_top_drop": 925.5,
+      "plate_shadow_min_row": 954
+     },
+     {
+      "x": 280,
+      "analytic": [
+       912.6,
+       940.0,
+       27.4
+      ],
+      "plate_top_drop": 913.5,
+      "plate_shadow_min_row": 941
+     },
+     {
+      "x": 340,
+      "analytic": [
+       901.2,
+       927.1,
+       25.8
+      ],
+      "plate_top_drop": 902.5,
+      "plate_shadow_min_row": 928
+     },
+     {
+      "x": 400,
+      "analytic": [
+       889.8,
+       914.1,
+       24.3
+      ],
+      "plate_top_drop": 890.5,
+      "plate_shadow_min_row": 915
+     },
+     {
+      "x": 425,
+      "analytic": [
+       885.1,
+       908.8,
+       23.7
+      ],
+      "plate_top_drop": 886.5,
+      "plate_shadow_min_row": 910
+     }
+    ],
+    "lock_qa": {
+     "top_vs_clay": -1.02,
+     "top_tilt_deg": -0.063,
+     "bottom_vs_analytic": 0.09
+    },
+    "ra_lock_rerun": {
+     "sill slab, top front edge (Z 0.75)": {
+      "kind": "horizontal",
+      "n": 41,
+      "median_offset_px": 1.0,
+      "p90_abs_px": 1.0,
+      "mean_corr": 0.892,
+      "tilt_deg_vs_clay": -0.074
+     },
+     "sill slab, bottom front edge (Z 0.71)": {
+      "kind": "horizontal",
+      "n": 36,
+      "median_offset_px": 2.0,
+      "p90_abs_px": 2.5,
+      "mean_corr": 0.641,
+      "tilt_deg_vs_clay": -0.281
+     }
+    },
+    "ra_rerun_equals_plate_lock_json": true
+   },
+   "reads_honed_x1_x2": {
+    "result": "pass",
+    "hp_std_sigma2": {
+     "face_r2": 0.99,
+     "face_r1": 3.86,
+     "top_surface": 1.16,
+     "hdx_stone": 2.24,
+     "d0_stone": 1.48
+    },
+    "face_Lab": [
+     57.3,
+     4.0,
+     18.6
+    ],
+    "face_dE00_matched": {
+     "d0 stone": [
+      [
+       55.0,
+       1.0
+      ],
+      [
+       57.3,
+       0.9
+      ],
+      [
+       58.5,
+       1.0
+      ]
+     ],
+     "hdx stone": [
+      [
+       55.0,
+       2.52
+      ],
+      [
+       57.3,
+       2.25
+      ],
+      [
+       58.5,
+       2.05
+      ]
+     ],
+     "bath stone": [
+      [
+       55.0,
+       1.52
+      ],
+      [
+       57.3,
+       1.33
+      ],
+      [
+       58.5,
+       1.32
+      ]
+     ]
+    },
+    "upper_minus_lower_third_L": [
+     2.4,
+     4.5
+    ],
+    "streak_residual_max_L": 0.49
+   },
+   "no_seam_or_halo_at_mask_border": {
+    "result": "pass",
+    "seam": {
+     "bottom_boundary_step_median": 1.78,
+     "bottom_p90_abs": 3.32,
+     "top_boundary_step_median": -0.1,
+     "top_p90_abs": 3.34,
+     "wall_row_step_p90_abs": 1.68
+    },
+    "top_surface_own_row_step_p90": 2.16,
+    "chips_left_top_rows": {
+     "r2": 9,
+     "r1": 16,
+     "of": 1725
+    },
+    "under_nose_profile_r2": [
+     55.2,
+     55.2,
+     54.5,
+     51.6,
+     51.8,
+     53.6,
+     55.8,
+     59.1,
+     61.3,
+     61.9,
+     62.3,
+     63.5,
+     63.9,
+     64.3,
+     64.5,
+     64.6
+    ],
+    "under_nose_profile_r1": [
+     48.9,
+     50.1,
+     54.1,
+     55.5,
+     57.0,
+     58.4,
+     59.6,
+     60.9,
+     61.4,
+     61.9,
+     62.3,
+     63.5,
+     63.9,
+     64.3,
+     64.5,
+     64.6
+    ]
+   },
+   "black_point_p0_5": {
+    "plate": 12.46,
+    "steps1_3": 12.46
+   }
+  },
+  "findings": [
+   {
+    "id": "MP-L2",
+    "severity": "low",
+    "what": "the slab end at the jamb (fade zone x 431-445) keeps the model's rock-faced end: a lighter, rough ~14 px cap; steps +2..+3 then -4 L* at the fade start; its top edge ~1 px higher. Clear at x4, faint at x2 (reads as the slab end catching light), not visible at x1. Vase x 240-303 far; curtain starts at x 456",
+    "fix": "0 tokens in fix_sill.py: paint the face to x 445 with no fade (or 2-3 px at most), the arris to the end, a clean vertical end from the face tone",
+    "owner": "render-agent",
+    "when": "with the next plate fix, or before launch",
+    "evidence": "r2-mp-d2-sill-x1-x2-x4.jpg",
+    "backlog": "status/backlog-low.md"
+   }
+  ],
+  "fade_face_mid_L_x415_448": [
+   58.2,
+   57.3,
+   57.7,
+   58.4,
+   58.1,
+   57.6,
+   58.5,
+   58.5,
+   58.4,
+   58.6,
+   58.1,
+   57.7,
+   58.4,
+   58.8,
+   60.0,
+   61.0,
+   61.2,
+   60.8,
+   56.9,
+   57.1,
+   57.9,
+   58.4,
+   58.7,
+   58.8,
+   59.0,
+   59.2,
+   58.5,
+   58.0,
+   58.1,
+   56.3,
+   61.8,
+   66.2,
+   65.0,
+   64.8
+  ],
+  "evidence": [
+   "r2-mp-d2-sill-x1-x2-x4.jpg"
+  ],
+  "scripts": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-master/r2/",
+  "tokens": 0,
+  "var2": false,
+  "commits": false
+ },
+ "verdict_latest": "pass (round 2); MP-D2 closed; MP-D1 open (designer call)"
 }
