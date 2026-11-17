@@ -21,6 +21,9 @@ Output (--out, e.g. assets/frames/d0--m0.warm-modern/):
 
   python3 export_arrival.py --bank1 DIR --bank2 DIR --d0 D0.png --canvas-d0 base --hd HD.png --hdx HDx.png --canvas-turn tall
                             --version 7.3 --out DIR [--only 1080] [--w 1920] [--mp4 out.mp4] [--temporary] [--note "..."]
+
+  --segment dolly: clip 2 alone (HDx -> M0: dolly, landing, hold) on the same timeline, frame 1 = HDx exactly; needs only --bank2
+  (a preview of one clip before the other banks exist, 2026-11-17).
 """
 from __future__ import annotations
 
@@ -86,12 +89,13 @@ def encode(img8: np.ndarray, base: str, aq: int, wq: int) -> tuple[int, int]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--bank1", required=True)
+    ap.add_argument("--segment", default="all", choices=["all", "dolly"], help="dolly: clip 2 alone (HDx -> M0), only --bank2 is needed")
+    ap.add_argument("--bank1")
     ap.add_argument("--bank2", required=True)
-    ap.add_argument("--d0", required=True, help="the closed-door still (the leaf's texture, and frame 1)")
+    ap.add_argument("--d0", help="the closed-door still (the leaf's texture, and frame 1)")
     ap.add_argument("--canvas-d0", default="base", choices=["base", "tall", "frame"])
-    ap.add_argument("--hd", required=True)
-    ap.add_argument("--hdx", required=True)
+    ap.add_argument("--hd")
+    ap.add_argument("--hdx")
     ap.add_argument("--canvas-turn", default="tall", choices=["base", "tall", "frame"])
     ap.add_argument("--version", default="7.3", choices=sorted(tl.VERSIONS), help="the -cut versions are for a preview clip (--mp4-only): "
                     "on the site the cut is the same frames with the turn skipped")
@@ -112,13 +116,22 @@ def main(argv=None) -> int:
     V = tl.VERSIONS[a.version]
     W, H = a.w, int(round(a.w * 9 / 16))
     fr = cg.Canvas.frame(W, H)
-    b1, b2 = Bank(a.bank1, tl.L1, W, H), Bank(a.bank2, tl.L2, W, H)
-    d0_full = td.load(a.d0)
-    d0 = td.canvas_for(a.canvas_d0, d0_full.shape[1], d0_full.shape[0]).crop_frame(d0_full, W, H)
-    hd, hdx = td.load(a.hd), td.load(a.hdx)
-    T = td.Turn([td.Still(hd, cg.HD, td.canvas_for(a.canvas_turn, hd.shape[1], hd.shape[0]), "HD"),
-                 td.Still(hdx, cg.HDX, td.canvas_for(a.canvas_turn, hdx.shape[1], hdx.shape[0]), "HDx")], None, 2.0, W)
-    states = V.frames(60.0)
+    dolly_only = a.segment == "dolly"
+    if not dolly_only and not (a.bank1 and a.d0 and a.hd and a.hdx):
+        raise SystemExit("--segment all needs --bank1, --d0, --hd and --hdx")
+    b2 = Bank(a.bank2, tl.L2, W, H)
+    if dolly_only:
+        # the frames of the arrival from the end of the turn (s2 = 0, HDx) to the end of the hold, at the same times
+        t0 = V.t_turn_end
+        states = [V.state(t0 + i / 60.0) for i in range(int(round((V.t_end + V.hold_s - t0) * 60.0)) + 1)]
+    else:
+        b1 = Bank(a.bank1, tl.L1, W, H)
+        d0_full = td.load(a.d0)
+        d0 = td.canvas_for(a.canvas_d0, d0_full.shape[1], d0_full.shape[0]).crop_frame(d0_full, W, H)
+        hd, hdx = td.load(a.hd), td.load(a.hdx)
+        T = td.Turn([td.Still(hd, cg.HD, td.canvas_for(a.canvas_turn, hd.shape[1], hd.shape[0]), "HD"),
+                     td.Still(hdx, cg.HDX, td.canvas_for(a.canvas_turn, hdx.shape[1], hdx.shape[0]), "HDx")], None, 2.0, W)
+        states = V.frames(60.0)
     n60 = len(states)
     worst_hole = 0.0
 
@@ -223,7 +236,7 @@ def main(argv=None) -> int:
             out.setdefault(states[i]["phase"], [j + 1, j + 1])[1] = j + 1
         return out
 
-    play = V.t_end
+    play = V.t_end - (V.t_turn_end if dolly_only else 0.0)
     man = dict(
         id="T-D0", **{"from": "D0"}, to="M0", style=a.style, version=V.name, play_s=round(play, 3), hold_s=V.hold_s,
         timeline=V.summary(),
@@ -244,7 +257,12 @@ def main(argv=None) -> int:
         turn_worst_hole_frac=worst_hole,
         swap=dict(blend_out_ms=200, rule="after the hold, a soft swap to the live layers of the empty room (the same picture)"),
         qa="pending", temporary=bool(a.temporary), note=a.note)
-    if "1080" in bytes_:
+    if dolly_only:
+        man.update(id="T-D0 clip 2 alone", **{"from": "HDx"}, first_frame="HDx: identical to the 16:9 frame of HDx (bank frame 1) at this size",
+                   timeline=dict(V.summary(), segment="dolly", segment_starts_at_s=round(V.t_turn_end, 3),
+                                 note="the camera enters at walking speed, as it leaves the turn in the whole arrival"),
+                   cut_version=None, loading=None)
+    if "1080" in bytes_ and not dolly_only:
         segs = man["variants"]["1080"]["segments"]
         pre_last = max(v[1] for k, v in segs.items() if k in ("door", "door+walk", "walk"))
         pre = int(sum(r[0] for r in sizes["1080"][:pre_last]))

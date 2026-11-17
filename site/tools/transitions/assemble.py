@@ -103,7 +103,12 @@ def end_lock(frames: list[np.ndarray], first: np.ndarray | None, last: np.ndarra
                 continue
             w = 1 - k / (n + 1)
             w = w * w * (3 - 2 * w)
-            frames[i] = np.clip(backwarp(frames[i], w * g).astype(np.float32) + w * resid + 0.5, 0, 255).astype(np.uint8)
+            # the correction travels with the picture: frame i's point x shows the end frame's point x + h(x), so it
+            # takes the move and the colour residual found there (2026-11-17: held still on screen, the residual of
+            # a thin joint line stayed behind as a faint second line while the wall slid past it)
+            h = flow(frames[i], end)                           # end(x + h) ~ frame i(x)
+            frames[i] = np.clip(backwarp(frames[i], w * backwarp(g, h)).astype(np.float32) + w * backwarp(resid, h) + 0.5,
+                                0, 255).astype(np.uint8)
     return rep
 
 
