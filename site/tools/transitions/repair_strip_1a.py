@@ -1,25 +1,46 @@
 #!/usr/bin/env python3
 """
 repair_strip_1a.py: clip 1a (D0o + leaf -> HT, kling-3-omni take 1), the living room seen past the walnut edge, repainted
-from the real stills through their clay depth. 0 var2 tokens. Brief: briefs/wm-clip1a-strip-repair-2026-11-17.md.
+from the real stills through their clay depth, and the door's right jamb replaced by one consistent jamb. 0 var2 tokens.
+Briefs: briefs/wm-clip1a-strip-repair-2026-11-17.md (round 1), briefs/wm-clip1a-strip-repair-r2-2026-11-17.md (round 2,
+QA C1A-M1, M2, M3).
 
-The model drew a plain wall where the living room shows through O-entry-living (right of the walnut lining, about x 1580-
-1740 of 1920), and HT has the north window with the birches; the end lock melted one into the other (bank frames 130-141).
-From the frame where the living room enters from behind the door's right reveal (about bank frame 118, 3.16 m), every bank
-frame gets, inside the clay's own mask of the living room (the clay depth pass rendered at that frame's camera: points with
-Y < 6.27, past the walnut lining's hall half), the living room as the real stills show it:
+The model drew a plain wall where the living room shows through O-entry-living (right of the walnut lining), its right door
+jamb changes look in every frame from 120 to 125 (and carries a black contour line), and the end lock melted the wall into
+HT's north window with the birches (bank frames 130-141). From bank frame 122 (the first frame in which the clay sees the
+living room past the walnut lining, Y < 6.20) every frame gets:
 
-  sources  HT (its clay depth; the window glass on the plane of its frame, as clip 1b; only HT's 16:9 frame is read, the
-           margin from x 2643 is unfinished, HT-L2), then HDx (from the junction, through its clay depth), then base.png
-           (M0, through the room depth map). HT's living room was seeded from HDx and base.png (seeds.py ht), so the three
-           agree; where two meet, a 6 px feather.
-  register the model's own walnut edge (the dark-to-bright step at the strip's left border) against the clay's, per frame,
-           smoothed over the frames: the mask and the paint move with the clip's edge, so the border is the clip's line.
-  holes    a pixel of the mask that no still shows keeps the clip (a local dissolve over 6 px); counted per frame.
-  the end  frame 143 is HT itself (the end lock) and is not touched.
+  the stills   every pixel of the living room is looked up from the stills BACKWARD, through the clay depth of that very
+               frame (the clay depth pass at the bank camera): the world point of the pixel is projected into each still,
+               and the still is used only where its own clay depth sees that point (no splat, so nothing is stretched across
+               a depth jump: round 2, C1A-M2). Order: HT (its 16:9 frame only, HT-L2), HDx, base.png; 6 px feathers where
+               a later still meets an earlier one.
+  the window   the glass is carried on the plane of the window frame of W-living (X = -2.65, the clay's frame face), the
+               same plane in every view; the glass takes HT, then base.png, never HDx. HT's right frame edge lies on the
+               mullion, so HT gives the left pane and base.png the right pane, and the seam sits on the mullion, outside
+               the glass (round 2, C1A-M3).
+  the armchair the clay has no living-room furniture; base.png's room depth has the walnut armchair (CHAIR_BOX): its points are
+               splatted forward (direct hits only, no hole filling) where they lie in front of the clay, and HT and HDx give
+               nothing they see through that box (they would show the armchair as a decal on the floor).
+  the plate    what no still sees outside HT's frame (the top right ceiling corner, bits of floor by the armchair) is
+               painted ONCE, at bank frame 130: first the same clay plane further along the window wall (+Y: the ceiling,
+               the soffit and the boards do not change along it, so the soffit's edge runs on), then an inpaint that stays
+               inside each clay plane; every other frame looks that plate up through the clay depth like a still: it moves
+               with the room and cannot flicker (round 2, C1A-M2). HDx gives no ceiling (its render of it is darker).
+  behind the lining  a pixel HT cannot see because the walnut lining hides it from HT (within 120 px of the lining) keeps
+               the clip (24 px ramp); past the paint's coverage the clip, never black.
+  the jamb     the clip's jamb as it drew it at bank frame 125 (its contour line cut off), one texture for every frame from
+               122, mapped as the plane of the reveal under the forward walk (a 1-D homography about the focus of
+               expansion), its edge moving at a constant acceleration from the clip's own edge and speed at 122 to out of
+               the frame at 131 (the clay's jamb is out at ~130), with an edge blur of 0.15 of its speed (round 2,
+               C1A-M1: the clip's black line at 123-124 lies under it, and no frame has the model's changing jamb). What the
+               clay's jamb still covers left of the new edge (122-127) is HT splatted forward (it is past the jamb).
+  register     the paint moves with the clip's own walnut edge (dark-to-bright step, sub-pixel, per frame, lightly smoothed),
+               so the border is the clip's line.
+  the end      frame 143 is HT itself (the end lock) and is not touched.
 
-  python3 repair_strip_1a.py --bank DIR --clay DIR --out DIR --report repair.json [--from 118]
-  python3 repair_strip_1a.py check --bank DIR --before DIR --repair repair.json --out check.json
+  python3 repair_strip_1a.py --bank DIR --clay DIR --out DIR --report repair.json
+  python3 repair_strip_1a.py check --bank DIR --before DIR --repair repair.json --clay DIR --out selfcheck.json
 """
 from __future__ import annotations
 
@@ -33,7 +54,6 @@ import cv2
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import assemble as asm  # noqa: E402
 import camgeo as cg  # noqa: E402
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
@@ -43,9 +63,15 @@ LIV = os.path.join(REPO, "assets/renders/living-room/warm-modern")
 W, H = 1920, 1080
 L1A, N = 3.80, 143
 Y_CUT = 6.20            # HT shows the whole reveal of O-entry-living (Y 6.20-6.35) in walnut: past it, the living room
+XG = -2.65              # the frame face of W-living's glazing (clay: X -2.650 +- 0.003 on the panes it fits cleanly)
+TOL = 0.04
 FEATHER = 1.5
 SEAM = 6.0
 OVS = cg.BASE_BOX[0] / (cg.BASE_BOX[2] - cg.BASE_BOX[0])
+CX, CY = 0.36 * W, 0.48 * H     # the bank cameras' principal point = the focus of expansion of the walk (-X along f)
+JAMB_SRC = 125          # the clip's jamb as drawn at this bank frame (lit face + shaded face, a straight contour line)
+JAMB_NEAR = 1.5         # clay depth (m) below which a pixel right of the walnut is the door jamb
+PLATE_K = 130           # the first frame in which the clay's jamb is out of the frame
 
 
 def cam_at(k: int) -> cg.Cam:
@@ -57,57 +83,17 @@ def rgb(p):
     return cv2.cvtColor(cv2.imread(p, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
 
 
-def sources():
-    out = []
-    ht = rgb(os.path.join(HALL, "ht.png"))
-    cvb = cg.Canvas(ht.shape[1], ht.shape[0], cg.Canvas.base(ht.shape[1]).box)
-    d, v = cg.load_depth_png(os.path.join(CLAY_DOOR, "HT-depth.png"))
-    asm.glass_plane(d, v, cvb)
-    x0, y0, x1, y1 = cvb.box
-    v[:, :int(np.ceil(x0))] = False                     # HT-L2: only the 16:9 frame of HT is read
-    v[:, int(np.floor(x1)):] = False
-    out.append(dict(name="HT", cam=cg.HT, cv=cvb, img=ht, depth=d, valid=v))
-    hdx = rgb(os.path.join(HALL, "hdx.png"))
-    cvt = cg.Canvas.tall(hdx.shape[1], hdx.shape[0], OVS)
-    d, v = cg.load_depth_png(os.path.join(CLAY_DOOR, "HDx-depth.png"))
-    asm.glass_plane(d, v, cvt, inside_frame_only=False)            # HDx's margin is finished (the turn reads it)
-    out.append(dict(name="HDx", cam=cg.HDX, cv=cvt, img=hdx, depth=d, valid=v))
-    base = rgb(os.path.join(LIV, "phase2-2026-11-10/layers/base.png"))
-    cvm = cg.Canvas(base.shape[1], base.shape[0], cg.Canvas.base(base.shape[1]).box)
-    d, v = cg.load_room_depth(os.path.join(LIV, "depth.png"))
-    if d.shape != base.shape[:2]:
-        d = cv2.resize(d, (base.shape[1], base.shape[0]), interpolation=cv2.INTER_NEAREST)
-        v = cv2.resize(v.astype(np.uint8), (base.shape[1], base.shape[0]), interpolation=cv2.INTER_NEAREST) > 0
-    d = np.where(v, d, 0).astype(np.float32)
-    asm.glass_plane(d, v, cvm, inside_frame_only=False)            # the window reaches the edge of M0's frame
-    out.append(dict(name="base.png", cam=cg.M0, cv=cvm, img=base, depth=d, valid=v))
-    return out
+def to8(a):
+    return np.clip(np.rint(a * 255), 0, 255).astype(np.uint8)
 
 
-def clay_mask(clay_dir: str, k: int, cam: cg.Cam) -> np.ndarray:
-    d, v = cg.load_depth_png(os.path.join(clay_dir, f"k{k:03d}-depth.png"))
-    fr = cg.Canvas.frame(W, H)
-    us, vs = fr.uv()
-    P = cam.unproject(us, vs, np.where(v, d, 1.0))
-    return v & (P[..., 1] < Y_CUT)
+def lstar_bgr(bgr8):
+    return cv2.cvtColor(bgr8, cv2.COLOR_BGR2LAB)[..., 0].astype(np.float32) * (100.0 / 255.0)
 
 
-def walnut_edge(img8_gray: np.ndarray) -> int:
-    """The clip's walnut band (the darkest 30 px band in x 1300-1720, rows 200-800) and its right edge (the largest rise)."""
-    g = cv2.GaussianBlur(img8_gray.astype(np.float32), (0, 0), 1.2)
-    prof = g[200:800, :].mean(axis=0)
-    band = np.convolve(prof, np.ones(30) / 30, mode="same")
-    wl = 1300 + int(np.argmin(band[1300:1720]))
-    return wl + int(np.argmax(np.diff(prof[wl:wl + 80])))
-
-
-def reveal_edge(img8_gray: np.ndarray, wr: int) -> int:
-    """The clip's right door reveal (a near stone face entering from the right): its left edge, the largest fall of the column
-    profile right of the walnut edge + 40 px."""
-    g = cv2.GaussianBlur(img8_gray.astype(np.float32), (0, 0), 1.2)
-    prof = g[200:800, :].mean(axis=0)
-    p2 = cv2.GaussianBlur(prof[wr + 40:1916].reshape(1, -1), (0, 0), 2).ravel()
-    return wr + 40 + int(np.argmin(np.diff(p2)))
+def shift_x(a: np.ndarray, dx: float) -> np.ndarray:
+    M = np.float32([[1, 0, dx], [0, 1, 0]])
+    return cv2.warpAffine(a, M, (a.shape[1], a.shape[0]), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
 
 
 def left_border(mask: np.ndarray) -> np.ndarray:
@@ -117,39 +103,318 @@ def left_border(mask: np.ndarray) -> np.ndarray:
     return np.where(has, x, np.nan)
 
 
-def edge_offset(img: np.ndarray, xb: np.ndarray, rows: range, search: int = 24) -> float | None:
-    """The clip's dark-to-bright step (the walnut's right edge) near the clay's border, per row band: the median offset."""
-    g = cv2.GaussianBlur(cv2.cvtColor((img * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32), (0, 0), 1.2)
-    offs = []
-    for r0 in rows:
-        xs = xb[r0:r0 + 24]
-        if np.isnan(xs).any():
-            continue
-        c = int(round(float(np.median(xs))))
-        if c - search - 2 < 0 or c + search + 2 >= W:
-            continue
-        prof = g[r0:r0 + 24, c - search:c + search + 1].mean(axis=0)
-        gr = np.diff(prof)
-        j = int(np.argmax(gr))
-        if gr[j] > 6:
-            offs.append(j + 0.5 - search)
-    return float(np.median(offs)) if len(offs) >= 3 else None
+def walnut_edge(img8_gray: np.ndarray) -> float:
+    """The clip's walnut band (the darkest 30 px band in x 1300-1720, rows 200-800) and its right edge (the largest rise),
+    sub-pixel (a parabola through the rise and its neighbours). Returns the index j of the step between columns j and j+1."""
+    g = cv2.GaussianBlur(img8_gray.astype(np.float32), (0, 0), 1.2)
+    prof = g[200:800, :].mean(axis=0)
+    band = np.convolve(prof, np.ones(30) / 30, mode="same")
+    wl = 1300 + int(np.argmin(band[1300:1720]))
+    d = np.diff(prof[wl:wl + 80])
+    j = int(np.argmax(d))
+    dl = d[j - 1] if j > 0 else d[j]
+    dr = d[j + 1] if j + 1 < len(d) else d[j]
+    den = dl - 2 * d[j] + dr
+    off = 0.5 * (dl - dr) / den if abs(den) > 1e-6 else 0.0
+    return wl + j + float(np.clip(off, -0.5, 0.5))
 
 
-def shift_x(a: np.ndarray, dx: float) -> np.ndarray:
-    M = np.float32([[1, 0, dx], [0, 1, 0]])
-    return cv2.warpAffine(a, M, (a.shape[1], a.shape[0]), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+def reveal_edge(img8_gray: np.ndarray, wr: float) -> int:
+    """The clip's right door jamb (a near face entering from the right): its left edge, the largest fall of the column
+    profile right of the walnut edge + 40 px."""
+    g = cv2.GaussianBlur(img8_gray.astype(np.float32), (0, 0), 1.2)
+    prof = g[200:800, :].mean(axis=0)
+    a = int(wr) + 40
+    p2 = cv2.GaussianBlur(prof[a:1916].reshape(1, -1), (0, 0), 2).ravel()
+    return a + int(np.argmin(np.diff(p2)))
 
 
-def stills_view(cam: cg.Cam, src: list):
-    """The view from cam out of the real stills in priority order (HT, HDx, base.png), SEAM px blends where a later one meets
-    an earlier one. Returns (image, covered)."""
+def dark_lines(L: np.ndarray, lo: int, hi: int, rows=(40, 1040), drop: float = 15.0, half: int = 4):
+    """Narrow dark vertical lines, measured on the frame itself: per column, the rows in which L* lies `drop` below BOTH
+    columns `half` px to the left and to the right. Returns (x of the column with most such rows, its row count, the per-
+    column counts over [lo, hi))."""
+    Lr = L[rows[0]:rows[1]]
+    r = np.minimum(np.roll(Lr, half, axis=1), np.roll(Lr, -half, axis=1)) - Lr
+    cnt = (r > drop).sum(axis=0)
+    cnt[:lo] = 0
+    cnt[hi:] = 0
+    x = int(np.argmax(cnt))
+    return x, int(cnt[x]), cnt
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# geometry
+# ----------------------------------------------------------------------------------------------------------------
+def glass_hit(cam: cg.Cam, cv: cg.Canvas):
+    """Planar depth of every pixel's ray on the glazing plane X = XG, and where that hit lies in the living room's window
+    wall (Y 0-6.2, Z 0.3-2.9, in front of the camera)."""
+    us, vs = cv.uv()
+    f, r = cam.f, cam.r
+    den = f[0] + (us - cam.u0) / cg.KU * r[0]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        d = (XG - cam.loc[0]) / den
+    good = np.isfinite(d) & (d > 0.05)
+    P = cam.unproject(us, vs, np.where(good, d, 1.0))
+    ok = good & (P[..., 1] > 0.0) & (P[..., 1] < 6.2) & (P[..., 2] > 0.3) & (P[..., 2] < 2.9)
+    return np.where(ok, d, 0).astype(np.float32), ok
+
+
+def sources():
+    """The stills, each with its clay depth; the clay has nothing behind the glass: there, the glazing plane."""
+    out = []
+    ht = rgb(os.path.join(HALL, "ht.png"))
+    cvb = cg.Canvas(ht.shape[1], ht.shape[0], cg.Canvas.base(ht.shape[1]).box)
+    d, v = cg.load_depth_png(os.path.join(CLAY_DOOR, "HT-depth.png"))
+    gd, gok = glass_hit(cg.HT, cvb)
+    g = ~v & gok
+    d = np.where(g, gd, d).astype(np.float32)
+    v = v | g
+    x0, y0, x1, y1 = cvb.box
+    v[:, :int(np.ceil(x0))] = False                     # HT-L2: only the 16:9 frame of HT is read
+    v[:, int(np.floor(x1)):] = False
+    out.append(dict(name="HT", cam=cg.HT, cv=cvb, img=ht, depth=d, valid=v))
+    hdx = rgb(os.path.join(HALL, "hdx.png"))
+    cvt = cg.Canvas.tall(hdx.shape[1], hdx.shape[0], OVS)
+    d, v = cg.load_depth_png(os.path.join(CLAY_DOOR, "HDx-depth.png"))
+    out.append(dict(name="HDx", cam=cg.HDX, cv=cvt, img=hdx, depth=d, valid=v))      # no glass from HDx
+    base = rgb(os.path.join(LIV, "phase2-2026-11-10/layers/base.png"))
+    cvm = cg.Canvas(base.shape[1], base.shape[0], cg.Canvas.base(base.shape[1]).box)
+    d, v = cg.load_room_depth(os.path.join(LIV, "depth.png"))
+    if d.shape != base.shape[:2]:
+        d = cv2.resize(d, (base.shape[1], base.shape[0]), interpolation=cv2.INTER_NEAREST)
+        v = cv2.resize(v.astype(np.uint8), (base.shape[1], base.shape[0]), interpolation=cv2.INTER_NEAREST) > 0
+    gd, gok = glass_hit(cg.M0, cvm)
+    g = ~v & gok
+    d = np.where(v, d, np.where(g, gd, 0)).astype(np.float32)
+    v = v | g
+    out.append(dict(name="base.png", cam=cg.M0, cv=cvm, img=base, depth=d, valid=v))
+    return out
+
+
+def target(clay_dir: str, k: int) -> dict:
+    """The clay at bank camera k: planar depth (glass on the glazing plane), world points, the living room mask."""
+    cam = cam_at(k)
     fr = cg.Canvas.frame(W, H)
+    d, v = cg.load_depth_png(os.path.join(clay_dir, f"k{k:03d}-depth.png"))
+    gd, gok = glass_hit(cam, fr)
+    g = ~v & gok
+    d = np.where(v, d, np.where(g, gd, 0)).astype(np.float32)
+    v = v | g
+    us, vs = fr.uv()
+    P = cam.unproject(us, vs, np.where(v, d, 1.0))
+    m = v & (P[..., 1] < Y_CUT)
+    return dict(k=k, cam=cam, fr=fr, d=d, v=v, glass=g, P=P, m=m)
+
+
+def clay_mask(clay_dir: str, k: int, cam: cg.Cam | None = None) -> np.ndarray:
+    return target(clay_dir, k)["m"]
+
+
+def backward(st: dict, P: np.ndarray, sel: np.ndarray, tol: float = TOL):
+    """Look a still up at world points P. Returns (image, ok, occluded): ok where the still's own clay depth sees that
+    very point and no nearer surface lies within 2 px of it in the still (so no colour of an occluding edge is sampled:
+    nothing across a depth jump); occluded where the still sees something nearer there."""
+    u2, v2, d2 = st["cam"].project(P)
+    mx, my = st["cv"].px(u2, v2)
+    mx = np.nan_to_num(mx, nan=-1e4).astype(np.float32)
+    my = np.nan_to_num(my, nan=-1e4).astype(np.float32)
+    im = cv2.remap(st["img"], mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    dsv = np.where(st["valid"], st["depth"], 0).astype(np.float32)
+    ds = cv2.remap(dsv, mx, my, cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+    if "dmin" not in st:
+        st["dmin"] = cv2.erode(np.where(st["valid"], st["depth"], 1e4).astype(np.float32), np.ones((5, 5), np.uint8))
+    dm = cv2.remap(st["dmin"], mx, my, cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=1e4)
+    inside = cg.inside(mx, my, st["cv"].w, st["cv"].h, 1.0) & (d2 > 0.05)
+    agree = np.abs(ds - d2) <= tol * d2 + 0.01
+    occ = inside & (ds > 0) & ((ds < d2 * (1 - tol) - 0.01) | (dm < d2 * 0.9 - 0.01))
+    ok = sel & inside & agree & ~occ
+    return im, ok, occ & sel
+
+
+def in_frame_of(st: dict, P: np.ndarray, margin_px: float = 0.0) -> np.ndarray:
+    """Whether world points fall inside a still's 16:9 frame (seen or hidden), `margin_px` inside its edges."""
+    u2, v2, d2 = st["cam"].project(P)
+    mu, mv = margin_px / st["cv"].fw, margin_px / st["cv"].fh
+    return (d2 > 0.05) & (u2 >= mu) & (u2 < 1 - mu) & (v2 >= mv) & (v2 < 1 - mv)
+
+
+# the walnut armchair by W-living (base.png's room depth: X -1.78..-0.76, Y 2.26..3.24, Z to 0.68), with a margin. The clay has
+# no living-room furniture: a still whose ray to a clay point crosses this box may show the armchair there, not the point.
+CHAIR_BOX = (np.array([-1.85, 2.20, 0.0]), np.array([-0.70, 3.30, 0.75]))
+
+
+def ray_crosses_box(C, P: np.ndarray, box=CHAIR_BOX) -> np.ndarray:
+    """Whether the segment from C to each world point P passes through the box before reaching P."""
+    C = np.asarray(C, np.float64)
+    D = P - C
+    with np.errstate(divide="ignore", invalid="ignore"):
+        t1 = (box[0] - C) / D
+        t2 = (box[1] - C) / D
+    t1 = np.where(np.abs(D) < 1e-12, np.where((C >= box[0]) & (C <= box[1]), -np.inf, np.inf), t1)
+    t2 = np.where(np.abs(D) < 1e-12, np.where((C >= box[0]) & (C <= box[1]), np.inf, -np.inf), t2)
+    tmin = np.max(np.minimum(t1, t2), axis=-1)
+    tmax = np.min(np.maximum(t1, t2), axis=-1)
+    return (tmax >= np.maximum(tmin, 0)) & (tmin < 0.995)
+
+
+def forward_direct(st: dict, cam: cg.Cam, fr: cg.Canvas):
+    """A still splatted forward (cg.dibr), kept only where a source point landed (a 1 px closing for pin-holes): no hole
+    filling, so nothing stretched. Returns (image, ok, planar depth)."""
+    us, vs = st["cv"].uv()
+    dv = np.isfinite(st["depth"]) & (st["depth"] > 0) & st["valid"]
+    Pw = st["cam"].unproject(us, vs, np.where(dv, st["depth"], 1.0))[dv]
+    z = cg._splat_depth(Pw, cam, fr, ss=1)
+    hit = cv2.morphologyEx(np.isfinite(z).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8)) > 0
+    im, ok, dd = cg.dibr(st["img"], st["depth"], st["cam"], st["cv"], cam, fr, depth_valid=st["valid"])
+    return im, ok & hit, dd
+
+
+def segments(P: np.ndarray, v: np.ndarray) -> np.ndarray:
+    """The clay's planes: pixels grouped by the dominant axis and sign of their normal and their offset along it (a step of
+    > 3 cm or a change of axis is a border). 0 = border / no surface."""
+    gx = np.gradient(P, axis=1)
+    gy = np.gradient(P, axis=0)
+    n = np.cross(gx, gy)
+    n /= np.linalg.norm(n, axis=-1, keepdims=True) + 1e-12
+    ax = np.argmax(np.abs(n), axis=-1)
+    sg = np.take_along_axis(n, ax[..., None], -1)[..., 0] > 0
+    cls = (ax * 2 + sg).astype(np.int32)
+    off = np.take_along_axis(P, ax[..., None], -1)[..., 0]
+    edge = ~v.copy()
+    for sh in ((0, 1), (1, 0)):
+        c2 = np.roll(cls, sh, axis=(0, 1))
+        o2 = np.roll(off, sh, axis=(0, 1))
+        e = (c2 != cls) | (np.abs(o2 - off) > 0.03)
+        edge |= e
+        edge |= np.roll(e, (-sh[0], -sh[1]), axis=(0, 1))
+    n_, lab = cv2.connectedComponents((~edge).astype(np.uint8), connectivity=4)
+    return lab.astype(np.int32)
+
+
+def extrude_fill(paint: np.ndarray, cov: np.ndarray, hole: np.ndarray, tg: dict, lab: np.ndarray, step: float = 0.02,
+                 max_dy: float = 2.5):
+    """Fill holes from the same clay plane further along +Y (the room's surfaces by W-living - the ceiling, the soffit along
+    the window wall, the wall above the window, the floor boards - do not change along the window wall): for each hole
+    point, the nearest point P + (0, dY, 0) that this frame paints on the same plane gives its colour. Returns (image,
+    filled)."""
+    ys, xs = np.nonzero(hole)
+    out = paint.copy()
+    filled = np.zeros_like(hole)
+    if not len(ys):
+        return out, filled
+    Ph = tg["P"][ys, xs]
+    lh = lab[ys, xs]
+    cove = cv2.erode(cov.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
+    done = lh == 0
+    got = np.zeros(len(ys), bool)
+    for dy in np.arange(step, max_dy, step):
+        idx = np.nonzero(~done)[0]
+        if not len(idx):
+            break
+        Q = Ph[idx] + np.array([0.0, dy, 0.0])
+        u, v, d = tg["cam"].project(Q)
+        mx, my = tg["fr"].px(u, v)
+        ix = np.clip(np.rint(mx).astype(np.int64), 0, W - 1)
+        iy = np.clip(np.rint(my).astype(np.int64), 0, H - 1)
+        ok = (mx >= 1) & (mx <= W - 2) & (my >= 1) & (my <= H - 2) & (d > 0.05)
+        ok &= cove[iy, ix] & (lab[iy, ix] == lh[idx]) & (np.abs(tg["d"][iy, ix] - d) <= 0.03 * d + 0.01)
+        sel = idx[ok]
+        if len(sel):
+            col = cv2.remap(paint, mx[ok].astype(np.float32).reshape(-1, 1), my[ok].astype(np.float32).reshape(-1, 1), cv2.INTER_LINEAR)
+            out[ys[sel], xs[sel]] = col.reshape(-1, 3)
+            done[sel] = True
+            got[sel] = True
+    filled[ys[got], xs[got]] = True
+    return out, filled
+
+
+def seg_inpaint(img: np.ndarray, known: np.ndarray, hole: np.ndarray, lab: np.ndarray) -> tuple[np.ndarray, int]:
+    """Fill `hole` plane by plane: each clay plane only from its own known pixels (so the borders between planes stay the
+    clay's); what is left (plane borders, planes with nothing known) from all known pixels. Returns (image, px filled by
+    the general pass)."""
+    out = img.copy()
+    o8 = to8(out)
+    todo = hole.copy()
+    for s in np.unique(lab[hole]):
+        if s == 0:
+            continue
+        seg = lab == s
+        h_ = hole & seg
+        k_ = known & seg
+        if k_.sum() < 20:
+            continue
+        ys, xs = np.nonzero(h_)
+        y0, y1, x0, x1 = max(ys.min() - 80, 0), min(ys.max() + 81, H), max(xs.min() - 80, 0), min(xs.max() + 81, W)
+        if k_[y0:y1, x0:x1].sum() < 20:
+            continue
+        sub = o8[y0:y1, x0:x1].copy()
+        msk = (~k_[y0:y1, x0:x1]).astype(np.uint8) * 255
+        f = cv2.inpaint(sub, msk, 6, cv2.INPAINT_TELEA)
+        hh = h_[y0:y1, x0:x1]
+        sub[hh] = f[hh]
+        o8[y0:y1, x0:x1] = sub
+        todo &= ~h_
+    rest = int(todo.sum())
+    if rest:
+        f = cv2.inpaint(o8, (todo | ~(known | hole)).astype(np.uint8) * 255, 4, cv2.INPAINT_TELEA)
+        o8[todo] = f[todo]
+    out = o8.astype(np.float32) / 255.0
+    sm = cv2.GaussianBlur(out, (0, 0), 1.5)                  # the inpaint's own texture (dots, streaks) smoothed: these are plain planes
+    out[hole] = sm[hole]
+    return out, rest
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# the jamb
+# ----------------------------------------------------------------------------------------------------------------
+class Jamb:
+    """The clip's jamb at JAMB_SRC, its face from `e_src` (right of the contour line), placed with its edge at x_j: the
+    plane of the reveal seen from a camera walking along its optical axis maps by 1/(x - CX) -> 1/(x - CX) + c (and y about
+    CY by the same local scale). Out of the source frame the face is mirrored (the shaded face is uniform there)."""
+
+    def __init__(self, img: np.ndarray, e_src: float):
+        self.img = img
+        self.e = float(e_src)
+        X, Y = np.meshgrid(np.arange(W, dtype=np.float64), np.arange(H, dtype=np.float64))
+        self.X, self.Y = X, Y
+
+    def render(self, xj: float, w: float):
+        c = 1.0 / (self.e - CX) - 1.0 / (xj - CX)
+        Xs = np.maximum(self.X, xj)
+        inv = 1.0 / (Xs - CX) + c
+        xs = CX + 1.0 / inv
+        lam = (Xs - CX) / (xs - CX)
+        ys = CY + (self.Y - CY) / lam
+        out = cv2.remap(self.img, xs.astype(np.float32), ys.astype(np.float32), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT_101)
+        a = np.clip((self.X - xj) / max(w, 1.0) + 0.5, 0, 1).astype(np.float32)
+        return out, a
+
+
+def jamb_path(x0: float, v0: float, k0: int, k1: int, x_out: float = W + 40.0) -> dict:
+    """Edge positions: x0 at k0 with speed v0, a constant acceleration to x_out at k1."""
+    T = k1 - k0
+    acc = 2 * (x_out - x0 - v0 * T) / (T * T)
+    return {k: x0 + v0 * (k - k0) + 0.5 * acc * (k - k0) ** 2 for k in range(k0, k1 + 1)}, acc
+
+
+# ----------------------------------------------------------------------------------------------------------------
+def paint_stills(tg: dict, src: list, sel: np.ndarray):
+    """The stills looked up backward over `sel`, in order, SEAM px feathers inside the earlier coverage. HDx gives neither
+    the glass nor the ceiling (its ceiling is a darker, textured render of the same plaster: a seam against HT's); HT and HDx
+    give nothing they see through the armchair's box. Returns (image, covered, who 1..n, HT occluded)."""
     out = np.zeros((H, W, 3), np.float32)
     cov = np.zeros((H, W), bool)
-    use = {}
-    for st in src:
-        im, ok, _ = cg.dibr(st["img"], st["depth"], st["cam"], st["cv"], cam, fr, depth_valid=st["valid"])
+    who = np.zeros((H, W), np.uint8)
+    occ_ht = np.zeros((H, W), bool)
+    for i, st in enumerate(src):
+        s = sel
+        if st["name"] == "HDx":
+            s = s & ~tg["glass"] & (tg["P"][..., 2] < 2.55)
+        if st["name"] in ("HT", "HDx"):
+            s = s & ~ray_crosses_box(st["cam"].loc, tg["P"])
+        im, ok, occ = backward(st, tg["P"], s)
+        if st["name"] == "HT":
+            occ_ht = occ
         if not ok.any():
             continue
         new = ok & ~cov
@@ -158,10 +423,10 @@ def stills_view(cam: cg.Cam, src: list):
             wa = np.clip(inside / SEAM, 0, 1)[..., None]
             both = (ok & cov)[..., None]
             out = np.where(both, wa * out + (1 - wa) * im, out)
-        out = np.where(new[..., None], im, out)
-        use[st["name"]] = new
+        out[new] = im[new]
+        who[new] = i + 1
         cov |= ok
-    return out, cov, use
+    return out, cov, who, occ_ht
 
 
 def main(argv=None) -> int:
@@ -170,88 +435,168 @@ def main(argv=None) -> int:
     ap.add_argument("--clay", required=True, help="clay depth passes at the bank cameras, k%%03d-depth.png (1920 x 1080 frame)")
     ap.add_argument("--out", required=True)
     ap.add_argument("--report", required=True)
-    ap.add_argument("--sweep", default="125,132", help="the clip's reveal follows its own edge to the first frame, then leaves the frame by the second")
+    ap.add_argument("--debug", help="a scratch folder for the plate image")
+    ap.add_argument("--jamb", default="122,131", help="the new jamb from this frame (the clip's edge and speed there) until out of the frame at the second")
     a = ap.parse_args(argv)
     os.makedirs(a.out, exist_ok=True)
     names = sorted(f for f in os.listdir(a.bank) if f.endswith(".png") and f[:4].isdigit())
     assert len(names) == N, f"{a.bank}: {len(names)} frames, expected {N}"
     src = sources()
-    ks0, ks1 = (int(x) for x in a.sweep.split(","))
-    masks, wr, rv = {}, {}, {}
+    ht = src[0]
+    base_st = src[2]
+    us_, vs_ = base_st["cv"].uv()
+    Pb = base_st["cam"].unproject(us_, vs_, np.where(base_st["valid"], base_st["depth"], 1.0))
+    inbox = np.all((Pb >= CHAIR_BOX[0]) & (Pb <= CHAIR_BOX[1]), axis=-1) & (Pb[..., 2] > 0.03)
+    chair_st = dict(base_st, valid=base_st["valid"] & inbox)
+    chair_st.pop("dmin", None)
+    kj0, kj1 = (int(x) for x in a.jamb.split(","))
+
+    # the frames with living room past the walnut, and the registration to the clip's walnut edge
+    tgs = {}
     for k in range(100, N):
-        m = clay_mask(a.clay, k, cam_at(k))
-        if m.sum() > 50:
-            masks[k] = m
-    k0 = min(masks)
-    for k in masks:
-        g = cv2.cvtColor(cv2.imread(os.path.join(a.bank, names[k - 1])), cv2.COLOR_BGR2GRAY)
-        wr[k] = walnut_edge(g)
-        rv[k] = reveal_edge(g, wr[k])
-    ks = sorted(masks)
-    border = {k: float(np.nanmedian(left_border(masks[k])[200:800])) for k in ks}
-    dx_raw = np.array([wr[k] + 0.5 - border[k] for k in ks])
-    dx_fit = np.polyval(np.polyfit(ks, dx_raw, 2), ks)
-    dx = {k: float(v) for k, v in zip(ks, dx_fit)}
-    # the clip's reveal edge, smoothed, to the start of the sweep; then a constant acceleration out of the frame
-    kr = [k for k in ks if ks0 - 1 <= k <= N - 2]
-    rfit = np.polyfit(kr, [rv[k] for k in kr], 2)
-    for _ in range(2):                                    # drop the frames where the fall found something else
-        res = np.array([rv[k] - np.polyval(rfit, k) for k in kr])
-        kr = [k for k, r_ in zip(kr, res) if abs(r_) <= 15]
-        rfit = np.polyfit(kr, [rv[k] for k in kr], 2)
-    xr_model = {k: float(np.polyval(rfit, k)) for k in ks}
-    v0 = float(np.polyval(np.polyder(rfit), ks0))
-    T = ks1 - ks0
-    acc = 2 * (W + 40 - xr_model[ks0] - v0 * T) / (T * T)
-    xr = {}
+        tg = target(a.clay, k)
+        if tg["m"].sum() > 50:
+            tgs[k] = tg
+    ks = sorted(tgs)
+    k0 = ks[0]
+    gray = {k: cv2.cvtColor(cv2.imread(os.path.join(a.bank, names[k - 1])), cv2.COLOR_BGR2GRAY) for k in range(k0 - 3, N + 1)}
+    wr = {k: walnut_edge(gray[k]) for k in ks}
+    border = {k: float(np.nanmean(left_border(tgs[k]["m"])[200:800])) for k in ks}
+    dx_raw = {k: wr[k] + 0.5 - border[k] for k in ks}
+    dx = {}
     for k in ks:
-        if k <= ks0:
-            xr[k] = xr_model[k]
+        if k in (ks[0], ks[-1]):
+            dx[k] = dx_raw[k]
         else:
-            t = k - ks0
-            xr[k] = max(xr_model[k], xr_model[ks0] + v0 * t + 0.5 * acc * t * t) if k < ks1 else W + 40.0
-    rep = dict(tool="repair_strip_1a.py", date="2026-11-17", first_frame=k0, y_cut=Y_CUT, sources_order=[s_["name"] for s_ in src],
-               registration=dict(dx_measured={k: round(float(v), 1) for k, v in zip(ks, dx_raw)}, dx_used={k: round(dx[k], 1) for k in ks},
-                                 note="dx: the clip's walnut edge minus the clay's (px), a quadratic fit over the frames"),
-               reveal=dict(clip_edge_measured={k: rv[k] for k in ks}, clip_edge_fit=[round(float(c), 3) for c in rfit], sweep=[ks0, ks1],
-                           accel_px_per_frame2=round(acc, 2), edge_used={k: round(xr[k], 1) for k in ks},
-                           note="the clip's right door reveal lingers in the frame to bank 139 (the clay's leaves by ~130); it follows the clip to "
-                                f"{ks0}, then leaves at a constant acceleration (its speed at the exit ~{v0 + acc * T:.0f} px a frame, the clay's own)"),
+            dx[k] = 0.25 * dx_raw[k - 1] + 0.5 * dx_raw[k] + 0.25 * dx_raw[k + 1]
+    # the clip's jamb: its edge (largest fall) and its black contour line (measured on the frame), per frame
+    rv = {k: reveal_edge(gray[k], wr.get(k, walnut_edge(gray[k]))) for k in range(k0 - 2, kj1 + 1)}
+    Lb = {k: lstar_bgr(cv2.imread(os.path.join(a.bank, names[k - 1]))) for k in range(k0 - 2, N)}
+    line = {}
+    for k in Lb:
+        x, n_, _ = dark_lines(Lb[k], int(walnut_edge(gray[k])) + 60, W - 6)
+        line[k] = dict(x=x, rows=n_)
+    # the new jamb: from the clip's edge at kj0 (8 px left of it, so the clip's edge is under it) and the clip's speed there
+    x0 = rv[kj0] - 8.0
+    v0 = 0.5 * (rv[kj0 + 2] - rv[kj0])
+    xj, acc = jamb_path(x0, v0, kj0, kj1)
+    vj = {k: (xj[k] - xj[k - 1]) if k > kj0 else v0 for k in xj}
+    wj = {k: max(1.0, 0.15 * vj[k]) for k in xj}
+    e_src = line[JAMB_SRC]["x"] + 4.0
+    jamb = Jamb(rgb(os.path.join(a.bank, names[JAMB_SRC - 1])), e_src)
+
+    rep = dict(tool="repair_strip_1a.py", round=2, date="2026-11-17", first_frame=k0, y_cut=Y_CUT, glazing_plane_x=XG,
+               sources_order=[s_["name"] for s_ in src],
+               registration=dict(dx_measured={k: round(dx_raw[k], 2) for k in ks}, dx_used={k: round(dx[k], 2) for k in ks},
+                                 note="dx: the clip's walnut edge (sub-pixel) minus the clay's (px), smoothed 1-2-1 over the frames (the first "
+                                      "and last as measured)"),
+               jamb=dict(source_frame=JAMB_SRC, source_edge_x=e_src, frames=[kj0, kj1], start_x=round(x0, 1), start_speed=round(v0, 1),
+                         accel_px_per_frame2=round(acc, 2), edge_x={k: round(v, 1) for k, v in xj.items()},
+                         speed_px_per_frame={k: round(v, 1) for k, v in vj.items()}, edge_blur_px={k: round(v, 1) for k, v in wj.items()},
+                         clip_edge_measured={k: rv[k] for k in sorted(rv)},
+                         clip_line_measured={k: line[k] for k in sorted(line) if k <= kj1 + 2},
+                         note=f"one jamb from {kj0}: the clip's face at {JAMB_SRC} (right of its contour line), on the plane of the reveal; "
+                              f"the edge leaves the frame by {kj1} (last visible step {xj[kj1 - 1] - xj[kj1 - 2]:.1f} px, out of the frame "
+                              f"{xj[kj1] - xj[kj1 - 1]:.1f} px); the clay's jamb is out at ~130"),
                frames={})
-    rev_img = rgb(os.path.join(a.bank, names[ks0 - 1]))
+
+    # the plate: what no still sees outside HT's frame, painted once at PLATE_K
+    def compose(k, plate=None):
+        tg = tgs[k]
+        m = tg["m"]
+        X = np.arange(W, dtype=np.float32)[None, :]
+        paint, cov, who, occ_ht = paint_stills(tg, src, m)
+        # the armchair (base.png's room depth has it, the clay has not): base.png's points in its box, splatted forward, where
+        # they lie in front of the clay
+        imc, okc, ddc = forward_direct(chair_st, tg["cam"], tg["fr"])
+        okc = okc & np.isfinite(ddc) & tg["v"] & (ddc < tg["d"] * 0.995 - 0.005) & (m | (X > border[k] + 40))
+        if okc.any():
+            paint[okc] = imc[okc]
+            who[okc] = 4
+            cov |= okc
+        nf = int(okc.sum())
+        region = m | okc
+        # behind the clay's jamb, left of the new jamb: HT forward (HT is past the jamb)
+        nB = 0
+        Bsel = np.zeros((H, W), bool)
+        if k < kj1:
+            xju = xj[k] - dx[k] if k >= kj0 else -1
+            wl = border[k] + 40
+            Bsel = tg["v"] & (tg["d"] < JAMB_NEAR) & (tg["P"][..., 2] > 0.03) & ~m & (X > wl) & (X < xju + wj.get(k, 1.0) + 2)
+            if Bsel.any():
+                imh, okh, ddh = forward_direct(ht, tg["cam"], tg["fr"])
+                okB = Bsel & okh & np.isfinite(ddh) & (ddh > 2.0)
+                paint[okB] = imh[okB]
+                who[okB] = 5
+                cov |= okB
+                nB = int(okB.sum())
+                region |= Bsel
+        hole = region & ~cov
+        # hidden from HT by the walnut lining (HT sees something nearer there, inside its frame), or behind the clay jamb where
+        # HT forward has nothing: the clip keeps these (its own wall, 24 px ramp). Every other hole: the plate.
+        u2, v2, d2 = ht["cam"].project(tg["P"])
+        mx_, my_ = ht["cv"].px(u2, v2)
+        dsh = cv2.remap(np.where(ht["valid"], ht["depth"], 0).astype(np.float32), np.nan_to_num(mx_, nan=-1e4).astype(np.float32),
+                        np.nan_to_num(my_, nan=-1e4).astype(np.float32), cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+        lining = occ_ht & (dsh > 0) & (dsh < 0.9 * d2) & (X < border[k] + 120)      # the band by the lining: not a window reveal corner
+        hole_keep = hole & ((lining & in_frame_of(ht, tg["P"], 3.0)) | (Bsel & (X < border[k] + 120)))
+        hole_out = hole & ~hole_keep
+        xju_ = (xj[k] - dx[k]) if (kj0 <= k < kj1) else W + 100
+        n_out_visible = int((hole_out & (X < xju_)).sum())
+        n_keep_B = int((hole & Bsel).sum())
+        n_plate = n_inp = 0
+        if hole_out.any() and plate is not None:
+            st = dict(name="plate", cam=plate["cam"], cv=plate["fr"], img=plate["img"], depth=plate["d"], valid=plate["ok"])
+            imp, okp, _ = backward(st, tg["P"], hole_out)
+            paint[okp] = imp[okp]
+            who[okp] = 6
+            cov |= okp
+            hole_out &= ~okp
+            n_plate = int(okp.sum())
+        n_ext = 0
+        if hole_out.any():
+            lab = segments(tg["P"], tg["v"])
+            paint, ext = extrude_fill(paint, cov, hole_out, tg, lab)
+            n_ext = int(ext.sum())
+            cov |= ext
+            hole_out &= ~ext
+        if hole_out.any():
+            paint, rest = seg_inpaint(paint, cov, hole_out, lab)
+            n_inp = int(hole_out.sum())
+            cov |= hole_out
+            if a.debug:
+                cv2.imwrite(os.path.join(a.debug, f"inpainted-k{k}.png"), hole_out.astype(np.uint8) * 255)
+        return dict(tg=tg, paint=paint, cov=cov, who=who, region=region, hole_keep=hole_keep, Bsel=Bsel,
+                    n=dict(armchair_base_forward=nf, behind_jamb_HT=nB, behind_jamb_kept_clip=n_keep_B, plate=n_plate, extruded=n_ext, inpainted=n_inp,
+                           holes_left_of_jamb=n_out_visible))
+
+    cp = compose(PLATE_K)
+    pok = cp["cov"] & tgs[PLATE_K]["m"]
+    pimg = cp["paint"].copy()                                 # padded past its edges, so a look-up never blends in black
+    if (~pok).any():
+        p8 = cv2.inpaint(to8(pimg), (~pok).astype(np.uint8) * 255, 3, cv2.INPAINT_TELEA)
+        pimg = np.where(pok[..., None], pimg, p8.astype(np.float32) / 255)
+    plate = dict(cam=tgs[PLATE_K]["cam"], fr=tgs[PLATE_K]["fr"], img=pimg, d=tgs[PLATE_K]["d"], ok=pok)
+    rep["plate"] = dict(frame=PLATE_K, inpainted_px=cp["n"]["inpainted"],
+                        note="painted once, inside each clay plane, where no still sees outside HT's frame; every frame looks it up through its clay depth")
+    if a.debug:
+        os.makedirs(a.debug, exist_ok=True)
+        cv2.imwrite(os.path.join(a.debug, f"plate-k{PLATE_K}.png"), cv2.cvtColor(to8(cp["paint"]), cv2.COLOR_RGB2BGR))
+
     for k in range(1, N + 1):
         srcp = os.path.join(a.bank, names[k - 1])
         dst = os.path.join(a.out, names[k - 1])
-        if k not in masks or k == N:
+        if k not in tgs or k == N:
             shutil.copyfile(srcp, dst)
             continue
         img = rgb(srcp)
-        cam = cam_at(k)
-        view, cov, use = stills_view(cam, src)
-        view = shift_x(view, dx[k])
-        cov = shift_x(cov.astype(np.float32), dx[k]) > 0.5
-        m = shift_x(masks[k].astype(np.float32), dx[k]) > 0.5
+        c = cp if k == PLATE_K else compose(k, plate)
         X = np.arange(W, dtype=np.float32)[None, :]
-        # the clip's reveal, moved to its edge of this frame
-        shift = xr[k] - xr_model[k]
-        base = img.copy()
-        if k > ks0:
-            # the reveal as the clip drew it at the sweep's first frame (from ~129 the clip melts it), moved to this frame's edge
-            moved = shift_x(rev_img, xr[k] - xr_model[ks0])
-            base = np.where((X >= xr[k] + 6.0)[..., None], moved, img)
-        # what is painted: the living room left of the reveal, and everything the reveal uncovers (from its clip edge to its new edge)
-        cut = xr[k] + 6.0                                   # past the clip's dark contour line along the reveal's edge
-        uncovered = (X >= xr_model[k]) & (X < cut) if k < ks1 else (X >= min(xr_model[k], W - 1))
-        region = (m & (X < cut)) | np.broadcast_to(uncovered, (H, W))
-        hole = region & ~cov
-        # holes: in the clip's sane part (left of its reveal) the clip's own pixels; where the reveal was, inpainted from the paint
-        hole_keep = hole & (X < xr_model[k])
-        hole_inp = hole & ~hole_keep
-        paintv = np.where(cov[..., None], view, base)
-        if hole_inp.any():
-            v8 = np.clip(np.rint(paintv * 255), 0, 255).astype(np.uint8)
-            v8 = cv2.inpaint(v8, hole_inp.astype(np.uint8) * 255, 5, cv2.INPAINT_TELEA)
-            paintv = v8.astype(np.float32) / 255
+        paint = shift_x(c["paint"], dx[k])
+        cov = shift_x(c["cov"].astype(np.float32), dx[k]) > 0.5
+        region = shift_x(c["region"].astype(np.float32), dx[k]) > 0.5
+        hole_keep = shift_x(c["hole_keep"].astype(np.float32), dx[k]) > 0.5
+        region &= cov | hole_keep
         lay = (region & ~hole_keep).astype(np.float32)
         alpha = cv2.GaussianBlur(lay, (0, 0), FEATHER)
         if hole_keep.any():                                # the clip's own wall and floor meet the paint over 24 px, not on a line
@@ -260,37 +605,37 @@ def main(argv=None) -> int:
         col_has = region.any(axis=0)
         bottom = np.where(col_has, H - 1 - np.argmax(region[::-1, :], axis=0), -1)
         rr = np.arange(H, dtype=np.float32)[:, None]
-        floorcols = (bottom > 0) & (bottom < H - 5) & (X[0] < xr[k])
-        ramp = np.clip((bottom[None, :] + 10 - rr) / 40.0, 0, 1)
-        zone = floorcols[None, :] & (rr > bottom[None, :] - 30) & (rr <= bottom[None, :] + 10) & cov
+        xjk = xj.get(k, -1e9)
+        floorcols = (bottom > 0) & (bottom < H - 5) & ((X[0] < xjk - 20) if k < kj1 else True)
+        ramp = np.clip((bottom[None, :] - rr) / 40.0, 0, 1)          # 0 on the clay's threshold line, the paint 40 px above it
+        zone = floorcols[None, :] & (rr > bottom[None, :] - 40) & (rr <= bottom[None, :] + 10) & cov
         alpha = np.where(zone, ramp, alpha)
-        # the strip enters behind the reveal mostly where no still sees it (the clip's own wall): the paint comes in over 5 frames
-        alpha *= float(np.clip((k - ks0 + 2) / 5.0, 0, 1)) ** 2 * (3 - 2 * float(np.clip((k - ks0 + 2) / 5.0, 0, 1))) if k < ks0 + 3 else 1.0
-        res = base * (1 - alpha[..., None]) + paintv * alpha[..., None]
-        if k <= ks0:
-            # the clip's own black contour along the reveal's edge (a melt line, 4-8 px, frames ~121-125, before the sweep): inpainted
-            r8 = np.clip(np.rint(res * 255), 0, 255).astype(np.uint8)
-            gl = cv2.cvtColor(r8, cv2.COLOR_RGB2GRAY)
-            band = np.broadcast_to(np.abs(X - xr_model[k]) <= 7, (H, W))
-            line = band & (gl < 120)
-            line = cv2.dilate(line.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
-            if line.any():
-                res = cv2.inpaint(r8, line.astype(np.uint8) * 255, 4, cv2.INPAINT_TELEA).astype(np.float32) / 255
-            if k == ks0:
-                rev_img = res.copy()                       # the frozen reveal of the sweep: without the contour line
-        tot = float(region.sum()) or 1.0
+        # the paint comes in over the first three frames (the clip's own wall before it)
+        if k < k0 + 3:
+            t_ = float(np.clip((k - k0 + 2) / 5.0, 0, 1))
+            alpha *= t_ * t_ * (3 - 2 * t_)
+        paint = np.where(cov[..., None], paint, img)          # past the paint's edge (its feather) the clip, never black
+        res = img * (1 - alpha[..., None]) + paint * alpha[..., None]
+        if kj0 <= k < kj1:
+            jim, ja = jamb.render(xj[k], wj[k])
+            res = res * (1 - ja[..., None]) + jim * ja[..., None]
+        tot = float((region | hole_keep).sum()) or 1.0
+        whoi = cv2.warpAffine(c["who"], np.float32([[1, 0, dx[k]], [0, 1, 0]]), (W, H), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_REPLICATE)
         rep["frames"][k] = dict(region_px=int(region.sum()), holes_kept_clip_frac=round(float(hole_keep.sum()) / tot, 4),
-                                holes_inpainted_frac=round(float(hole_inp.sum()) / tot, 4), dx=round(dx[k], 1), reveal_edge=round(xr[k], 1),
-                                reveal_shift=round(shift, 1), sources={n: round(float((u & region).sum()) / tot, 4) for n, u in use.items()})
-        cv2.imwrite(dst, cv2.cvtColor(np.clip(np.rint(res * 255), 0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR))
+                                dx=round(dx[k], 2), jamb_edge=round(xj[k], 1) if k in xj and k < kj1 else None,
+                                sources={nm: round(float(((whoi == i + 1) & region).sum()) / tot, 4)
+                                         for i, nm in enumerate(["HT", "HDx", "base.png", "base.png forward (armchair)", "HT forward (behind the clay jamb)", "plate"])},
+                                px=c["n"])
+        cv2.imwrite(dst, cv2.cvtColor(to8(res), cv2.COLOR_RGB2BGR))
     for fn in os.listdir(a.bank):
         if not (fn.endswith(".png") and fn[:4].isdigit()):
             shutil.copyfile(os.path.join(a.bank, fn), os.path.join(a.out, fn))
     fr = rep["frames"]
-    rep["summary"] = dict(frames_painted=len(fr), first=k0, last=max(fr), method="projection from the real stills (HT, HDx, base.png) through the clay depth",
+    rep["summary"] = dict(frames_painted=len(fr), first=k0, last=max(fr), method="backward look-up of the real stills (HT, HDx, base.png) through the "
+                          "clay depth of each frame; the glass on the glazing plane; one plate for what no still sees; one jamb from 122",
                           holes_kept_clip_max=max(v["holes_kept_clip_frac"] for v in fr.values()),
-                          holes_inpainted_max=max(v["holes_inpainted_frac"] for v in fr.values()),
-                          dx_range=[round(min(v["dx"] for v in fr.values()), 1), round(max(v["dx"] for v in fr.values()), 1)])
+                          inpainted_px_outside_plate_frame={k: v["px"]["inpainted"] for k, v in fr.items() if v["px"]["inpainted"] and k != PLATE_K},
+                          dx_range=[round(min(v["dx"] for v in fr.values()), 2), round(max(v["dx"] for v in fr.values()), 2)])
     json.dump(rep, open(a.report, "w"), indent=1)
     print(json.dumps(rep["summary"], indent=1))
     return 0
@@ -298,17 +643,17 @@ def main(argv=None) -> int:
 
 # ----------------------------------------------------------------------------------------------------------------
 def check_main(argv=None) -> int:
-    """The border self-check on the repaired bank (checks 5 and 6 of walk_test.py cannot see a border painted from the clay that
-    measures it). Each measure is taken on the repaired bank and, at the same place, on the bank before the repair (the clip's
-    own level of the same thing), per painted frame:
-      outline  along the paint's left border (the walnut edge) and along the moving reveal's edge: a narrow line (<= 3 px)
-               darker or brighter than both sides, in 8-bit levels (an uncovered old edge or a halo of the paint)
-      tab      the walnut edge as drawn (its dark-to-bright step, per 30-row band, rows 150-950) against its own straight fit: the
-               largest residual in px (a tab or a kink)
-      jamb     the drawn walnut edge against the paint's border (px): where they part
-      floor    the luminance step across the hall / living floor line (the paint's lower border, where it ends above the frame
-               bottom), levels
-      flash    the strip's mean luminance frame by frame: the largest second difference (a flicker), levels"""
+    """The self-check, measured on the frames (round 2): each measure on the repaired bank and, at the same place, on the
+    bank before the repair, per frame:
+      lines    narrow dark vertical lines anywhere right of the walnut edge + 60 px (L* 15 below both columns 4 px away): the
+               column with most such rows, and its row count (QA counted 1,065 of 1,080 rows at x 1634 in 123); also the
+               count at the clip's own line x (found on the bank before) and at the new jamb's edge
+      shards   the dark pixels (L* < 70) in QA's ceiling zone (x 1786-1919, y 0-140) and the floor zone under the armchair
+               (x 1840-1900, y 760-860), their sharp edges (Sobel > 40 on L*), and the even/odd flicker: per zone, the mean
+               |L*(k) - (L*(k-1) + L*(k+1))/2| per pixel
+      birch    HT's birch (frame 143, the left pane) scaled to each frame's glazing distance, the best NCC in a 60 px window
+      tab, jamb vs border, floor, flash   as in round 1
+    """
     ap = argparse.ArgumentParser(description="repair_strip_1a.py check")
     ap.add_argument("--bank", required=True, help="the repaired bank")
     ap.add_argument("--before", required=True, help="the bank before the repair")
@@ -318,7 +663,10 @@ def check_main(argv=None) -> int:
     a = ap.parse_args(argv)
     rep = json.load(open(a.repair))
     fr = {int(k): v for k, v in rep["frames"].items()}
+    jline = {int(k): v for k, v in rep["jamb"]["clip_line_measured"].items()}
     names = sorted(f for f in os.listdir(a.bank) if f.endswith(".png") and f[:4].isdigit())
+    LA = {k: lstar_bgr(cv2.imread(os.path.join(a.bank, names[k - 1]))) for k in range(118, N + 1)}
+    LB = {k: lstar_bgr(cv2.imread(os.path.join(a.before, names[k - 1]))) for k in range(118, N + 1)}
 
     def outline(g, cx, rows):
         dips = []
@@ -327,9 +675,9 @@ def check_main(argv=None) -> int:
                 continue
             prof = g[r0:r0 + 30, cx - 12:cx + 13].mean(axis=0)
             for c0 in range(9, 16):
-                line = prof[c0 - 1:c0 + 2]
+                ln = prof[c0 - 1:c0 + 2]
                 left, right = prof[c0 - 8:c0 - 3].mean(), prof[c0 + 4:c0 + 9].mean()
-                dips.append(float(max(min(left, right) - line.min(), line.max() - max(left, right))))
+                dips.append(float(max(min(left, right) - ln.min(), ln.max() - max(left, right))))
         return round(max(dips), 1) if dips else None
 
     def edge_line(g, cx):
@@ -346,34 +694,85 @@ def check_main(argv=None) -> int:
         c = np.polyfit(ys, xs, 1)
         return round(float(np.max(np.abs(np.array(xs) - np.polyval(c, ys)))), 1), float(np.median(xs))
 
+    # birch template: HT's frame (bank 143), the left pane
+    tg143 = target(a.clay, N)
+    g143 = cv2.cvtColor(cv2.imread(os.path.join(a.bank, names[N - 1])), cv2.COLOR_BGR2GRAY).astype(np.float32)
+    gl = tg143["glass"]
+    ys, xs = np.nonzero(gl)
+    # the left pane: the glass component containing the most pixels left of the mullion
+    n_, lab = cv2.connectedComponents(gl.astype(np.uint8))
+    best = max(range(1, n_), key=lambda i: (lab == i).sum())
+    ys, xs = np.nonzero(lab == best)
+    bx0, bx1, by0, by1 = xs.min() + 8, xs.max() - 6, 220, 600
+    tmpl = g143[by0:by1, bx0:bx1]
+    zg = 3.60 - XG
+
+    def ncc_birch(g, k):
+        s = zg / (zg + L1A * (N - k) / (N - 1))
+        t = cv2.resize(tmpl, None, fx=s, fy=s, interpolation=cv2.INTER_AREA)
+        cxm = CX + ((bx0 + bx1) / 2 - CX) * s
+        cym = CY + ((by0 + by1) / 2 - CY) * s
+        x0 = int(cxm - t.shape[1] / 2 - 30)
+        y0 = int(cym - t.shape[0] / 2 - 30)
+        win = g[max(y0, 0):y0 + t.shape[0] + 60, max(x0, 0):min(x0 + t.shape[1] + 60, W)]
+        if win.shape[0] < t.shape[0] or win.shape[1] < t.shape[1]:
+            return None
+        r = cv2.matchTemplate(win, t, cv2.TM_CCOEFF_NORMED)
+        return round(float(r.max()), 3)
+
+    zones = dict(ceiling=(0, 140, 1786, 1920), floor=(760, 860, 1840, 1900))
     out = dict(frames=[])
     la, lb = [], []
-    for k in sorted(fr):
-        gA = cv2.cvtColor(cv2.imread(os.path.join(a.bank, names[k - 1])), cv2.COLOR_BGR2GRAY).astype(np.float32)
-        gB = cv2.cvtColor(cv2.imread(os.path.join(a.before, names[k - 1])), cv2.COLOR_BGR2GRAY).astype(np.float32)
-        m = shift_x(clay_mask(a.clay, k, cam_at(k)).astype(np.float32), fr[k]["dx"]) > 0.5
-        cx = int(round(float(np.nanmedian(left_border(m)[200:800]))))
+    for k in sorted(set(fr) | set(range(118, N))):
+        A, B = LA[k], LB[k]
         rec = dict(frame=k)
-        for tag, g in (("after", gA), ("before", gB)):
-            rec[f"outline_{tag}"] = outline(g, cx, range(150, 920, 30))
-            tab, xe = edge_line(g, cx)
-            rec[f"tab_px_{tag}"] = tab
+        wr = int(walnut_edge(cv2.cvtColor(cv2.imread(os.path.join(a.bank, names[k - 1])), cv2.COLOR_BGR2GRAY)))
+        for tag, L in (("after", A), ("before", B)):
+            x, n_, cnt = dark_lines(L, wr + 60, W - 6)
+            rec[f"line_max_{tag}"] = dict(x=x, rows=n_)
             if tag == "after":
-                rec["jamb_vs_border_px"] = None if xe is None else round(abs(xe - cx), 1)
-        xe = fr[k].get("reveal_edge")
-        if xe is not None and 30 < xe + 6 < W - 30:
-            rec["reveal_outline_after"] = outline(gA, int(round(xe + 6)), range(120, 900, 30))
-            xm = fr[k]["reveal_edge"] - fr[k]["reveal_shift"]
-            rec["reveal_outline_before"] = outline(gB, int(round(xm)), range(120, 900, 30))
-        bottom = np.array([np.max(np.nonzero(m[:, c])[0]) if m[:, c].any() else -1 for c in range(W)])
-        cols = np.nonzero((bottom > 20) & (bottom < H - 20))[0]
-        if len(cols) > 10:
+                cntA = cnt
+            else:
+                cntB = cnt
+        if k in jline and jline[k]["rows"] > 100:
+            x = jline[k]["x"]
+            rec["at_clip_line"] = dict(x=x, rows_before=int(cntB[max(x - 3, 0):x + 4].max()), rows_after=int(cntA[max(x - 3, 0):x + 4].max()))
+        if k in fr and fr[k].get("jamb_edge") is not None:
+            x = int(round(fr[k]["jamb_edge"]))
+            if 4 < x < W - 4:
+                rec["at_new_jamb_edge"] = dict(x=x, rows_after=int(cntA[max(x - 6, 0):min(x + 7, W)].max()))
+        for zn, (y0, y1, x0, x1) in zones.items():
+            for tag, L in (("after", A), ("before", B)):
+                z = L[y0:y1, x0:x1]
+                sob = np.hypot(cv2.Sobel(z, cv2.CV_32F, 1, 0, ksize=3), cv2.Sobel(z, cv2.CV_32F, 0, 1, ksize=3))
+                rec[f"{zn}_dark_{tag}"] = int((z < 70).sum())
+                rec[f"{zn}_sharp_dark_{tag}"] = int(((z < 70) & (cv2.dilate((sob > 40).astype(np.uint8), np.ones((3, 3), np.uint8)) > 0)).sum())
+                if 118 < k < N:
+                    zp, zn_ = (LA if tag == "after" else LB)[k - 1][y0:y1, x0:x1], (LA if tag == "after" else LB)[k + 1][y0:y1, x0:x1]
+                    rec[f"{zn}_flicker_{tag}"] = round(float(np.abs(z - 0.5 * (zp + zn_)).mean()), 2)
+        if 130 <= k <= N:
+            rec["birch_ncc_after"] = ncc_birch(cv2.cvtColor(cv2.imread(os.path.join(a.bank, names[k - 1])), cv2.COLOR_BGR2GRAY).astype(np.float32), k)
+            rec["birch_ncc_before"] = ncc_birch(cv2.cvtColor(cv2.imread(os.path.join(a.before, names[k - 1])), cv2.COLOR_BGR2GRAY).astype(np.float32), k)
+        if k in fr:
+            gA = cv2.cvtColor(cv2.imread(os.path.join(a.bank, names[k - 1])), cv2.COLOR_BGR2GRAY).astype(np.float32)
+            gB = cv2.cvtColor(cv2.imread(os.path.join(a.before, names[k - 1])), cv2.COLOR_BGR2GRAY).astype(np.float32)
+            m = shift_x(clay_mask(a.clay, k).astype(np.float32), fr[k]["dx"]) > 0.5
+            cx = int(round(float(np.nanmedian(left_border(m)[200:800]))))
             for tag, g in (("after", gA), ("before", gB)):
-                above = np.mean([g[bottom[c] - 12:bottom[c] - 3, c].mean() for c in cols])
-                below = np.mean([g[bottom[c] + 3:bottom[c] + 12, c].mean() for c in cols])
-                rec[f"floor_step_{tag}"] = round(float(above - below), 1)
-        la.append(float(gA[m].mean()) if m.any() else np.nan)
-        lb.append(float(gB[m].mean()) if m.any() else np.nan)
+                rec[f"outline_walnut_{tag}"] = outline(g, cx, range(150, 920, 30))
+                tab, xe = edge_line(g, cx)
+                rec[f"tab_px_{tag}"] = tab
+                if tag == "after":
+                    rec["jamb_vs_border_px"] = None if xe is None else round(abs(xe - cx), 1)
+            bottom = np.array([np.max(np.nonzero(m[:, c])[0]) if m[:, c].any() else -1 for c in range(W)])
+            cols = np.nonzero((bottom > 20) & (bottom < H - 20))[0]
+            if len(cols) > 10:
+                for tag, g in (("after", gA), ("before", gB)):
+                    above = np.mean([g[bottom[c] - 12:bottom[c] - 3, c].mean() for c in cols])
+                    below = np.mean([g[bottom[c] + 3:bottom[c] + 12, c].mean() for c in cols])
+                    rec[f"floor_step_{tag}"] = round(float(above - below), 1)
+            la.append(float(gA[m].mean()) if m.any() else np.nan)
+            lb.append(float(gB[m].mean()) if m.any() else np.nan)
         out["frames"].append(rec)
 
     def flash(x):
@@ -382,14 +781,26 @@ def check_main(argv=None) -> int:
         return round(float(np.max(np.abs(np.diff(x, 2)))), 2) if len(x) > 3 else None
     F = out["frames"]
     mx = lambda key: max((f[key] for f in F if f.get(key) is not None), default=None, key=abs)
-    out["summary"] = dict(frames=len(F),
-                          outline_after_max=mx("outline_after"), outline_before_max=mx("outline_before"),
-                          frames_outline_new=[f["frame"] for f in F if (f.get("outline_after") or 0) > (f.get("outline_before") or 0) + 6],
-                          reveal_outline_after_max=mx("reveal_outline_after"), reveal_outline_before_max=mx("reveal_outline_before"),
-                          tab_px_after_max=mx("tab_px_after"), tab_px_before_max=mx("tab_px_before"),
-                          jamb_vs_border_px_max=mx("jamb_vs_border_px"),
-                          floor_step_after_max=mx("floor_step_after"), floor_step_before_max=mx("floor_step_before"),
-                          strip_flash_after=flash(la), strip_flash_before=flash(lb))
+    r130 = [f for f in F if 130 <= f["frame"] <= 141]
+    out["summary"] = dict(
+        frames=[F[0]["frame"], F[-1]["frame"]],
+        lines_after={f["frame"]: f["line_max_after"] for f in F if 118 <= f["frame"] <= 135},
+        lines_before={f["frame"]: f["line_max_before"] for f in F if 118 <= f["frame"] <= 135},
+        at_clip_line={f["frame"]: f["at_clip_line"] for f in F if "at_clip_line" in f},
+        at_new_jamb_edge={f["frame"]: f["at_new_jamb_edge"]["rows_after"] for f in F if "at_new_jamb_edge" in f},
+        ceiling_dark_after_130_141={f["frame"]: f["ceiling_dark_after"] for f in r130},
+        ceiling_dark_before_130_141={f["frame"]: f["ceiling_dark_before"] for f in r130},
+        floor_sharp_dark_after_130_141={f["frame"]: f["floor_sharp_dark_after"] for f in r130},
+        floor_sharp_dark_before_130_141={f["frame"]: f["floor_sharp_dark_before"] for f in r130},
+        ceiling_flicker_after_max=max(f.get("ceiling_flicker_after", 0) for f in r130),
+        floor_flicker_after_max=max(f.get("floor_flicker_after", 0) for f in r130),
+        birch_ncc_after={f["frame"]: f.get("birch_ncc_after") for f in F if 130 <= f["frame"] <= N},
+        birch_ncc_before={f["frame"]: f.get("birch_ncc_before") for f in F if 130 <= f["frame"] <= N},
+        outline_walnut_after_max=mx("outline_walnut_after"), outline_walnut_before_max=mx("outline_walnut_before"),
+        tab_px_after_max=mx("tab_px_after"), tab_px_before_max=mx("tab_px_before"),
+        jamb_vs_border_px_max=mx("jamb_vs_border_px"),
+        floor_step_after_max=mx("floor_step_after"), floor_step_before_max=mx("floor_step_before"),
+        strip_flash_after=flash(la), strip_flash_before=flash(lb))
     print(json.dumps(out["summary"], indent=1))
     if a.out:
         json.dump(out, open(a.out, "w"), indent=1)

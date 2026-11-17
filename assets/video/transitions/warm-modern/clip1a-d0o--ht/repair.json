@@ -1,8 +1,10 @@
 {
  "tool": "repair_strip_1a.py",
+ "round": 2,
  "date": "2026-11-17",
  "first_frame": 122,
  "y_cut": 6.2,
+ "glazing_plane_x": -2.65,
  "sources_order": [
   "HT",
   "HDx",
@@ -10,55 +12,102 @@
  ],
  "registration": {
   "dx_measured": {
-   "122": 0.5,
-   "123": 0.5,
-   "124": 0.5,
-   "125": 0.5,
-   "126": -0.5,
-   "127": -0.5,
-   "128": -0.5,
-   "129": 0.5,
-   "130": 1.5,
-   "131": 1.5,
-   "132": 1.5,
-   "133": 2.5,
-   "134": 3.5,
-   "135": 4.5,
-   "136": 5.5,
-   "137": 7.5,
-   "138": 7.5,
-   "139": 6.5,
-   "140": 7.5,
-   "141": 7.5,
-   "142": 3.5
+   "122": 0.48,
+   "123": 0.09,
+   "124": 0.65,
+   "125": 0.35,
+   "126": -0.22,
+   "127": -0.6,
+   "128": -0.54,
+   "129": 0.84,
+   "130": 1.12,
+   "131": 1.65,
+   "132": 1.78,
+   "133": 2.47,
+   "134": 3.53,
+   "135": 4.86,
+   "136": 5.74,
+   "137": 7.16,
+   "138": 7.65,
+   "139": 6.74,
+   "140": 7.52,
+   "141": 7.58,
+   "142": 3.3
   },
   "dx_used": {
-   "122": -0.6,
-   "123": -0.4,
-   "124": -0.1,
-   "125": 0.1,
-   "126": 0.4,
-   "127": 0.7,
-   "128": 1.1,
-   "129": 1.4,
-   "130": 1.8,
-   "131": 2.2,
-   "132": 2.6,
-   "133": 3.0,
-   "134": 3.4,
-   "135": 3.9,
-   "136": 4.4,
-   "137": 4.9,
-   "138": 5.4,
-   "139": 6.0,
-   "140": 6.5,
-   "141": 7.1,
-   "142": 7.7
+   "122": 0.48,
+   "123": 0.33,
+   "124": 0.43,
+   "125": 0.28,
+   "126": -0.17,
+   "127": -0.49,
+   "128": -0.21,
+   "129": 0.57,
+   "130": 1.18,
+   "131": 1.55,
+   "132": 1.92,
+   "133": 2.57,
+   "134": 3.6,
+   "135": 4.75,
+   "136": 5.87,
+   "137": 6.92,
+   "138": 7.3,
+   "139": 7.16,
+   "140": 7.34,
+   "141": 6.5,
+   "142": 3.3
   },
-  "note": "dx: the clip's walnut edge minus the clay's (px), a quadratic fit over the frames"
+  "note": "dx: the clip's walnut edge (sub-pixel) minus the clay's (px), smoothed 1-2-1 over the frames (the first and last as measured)"
  },
- "reveal": {
+ "jamb": {
+  "source_frame": 125,
+  "source_edge_x": 1676.0,
+  "frames": [
+   122,
+   131
+  ],
+  "start_x": 1600.0,
+  "start_speed": 24.0,
+  "accel_px_per_frame2": 3.56,
+  "edge_x": {
+   "122": 1600.0,
+   "123": 1625.8,
+   "124": 1655.1,
+   "125": 1688.0,
+   "126": 1724.4,
+   "127": 1764.4,
+   "128": 1808.0,
+   "129": 1855.1,
+   "130": 1905.8,
+   "131": 1960.0
+  },
+  "speed_px_per_frame": {
+   "122": 24.0,
+   "123": 25.8,
+   "124": 29.3,
+   "125": 32.9,
+   "126": 36.4,
+   "127": 40.0,
+   "128": 43.6,
+   "129": 47.1,
+   "130": 50.7,
+   "131": 54.2
+  },
+  "edge_blur_px": {
+   "122": 3.6,
+   "123": 3.9,
+   "124": 4.4,
+   "125": 4.9,
+   "126": 5.5,
+   "127": 6.0,
+   "128": 6.5,
+   "129": 7.1,
+   "130": 7.6,
+   "131": 8.1
+  },
   "clip_edge_measured": {
+   "120": 1517,
+   "121": 1807,
    "122": 1608,
    "123": 1629,
    "124": 1656,
@@ -68,339 +117,589 @@
    "128": 1702,
    "129": 1716,
    "130": 1729,
-   "131": 1742,
-   "132": 1756,
-   "133": 1770,
-   "134": 1782,
-   "135": 1799,
-   "136": 1812,
-   "137": 1827,
-   "138": 1843,
-   "139": 1856,
-   "140": 1870,
-   "141": 1895,
-   "142": 1895
+   "131": 1742
   },
-  "clip_edge_fit": [
-   0.155,
-   -27.373,
-   2662.228
-  ],
-  "sweep": [
-   125,
-   132
-  ],
-  "accel_px_per_frame2": 8.67,
-  "edge_used": {
-   "122": 1634.4,
-   "123": 1645.1,
-   "124": 1656.1,
-   "125": 1667.4,
-   "126": 1683.2,
-   "127": 1707.6,
-   "128": 1740.8,
-   "129": 1782.6,
-   "130": 1833.0,
-   "131": 1892.2,
-   "132": 1960.0,
-   "133": 1960.0,
-   "134": 1960.0,
-   "135": 1960.0,
-   "136": 1960.0,
-   "137": 1960.0,
-   "138": 1960.0,
-   "139": 1960.0,
-   "140": 1960.0,
-   "141": 1960.0,
-   "142": 1960.0
+  "clip_line_measured": {
+   "120": {
+    "x": 0,
+    "rows": 0
+   },
+   "121": {
+    "x": 0,
+    "rows": 0
+   },
+   "122": {
+    "x": 0,
+    "rows": 0
+   },
+   "123": {
+    "x": 1633,
+    "rows": 708
+   },
+   "124": {
+    "x": 1660,
+    "rows": 1000
+   },
+   "125": {
+    "x": 1672,
+    "rows": 1000
+   },
+   "126": {
+    "x": 1683,
+    "rows": 1000
+   },
+   "127": {
+    "x": 1693,
+    "rows": 1000
+   },
+   "128": {
+    "x": 1706,
+    "rows": 1000
+   },
+   "129": {
+    "x": 1720,
+    "rows": 1000
+   },
+   "130": {
+    "x": 1733,
+    "rows": 914
+   },
+   "131": {
+    "x": 1746,
+    "rows": 873
+   },
+   "132": {
+    "x": 1760,
+    "rows": 778
+   },
+   "133": {
+    "x": 1774,
+    "rows": 609
+   }
   },
-  "note": "the clip's right door reveal lingers in the frame to bank 139 (the clay's leaves by ~130); it follows the clip to 125, then leaves at a constant acceleration (its speed at the exit ~72 px a frame, the clay's own)"
+  "note": "one jamb from 122: the clip's face at 125 (right of its contour line), on the plane of the reveal; the edge leaves the frame by 131 (last visible step 50.7 px, out of the frame 54.2 px); the clay's jamb is out at ~130"
  },
  "frames": {
   "122": {
-   "region_px": 25848,
-   "holes_kept_clip_frac": 0.7165,
-   "holes_inpainted_frac": 0.0077,
-   "dx": -0.6,
-   "reveal_edge": 1634.4,
-   "reveal_shift": 0.0,
+   "region_px": 124128,
+   "holes_kept_clip_frac": 0.4605,
+   "dx": 0.48,
+   "jamb_edge": 1600.0,
    "sources": {
-    "HT": 0.2922,
-    "HDx": 0.0194,
-    "base.png": 0.0
+    "HT": 0.0065,
+    "HDx": 0.0,
+    "base.png": 0.0,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.5113,
+    "plate": 0.0015
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 63468,
+    "behind_jamb_kept_clip": 41292,
+    "plate": 183,
+    "extruded": 0,
+    "inpainted": 2504,
+    "holes_left_of_jamb": 2045
    }
   },
   "123": {
-   "region_px": 59335,
-   "holes_kept_clip_frac": 0.801,
-   "holes_inpainted_frac": 0.0031,
-   "dx": -0.4,
-   "reveal_edge": 1645.1,
-   "reveal_shift": 0.0,
+   "region_px": 165175,
+   "holes_kept_clip_frac": 0.4281,
+   "dx": 0.33,
+   "jamb_edge": 1625.8,
    "sources": {
-    "HT": 0.1812,
-    "HDx": 0.0147,
-    "base.png": 0.0
+    "HT": 0.0284,
+    "HDx": 0.0027,
+    "base.png": 0.0,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.5037,
+    "plate": 0.0097
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 83195,
+    "behind_jamb_kept_clip": 29125,
+    "plate": 1597,
+    "extruded": 0,
+    "inpainted": 4546,
+    "holes_left_of_jamb": 5537
    }
   },
   "124": {
-   "region_px": 99578,
-   "holes_kept_clip_frac": 0.657,
-   "holes_inpainted_frac": 0.0017,
-   "dx": -0.1,
-   "reveal_edge": 1656.1,
-   "reveal_shift": 0.0,
+   "region_px": 190298,
+   "holes_kept_clip_frac": 0.3409,
+   "dx": 0.43,
+   "jamb_edge": 1655.1,
    "sources": {
-    "HT": 0.3195,
-    "HDx": 0.0218,
-    "base.png": 0.0
+    "HT": 0.1274,
+    "HDx": 0.0092,
+    "base.png": 0.0,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.4663,
+    "plate": 0.018
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 88740,
+    "behind_jamb_kept_clip": 8460,
+    "plate": 3433,
+    "extruded": 0,
+    "inpainted": 7259,
+    "holes_left_of_jamb": 10034
    }
   },
   "125": {
-   "region_px": 145354,
-   "holes_kept_clip_frac": 0.4427,
-   "holes_inpainted_frac": 0.001,
-   "dx": 0.1,
-   "reveal_edge": 1667.4,
-   "reveal_shift": 0.0,
+   "region_px": 218794,
+   "holes_kept_clip_frac": 0.2741,
+   "dx": 0.28,
+   "jamb_edge": 1688.0,
    "sources": {
-    "HT": 0.5263,
-    "HDx": 0.03,
-    "base.png": 0.0
+    "HT": 0.3173,
+    "HDx": 0.0182,
+    "base.png": 0.0,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.3362,
+    "plate": 0.0152
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 73556,
+    "behind_jamb_kept_clip": 6364,
+    "plate": 3325,
+    "extruded": 0,
+    "inpainted": 8522,
+    "holes_left_of_jamb": 11245
    }
   },
   "126": {
-   "region_px": 203259,
-   "holes_kept_clip_frac": 0.3094,
-   "holes_inpainted_frac": 0.0012,
-   "dx": 0.4,
-   "reveal_edge": 1683.2,
-   "reveal_shift": 4.2,
+   "region_px": 252939,
+   "holes_kept_clip_frac": 0.2285,
+   "dx": -0.17,
+   "jamb_edge": 1724.4,
    "sources": {
-    "HT": 0.6532,
-    "HDx": 0.0362,
-    "base.png": 0.0
+    "HT": 0.4769,
+    "HDx": 0.0266,
+    "base.png": 0.0,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.2256,
+    "plate": 0.0151
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 57057,
+    "behind_jamb_kept_clip": 4503,
+    "plate": 3830,
+    "extruded": 0,
+    "inpainted": 6909,
+    "holes_left_of_jamb": 10107
    }
   },
   "127": {
-   "region_px": 224384,
-   "holes_kept_clip_frac": 0.2667,
-   "holes_inpainted_frac": 0.0019,
-   "dx": 0.7,
-   "reveal_edge": 1707.6,
-   "reveal_shift": 16.7,
+   "region_px": 289184,
+   "holes_kept_clip_frac": 0.1906,
+   "dx": -0.49,
+   "jamb_edge": 1764.4,
    "sources": {
-    "HT": 0.6995,
-    "HDx": 0.036,
-    "base.png": 0.0
+    "HT": 0.6217,
+    "HDx": 0.0317,
+    "base.png": 0.0,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.1121,
+    "plate": 0.0168
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 32417,
+    "behind_jamb_kept_clip": 5383,
+    "plate": 4865,
+    "extruded": 0,
+    "inpainted": 7819,
+    "holes_left_of_jamb": 10245
    }
   },
   "128": {
-   "region_px": 253008,
-   "holes_kept_clip_frac": 0.226,
-   "holes_inpainted_frac": 0.0027,
-   "dx": 1.1,
-   "reveal_edge": 1740.8,
-   "reveal_shift": 37.6,
+   "region_px": 329688,
+   "holes_kept_clip_frac": 0.1603,
+   "dx": -0.21,
+   "jamb_edge": 1808.0,
    "sources": {
-    "HT": 0.7405,
-    "HDx": 0.0344,
-    "base.png": 0.0
+    "HT": 0.7068,
+    "HDx": 0.0482,
+    "base.png": 0.0274,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.0252,
+    "plate": 0.0179
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 8324,
+    "behind_jamb_kept_clip": 2476,
+    "plate": 5889,
+    "extruded": 0,
+    "inpainted": 4678,
+    "holes_left_of_jamb": 8550
    }
   },
   "129": {
-   "region_px": 291293,
-   "holes_kept_clip_frac": 0.1871,
-   "holes_inpainted_frac": 0.0032,
-   "dx": 1.4,
-   "reveal_edge": 1782.6,
-   "reveal_shift": 66.9,
+   "region_px": 398213,
+   "holes_kept_clip_frac": 0.1272,
+   "dx": 0.57,
+   "jamb_edge": 1855.1,
    "sources": {
-    "HT": 0.7765,
-    "HDx": 0.036,
-    "base.png": 0.0004
+    "HT": 0.6455,
+    "HDx": 0.0835,
+    "base.png": 0.0807,
+    "base.png forward (armchair)": 0.0001,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.059
+   },
+   "px": {
+    "armchair_base_forward": 34,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 23484,
+    "extruded": 0,
+    "inpainted": 1605,
+    "holes_left_of_jamb": 16272
    }
   },
   "130": {
-   "region_px": 337133,
-   "holes_kept_clip_frac": 0.1491,
-   "holes_inpainted_frac": 0.0027,
-   "dx": 1.8,
-   "reveal_edge": 1833.0,
-   "reveal_shift": 104.5,
+   "region_px": 424613,
+   "holes_kept_clip_frac": 0.1105,
+   "dx": 1.18,
+   "jamb_edge": 1905.8,
    "sources": {
-    "HT": 0.7973,
-    "HDx": 0.056,
-    "base.png": 0.0003
+    "HT": 0.6124,
+    "HDx": 0.0911,
+    "base.png": 0.1107,
+    "base.png forward (armchair)": 0.0002,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0
+   },
+   "px": {
+    "armchair_base_forward": 80,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 0,
+    "extruded": 19418,
+    "inpainted": 12687,
+    "holes_left_of_jamb": 28263
    }
   },
   "131": {
-   "region_px": 393649,
-   "holes_kept_clip_frac": 0.1205,
-   "holes_inpainted_frac": 0.0273,
-   "dx": 2.2,
-   "reveal_edge": 1892.2,
-   "reveal_shift": 150.5,
+   "region_px": 416329,
+   "holes_kept_clip_frac": 0.1074,
+   "dx": 1.55,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.7139,
-    "HDx": 0.0925,
-    "base.png": 0.0501
+    "HT": 0.6324,
+    "HDx": 0.0845,
+    "base.png": 0.1055,
+    "base.png forward (armchair)": 0.0002,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0691
+   },
+   "px": {
+    "armchair_base_forward": 71,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 29264,
+    "extruded": 41,
+    "inpainted": 370,
+    "holes_left_of_jamb": 29675
    }
   },
   "132": {
-   "region_px": 406949,
-   "holes_kept_clip_frac": 0.107,
-   "holes_inpainted_frac": 0.0315,
-   "dx": 2.6,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 204.8,
+   "region_px": 408029,
+   "holes_kept_clip_frac": 0.1018,
+   "dx": 1.92,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.6978,
-    "HDx": 0.1023,
-    "base.png": 0.0677
+    "HT": 0.6533,
+    "HDx": 0.078,
+    "base.png": 0.1013,
+    "base.png forward (armchair)": 0.0002,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0645
+   },
+   "px": {
+    "armchair_base_forward": 66,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 26809,
+    "extruded": 41,
+    "inpainted": 349,
+    "holes_left_of_jamb": 27199
    }
   },
   "133": {
    "region_px": 398608,
-   "holes_kept_clip_frac": 0.0995,
-   "holes_inpainted_frac": 0.0302,
-   "dx": 3.0,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 191.0,
+   "holes_kept_clip_frac": 0.0963,
+   "dx": 2.57,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.721,
-    "HDx": 0.0917,
-    "base.png": 0.0637
+    "HT": 0.6773,
+    "HDx": 0.0707,
+    "base.png": 0.0955,
+    "base.png forward (armchair)": 0.0001,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.059
+   },
+   "px": {
+    "armchair_base_forward": 61,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 24331,
+    "extruded": 22,
+    "inpainted": 417,
+    "holes_left_of_jamb": 24770
    }
   },
   "134": {
-   "region_px": 390228,
-   "holes_kept_clip_frac": 0.0925,
-   "holes_inpainted_frac": 0.029,
-   "dx": 3.4,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 176.9,
+   "region_px": 389148,
+   "holes_kept_clip_frac": 0.0903,
+   "dx": 3.6,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.7444,
-    "HDx": 0.0811,
-    "base.png": 0.0597
+    "HT": 0.7024,
+    "HDx": 0.0629,
+    "base.png": 0.09,
+    "base.png forward (armchair)": 0.0001,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0535
+   },
+   "px": {
+    "armchair_base_forward": 27,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 21788,
+    "extruded": 36,
+    "inpainted": 315,
+    "holes_left_of_jamb": 22139
    }
   },
   "135": {
-   "region_px": 380729,
-   "holes_kept_clip_frac": 0.086,
-   "holes_inpainted_frac": 0.0285,
-   "dx": 3.9,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 162.5,
+   "region_px": 379649,
+   "holes_kept_clip_frac": 0.0841,
+   "dx": 4.75,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.7699,
-    "HDx": 0.0695,
-    "base.png": 0.0553
+    "HT": 0.7269,
+    "HDx": 0.0545,
+    "base.png": 0.0836,
+    "base.png forward (armchair)": 0.0001,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0495
+   },
+   "px": {
+    "armchair_base_forward": 35,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 20065,
+    "extruded": 125,
+    "inpainted": 333,
+    "holes_left_of_jamb": 20523
    }
   },
   "136": {
-   "region_px": 370995,
-   "holes_kept_clip_frac": 0.079,
-   "holes_inpainted_frac": 0.0272,
-   "dx": 4.4,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 147.8,
+   "region_px": 370110,
+   "holes_kept_clip_frac": 0.0775,
+   "dx": 5.87,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.7954,
-    "HDx": 0.0562,
-    "base.png": 0.0511
+    "HT": 0.7547,
+    "HDx": 0.0449,
+    "base.png": 0.0758,
+    "base.png forward (armchair)": 0.0001,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0456
+   },
+   "px": {
+    "armchair_base_forward": 45,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 18388,
+    "extruded": 201,
+    "inpainted": 356,
+    "holes_left_of_jamb": 18945
    }
   },
   "137": {
-   "region_px": 357568,
-   "holes_kept_clip_frac": 0.0726,
-   "holes_inpainted_frac": 0.025,
-   "dx": 4.9,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 132.8,
+   "region_px": 360532,
+   "holes_kept_clip_frac": 0.0705,
+   "dx": 6.92,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.8222,
-    "HDx": 0.046,
-    "base.png": 0.0451
+    "HT": 0.7822,
+    "HDx": 0.0353,
+    "base.png": 0.0692,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0419
+   },
+   "px": {
+    "armchair_base_forward": 18,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 16820,
+    "extruded": 312,
+    "inpainted": 297,
+    "holes_left_of_jamb": 17429
    }
   },
   "138": {
-   "region_px": 343668,
-   "holes_kept_clip_frac": 0.0626,
-   "holes_inpainted_frac": 0.0224,
-   "dx": 5.4,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 117.4,
+   "region_px": 350924,
+   "holes_kept_clip_frac": 0.0602,
+   "dx": 7.3,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.85,
-    "HDx": 0.0372,
-    "base.png": 0.0389
+    "HT": 0.8083,
+    "HDx": 0.0274,
+    "base.png": 0.0638,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0395
+   },
+   "px": {
+    "armchair_base_forward": 7,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 15853,
+    "extruded": 184,
+    "inpainted": 205,
+    "holes_left_of_jamb": 16242
    }
   },
   "139": {
-   "region_px": 328586,
-   "holes_kept_clip_frac": 0.052,
-   "holes_inpainted_frac": 0.0184,
-   "dx": 6.0,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 101.8,
+   "region_px": 341266,
+   "holes_kept_clip_frac": 0.0493,
+   "dx": 7.16,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.8803,
-    "HDx": 0.0302,
-    "base.png": 0.0326
+    "HT": 0.8363,
+    "HDx": 0.0214,
+    "base.png": 0.0568,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0355
+   },
+   "px": {
+    "armchair_base_forward": 2,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 14123,
+    "extruded": 163,
+    "inpainted": 160,
+    "holes_left_of_jamb": 14446
    }
   },
   "140": {
-   "region_px": 314496,
-   "holes_kept_clip_frac": 0.0435,
-   "holes_inpainted_frac": 0.0131,
-   "dx": 6.5,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 85.8,
+   "region_px": 332640,
+   "holes_kept_clip_frac": 0.0407,
+   "dx": 7.34,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.9107,
-    "HDx": 0.023,
-    "base.png": 0.0253
+    "HT": 0.8625,
+    "HDx": 0.0151,
+    "base.png": 0.051,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0304
+   },
+   "px": {
+    "armchair_base_forward": 3,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 12354,
+    "extruded": 146,
+    "inpainted": 109,
+    "holes_left_of_jamb": 12609
    }
   },
   "141": {
-   "region_px": 299918,
-   "holes_kept_clip_frac": 0.0309,
-   "holes_inpainted_frac": 0.0066,
-   "dx": 7.1,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 69.6,
+   "region_px": 324000,
+   "holes_kept_clip_frac": 0.0283,
+   "dx": 6.5,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.9437,
-    "HDx": 0.0156,
-    "base.png": 0.0177
+    "HT": 0.8898,
+    "HDx": 0.0094,
+    "base.png": 0.047,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0253
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 10373,
+    "extruded": 90,
+    "inpainted": 73,
+    "holes_left_of_jamb": 10536
    }
   },
   "142": {
-   "region_px": 284444,
-   "holes_kept_clip_frac": 0.0155,
-   "holes_inpainted_frac": 0.0,
-   "dx": 7.7,
-   "reveal_edge": 1960.0,
-   "reveal_shift": 53.0,
+   "region_px": 316440,
+   "holes_kept_clip_frac": 0.0138,
+   "dx": 3.3,
+   "jamb_edge": null,
    "sources": {
-    "HT": 0.9735,
-    "HDx": 0.0081,
-    "base.png": 0.0103
+    "HT": 0.9153,
+    "HDx": 0.0049,
+    "base.png": 0.0453,
+    "base.png forward (armchair)": 0.0,
+    "HT forward (behind the clay jamb)": 0.0,
+    "plate": 0.0205
+   },
+   "px": {
+    "armchair_base_forward": 0,
+    "behind_jamb_HT": 0,
+    "behind_jamb_kept_clip": 0,
+    "plate": 7579,
+    "extruded": 31,
+    "inpainted": 66,
+    "holes_left_of_jamb": 7676
    }
   }
+ },
+ "plate": {
+  "frame": 130,
+  "inpainted_px": 12687,
+  "note": "painted once, inside each clay plane, where no still sees outside HT's frame; every frame looks it up through its clay depth"
  },
  "summary": {
   "frames_painted": 21,
   "first": 122,
   "last": 142,
-  "method": "projection from the real stills (HT, HDx, base.png) through the clay depth",
-  "holes_kept_clip_max": 0.801,
-  "holes_inpainted_max": 0.0315,
+  "method": "backward look-up of the real stills (HT, HDx, base.png) through the clay depth of each frame; the glass on the glazing plane; one plate for what no still sees; one jamb from 122",
+  "holes_kept_clip_max": 0.4605,
+  "inpainted_px_outside_plate_frame": {
+   "122": 2504,
+   "123": 4546,
+   "124": 7259,
+   "125": 8522,
+   "126": 6909,
+   "127": 7819,
+   "128": 4678,
+   "129": 1605,
+   "131": 370,
+   "132": 349,
+   "133": 417,
+   "134": 315,
+   "135": 333,
+   "136": 356,
+   "137": 297,
+   "138": 205,
+   "139": 160,
+   "140": 109,
+   "141": 73,
+   "142": 66
+  },
   "dx_range": [
-   -0.6,
-   7.7
+   -0.49,
+   7.34
   ]
  }
 }
