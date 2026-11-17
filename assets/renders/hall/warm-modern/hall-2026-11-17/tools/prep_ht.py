@@ -13,6 +13,9 @@ prep_ht.py: the model input of the HT still (render-agent, 2026-11-17). 0 tokens
     - the edge of the open front-door leaf in the left margin (id 72, x 0-6, outside the 16:9 frame): painted as the plaster
       beside it, so the model draws no door (the code draws the leaf)
     - in the input only, the seed fades into the new parts over 30 px on the same surface
+    - r2: the plaster above and below HD's patch = HD's own pixels mirrored about the patch edge, column by column, scaled by the
+      clay's vertical wash ratio (continuous at the edge; vertical seams stay put), and the clay's jib-door seams (id 83) drawn in
+      the seed's seam colour wherever the seed does not cover (the head only at the canvas top edge, as in the clay)
   python3 prep_ht.py <seed_dir> <out_input.png> <out_keep_mask.png> <out_seed_full.png>
 """
 import json
@@ -134,6 +137,37 @@ def main(sd, out, out_keep, out_seed):
         sub[:, 2] = np.median(labs[ref, 2]) + (sub[:, 2] - sub[:, 2].mean()) * 0.3
         res[sel] = lin_from_lab(sub)
         per["far wall " + "/".join(map(str, grp))] = dict(rows_measured=int(ok.sum()), gain_range=[round(float(gfit.min()), 3), round(float(gfit.max()), 3)])
+    # r2: the plaster above and below HD's patch gets HD's own trowel texture, mirrored across the patch edge column by column
+    # (a vertical mirror keeps vertical seams where they are), on top of the per-row level above; then the clay's seam lines
+    # (id 83: the jib door's two side seams and its head at the canvas top edge) are drawn in the seed's own seam colour over
+    # every part the seed does not cover. So no patch edge is left for the model to read as a door head.
+    pl_grp = np.isin(cls, (11, 82))
+    src_hd = np.asarray(Image.open(sd + "/ht-seed-source.png").convert("RGB"))
+    from_hd = keep & (src_hd[..., 0] > 128) & (src_hd[..., 1] < 128)
+    # the wash: the clay's own plaster level per row (median over the plaster), smoothed
+    prof = np.array([np.median(Yc[y][pl_grp[y]]) if pl_grp[y].sum() > 50 else np.nan for y in range(Hh)])
+    okp = np.isfinite(prof)
+    prof = np.interp(np.arange(Hh), np.nonzero(okp)[0], prof[okp])
+    prof = cv2.GaussianBlur(prof.reshape(-1, 1).astype(np.float64), (1, 0), 25).ravel()
+    mirrored = 0
+    for x in range(Ww):
+        col = from_hd[:, x] & pl_grp[:, x]
+        if col.sum() < 40:
+            continue
+        ys = np.nonzero(col)[0]
+        t_, b_ = int(ys.min()), int(ys.max())
+        for y in range(0, t_):
+            if pl_grp[y, x] and not keep[y, x]:
+                sy = min(b_, t_ + (t_ - y)); res[y, x] = np.clip(seed[sy, x] * prof[y] / prof[sy], 0, 1); mirrored += 1
+        for y in range(b_ + 1, Hh):
+            if pl_grp[y, x] and not keep[y, x]:
+                sy = max(t_, b_ - (y - b_)); res[y, x] = np.clip(seed[sy, x] * prof[y] / prof[sy], 0, 1); mirrored += 1
+    sg = (K.clay_id("HT") == 83)
+    seam_col = np.median(seed[sg & keep], axis=0) if (sg & keep).sum() > 50 else np.array([0.25, 0.22, 0.2])
+    draw = sg & ~keep
+    res[draw] = seam_col
+    rep["r2_mirrored_texture_px"] = mirrored
+    rep["r2_seam_px_drawn"] = int(draw.sum())
     fl = (cls == 10) & ~keep
     if fl.any():
         Yt = ((42 + 16) / 116) ** 3
@@ -145,7 +179,7 @@ def main(sd, out, out_keep, out_seed):
     # in the INPUT only: the seed fades into the new parts over 30 px where the same surface continues (no hard rectangles for
     # the model to copy); the paste-back after the render uses the exact seed
     same = np.zeros_like(keep)
-    for grp in ((11, 82, 83, 14), (94, 86), tuple(range(30, 44)) + (0,)):
+    for grp in ((94, 86), tuple(range(30, 44)) + (0,)):          # r2: not the plaster (its continuation is the mirrored seed)
         g_ = np.isin(cls, grp)
         same |= g_ & (cv2.dilate((g_ & ~keep).astype(np.uint8), np.ones((61, 61), np.uint8)) > 0)
     dt = cv2.distanceTransform(keep.astype(np.uint8), cv2.DIST_L2, 5)

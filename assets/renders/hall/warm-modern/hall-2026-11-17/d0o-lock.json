@@ -1,6 +1,6 @@
 {
  "still": "D0o (the door open, no leaf; D0's canvas 2720 x 1530)",
- "status": "rendered, locked; for qa-agent and master-designer; not for the site before QA",
+ "status": "accepted by the manager; level multiplier applied (run 4) now that HD and HT are in; for QA's re-check of the level and the top of the hall wall",
  "mask": {
   "file": "d0o-mask.png",
   "rect_motion_agent": "u 0.2441-0.4224, v 0.0997-0.8603 (pixel centres: x 704-1160, y 187-1284)",
@@ -8,19 +8,39 @@
   "outside_the_mask_vs_d0_max_diff_levels": 0
  },
  "level_multiplier": {
-  "applied": false,
-  "gain": 1.0,
-  "note": "11.9.3 allows one linear multiplier inside the mask, up to +-1/4 stop; not needed (inside the band). It can centre the jib band once HT and HD exist (0 tokens), e.g. x1.087 (+0.12) to land on -0.60"
+  "applied": true,
+  "gain": 1.0867,
+  "stops": 0.12,
+  "where": "inside the mask only, on the model's pixels, in linear light (11.9.3: one multiplier, up to +-1/4, D0o only)",
+  "jib_before": -0.721,
+  "jib_after": -0.6,
+  "band_with_HT_HD": {
+   "D0o": -0.6,
+   "HT": -0.501,
+   "HD": -0.501,
+   "spread": 0.099,
+   "rule": "within 1/6 (0.167)"
+  },
+  "outside_the_mask_vs_d0_max_diff_levels": 0,
+  "clipping": {
+   "px_with_a_channel_at_255_inside_the_mask_before": 102,
+   "after": 27907,
+   "fully_white_after": 4073,
+   "where": "the line of light and the top of the far wall under it (rows 247-366); those pixels were already 246-254 in their highest channel (median 250): that channel now sits at 255, the others about 249, so they stay warm off-white; fully white only on the line of light itself",
+   "visibility": "not visible at x1; at x2 the top of the wall loses a little of its gradation",
+   "alternative": "+0.06 stop puts D0o at -0.66 (spread 0.16, just inside 1/6) with 15,865 px clipped; any gain that reaches the band clips, because the render's wall under the slot is already near white"
+  },
+  "pre_multiplier": "/home/user/homedesign-app/assets/renders/hall/warm-modern/hall-2026-11-17/rejected/d0o-pre-multiplier.png"
  },
  "levels_11_9_3": {
   "reference": "jib door",
-  "stops_vs_base": -0.721,
-  "L_star": 73.3,
+  "stops_vs_base": -0.6,
+  "L_star": 75.8,
   "px": 44280,
   "target": -0.6,
   "tol": 0.167,
   "within": true,
-  "off_by": -0.121
+  "off_by": 0.0
  },
  "d0_stone_beside_the_door_stops": -0.181,
  "d0_stone_note": "measured in 11.9.2's region (id 84, u 0.45-0.56, v 0.52-0.75) on the approved d0.png: -0.18 (L* 85), not the -0.41 quoted in 11.9.2; the stone left of the door reads -0.45. Inside the -0.42 +-1/4 band, at its bright edge (for qa-agent, who measures D0)",
@@ -42,24 +62,7 @@
     "still_u": 0.4021
    }
   },
-  "rejection_11_5_7": {
-   "stone_edge_u_0400_0422": {
-    "clay_u": 0.4008,
-    "still_u": 0.4021
-   },
-   "jib_seams_0274_0365": [
-    {
-     "clay_u": 0.2741,
-     "still_u": 0.2741
-    },
-    {
-     "clay_u": 0.3649,
-     "still_u": 0.3649
-    }
-   ],
-   "joints_within_3px": true
-  },
-  "note": "the stone edge sits 3.4 px right of the clay's (u 0.4021 vs 0.4008): its lit arris; spec u 0.400-0.422 +-0.01"
+  "note": "unchanged by the multiplier"
  },
  "lines": {
   "jib door seam left": {

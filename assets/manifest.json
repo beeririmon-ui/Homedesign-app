@@ -15729,9 +15729,9 @@
    "model": "seedream-5-pro i2i 2K, one render, no fix (650 tokens)",
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/d0o.json, d0o.txt (designer's 11.5.3 text with 11.9.3's sentence: d0o-designer-11.9.txt; verbatim: d0o-designer-verbatim.txt)",
    "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_d0o.py, tools/lock_d0o.py; mask assets/renders/hall/warm-modern/hall-2026-11-17/d0o-mask.png (the leaf rectangle plus column x 1161)",
-   "status": "rendered by render-agent; outside the mask identical to the approved D0 (0 levels); locked on the clay D0-none (joints <= 0.58 px, jib seams 0.274 / 0.365, stone edge u 0.402); jib door -0.72 vs -0.60 +-1/6 (in band, no multiplier); rejection list 11.5.7 passed at x1 (README); accepted by the manager (2026-11-17); for qa-agent and master-designer; not for the site before QA",
-   "sha256": "90a289bcb00b4bdc1829bdef27ae73ec3b3ba51317c1e302ad5a012ad14de562",
-   "bytes": 6364106
+   "status": "accepted by the manager; level multiplier +0.12 inside the mask applied (run 4): jib door -0.60, 0 levels outside the mask from D0, lock unchanged; the top of the hall wall under the line of light near-white with some channel clipping (d0o-lock.json); for QA's re-check; not for the site before QA",
+   "sha256": "8a4b36a5fbcd1db0c7643ddcae5d76ea57c4d00825c760c801aa4743c8a52d78",
+   "bytes": 6365973
   },
   {
    "id": "wm-hall-d0o-frame-2026-11-17",
@@ -15742,9 +15742,9 @@
    "created": "2026-11-17",
    "model": "code",
    "recipe": "site/tools/transitions/seeds.py frame",
-   "status": "cut from d0o.png; same status as the master",
-   "sha256": "927fb7c9ad430cc721bde879e46e8ab8f835fbae9fc997d28aef1f2553c5063f",
-   "bytes": 3278576
+   "status": "cut from the multiplied d0o.png; same status as the master",
+   "sha256": "026cdaaaaa721abab689574455e13edaae3caa79ffddf4e4d1e25da47909dc6d",
+   "bytes": 3281304
   },
   {
    "id": "wm-hall-hdx-candidate-fix1-2026-11-17",
@@ -15851,7 +15851,7 @@
    "model": "nano-banana-2 i2i 2K (400), run 3",
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/ht.json, ht.txt, ht-edits.json (designer's 11.5.4: ht-designer-verbatim.txt)",
    "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_ht.py, tools/ht_tools.py; seed: site/tools/transitions/seeds.py ht",
-   "status": "REJECTED at x1: the jib door drawn as a double door with a head at v 0.12, and a tone step at v ~0.86 (rejected/ht-r1-check.json); locked and in level otherwise; no fix inside the run (the manager); not for the site",
+   "status": "REJECTED at x1: the jib door drawn as a double door with a head at v 0.12, and a tone step at v ~0.86 (rejected/ht-r1-check.json); locked and in level otherwise; no fix inside the run (the manager); not for the site; replaced by wm-hall-ht-2026-11-17",
    "sha256": "a97b01e76bac509ceec9aaf2e55f32f3f2d8ab39d59f75c1438c9a029f118596",
    "bytes": 4779624
   },
@@ -15867,6 +15867,46 @@
    "status": "SUPERSEDED by the healed hdx.png (QA HDx-M1 / M2); not for the site",
    "sha256": "09036b5aeb579a39594baa786beb68ae0dd2796cf7a61aad2e6f786fb28ca2b1",
    "bytes": 5868333
+  },
+  {
+   "id": "wm-hall-ht-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/ht.png",
+   "kind": "arrival still HT: the far wall from the threshold (the end of clip 1a, the start of clip 1b); base.png's canvas 2720 x 1530",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "nano-banana-2 i2i 2K (400), run 4; HD, HDx and base.png's seeds pasted back",
+   "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/ht.json, ht-r2.txt, ht-r2-edits.json (designer's 11.5.4: ht-designer-verbatim.txt)",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_ht.py, tools/align_affine.py, tools/ht_tools.py, tools/ht_patch_step.py; seed: site/tools/transitions/seeds.py ht (2x, area-averaged)",
+   "status": "rendered by render-agent; locked (17 joints <= 2.03 px, architecture <= 1.73 px, positions within 11.5.7); jib door -0.50 (HD's own pixels), stone 0.31 under it, walnut L* 28.5; one flush jib leaf, no tone step; for qa-agent and master-designer; not for the site before QA",
+   "sha256": "ac1bad7fccbd265fe595fb0aef96733f8dfccc30439c8990a32ee731d4fb1e11",
+   "bytes": 4722993
+  },
+  {
+   "id": "wm-hall-ht-frame-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/ht-frame.png",
+   "kind": "the 16:9 frame of HT at 1920 x 1080 for the video model (seeds.py frame --canvas base)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "code",
+   "recipe": "site/tools/transitions/seeds.py frame",
+   "status": "cut from ht.png; same status as the master",
+   "sha256": "1379c21e95b3f651e42360fe5bf1fd9d38404eb29f6bd01fb9a2ade1b9d507f0",
+   "bytes": 2435435
+  },
+  {
+   "id": "wm-hall-d0o-pre-multiplier-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/d0o-pre-multiplier.png",
+   "kind": "D0o before the level multiplier (kept for the record / rollback)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "seedream-5-pro r1 (see wm-hall-d0o-2026-11-17)",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json",
+   "status": "SUPERSEDED by d0o.png with the +0.12 multiplier; not for the site",
+   "sha256": "90a289bcb00b4bdc1829bdef27ae73ec3b3ba51317c1e302ad5a012ad14de562",
+   "bytes": 6364106
   }
  ]
 }

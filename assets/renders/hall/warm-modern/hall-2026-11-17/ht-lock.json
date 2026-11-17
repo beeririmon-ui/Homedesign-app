@@ -1,0 +1,480 @@
+{
+ "still": "HT (r2, nano-banana-2), base.png's canvas 2720 x 1530",
+ "status": "rendered, locked, level in band; for qa-agent and master-designer; not for the site before QA",
+ "render": {
+  "model": "nano-banana-2 i2i 2K, 400 tokens",
+  "returned_px": [
+   2752,
+   1536
+  ],
+  "resampled_to": [
+   2720,
+   1530
+  ],
+  "note": "resampled to the canvas, it locks without an affine"
+ },
+ "seed": {
+  "tool": "seeds.py ht --hd hd.png --hdx hdx.png (the healed HDx) --base base.png --clay wm-door-2026-11-16, at 2x (--w 5440 --h 3060) and area-averaged down over valid samples (QA HDx-M1: no dotted joints)",
+  "share_of_frame": {
+   "HD": 0.467,
+   "HDx": 0.125,
+   "base_png": 0.015,
+   "new": 0.393
+  },
+  "view_by_rotation_px": 62216
+ },
+ "input_fixes_vs_r1": [
+  "the plaster above and below HD's patch = HD's own pixels mirrored about the patch edge, column by column, scaled by the clay's vertical wash ratio (continuous at the edge, vertical seams in place): no patch edge left to read as a door head",
+  "the clay's jib-door seams (id 83: the two side seams and the head at the canvas top edge, Z 2.40) drawn in the seed's seam colour wherever the seed does not cover",
+  "the edge of the open front-door leaf in the left margin (id 72) painted as plaster"
+ ],
+ "wording_fixes_vs_r1": "assets/prompts/warm-modern-hall-2026-11-17/ht-r2-edits.json: ONE flush leaf, only its two side seams from the top edge to the floor, its head at that top edge, no centre seam / second leaf / line across it; the plaster one continuous surface down to the skirting; five word-level tightenings to fit var2's 4,000 characters (3,990)",
+ "composition": "the seed pasted back, ramped inside its edge where the same surface continues: plaster 120 px (the model's band under HD's patch was ~10 % darker; now a gradual darkening toward the floor), stone 12 px (so the seed's own joints survive), living room 40 px; hard at the architecture's edges (tools/ht_tools.py compose)",
+ "lock_vs_clay": {
+  "joints_n": 17,
+  "joints_worst_px": 2.03,
+  "architecture_worst_px": 1.73,
+  "positions_u": {
+   "jib door seam left (u 0.158)": {
+    "clay_u": 0.1579,
+    "still_u": 0.158
+   },
+   "jib door seam right (u 0.372)": {
+    "clay_u": 0.3719,
+    "still_u": 0.372
+   },
+   "stone edge (u 0.456)": {
+    "clay_u": 0.4554,
+    "still_u": 0.4554
+   },
+   "inside corner (u 0.790)": {
+    "clay_u": 0.7903,
+    "still_u": 0.7903
+   },
+   "return / walnut (u 0.814)": {
+    "clay_u": 0.8136,
+    "still_u": 0.8136
+   },
+   "walnut / living room (u 0.850)": {
+    "clay_u": 0.8491,
+    "still_u": 0.8498
+   }
+  }
+ },
+ "levels_11_9_3": {
+  "reference": "jib door",
+  "stops_vs_base": -0.501,
+  "L_star": 77.9,
+  "px": 225848,
+  "target": -0.6,
+  "tol": 0.167,
+  "within": true,
+  "off_by": 0.099,
+  "second": {
+   "surface": "stone panel",
+   "stops_vs_base": -0.812,
+   "px": 379850,
+   "vs_reference": -0.31,
+   "band": [
+    -0.6,
+    -0.25
+   ],
+   "within": true
+  }
+ },
+ "walnut": {
+  "stone_0456_0790": [
+   {
+    "clay_u": 0.4554,
+    "still_u": 0.4554
+   },
+   {
+    "clay_u": 0.7903,
+    "still_u": 0.7903
+   }
+  ],
+  "walnut_0814_0850": [
+   {
+    "clay_u": 0.8136,
+    "still_u": 0.8136
+   },
+   {
+    "clay_u": 0.8491,
+    "still_u": 0.8498
+   }
+  ],
+  "walnut_L": 28.5,
+  "frame_L_p0_5": 20.8,
+  "walnut_8_above_the_grade_black_point": true,
+  "black_point_note": "the black point of the door doc (10.2 item 4, ch. 2) is the grade's, L* 11-14 (WM-G1), not the frame's darkest 0.5 %, which is the walnut itself here",
+  "joints_within_3px": true
+ },
+ "hd_patch_edges_on_the_plaster_pct": {
+  "top": [
+   [
+    400,
+    -1.2
+   ],
+   [
+    500,
+    -1.8
+   ],
+   [
+    600,
+    -1.5
+   ],
+   [
+    700,
+    -1.1
+   ],
+   [
+    800,
+    -1.5
+   ],
+   [
+    900,
+    -1.5
+   ],
+   [
+    1000,
+    -1.4
+   ],
+   [
+    1100,
+    -1.2
+   ],
+   [
+    1200,
+    -3.0
+   ]
+  ],
+  "bottom": [
+   [
+    400,
+    4.6
+   ],
+   [
+    500,
+    6.2
+   ],
+   [
+    600,
+    4.1
+   ],
+   [
+    700,
+    3.4
+   ],
+   [
+    800,
+    4.3
+   ],
+   [
+    900,
+    4.8
+   ],
+   [
+    1000,
+    4.1
+   ],
+   [
+    1100,
+    3.4
+   ],
+   [
+    1200,
+    3.9
+   ]
+  ]
+ },
+ "seam_with_HD": "the hidden door's measuring region (u 0.18-0.35, v 0.29-0.65) is HD's own pixels: HT -0.50 = HD -0.50; the far wall's texture in HT is HD's (clip 1b sees the same wall)",
+ "clipped": {
+  "px_with_a_channel_at_255_share": 0.0017913783160322953,
+  "where": "the view through the glazing (6,390 px) and stone in the top margin above the 16:9 frame (rows 0-42); none on the wall inside the frame"
+ },
+ "rejection_11_5_7_x1": {
+  "one_flush_jib_leaf_seams_top_to_floor": true,
+  "no_centre_seam_no_mid_head": true,
+  "skirting_stops_at_seams_and_before_stone": true,
+  "stone_no_skirting_uniform": true,
+  "corner_0790": true,
+  "walnut_0814_0850": true,
+  "living_room_bright_birches_armchair_edge": true,
+  "no_objects": true,
+  "no_tone_step_on_plaster": true
+ },
+ "note_x1": "at 1:1, on the jib door's lower part, the trowel texture shows a faint symmetric swirl from the mirrored input; it reads as trowel marks",
+ "turn_door_joints": "not applicable (HT is not part of the HD / HDx turn)",
+ "lines": {
+  "jib door seam left (u 0.158)": {
+   "kind": "vertical",
+   "clay_px": 482,
+   "median_offset_px": 0.2,
+   "p90_abs_px": 0.9,
+   "n": 28,
+   "mean_corr": 0.952,
+   "tilt_deg_vs_clay": -0.04
+  },
+  "jib door seam right (u 0.372)": {
+   "kind": "vertical",
+   "clay_px": 1031,
+   "median_offset_px": 0.12,
+   "p90_abs_px": 0.95,
+   "n": 28,
+   "mean_corr": 0.984,
+   "tilt_deg_vs_clay": -0.134
+  },
+  "stone edge (u 0.456)": {
+   "kind": "vertical",
+   "clay_px": 1245,
+   "median_offset_px": 0.04,
+   "p90_abs_px": 0.16,
+   "n": 30,
+   "mean_corr": 0.959,
+   "tilt_deg_vs_clay": -0.056
+  },
+  "inside corner (u 0.790)": {
+   "kind": "vertical",
+   "clay_px": 2104,
+   "median_offset_px": -0.0,
+   "p90_abs_px": 0.01,
+   "n": 30,
+   "mean_corr": 1.0,
+   "tilt_deg_vs_clay": -0.0
+  },
+  "return / walnut (u 0.814)": {
+   "kind": "vertical",
+   "clay_px": 2164,
+   "median_offset_px": -0.03,
+   "p90_abs_px": 0.08,
+   "n": 30,
+   "mean_corr": 1.0,
+   "tilt_deg_vs_clay": -0.003
+  },
+  "walnut / living room (u 0.850)": {
+   "kind": "vertical",
+   "clay_px": 2255,
+   "median_offset_px": 1.73,
+   "p90_abs_px": 4.04,
+   "n": 30,
+   "mean_corr": 0.915,
+   "tilt_deg_vs_clay": 0.024
+  },
+  "stone joint 1 (clay row 0)": {
+   "kind": "joint (followed per column)",
+   "n": 0,
+   "median_offset_px": NaN,
+   "p90_abs_px": null,
+   "mean_corr": null,
+   "clay_row_mid": 0.5,
+   "cols": [
+    1249,
+    2100
+   ]
+  },
+  "stone joint 2 (clay row 154)": {
+   "kind": "joint (followed per column)",
+   "n": 8,
+   "median_offset_px": -1.74,
+   "p90_abs_px": 4.0,
+   "mean_corr": 0.567,
+   "clay_row_mid": 153.5,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 3 (clay row 154)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": 0.1,
+   "p90_abs_px": 1.66,
+   "mean_corr": 0.904,
+   "clay_row_mid": 153.5,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 4 (clay row 246)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": 0.06,
+   "p90_abs_px": 0.08,
+   "mean_corr": 0.998,
+   "clay_row_mid": 245.5,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 5 (clay row 246)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": 0.09,
+   "p90_abs_px": 0.1,
+   "mean_corr": 1.0,
+   "clay_row_mid": 245.5,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 6 (clay row 490)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.04,
+   "p90_abs_px": 0.04,
+   "mean_corr": 1.0,
+   "clay_row_mid": 490.5,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 7 (clay row 490)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.01,
+   "p90_abs_px": 0.02,
+   "mean_corr": 1.0,
+   "clay_row_mid": 490.5,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 8 (clay row 582)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.02,
+   "p90_abs_px": 0.03,
+   "mean_corr": 1.0,
+   "clay_row_mid": 582.5,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 9 (clay row 582)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.02,
+   "p90_abs_px": 0.03,
+   "mean_corr": 1.0,
+   "clay_row_mid": 582.5,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 10 (clay row 705)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.01,
+   "p90_abs_px": 0.02,
+   "mean_corr": 1.0,
+   "clay_row_mid": 705.0,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 11 (clay row 705)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.0,
+   "p90_abs_px": 0.01,
+   "mean_corr": 1.0,
+   "clay_row_mid": 705.0,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 12 (clay row 950)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.02,
+   "p90_abs_px": 0.04,
+   "mean_corr": 1.0,
+   "clay_row_mid": 950.0,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 13 (clay row 950)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.02,
+   "p90_abs_px": 0.03,
+   "mean_corr": 1.0,
+   "clay_row_mid": 950.0,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 14 (clay row 1042)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.01,
+   "p90_abs_px": 0.03,
+   "mean_corr": 1.0,
+   "clay_row_mid": 1042.0,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 15 (clay row 1042)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": -0.03,
+   "p90_abs_px": 0.04,
+   "mean_corr": 1.0,
+   "clay_row_mid": 1042.0,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 16 (clay row 1226)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": 0.02,
+   "p90_abs_px": 0.03,
+   "mean_corr": 1.0,
+   "clay_row_mid": 1225.5,
+   "cols": [
+    1249,
+    1673
+   ]
+  },
+  "stone joint 17 (clay row 1226)": {
+   "kind": "joint (followed per column)",
+   "n": 10,
+   "median_offset_px": 0.01,
+   "p90_abs_px": 0.04,
+   "mean_corr": 1.0,
+   "clay_row_mid": 1225.5,
+   "cols": [
+    1675,
+    2100
+   ]
+  },
+  "stone joint 18 (clay row 1469)": {
+   "kind": "joint (followed per column)",
+   "n": 19,
+   "median_offset_px": -2.03,
+   "p90_abs_px": 3.11,
+   "mean_corr": 0.765,
+   "clay_row_mid": 1469.0,
+   "cols": [
+    1249,
+    2097
+   ]
+  }
+ }
+}

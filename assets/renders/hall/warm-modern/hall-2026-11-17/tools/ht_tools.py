@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """ht_tools.py: compose and check the HT still. render-agent 2026-11-17, 0 tokens.
   compose <render_on_canvas.png> <seed_kept.png> <keep_mask.png> <out.png> [ramp=40]
-      the seed (seeds.py ht: HD, HDx, base.png) pasted back over the render: ramped over RAMP px inside the seed where the same
-      surface continues outside it (the far wall's plaster / stone, the living room), hard at the architecture's edges
+      the seed (seeds.py ht: HD, HDx, base.png) pasted back over the render: ramped inside the seed where the same surface continues
+      outside it (plaster 120 px, stone 12 px, living room 40 px; or one RAMP for all), hard at the architecture's edges
   check <img.png> <input.png> <keep_mask.png> <out.json>"""
 import json, sys
 import cv2
@@ -21,20 +21,25 @@ def cls_ht():
     return c
 
 
-def compose(rp, sp, kp, out, ramp=40):
+RAMPS = {0: 120, 1: 12, 2: 40}      # r2: plaster 120 px (a gradual hand-over, no step), stone 12 px (the seed's own joints), living room 40
+
+
+def compose(rp, sp, kp, out, ramp=None):
     r = to_lin(np.asarray(Image.open(rp).convert("RGB")).astype(np.float64) / 255)
     s = to_lin(np.asarray(Image.open(sp).convert("RGB")).astype(np.float64) / 255)
     keep = np.asarray(Image.open(kp)) > 127
     cls = cls_ht()
-    same = np.zeros_like(keep)
-    for grp in GROUPS:
-        g_ = np.isin(cls, grp)
-        same |= g_ & (cv2.dilate((g_ & ~keep).astype(np.uint8), np.ones((2 * ramp + 1,) * 2, np.uint8)) > 0)
     dt = cv2.distanceTransform(keep.astype(np.uint8), cv2.DIST_L2, 5)
-    t = np.clip(dt / ramp, 0, 1)
-    al = np.where(same, t * t * (3 - 2 * t), 1.0) * keep
+    al = keep.astype(np.float64)
+    ramps = {i: (ramp if ramp else RAMPS[i]) for i in range(len(GROUPS))}
+    for i, grp in enumerate(GROUPS):
+        g_ = np.isin(cls, grp)
+        rp_ = ramps[i]
+        same = g_ & (cv2.dilate((g_ & ~keep).astype(np.uint8), np.ones((2 * rp_ + 1,) * 2, np.uint8)) > 0)
+        t = np.clip(dt / rp_, 0, 1)
+        al = np.where(same & keep, t * t * (3 - 2 * t), al)
     K.save_rgb(out, to_srgb(r * (1 - al[..., None]) + s * al[..., None]))
-    return dict(ramp_px=ramp, seed_exact_px=int((al >= 0.999).sum()), ramped_px=int(((al > 0) & (al < 0.999)).sum()))
+    return dict(ramps_px={"plaster": ramps[0], "stone": ramps[1], "living room": ramps[2]}, seed_exact_px=int((al >= 0.999).sum()), ramped_px=int(((al > 0) & (al < 0.999)).sum()))
 
 
 def check(img, inp, kp, outp):
@@ -86,7 +91,7 @@ def check(img, inp, kp, outp):
 
 if __name__ == "__main__":
     if sys.argv[1] == "compose":
-        print(json.dumps(compose(*sys.argv[2:6], *(int(x) for x in sys.argv[6:7]))))
+        print(json.dumps(compose(*sys.argv[2:6], *(int(x) for x in sys.argv[6:7]))))  # no ramp argument = the per-surface RAMPS
     else:
         r = check(*sys.argv[2:6])
         print(json.dumps({k: v for k, v in r.items() if k != "lines"}, indent=1))

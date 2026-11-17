@@ -1,6 +1,6 @@
 {
  "asset_id": "wm-hall-ht-2026-11-17",
- "status": "r1 REJECTED at x1 (a double jib door with a head; a tone step at v ~0.86); HT not delivered",
+ "status": "accepted render: r2 (run 4); r1 rejected (a double jib door, a tone step)",
  "model": "nano-banana-2",
  "type": "image-to-image",
  "resolution": "2K",
@@ -26,9 +26,35 @@
    "tokens": 400,
    "returned": "2730 x 1536 JPEG",
    "verdict": "rejected at x1 (rejected/ht-r1-check.json)"
+  },
+  {
+   "id": "r2",
+   "run": 4,
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b7392666-5563-4bce-8db9-021f8e6e7858.png",
+   "input_made_by": "seeds.py ht from the healed hdx.png and hd.png at 2x, area-averaged; tools/prep_ht.py (r2: the plaster continued from HD's own pixels, the clay's seams drawn)",
+   "input_sha256_20": "5f4f34b1969bfd107699",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-17/ht-r2.txt",
+   "prompt": "Photorealistic photograph from this render. Keep the camera and every edge exactly. Most of the picture is already the finished photograph (the far wall in the middle, the corner, the walnut opening, the living room): keep it exactly as it is, including its brightness, and complete only the rest in the same light and tone.\n\nEmpty entrance hall of a warm-minimal family house, same materials, light and grading as the hall stills and the reference living-room plate. The camera stands on the threshold of the open front door, just inside the hall; the doorway itself is behind the camera and not in frame. Eye height 1.20 m, 24 mm full-frame, level (no tilt or roll, verticals vertical), looking straight across the hall at its far wall 2.80 m away, with the same lens shift as the door still. All sharp, no depth of field, grain or vignette. The far wall fills the frame up to 79% of its width and runs off the top and left edges. Its left part, up to 46% of the width, is matte bone limewash plaster #ECE5DA with a very soft trowel movement; in it, from 16% to 37% of the width, the 3 mm shadow-gap outline of ONE closed flush jib door leaf in the same plaster, no handle, no frame: only its two side seams, straight from the very top edge of the picture down to the floor, its head at that top edge; no centre seam, no second leaf, no line across it. The plaster is one continuous surface from the top edge down to the skirting, no band, line or step in tone. A 15 cm skirting in the wall colour, barely proud, runs along the plaster and stops at both seams and just short of the stone. From 46% to 79% of the width, the wall is clad in the same honed pale limestone as the door wall outside (#D8C8AE), uniform in tone across each stone and from stone to stone, fossil dots at most, no streaks or bands, from the floor to above the frame, in long horizontal courses of different heights with fine 5 mm recessed joints, with a vertical joint at about 62% of the width in every other course and a clean edge where it meets the plaster; the stone has no skirting and runs straight down to the floor. Below, only a thin strip of smoked oak floor (#8B6F55, 22 cm planks running left to right). The whole far wall is washed from above by daylight from an opal roof-light slot that runs along its top, out of frame: one even wash across its full width, the lower half only slightly darker than the upper half; on the stone, each joint shows as a fine shadow line under the course above. Soft daylight from the open door behind the camera fills it evenly. On the right, at 79% of the width: a sharp inside corner, then a 14 cm return of the hall's front wall in plaster, then the side of a wide opening into the living room, lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap. The walnut reads as a warm vertical band from 81% to 85% of the width, running off the top and bottom edges; no architrave, casing, door leaf or threshold strip. Beyond it, to the right edge and at a steep angle, the brighter living room exactly as in the reference plate: its bone plaster window wall, the near end of the dark espresso-bronze steel glazing with 45 mm sight lines and the same pale, misty winter view of bare birches, the end of the honed limestone bench #D8C8AE under it, the smoked oak floor running on through the opening, and the bone plaster ceiling with its lowered band along the window wall. At the very right edge, at most the edge of the walnut and bone bouclé armchair. The living room is two-thirds of a stop brighter than the hall, and its light falls softly on the short plaster return and on the walnut. The hall wall is a quiet mid-tone, exactly the brightness of the photograph. Winter afternoon, no sun inside the house, no sun patches, no hard shadows, white balance 4600 K, warm brown-grey shadows, all lamps off and absent. Empty hall: no furniture, bench, hooks, console, lamp, switch, art, rug, objects, people or text.",
+   "prompt_chars": 3990,
+   "prompt_vs_designer": "ht.txt (r1) with the jib-door and plaster sentences changed and five word-level tightenings to fit 4,000 (ht-r2-edits.json)",
+   "idempotency_key": "wm-hall-ht-r2-nano-2026-11-17",
+   "placeholder_id": "5ef1203f-0e16-4072-b0dd-174e83854485",
+   "task_id": "30c96056c9cb509aaea7ed970df477c3",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-30c96056c9cb509aaea7ed970df477c3-0-1794898471986-3ee77816.png",
+   "estimate": 400,
+   "tokens": 400,
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "verdict": "accepted (ht-lock.json)"
   }
  ],
- "tokens": 400,
+ "tokens": 800,
  "date": "2026-11-17",
  "jobs_file": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json"
 }

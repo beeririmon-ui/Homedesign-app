@@ -231,12 +231,43 @@
     "rejected": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/ht-r1.png",
     "record": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/ht-r1-check.json"
    }
+  },
+  {
+   "id": "wm-hall-ht-r2-nano",
+   "run": 4,
+   "still": "HT",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "estimate": 400,
+   "tokens": 400,
+   "input": {
+    "made": "seeds.py ht (2x, from the healed HDx), then tools/prep_ht.py",
+    "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b7392666-5563-4bce-8db9-021f8e6e7858.png",
+    "sha256_20": "5f4f34b1969bfd107699"
+   },
+   "placeholder_id": "5ef1203f-0e16-4072-b0dd-174e83854485",
+   "task_id": "30c96056c9cb509aaea7ed970df477c3",
+   "batch_id": "d54b2857-aad0-4744-ae0e-4ff9d5fad5ba",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-30c96056c9cb509aaea7ed970df477c3-0-1794898471986-3ee77816.png",
+   "share": "https://www.var2.ai/image/5ef1203f-0e16-4072-b0dd-174e83854485",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/ht-r2.txt",
+   "verdict": "accepted (ht-lock.json)",
+   "out": {
+    "master": "assets/renders/hall/warm-modern/hall-2026-11-17/ht.png",
+    "master_sha256_20": "ac1bad7fccbd265fe595",
+    "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/ht-frame.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/ht-lock.json",
+    "made": "tools/align_affine.py (resample), tools/ht_tools.py compose (plaster 120 / stone 12 / living 40 px)"
+   }
   }
  ],
- "not_rendered": {
-  "HT": "r1 rejected; a second HT needs a decision and money"
- },
- "tokens_total": 4050,
+ "tokens_total": 4450,
  "run_1": {
   "cap": 2600,
   "spent": 1950,
@@ -253,7 +284,8 @@
  "tokens_by_run": {
   "run_1": 1950,
   "run_2": 1300,
-  "run_3": 800
+  "run_3": 800,
+  "run_4": 400
  },
  "run_3": {
   "brief": "the manager's decision on the second hand-back: HD by a uniform exposure correction of r1 first (0 tokens), else one nano-banana-2 HD; then HT (cap 650); D0o's multiplier once HD and HT are in; cap 1,000",
@@ -268,5 +300,16 @@
   ],
   "disk": "the disk was full for a while during this run: every PNG and JSON of this folder and the scratch inputs re-read in full afterwards (35 PNGs, all decode; masters byte-identical to their sources)",
   "qa_heal_hdx": "QA HDx-M1 / M2 healed at 0 tokens (hdx-lock.json -> qa_heal); hdx.png and hdx-frame.png replaced; the pre-heal master in rejected/hdx-r2-preheal.png; HD unaffected"
+ },
+ "run_4": {
+  "brief": "the manager's decision on run 3: HT r2 with nano-banana-2 (hard cap 400), then D0o's multiplier",
+  "cap": 400,
+  "spent": 400,
+  "unspent": 0,
+  "steps": [
+   "the HT seed rebuilt from the healed HDx and HD, supersampled 2x (no dotted joints)",
+   "HT r2: accepted",
+   "D0o's multiplier +0.12 inside the mask (0 tokens): D0o -0.60, HT -0.50, HD -0.50 (spread 0.10); the pre-multiplier D0o in rejected/; 0 levels outside the mask; a little clipping at the top of the hall wall (d0o-lock.json)"
+  ]
  }
 }

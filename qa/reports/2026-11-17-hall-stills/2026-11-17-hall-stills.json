@@ -332,5 +332,510 @@
  },
  "item3": {
   "answer": "does not break clip 2 (the living room in HDx is base.png's own pixels at +0.01); the release along the clip is about +0.45 stop of frame mean instead of ~0.6; for the designer's eye. The level that matters more is HD: it inherits HDx's stone at -0.82, so with the jib door at -0.60 the stone sits 0.22 below the plaster (11.9.3 asks 0.25-0.6)"
+ },
+ "recheck_2026-11-17_round2": {
+  "scope": "EFF1.2: HDx's two healed regions + what changed; HD new. 0 tokens. HT and D0o not touched.",
+  "HDx": {
+   "status": "pass; fit to be clip 2's first frame",
+   "changed_vs_rejected/hdx-r2-preheal.png": {
+    "px_any_change": 324849,
+    "px_over_2_levels": 62169,
+    "note": "render-agent's 62,169 = changes over 2 levels",
+    "bbox_x0_x1_y0_y1": [
+     820,
+     1602,
+     475,
+     1117
+    ],
+    "outside_living_room_ids": 0,
+    "max_levels": 71
+   },
+   "hdx_frame_equals_seeds_frame": true,
+   "levels_unchanged": {
+    "stone_new_old": [
+     -0.817,
+     -0.817
+    ],
+    "living_back_wall_new_old": [
+     0.01,
+     0.011
+    ],
+    "frame_mean_new_old": [
+     0.4095,
+     0.4095
+    ]
+   },
+   "HDx-M1": {
+    "status": "closed",
+    "evidence": "hdx-r2-floor-joints-x4.jpg (top healed, bottom pre-heal): continuous lines at x1 and x4",
+    "hf_energy_floor_band_new_old": [
+     0.698,
+     1.01
+    ]
+   },
+   "HDx-M2": {
+    "status": "closed",
+    "pedestal_specks_new_old": [
+     0,
+     5
+    ],
+    "right_pedestal_L_by_row_1095_1124": [
+     13.5,
+     13.5,
+     13.3,
+     13.3,
+     13.3,
+     13.4,
+     12.8,
+     12.4,
+     11.7,
+     10.9,
+     9.7,
+     8.7,
+     7.4,
+     6.4,
+     5.9,
+     5.7,
+     5.7,
+     5.3,
+     5.3,
+     5.3,
+     4.8,
+     4.9,
+     4.5,
+     4.2,
+     4.0,
+     3.6,
+     3.4,
+     3.1,
+     2.3,
+     1.4
+    ],
+    "note": "the 10 px ramp to the feet is monotonic (13.4 -> 5.3 L*), no step or ring; pedestals are base.png's plain walnut",
+    "evidence": "hdx-r2-table-x2.jpg"
+   },
+   "new_low": {
+    "id": "HDx-L2",
+    "what": "15 small dark specks (1-8 px) along the coffee table top's back edge against the sofa; identical in fix1, the pre-heal and now (missed in round 1). Not visible at x1, faint at x2",
+    "evidence": "hdx-r2-tabletop-edge-x4.jpg",
+    "owner": "render-agent"
+   },
+   "info": "the supersampled seed is a little softer (Laplacian: sofa -3 %, armchair -7 %); not visible at x2"
+  },
+  "HD": {
+   "status": "fail: 2 medium (0-token fixes); levels, lock to the clay's lines and the joints gate pass",
+   "hd_frame_equals_seeds_frame": true,
+   "levels": {
+    "jib_door_stops": [
+     565506,
+     -0.501,
+     77.9
+    ],
+    "target": "-0.60 +-1/6",
+    "stone_stops": [
+     279576,
+     -0.779
+    ],
+    "stone_minus_jib": -0.278,
+    "plaster_by_v": [
+     -0.232,
+     -0.448,
+     -0.588,
+     -0.643
+    ],
+    "stone_by_v": [
+     -0.484,
+     -0.763,
+     -0.87,
+     -0.961
+    ],
+    "plaster_by_u": [
+     -0.557,
+     -0.48,
+     -0.489
+    ],
+    "clipped_255": [
+     0,
+     0
+    ],
+    "zero_px": 0
+   },
+   "lock": {
+    "jib_seams_and_stone_edge": {
+     "jib seam left (clay x ~116)": {
+      "n": 39,
+      "clay_u": 0.0197,
+      "still_u": 0.0169,
+      "median_px": -6.74,
+      "p90_abs_px": 6.92
+     },
+     "jib seam right (clay x ~965)": {
+      "n": 39,
+      "clay_u": 0.3795,
+      "still_u": 0.3787,
+      "median_px": -1.71,
+      "p90_abs_px": 1.84
+     },
+     "stone edge (clay x ~1298)": {
+      "n": 39,
+      "clay_u": 0.5213,
+      "still_u": 0.5198,
+      "median_px": -2.17,
+      "p90_abs_px": 3.88
+     }
+    },
+    "horizontal_joints_per_clay_run": {
+     "joint at row ~50 (v -0.091)": {
+      "render_n": 23,
+      "render_median": 0.65,
+      "render_max_abs": 1.5,
+      "seed_ramp_n": 36,
+      "seed_ramp_median": -0.06
+     },
+     "joint at row ~420 (v 0.189)": {
+      "render_n": 23,
+      "render_median": 0.06,
+      "render_max_abs": 0.63,
+      "seed_ramp_n": 36,
+      "seed_ramp_median": 0.29
+     },
+     "joint at row ~570 (v 0.302)": {
+      "render_n": 23,
+      "render_median": 1.45,
+      "render_max_abs": 1.73,
+      "seed_ramp_n": 36,
+      "seed_ramp_median": 0.28
+     },
+     "joint at row ~760 (v 0.446)": {
+      "render_n": 23,
+      "render_median": -0.09,
+      "render_max_abs": 2.47,
+      "seed_ramp_n": 36,
+      "seed_ramp_median": 0.03
+     },
+     "joint at row ~1140 (v 0.733)": {
+      "render_n": 23,
+      "render_median": 0.82,
+      "render_max_abs": 1.16,
+      "seed_ramp_n": 36,
+      "seed_ramp_median": -0.2
+     },
+     "joint at row ~1280 (v 0.838)": {
+      "render_n": 23,
+      "render_median": -0.89,
+      "render_max_abs": 1.57,
+      "seed_ramp_n": 36,
+      "seed_ramp_median": -0.61
+     },
+     "joint at row ~1560 (v 1.05)": {
+      "render_n": 23,
+      "render_median": -1.1,
+      "render_max_abs": 1.6,
+      "seed_ramp_n": 36,
+      "seed_ramp_median": -0.74
+     }
+    },
+    "worst_median_px": 1.45,
+    "worst_column_px": 2.47
+   },
+   "turn_door_joints": {
+    "exit": 0,
+    "hdx_to_hd_p90": [
+     1.0,
+     1.0
+    ],
+    "hd_to_hdx_p90": [
+     1.0,
+     1.0
+    ],
+    "HD_lines_vs_clay_share_within_2px": 0.9367
+   },
+   "seam_with_hdx": {
+    "seeds.py hd from the healed hdx.png: seed edge u": [
+     0.7169,
+     1.03
+    ],
+    ">=70 px right of the seed edge": "HD == HDx projection exactly (max diff 0, 1,097,456 px)",
+    "ramp_profile_mean_abs_diff_levels": [
+     [
+      0,
+      6.61
+     ],
+     [
+      5,
+      6.42
+     ],
+     [
+      10,
+      6.4
+     ],
+     [
+      15,
+      5.31
+     ],
+     [
+      20,
+      5.03
+     ],
+     [
+      25,
+      4.06
+     ],
+     [
+      30,
+      3.88
+     ],
+     [
+      35,
+      3.27
+     ],
+     [
+      40,
+      2.6
+     ],
+     [
+      45,
+      1.76
+     ],
+     [
+      50,
+      1.2
+     ],
+     [
+      55,
+      0.64
+     ],
+     [
+      60,
+      0.15
+     ],
+     [
+      65,
+      0.0
+     ],
+     [
+      70,
+      0.0
+     ],
+     [
+      75,
+      0.0
+     ],
+     [
+      80,
+      0.0
+     ],
+     [
+      85,
+      0.0
+     ]
+    ],
+    "seed_edge_not_vertical": "x 1758 (u 0.717) for rows 50-1560; in the overscan corners it moves right to x 1864 (row 0) and 1974 (row 1663), so there the turn's seam (u 0.765-0.805) lies on render pixels",
+    "tone_across_paste_by_band_in_frame": [
+     {
+      "rows": [
+       170,
+       250
+      ],
+      "across_paste": 0.79,
+      "render_only_same_gap": 2.99,
+      "hdx_only_same_gap": 2.23
+     },
+     {
+      "rows": [
+       250,
+       330
+      ],
+      "across_paste": 1.23,
+      "render_only_same_gap": 1.85,
+      "hdx_only_same_gap": 0.24
+     },
+     {
+      "rows": [
+       330,
+       410
+      ],
+      "across_paste": 0.3,
+      "render_only_same_gap": -0.6,
+      "hdx_only_same_gap": 2.68
+     },
+     {
+      "rows": [
+       410,
+       490
+      ],
+      "across_paste": 1.82,
+      "render_only_same_gap": -1.43,
+      "hdx_only_same_gap": 0.42
+     },
+     {
+      "rows": [
+       490,
+       570
+      ],
+      "across_paste": -0.35,
+      "render_only_same_gap": -0.97,
+      "hdx_only_same_gap": -2.76
+     },
+     {
+      "rows": [
+       570,
+       650
+      ],
+      "across_paste": -0.14,
+      "render_only_same_gap": -1.66,
+      "hdx_only_same_gap": 0.85
+     },
+     {
+      "rows": [
+       650,
+       730
+      ],
+      "across_paste": 2.25,
+      "render_only_same_gap": 0.85,
+      "hdx_only_same_gap": 1.2
+     },
+     {
+      "rows": [
+       730,
+       810
+      ],
+      "across_paste": -2.95,
+      "render_only_same_gap": 0.36,
+      "hdx_only_same_gap": 7.58
+     },
+     {
+      "rows": [
+       810,
+       890
+      ],
+      "across_paste": -1.41,
+      "render_only_same_gap": -0.61,
+      "hdx_only_same_gap": 9.5
+     },
+     {
+      "rows": [
+       890,
+       970
+      ],
+      "across_paste": -3.16,
+      "render_only_same_gap": -3.4,
+      "hdx_only_same_gap": 11.81
+     },
+     {
+      "rows": [
+       970,
+       1050
+      ],
+      "across_paste": -1.99,
+      "render_only_same_gap": -1.92,
+      "hdx_only_same_gap": 11.22
+     },
+     {
+      "rows": [
+       1050,
+       1130
+      ],
+      "across_paste": -0.88,
+      "render_only_same_gap": -1.58,
+      "hdx_only_same_gap": 10.07
+     },
+     {
+      "rows": [
+       1130,
+       1210
+      ],
+      "across_paste": 1.0,
+      "render_only_same_gap": -0.1,
+      "hdx_only_same_gap": 1.74
+     },
+     {
+      "rows": [
+       1210,
+       1290
+      ],
+      "across_paste": 0.78,
+      "render_only_same_gap": -0.52,
+      "hdx_only_same_gap": 0.78
+     },
+     {
+      "rows": [
+       1290,
+       1370
+      ],
+      "across_paste": 7.83,
+      "render_only_same_gap": -1.2,
+      "hdx_only_same_gap": -2.78
+     },
+     {
+      "rows": [
+       1370,
+       1450
+      ],
+      "across_paste": 3.36,
+      "render_only_same_gap": -2.08,
+      "hdx_only_same_gap": -2.49
+     }
+    ],
+    "median_worst_abs_pct_across_paste_render_only_hdx_only": [
+     [
+      1.32,
+      7.83
+     ],
+     [
+      1.31,
+      3.4
+     ],
+     [
+      2.58,
+      11.81
+     ]
+    ]
+   },
+   "findings": [
+    {
+     "id": "HD-M1",
+     "severity": "medium",
+     "what": "lower course (rows ~1290-1494, u 0.717-0.803): the block straddles the paste. Left of the edge the render's smooth honed stone and a plain dark joint; from the paste edge HDx's own pixels of its lower-left corner (HDx x ~4-218, y ~1300-1590, magnified about x2 in HD), which are pitted, with a white lip under the joint that starts at the paste edge. Faint at x1, clear at x2; tone across the paste there +7.8 % / +3.4 %",
+     "fix": "0 tokens: heal the pitted texture and the joint lip in HDx's lower-left stone corner (hall stone, not the living room), re-derive HD's strip with seeds.py hd and recompose; or decide another seam route that keeps HD == HDx at u 0.765-0.805",
+     "owner": "render-agent",
+     "evidence": [
+      "hd-paste-lowcourse-x1.jpg",
+      "hd-paste-lowcourse-x2.jpg"
+     ]
+    },
+    {
+     "id": "HD-M2",
+     "severity": "medium",
+     "what": "an extra vertical joint at u 0.660 (canvas x 1624) in the four courses where the clay has none (rows 47-426, 568-758, 1137-1279, 1564+), a clear joint (15-20 L* dip); the clay has one vertical joint only, at u 0.803 in the other courses (11.5.5, 11.5.7 'joints vs the clay'). Outside HDx's strip, so the turn is unaffected, but seeds.py ht maps it to HT u 0.538, where HT's clay has no joint (HT's only vertical joint is at 0.623)",
+     "fix": "0 tokens: heal the four joint segments into the stone (smooth honed) before HT's seed is built from HD; or master-designer accepts the extra joint and HT's check expects it at 0.538",
+     "owner": "render-agent; master-designer if accepted",
+     "evidence": [
+      "hd-extra-joint-vs-clay.jpg"
+     ]
+    },
+    {
+     "id": "HD-I1",
+     "severity": "info",
+     "what": "the stone's vertical edge at 0.521 reads as a dark hairline (L* 57 against 72-74), not a lit one as 11.5.5 words it; the plaster darkens softly by ~6 L* over the last 40 px before it. Natural, a thin edge, for the designer's eye"
+    },
+    {
+     "id": "HD-I2",
+     "severity": "info",
+     "what": "the left jib seam sits 6.7 px left of the clay (u 0.0169 against 0.0197), inside +-0.01 (23.5 px)"
+    },
+    {
+     "id": "HD-I3",
+     "severity": "info",
+     "what": "in the overscan corners (rows 0-50 and 1560-1663) HDx's projection does not reach u 0.765-0.805, so the turn's seam falls on the render there: for motion-agent, only if the turn shows the canvas's overscan"
+    },
+    {
+     "id": "clip1-band",
+     "severity": "open (known)",
+     "what": "jib door D0o -0.72, HD -0.50: 0.22 apart, wider than the single 1/6 band of 11.9.3 for D0o/HT/HD; render-agent's ready x1.087 on D0o (0 tokens) brings it to 0.10. A condition for clip 1, not an HD defect",
+     "owner": "manager (decision), render-agent"
+    }
+   ]
+  }
  }
 }
