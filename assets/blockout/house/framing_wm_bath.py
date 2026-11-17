@@ -112,7 +112,8 @@ FRAMES = {"B2": dict(placeholders=PRODUCTS_B2, lamps=["bath/vanity-sconces", "ba
           "B2-plate": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=True),
           "B2-shell": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=False)}
 CAPTURE = {}
-LIGHT = dict(window=18.0, downlight_x=2.0, downlight_size=0.25, b1_lamp_x=0.4, sconce_w=5.0, niche_led_w=2.4, plate_target_L=84.0)
+LIGHT = dict(window=18.0, downlight_x=1.0, downlight_size=0.25, b1_lamp_x=0.4, sconce_w=10.0, sconce_spot_deg=110.0, niche_led_w=0.8,
+             plate_target_L=80.0)
 
 
 def mat(name, key, rough=0.9):
@@ -319,7 +320,7 @@ def wm_bath(R):
     for li in (b1 or {}).get("lights", []):
         li.data.energy *= LIGHT["b1_lamp_x"]
     notes.append(f"light balance (daylight the key, 7.8): bath window x{LIGHT['window']} (the round-4 clay: x4.5); downlight x{LIGHT['downlight_x']}, "
-                 f"area {LIGHT['downlight_size']} m (soft); B1 lamp x{LIGHT['b1_lamp_x']}; sconces {LIGHT['sconce_w']} W each; niche LED {LIGHT['niche_led_w']} W")
+                 f"area {LIGHT['downlight_size']} m (soft); B1 lamp x{LIGHT['b1_lamp_x']}; sconces {LIGHT['sconce_w']} W spots of {LIGHT['sconce_spot_deg']} deg pointing down; niche LED {LIGHT['niche_led_w']} W")
     notes.append("shower: limestone 12 mm floor to ceiling on both walls, joints Y 10.30 / 10.90 full height and Z 1.40; niche lined; "
                  "LED as an area light at the niche head (no visible strip)")
     # ---- shower fittings, bronze ----
@@ -409,7 +410,11 @@ def wm_products(R):
         b = bx(f"sconce_{i}", px - SCONCE["proj"], px, py - SCONCE["w"] / 2, py + SCONCE["w"] / 2, pz - SCONCE["h"] / 2, pz + SCONCE["h"] / 2,
                C["trav"], 0.006)
         (sw if i == 0 else se).append(b)
-        li = r2.mk_light(f"bath_wm_sconce_L{i}", "POINT", (px - 0.06, py, pz - SCONCE["h"] / 2 - 0.02), LIGHT["sconce_w"], size=0.04)
+        li = r2.mk_light(f"bath_wm_sconce_L{i}", "SPOT", (px - 0.05, py, pz - SCONCE["h"] / 2 - 0.005), LIGHT["sconce_w"])
+        li.data.spot_size = math.radians(LIGHT["sconce_spot_deg"])
+        li.data.spot_blend = 0.7
+        li.data.shadow_soft_size = 0.04
+        li.visible_camera = False
         li.data.color = r2.WARM
         lights.append(li)
     r3.reg(R, "bath/vanity-sconces", sw + se, "bath", src="7.7 + sconce gate open: blocks 12 x 22 x 10 on the plates, provisional")
