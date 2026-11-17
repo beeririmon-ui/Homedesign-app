@@ -265,12 +265,13 @@ def clay_view(stations: list[dict], cam: cg.Cam, out: cg.Canvas) -> tuple[np.nda
     return np.clip(res, 0, 1), float(hole.mean())
 
 
-def glass_plane(depth: np.ndarray, valid: np.ndarray, cv: "cg.Canvas", ring: int = 8) -> list[dict]:
+def glass_plane(depth: np.ndarray, valid: np.ndarray, cv: "cg.Canvas", ring: int = 8, inside_frame_only: bool = True) -> list[dict]:
     """Fill, in place, every hole of a depth pass that lies wholly inside the canvas's 16:9 frame with the plane of
     its rim (window glass: the clay has nothing behind it, so the view through the window is carried as one picture
     on the glass plane: no hole and no stretch, and the window frame stays its occluding edge). For a planar depth
     1/d is affine in (u, v): fitted on a ring around the hole, twice, dropping rim pixels off the plane (a sill, a
-    reveal). Holes reaching into the overscan stay holes, so nothing in the margin is read. Returns what was filled."""
+    reveal). Holes reaching into the overscan stay holes, so nothing in the margin is read (inside_frame_only=False: every
+    pane-sized hole, for a still whose margin is finished). Returns what was filled."""
     us, vs = cv.uv()
     x0, y0, x1, y1 = cv.box
     n, lab, stats, _ = cv2.connectedComponentsWithStats((~valid).astype(np.uint8), connectivity=8)
@@ -279,8 +280,10 @@ def glass_plane(depth: np.ndarray, valid: np.ndarray, cv: "cg.Canvas", ring: int
         bx, by, bw, bh, area = (int(t) for t in stats[k])
         if area < 50:
             continue
-        if bx < x0 or by < y0 or bx + bw > x1 or by + bh > y1:
+        if inside_frame_only and (bx < x0 or by < y0 or bx + bw > x1 or by + bh > y1):
             continue
+        if not inside_frame_only and area > 0.25 * valid.size:
+            continue                                          # not a pane: the sky or the outside
         m = lab == k
         rim = (cv2.dilate(m.astype(np.uint8), np.ones((2 * ring + 1, 2 * ring + 1), np.uint8)) > 0) & ~m & valid
         A = np.stack([us[rim], vs[rim], np.ones(int(rim.sum()))], axis=1)
