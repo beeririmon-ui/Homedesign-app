@@ -19,7 +19,9 @@
   "new: clip 1b can be built in code (0 tokens) from HT, its clay depth and HD; recommended before the model job (plan section 10). seeds.py ht seeds HT's far wall from HD",
   "every sendable prompt kept under 2,500 characters (var2 takes 4,000; a provider cap at 2,500 is possible and would cut the Scene paragraph)",
   "r2 of turn_door.py joints (the manager's follow-up): joint lines only, on the clay's lines, one threshold for both stills",
-  "D0o's mask has one more column (x 1161, render-agent): the door in code and clip 1a's first frame need nothing, since everything outside the drawn leaf is D0o's own pixels (checked: at 90 deg the composite equals D0o except x 708-809)"
+  "D0o's mask has one more column (x 1161, render-agent): the door in code and clip 1a's first frame need nothing, since everything outside the drawn leaf is D0o's own pixels (checked: at 90 deg the composite equals D0o except x 708-809)",
+  "assemble.py end_lock: the end correction travels with the picture along the flow (it stayed on screen and left a faint second joint line in bank frames 4-12); selftest unchanged (ends identical, PSNR 28.6 / 33.3)",
+  "export_arrival.py --segment dolly: clip 2 alone on the same timeline, needs only --bank2"
  ],
  "tools": "site/tools/transitions/: camgeo.py (cameras, canvases, reprojection, room depth I/O), turn_door.py (the turn and the door in code), walk_test.py (the clay is the ruler: --stations with -depth and -edges passes), assemble.py (bank: exposure tracking, end locks, resample in DIS), arrival_timeline.py, export_arrival.py (sequences, manifest, master), seeds.py (frames for the video model, the HD and HDx seeds), room_depth.py, clay_walk.py. proxy_house.py is the test fixture. 2026-11-17: walk_test.py routes clip1a / clip1b, --exclude ID:A-B, --events; turn_door.py joints (and the joints gate in turn); seeds.py ht; camgeo.HT.",
  "canvases": {
@@ -166,7 +168,23 @@
     "a walk with local defects (flicker, a jamb that shakes)": "one retry, same model, prompt tightened on the defect: 1,296",
     "a dissolve or a zoom": "minimax-h3, 2K, 4 s: 1,120 (another family); if it fails the same way, a threshold still in the wall and two 3 s clips: 650 + 2 x 972"
    },
-   "status": "not sent"
+   "status": "sent 2026-11-17, take 1: FAILED on a local defect (no retake inside the go)",
+   "take1": {
+    "var2": "3c70d4ab-0af5-414f-bb89-de0539a58af7",
+    "tokens": 1296,
+    "quote": 1296,
+    "seeds": "first: hdx-frame of hdx-r3-precorner (sha256 2259f573..., the job went out before render-agent's corner change at 07:21); last: base.png frame",
+    "out": "assets/video/transitions/warm-modern/clip2-hdx--m0/ (README.md)",
+    "walk": "WALK, WITH DEFECTS, no fails: parallax p90 0.4 %, dissolve R2 0.001, verticals median 0.07 deg, structure 0.0024; the reported back step (-0.07 m, f48-49) is a fit artifact at the id 50 exclusion edge (LK and flow: even progress)",
+    "exposure": "frame mean +0.453 stop (= the stills' own); the model's exposure on a tracked back-wall patch within 0.021 stop: locked",
+    "end_locks": "bank frame 1 = the NEW hdx-frame.png, last = M0 (within 1 level); model drift: start 0.4 px / 2.0 levels, end 6.8 px median / 3.6 levels (the model stops ~5 cm short)",
+    "corner": "no jump at the new HDx corner (residual 4.7 vs 5.3 on the stone at step 1->2)",
+    "defect": "right 20 % of the frame, f30-f72 (1.10-2.77 m): a pier whose upper face leans 3.5 -> 18.7 deg, and behind it a whole black-framed glass wall (~13 % of the width at f42) that stays ~1 m too long, into the wall thickness; a small object (furniture?) at its foot f42-48. Fails 10.4 and the straight-verticals rule",
+    "fix_options": {
+     "A, retake 1,296": "same model; the [DINING] paragraph replaced by one plain right wall with no opening (10.4 allows the glimpse to be missing); verticals sentence kept",
+     "B, code repair 0 tokens": "paint the right wall plane over f28-f76 from the clay geometry (its baseboard and ceiling lines per frame) with the clip's own bone plaster; the glimpse becomes missing (allowed)"
+    }
+   }
   },
   {
    "id": "clip1a",
