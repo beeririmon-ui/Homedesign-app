@@ -481,5 +481,173 @@
    }
   ]
  },
- "verdict_latest": "FAIL (round 2: C1A-M4)"
+ "verdict_latest": "PASS (round 3)",
+ "round3": {
+  "date": "2026-11-17",
+  "scope": "bank 128-143, join into 1b, 121-123 (L4), animatic 213-228 (EFF1.2); frames 1-118 bit-identical to round 2",
+  "verdict": "PASS",
+  "status_line": "קליפ 1a (טייק 1 + תיקון הרצועה, סבב 3): עבר QA (2026-11-17). תצוגה זמנית, לא לאתר עדיין. נשארו נמוכים ב-backlog: C1A-L1, L2, L3.",
+  "results": {
+   "C1A-M4": {
+    "result": "PASS",
+    "aligned_abs_dL_142_143": 0.71,
+    "signed": -0.04,
+    "round2": 5.39,
+    "steps_130_142": [
+     1.38,
+     1.52,
+     1.37,
+     1.05,
+     1.0,
+     0.85,
+     0.7,
+     0.83,
+     0.64,
+     0.66,
+     0.67,
+     0.49
+    ],
+    "steps_128_130_jamb": [
+     5.9,
+     11.91
+    ],
+    "blobs_142_143": "only two thin horizontal lines at the window head (y 205-227), also at 141->142; bench region clean"
+   },
+   "C1A-L4": {
+    "result": "PASS (closed)",
+    "edge_band_122_Lstar": 42.3,
+    "edge_band_median_dL": 0.1,
+    "rows_over_10": 0,
+    "round2": {
+     "Lstar": 67.2,
+     "median_dL": 19.8,
+     "rows": 1080
+    },
+    "mean_steps_121_128": [
+     -0.4,
+     3.9,
+     4.4,
+     4.5,
+     4.7,
+     4.6,
+     0.8
+    ]
+   },
+   "C1A-M1": {
+    "result": "PASS (unchanged)",
+    "outline_rows_120_127": 0,
+    "at_model_line_x_123_133": 0,
+    "jamb_edge_measured": [
+     1599.5,
+     1625.5,
+     1654.5,
+     1687.5,
+     1724.5,
+     1764.5,
+     1807.5,
+     1854.5,
+     1904.5
+    ]
+   },
+   "C1A-M2": {
+    "result": "PASS (unchanged)",
+    "ceiling_px_Lstar_below_70_128_143": 0,
+    "floor_dark_px_128_143": [
+     0,
+     252,
+     2232,
+     1849,
+     1459,
+     963,
+     591,
+     597,
+     627,
+     704,
+     818,
+     985,
+     1198,
+     1393,
+     1530,
+     1675
+    ]
+   },
+   "C1A-M3": {
+    "result": "PASS (unchanged)",
+    "birch_ncc_135_142": [
+     0.968,
+     0.982,
+     0.974,
+     0.987,
+     0.982,
+     0.98,
+     0.967,
+     0.979
+    ]
+   },
+   "join_1b": {
+    "result": "PASS",
+    "vs_HT_codec_rt_bgr": [
+     -1.33,
+     -0.18,
+     -1.19
+    ],
+    "vs_1b_first_bgr": [
+     -0.03,
+     0.0,
+     0.02
+    ],
+    "lowpass_p95": 1.78,
+    "walnut_steps_end": [
+     8.4,
+     4.9,
+     5.0,
+     0.0,
+     9.0
+    ],
+    "note": "C1A-L3 unchanged (arrival assembly)"
+   },
+   "walk_test_preview": {
+    "result": "PASS",
+    "verdict": "WALK, LOCAL FAIL",
+    "check6_bank_frames": [
+     22,
+     81,
+     120
+    ],
+    "worst": {
+     "frame": 21,
+     "longest_leaning": {
+      "len_h": 0.229,
+      "tilt_deg": -1.05,
+      "x": 0.003
+     }
+    },
+    "verticals": {
+     "frames": 36,
+     "max_abs_median_deg": 0.062,
+     "p90_worst_deg": 1.2105000000000001
+    },
+    "note": "p90 worst 1.21 deg on the preview, same as round 2; motion-agent's 1.37 is on the bank; criterion is the median (0.062 < 0.5)"
+   },
+   "animatic_213_228": {
+    "result": "carries the round-3 fix",
+    "mse_vs_r3": "118-544",
+    "mse_vs_r2": "215-604",
+    "step_228_229_aligned_abs_dL": 1.41,
+    "neighbours": [
+     1.09,
+     1.74
+    ],
+    "round2": 5.48
+   }
+  },
+  "findings": [
+   {
+    "id": "C1A-I7",
+    "severity": "info",
+    "frames": "137-142",
+    "what": "short dark dashed mark at the bench base at the right edge (~25x6 px, y 788-796, L* 16-18 vs 55), gone at 143; projection puts the armchair's rear feet (X ~-1.78) on the floor at y ~800 in frame 140, i.e. real content leaving the frame; not visible at x1, visible at x3-x4"
+   }
+  ]
+ }
 }
