@@ -1,0 +1,97 @@
+{
+  "room": "bath",
+  "style": "warm-modern",
+  "date": "2026-11-17",
+  "author": "master-designer (picks); sourcing-agent (written into data)",
+  "status": "proposed; part of owner approval 3 with the B2 render. Card statuses NOT changed until approval",
+  "source": "docs/proposals/wm-bath-render-2026-11-17.md sections 4.1 and 4.2",
+  "bible": "docs/design-bible/warm-modern.md 1.0.2",
+  "camera": "CB; B2 first (hero), B1 after approval 3; 23 slots",
+  "scores": "warm-modern score: the designer's table 4.2, also written to each card's style_scores.warm-modern. Price: card price.cost (USD, supplier); no retail price is approved (rule ה.10)",
+  "rule_variants": "every variant combines with every variant of every other slot; the first is the default and the defaults together are the strongest scene",
+  "gates_2026_11_17": {
+    "sconce_037853": "NOT PASSED: only seller brackets (L <=17.5, H 10.2-20.1, W <=12.4 cm), no projection; IP65 and CE seller-declared; see the card notes",
+    "sconce_430468_backup": "partly verified: 8 x 8 x 16 from SKU names, conflicts with the seller brackets; stock 7",
+    "planter_beige_medium": "SKU CJJT154204208HS exists; Medium dimensions not published; NOT PASSED",
+    "hand_towel_skus": "the three SKUs exist (caramel, linen, black); size label is the seller's rename of 70x140; linen stock 5"
+  },
+  "slots": {
+    "hand-towel": {"frame": "B2", "state": "ready; the sample slot", "picks": [
+      {"card_id": "hand-towel-aliexpress-pure-linen-towel-38x55", "option": {"color": "caramel", "set": "1pc"}, "sku": "12000059652536005", "score": 9.0, "score_src": "card", "cost_usd": 7.66, "price_ils": null, "why": "DEFAULT: washed linen 100%, 38x55; caramel #B07A44 is the style's accent, beside the walnut"},
+      {"card_id": "hand-towel-aliexpress-pure-linen-towel-38x55", "option": {"color": "linen", "set": "1pc"}, "sku": "12000059652334993", "score": 9.0, "score_src": "card", "cost_usd": 7.73, "price_ils": null, "why": "variant 2: oat linen #D9CDB8, tonal with the curtain and the stone. Live stock was 5 in the 2026-10-12 cache"},
+      {"card_id": "hand-towel-aliexpress-pure-linen-towel-38x55", "option": {"color": "black", "set": "1pc"}, "sku": "12000059652334999", "score": 8.5, "score_src": "card", "cost_usd": 7.57, "price_ils": null, "why": "variant 3: espresso, repeats the tap, the ring and the vase. Returns to the designer if the SKU photo leans blue (H 180-260)"}
+    ], "gap": "none for the sample"},
+    "shower-curtain": {"frame": "B1, B2", "state": "ready; variants nearly identical (gap 8)", "picks": [
+      {"card_id": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270", "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: oat #E4DACB tonal with plaster and stone, slub, hidden hooks; against: polyester in a linen look, semi-sheer, 270 touches the floor"}
+    ], "gap": "two curtains that are a real choice (taupe-mushroom heavy linen, and a waffle cotton in light oat)"},
+    "vanity-sconces": {"frame": "B2", "state": "GATE before render: dimensions", "picks": [
+      {"card_id": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853", "sku": "12000048654610384", "score": 8.0, "score_src": "card", "cost_usd": 67.85, "price_ils": 659, "why": "DEFAULT, with the gate: real travertine #D6BFA4, the anchor material; IP65 and CE declared, the only one that passes the electrical gate on paper; against: a rectangular block, no dimensions", "gate": "NOT PASSED on 2026-11-17: exact dimensions and projection unknown (brackets only)"},
+      {"card_id": "vanity-sconces-aliexpress-walnut-color-yellow-travertine-332886", "score": 8.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2, ONLY with IP44 in writing (then the default): a travertine cylinder on a walnut plate; against: IP not declared, height 28 over 26"},
+      {"card_id": "vanity-sconces-cj-fluted-resin-updown-white", "score": 7.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 3, ONLY with IP44 in writing: a fluted half cylinder in a plaster look; against: white, resin, IP44 not declared"}
+    ], "gap": "dimensions of 037853; IP44 in writing for 332886 and the fluted resin"},
+    "wall-sconce": {"frame": "B1 (lit in B2, out of frame)", "state": "same gate", "picks": [
+      {"card_id": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853", "sku": "12000048654610384", "score": 8.0, "score_src": "card", "cost_usd": 67.85, "price_ils": 349, "why": "DEFAULT, with the gate: the same lamp as the pair, one family for the shower", "gate": "NOT PASSED on 2026-11-17"},
+      {"card_id": "wall-sconce-aliexpress-wabi-sabi-natural-stone-430468", "sku": "12000049092105182", "score": 7.5, "score_src": "card", "cost_usd": 68.25, "price_ils": 349, "why": "variant 2 and the backup: a travertine cube with IP65; narrow and low against the envelope, stock only 7", "gate": "partly verified: 8x8x16 from SKU names, conflicts with the seller brackets"}
+    ], "gap": "dimensions"},
+    "shower-dispensers": {"frame": "B1, B2 (set of 3)", "state": "ready", "picks": [
+      {"card_id": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle", "score": 8.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: a fluted cylinder in sand #D3BC90, matte ceramic, 16.5 within the envelope; the small black pump reads as espresso"},
+      {"card_id": "shower-dispensers-aliexpress-sand-coarse-pottery-pump-bottle-set3", "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2: coarse clay in taupe-sand #A98A6E, a smooth cylinder: the same tone, another texture"},
+      {"card_id": "shower-dispensers-cj-ribbed-terracotta-pump-bottle-set3", "option": {"color": "light-brown"}, "score": 7.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 3: Light Brown reads as fluted caramel; a little strong for a 60 cm niche"}
+    ], "gap": "none"},
+    "soap-dispenser": {"frame": "B2", "state": "ready", "picks": [
+      {"card_id": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle", "score": 8.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: the same family as the niche bottles, a matched pair of a real home; 16.5 within the envelope; good photos"},
+      {"card_id": "soap-dispenser-aliexpress-beige-travertine-bathroom-accessorie-528496", "option": {"sku": "D"}, "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2, after dimensions and a matte pump: real beige travertine beside the travertine lamps; against: no dimensions, pump colour unknown, the main photo is a collage"}
+    ], "gap": "dimensions and pump colour of 528496"},
+    "toothbrush-cup": {"frame": "B2", "state": "ready", "picks": [
+      {"card_id": "toothbrush-cup-cj-silver-travertine-cup", "score": 8.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: real honed travertine in grey-beige #CFC7BA, exactly 8x11; the second anchor material of the three"},
+      {"card_id": "toothbrush-cup-cj-travertine-look-cup-milktea", "score": 7.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2, after dimensions: the right tone but probably resin and no dimensions"}
+    ], "gap": "dimensions of the milk-tea cup"},
+    "vanity-vase": {"frame": "B2", "state": "ready", "picks": [
+      {"card_id": "vanity-vase-cj-matte-black-pottery-bud-vase-10", "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT despite 8.0 (the sand one is 8.5): matte espresso pottery ties the sand dispenser and the stone cup to the tap and the ring; against: 9.8 under 11, a branch completes it"},
+      {"card_id": "vanity-vase-aliexpress-sand-oat-bud-vase-g-series", "option": {"model": "G3"}, "score": 8.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2: matte sand-oat, G3 at 12.8, a soft bottle"},
+      {"card_id": "vanity-vase-cj-wood-fired-stoneware-bud-vase-12", "score": 7.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 3: irregular stoneware in brown #8C7058, a serial handmade look (rule ג.4)"}
+    ], "gap": "none"},
+    "towel-ring": {"frame": "B2", "state": "ready; all black (gap 9)", "picks": [
+      {"card_id": "towel-ring-aliexpress-1-2pcs-bathroom-towel-842335", "score": 7.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: a full 16 cm ring in matte black on a small round plate, blackened steel, clean"},
+      {"card_id": "towel-ring-aliexpress-minimalist-oval-towel-ring-663845", "score": 7.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2: an oval black ring, a pill shape"},
+      {"card_id": "towel-ring-cj-matte-black-aluminium-ring-16", "score": 7.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 3: matte black, a protruding adhesive mount of 7"}
+    ], "gap": "one non-black ring (dark bronze or satin brass), 16-18"},
+    "floor-planter": {"frame": "B1, B2", "state": "CONDITIONAL: Medium dimensions", "picks": [
+      {"card_id": "planter-cj-cement-ribbed-belly", "option": {"color": "beige", "size": "medium"}, "sku": "CJJT154204208HS", "shared": "data/products/planter/", "score": 7.5, "score_src": "card", "cost_usd": 19.29, "price_ils": null, "why": "shared pick: the same fluted vessel as the living room, in Medium (the designer needs belly up to 31, height 26-36)", "gate": "NOT PASSED on 2026-11-17: the SKU exists; the Medium size is not published"}
+    ], "gap": "a vessel 26-30 x 30-36, concrete or matte ceramic, warm beige (gap 7)"},
+    "storage-basket": {"frame": "B2", "state": "EMPTY (everything under 7)", "picks": [], "gap": "a basket 40-44 x 30-34 x 20-23 (gap 5)"},
+    "towel-ladder": {"frame": "B1, B2", "state": "EMPTY (no card)", "picks": [], "gap": "a walnut or smoked-oak ladder (gap 3)"},
+    "bath-towels": {"frame": "B1, B2 (a pair)", "state": "EMPTY until there is a ladder; they hang on it", "picks": [
+      {"card_id": "bath-towels-cj-honeycomb-waffle-cotton-70x140", "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "default when there is a ladder: honeycomb waffle in coffee-taupe #8E7A6E, the plate's taupe"},
+      {"card_id": "bath-towels-cj-waffle-cotton-milky-white-70x140", "score": 7.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2: warm milky white; thin (260 g)"}
+    ], "gap": "the ladder"},
+    "shower-stool": {"frame": "B1, B2", "state": "EMPTY (no card)", "picks": [], "gap": "a drum or cylinder stool, 28-34 diameter, 42-46 high (gap 4)"},
+    "vanity": {"frame": "B2", "state": "FIXED, plan B; no dot", "picks": [], "fixed": "a walnut vanity per the designer's spec (section 7.6); a matching Israeli vanity is gap 11 (F3)", "gap": "a sellable vanity"},
+    "bath-mat": {"frame": "B1", "state": "ready; the B1 sample", "picks": [
+      {"card_id": "bath-mat-cj-tufted-cotton-frame-beige-40x60", "option": {"color": "line-camel"}, "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT (Line Camel): thick tufted cotton, 40x60, tone on tone"},
+      {"card_id": "bath-mat-cj-tufted-cotton-frame-beige-40x60", "option": {"color": "return-frame-beige"}, "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2: Return Frame Beige, the same card"},
+      {"card_id": "bath-mat-cj-tufted-cotton-frame-beige-40x60", "option": {"color": "return-frame-khaki"}, "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 3: Return Frame Khaki, the same card"}
+    ], "gap": "verify that the SKU Line Camel 40x60 exists (gap 12)"},
+    "toilet-paper-stand": {"frame": "B1", "state": "ready", "picks": [
+      {"card_id": "toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with", "score": 7.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: a matte black post of 60 with a spare post and a round base, a thin line"}
+    ], "gap": "none"},
+    "bin": {"frame": "B1", "state": "ready", "picks": [
+      {"card_id": "bin-cj-bent-walnut-round-swing-lid", "score": 8.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: a bent-wood drum in walnut #5E4030 with a swing lid; against: D26 over 24 (+8%)"}
+    ], "gap": "none"},
+    "toilet-brush": {"frame": "B1", "state": "ready", "picks": [
+      {"card_id": "toilet-brush-cj-fluted-ceramic-holder-black-handle", "option": {"color": "terracotta-brown"}, "score": 8.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: a fluted ceramic holder in caramel-brown #9A5F43, a long black handle; carries the caramel of B1"},
+      {"card_id": "toilet-brush-aliexpress-matte-black-steel-cylinder-245996", "score": 7.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2: a matte black cylinder 8x38"}
+    ], "gap": "none"},
+    "reed-diffuser": {"frame": "B1", "state": "ready", "picks": [
+      {"card_id": "reed-diffuser-cj-travertine-look-bamboo-lid-milktea", "score": 7.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: a travertine-look cylinder that repeats the lamps; against: probably resin, no dimensions, the bamboo lid must be matte"}
+    ], "gap": "dimensions"},
+    "candle": {"frame": "B1", "state": "ready", "picks": [
+      {"card_id": "candle-cj-ribbed-matte-ceramic-candle-cup-9", "option": {"color": "white-matte"}, "score": 7.5, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "DEFAULT: a matte fluted cup 9x9.8 within the envelope; matte white #ECE9E3 is tonal with the stone"},
+      {"card_id": "candle-cj-matte-footed-ceramic-cup-12", "option": {"color": "sand"}, "score": 7.0, "score_src": "card", "cost_usd": null, "price_ils": null, "why": "variant 2, tested in the frame: a footed bowl in sand #D9C8AE; 11.7 wide (+17%)"}
+    ], "gap": "none"},
+    "ledge-planter": {"frame": "B1", "state": "EMPTY (no card)", "picks": [], "gap": "a small vessel 11-14 x 11-14, matte sand or espresso (gap 6)"},
+    "ceiling-light": {"frame": "transit only", "state": "EMPTY (6.5 and below); not in the first stage", "picks": [], "gap": "a flush 28-34 x 6-10, opal or plaster, IP44 in writing (gap 10)"}
+  },
+  "first_stage_b2": "8 products (9 with the planter, if it passes) plus the fixed vanity: shower-curtain, niche set, sconce pair, dispenser, cup, vase, towel ring, hand towel",
+  "managers_note": "the status of each card (selected / rejected / candidate) stays unchanged until the owner approves; the proposed marking is the 'decision' column of docs/proposals/wm-bath-render-2026-11-17.md 4.2"
+}
