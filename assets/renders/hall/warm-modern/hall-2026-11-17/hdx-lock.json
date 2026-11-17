@@ -1,6 +1,6 @@
 {
  "still": "HDx (r2, the resumed run), tall 3:2 canvas 2496 x 1664",
- "status": "rendered, locked; level within +-1/3 of the 11.9.3 target (passes with a README line); for qa-agent and master-designer; not for the site before QA",
+ "status": "accepted by the manager; healed for QA HDx-M1 and HDx-M2 (2026-11-17, 0 tokens); for QA's re-check of the two regions",
  "composition": {
   "hall": "r2 (wm-hall-hdx-r2)",
   "living_room": "base.png's seed (seeds.py hdx, kept on the clay's living-room ids 30-43); where the seed is missing or dirty, fix1 (same camera, same input, same lock), because r2 left the armchair out of its own living room; the cut is hard at the walnut jamb and the arris, feathered (sigma 4 px) where the floor crosses the threshold (fix1 vs r2 there: 4 %)",
@@ -28,8 +28,7 @@
     "clay_u": 0.651,
     "still_u": 0.651
    }
-  },
-  "note": "r2's own walnut edge sat 4.1 px right of the clay's (u 0.3197); the living-room cut on the clay's ids puts it at 0.3183"
+  }
  },
  "levels_11_9_3": {
   "reference": "stone panel, left wall",
@@ -42,9 +41,9 @@
   "off_by": 0.183,
   "second": {
    "surface": "living back wall in the opening",
-   "stops_vs_base": 0.011,
+   "stops_vs_base": 0.01,
    "px": 228715,
-   "vs_reference": 0.828,
+   "vs_reference": 0.827,
    "band": null,
    "within": true,
    "target": "0 +-1/12"
@@ -59,9 +58,9 @@
  "living_over_hall_plaster_equivalent_stops": 0.408,
  "living_over_hall_designer": "2/3 +-1/6 (follows from the anchor; with the stone at -0.82 it is 0.40)",
  "seam_tone_pct": {
-  "30": 7.59,
-  "35": 0.8,
-  "36": 6.98
+  "30": 7.74,
+  "35": 0.62,
+  "36": 7.02
  },
  "seam_note": "the floor figure measures a band that includes the floor next to the furniture taken from fix1 (its shadow); along the open floor no seam is visible at x1",
  "rejection_11_5_7_x1": {
@@ -98,8 +97,8 @@
    "median_offset_px": 0.91,
    "p90_abs_px": 1.84,
    "n": 13,
-   "mean_corr": 0.819,
-   "tilt_deg_vs_clay": 0.071
+   "mean_corr": 0.818,
+   "tilt_deg_vs_clay": 0.072
   },
   "opening, right arris (u 0.651)": {
    "kind": "vertical",
@@ -107,7 +106,7 @@
    "median_offset_px": -0.08,
    "p90_abs_px": 0.76,
    "n": 29,
-   "mean_corr": 0.947,
+   "mean_corr": 0.948,
    "tilt_deg_vs_clay": -0.062
   },
   "stone joint 1 (clay row 45 mid)": {
@@ -290,5 +289,53 @@
     218
    ]
   }
+ },
+ "qa_heal": {
+  "report": "qa/reports/2026-11-17-hall-stills/README.md",
+  "M1": {
+   "finding": "dotted parquet joints in the living room (y 1040-1117), from the seed's reprojection (seeds.py hdx), copied by fix1",
+   "fix": "the seed reprojected at 2x (seeds.py hdx --w 4992 --h 3328) and area-averaged down to 2496 x 1664 over its valid samples only (the mask: full coverage after averaging); the joints come out as continuous anti-aliased lines; the composite rebuilt with it (tools/prep_hdx.py, tools/compose_hdx.py: the same rules as before)"
+  },
+  "M2": {
+   "finding": "dark dots on the coffee table's legs and a ring by the right leg (fix1's legs, used where the old seed was dirty)",
+   "fix": "with the clean seed the legs are base.png's own (smooth walnut); base.png's frame ends part-way down the legs, so their feet are fix1's: the hard hand-over that read as a ring is now a 10 px ramp inside the seed (tools/heal_legs.py). A first try that inpainted the strips beside the legs blurred the sofa base and was dropped"
+  },
+  "changed_px": 62169,
+  "changed_only_inside_living_room_ids": true,
+  "changed_box": "x 820-1602, y 475-1117",
+  "seed_artifacts_now_from_model_px": 40880,
+  "hd_unaffected": "seeds.py hd from the healed HDx = the seed HD was built on (max difference 0 inside its mask): HD only takes HDx's stone wall",
+  "turn_door_joints_hd_vs_healed_hdx": {
+   "passed": true,
+   "hdx_to_hd": {
+    "shared_strip": {
+     "edge_px": 10587,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.9998
+    },
+    "seam_band": {
+     "edge_px": 6145,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.9997
+    }
+   },
+   "hd_to_hdx": {
+    "shared_strip": {
+     "edge_px": 11816,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.998
+    },
+    "seam_band": {
+     "edge_px": 5878,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.9959
+    }
+   }
+  },
+  "preheal": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-r2-preheal.png"
  }
 }

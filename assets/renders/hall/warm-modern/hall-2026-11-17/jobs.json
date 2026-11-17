@@ -135,10 +135,11 @@
    "verdict": "accepted: stone -0.82 vs -1.0 +-1/6 (0.18 from the target: within +-1/3, README line); uniform honed limestone, one wash, no cones, no sun inside; locked (architecture <= 0.98 px, 15 joints <= 1.06 px). r2 left the armchair out of its own living room: the living room comes from the seed and fix1",
    "out": {
     "master": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx.png",
-    "master_sha256_20": "09036b5aeb579a39594b",
+    "master_sha256_20": "2259f57366345afbd071",
     "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-frame.png",
     "record": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-lock.json",
-    "made": "tools/compose_hdx.py raw/hdx-r2 work/hdx-seed-kept work/hdx-keep-mask out seam raw/hdx-fix1"
+    "made": "tools/compose_hdx.py raw/hdx-r2 work/hdx-seed-kept work/hdx-keep-mask out seam raw/hdx-fix1; healed for QA (run 3): the 2x supersampled seed (work/hdx-seed-ss), then tools/heal_legs.py",
+    "preheal": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-r2-preheal.png"
    }
   },
   {
@@ -265,6 +266,7 @@
    "HT r1, nano-banana-2 (400; seedream's 650 no longer fitted the cap): rejected at x1; stopped (the manager: no fix inside this run)",
    "D0o's multiplier not applied: the manager's condition is HD AND HT in"
   ],
-  "disk": "the disk was full for a while during this run: every PNG and JSON of this folder and the scratch inputs re-read in full afterwards (35 PNGs, all decode; masters byte-identical to their sources)"
+  "disk": "the disk was full for a while during this run: every PNG and JSON of this folder and the scratch inputs re-read in full afterwards (35 PNGs, all decode; masters byte-identical to their sources)",
+  "qa_heal_hdx": "QA HDx-M1 / M2 healed at 0 tokens (hdx-lock.json -> qa_heal); hdx.png and hdx-frame.png replaced; the pre-heal master in rejected/hdx-r2-preheal.png; HD unaffected"
  }
 }
