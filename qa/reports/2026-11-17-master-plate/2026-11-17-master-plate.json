@@ -1,0 +1,2688 @@
+{
+ "report": "qa/reports/2026-11-17-master-plate/README.md",
+ "date": "2026-11-17",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-master-plate-2026-11-17.md",
+ "asset": "assets/renders/master/warm-modern/stage1-2026-11-17/plate.png",
+ "verdict": "pass",
+ "blocking": [],
+ "status_line": "פלייט MB0: עבר QA (הפלייט בלבד; לא לאתר לפני רישום 1.3.9 ואישור 3). לפני ברירות המחדל: הכרעת המעצב על MP-D1 (סיבי ראש המיטה) ו-MP-D2 (קנט לוח האבן); QA יבדוק שוב רק את מה שישתנה.",
+ "items": {
+  "1_lock": {
+   "result": "pass",
+   "lines_measured": 19,
+   "lines_without_feature": 6,
+   "within_2px_vs_clay": 15,
+   "above_2px_vs_clay": {
+    "bronze jamb, inner edge": -3.95,
+    "left nightstand, top underside": -2.91,
+    "right nightstand, top underside": -2.94,
+    "right nightstand, right side front edge": 2.79
+   },
+   "above_2px_vs_analytic_only": {
+    "sill slab, bottom front edge": 3.28,
+    "mattress, foot top edge": 3.28,
+    "left nightstand, left side front edge": -2.4
+   },
+   "visible_x1_x2": false,
+   "raw_worst_vs_clay_px_excl_grooves": 4.95,
+   "plate_worst_vs_clay_px": 3.95,
+   "bed_centre_u": 0.5002,
+   "window_end_u": 0.1384,
+   "corner_u": {
+    "sharp_equivalent": 0.1853,
+    "arc_mid": 0.1917,
+    "band": [
+     0.166,
+     0.2245
+    ],
+    "reads_rounded": true
+   },
+   "headboard_top_tilt_deg": 0.049,
+   "verticals_deg": {
+    "window jamb": 0.023,
+    "bronze jamb": 0.037,
+    "headboard left": 0.017,
+    "headboard right": 0.001,
+    "nightstand side edges (noise, R4 corners)": [
+     0.492,
+     0.163
+    ]
+   },
+   "ra_lock_rerun_identical": "25/25"
+  },
+  "2_rejection_list_and_code_steps": {
+   "result": "pass",
+   "ch7_plate_items": {
+    "1": "pass",
+    "2": "pass",
+    "3": "pass",
+    "4": "pass",
+    "5": "pass (grain direction: MP-D1; sill edge: MP-D2)",
+    "6": "pass (MP-I3)",
+    "7": "pass"
+   },
+   "upper_wall_diagonal_max_smoothed_grad_L_per_px": [
+    0.07,
+    0.16
+   ],
+   "overscan_right_jamb": "absent (plaster, skirting, floor)",
+   "repro_from_raw_and_compose": {
+    "max_diff_levels": 1,
+    "px_diff_gt1": 0,
+    "px_diff_eq1": 26411,
+    "local_edits": 0
+   },
+   "step1_warp": {
+    "y_scale_about_row_707.3": 0.99246,
+    "y_offset_px": 0.686,
+    "x_offset_px": -1.0,
+    "plate_frame_equals_crop": true
+   },
+   "step2_gain": {
+    "range": [
+     1.0,
+     1.5157
+    ],
+    "gain1_share_of_frame": 0.302,
+    "cap_region": "rows 0-471, x 2372-2720",
+    "max_dlog_per_px": 0.0005,
+    "seam_row850_residual_L": [
+     0.21,
+     0.26
+    ],
+    "noise_elsewhere_L": [
+     0.26,
+     0.28
+    ],
+    "halo": "none",
+    "lift_L": {
+     "x2300_below_row850": 3.3,
+     "x2600_below_row850": 6.2,
+     "x2600_row600": 9.3
+    }
+   },
+   "step3_toe": {
+    "p05_before": 8.05,
+    "p05_after": 12.47,
+    "changed_above_L30.5_max_levels": 1,
+    "ab_kept": true,
+    "bath_round2_criteria": "pass (MP-I2)"
+   }
+  },
+  "3_tone": {
+   "result": "pass",
+   "plaster_bed_wall": {
+    "plate": [
+     86.1,
+     0.7,
+     7.0
+    ],
+    "base_clean_back_wall": [
+     87.3,
+     0.7,
+     5.0
+    ],
+    "dL": -1.2,
+    "dL_render_agent": -2.7,
+    "dE00_matched": [
+     0.95,
+     1.58
+    ],
+    "vs_bath_wall_matched": [
+     0.99,
+     1.55
+    ]
+   },
+   "floor_right_of_bed": {
+    "plate": [
+     35.4,
+     5.7,
+     15.2
+    ],
+    "dE00_matched": {
+     "base floor whole": [
+      1.99,
+      2.02
+     ],
+     "base floor right": [
+      1.71,
+      2.01
+     ],
+     "base floor far right": [
+      1.4,
+      1.4
+     ]
+    },
+    "dE00_medians": {
+     "base floor whole": 12.12,
+     "base floor right": 5.87,
+     "base floor far right": 8.11
+    }
+   },
+   "walnut_headboard": {
+    "plate": [
+     35.1,
+     11.4,
+     17.9
+    ],
+    "hab": 57.5,
+    "vs_6B4A33": 1.19,
+    "dE00_matched": {
+     "bath vanity front": [
+      1.35,
+      1.89
+     ],
+     "d0 door leaf": [
+      1.05,
+      1.09
+     ],
+     "base coffee table": [
+      0.9,
+      2.81
+     ],
+     "hdx casing": [
+      1.96,
+      2.46
+     ]
+    }
+   },
+   "walnut_nightstand_fronts": {
+    "plate": [
+     17.6,
+     8.5,
+     11.7
+    ],
+    "vs_base_table_matched": [
+     1.37,
+     1.45
+    ],
+    "vs_base_walnut_shadow_matched": [
+     1.15,
+     2.88
+    ]
+   },
+   "walnut_nightstand_tops": {
+    "plate": [
+     44.1,
+     7.8,
+     15.6
+    ],
+    "vs_base_table_matched": [
+     2.05,
+     4.34,
+     2.05
+    ],
+    "note": "middle band greyer: window reflection on a horizontal top; reads walnut"
+   },
+   "sill_stone": {
+    "top": [
+     94.2,
+     0.0,
+     6.4
+    ],
+    "face": [
+     56.2,
+     5.0,
+     21.2
+    ],
+    "vs_d0_matched": {
+     "top": 2.14,
+     "face": [
+      1.59,
+      1.98
+     ]
+    },
+    "vs_hdx_matched": {
+     "top": [
+      1.09,
+      1.64
+     ],
+     "face": [
+      1.38,
+      1.66
+     ]
+    },
+    "vs_bath_stone_matched": {
+     "top": [
+      2.12,
+      2.87
+     ],
+     "face": [
+      0.68,
+      0.88
+     ]
+    },
+    "face_height": "4 cm (clay +-1-2 px at 7 columns)"
+   },
+   "bronze_core": {
+    "plate": [
+     18.9,
+     2.7,
+     5.7
+    ],
+    "base": [
+     22.0,
+     4.1,
+     6.6
+    ],
+    "dE00_matched": [
+     1.28,
+     2.48
+    ],
+    "dE00_medians": 2.82
+   },
+   "black_point": {
+    "plate_p0_5": 12.47,
+    "plate_p0_1": 4.49,
+    "plate_p1": 14.7,
+    "base": 12.42,
+    "bath_now": 12.4,
+    "d0": 15.19,
+    "hdx": 13.97
+   },
+   "frame_mean_8bit": {
+    "plate": 178.6,
+    "base": 186.7,
+    "bath": 170.8
+   },
+   "same_house_x1": true,
+   "render_agent_flags": {
+    "headboard_grain_horizontal": {
+     "visible_x1": true,
+     "defect": false,
+     "call": "designer (MP-D1); QA: keep"
+    },
+    "sill_edge_rock_faced_6cm": {
+     "visible_x1": "as texture",
+     "visible_x2": true,
+     "thickness_measured": "4 cm",
+     "defect": false,
+     "call": "designer (MP-D2); QA: honed edge, 0 tokens"
+    },
+    "floor_darker": {
+     "visible": "side by side only",
+     "defect": false,
+     "call": "none needed (MP-D3)"
+    }
+   }
+  },
+  "4_slots": {
+   "result": "pass",
+   "slots": {
+    "curtains (product)": {
+     "box": [
+      456,
+      44,
+      547,
+      1128
+     ],
+     "under": {
+      "plaster, window wall (X -2.30)": 50948,
+      "plaster, rounded corner R 0.20": 47696
+     }
+    },
+    "sill-vase (product)": {
+     "box": [
+      240,
+      740,
+      303,
+      897
+     ],
+     "under": {
+      "window reveals, plaster": 7191,
+      "window frame, bronze-espresso": 1707,
+      "sill slab, limestone 4 cm": 989
+     }
+    },
+    "sill stem (filler)": {
+     "box": [
+      241,
+      612,
+      293,
+      740
+     ],
+     "under": {
+      "window reveals, plaster": 5248,
+      "window frame, bronze-espresso": 1408
+     }
+    },
+    "bedside-sconces, west (product)": {
+     "box": [
+      705,
+      532,
+      795,
+      636
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 9360
+     },
+     "wall_hp_p99": 1.22,
+     "wall_hp_p99.9": 1.63,
+     "wall_L_med": 91.0
+    },
+    "bedside-sconces, east (product)": {
+     "box": [
+      1925,
+      532,
+      2015,
+      636
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 9360
+     },
+     "wall_hp_p99": 2.21,
+     "wall_hp_p99.9": 3.19,
+     "wall_L_med": 87.2
+    },
+    "nightstand-tray (product)": {
+     "box": [
+      611,
+      963,
+      815,
+      990
+     ],
+     "under": {
+      "plaster, rounded corner R 0.20": 195,
+      "nightstand top, walnut": 5313
+     }
+    },
+    "nightstand-vase (product)": {
+     "box": [
+      649,
+      834,
+      713,
+      972
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 7563,
+      "plaster, rounded corner R 0.20": 508,
+      "nightstand top, walnut": 761
+     },
+     "wall_hp_p99": 3.14,
+     "wall_hp_p99.9": 4.69,
+     "wall_L_med": 80.0
+    },
+    "oat stems (filler)": {
+     "box": [
+      639,
+      734,
+      685,
+      835
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 3232,
+      "plaster, rounded corner R 0.20": 1414
+     },
+     "wall_hp_p99": 1.86,
+     "wall_hp_p99.9": 2.33,
+     "wall_L_med": 80.2
+    },
+    "trinket-dish (product)": {
+     "box": [
+      726,
+      953,
+      798,
+      974
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 504,
+      "nightstand top, walnut": 1008
+     }
+    },
+    "candle-holders (product)": {
+     "box": [
+      1987,
+      913,
+      2074,
+      980
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 4102,
+      "nightstand top, walnut": 1727
+     },
+     "wall_hp_p99": 5.6,
+     "wall_hp_p99.9": 8.67,
+     "wall_L_med": 84.6
+    },
+    "candles (filler)": {
+     "box": [
+      1988,
+      833,
+      2073,
+      920
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 7395
+     },
+     "wall_hp_p99": 3.44,
+     "wall_hp_p99.9": 5.56,
+     "wall_L_med": 85.3
+    },
+    "pillowcases (product)": {
+     "box": [
+      888,
+      911,
+      1832,
+      982
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 1562,
+      "bed headboard, walnut": 65462
+     },
+     "wall_hp_p99": 13.33,
+     "wall_hp_p99.9": 14.33,
+     "wall_L_med": 31.5
+    },
+    "bedding (product)": {
+     "box": [
+      222,
+      982,
+      2498,
+      1486
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 63341,
+      "plaster, window wall (X -2.30)": 80669,
+      "plaster, rounded corner R 0.20": 12837,
+      "skirting 15, wall colour": 48280,
+      "floor, smoked oak planks 22": 32061,
+      "bed headboard, walnut": 8350,
+      "mattress, bone": 824947,
+      "nightstand carcass + drawer fr": 56389,
+      "nightstand top, walnut": 15158,
+      "nightstand groove / finger rec": 5072
+     },
+     "wall_hp_p99": 4.47,
+     "wall_hp_p99.9": 8.37,
+     "wall_L_med": 60.5
+    },
+    "cushions (product)": {
+     "box": [
+      1202,
+      821,
+      1518,
+      985
+     ],
+     "under": {
+      "bed headboard, walnut": 51824
+     }
+    },
+    "throw (product)": {
+     "box": [
+      234,
+      1123,
+      2486,
+      1298
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 13026,
+      "plaster, window wall (X -2.30)": 36710,
+      "plaster, rounded corner R 0.20": 3579,
+      "skirting 15, wall colour": 35654,
+      "floor, smoked oak planks 22": 13541,
+      "mattress, bone": 281344,
+      "nightstand carcass + drawer fr": 8566,
+      "nightstand groove / finger rec": 1680
+     },
+     "wall_hp_p99": 2.86,
+     "wall_hp_p99.9": 4.05,
+     "wall_L_med": 31.3
+    },
+    "floor-lamp (product)": {
+     "box": [
+      2221,
+      370,
+      2527,
+      1180
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 242352,
+      "skirting 15, wall colour": 5508
+     },
+     "wall_hp_p99": 3.93,
+     "wall_hp_p99.9": 7.17,
+     "wall_L_med": 83.1
+    },
+    "framed-art (empty slot, 110-120 wide)": {
+     "box": [
+      1055,
+      224,
+      1665,
+      529
+     ],
+     "under": {
+      "plaster, bed wall (Y 17.66)": 186050
+     },
+     "wall_hp_p99": 2.05,
+     "wall_hp_p99.9": 3.49,
+     "wall_L_med": 89.7
+    }
+   },
+   "out_of_scope": "M-HC2 (curtain vs left nightstand 0.008 in the clay): designer, before the defaults"
+  }
+ },
+ "findings": [
+  {
+   "id": "MP-D1",
+   "severity": "designer call",
+   "what": "headboard walnut figure horizontal and flowing; ch.2 asked straight vertical quiet grain. Visible x1. Matte, no cathedrals, hue of the house walnut; horizontal like the bath vanity and the coffee table",
+   "fix": "QA recommends keep. Vertical = a model edit (tokens); decide before the defaults and MBf (the plate is the material reference)",
+   "owner": "master-designer",
+   "evidence": "mp-flags-x1-x2.jpg"
+  },
+  {
+   "id": "MP-D2",
+   "severity": "designer call",
+   "what": "sill slab edge chipped / rock-faced, not honed; thickness measured 4 cm (not 6). The only rustic stone edge in the house (d0, HDx, HD, bath vanity top: honed, crisp eased arris). Visible x1 as texture, clear x2; the sill-vase close-up will magnify it",
+   "fix": "QA recommends honed: 0-token local repaint of the face band (24-32 px, x 75-445) from its own tone with a straight top arris; before the defaults. If accepted: closed",
+   "owner": "master-designer (call); render-agent (fix)",
+   "evidence": "mp-flags-x1-x2.jpg"
+  },
+  {
+   "id": "MP-D3",
+   "severity": "not a defect",
+   "what": "floor right of the bed darker than base.png (35.4 vs 41.9-44.4); same material at matched lightness (dE00 1.4-2.1); the light, far side of a 1.5 m window in the bed's shadow; floor-lamp pool lifts it in the default scene",
+   "fix": "none (optional 0-token lift in the floor mask)",
+   "owner": "-"
+  },
+  {
+   "id": "MP-L1",
+   "severity": "low",
+   "what": "trowel texture on the right third of the bed wall: local hp p99/p99.9 3.8-4.0/6.3-7.1 L* vs 1.4/2.5 in base.png (same box) and 1.6/3.5 on the left of the same wall; ch.1 'soft, up to 3 L'. Faint x1, visible x2; behind the floor-lamp shade and the east sconce pool",
+   "fix": "0 tokens: halve the high-pass in the bed-wall mask, x > 1850, before the defaults; or the designer accepts it as plaster texture",
+   "owner": "render-agent, or master-designer to accept",
+   "evidence": "mp-l1-trowel-x2.jpg",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MP-I1",
+   "severity": "info",
+   "what": "step 2 (gain 1.1-1.5 on the right third) is not recorded as mandatory for derived assets; if the defaults frame brings back the model's fall-off, products there come out darker than the plate around them (FB1)",
+   "fix": "output 2: record whether the gain applies to the defaults frame before cutting; check layer edges on the right third",
+   "owner": "render-agent"
+  },
+  {
+   "id": "MP-I2",
+   "severity": "info",
+   "what": "MB0 toe is grade_d0's piecewise curve (slope 1.55 below p0.5), not the bath round-3 curve; passes BP-M1 round-2 criteria (p0.5 12.47; 0 change >= L*30; walnut shadow dE00 2.4, C/L 0.76; neighbour contrast x1.07 at p90)",
+   "fix": "derived assets: plate-compose.json curve (anchor 8.05); never re-solve; not the bath curve",
+   "owner": "render-agent"
+  },
+  {
+   "id": "MP-I3",
+   "severity": "info",
+   "what": "mattress cover soft, not tight (light creases, folded foot corner), L* 86.6 vs 88-90; item 6 passes; covered by the bedding in every combination",
+   "fix": "none",
+   "owner": "-"
+  },
+  {
+   "id": "MP-I4",
+   "severity": "info",
+   "what": "upper-right bed wall L* 68-78 (gain reached its +0.6 stop cap); median rule holds; reads as daylight fall-off, not vignette",
+   "fix": "none",
+   "owner": "-"
+  }
+ ],
+ "tokens": 0,
+ "var2": false,
+ "commits": false,
+ "scripts": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-master/",
+ "lock_detail": {
+  "window jamb at the wall face (Y 18.10)": {
+   "kind": "edge",
+   "n": 37,
+   "n_seen": 37,
+   "still_vs_analytic_median": -1.22,
+   "still_vs_analytic_p90": 1.29,
+   "clay_vs_analytic_median": -1.15,
+   "still_vs_clay_median": -0.07,
+   "still_vs_clay_p90": 0.19,
+   "tilt_vs_line_deg": -0.023,
+   "line_angle_deg": -90.0,
+   "abs_tilt_from_vertical_deg": 0.023
+  },
+  "bronze jamb, inner edge (Y 18.145)": {
+   "kind": "edge",
+   "n": 36,
+   "n_seen": 36,
+   "still_vs_analytic_median": -4.17,
+   "still_vs_analytic_p90": 4.18,
+   "clay_vs_analytic_median": -0.21,
+   "still_vs_clay_median": -3.95,
+   "still_vs_clay_p90": 3.97,
+   "tilt_vs_line_deg": -0.037,
+   "line_angle_deg": -90.0,
+   "abs_tilt_from_vertical_deg": 0.037
+  },
+  "sill slab, top front edge (Z 0.75)": {
+   "kind": "edge",
+   "n": 40,
+   "n_seen": 40,
+   "still_vs_analytic_median": -1.3,
+   "still_vs_analytic_p90": 3.12,
+   "clay_vs_analytic_median": 0.05,
+   "still_vs_clay_median": -1.41,
+   "still_vs_clay_p90": 3.23,
+   "tilt_vs_line_deg": -0.573,
+   "line_angle_deg": 169.24
+  },
+  "sill slab, bottom front edge (Z 0.71)": {
+   "kind": "edge",
+   "n": 40,
+   "n_seen": 40,
+   "still_vs_analytic_median": 3.28,
+   "still_vs_analytic_p90": 3.78,
+   "clay_vs_analytic_median": 2.24,
+   "still_vs_clay_median": 1.01,
+   "still_vs_clay_p90": 1.48,
+   "tilt_vs_line_deg": -0.24,
+   "line_angle_deg": 167.84
+  },
+  "skirting top, window wall (Z 0.15)": {
+   "kind": "edge",
+   "n": 40,
+   "n_seen": 40,
+   "still_vs_analytic_median": 0.96,
+   "still_vs_analytic_p90": 1.31,
+   "clay_vs_analytic_median": 0.88,
+   "still_vs_clay_median": 0.06,
+   "still_vs_clay_p90": 0.79,
+   "tilt_vs_line_deg": -0.109,
+   "line_angle_deg": 150.38
+  },
+  "skirting top, bed wall right of the right nightstand": {
+   "kind": "edge",
+   "n": 36,
+   "n_seen": 36,
+   "still_vs_analytic_median": -1.31,
+   "still_vs_analytic_p90": 2.06,
+   "clay_vs_analytic_median": -0.22,
+   "still_vs_clay_median": -1.0,
+   "still_vs_clay_p90": 1.93,
+   "tilt_vs_line_deg": -0.275,
+   "line_angle_deg": 0.0
+  },
+  "floor line, bed wall right of the right nightstand": {
+   "kind": "edge",
+   "n": 32,
+   "n_seen": 32,
+   "still_vs_analytic_median": 0.09,
+   "still_vs_analytic_p90": 0.84,
+   "clay_vs_analytic_median": -0.29,
+   "still_vs_clay_median": 0.69,
+   "still_vs_clay_p90": 1.19,
+   "tilt_vs_line_deg": -0.263,
+   "line_angle_deg": 0.0
+  },
+  "headboard, left edge": {
+   "kind": "edge",
+   "n": 41,
+   "n_seen": 41,
+   "still_vs_analytic_median": 1.3,
+   "still_vs_analytic_p90": 1.34,
+   "clay_vs_analytic_median": 0.19,
+   "still_vs_clay_median": 1.12,
+   "still_vs_clay_p90": 1.16,
+   "tilt_vs_line_deg": 0.017,
+   "line_angle_deg": -90.0,
+   "abs_tilt_from_vertical_deg": -0.017
+  },
+  "headboard, right edge": {
+   "kind": "edge",
+   "n": 41,
+   "n_seen": 41,
+   "still_vs_analytic_median": -0.26,
+   "still_vs_analytic_p90": 0.27,
+   "clay_vs_analytic_median": -0.31,
+   "still_vs_clay_median": 0.05,
+   "still_vs_clay_p90": 0.08,
+   "tilt_vs_line_deg": -0.001,
+   "line_angle_deg": -90.0,
+   "abs_tilt_from_vertical_deg": 0.001
+  },
+  "headboard, top edge": {
+   "kind": "edge",
+   "n": 41,
+   "n_seen": 41,
+   "still_vs_analytic_median": 0.37,
+   "still_vs_analytic_p90": 0.48,
+   "clay_vs_analytic_median": -0.47,
+   "still_vs_clay_median": 0.84,
+   "still_vs_clay_p90": 0.93,
+   "tilt_vs_line_deg": -0.049,
+   "line_angle_deg": 0.0
+  },
+  "mattress, foot top edge (plate)": {
+   "kind": "edge",
+   "n": 39,
+   "n_seen": 41,
+   "still_vs_analytic_median": 3.28,
+   "still_vs_analytic_p90": 4.31,
+   "clay_vs_analytic_median": 4.16,
+   "still_vs_clay_median": -0.86,
+   "still_vs_clay_p90": 2.98,
+   "tilt_vs_line_deg": 0.034,
+   "line_angle_deg": 0.0
+  },
+  "mattress, right top edge (plate)": {
+   "kind": "edge",
+   "n": 0,
+   "n_seen": 0,
+   "note": "too few samples with a feature in clay and still"
+  },
+  "mattress, left top edge (plate)": {
+   "kind": "edge",
+   "n": 0,
+   "n_seen": 0,
+   "note": "too few samples with a feature in clay and still"
+  },
+  "left nightstand, top front edge (Z 0.55)": {
+   "kind": "edge",
+   "n": 41,
+   "n_seen": 41,
+   "still_vs_analytic_median": 0.24,
+   "still_vs_analytic_p90": 0.67,
+   "clay_vs_analytic_median": -0.7,
+   "still_vs_clay_median": 0.93,
+   "still_vs_clay_p90": 0.99,
+   "tilt_vs_line_deg": -0.209,
+   "line_angle_deg": 0.0
+  },
+  "left nightstand, top underside (Z 0.52)": {
+   "kind": "edge",
+   "n": 41,
+   "n_seen": 41,
+   "still_vs_analytic_median": -1.91,
+   "still_vs_analytic_p90": 1.98,
+   "clay_vs_analytic_median": 1.02,
+   "still_vs_clay_median": -2.91,
+   "still_vs_clay_p90": 2.99,
+   "tilt_vs_line_deg": 0.251,
+   "line_angle_deg": 0.0
+  },
+  "left nightstand, drawer groove (Z 0.29)": {
+   "kind": "joint",
+   "n": 15,
+   "n_seen": 16,
+   "still_vs_analytic_median": -1.73,
+   "still_vs_analytic_p90": 2.17,
+   "clay_vs_analytic_median": -0.66,
+   "still_vs_clay_median": -1.08,
+   "still_vs_clay_p90": 1.31,
+   "tilt_vs_line_deg": 2.997,
+   "line_angle_deg": 0.0
+  },
+  "left nightstand, plinth line (Z 0.06)": {
+   "kind": "joint",
+   "n": 0,
+   "n_seen": 0,
+   "note": "too few samples with a feature in clay and still"
+  },
+  "right nightstand, top front edge (Z 0.55)": {
+   "kind": "edge",
+   "n": 41,
+   "n_seen": 41,
+   "still_vs_analytic_median": -0.81,
+   "still_vs_analytic_p90": 0.85,
+   "clay_vs_analytic_median": -0.7,
+   "still_vs_clay_median": -0.11,
+   "still_vs_clay_p90": 0.15,
+   "tilt_vs_line_deg": -0.059,
+   "line_angle_deg": 0.0
+  },
+  "right nightstand, top underside (Z 0.52)": {
+   "kind": "edge",
+   "n": 41,
+   "n_seen": 41,
+   "still_vs_analytic_median": -1.93,
+   "still_vs_analytic_p90": 1.95,
+   "clay_vs_analytic_median": 1.01,
+   "still_vs_clay_median": -2.94,
+   "still_vs_clay_p90": 2.96,
+   "tilt_vs_line_deg": -0.101,
+   "line_angle_deg": 0.0
+  },
+  "right nightstand, drawer groove (Z 0.29)": {
+   "kind": "joint",
+   "n": 15,
+   "n_seen": 16,
+   "still_vs_analytic_median": -1.77,
+   "still_vs_analytic_p90": 2.63,
+   "clay_vs_analytic_median": -0.75,
+   "still_vs_clay_median": -1.03,
+   "still_vs_clay_p90": 1.92,
+   "tilt_vs_line_deg": -2.812,
+   "line_angle_deg": 0.0
+  },
+  "right nightstand, plinth line (Z 0.06)": {
+   "kind": "joint",
+   "n": 0,
+   "n_seen": 0,
+   "note": "too few samples with a feature in clay and still"
+  },
+  "left nightstand, left side front edge (X -2.10)": {
+   "kind": "edge",
+   "n": 32,
+   "n_seen": 32,
+   "still_vs_analytic_median": -2.4,
+   "still_vs_analytic_p90": 2.47,
+   "clay_vs_analytic_median": -2.46,
+   "still_vs_clay_median": 0.05,
+   "still_vs_clay_p90": 0.12,
+   "tilt_vs_line_deg": -0.492,
+   "line_angle_deg": -90.0,
+   "abs_tilt_from_vertical_deg": 0.492
+  },
+  "right nightstand, right side front edge (X 0.70)": {
+   "kind": "edge",
+   "n": 32,
+   "n_seen": 32,
+   "still_vs_analytic_median": 4.21,
+   "still_vs_analytic_p90": 4.37,
+   "clay_vs_analytic_median": 1.42,
+   "still_vs_clay_median": 2.79,
+   "still_vs_clay_p90": 2.95,
+   "tilt_vs_line_deg": -0.163,
+   "line_angle_deg": -90.0,
+   "abs_tilt_from_vertical_deg": 0.163
+  },
+  "bed frame, right side top (Z 0.28)": {
+   "kind": "edge",
+   "n": 0,
+   "n_seen": 0,
+   "note": "too few samples with a feature in clay and still"
+  },
+  "bed frame, left side top (Z 0.28)": {
+   "kind": "edge",
+   "n": 0,
+   "n_seen": 0,
+   "note": "too few samples with a feature in clay and still"
+  }
+ },
+ "tone_detail": {
+  "plate": {
+   "plaster bed wall (id 1, all)": {
+    "px": 1631929,
+    "Lab": [
+     86.1,
+     0.7,
+     7.0
+    ],
+    "L_p10_p90": [
+     76.7,
+     91.4
+    ],
+    "C": 7.0,
+    "hab": 84.1,
+    "H_hsl": 36.0
+   },
+   "plaster bed wall, upper (id 1, y<640)": {
+    "px": 1185045,
+    "Lab": [
+     86.9,
+     0.7,
+     6.8
+    ],
+    "L_p10_p90": [
+     78.0,
+     91.5
+    ],
+    "C": 6.8,
+    "hab": 84.3,
+    "H_hsl": 36.0
+   },
+   "plaster bed wall, left of headboard x 660-890": {
+    "px": 210413,
+    "Lab": [
+     90.2,
+     0.5,
+     5.0
+    ],
+    "L_p10_p90": [
+     82.2,
+     92.8
+    ],
+    "C": 5.0,
+    "hab": 84.5,
+    "H_hsl": 36.0
+   },
+   "plaster bed wall, right of headboard x 1830-2643": {
+    "px": 841229,
+    "Lab": [
+     83.0,
+     1.0,
+     8.5
+    ],
+    "L_p10_p90": [
+     71.3,
+     86.9
+    ],
+    "C": 8.6,
+    "hab": 83.2,
+    "H_hsl": 35.7
+   },
+   "plaster bed wall, upper right x 2200-2643 y<500": {
+    "px": 201994,
+    "Lab": [
+     77.6,
+     1.2,
+     10.2
+    ],
+    "L_p10_p90": [
+     69.6,
+     81.9
+    ],
+    "C": 10.3,
+    "hab": 83.1,
+    "H_hsl": 36.0
+   },
+   "plaster window wall (id 2)": {
+    "px": 205972,
+    "Lab": [
+     61.5,
+     2.8,
+     13.2
+    ],
+    "L_p10_p90": [
+     44.1,
+     67.9
+    ],
+    "C": 13.5,
+    "hab": 78.2,
+    "H_hsl": 33.3
+   },
+   "rounded corner (id 5)": {
+    "px": 143271,
+    "Lab": [
+     52.4,
+     2.7,
+     14.2
+    ],
+    "L_p10_p90": [
+     35.5,
+     66.2
+    ],
+    "C": 14.5,
+    "hab": 79.3,
+    "H_hsl": 34.3
+   },
+   "window reveals (id 12)": {
+    "px": 144282,
+    "Lab": [
+     94.8,
+     -0.0,
+     3.2
+    ],
+    "L_p10_p90": [
+     78.4,
+     96.2
+    ],
+    "C": 3.2,
+    "hab": 90.5,
+    "H_hsl": 40.0
+   },
+   "skirting (id 9)": {
+    "px": 62991,
+    "Lab": [
+     40.2,
+     2.9,
+     12.3
+    ],
+    "L_p10_p90": [
+     26.7,
+     54.6
+    ],
+    "C": 12.7,
+    "hab": 76.8,
+    "H_hsl": 33.1
+   },
+   "floor (id 10+11)": {
+    "px": 63736,
+    "Lab": [
+     34.9,
+     5.7,
+     15.2
+    ],
+    "L_p10_p90": [
+     17.5,
+     49.3
+    ],
+    "C": 16.2,
+    "hab": 69.3,
+    "H_hsl": 29.3
+   },
+   "floor right of bed (x 2250-2643, y>1230)": {
+    "px": 61902,
+    "Lab": [
+     35.4,
+     5.7,
+     15.2
+    ],
+    "L_p10_p90": [
+     17.5,
+     49.4
+    ],
+    "C": 16.3,
+    "hab": 69.4,
+    "H_hsl": 29.3
+   },
+   "floor left of bed (x<500)": {
+    "px": 1657,
+    "Lab": [
+     21.8,
+     6.4,
+     14.3
+    ],
+    "L_p10_p90": [
+     19.8,
+     24.1
+    ],
+    "C": 15.7,
+    "hab": 66.0,
+    "H_hsl": 28.2
+   },
+   "sill slab (id 14)": {
+    "px": 18663,
+    "Lab": [
+     90.8,
+     0.8,
+     10.3
+    ],
+    "L_p10_p90": [
+     53.4,
+     95.4
+    ],
+    "C": 10.3,
+    "hab": 85.4,
+    "H_hsl": 36.9
+   },
+   "sill slab top surface (id 14, above top front edge)": {
+    "px": 9581,
+    "Lab": [
+     94.2,
+     -0.0,
+     6.4
+    ],
+    "L_p10_p90": [
+     88.8,
+     95.6
+    ],
+    "C": 6.4,
+    "hab": 90.2,
+    "H_hsl": 40.0
+   },
+   "headboard (id 20)": {
+    "px": 297210,
+    "Lab": [
+     35.1,
+     11.4,
+     17.9
+    ],
+    "L_p10_p90": [
+     23.3,
+     47.0
+    ],
+    "C": 21.2,
+    "hab": 57.5,
+    "H_hsl": 23.1
+   },
+   "nightstand carcass/fronts (id 24)": {
+    "px": 46099,
+    "Lab": [
+     17.6,
+     8.5,
+     11.7
+    ],
+    "L_p10_p90": [
+     11.7,
+     44.2
+    ],
+    "C": 14.5,
+    "hab": 54.1,
+    "H_hsl": 22.1
+   },
+   "nightstand tops (id 25)": {
+    "px": 20694,
+    "Lab": [
+     44.1,
+     7.8,
+     15.6
+    ],
+    "L_p10_p90": [
+     16.7,
+     67.3
+    ],
+    "C": 17.4,
+    "hab": 63.4,
+    "H_hsl": 25.7
+   },
+   "mattress (id 23)": {
+    "px": 812299,
+    "Lab": [
+     86.6,
+     0.8,
+     6.6
+    ],
+    "L_p10_p90": [
+     35.4,
+     91.4
+    ],
+    "C": 6.7,
+    "hab": 82.7,
+    "H_hsl": 35.3
+   },
+   "bronze frame (id 13, not eroded)": {
+    "px": 37974,
+    "Lab": [
+     28.8,
+     3.3,
+     6.9
+    ],
+    "L_p10_p90": [
+     14.3,
+     87.4
+    ],
+    "C": 7.6,
+    "hab": 64.7,
+    "H_hsl": 26.7
+   },
+   "sill slab front edge face (id 14, below top front edge)": {
+    "px": 8977,
+    "Lab": [
+     56.2,
+     5.0,
+     21.2
+    ],
+    "L_p10_p90": [
+     49.1,
+     61.3
+    ],
+    "C": 21.8,
+    "hab": 76.8,
+    "H_hsl": 33.6
+   }
+  },
+  "refs": {
+   "base back wall plaster (x 1150-2700, y 150-1100, L*>60)": {
+    "px": 1429723,
+    "Lab": [
+     87.5,
+     0.7,
+     4.9
+    ],
+    "L_p10_p90": [
+     82.6,
+     91.8
+    ],
+    "C": 4.9,
+    "hab": 82.3,
+    "H_hsl": 34.7
+   },
+   "base floor (y>1100, L*<70, below the furniture rows)": {
+    "px": 558243,
+    "Lab": [
+     48.7,
+     6.2,
+     14.7
+    ],
+    "L_p10_p90": [
+     28.7,
+     65.4
+    ],
+    "C": 16.0,
+    "hab": 67.1,
+    "H_hsl": 27.4
+   },
+   "base floor right (x 2400-2650, y 1380-1480)": {
+    "px": 25000,
+    "Lab": [
+     41.9,
+     7.2,
+     15.3
+    ],
+    "L_p10_p90": [
+     28.8,
+     46.0
+    ],
+    "C": 16.9,
+    "hab": 64.7,
+    "H_hsl": 26.2
+   },
+   "base floor far right (x 2500-2700, y 1300-1350)": {
+    "px": 10000,
+    "Lab": [
+     44.4,
+     7.2,
+     16.4
+    ],
+    "L_p10_p90": [
+     38.6,
+     81.2
+    ],
+    "C": 17.9,
+    "hab": 66.2,
+    "H_hsl": 28.1
+   },
+   "base coffee table top (x 1350-2050, y 1200-1330)": {
+    "px": 91000,
+    "Lab": [
+     45.9,
+     10.6,
+     17.4
+    ],
+    "L_p10_p90": [
+     18.5,
+     58.7
+    ],
+    "C": 20.4,
+    "hab": 58.7,
+    "H_hsl": 23.3
+   },
+   "base window frames, dark px (L*<40)": {
+    "px": 34763,
+    "Lab": [
+     22.4,
+     4.3,
+     6.8
+    ],
+    "L_p10_p90": [
+     16.6,
+     29.5
+    ],
+    "C": 8.1,
+    "hab": 57.8,
+    "H_hsl": 22.1
+   },
+   "d0 stone wall (door wall, both sides)": {
+    "px": 546400,
+    "Lab": [
+     80.2,
+     1.6,
+     11.6
+    ],
+    "L_p10_p90": [
+     72.3,
+     85.3
+    ],
+    "C": 11.7,
+    "hab": 82.0,
+    "H_hsl": 35.3
+   },
+   "d0 door leaf walnut (x 720-1150, y 200-1270)": {
+    "px": 460100,
+    "Lab": [
+     32.4,
+     12.1,
+     19.1
+    ],
+    "L_p10_p90": [
+     21.0,
+     41.1
+    ],
+    "C": 22.6,
+    "hab": 57.7,
+    "H_hsl": 23.5
+   },
+   "hdx stone wall (x 20-640, y 60-1600, L*>40)": {
+    "px": 952257,
+    "Lab": [
+     71.0,
+     3.1,
+     16.5
+    ],
+    "L_p10_p90": [
+     67.2,
+     83.4
+    ],
+    "C": 16.8,
+    "hab": 79.2,
+    "H_hsl": 34.1
+   },
+   "hdx walnut casing (x 768-800, y 100-1500)": {
+    "px": 44800,
+    "Lab": [
+     29.6,
+     13.3,
+     19.8
+    ],
+    "L_p10_p90": [
+     23.4,
+     34.2
+    ],
+    "C": 23.9,
+    "hab": 56.1,
+    "H_hsl": 22.6
+   },
+   "bath plate stone (ids 9, 11, 12, 23)": {
+    "px": 1321166,
+    "Lab": [
+     69.6,
+     3.2,
+     16.1
+    ],
+    "L_p10_p90": [
+     58.7,
+     88.1
+    ],
+    "C": 16.4,
+    "hab": 78.7,
+    "H_hsl": 33.2
+   },
+   "bath plate walnut drawer front (id 21)": {
+    "px": 192705,
+    "Lab": [
+     35.5,
+     13.1,
+     19.4
+    ],
+    "L_p10_p90": [
+     25.9,
+     54.4
+    ],
+    "C": 23.4,
+    "hab": 55.9,
+    "H_hsl": 22.3
+   },
+   "bath plate plaster vanity wall (id 1)": {
+    "px": 1115227,
+    "Lab": [
+     84.8,
+     1.0,
+     6.0
+    ],
+    "L_p10_p90": [
+     47.6,
+     91.8
+    ],
+    "C": 6.1,
+    "hab": 80.5,
+    "H_hsl": 34.3
+   }
+  },
+  "matched": {
+   "plaster bed wall (id 1, all) vs base back wall plaster (x 1150-2700, y 150-1100, L*>60)": {
+    "median_dE00": 1.93,
+    "matched": [
+     [
+      82.5,
+      [
+       0.9,
+       8.5
+      ],
+      [
+       1.0,
+       6.4
+      ],
+      1.58,
+      119881
+     ],
+     [
+      86.1,
+      [
+       0.8,
+       7.0
+      ],
+      [
+       1.0,
+       5.9
+      ],
+      0.95,
+      422784
+     ],
+     [
+      89.0,
+      [
+       0.7,
+       5.7
+      ],
+      [
+       0.5,
+       4.4
+      ],
+      1.16,
+      384347
+     ]
+    ]
+   },
+   "plaster bed wall (id 1, all) vs bath plate plaster vanity wall (id 1)": {
+    "median_dE00": 1.21,
+    "matched": [
+     [
+      82.5,
+      [
+       0.9,
+       8.5
+      ],
+      [
+       1.0,
+       6.5
+      ],
+      1.55,
+      152093
+     ],
+     [
+      86.1,
+      [
+       0.8,
+       7.0
+      ],
+      [
+       1.0,
+       5.5
+      ],
+      1.24,
+      224246
+     ],
+     [
+      89.0,
+      [
+       0.7,
+       5.7
+      ],
+      [
+       0.7,
+       4.5
+      ],
+      0.99,
+      152208
+     ]
+    ]
+   },
+   "plaster bed wall, upper right x 2200-2643 y<500 vs base back wall plaster (x 1150-2700, y 150-1100, L*>60)": {
+    "median_dE00": 7.78,
+    "matched": [
+     [
+      74.0,
+      [
+       1.5,
+       11.4
+      ],
+      [
+       1.4,
+       8.8
+      ],
+      1.84,
+      17545
+     ],
+     [
+      77.6,
+      [
+       1.3,
+       10.2
+      ],
+      [
+       1.0,
+       7.3
+      ],
+      2.1,
+      25608
+     ],
+     [
+      80.3,
+      [
+       1.1,
+       9.2
+      ],
+      [
+       0.9,
+       6.5
+      ],
+      2.03,
+      34164
+     ]
+    ]
+   },
+   "plaster window wall (id 2) vs base back wall plaster (x 1150-2700, y 150-1100, L*>60)": {
+    "median_dE00": 20.15,
+    "matched": [
+     [
+      53.6,
+      null,
+      null,
+      null,
+      0
+     ],
+     [
+      61.5,
+      [
+       2.7,
+       13.6
+      ],
+      [
+       2.2,
+       11.3
+      ],
+      1.52,
+      7671
+     ],
+     [
+      65.6,
+      [
+       2.4,
+       12.7
+      ],
+      [
+       1.9,
+       10.5
+      ],
+      1.47,
+      9957
+     ]
+    ]
+   },
+   "floor (id 10+11) vs base floor (y>1100, L*<70, below the furniture rows)": {
+    "median_dE00": 12.52,
+    "matched": [
+     [
+      24.9,
+      [
+       5.0,
+       13.0
+      ],
+      [
+       4.9,
+       10.2
+      ],
+      1.94,
+      17521
+     ],
+     [
+      34.9,
+      [
+       6.1,
+       15.6
+      ],
+      [
+       5.5,
+       12.3
+      ],
+      2.1,
+      23939
+     ],
+     [
+      43.5,
+      [
+       6.4,
+       17.0
+      ],
+      [
+       8.2,
+       16.3
+      ],
+      2.05,
+      49829
+     ]
+    ]
+   },
+   "floor right of bed (x 2250-2643, y>1230) vs base floor (y>1100, L*<70, below the furniture rows)": {
+    "median_dE00": 12.12,
+    "matched": [
+     [
+      25.7,
+      [
+       5.0,
+       13.2
+      ],
+      [
+       4.9,
+       10.4
+      ],
+      1.99,
+      17237
+     ],
+     [
+      35.4,
+      [
+       6.1,
+       15.6
+      ],
+      [
+       5.7,
+       12.5
+      ],
+      2.0,
+      24935
+     ],
+     [
+      43.8,
+      [
+       6.4,
+       17.1
+      ],
+      [
+       8.2,
+       16.3
+      ],
+      2.02,
+      49424
+     ]
+    ]
+   },
+   "floor right of bed (x 2250-2643, y>1230) vs base floor right (x 2400-2650, y 1380-1480)": {
+    "median_dE00": 5.87,
+    "matched": [
+     [
+      25.7,
+      [
+       5.0,
+       13.2
+      ],
+      [
+       4.8,
+       10.3
+      ],
+      2.01,
+      823
+     ],
+     [
+      35.4,
+      [
+       6.1,
+       15.6
+      ],
+      [
+       6.2,
+       12.9
+      ],
+      1.88,
+      1498
+     ],
+     [
+      43.8,
+      [
+       6.4,
+       17.1
+      ],
+      [
+       7.8,
+       16.2
+      ],
+      1.71,
+      7633
+     ]
+    ]
+   },
+   "floor right of bed (x 2250-2643, y>1230) vs base floor far right (x 2500-2700, y 1300-1350)": {
+    "median_dE00": 8.11,
+    "matched": [
+     [
+      25.7,
+      null,
+      null,
+      null,
+      32
+     ],
+     [
+      35.4,
+      [
+       6.1,
+       15.6
+      ],
+      [
+       7.1,
+       15.0
+      ],
+      1.4,
+      334
+     ],
+     [
+      43.8,
+      [
+       6.4,
+       17.1
+      ],
+      [
+       7.8,
+       17.4
+      ],
+      1.4,
+      2882
+     ]
+    ]
+   },
+   "floor left of bed (x<500) vs base floor (y>1100, L*<70, below the furniture rows)": {
+    "median_dE00": 22.21,
+    "matched": [
+     [
+      20.7,
+      [
+       6.3,
+       14.1
+      ],
+      [
+       4.8,
+       9.6
+      ],
+      3.04,
+      17932
+     ],
+     [
+      21.8,
+      [
+       6.4,
+       14.3
+      ],
+      [
+       4.9,
+       9.7
+      ],
+      3.14,
+      22854
+     ],
+     [
+      23.1,
+      [
+       6.8,
+       14.7
+      ],
+      [
+       4.9,
+       9.9
+      ],
+      3.3,
+      18771
+     ]
+    ]
+   },
+   "headboard (id 20) vs base coffee table top (x 1350-2050, y 1200-1330)": {
+    "median_dE00": 9.62,
+    "matched": [
+     [
+      27.8,
+      [
+       10.7,
+       16.7
+      ],
+      [
+       10.8,
+       12.9
+      ],
+      2.67,
+      481
+     ],
+     [
+      35.1,
+      [
+       11.6,
+       18.2
+      ],
+      [
+       9.2,
+       13.8
+      ],
+      2.81,
+      1199
+     ],
+     [
+      42.1,
+      [
+       12.1,
+       19.4
+      ],
+      [
+       11.5,
+       17.8
+      ],
+      0.9,
+      12533
+     ]
+    ]
+   },
+   "headboard (id 20) vs bath plate walnut drawer front (id 21)": {
+    "median_dE00": 1.37,
+    "matched": [
+     [
+      27.8,
+      [
+       10.7,
+       16.7
+      ],
+      [
+       12.3,
+       17.2
+      ],
+      1.35,
+      35943
+     ],
+     [
+      35.1,
+      [
+       11.6,
+       18.2
+      ],
+      [
+       14.1,
+       20.6
+      ],
+      1.89,
+      14126
+     ],
+     [
+      42.1,
+      [
+       12.1,
+       19.4
+      ],
+      [
+       14.1,
+       21.4
+      ],
+      1.49,
+      13643
+     ]
+    ]
+   },
+   "headboard (id 20) vs hdx walnut casing (x 768-800, y 100-1500)": {
+    "median_dE00": 4.65,
+    "matched": [
+     [
+      27.8,
+      [
+       10.7,
+       16.7
+      ],
+      [
+       13.0,
+       19.4
+      ],
+      1.96,
+      10027
+     ],
+     [
+      35.1,
+      [
+       11.6,
+       18.2
+      ],
+      [
+       14.7,
+       21.7
+      ],
+      2.46,
+      4913
+     ],
+     [
+      42.1,
+      [
+       12.1,
+       19.4
+      ],
+      [
+       18.3,
+       27.2
+      ],
+      4.59,
+      141
+     ]
+    ]
+   },
+   "headboard (id 20) vs d0 door leaf walnut (x 720-1150, y 200-1270)": {
+    "median_dE00": 2.3,
+    "matched": [
+     [
+      27.8,
+      [
+       10.7,
+       16.7
+      ],
+      [
+       11.7,
+       18.3
+      ],
+      1.05,
+      54208
+     ],
+     [
+      35.1,
+      [
+       11.6,
+       18.2
+      ],
+      [
+       12.7,
+       20.0
+      ],
+      1.09,
+      67566
+     ],
+     [
+      42.1,
+      [
+       12.1,
+       19.4
+      ],
+      [
+       12.8,
+       21.4
+      ],
+      1.08,
+      36720
+     ]
+    ]
+   },
+   "nightstand carcass/fronts (id 24) vs base coffee table top (x 1350-2050, y 1200-1330)": {
+    "median_dE00": 22.66,
+    "matched": [
+     [
+      14.2,
+      [
+       6.4,
+       8.4
+      ],
+      [
+       5.9,
+       6.6
+      ],
+      1.37,
+      2061
+     ],
+     [
+      17.6,
+      [
+       8.3,
+       11.6
+      ],
+      [
+       9.7,
+       11.7
+      ],
+      1.45,
+      6144
+     ],
+     [
+      30.2,
+      [
+       11.3,
+       17.8
+      ],
+      [
+       12.9,
+       14.1
+      ],
+      3.41,
+      333
+     ]
+    ]
+   },
+   "nightstand carcass/fronts (id 24) vs bath plate walnut drawer front (id 21)": {
+    "median_dE00": 14.22,
+    "matched": [
+     [
+      14.2,
+      null,
+      null,
+      null,
+      0
+     ],
+     [
+      17.6,
+      null,
+      null,
+      null,
+      6
+     ],
+     [
+      30.2,
+      [
+       11.3,
+       17.8
+      ],
+      [
+       13.3,
+       18.8
+      ],
+      1.55,
+      24301
+     ]
+    ]
+   },
+   "nightstand carcass/fronts (id 24) vs hdx walnut casing (x 768-800, y 100-1500)": {
+    "median_dE00": 10.09,
+    "matched": [
+     [
+      14.2,
+      null,
+      null,
+      null,
+      18
+     ],
+     [
+      17.6,
+      [
+       8.3,
+       11.6
+      ],
+      [
+       10.6,
+       17.3
+      ],
+      3.71,
+      502
+     ],
+     [
+      30.2,
+      [
+       11.3,
+       17.8
+      ],
+      [
+       13.2,
+       19.7
+      ],
+      1.53,
+      12366
+     ]
+    ]
+   },
+   "nightstand tops (id 25) vs base coffee table top (x 1350-2050, y 1200-1330)": {
+    "median_dE00": 3.07,
+    "matched": [
+     [
+      32.8,
+      [
+       9.3,
+       16.4
+      ],
+      [
+       9.0,
+       13.2
+      ],
+      2.05,
+      425
+     ],
+     [
+      44.1,
+      [
+       7.0,
+       15.1
+      ],
+      [
+       11.9,
+       18.6
+      ],
+      4.34,
+      13730
+     ],
+     [
+      52.6,
+      [
+       12.0,
+       23.2
+      ],
+      [
+       10.8,
+       19.3
+      ],
+      2.05,
+      7058
+     ]
+    ]
+   },
+   "nightstand tops (id 25) vs bath plate walnut drawer front (id 21)": {
+    "median_dE00": 8.72,
+    "matched": [
+     [
+      32.8,
+      [
+       9.3,
+       16.4
+      ],
+      [
+       13.9,
+       20.0
+      ],
+      3.66,
+      15093
+     ],
+     [
+      44.1,
+      [
+       7.0,
+       15.1
+      ],
+      [
+       14.0,
+       21.5
+      ],
+      5.9,
+      12856
+     ],
+     [
+      52.6,
+      [
+       12.0,
+       23.2
+      ],
+      [
+       13.4,
+       21.3
+      ],
+      1.93,
+      10140
+     ]
+    ]
+   },
+   "sill slab top surface (id 14, above top front edge) vs d0 stone wall (door wall, both sides)": {
+    "median_dE00": 9.97,
+    "matched": [
+     [
+      92.4,
+      [
+       0.1,
+       8.1
+      ],
+      [
+       1.5,
+       8.8
+      ],
+      2.14,
+      137
+     ],
+     [
+      94.2,
+      null,
+      null,
+      null,
+      27
+     ],
+     [
+      95.1,
+      null,
+      null,
+      null,
+      1
+     ]
+    ]
+   },
+   "sill slab top surface (id 14, above top front edge) vs hdx stone wall (x 20-640, y 60-1600, L*>40)": {
+    "median_dE00": 17.33,
+    "matched": [
+     [
+      92.4,
+      [
+       0.1,
+       8.1
+      ],
+      [
+       1.0,
+       7.4
+      ],
+      1.64,
+      7071
+     ],
+     [
+      94.2,
+      [
+       -0.0,
+       5.8
+      ],
+      [
+       0.8,
+       6.6
+      ],
+      1.62,
+      1415
+     ],
+     [
+      95.1,
+      [
+       -0.2,
+       5.3
+      ],
+      [
+       0.3,
+       6.0
+      ],
+      1.09,
+      366
+     ]
+    ]
+   },
+   "sill slab top surface (id 14, above top front edge) vs bath plate stone (ids 9, 11, 12, 23)": {
+    "median_dE00": 18.26,
+    "matched": [
+     [
+      92.4,
+      [
+       0.1,
+       8.1
+      ],
+      [
+       0.7,
+       4.7
+      ],
+      2.87,
+      32674
+     ],
+     [
+      94.2,
+      [
+       -0.0,
+       5.8
+      ],
+      [
+       0.1,
+       3.3
+      ],
+      2.17,
+      12356
+     ],
+     [
+      95.1,
+      [
+       -0.2,
+       5.3
+      ],
+      [
+       0.1,
+       2.9
+      ],
+      2.12,
+      6876
+     ]
+    ]
+   },
+   "sill slab front edge face (id 14, below top front edge) vs d0 stone wall (door wall, both sides)": {
+    "median_dE00": 19.91,
+    "matched": [
+     [
+      52.8,
+      [
+       5.4,
+       22.1
+      ],
+      [
+       5.0,
+       19.1
+      ],
+      1.59,
+      455
+     ],
+     [
+      56.2,
+      [
+       5.0,
+       21.5
+      ],
+      [
+       4.7,
+       17.9
+      ],
+      1.98,
+      707
+     ],
+     [
+      59.0,
+      [
+       4.5,
+       20.7
+      ],
+      [
+       4.5,
+       17.7
+      ],
+      1.65,
+      895
+     ]
+    ]
+   },
+   "sill slab front edge face (id 14, below top front edge) vs hdx stone wall (x 20-640, y 60-1600, L*>40)": {
+    "median_dE00": 12.72,
+    "matched": [
+     [
+      52.8,
+      [
+       5.4,
+       22.1
+      ],
+      [
+       6.9,
+       21.4
+      ],
+      1.66,
+      2162
+     ],
+     [
+      56.2,
+      [
+       5.0,
+       21.5
+      ],
+      [
+       6.3,
+       20.8
+      ],
+      1.44,
+      2153
+     ],
+     [
+      59.0,
+      [
+       4.5,
+       20.7
+      ],
+      [
+       5.8,
+       20.6
+      ],
+      1.38,
+      2451
+     ]
+    ]
+   },
+   "sill slab front edge face (id 14, below top front edge) vs bath plate stone (ids 9, 11, 12, 23)": {
+    "median_dE00": 11.68,
+    "matched": [
+     [
+      52.8,
+      [
+       5.4,
+       22.1
+      ],
+      [
+       5.4,
+       20.5
+      ],
+      0.88,
+      26957
+     ],
+     [
+      56.2,
+      [
+       5.0,
+       21.5
+      ],
+      [
+       5.2,
+       20.5
+      ],
+      0.68,
+      36278
+     ],
+     [
+      59.0,
+      [
+       4.5,
+       20.7
+      ],
+      [
+       5.0,
+       20.3
+      ],
+      0.69,
+      49698
+     ]
+    ]
+   },
+   "bronze frame (id 13, not eroded) vs base window frames, dark px (L*<40)": {
+    "median_dE00": 4.85,
+    "matched": [
+     [
+      18.7,
+      [
+       2.5,
+       5.6
+      ],
+      [
+       4.9,
+       7.1
+      ],
+      3.01,
+      3456
+     ],
+     [
+      28.8,
+      [
+       5.8,
+       11.3
+      ],
+      [
+       5.6,
+       8.6
+      ],
+      2.01,
+      3313
+     ],
+     [
+      61.4,
+      null,
+      null,
+      null,
+      0
+     ]
+    ]
+   },
+   "bronze core L*<30 vs base frames core L*<30": {
+    "median_dE00": 2.82,
+    "plate": [
+     18.9,
+     2.7,
+     5.7
+    ],
+    "base": [
+     22.0,
+     4.1,
+     6.6
+    ],
+    "matched": [
+     [
+      15.3,
+      [
+       2.2,
+       5.2
+      ],
+      [
+       3.6,
+       5.9
+      ],
+      1.83,
+      4106
+     ],
+     [
+      18.9,
+      [
+       2.5,
+       5.7
+      ],
+      [
+       4.5,
+       6.8
+      ],
+      2.48,
+      5624
+     ],
+     [
+      22.5,
+      [
+       3.0,
+       6.8
+      ],
+      [
+       3.8,
+       6.2
+      ],
+      1.28,
+      14624
+     ]
+    ]
+   }
+  },
+  "frame": {
+   "plate": {
+    "0.1": 4.49,
+    "0.5": 12.47,
+    "1": 14.7,
+    "5": 26.45
+   },
+   "raw": {
+    "0.1": 2.82,
+    "0.5": 7.73,
+    "1": 10.45,
+    "5": 25.1
+   },
+   "base.png": {
+    "0.1": 10.28,
+    "0.5": 12.42,
+    "1": 13.36,
+    "5": 21.21
+   },
+   "bath plate (now)": {
+    "0.1": 6.98,
+    "0.5": 12.4,
+    "1": 12.96,
+    "5": 21.59
+   },
+   "d0.png": {
+    "0.1": 9.2,
+    "0.5": 15.19,
+    "1": 18.09,
+    "5": 27.64
+   },
+   "hdx.png": {
+    "0.1": 5.0,
+    "0.5": 13.97,
+    "1": 21.18,
+    "5": 41.43
+   },
+   "plate px below L*11": 14173,
+   "raw px below L*11": 41214,
+   "plate mean 8-bit rec709": 178.6,
+   "base mean 8-bit rec709": 186.7,
+   "bath mean 8-bit rec709": 170.8,
+   "px below L*14 by clay id": {
+    "1": 355,
+    "2": 494,
+    "5": 492,
+    "9": 1183,
+    "10": 2389,
+    "13": 3477,
+    "20": 529,
+    "23": 425,
+    "24": 16294,
+    "25": 947,
+    "26": 4050
+   }
+  }
+ },
+ "toe_detail": {
+  "zone_px": 18540,
+  "neighbour_dL_3x3_before(median,p90)": [
+   0.733,
+   4.667
+  ],
+  "after": [
+   0.988,
+   4.987
+  ],
+  "zone_L_after_p10_p90": [
+   3.22,
+   11.9
+  ],
+  "zone_by_id": {
+   "1": 163,
+   "9": 219,
+   "10": 927,
+   "13": 2115,
+   "20": 272,
+   "23": 360,
+   "24": 10213,
+   "25": 390,
+   "26": 3855
+  },
+  "walnut L10-20 nightstand carcass/fronts id24": {
+   "px": 28245,
+   "Lab": [
+    14.91,
+    6.88,
+    8.98
+   ],
+   "dE00_to_base_walnut_shadow": 2.44,
+   "C_over_L": 0.759,
+   "hab": 52.6
+  },
+  "walnut L10-20 grooves id26": {
+   "px": 1192,
+   "Lab": [
+    15.78,
+    6.32,
+    8.71
+   ],
+   "dE00_to_base_walnut_shadow": 2.17,
+   "C_over_L": 0.682,
+   "hab": 54.0
+  },
+  "walnut L10-20 all walnut ids 20/24/25/26": {
+   "px": 42429,
+   "Lab": [
+    15.81,
+    7.04,
+    9.77
+   ],
+   "dE00_to_base_walnut_shadow": 3.04,
+   "C_over_L": 0.762,
+   "hab": 54.2
+  },
+  "nightstand vs base walnut shadow, matched L": [
+   [
+    12,
+    [
+     12.3,
+     5.3,
+     6.4
+    ],
+    [
+     12.5,
+     3.3,
+     3.8
+    ],
+    2.88
+   ],
+   [
+    14,
+    [
+     14.0,
+     6.2,
+     8.2
+    ],
+    [
+     14.0,
+     5.4,
+     6.7
+    ],
+    1.33
+   ],
+   [
+    16,
+    [
+     15.9,
+     7.4,
+     10.3
+    ],
+    [
+     15.9,
+     6.6,
+     8.9
+    ],
+    1.15
+   ],
+   [
+    18,
+    [
+     17.9,
+     8.5,
+     11.9
+    ],
+    [
+     17.9,
+     6.6,
+     9.5
+    ],
+    2.13
+   ]
+  ],
+  "dark px L<20": 90550,
+  "C*<4 share among them (after)": 0.085,
+  "C*<4 share among L<20 (before)": 0.067
+ }
+}
