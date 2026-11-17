@@ -1455,5 +1455,288 @@
     "d0o-slot-x2-pre-012-006.jpg"
    ]
   }
+ },
+ "recheck_2026-11-17_round3": {
+  "scope": "render-agent run 5; only what changed, against rejected/hdx-r3-precorner.png, hd-r2-preheal.png, ht-r2-preheal.png. 0 tokens. Manager's decision: HD-M2 and HT-M3 accepted, no heal.",
+  "final_status": {
+   "D0o": "pass",
+   "HDx": "pass (incl. the corner stone); fit for clip 2's first frame",
+   "HD": "pass (HD-M1 fixed; HD-M2 accepted)",
+   "HT": "pass (HT-M1, M2, M4 fixed; HT-M3 accepted); HT-L1, HT-L2 low"
+  },
+  "diff": {
+   "HDx": {
+    "changed_px": 62608,
+    "over_2_levels": 50921,
+    "bbox": [
+     0,
+     218,
+     1303,
+     1663
+    ],
+    "by_id": {
+     "94": 62608
+    },
+    "in_frame": 25120,
+    "max_levels": 72,
+    "frame bbox at 1920 (x0 x1 y0 y1)": [
+     0,
+     119,
+     924,
+     1079
+    ],
+    "changed outside x 0-218, y 1297-1663": 0,
+    "changed outside clay id 94": 0,
+    "stone median Y new/old in the changed px": 1.0064
+   },
+   "HD": {
+    "changed_px": 52350,
+    "over_2_levels": 37914,
+    "bbox": [
+     1764,
+     1961,
+     1282,
+     1565
+    ],
+    "by_id": {
+     "86": 465,
+     "94": 51885
+    },
+    "in_frame": 39217,
+    "max_levels": 73,
+    "frame bbox at 1920 (x0 x1 y0 y1)": [
+     1380,
+     1541,
+     907,
+     1079
+    ]
+   },
+   "HT": {
+    "changed_px": 600697,
+    "over_2_levels": 360216,
+    "bbox": [
+     484,
+     2719,
+     0,
+     1469
+    ],
+    "by_id": {
+     "0": 3737,
+     "11": 4,
+     "14": 353,
+     "30": 8380,
+     "39": 926,
+     "40": 9122,
+     "43": 7824,
+     "82": 152733,
+     "86": 4760,
+     "94": 412858
+    },
+    "in_frame": 537879,
+    "max_levels": 225,
+    "frame bbox at 1920 (x0 x1 y0 y1)": [
+     304,
+     1918,
+     0,
+     1067
+    ]
+   }
+  },
+  "items": {
+   "1_HDx_corner": {
+    "result": "pass",
+    "note": "62,608 px changed, all id 94 inside x 0-218, y 1303-1663; in the frame x 0-119, y 924-1079 (1920); tone +0.64 %; reads as the neighbouring smooth stone at x1-x2; edges are joints; hdx-frame == seeds.py frame"
+   },
+   "2_HD_M1": {
+    "result": "pass",
+    "note": "changes only the bottom course (x 1764-1961, rows 1282-1565); from u 0.765 HD == the new HDx projection, 0 px different inside the frame; bottom course L* 67.7 -> 69.4 across u 0.67-0.82, even texture",
+    "joints": {
+     "exit": 0,
+     "hdx_to_hd": {
+      "shared_strip": {
+       "edge_px": 10586,
+       "median_px": 0.0,
+       "p90_px": 1.0,
+       "share_within_tol": 0.9998
+      },
+      "seam_band": {
+       "edge_px": 6146,
+       "median_px": 0.0,
+       "p90_px": 1.0,
+       "share_within_tol": 0.9997
+      }
+     },
+     "hd_to_hdx": {
+      "shared_strip": {
+       "edge_px": 11816,
+       "median_px": 0.0,
+       "p90_px": 1.0,
+       "share_within_tol": 0.998
+      },
+      "seam_band": {
+       "edge_px": 5878,
+       "median_px": 0.0,
+       "p90_px": 1.0,
+       "share_within_tol": 0.9959
+      }
+     },
+     "pass": true
+    }
+   },
+   "3_HT_M1": {
+    "result": "pass",
+    "top_joint": "-0.12 px median, 0.35 worst column (was -4.6)",
+    "horizontal_joints": {
+     "150": [
+      42,
+      -0.12,
+      0.35
+     ],
+     "240": [
+      42,
+      0.18,
+      0.64
+     ],
+     "490": [
+      42,
+      -0.03,
+      0.38
+     ],
+     "580": [
+      42,
+      -0.01,
+      0.4
+     ],
+     "700": [
+      42,
+      0.1,
+      0.81
+     ],
+     "950": [
+      42,
+      0.25,
+      0.48
+     ],
+     "1040": [
+      42,
+      0.07,
+      0.54
+     ],
+     "1220": [
+      42,
+      0.01,
+      0.59
+     ],
+     "1470": [
+      42,
+      7.34,
+      7.53
+     ]
+    },
+    "tone_across_transition_joints_pct_left_part": {
+     "245": "-10..-21",
+     "1225": "-14..-17",
+     "ordinary joints": "+3..-11"
+    },
+    "x1": "reads as separate stones under the wash; no step inside a stone",
+    "clipped_6px": "rows 44-47, (255, 246-248, 239-242) among 250-254 neighbours; not visible"
+   },
+   "4_HT_M2": {
+    "result": "pass in the frame",
+    "note": "no armchair in the 16:9 frame; band x 2626-2642 reads as bench and floor at x2; base.png's walnut armchair in the margin from x 2643",
+    "margin": "HT-L2"
+   },
+   "5_HT_M4": {
+    "result": "pass",
+    "note": "no mirrored swirl; clone tile edges faint at x2 (HT-L1)"
+   }
+  },
+  "HT_unchanged_checks": {
+   "levels": [
+    [
+     225848,
+     -0.501,
+     77.9
+    ],
+    -0.311
+   ],
+   "verticals": {
+    "jib seam left 0.158": {
+     "still_u": 0.1564,
+     "clay_u": 0.158,
+     "median_px": -4.15,
+     "p90_abs_px": 4.3,
+     "tilt_deg": -0.003
+    },
+    "jib seam right 0.372": {
+     "still_u": 0.3711,
+     "clay_u": 0.3715,
+     "median_px": -1.01,
+     "p90_abs_px": 1.14,
+     "tilt_deg": 0.009
+    },
+    "stone edge 0.456": {
+     "still_u": 0.4555,
+     "clay_u": 0.4556,
+     "median_px": 0.01,
+     "p90_abs_px": 2.01,
+     "tilt_deg": -0.012
+    },
+    "corner 0.790": {
+     "still_u": 0.7906,
+     "clay_u": 0.7902,
+     "median_px": 0.99,
+     "p90_abs_px": 1.88,
+     "tilt_deg": 0.0
+    },
+    "return/walnut 0.814": {
+     "still_u": 0.8145,
+     "clay_u": 0.814,
+     "median_px": 1.36,
+     "p90_abs_px": 2.31,
+     "tilt_deg": 0.048
+    },
+    "walnut/living 0.850": {
+     "still_u": 0.8507,
+     "clay_u": 0.8499,
+     "median_px": 2.12,
+     "p90_abs_px": 2.4,
+     "tilt_deg": 0.008
+    }
+   },
+   "walnut_L": 29.1,
+   "ht_frame_equals_seeds_frame": true
+  },
+  "findings": [
+   {
+    "id": "HT-L1",
+    "severity": "low",
+    "what": "tile edges of the cloned trowel texture on the jib door's lower part: vertical at x ~870 and ~990, horizontal at row ~1377, a texture change and a ~0.5 L* step (0.03 elsewhere); not at x1, faint at x2",
+    "owner": "render-agent",
+    "evidence": "r3-ht-door-x2-new-old.jpg"
+   },
+   {
+    "id": "HT-L2",
+    "severity": "low (conditional)",
+    "what": "HT's right margin (x >= 2643) is unfinished: the render's bench cut by a hard vertical line at the frame edge, flat untextured fills around the walnut armchair, a smeared floor wedge; not in the 16:9 frame. Becomes medium if any clip or crop shows HT's right margin",
+    "owner": "motion-agent to confirm the margin's use; render-agent",
+    "evidence": "r3-ht-armchair-margin-x3-new-old.jpg"
+   },
+   {
+    "id": "HD-I4",
+    "severity": "info",
+    "what": "the lit lip under joint 1280 is 5-7 L* brighter from x ~1760 (11 -> 16-19 above the stone); the pure-HDx part varies 9-19 too; not at x1"
+   },
+   {
+    "id": "HT-I3",
+    "severity": "info",
+    "what": "6 clipped stone px at the frame's top edge (rows 44-47); not visible"
+   },
+   {
+    "id": "HT-I2 (update)",
+    "severity": "info",
+    "what": "the floor line under the stone still ~7 px below the clay in my measure (render-agent -2.03 by another method); ~1 cm"
+   }
+  ]
  }
 }
