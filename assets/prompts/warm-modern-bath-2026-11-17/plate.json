@@ -1,7 +1,7 @@
 {
  "asset_id": "wm-bath-b2-plate-2026-11-17",
  "output": "1 of 3: the empty plate of B2 (shell + the fixed vanity and its shadow; every product hidden, every product lamp off; downlight and niche LED on)",
- "status": "sent and accepted after code steps (lock warp, the left strip repaired, bronze tone); for QA. Not for the site before QA, owner approval 3 and the 1.3.9 registration.",
+ "status": "sent; accepted after code steps; QA round 1 failed on BP-M1 (black point), fixed at 0 tokens with the recorded WM-G1 curve; waits for QA's re-check. Not for the site before QA, owner approval 3 and the 1.3.9 registration.",
  "model": "seedream-5-pro",
  "type": "image-to-image",
  "resolution": "2K",
@@ -62,7 +62,8 @@
   "steps": [
    "global lock warp (y about the horizon x0.9893, x +1.9 px)",
    "the left strip: the model's tall fluted window replaced by the clay's plaster wall and stone skirting (rejection list 1, S10)",
-   "bronze chroma to the house bronze-espresso"
+   "bronze chroma to the house bronze-espresso",
+   "QA round 1: the WM-G1 toe on L* (p0.5 1.42 -> 12.5, knee 30; plate-grade.json) and BP-L1 (the niche LED line in the soffit tone); the ungraded plate in raw/plate-ungraded.png"
   ]
  },
  "verdict": "r1 accepted with the three code steps; no retry (0 extra tokens)",

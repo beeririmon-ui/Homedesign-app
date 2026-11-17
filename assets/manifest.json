@@ -15950,15 +15950,16 @@
   {
    "id": "wm-bath-clay-2026-11-17",
    "path": "assets/blockout/house/framing/wm-bath-2026-11-17/",
-   "kind": "clay set: the warm-modern bath, frame B2 (ch. 1 and 7 of docs/proposals/wm-bath-render-2026-11-17.md) - B2-plate (output 1's clay), B2 (the 7.7 defaults as envelope boxes, no floor planter, provisional sconce blocks), B2-shell; each with depth, id, edges; lock-target.json (33 named lines)",
+   "kind": "clay set: the warm-modern bath, frame B2 - B2-plate (output 1's clay), B2 (the 0א defaults: Style B sconces 8x8x16 up-down, floor planter Beige-Medium, ring A3 at Y 13.07, curtain stack at X 5.34), B2-shell; each with depth, id, edges; lock-target.json (33 named lines)",
    "room": "bath",
    "style": "warm-modern",
    "created": "2026-11-17",
    "model": "Blender Cycles (0 tokens)",
    "recipe": "assets/blockout/house/framing_wm_bath.py, assets/blockout/house/framing/wm-bath-2026-11-17/checks_wm_bath.py",
-   "status": "clay: 7.3 checked in selfcheck.json and the README; two numbers do not hold (towel vs vanity 0.004, the ceiling slot not in frame), one holds only with the stack at X 5.34 (curtain overlap 0.038; 0.030 at 5.30)",
+   "status": "clay round 2 (0א rulings): every 7.3 / 0א number holds (towel gap 0.033 >= 0.025, curtain overlap 0.038, plant vs curtain 0.118, sprig 0.028); the rail-slot requirement dropped in B2",
    "sha256_B2_plate": "8627933df8dbbae1fb735e560f66a509f34e6525671ff9ea3745bad042b1bd2f",
-   "sha256_B2": "0a1ebf4c8159e80401ed93802fdff471495f510d40ba1d3bded321d13876d5fb"
+   "sha256_B2": "5803c1e867f532ec9e5fea195ce09227b5fa960b751036e7766ab9e5c5025111",
+   "updated": "2026-11-17 (round 2)"
   },
   {
    "id": "wm-bath-b2-plate-2026-11-17",
@@ -15967,15 +15968,17 @@
    "room": "bath",
    "style": "warm-modern",
    "created": "2026-11-17",
-   "model": "seedream-5-pro i2i 2K (r1, 650) + code: lock warp, the left strip repaired (the model's window), bronze tone",
+   "model": "seedream-5-pro i2i 2K (r1, 650) + code: lock warp, the left strip repaired (the model's window), bronze tone; QA round 1: WM-G1 L* toe (BP-M1) and the niche LED line (BP-L1)",
    "prompt_record": "assets/prompts/warm-modern-bath-2026-11-17/plate.json, plate.txt (designer: plate-designer-verbatim.txt)",
    "recipe": "assets/renders/bath/warm-modern/stage1-2026-11-17/jobs.json, tools/prep_plate.py, tools/compose_plate.py (plate-compose.json), tools/lock_b2.py",
    "lock_record": "assets/renders/bath/warm-modern/stage1-2026-11-17/plate-lock.json",
    "tokens": 650,
    "clay": "assets/blockout/house/framing/wm-bath-2026-11-17/B2-plate.png",
-   "status": "for QA (full review: milestone before approval 3). Not for the site before QA, owner approval 3 and the 1.3.9 registration.",
-   "sha256": "49c6dd875b002f27979519c68daad0701cb15a15911946b92ee2ce7d42c5cd92",
-   "bytes": 6520038
+   "status": "QA round 1 failed on BP-M1 (black point) -> fixed at 0 tokens (p0.5 1.42 -> 12.5; above L* 30 unchanged); BP-L1 fixed; BP-L2 to the low backlog. Waits for QA's re-check of the black point. Not for the site before QA, owner approval 3 and the 1.3.9 registration.",
+   "sha256": "3c8da0d1516c2fab4f7fa8867a67ca7b8714c36ba764d6e3522c00df8414d077",
+   "bytes": 6480220,
+   "grading": "assets/renders/bath/warm-modern/stage1-2026-11-17/plate-grade.json (curve (0,0) (1.42,12.5) (30,30) (100,100) on L*; apply the same curve to every derived asset: tools/grade_plate.py apply)",
+   "updated": "2026-11-17 (QA round 1 fixes)"
   },
   {
    "id": "wm-bath-b2-plate-frame-2026-11-17",
@@ -15986,8 +15989,9 @@
    "created": "2026-11-17",
    "model": "derived from wm-bath-b2-plate-2026-11-17",
    "status": "for QA, with plate.png",
-   "sha256": "858dfccc0f5a9705403a32b202365c86e00edf3f5f4b7469bf64863ee9a10051",
-   "bytes": 3207485
+   "sha256": "9af08a515c3684d555d2ab5a36e5290d6c11523d7ac590b4b298fefdb1129fe5",
+   "bytes": 3189257,
+   "updated": "2026-11-17 (from the graded plate)"
   },
   {
    "id": "wm-bath-b2-plate-r1-raw-2026-11-17",
@@ -16062,6 +16066,19 @@
    "status": "SOURCE of plate.png; not for the site (before the lock, the one-house lift and WM-G1)",
    "sha256": "bef03f901149365695f9d4b4def1c88a8370e3a5092d9dc9c6664292aa768f75",
    "bytes": 7592982
+  },
+  {
+   "id": "wm-bath-b2-plate-ungraded-2026-11-17",
+   "path": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/plate-ungraded.png",
+   "kind": "the B2 plate as it went to QA round 1 (before the WM-G1 grade and BP-L1), kept as raw",
+   "room": "bath",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "see wm-bath-b2-plate-2026-11-17",
+   "tokens": 0,
+   "status": "SOURCE of plate.png; not for the site (black point L* p0.5 1.42)",
+   "sha256": "49c6dd875b002f27979519c68daad0701cb15a15911946b92ee2ce7d42c5cd92",
+   "bytes": 6520038
   }
  ]
 }
