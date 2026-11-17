@@ -105,6 +105,30 @@
   "backlog": [
    "BP-L2: the trowel ridges by the ring (status/backlog-low.md, per the manager)"
   ],
-  "rule": "every asset derived from the plate (output 2, the towel variant(s), the layers) gets the SAME recorded curve: python3 tools/grade_plate.py apply <in> <out> plate-grade.json"
+  "rule": "every asset derived from the plate gets the SAME recorded curve (round 3): python3 tools/grade_plate.py apply <in> <out> plate-grade.json"
+ },
+ "qa_round_2": {
+  "finding": "the round-2 straight toe (slope 8.8) made soot (neighbour contrast p90 3.14) and grey walnut (dE00 4.2); BP-L1 closed",
+  "fix": "round 3: L' = L + 11 (1 - L/30)^2, slope <= 1; chroma lifted with the lift toward (14.4, 5.1, 6.4); pointwise",
+  "checks": {
+   "p05_after": 11.4,
+   "p05_ok": true,
+   "max_dL_at_or_above_knee": 0.0,
+   "neighbour_contrast_p90_in_the_region_under_p05": {
+    "before": 0.494,
+    "after": 0.146,
+    "px": 18479
+   },
+   "shelf_walnut_L10_20": {
+    "px": 156477,
+    "median_Lab": [
+     13.34,
+     6.25,
+     8.7
+    ],
+    "de00_to_target": 2.05,
+    "C_over_L": 0.803
+   }
+  }
  }
 }

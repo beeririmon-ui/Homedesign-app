@@ -1,25 +1,49 @@
 {
  "source": "raw/plate-ungraded.png",
- "rule": "WM-G1: black point L* 11-14; toe on L* only (a*, b* kept), piecewise linear through the points below; nothing at L* 30 or above changes; no exposure change",
+ "rule": "WM-G1 (black point L* 11-14), round 3 after QA round 2: a smooth toe on L* whose slope never exceeds 1, with the chroma lifted with the lift toward base.png's shadowed walnut; pointwise; nothing at L* 30 or above changes",
  "curve": {
-  "L_in": [
-   0.0,
-   1.4206,
-   30.0,
-   100.0
+  "kind": "smooth toe + chroma lift",
+  "A": 11.0,
+  "knee": 30.0,
+  "chroma_per_lift": [
+   0.35417,
+   0.44444
   ],
-  "L_out": [
-   0.0,
-   12.5,
-   30.0,
-   100.0
+  "formula": "L < knee: L' = L + A (1 - L/knee)^2; a*' = a* + (L' - L) * r_a; b*' = b* + (L' - L) * r_b; L >= knee: unchanged",
+  "slope_at_black": 0.2667,
+  "slope_at_knee": 1.0,
+  "f0": 11.0,
+  "shadow_walnut_target": [
+   14.4,
+   5.1,
+   6.4
   ]
  },
- "knee": 30.0,
  "p05_before_bp_l1": 1.42,
  "p05_before": 1.42,
- "p05_after": 12.5,
+ "p05_after": 11.4,
  "changed_px_share": 0.0901,
+ "checks": {
+  "p05_after": 11.4,
+  "p05_ok": true,
+  "max_dL_at_or_above_knee": 0.0,
+  "neighbour_contrast_p90_in_the_region_under_p05": {
+   "before": 0.494,
+   "after": 0.146,
+   "px": 18479
+  },
+  "shelf_walnut_L10_20": {
+   "px": 156477,
+   "median_Lab": [
+    13.34,
+    6.25,
+    8.7
+   ],
+   "de00_to_target": 2.05,
+   "C_over_L": 0.803
+  }
+ },
+ "replaces": "round 2's piecewise-linear toe (0,0) (1.42,12.5) (30,30) (100,100) with a*/b* kept: soot and grey walnut (QA round 2)",
  "bp_l1": {
   "px": 224,
   "box": {
