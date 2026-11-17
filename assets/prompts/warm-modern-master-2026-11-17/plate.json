@@ -1,7 +1,7 @@
 {
  "asset_id": "wm-master-mb0-plate-2026-11-17",
  "output": "the empty plate of MB0: shell + the fixed walnut bed and nightstands and their shadow; no products, every lamp off",
- "status": "sent and accepted after code steps (lock warp, the bed wall's fall-off flattened by half, WM-G1 toe); for QA. Not for the site before QA, owner approval 3 and the 1.3.9 registration.",
+ "status": "QA passed (qa/reports/2026-11-17-master-plate/README.md); then the sill step (MP-D2) in code, for QA of that change only. Not for the site before owner approval 3 and the 1.3.9 registration.",
  "model": "seedream-5-pro",
  "type": "image-to-image",
  "resolution": "2K",
@@ -69,8 +69,10 @@
   "steps": [
    "global lock warp (y about the horizon x0.99246 + 0.69 px, x -1 px)",
    "the bed wall's fall-off flattened by half toward its bright part (one smooth lift field, gain 1.00-1.52)",
-   "WM-G1 toe on L* (p0.5 8.05 -> 12.5, knee 30)"
-  ]
+   "WM-G1 toe on L* (p0.5 8.05 -> 12.5, knee 30)",
+   "MP-D2 (12.6 4b, manager relay): the sill slab's front edge honed and straight, 4 cm, in the clay's slab mask only (tools/fix_sill.py; 15,381 px, 0 outside the mask)"
+  ],
+  "mandatory_for_derived": "steps 2 and 3 of this plate on every derived asset (MP-I1, MP-I2): plate-compose.json"
  },
  "verdict": "r1 accepted with the three code steps; no retry (0 extra tokens)",
  "date": "2026-11-17"

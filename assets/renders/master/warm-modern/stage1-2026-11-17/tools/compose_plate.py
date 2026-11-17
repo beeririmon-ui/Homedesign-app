@@ -12,21 +12,29 @@ compose_plate.py: the MB0 empty plate from the model's r1 (render-agent, 2026-11
 3. WM-G1 (black point L* 11-14; QA BP-M1 on the bath plate, the manager's ruling "the same curve on everything derived"): a toe on
    L* only, piecewise linear (0, 0) (p0.5, 12.5) (30, 30) (100, 100) on the 16:9 frame's p0.5; a* and b* kept; nothing above L* 30
    changes. The curve is recorded in plate-compose.json and must be applied to every layer derived from this plate (RND2).
+4. MP-D2 (12.6 4(b), manager relay 2026-11-17): the sill slab's rock-faced front edge made honed and straight, 4 cm, in code, in the
+   clay's slab mask only (tools/fix_sill.py). The result of steps 1-3 is kept as raw/plate-r1-steps1-3.png.
+MANDATORY for every derived asset (MP-I1, MP-I2): steps 2 and 3 of this plate, as recorded in plate-compose.json ('mandatory_for_derived').
 
-  python3 compose_plate.py raw/plate-r1.png raw/plate-r1-lock.json plate.png plate-compose.json
+  python3 compose_plate.py raw/plate-r1.png raw/plate-r1-lock.json plate.png plate-compose.json        (run from the folder above tools/)
 """
 import json
+import os
 import sys
 
 import cv2
 import numpy as np
 from PIL import Image
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import fix_sill  # noqa: E402
+
 CLAY = "/home/user/homedesign-app/assets/blockout/house/framing/wm-master-2026-11-17/"
 HORIZON = 707.3
 FRAME = (77.4882, 43.4301, 2642.5118, 1486.5699)
 TARGET_BP, KNEE = 12.5, 30.0
 FLATTEN, MAX_GAIN = 0.5, 2 ** 0.6
+GAIN_SCALE = 40000.0
 
 M3 = np.array([[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]])
 WP = np.array([0.95047, 1.0, 1.08883])
@@ -127,16 +135,33 @@ def main(raw, lockp, out, rec):
         rgb2 = rgb2.copy()
         rgb2[m] = rgb_from_lab(L2[m])
     after = float(np.percentile(lab(rgb2[y0:y1, x0:x1])[..., 0], 0.5))
-    Image.fromarray(np.clip(np.rint(rgb2 * 255), 0, 255).astype(np.uint8)).save(out)
-    fr = Image.fromarray(np.clip(np.rint(rgb2 * 255), 0, 255).astype(np.uint8)).crop((FRAME[0], FRAME[1], FRAME[2], FRAME[3])).resize((1920, 1080), Image.LANCZOS)
-    fr.save(out.replace(".png", "-frame.png"))
-    np.save("/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/render-master/plate-gain.npy", gain.astype(np.float32))
+    pre = os.path.join(os.path.dirname(out) or ".", "raw", "plate-r1-steps1-3.png")
+    Image.fromarray(np.clip(np.rint(rgb2 * 255), 0, 255).astype(np.uint8)).save(pre)
+    rgb3, srec = fix_sill.fix(rgb2)                                  # step 4: MP-D2, the sill's front edge honed (12.6 4(b))
+    img = Image.fromarray(np.clip(np.rint(rgb3 * 255), 0, 255).astype(np.uint8))
+    img.save(out)
+    img.crop((FRAME[0], FRAME[1], FRAME[2], FRAME[3])).resize((1920, 1080), Image.LANCZOS).save(out.replace(".png", "-frame.png"))
+    gpath = os.path.join(os.path.dirname(out) or ".", "plate-gain-field.png")
+    Image.fromarray(np.rint(gain * GAIN_SCALE).astype(np.uint16)).save(gpath)
     rep = dict(source=raw, out=out, steps=[
         dict(step=1, what="lock warp", y_offset_px=round(a, 3), y_scale_about_horizon=round(1 + b, 5), horizon_row=HORIZON, x_offset_px=round(c, 3),
              lines_used=nl, rule="locked(x, y) = raw(x + c, y + a + b (y - horizon)); bicubic"),
-        dict(step=2, what="one house: the bed wall's fall-off flattened by half toward its bright part (lift only)", **frec),
+        dict(step=2, what="one house: the bed wall's fall-off flattened by half toward its bright part (lift only)", **frec,
+             field_file=gpath, field_encoding=f"uint16 PNG, gain = value / {GAIN_SCALE}"),
         dict(step=3, what="WM-G1 toe on L* (a*, b* kept)", applied=toe, p05_before=round(p05, 2), p05_after=round(after, 2), knee=KNEE,
-             curve="(0, 0) (p05_before, 12.5) (30, 30) (100, 100), piecewise linear on L*; apply the same curve to every derived layer (RND2)")])
+             curve=f"(0, 0) ({round(p05, 2)}, 12.5) (30, 30) (100, 100), piecewise linear on L*", after_steps_1_3=pre),
+        dict(step=4, recipe="tools/fix_sill.py", **srec)],
+        mandatory_for_derived=dict(
+            rule="Every asset derived from this plate (the defaults frame, the product, shadow and light layers, the throw variants, MBf) "
+                 "gets steps 2 and 3 of THIS plate, so product and wall share the plate's light and black point (RND2). Manager relay, 2026-11-17.",
+            MP_I1=("Step 2, the bed-wall fall-off evening, on the defaults frame and on every layer, before the layers are cut. Use the recorded "
+                   "field (plate-gain-field.png, or the coefficients above), never a refit on another frame. If the frame was generated from raw-tone "
+                   "inputs, apply the field as it is. If it was generated from plate.png (already evened), compare its bed wall outside the product "
+                   "masks with plate.png first: apply the field only where the model put the fall-off back, so the right third (gain 1.1-1.5) is not "
+                   "lifted twice. Then check the layer edges in the right third against the wall around them (FB1)."),
+            MP_I2=(f"Step 3 with MB0's own curve: (0, 0) ({round(p05, 2)}, 12.5) (30, 30) (100, 100) on L*, a* b* kept, anchored at "
+                   f"{round(p05, 2)} as recorded here. Do not recompute the anchor on a derived frame and do not use the bath's round-3 curve."),
+            step_4="The sill fix is the plate's own (the sill is architecture, no layer sits on it); derived layers take the plate as it is."))
     json.dump(rep, open(rec, "w"), indent=1)
     print(json.dumps(rep, indent=1))
 

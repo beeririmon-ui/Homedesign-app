@@ -16017,9 +16017,9 @@
    "created": "2026-11-17",
    "model": "Blender Cycles (0 tokens)",
    "recipe": "assets/blockout/house/framing_wm_master.py, assets/blockout/house/framing/wm-master-2026-11-17/checks_wm_master.py",
-   "status": "clay: 6.3 checked in selfcheck.json and the README; M-HC2 does not hold (curtain stack vs the left nightstand 0.008, the designer's call); 6.3's art place is a 90 cm piece; the throw spreads to u 0.061-0.939; F10 count 7 (designer's estimate 9, minimum 14)",
+   "status": "clay moved to 12.6 (curtain stacks 18.00-18.22 / 19.48-19.70, rail 17.98-19.72; floor lamp X 0.89; tray, bottle, dish); MB0 re-rendered with the recorded post. M-HC2 holds (0.028 px), M-HC4 0.043, shade 0.060 from the right edge, base hidden. The pole against the throw: F3 overlap 0.0078 = the pole's width at every position that keeps the base hidden (designer's call). F10 count 7.",
    "sha256_MB0_plate": "69fe4cd17ca4ccd4365bfa66db07907d3f6ba887331a986dde2a2a2648697350",
-   "sha256_MB0": "99c1586f0209d98c3c3cc6ebf64f4adc9f274c7edf87628e249be98d208ca0ac",
+   "sha256_MB0": "9ba4bdb0c6a90d49b9155a82f241ae4f13d5b58af9823ad541ae74acdc824f0b",
    "sha256_MB0_shell": "6799e83f61da1795953429e8e2c703f2a5ab65890f165777b08d1bffd33619fd"
   },
   {
@@ -16029,16 +16029,16 @@
    "room": "master",
    "style": "warm-modern",
    "created": "2026-11-17",
-   "model": "seedream-5-pro i2i 2K (r1, 650) + code: lock warp, the bed wall's fall-off flattened by half (one house), WM-G1 toe",
+   "model": "seedream-5-pro i2i 2K (r1, 650) + code: lock warp, the bed wall's fall-off flattened by half (one house), WM-G1 toe, MP-D2 sill edge honed (step 4)",
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/plate.json, plate.txt (designer: plate-designer-verbatim.txt)",
-   "recipe": "assets/renders/master/warm-modern/stage1-2026-11-17/jobs.json, tools/prep_plate.py, tools/compose_plate.py (plate-compose.json), tools/lock_mb0.py, tools/readings_plate.py",
+   "recipe": "assets/renders/master/warm-modern/stage1-2026-11-17/jobs.json, tools/prep_plate.py, tools/compose_plate.py (plate-compose.json), tools/lock_mb0.py, tools/readings_plate.py, tools/fix_sill.py",
    "lock_record": "assets/renders/master/warm-modern/stage1-2026-11-17/plate-lock.json",
    "readings": "assets/renders/master/warm-modern/stage1-2026-11-17/plate-readings.json",
    "tokens": 650,
    "clay": "assets/blockout/house/framing/wm-master-2026-11-17/MB0-plate.png",
-   "status": "for QA (full review: milestone before approval 3). Notes for the designer's eye: horizontal walnut grain on the headboard (ch. 2 says vertical), a rough-edged sill slab about 6 cm, the floor darker than base.png by light (chroma dE00 1.5-2.3). Not for the site before QA, owner approval 3 and the 1.3.9 registration.",
-   "sha256": "7c3389c7c1830dc926fc77cf18b86946ead39abfa128c2ded40b31611757aa40",
-   "bytes": 6697407
+   "status": "QA passed on steps 1-3 (qa/reports/2026-11-17-master-plate/README.md; that version is raw/plate-r1-steps1-3.png). Round 2 (manager relay): MP-D2, the sill's front edge honed in code, 15,381 px inside the slab mask, 0 outside; QA checks only that change. MP-D1 (horizontal grain) accepted, MP-D3 (floor) no change. Every derived asset takes steps 2 and 3 of this plate (MP-I1, MP-I2: plate-compose.json). Not for the site before owner approval 3 and the 1.3.9 registration.",
+   "sha256": "443ebeda8462b7f6db9e0c1ed0a4aa3be6278de64ff7cfdfae953165ced9d01a",
+   "bytes": 6688036
   },
   {
    "id": "wm-master-mb0-plate-frame-2026-11-17",
@@ -16049,8 +16049,8 @@
    "created": "2026-11-17",
    "model": "derived from wm-master-mb0-plate-2026-11-17",
    "status": "for QA, with plate.png",
-   "sha256": "dc0d44d9026abe882e0b0c8e89a6af014850647992676ccd4c4e66e5bbf92f2b",
-   "bytes": 3249257
+   "sha256": "dcb59b3ed9873f13800eec3e9248b652dc24382ff548c86c886567f40ce72b3f",
+   "bytes": 3244776
   },
   {
    "id": "wm-master-mb0-plate-r1-raw-2026-11-17",
@@ -16079,6 +16079,32 @@
    "status": "SOURCE of plate.png; not for the site (black point L* p0.5 1.42)",
    "sha256": "49c6dd875b002f27979519c68daad0701cb15a15911946b92ee2ce7d42c5cd92",
    "bytes": 6520038
+  },
+  {
+   "id": "wm-master-mb0-plate-steps1-3-2026-11-17",
+   "path": "assets/renders/master/warm-modern/stage1-2026-11-17/raw/plate-r1-steps1-3.png",
+   "kind": "MB0 plate after compose steps 1-3 (lock, one-house field, WM-G1), before the sill step: the version QA passed",
+   "room": "master",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "derived from wm-master-mb0-plate-r1-raw-2026-11-17",
+   "tokens": 0,
+   "status": "SOURCE of plate.png (step 4 adds the sill fix); not for the site",
+   "sha256": "7c3389c7c1830dc926fc77cf18b86946ead39abfa128c2ded40b31611757aa40",
+   "bytes": 6697407
+  },
+  {
+   "id": "wm-master-mb0-plate-gain-field-2026-11-17",
+   "path": "assets/renders/master/warm-modern/stage1-2026-11-17/plate-gain-field.png",
+   "kind": "the plate's step-2 light field (uint16 PNG, gain = value / 40000), mandatory for every asset derived from the plate (MP-I1)",
+   "room": "master",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "tools/compose_plate.py (0 tokens)",
+   "tokens": 0,
+   "status": "data for derived assets; not an image for the site",
+   "sha256": "59902a266a7656027ae88ddd79ee69e4b04ba452dc23e1fbdc6b57e1c5fbed5e",
+   "bytes": 332656
   }
  ]
 }

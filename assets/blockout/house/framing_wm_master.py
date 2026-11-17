@@ -82,8 +82,9 @@ NS = dict(xs=((-2.10, -1.65), (0.25, 0.70)), y=(17.66, 18.06), h=0.55, r=0.04, t
           groove=0.004, recess=0.015)
 SCONCE = dict(plates=((-1.875, 17.66, 1.34), (0.475, 17.66, 1.34)), plate_r=0.055, plate_t=0.018, axis_y=17.775, cone_r=0.075,
               cone_top_r=0.012, cone_z=(1.19, 1.34))
-LAMP = dict(c=(0.95, 18.25), base_r=0.14, stem_r=0.012, shade=(1.28, 1.58), shade_r=(0.215, 0.11), collar=(1.22, 1.29))
-CURTAIN = dict(stacks=((17.88, 18.10), (19.60, 19.82)), n=6, r=0.035, x=(-2.255, -2.215), z=(0.12, 2.82))
+LAMP = dict(c=(0.89, 18.25),                                  # 12.6: X 0.95 -> 0.89
+             base_r=0.14, stem_r=0.012, shade=(1.28, 1.58), shade_r=(0.215, 0.11), collar=(1.22, 1.29))
+CURTAIN = dict(stacks=((18.00, 18.22), (19.48, 19.70)), n=6, r=0.037, x=(-2.263, -2.247), z=(0.12, 2.82), rail=(17.98, 19.72))   # 12.6: 9 cm deep, 12 cm over the glass
 LIGHT = dict(window=6.0, sconce_spot_w=30.0, sconce_spot_deg=100.0, sconce_point_w=5.0, sconce_glow=4.0, lamp_point_w=45.0,
              lamp_area_w=30.0, lamp_glow=5.0, plate_target_Lstar=87.5)
 
@@ -266,7 +267,7 @@ def wm_master(R):
                                           r3.bx("mb_wm_cg_n", x0, x0 + 0.01, y0, y1, cz - 0.0005, cz, gp),
                                           r3.bx("mb_wm_cg_w", x0, x1, y1 - 0.01, y1, cz - 0.0005, cz, gp),
                                           r3.bx("mb_wm_cg_s", x1 - 0.01, x1, y0, y1, cz - 0.0005, cz, gp)], 7)
-    reg_arch("mb_wm curtain slot", [r3.bx("mb_wm_slot", x0 + 0.03, x0 + 0.14, cy, 19.86, cz - 0.0006, cz, gp)], 8)
+    reg_arch("mb_wm curtain slot", [r3.bx("mb_wm_slot", x0 + 0.03, x0 + 0.14, CURTAIN["rail"][0], CURTAIN["rail"][1], cz - 0.0006, cz, gp)], 8)
     # ---- floor: smoked oak 22 cm planks along Y, staggered, 1.5 mm gaps (the dark base below shows in the gaps) ----
     rng = np.random.default_rng(17)
     oaks = [mat("oak", "oak", 0.8), mat("oak_l", "oak_l", 0.8), mat("oak_d", "oak_d", 0.8)]
@@ -438,21 +439,21 @@ def wm_products(R):
     reg_prod(R, "candle-holders-filler", cd, 50, "6.8 pillar candles 7 x 10 (at the bed) and 7 x 15, cream, unlit")
     # left nightstand: tray 30 x 20 x 2, parallel to the front, 3 cm from the front edge (6.5); bottle and dish moved onto it (README)
     ty = (NS["y"][1] - 0.03 - 0.20, NS["y"][1] - 0.03)
-    tx = (-2.025, -1.725)
+    tx = (-2.03, -1.73)                                       # 12.6
     tray = [r3.bx("mb_wm_tray", tx[0], tx[1], ty[0], ty[1], NS["h"], NS["h"] + 0.02, C["tray"], 0.004)]
     reg_prod(R, "nightstand-tray", tray, 45, f"3.2 walnut tray 30 x 20 x 2, X {tx[0]}..{tx[1]}, Y {ty[0]:.2f}-{ty[1]:.2f} (3 cm from the front, 6.5)")
     vz = NS["h"] + 0.02
     vc = (-1.95, 17.90)
     vase = [cyl("bottle_body", vc, 0.055, vz, vz + 0.17, C["bottle"], 40), cone("bottle_shoulder", vc, 0.055, 0.02, vz + 0.17, vz + 0.215, C["bottle"], 40),
             cyl("bottle_neck", vc, 0.017, vz + 0.215, vz + 0.245, C["bottle"], 24)]
-    reg_prod(R, "nightstand-vase", vase, 46, f"3.2 Color D sand bottle 11 x 24.5 at ({vc[0]}, {vc[1]}) on the tray (6.5 says 17.84: off the tray's back edge)")
+    reg_prod(R, "nightstand-vase", vase, 46, f"3.2 Color D sand bottle 11 x 24.5 at ({vc[0]}, {vc[1]}) on the tray (12.6)")
     stems = [r2.obox("mb_wm_oat_a", (vc[0], vc[1], vz + 0.24), (vc[0] - 0.07, vc[1] + 0.01, 1.00), (0, 1, 0), 0.006, 0.006, C["stem"]),
              r2.obox("mb_wm_oat_b", (vc[0] + 0.004, vc[1], vz + 0.24), (vc[0] - 0.03, vc[1] - 0.01, 0.97), (0, 1, 0), 0.006, 0.006, C["stem"]),
              r3.ell("mb_wm_oat_head_a", (vc[0] - 0.062, vc[1] + 0.009), 0.012, 0.93, 1.00, C["stem"]),
              r3.ell("mb_wm_oat_head_b", (vc[0] - 0.028, vc[1] - 0.009), 0.011, 0.91, 0.97, C["stem"])]
     reg_prod(R, "nightstand-vase-filler", stems, 47, "6.8 two dry oat stems to Z 1.00, leaning a little toward the window")
-    dish = [r3.bx("mb_wm_dish", -1.84, -1.74, 17.88, 17.98, vz, vz + 0.025, C["dish"], 0.006)]
-    reg_prod(R, "trinket-dish", dish, 48, "3.2 travertine 10 x 10 rough edge, empty, at (-1.79, 17.93) on the tray (6.5 says 17.90)")
+    dish = [r3.bx("mb_wm_dish", -1.85, -1.75, 17.88, 17.98, vz, vz + 0.025, C["dish"], 0.006)]       # 12.6: (-1.80, 17.93)
+    reg_prod(R, "trinket-dish", dish, 48, "3.2 travertine 10 x 10 rough edge, empty, at (-1.80, 17.93) on the tray (12.6)")
     # sill: the fluted column 8.5 x 24.7 at (-2.45, 18.30) on the limestone, one sage stem to Z 1.20
     sv = (-2.45, 18.30)
     col = [cyl("sill_vase", sv, 0.0425, WIN["sill"], WIN["sill"] + 0.247, C["column"], 24)]
@@ -652,7 +653,7 @@ def checks_6_3(fid, cam, ids, items=None):
     C["cones"] = dict(target="u 0.255 / 0.745 (+-0.01), v 0.35", pair=cones,
                       ok_u=abs(cones[0]["u_centre"] - 0.255) <= 0.01 and abs(cones[1]["u_centre"] - 0.745) <= 0.01,
                       note="v 0.35 is the plate height (Z 1.34) at the cone's depth; the cone hangs below its arm, so its centre reads lower")
-    C["art_place_empty"] = dict(target="u 0.412-0.588, v 0.13-0.34 (empty now)",
+    C["art_place_empty"] = dict(target="u 0.381-0.619, v 0.125-0.337 (12.6; empty now)",
                                 slot_rect=dict(u=[r4_(UVf(cam, -1.30, 17.69, 1.7)[0]), r4_(UVf(cam, -0.10, 17.69, 1.7)[0])],
                                                v=[r4_(UVf(cam, -0.7, 17.69, 2.00)[1]), r4_(UVf(cam, -0.7, 17.69, 1.40)[1])]),
                                 note="the slot's 110-120 wide art (X -1.30..-0.10) spans u 0.382-0.618; 0.412-0.588 is a 90 cm wide piece")
@@ -704,6 +705,26 @@ def checks_6_3(fid, cam, ids, items=None):
                     tot += 1
                     vis += int(ids[int(v * H), int(u * W)] == 55)
         C["M-HC3"]["floor_lamp_vs_throw"]["base_disc_samples_visible"] = f"{vis}/{tot}"
+        # 12.6: the pole against the throw. r2's F3 overlap rule (overlap >= 0.03 or gap >= 0.02) measures the overlap's thickness,
+        # which for a 2.4 cm pole is the pole's width wherever the pole passes behind the throw. Analytic table of lamp positions.
+        cx0, cy0, cz0 = CAM["loc"]
+        throw_right = UVf(cam, BED["x"][1] + 0.035, 19.63, 0.60)[0]
+        opts = {}
+        for (lx, ly) in ((0.89, 18.25), (0.89, 18.20), (0.95, 18.25), (1.10, 18.25), (1.15, 18.25)):
+            pu = UVf(cam, lx, ly, 0.8)[0]
+            pw = 2 * LAMP["stem_r"] * 0.6667 * K / (cy0 - ly)
+            sr = max(UVf(cam, lx + LAMP["shade_r"][0] * math.cos(t), ly + LAMP["shade_r"][0] * math.sin(t), LAMP["shade"][0])[0] for t in np.linspace(0, 2 * math.pi, 73))
+            hidden = True
+            for t in np.linspace(0, 2 * math.pi, 24, endpoint=False):
+                bxp, byp = lx + LAMP["base_r"] * math.cos(t), ly + LAMP["base_r"] * math.sin(t)
+                tt = (BED["x"][1] + 0.015 - cx0) / (bxp - cx0)
+                yt, zt = cy0 + (byp - cy0) * tt, cz0 + (0.02 - cz0) * tt
+                hidden &= bool(BED["y"][0] <= yt <= BED["y"][1] + 0.015 and zt <= BED["mat"][1] + 0.07)
+            opts[f"lamp at ({lx}, {ly})"] = dict(pole_u=r4_(pu), pole_width_u=r4_(pw), throw_right_u=r4_(throw_right),
+                                                 pole_vs_throw=("behind the throw (T-junction), F3 overlap thickness = the pole's width" if pu < throw_right
+                                                                else f"clear by {r4_(pu - throw_right)}"),
+                                                 base_hidden_by_bed=hidden, shade_right_u=r4_(sr), shade_to_right_edge=r4_(1 - sr))
+        C["M-HC3"]["floor_lamp_vs_throw"]["positions_12_6"] = opts
         C["M-HC3"]["floor_lamp_vs_throw"]["ok"] = vis == 0 or vis > 0.8 * tot
         # M-HC4: the sill vase
         sb = bxs["sill_vase"]
@@ -836,9 +857,17 @@ def Lstar(rgb01):
     return float(np.mean(np.where(Y > 0.008856, 116 * np.cbrt(Y) - 16, 903.3 * Y)))
 
 
-def tone_frames(frames, cam, ref_frame, out_dir):
+def tone_frames(frames, cam, ref_frame, out_dir, fixed=None):
     import tone_r4 as T
     toner = T.Toner()
+    if fixed is not None:                                       # reuse the recorded post (one exposure / balance for the frame set)
+        e, gains = fixed["exposure"], np.array(fixed["wb_gains"])
+        for fid in frames:
+            img, lin = toner.load(os.path.join(r4.EXR_DIR, f"{fid}.exr"))
+            t = T.shoulder(toner.tone(img, lin, e, gains))
+            bpy.data.images.remove(img)
+            T.save_png(t, os.path.join(out_dir, f"{fid}.png"))
+        return dict(fixed, reused_for=list(frames))
     ref_pts = [(-0.70, 17.66, 1.85), (-0.40, 17.66, 2.05)]       # the bed wall above the headboard, centre (the art place is empty)
     u = [fr.U(cam, *p) for p in ref_pts]
     v = [fr.V(cam, *p) for p in ref_pts]
@@ -912,6 +941,7 @@ def main(argv):
     ap.add_argument("--bath-window", type=float, default=1.0)
     ap.add_argument("--master-window", type=float, default=LIGHT["window"])
     ap.add_argument("--out", default=OUT)
+    ap.add_argument("--keep-post", action="store_true", help="merge into the existing selfcheck.json and reuse its exposure / balance")
     a, _ = ap.parse_known_args(argv)
     out = a.out
     os.makedirs(out, exist_ok=True)
@@ -952,6 +982,13 @@ def main(argv):
                            note="u / v in this file are FRAME fractions (the 16:9 frame), pixels are CANVAS pixels"),
                render=f"{a.res}x{int(round(a.res * 9 / 16))}, {a.samples} samples, Cycles CPU, OIDN, AgX MHC; post: tone_frames()",
                light=dict(LIGHT), build_notes=notes, ids=IDS, frames={})
+    prev = None
+    if a.keep_post and os.path.exists(os.path.join(out, "selfcheck.json")):
+        prev = json.load(open(os.path.join(out, "selfcheck.json")))
+        rep["frames"] = prev.get("frames", {})
+        rep["lock_target"] = prev.get("lock_target")
+        rep["history"] = prev.get("history", []) + [dict(date=time.strftime("%Y-%m-%d %H:%M"), rerendered=frames,
+                                                         why="12.6 (designer rulings): curtain stacks 18.00-18.22 / 19.48-19.70 (rail 17.98-19.72), floor lamp X 0.89, tray / bottle / dish")]
     tmp = tempfile.mkdtemp(prefix="wm-master-")
     r4.OS_STATE["on"] = True
     for fid in frames:
@@ -978,7 +1015,7 @@ def main(argv):
         print("frame", fid, Rr["runtime_s"], "s", flush=True)
     cam = S["cam"]
     ref = "MB0-plate" if "MB0-plate" in frames else frames[0]
-    rep["post"] = tone_frames(frames, cam, ref, out)
+    rep["post"] = tone_frames(frames, cam, ref, out, fixed=prev["post"] if prev else None) if prev else tone_frames(frames, cam, ref, out)
     for fid in frames:
         rep["frames"][fid]["readings"] = readings(os.path.join(out, f"{fid}.png"), os.path.join(out, f"{fid}-id.png"))
     rep["build_s"] = round(time.time() - t0)

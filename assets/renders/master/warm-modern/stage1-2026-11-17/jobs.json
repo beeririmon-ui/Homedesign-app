@@ -1,5 +1,5 @@
 {
- "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2).",
+ "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2). Round 2 (manager relay after QA, 0 tokens): MP-D2 sill edge honed in code (step 4), MP-I1 / MP-I2 recorded as mandatory, the clay moved to 12.6, re-priced; nothing sent.",
  "cap": 3500,
  "spent": 650,
  "left_in_cap": 2850,
@@ -23,7 +23,7 @@
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/plate.json",
    "raw": "assets/renders/master/warm-modern/stage1-2026-11-17/raw/plate-r1.png",
    "final": "assets/renders/master/warm-modern/stage1-2026-11-17/plate.png",
-   "verdict": "accepted with code steps (tools/compose_plate.py): lock warp, the bed wall's fall-off flattened by half, WM-G1 toe"
+   "verdict": "accepted with code steps (tools/compose_plate.py): lock warp, the bed wall's fall-off flattened by half, WM-G1 toe; QA passed (qa/reports/2026-11-17-master-plate); then step 4, MP-D2: the sill's front edge honed and straight in code (0 tokens)"
   }
  ],
  "priced_not_sent": [
@@ -61,8 +61,11 @@
    "estimate": 650,
    "waits_for": [
     "owner approval 2 of the bedroom picks (HOUSE2, relayed by the manager)",
-    "the curtain stack vs the left nightstand (M-HC2, clay README): the designer's position"
-   ]
+    "the designer's call on the floor-lamp pole against the throw (F3 overlap = the pole's width at every position that keeps the base hidden; clay README)"
+   ],
+   "repriced_2026_11_17_round2": 650,
+   "placements": "12.6: curtain stacks Y 18.00-18.22 and 19.48-19.70 (9 cm deep, rail 17.98-19.72), floor lamp (0.89, 18.25), tray X -2.03..-1.73 Y 17.83-18.03, bottle (-1.95, 17.90), dish (-1.80, 17.93)",
+   "post_mandatory": "MP-I1 and MP-I2: plate-compose.json 'mandatory_for_derived'"
   },
   {
    "output": "the sample slot, the throw (12.3 fallback, the manager's brief): Flax brown CJYD205807538LO and Clay CJYD205807510JQ as mask edits of the defaults frame with the SKU photo, composited in the throw's mask (+3 px) and its shadow (z 57); 0 difference outside (RND2)",
@@ -91,12 +94,58 @@
    "waits_for": [
     "the defaults frame",
     "owner approval 2"
-   ]
+   ],
+   "repriced_2026_11_17_round2": 800
   }
  ],
  "totals": {
+  "spent": 650,
+  "waiting": 1450,
+  "waiting_if_seedream_variants": 1950,
   "three_outputs": 2100,
   "if_seedream_variants": 2600,
   "under_cap": true
+ },
+ "repricing_call": {
+  "tool": "var2_estimate_cost",
+  "date": "2026-11-17",
+  "items": [
+   {
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 12
+    },
+    "total_tokens": 650
+   },
+   {
+    "model_id": "nano-banana-2",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 1
+    },
+    "quantity": 2,
+    "total_tokens": 800
+   },
+   {
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 1
+    },
+    "quantity": 2,
+    "total_tokens": 1300
+   }
+  ]
+ },
+ "not_needed": {
+  "what": "the designer's fallback for the sill, a mask edit (about 400)",
+  "why": "the code fix reads honed at x2; not sent, not authorised"
  }
 }

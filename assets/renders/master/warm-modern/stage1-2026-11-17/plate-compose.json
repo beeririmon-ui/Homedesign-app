@@ -40,7 +40,9 @@
    "gain_frame_min_max": [
     1.0,
     1.5157
-   ]
+   ],
+   "field_file": "./plate-gain-field.png",
+   "field_encoding": "uint16 PNG, gain = value / 40000.0"
   },
   {
    "step": 3,
@@ -49,7 +51,57 @@
    "p05_before": 8.05,
    "p05_after": 12.5,
    "knee": 30.0,
-   "curve": "(0, 0) (p05_before, 12.5) (30, 30) (100, 100), piecewise linear on L*; apply the same curve to every derived layer (RND2)"
+   "curve": "(0, 0) (8.05, 12.5) (30, 30) (100, 100), piecewise linear on L*",
+   "after_steps_1_3": "./raw/plate-r1-steps1-3.png"
+  },
+  {
+   "step": 4,
+   "recipe": "tools/fix_sill.py",
+   "what": "MP-D2: the sill slab's front edge honed and straight (12.6 4(b)); in the clay's slab mask (id 14, dilated 6 px)",
+   "edges": {
+    "used": "the clay's two analytic lines (lock-target.json), extended along their slopes: the face is exactly 4 cm",
+    "detected_top_offset_px": 2.0,
+    "detected_bottom_offset_px": -2.05,
+    "slope_top": -0.19012,
+    "slope_bottom": -0.21548,
+    "note": "the model's own edges sat this far from the clay's lines (median over columns 0-445): its face read about 3.5 cm"
+   },
+   "face_height_px": {
+    "at_x_75": 32.6,
+    "at_x_220": 28.9,
+    "at_x_430": 23.6
+   },
+   "face_tone_Lab_median": [
+    58.2,
+    4.0,
+    18.6
+   ],
+   "top_tone_Lab_median": [
+    94.3,
+    -0.1,
+    5.7
+   ],
+   "vertical_profile_L": [
+    3.0,
+    3.0,
+    -1.38,
+    -1.08,
+    -0.65,
+    -0.44,
+    -0.28,
+    -0.65,
+    -2.99,
+    -3.0
+   ],
+   "changed_px": 15381,
+   "changed_outside_mask_px": 0,
+   "fade": "x 431-445"
   }
- ]
+ ],
+ "mandatory_for_derived": {
+  "rule": "Every asset derived from this plate (the defaults frame, the product, shadow and light layers, the throw variants, MBf) gets steps 2 and 3 of THIS plate, so product and wall share the plate's light and black point (RND2). Manager relay, 2026-11-17.",
+  "MP_I1": "Step 2, the bed-wall fall-off evening, on the defaults frame and on every layer, before the layers are cut. Use the recorded field (plate-gain-field.png, or the coefficients above), never a refit on another frame. If the frame was generated from raw-tone inputs, apply the field as it is. If it was generated from plate.png (already evened), compare its bed wall outside the product masks with plate.png first: apply the field only where the model put the fall-off back, so the right third (gain 1.1-1.5) is not lifted twice. Then check the layer edges in the right third against the wall around them (FB1).",
+  "MP_I2": "Step 3 with MB0's own curve: (0, 0) (8.05, 12.5) (30, 30) (100, 100) on L*, a* b* kept, anchored at 8.05 as recorded here. Do not recompute the anchor on a derived frame and do not use the bath's round-3 curve.",
+  "step_4": "The sill fix is the plate's own (the sill is architecture, no layer sits on it); derived layers take the plate as it is."
+ }
 }
