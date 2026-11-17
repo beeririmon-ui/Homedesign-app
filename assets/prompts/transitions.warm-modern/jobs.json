@@ -17,7 +17,9 @@
   "light (11.9.6): the exposure lines stay; the frame mean falls about 0.6 stop in clip1a and rises in clip2 on purpose; assemble.py's exposure tracking keeps both (tested on clay walks, plan section 10)",
   "live prices taken again 2026-11-17: unchanged",
   "new: clip 1b can be built in code (0 tokens) from HT, its clay depth and HD; recommended before the model job (plan section 10). seeds.py ht seeds HT's far wall from HD",
-  "every sendable prompt kept under 2,500 characters (var2 takes 4,000; a provider cap at 2,500 is possible and would cut the Scene paragraph)"
+  "every sendable prompt kept under 2,500 characters (var2 takes 4,000; a provider cap at 2,500 is possible and would cut the Scene paragraph)",
+  "r2 of turn_door.py joints (the manager's follow-up): joint lines only, on the clay's lines, one threshold for both stills",
+  "D0o's mask has one more column (x 1161, render-agent): the door in code and clip 1a's first frame need nothing, since everything outside the drawn leaf is D0o's own pixels (checked: at 90 deg the composite equals D0o except x 708-809)"
  ],
  "tools": "site/tools/transitions/: camgeo.py (cameras, canvases, reprojection, room depth I/O), turn_door.py (the turn and the door in code), walk_test.py (the clay is the ruler: --stations with -depth and -edges passes), assemble.py (bank: exposure tracking, end locks, resample in DIS), arrival_timeline.py, export_arrival.py (sequences, manifest, master), seeds.py (frames for the video model, the HD and HDx seeds), room_depth.py, clay_walk.py. proxy_house.py is the test fixture. 2026-11-17: walk_test.py routes clip1a / clip1b, --exclude ID:A-B, --events; turn_door.py joints (and the joints gate in turn); seeds.py ht; camgeo.HT.",
  "canvases": {
@@ -375,8 +377,8 @@
    "id": "turn",
    "what": "the 65 degree turn HD -> HDx; the seam locked on the stone joints, then the tone",
    "command": "python3 site/tools/transitions/turn_door.py turn --hd <HD> --hdx <HDx> --canvas tall --match --blur --out <dir>",
-   "gate": "seam_joints.pass (p90 <= 2 px both ways over the shared strip; exit 3 otherwise, HD back to render-agent: 11.5.7); seam_match gain within 3 %; worst_hole_frac 0",
-   "check_alone": "python3 site/tools/transitions/turn_door.py joints --hd <HD> --hdx <HDx>   (on the clay: 15,620 edge px, median 0, p90 1 px, pass; a 3-4 px shift fails)",
+   "gate": "seam_joints.pass: the stills' JOINT LINES only (their own edges inside a +-6 px corridor around the clay's -edges lines, the gradient across the line, one Canny threshold for both stills), carried by the exact rotation, p90 <= 2 px both ways (exit 3 otherwise, HD back to render-agent: 11.5.7); seam_match gain within 3 %; worst_hole_frac 0",
+   "check_alone": "python3 site/tools/transitions/turn_door.py joints --hd <HD> --hdx <HDx> [--clay assets/blockout/house/framing/wm-door-2026-11-16]. r2 (2026-11-17): clay p90 1.0 / 1.0 px, pass; HD shifted 4 px or its strip 3 px: fail; real hd-r1 vs hdx.png: p90 1.0 / 1.0 px, pass (r1 of the tool gave 1.0 / 15.8: it counted HD's stone and plaster texture as joints)",
    "tokens": 0
   },
   {
