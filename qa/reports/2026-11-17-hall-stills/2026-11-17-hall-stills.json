@@ -334,7 +334,7 @@
   "answer": "does not break clip 2 (the living room in HDx is base.png's own pixels at +0.01); the release along the clip is about +0.45 stop of frame mean instead of ~0.6; for the designer's eye. The level that matters more is HD: it inherits HDx's stone at -0.82, so with the jib door at -0.60 the stone sits 0.22 below the plaster (11.9.3 asks 0.25-0.6)"
  },
  "recheck_2026-11-17_round2": {
-  "scope": "EFF1.2: HDx's two healed regions + what changed; HD new. 0 tokens. HT and D0o not touched.",
+  "scope": "EFF1.2: HDx's two healed regions + what changed; HD, HT (r2) new; D0o inside the mask after the +0.12 multiplier. 0 tokens.",
   "HDx": {
    "status": "pass; fit to be clip 2's first frame",
    "changed_vs_rejected/hdx-r2-preheal.png": {
@@ -808,7 +808,7 @@
      "id": "HD-M2",
      "severity": "medium",
      "what": "an extra vertical joint at u 0.660 (canvas x 1624) in the four courses where the clay has none (rows 47-426, 568-758, 1137-1279, 1564+), a clear joint (15-20 L* dip); the clay has one vertical joint only, at u 0.803 in the other courses (11.5.5, 11.5.7 'joints vs the clay'). Outside HDx's strip, so the turn is unaffected, but seeds.py ht maps it to HT u 0.538, where HT's clay has no joint (HT's only vertical joint is at 0.623)",
-     "fix": "0 tokens: heal the four joint segments into the stone (smooth honed) before HT's seed is built from HD; or master-designer accepts the extra joint and HT's check expects it at 0.538",
+     "fix": "one decision for HD and HT together (HT r2 already carries it, HT-M3): heal the segments in both (0 tokens), or master-designer accepts the joints; HD and HT are consistent with each other today, so clip 1b is not hurt either way",
      "owner": "render-agent; master-designer if accepted",
      "evidence": [
       "hd-extra-joint-vs-clay.jpg"
@@ -831,10 +831,628 @@
     },
     {
      "id": "clip1-band",
-     "severity": "open (known)",
-     "what": "jib door D0o -0.72, HD -0.50: 0.22 apart, wider than the single 1/6 band of 11.9.3 for D0o/HT/HD; render-agent's ready x1.087 on D0o (0 tokens) brings it to 0.10. A condition for clip 1, not an HD defect",
+     "severity": "closed",
+     "what": "D0o jib -0.60 after the multiplier, HT and HD -0.50: 0.10 apart, inside the single 1/6 band",
      "owner": "manager (decision), render-agent"
     }
+   ]
+  },
+  "status_all_four": {
+   "D0o": "pass (round 1; and after the +0.12 multiplier)",
+   "HDx": "pass; fit to be clip 2's first frame",
+   "HD": "fail: HD-M1, HD-M2 (medium, 0 tokens)",
+   "HT": "fail: HT-M1..HT-M4 (medium, 0 tokens)"
+  },
+  "HT": {
+   "status": "fail: 4 medium (0-token fixes); levels and the architecture's lock pass",
+   "ht_frame_equals_seeds_frame": true,
+   "levels": {
+    "jib_door": [
+     225848,
+     -0.501,
+     77.9
+    ],
+    "jib_in_seed_share_and_HT_over_seed": [
+     1.0,
+     0.9998
+    ],
+    "stone": [
+     379850,
+     -0.812
+    ],
+    "stone_minus_jib": -0.311,
+    "plaster_by_v_quarter": [
+     -0.091,
+     -0.452,
+     -0.653,
+     -0.986
+    ],
+    "plaster_by_u": [
+     -0.869,
+     -0.538,
+     -0.518
+    ],
+    "clipped_in_frame_total_and_outside_living": [
+     5965,
+     0
+    ]
+   },
+   "lock": {
+    "jib seam left 0.158": {
+     "still_u": 0.1564,
+     "clay_u": 0.158,
+     "median_px": -4.15,
+     "p90_abs_px": 4.3,
+     "tilt_deg": -0.003
+    },
+    "jib seam right 0.372": {
+     "still_u": 0.3711,
+     "clay_u": 0.3715,
+     "median_px": -1.02,
+     "p90_abs_px": 1.14,
+     "tilt_deg": -0.01
+    },
+    "stone edge 0.456": {
+     "still_u": 0.4555,
+     "clay_u": 0.4556,
+     "median_px": 0.08,
+     "p90_abs_px": 2.01,
+     "tilt_deg": -0.003
+    },
+    "corner 0.790": {
+     "still_u": 0.7906,
+     "clay_u": 0.7902,
+     "median_px": 1.02,
+     "p90_abs_px": 1.88,
+     "tilt_deg": 0.002
+    },
+    "return/walnut 0.814": {
+     "still_u": 0.8145,
+     "clay_u": 0.814,
+     "median_px": 1.36,
+     "p90_abs_px": 2.31,
+     "tilt_deg": 0.048
+    },
+    "walnut/living 0.850": {
+     "still_u": 0.8507,
+     "clay_u": 0.8499,
+     "median_px": 2.12,
+     "p90_abs_px": 2.4,
+     "tilt_deg": 0.008
+    },
+    "horizontal joints (row ~: n, median, max abs)": {
+     "150": [
+      42,
+      -4.62,
+      4.88
+     ],
+     "240": [
+      42,
+      -0.02,
+      0.39
+     ],
+     "490": [
+      42,
+      -0.03,
+      0.38
+     ],
+     "580": [
+      42,
+      -0.01,
+      0.4
+     ],
+     "700": [
+      42,
+      0.1,
+      0.81
+     ],
+     "950": [
+      42,
+      0.25,
+      0.48
+     ],
+     "1040": [
+      42,
+      0.07,
+      0.53
+     ],
+     "1220": [
+      42,
+      -0.04,
+      0.59
+     ],
+     "1470": [
+      42,
+      7.34,
+      7.53
+     ]
+    },
+    "horizontal joints: worst |median|, worst column": [
+     7.340057231418712,
+     7.532966545666094
+    ],
+    "clay vertical joints u": [
+     0.623
+    ],
+    "vertical joints per course (still vs clay)": [
+     {
+      "rows": [
+       1,
+       154
+      ],
+      "v": [
+       -0.029,
+       0.077
+      ],
+      "still_vertical_joints_u": [
+       0.689
+      ],
+      "clay_vertical_joints_u": []
+     },
+     {
+      "rows": [
+       154,
+       246
+      ],
+      "v": [
+       0.077,
+       0.14
+      ],
+      "still_vertical_joints_u": [
+       0.623
+      ],
+      "clay_vertical_joints_u": [
+       0.623
+      ]
+     },
+     {
+      "rows": [
+       246,
+       491
+      ],
+      "v": [
+       0.14,
+       0.31
+      ],
+      "still_vertical_joints_u": [
+       0.538
+      ],
+      "clay_vertical_joints_u": []
+     },
+     {
+      "rows": [
+       491,
+       583
+      ],
+      "v": [
+       0.31,
+       0.374
+      ],
+      "still_vertical_joints_u": [
+       0.623
+      ],
+      "clay_vertical_joints_u": [
+       0.623
+      ]
+     },
+     {
+      "rows": [
+       583,
+       705
+      ],
+      "v": [
+       0.374,
+       0.458
+      ],
+      "still_vertical_joints_u": [
+       0.538
+      ],
+      "clay_vertical_joints_u": []
+     },
+     {
+      "rows": [
+       705,
+       950
+      ],
+      "v": [
+       0.458,
+       0.628
+      ],
+      "still_vertical_joints_u": [
+       0.623
+      ],
+      "clay_vertical_joints_u": [
+       0.623,
+       0.78
+      ]
+     },
+     {
+      "rows": [
+       950,
+       1042
+      ],
+      "v": [
+       0.628,
+       0.692
+      ],
+      "still_vertical_joints_u": [
+       0.538
+      ],
+      "clay_vertical_joints_u": [
+       0.78
+      ]
+     },
+     {
+      "rows": [
+       1042,
+       1226
+      ],
+      "v": [
+       0.692,
+       0.819
+      ],
+      "still_vertical_joints_u": [
+       0.623
+      ],
+      "clay_vertical_joints_u": [
+       0.623,
+       0.779
+      ]
+     },
+     {
+      "rows": [
+       1226,
+       1469
+      ],
+      "v": [
+       0.819,
+       0.988
+      ],
+      "still_vertical_joints_u": [
+       0.538
+      ],
+      "clay_vertical_joints_u": [
+       0.78
+      ]
+     },
+     {
+      "rows": [
+       1469,
+       1530
+      ],
+      "v": [
+       0.988,
+       1.03
+      ],
+      "still_vertical_joints_u": [],
+      "clay_vertical_joints_u": []
+     }
+    ]
+   },
+   "walnut_L_and_frame_p0_5": [
+    29.1,
+    20.8
+   ],
+   "seed_compare": {
+    "seed source values": {
+     "0": 2433922,
+     "255": 1727678
+    },
+    "plaster: seed px, |HT - seed| > 2 levels share (all / >125 px inside)": [
+     902349,
+     0.205,
+     0.003
+    ],
+    "plaster: median |HT - seed| deep inside (levels)": 0.0,
+    "stone: seed px, |HT - seed| > 2 levels share (all / >125 px inside)": [
+     1017792,
+     0.013,
+     0.004
+    ],
+    "stone: median |HT - seed| deep inside (levels)": 0.0,
+    "living room: seed px, |HT - seed| > 2 levels share (all / >125 px inside)": [
+     168514,
+     0.509,
+     0.005
+    ],
+    "living room: median |HT - seed| deep inside (levels)": 0.0,
+    "jib region: share in the seed; HT/seed median ratio": [
+     1.0,
+     0.9998
+    ],
+    "patch top edge on plaster: outside/inside -1 (10 rows each side)": [
+     {
+      "x": 400,
+      "edge_row": 216,
+      "step_pct": 0.07
+     },
+     {
+      "x": 500,
+      "edge_row": 216,
+      "step_pct": -0.65
+     },
+     {
+      "x": 600,
+      "edge_row": 216,
+      "step_pct": 0.95
+     },
+     {
+      "x": 700,
+      "edge_row": 216,
+      "step_pct": 0.0
+     },
+     {
+      "x": 800,
+      "edge_row": 216,
+      "step_pct": 0.3
+     },
+     {
+      "x": 900,
+      "edge_row": 216,
+      "step_pct": -0.07
+     },
+     {
+      "x": 1000,
+      "edge_row": 216,
+      "step_pct": 0.78
+     },
+     {
+      "x": 1100,
+      "edge_row": 216,
+      "step_pct": -0.33
+     },
+     {
+      "x": 1200,
+      "edge_row": 216,
+      "step_pct": 1.08
+     }
+    ],
+    "patch bottom edge on plaster: outside/inside -1 (10 rows each side)": [
+     {
+      "x": 400,
+      "edge_row": 1289,
+      "step_pct": -2.54
+     },
+     {
+      "x": 500,
+      "edge_row": 1289,
+      "step_pct": 0.0
+     },
+     {
+      "x": 600,
+      "edge_row": 1289,
+      "step_pct": -0.46
+     },
+     {
+      "x": 700,
+      "edge_row": 1289,
+      "step_pct": -0.4
+     },
+     {
+      "x": 800,
+      "edge_row": 1289,
+      "step_pct": 1.01
+     },
+     {
+      "x": 900,
+      "edge_row": 1289,
+      "step_pct": -0.31
+     },
+     {
+      "x": 1000,
+      "edge_row": 1289,
+      "step_pct": -1.14
+     },
+     {
+      "x": 1100,
+      "edge_row": 1289,
+      "step_pct": -1.29
+     },
+     {
+      "x": 1200,
+      "edge_row": 1289,
+      "step_pct": -1.46
+     }
+    ],
+    "living room in frame: px, share in seed": [
+     555940,
+     0.193
+    ],
+    "living room in seed: HT/seed median Y ratio; share |d|>2": [
+     1.0162,
+     0.608
+    ],
+    "living window wall (id 32, v 0.2-0.7) stops; hall plaster same band stops; difference": [
+     -0.59,
+     -0.553,
+     -0.037
+    ],
+    "living window wall (id 32): px in frame, seed share, stops": [
+     218776,
+     0.104,
+     -0.598
+    ],
+    "living ceiling (id 35): px in frame, seed share, stops": [
+     56832,
+     0.0,
+     -0.451
+    ],
+    "living dropped band (id 36): px in frame, seed share, stops": [
+     29184,
+     0.0,
+     -0.63
+    ],
+    "living floor (id 30): px in frame, seed share, stops": [
+     152477,
+     0.342,
+     -1.502
+    ],
+    "living glazing (id 39): px in frame, seed share, stops": [
+     21053,
+     0.863,
+     -2.101
+    ],
+    "living bench (id 40): px in frame, seed share, stops": [
+     16209,
+     0.726,
+     -1.647
+    ],
+    "living view (id 0): px in frame, seed share, stops": [
+     46800,
+     0.0,
+     0.279
+    ]
+   },
+   "stone_patch_edges": "23 of 26 edge blocks over 3 %; worst: bottom edge (row ~1286) -21.0/-19.4/-16.6 %, top edge (row ~216) +19.1/+17.9/+14.0 %; L* 69.4 -> 63.5 across ~10 px at the bottom edge",
+   "findings": [
+    {
+     "id": "HT-M1",
+     "severity": "medium",
+     "what": "tone steps on the stone at the seed patch's edges (12 px ramp): bottom edge row ~1286 -10..-21 %, top edge row ~216 +14..+19 %, the HDx wedges' diagonal edges; and the top joint (row ~150) breaks: the model's left segment 4.6 px above the clay (over 11.5.7's 3 px), jogging at x ~1757 into the seed's segment. Steps visible at x1; jog faint x1, clear x2",
+     "fix": "0 tokens: move the seed's boundary on the stone onto the course joints (rows 246 and 1226) so the change falls on a joint (11.9.3 forbids local grading); straighten the top joint's left segment to the clay",
+     "owner": "render-agent",
+     "evidence": [
+      "ht-stone-patch-bottom-x1.jpg",
+      "ht-stone-patch-bottom-x2.jpg",
+      "ht-stone-patch-top-x1-vs-seed.jpg",
+      "ht-top-joint-vs-clay.jpg"
+     ]
+    },
+    {
+     "id": "HT-M2",
+     "severity": "medium",
+     "what": "the armchair in the right overscan is a different product: the seed holds base.png's walnut-frame armchair (89.7 % of its clay id, x 2651-2719, all outside the frame); HT shows a larger rounded boucle form with no walnut frame or legs, reaching ~12 canvas px into the 16:9 frame (from x ~2630; frame edge 2642.5). Per the clay and 10.2 no armchair belongs in the frame (10.2 items 1, 5)",
+     "fix": "0 tokens: paste the seed's armchair back, and the frame edge (bench, floor) as in the seed",
+     "owner": "render-agent",
+     "evidence": [
+      "ht-armchair-vs-seed.jpg"
+     ]
+    },
+    {
+     "id": "HT-M3",
+     "severity": "medium",
+     "what": "extra vertical joints: u 0.538 in four courses (rows 246-491, 583-705, 950-1042, 1226-1469; HD-M2 through the seed, continued by the model below the patch) and u 0.689 in the top course (rows 1-154, the model's); the clay's only vertical joint, 0.623, is in place",
+     "fix": "one decision with HD-M2: heal in both (0 tokens) or master-designer accepts",
+     "owner": "render-agent; master-designer",
+     "evidence": [
+      "ht-extra-joints-vs-clay.jpg"
+     ]
+    },
+    {
+     "id": "HT-M4",
+     "severity": "medium",
+     "what": "the symmetric swirl render-agent noted: the mirrored input under the patch made the model draw trowel marks mirrored about a horizontal axis on the jib door's lower part (Rorschach); faint at x1, the symmetry clear at x2",
+     "fix": "0 tokens, with HT-M1: break the symmetry (e.g. clone unmirrored trowel texture from the plaster left of the door)",
+     "owner": "render-agent",
+     "evidence": [
+      "ht-door-swirl-x2.jpg"
+     ]
+    },
+    {
+     "id": "HT-I1",
+     "severity": "info",
+     "what": "living over hall plaster to plaster (10.2 item 6, 0.50-0.83): the only living plaster in HT is the window wall, -0.60 (Z 0.8-1.65: -0.52), the hall plaster in the same band -0.55: -0.04. base.png's own window wall at that height (through HDx) is -0.61, so the item cannot hold on this surface; the seeded living room is within 1.6 % of the seed (11.9.3). For the designer"
+    },
+    {
+     "id": "HT-I2",
+     "severity": "info",
+     "what": "left jib seam 4.2 px left of the clay (u 0.1564 vs 0.158, inside +-0.01); the floor line under the stone 5-7 px lower than the clay (~1 cm at 2.80 m)"
+    }
+   ]
+  },
+  "D0o_after_multiplier": {
+   "status": "pass",
+   "measurements": {
+    "outside mask vs D0: max levels, px differing": [
+     0,
+     0
+    ],
+    "new vs pre-multiplier: px changed, all inside the mask": [
+     502876,
+     true
+    ],
+    "jib door stops: new / pre": [
+     -0.6,
+     -0.721
+    ],
+    "effective factor (median new/pre, linear Y, unclipped)": 1.0867,
+    "new: in mask px with a channel at 255 / all three": [
+     27907,
+     4073
+    ],
+    "pre: in mask px with a channel at 255 / all three": [
+     102,
+     8
+    ],
+    "+0.06 simulated: jib stops, px with a channel at 255 / all three (mask)": [
+     -0.664,
+     15865,
+     750
+    ],
+    "new clipped px: rows p1/p50/p99, cols min/max": [
+     248,
+     279,
+     323,
+     710,
+     1157
+    ],
+    "new: wall under the slot (rows 252-330, x 720-1140): max-channel median by row (every 8)": [
+     255,
+     255,
+     255,
+     255,
+     255,
+     255,
+     255,
+     255,
+     253,
+     252
+    ],
+    "new: same band, distinct G levels": 65,
+    "pre: wall under the slot (rows 252-330, x 720-1140): max-channel median by row (every 8)": [
+     252,
+     252,
+     251,
+     251,
+     249,
+     248,
+     247,
+     246,
+     244,
+     243
+    ],
+    "pre: same band, distinct G levels": 72,
+    "+0.06: wall under the slot (rows 252-330, x 720-1140): max-channel median by row (every 8)": [
+     255,
+     255,
+     255,
+     255,
+     254,
+     253,
+     252,
+     251,
+     249,
+     247
+    ],
+    "+0.06: same band, distinct G levels": 69,
+    "note": "court plaster-equivalent +0.22..+0.24 (round 1)",
+    "court over hall (stops) new / pre / +0.06": [
+     0.83,
+     0.95,
+     0.89
+    ]
+   },
+   "recommendation": "+0.12 over +0.06: +0.06 gives jib -0.664, 0.164 from HT/HD (0.003 inside the 1/6 band) for 15,865 instead of 27,907 clipped px, which are not visible at x1 either way; +0.12 puts the jib on -0.600 and the court-to-hall drop at 0.83 (0.89 at +0.06)",
+   "mask_edges": "no line, no halo at x2; inside +2.5 L* (right arris now 74-79 against D0's 47.8 pixel; x 704 unchanged; threshold +1.7 L*, a real edge)",
+   "findings": [
+    {
+     "id": "D0o-I2",
+     "severity": "info",
+     "what": "the +0.12 clipped 27,907 px with a channel at 255 (4,073 all three; before 102 / 8) on rows 248-323 under the slot; R at 255 on rows 252-315; x1 no difference, x2 the top ~60 rows lose the red channel's gradation and read as the slot's glow, no edge"
+    }
+   ],
+   "evidence": [
+    "d0o-slot-x2-pre-012-006.jpg"
    ]
   }
  }
