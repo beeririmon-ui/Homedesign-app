@@ -1,0 +1,336 @@
+{
+ "report": "qa/reports/2026-11-17-hall-stills/README.md",
+ "date": "2026-11-17",
+ "agent": "qa-agent",
+ "tokens": 0,
+ "folder": "assets/renders/hall/warm-modern/hall-2026-11-17/",
+ "D0o": {
+  "status": "pass",
+  "outside_mask_vs_d0": {
+   "max_diff_levels": 0,
+   "px_differing": 0,
+   "mask_bbox_x0_x1_y0_y1": [
+    704,
+    1161,
+    187,
+    1284
+   ]
+  },
+  "frame_equals_seeds_frame": true,
+  "jib_door": {
+   "region": "D0-none id 82, u 0.28-0.36, v 0.40-0.55",
+   "stops": -0.721,
+   "L_star": 73.3,
+   "target": "-0.60 +-1/6"
+  },
+  "court_over_hall_stops": [
+   0.94,
+   0.96
+  ],
+  "mask_edge": {
+   "profiles_median_L": {
+    "left": {
+     "698": 63.07,
+     "699": 62.94,
+     "700": 62.34,
+     "701": 61.54,
+     "702": 61.89,
+     "703": 64.9,
+     "704": 71.16,
+     "705": 74.08,
+     "706": 72.12,
+     "707": 71.91,
+     "708": 71.22,
+     "709": 71.05,
+     "710": 71.41,
+     "711": 72.6
+    },
+    "right": {
+     "1154": 57.04,
+     "1155": 56.61,
+     "1156": 56.06,
+     "1157": 55.92,
+     "1158": 71.21,
+     "1159": 76.06,
+     "1160": 73.98,
+     "1161": 72.13,
+     "1162": 47.81,
+     "1163": 52.95,
+     "1164": 52.51,
+     "1165": 53.24,
+     "1166": 54.04,
+     "1167": 54.76,
+     "1168": 55.43,
+     "1169": 55.74
+    },
+    "top": {
+     "181": 47.86,
+     "182": 47.54,
+     "183": 47.02,
+     "184": 46.17,
+     "185": 46.2,
+     "186": 47.7,
+     "187": 53.55,
+     "188": 65.03,
+     "189": 65.83,
+     "190": 64.12,
+     "191": 63.69,
+     "192": 63.22,
+     "193": 63.14,
+     "194": 63.32
+    },
+    "bottom": {
+     "1278": 45.74,
+     "1279": 45.6,
+     "1280": 43.27,
+     "1281": 43.56,
+     "1282": 43.59,
+     "1283": 41.39,
+     "1284": 47.88,
+     "1285": 52.62,
+     "1286": 52.03,
+     "1287": 52.29,
+     "1288": 52.97,
+     "1289": 54.09,
+     "1290": 54.29,
+     "1291": 54.4
+    }
+   },
+   "note": "right: x 1158-1161 lit arris (L* 71-76) inside, x 1162 is D0's own anti-aliased leaf-edge pixel (L* 47.8 vs the reveal's 53): reads as the arris's shadow line at x2; no walnut line, no halo. Left: x 704 +1.7 L* over its neighbours (median), not visible"
+  },
+  "light_line": "row 248, L* 98.5-99.6 in all 9 bins across the opening incl. the stone strip; 102 px with a channel at 255 (8 with all three)",
+  "rejection_11_5_7_x1": "pass"
+ },
+ "HDx": {
+  "status": "fail: 2 medium (0-token fixes), then fit for clip 2",
+  "frame_equals_seeds_frame": true,
+  "lock_spot_check_vs_clay_px": {
+   "inside corner u 0.259": {
+    "n": 32,
+    "median": 1.1,
+    "max_abs": 2.95,
+    "p90_abs": 2.07
+   },
+   "walnut / living u 0.318": {
+    "n": 35,
+    "median": 0.13,
+    "max_abs": 1.97,
+    "p90_abs": 0.7
+   },
+   "right arris u 0.651": {
+    "n": 26,
+    "median": 0.03,
+    "max_abs": 1.0,
+    "p90_abs": 0.95
+   }
+  },
+  "levels": {
+   "stone_u_0.08_0.24_Z_0.80_1.65": -0.817,
+   "stone_by_height": [
+    -0.206,
+    -0.817,
+    -0.981
+   ],
+   "living_back_wall": 0.011,
+   "hall_front_wall_plaster_Z_0.80_1.65": -1.08
+  },
+  "living_over_hall": {
+   "designer_method_stone_plus_0.42": 0.408,
+   "direct_vs_hall_front_wall_plaster": 1.091,
+   "frame_mean_rise_hdx_to_base_arith_geom": [
+    0.453,
+    0.246
+   ]
+  },
+  "living_room_vs_base_seed": {
+   "floor": {
+    "px_seed": 21498,
+    "share_identical_to_seed": 0.57,
+    "dE00_median": 0.0,
+    "dE00_p95": 9.18,
+    "dL_median": 0.0
+   },
+   "back wall": {
+    "px_seed": 228006,
+    "share_identical_to_seed": 0.993,
+    "dE00_median": 0.0,
+    "dE00_p95": 0.0,
+    "dL_median": 0.0
+   },
+   "window wall": {
+    "px_seed": 22011,
+    "share_identical_to_seed": 0.973,
+    "dE00_median": 0.0,
+    "dE00_p95": 0.0,
+    "dL_median": 0.0
+   },
+   "ceiling": {
+    "px_seed": 18260,
+    "share_identical_to_seed": 0.903,
+    "dE00_median": 0.0,
+    "dE00_p95": 1.01,
+    "dL_median": 0.0
+   },
+   "dropped band": {
+    "px_seed": 9095,
+    "share_identical_to_seed": 0.935,
+    "dE00_median": 0.0,
+    "dE00_p95": 0.84,
+    "dL_median": 0.0
+   },
+   "rounded corner": {
+    "px_seed": 32650,
+    "share_identical_to_seed": 0.983,
+    "dE00_median": 0.0,
+    "dE00_p95": 0.0,
+    "dL_median": 0.0
+   },
+   "skirting": {
+    "px_seed": 2774,
+    "share_identical_to_seed": 0.92,
+    "dE00_median": 0.0,
+    "dE00_p95": 1.39,
+    "dL_median": 0.0
+   },
+   "window bench": {
+    "px_seed": 1474,
+    "share_identical_to_seed": 0.189,
+    "dE00_median": 3.4,
+    "dE00_p95": 7.51,
+    "dL_median": -0.17
+   },
+   "sofa": {
+    "px_seed": 45579,
+    "share_identical_to_seed": 0.299,
+    "dE00_median": 2.56,
+    "dE00_p95": 11.71,
+    "dL_median": 0.0
+   },
+   "coffee table": {
+    "px_seed": 17239,
+    "share_identical_to_seed": 0.646,
+    "dE00_median": 0.0,
+    "dE00_p95": 5.73,
+    "dL_median": 0.0
+   },
+   "armchair": {
+    "px_seed": 17068,
+    "share_identical_to_seed": 0.161,
+    "dE00_median": 4.19,
+    "dE00_p95": 12.86,
+    "dL_median": -3.38
+   }
+  },
+  "seed_covers_living_room_in_frame": 0.436,
+  "products": {
+   "sofa": {
+    "clay_bbox": [
+     1177,
+     1602,
+     909,
+     1096
+    ],
+    "seed_px_on_product": 45579,
+    "seed_share": 0.836,
+    "shift_hdx_vs_seed_px": [
+     0.07,
+     0.08
+    ],
+    "response": 0.668,
+    "dE00_median_vs_seed": 2.56,
+    "hdx_vs_fix1_dE00_median": 0.0,
+    "share_identical_to_seed": 0.299
+   },
+   "coffee table": {
+    "clay_bbox": [
+     1166,
+     1501,
+     1008,
+     1125
+    ],
+    "seed_px_on_product": 17239,
+    "seed_share": 0.817,
+    "shift_hdx_vs_seed_px": [
+     0.54,
+     -0.04
+    ],
+    "response": 0.726,
+    "dE00_median_vs_seed": 0.0,
+    "hdx_vs_fix1_dE00_median": 0.0,
+    "share_identical_to_seed": 0.646
+   },
+   "armchair": {
+    "clay_bbox": [
+     821,
+     1017,
+     953,
+     1138
+    ],
+    "seed_px_on_product": 17068,
+    "seed_share": 0.835,
+    "shift_hdx_vs_seed_px": [
+     0.14,
+     0.61
+    ],
+    "response": 0.798,
+    "dE00_median_vs_seed": 4.19,
+    "hdx_vs_fix1_dE00_median": 0.0,
+    "share_identical_to_seed": 0.161
+   }
+  },
+  "window": {
+   "base_pane_Lab": [
+    94.4,
+    -0.0,
+    0.4
+   ],
+   "hdx_sky_id0_Lab": [
+    97.0,
+    -0.0,
+    0.5
+   ],
+   "hdx_sky_from_seed": 0.0
+  },
+  "floor_seed_edge_y1117": "open-floor columns: seed minus new dL* median -2.6 (p10/p90 -9.0/+4.7) vs +5.3 natural over the same span inside the seed: no step",
+  "findings": [
+   {
+    "id": "HDx-M1",
+    "severity": "medium",
+    "what": "dotted plank joints in the living-room floor band y ~1040-1117 (between the armchair, the table and the sofa): the joints of base.png are continuous lines; the DIBR seed (seeds.py hdx) samples them as dots, and fix1 copied them. Visible faintly at x1, clearly at x2",
+    "fix": "0 tokens: re-sample that band (supersampled or area-filtered reprojection) or heal the joints into continuous lines, before clip 2",
+    "owner": "render-agent; motion-agent for seeds.py (HT's seed uses the same DIBR)",
+    "evidence": [
+     "hdx-floor-joints-x4.jpg",
+     "hdx-floor-x1.jpg"
+    ]
+   },
+   {
+    "id": "HDx-M2",
+    "severity": "medium",
+    "what": "the coffee table's pedestals (from fix1, where the seed was missing): about 5 dark specks on the right pedestal, 2 on the left, and a ring line near the right pedestal's foot; base.png's pedestals are plain walnut. Visible faintly at x1, clearly at x2; a sold product",
+    "fix": "0 tokens: heal the specks and the ring (or the pedestal from base.png), before clip 2",
+    "owner": "render-agent",
+    "evidence": [
+     "hdx-table-x2.jpg"
+    ]
+   },
+   {
+    "id": "HDx-L1",
+    "severity": "low",
+    "what": "the window sliver left of the opening (clay id 0, x 837-892, not covered by the seed) is blank white (L* 97); base.png's pane shows pale birches in its lower half. Only on comparison at x2",
+    "owner": "render-agent; motion-agent to watch the window in clip 2",
+    "evidence": [
+     "hdx-window-vs-base.jpg"
+    ]
+   },
+   {
+    "id": "HDx-I1",
+    "severity": "info",
+    "what": "the armchair (84 % fix1) is the same product, 3.4 L* darker than base.png, the legs below the rail slightly greyer (a* 4 vs 9); the sofa (70 % fix1) is the same product, dE00 median 2.6 in the boucle texture"
+   }
+  ]
+ },
+ "item3": {
+  "answer": "does not break clip 2 (the living room in HDx is base.png's own pixels at +0.01); the release along the clip is about +0.45 stop of frame mean instead of ~0.6; for the designer's eye. The level that matters more is HD: it inherits HDx's stone at -0.82, so with the jib door at -0.60 the stone sits 0.22 below the plaster (11.9.3 asks 0.25-0.6)"
+ }
+}
