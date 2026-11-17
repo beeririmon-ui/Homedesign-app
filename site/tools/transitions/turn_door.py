@@ -22,7 +22,8 @@ of its picture when closed (from D0), drawn over the doorway of D0o and clipped 
 (the plaster reveal in front of it hides it as in life). Angle 0 returns D0 itself.
 
   python3 turn_door.py coverage [--canvas base|tall] [--seam 57.5] [--feather 2]
-  python3 turn_door.py turn --hd HD.png --hdx HDx.png --canvas tall --out DIR [--n 61] [--blur]
+  python3 turn_door.py turn --hd HD.png --hdx HDx.png --canvas tall --out DIR [--n 61] [--blur] [--match]
+  python3 turn_door.py joints --hd HD.png --hdx HDx.png [--canvas tall]   # the seam's lock on the stone joints only
   python3 turn_door.py door --d0 D0.png --d0o D0o.png --canvas base --out DIR [--n 55]
   python3 turn_door.py selftest --out DIR          # on proxy_house.py stills, against exact renders; JSON report
 """
@@ -272,6 +273,62 @@ def seam_match(dst: Still, src: Still, seam: float, band: float = 4.0, fall: flo
     w = smoothstep(1 - (sign * (az - seam)) / fall)[..., None]                    # 1 at the seam and beyond, 0 `fall` deg inside
     out = dst.img * (1 + (g[None, None] - 1) * w)
     return np.clip(out, 0, 1), dict(gain=[round(float(x), 4) for x in g], px=int(m.sum()))
+
+
+def still_edges(img: np.ndarray) -> np.ndarray:
+    """Edges of a still (bool), Canny with thresholds from the still's own gradient statistics (as the walk test)."""
+    g = cv2.cvtColor(np.clip(img * 255.0, 0, 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32)
+    g = cv2.GaussianBlur(g, (0, 0), 1.0)
+    mag = np.hypot(cv2.Sobel(g, cv2.CV_32F, 1, 0), cv2.Sobel(g, cv2.CV_32F, 0, 1))
+    hi = float(max(12.0, np.percentile(mag, 93)))
+    return cv2.Canny(np.clip(g, 0, 255).astype(np.uint8), 0.4 * hi, hi, L2gradient=True) > 0
+
+
+def _px_to(xs, ys, src: Still, dst: Still):
+    """Pixels of the source canvas -> pixel coordinates of the same rays in the destination canvas (same point)."""
+    u = (xs + 0.5 - src.cv.box[0]) / src.cv.fw
+    v = (ys + 0.5 - src.cv.box[1]) / src.cv.fh
+    D = ((u - src.cam.u0) / cg.KU)[:, None] * src.cam.r + ((src.cam.v0 - v) / cg.KV)[:, None] * np.array([0.0, 0.0, 1.0]) + src.cam.f
+    d = D @ dst.cam.f
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ud = dst.cam.u0 + cg.KU * (D @ dst.cam.r) / d
+        vd = dst.cam.v0 - cg.KV * D[:, 2] / d
+    px, py = dst.cv.px(ud, vd)
+    return px, py, d > 1e-6
+
+
+def seam_joints(dst: Still, src: Still, seam: float = 57.5, band: float = 4.0, edges=(None, None), tol_px: float = 2.0) -> dict:
+    """The seam's lock on LINES (11.5.8 of wm-entrance-magazine-2026-11-15.md): the stone joints of the hall panel are
+    in both stills. Every edge pixel of one still that the other also covers is carried to the other by the exact
+    rotation and measured against the other's edges (distance transform), both ways, in pixels of the destination
+    canvas. Reported over the whole shared strip and over the seam band (seam +- band degrees). A joint that the
+    image model moved shows here; tone is seam_match's job. Passes with the 11.5.7 rule: p90 within tol_px.
+    edges: optional precomputed edge maps (dst, src), e.g. the clay -edges passes."""
+    ed = still_edges(dst.img) if edges[0] is None else edges[0]
+    es = still_edges(src.img) if edges[1] is None else edges[1]
+    out = {}
+    for name, A, eA, B, eB in (("hdx_to_hd", src, es, dst, ed), ("hd_to_hdx", dst, ed, src, es)):
+        ys, xs = np.nonzero(eA)
+        px, py, front = _px_to(xs.astype(np.float64), ys.astype(np.float64), A, B)
+        m = front & cg.inside(px, py, B.cv.w, B.cv.h, 3.0)
+        dt = cv2.distanceTransform((~eB).astype(np.uint8) * 255, cv2.DIST_L2, 5)
+        xi = np.clip(np.rint(px[m]).astype(int), 0, B.cv.w - 1)
+        yi = np.clip(np.rint(py[m]).astype(int), 0, B.cv.h - 1)
+        dist = dt[yi, xi]
+        # world yaw of every carried pixel (for the band around the seam)
+        u = (xs[m] + 0.5 - A.cv.box[0]) / A.cv.fw
+        Dw = ((u - A.cam.u0) / cg.KU)[:, None] * A.cam.r + A.cam.f
+        az = np.degrees(np.arctan2(-Dw[:, 0], -Dw[:, 1]))
+        res = {}
+        for key, sel in (("shared_strip", np.ones(len(dist), bool)), ("seam_band", np.abs(az - seam) <= band)):
+            dd = dist[sel]
+            res[key] = (dict(edge_px=int(len(dd)), median_px=round(float(np.median(dd)), 2), p90_px=round(float(np.percentile(dd, 90)), 2),
+                             share_within_tol=round(float((dd <= tol_px).mean()), 4)) if len(dd) >= 200 else dict(edge_px=int(len(dd))))
+        out[name] = res
+    vals = [out[k]["shared_strip"].get("p90_px") for k in out]
+    out["tol_px"] = tol_px
+    out["pass"] = bool(all(v is not None and v <= tol_px for v in vals))
+    return out
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -544,6 +601,14 @@ def main(argv=None) -> int:
     t.add_argument("--blur", action="store_true")
     t.add_argument("--match", action="store_true", help="tone-match HD to HDx at the seam first")
     t.add_argument("--allow-holes", action="store_true")
+    t.add_argument("--allow-joint-miss", action="store_true", help="build the turn even if the joints do not lock (for a look only)")
+    j = sub.add_parser("joints")
+    j.add_argument("--hd", required=True)
+    j.add_argument("--hdx", required=True)
+    j.add_argument("--canvas", default="tall", choices=["base", "tall", "frame"])
+    j.add_argument("--seam", type=float, default=57.5)
+    j.add_argument("--tol", type=float, default=2.0)
+    j.add_argument("--edges", nargs=2, metavar=("HD_EDGES", "HDX_EDGES"), help="precomputed edge passes (black = edge), e.g. the clay's")
     d = sub.add_parser("door")
     d.add_argument("--d0", required=True)
     d.add_argument("--d0o", required=True)
@@ -575,6 +640,12 @@ def main(argv=None) -> int:
             st.append(Still(m, cg.lerp_cam(cg.HD, cg.HDX, 0.5), canvas_for(a.canvas, m.shape[1], m.shape[0]), "HD57"))
         st.append(Still(hdx, cg.HDX, canvas_for(a.canvas, hdx.shape[1], hdx.shape[0]), "HDx"))
         info = {}
+        joints = seam_joints(st[0], st[-1], a.seam or 57.5) if not a.mid else None
+        if joints is not None and not joints["pass"] and not a.allow_joint_miss:
+            print(json.dumps(dict(seam_joints=joints), indent=1))
+            print("the stone joints of HD and HDx do not lock at the seam (11.5.7: within 2 px); HD goes back to render-agent",
+                  file=sys.stderr)
+            return 3
         if a.match and not a.mid:
             st[0].img, info = seam_match(st[0], st[1], a.seam or 57.5)
         T = Turn(st, [a.seam] if (a.seam is not None and not a.mid) else None, a.feather, a.w)
@@ -584,11 +655,21 @@ def main(argv=None) -> int:
             f, hole = T.frame_blur(p, 1.0 / (a.n - 1)) if a.blur else T.frame(p)
             worst = max(worst, hole)
             save(os.path.join(a.out, f"{i + 1:04d}.png"), f)
-        print(json.dumps(dict(frames=a.n, worst_hole_frac=worst, seam_match=info), indent=1))
+        print(json.dumps(dict(frames=a.n, worst_hole_frac=worst, seam_match=info, seam_joints=joints), indent=1))
         if worst > 0 and not a.allow_holes:
             print("the stills do not cover the turn (see `coverage`); nothing was filled in", file=sys.stderr)
             return 2
         return 0
+    if a.cmd == "joints":
+        hd, hdx = load(a.hd), load(a.hdx)
+        A = Still(hd, cg.HD, canvas_for(a.canvas, hd.shape[1], hd.shape[0]), "HD")
+        B = Still(hdx, cg.HDX, canvas_for(a.canvas, hdx.shape[1], hdx.shape[0]), "HDx")
+        e = (None, None)
+        if a.edges:
+            e = tuple(cv2.imread(p, cv2.IMREAD_GRAYSCALE) < 128 for p in a.edges)
+        rep = seam_joints(A, B, a.seam, tol_px=a.tol, edges=e)
+        print(json.dumps(rep, indent=1))
+        return 0 if rep["pass"] else 3
     if a.cmd == "door":
         d0, d0o = load(a.d0), load(a.d0o)
         cvs = canvas_for(a.canvas, d0.shape[1], d0.shape[0])

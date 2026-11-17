@@ -29,6 +29,15 @@ The four checks
 Also reported: how far the house's structure lines are from the frame's edges at the best s (% of the frame width;
 QA limit 1 %). Shapes of furniture and "nothing is born or vanishes" stay an eye check at 100 %.
 
+Options added 2026-11-17 (the final entrance, ENT2; docs/proposals/wm-arrival-from-door-2026-11-14.md section 13):
+  --exclude ID:A-B   the clay id ID (the station's -id.png palette index) does not take part in the fit while the
+                     candidate position is between A and B metres from the route's first camera. For a part of the
+                     house the model may simplify or leave out without failing the clip (id 50, the dining glimpse
+                     of clip 2, 1.0-1.8 m: wm-front-door-2026-11-14.md 10.4). Repeatable.
+  --events FILE[:JOB] the clip's event table (jobs.json "walk_events" of job JOB, or a JSON list): for every event
+                     ("at_m", or a "window_m" [a, b]), the clip frames where the solved position reaches it, so the
+                     eye check at 100 % looks at the right frames (e.g. the herbs must be gone by 2.40 m in clip 1a).
+
   python3 walk_test.py test --frames DIR|clip.mp4 --route clip2 --stations DIR --ids b/S02,...,b/S11 --line t-e0 --out report.json
   python3 walk_test.py fakes --first A.png --last B.png --out DIR [--n 121]     # a dissolve and a flat zoom
   python3 walk_test.py selftest --out DIR      # an exact proxy walk (uneven speed) must pass; dissolve and zoom must fail
@@ -47,7 +56,8 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import camgeo as cg  # noqa: E402
 
-ROUTES = {"clip1": (cg.D0, cg.HD), "clip2": (cg.HDX, cg.M0), "t-e0": (cg.H0X, cg.M0)}
+ROUTES = {"clip1": (cg.D0, cg.HD), "clip1a": (cg.D0, cg.HT), "clip1b": (cg.HT, cg.HD), "clip2": (cg.HDX, cg.M0),
+          "t-e0": (cg.H0X, cg.M0)}
 LIMITS = dict(parallax_dev=0.05, dissolve_r2=0.55, vertical_deg=0.5, structure_w=0.01, stall_frac=0.12, back_m=0.04,
               jump_frac=0.25)
 TRUNC = 0.008          # chamfer truncation, fraction of the frame width (7.7 px at 960)
@@ -79,9 +89,11 @@ def read_frames(src: str, w: int = 960) -> list[np.ndarray]:
 # ----------------------------------------------------------------------------------------------------------------
 # the ruler: structure points of the clay stations
 # ----------------------------------------------------------------------------------------------------------------
-def cloud(depth: np.ndarray, edges: np.ndarray, cam: cg.Cam, cv: cg.Canvas, max_pts: int = 30000, seed: int = 0) -> np.ndarray:
+def cloud(depth: np.ndarray, edges: np.ndarray, cam: cg.Cam, cv: cg.Canvas, max_pts: int = 30000, seed: int = 0,
+          labels: np.ndarray | None = None):
     """World points of the structure edges of one station. An edge between a near and a far surface belongs to the
-    near one: each edge pixel takes the nearest depth of its 3 x 3 neighbourhood."""
+    near one: each edge pixel takes the nearest depth of its 3 x 3 neighbourhood. With `labels` (the id pass), also
+    the id of every point: (points, ids)."""
     d = np.where(np.isfinite(depth) & (depth > 0), depth, 1e6).astype(np.float32)
     dn = cv2.erode(d, np.ones((3, 3), np.uint8))
     ys, xs = np.nonzero(edges & (dn < 1e5))
@@ -90,7 +102,20 @@ def cloud(depth: np.ndarray, edges: np.ndarray, cam: cg.Cam, cv: cg.Canvas, max_
         ys, xs = ys[sel], xs[sel]
     u = (xs + 0.5 - cv.box[0]) / cv.fw
     v = (ys + 0.5 - cv.box[1]) / cv.fh
-    return cam.unproject(u, v, dn[ys, xs].astype(np.float64))
+    P = cam.unproject(u, v, dn[ys, xs].astype(np.float64))
+    if labels is None:
+        return P
+    # the id of an edge pixel: the id of the nearest surface around it (the one whose depth the point took)
+    near = (d[ys, xs] <= dn[ys, xs] + 1e-4)
+    lab = labels[ys, xs].copy()
+    if (~near).any():
+        H, W = d.shape
+        for j in np.nonzero(~near)[0]:
+            y0, y1, x0, x1 = max(0, ys[j] - 1), min(H, ys[j] + 2), max(0, xs[j] - 1), min(W, xs[j] + 2)
+            win = d[y0:y1, x0:x1]
+            iy, ix = np.unravel_index(int(np.argmin(win)), win.shape)
+            lab[j] = labels[y0 + iy, x0 + ix]
+    return P, lab.astype(np.int32)
 
 
 def canvas_of(name: str, W: int, H: int) -> cg.Canvas:
@@ -98,29 +123,44 @@ def canvas_of(name: str, W: int, H: int) -> cg.Canvas:
             "tall": cg.Canvas.tall(W, H, cg.BASE_BOX[0] / (cg.BASE_BOX[2] - cg.BASE_BOX[0]))}[name]
 
 
-def load_station(folder: str, fid: str, cam: cg.Cam, canvas: str = "base") -> np.ndarray:
+def load_station(folder: str, fid: str, cam: cg.Cam, canvas: str = "base", with_ids: bool = False):
     """A clay frame of render-agent: <id>-depth.png (16-bit, metres = value / 5000, 65535 = sky) and <id>-edges.png
-    (white with black edges, 1 px)."""
+    (white with black edges, 1 px). with_ids: also <id>-id.png (a palette PNG whose index is the clay id) -> (points,
+    ids)."""
     depth, valid = cg.load_depth_png(os.path.join(folder, fid + "-depth.png"))
     e = cv2.imread(os.path.join(folder, fid + "-edges.png"), cv2.IMREAD_GRAYSCALE)
     if e is None:
         raise SystemExit(f"{fid}-edges.png is missing")
     H, W = depth.shape
-    return cloud(np.where(valid, depth, np.inf), e < 128, cam, canvas_of(canvas, W, H))
+    labels = None
+    if with_ids:
+        from PIL import Image
+        im = Image.open(os.path.join(folder, fid + "-id.png"))
+        if im.mode != "P":
+            raise SystemExit(f"{fid}-id.png is not a palette PNG (mode {im.mode}): the index is the clay id")
+        labels = np.asarray(im)
+    return cloud(np.where(valid, depth, np.inf), e < 128, cam, canvas_of(canvas, W, H), labels=labels)
 
 
 class Ruler:
     """Stations along a straight route. clouds[k] is the structure seen from the station at distance at[k] (metres
     from the route's first camera, along the route)."""
 
-    def __init__(self, cam0: cg.Cam, cam1: cg.Cam, clouds: list[np.ndarray], at: list[float]):
+    def __init__(self, cam0: cg.Cam, cam1: cg.Cam, clouds: list[np.ndarray], at: list[float],
+                 ids: list[np.ndarray] | None = None, exclude: list[tuple[int, float, float]] | None = None):
+        """ids: the clay id of every point of every cloud (needed for `exclude`). exclude: (id, a, b): that id does not
+        take part in the fit while the candidate position s is within [a, b] (metres from cam0)."""
         self.cam0, self.cam1 = cam0, cam1
+        self.exclude = list(exclude or [])
+        if self.exclude and ids is None:
+            raise ValueError("exclude needs the ids of the clouds")
         vec = np.asarray(cam1.loc) - np.asarray(cam0.loc)
         self.L = float(np.linalg.norm(vec))
         self.dir = vec / self.L
         order = np.argsort(at)
         self.at = np.array([at[i] for i in order], np.float64)
         self.clouds = [clouds[i] for i in order]
+        self.ids = [ids[i] for i in order] if ids is not None else None
         # coordinates of every cloud in the route camera's axes (the camera only moves along `dir`, never turns)
         self.rel = []
         for P in self.clouds:
@@ -143,7 +183,15 @@ class Ruler:
             v = self.cam0.v0 - cg.KV * (R[:, 1] - s * self.fz) / d
         px, py = u * w - 0.5, v * h - 0.5
         ok = (d > 0.08) & (px >= 1) & (px <= w - 2) & (py >= 1) & (py <= h - 2)
-        return px, py, d, ok
+        return px, py, d, ok & self.keep(k, s)
+
+    def keep(self, k: int, s: float) -> np.ndarray:
+        """Points of station k that take part in the fit at position s (all, unless an `exclude` applies)."""
+        m = np.ones(len(self.rel[k]), bool)
+        for cid, a, b in self.exclude:
+            if a <= s <= b:
+                m &= self.ids[k] != cid
+        return m
 
 
 def frame_dt(gray: np.ndarray) -> np.ndarray:
@@ -175,8 +223,9 @@ def solve_frame(R: Ruler, dt: np.ndarray, lo: float | None = None, hi: float | N
 
     def cost(s: float, k: int, sel: np.ndarray | None) -> float:
         px, py, d, ok = R.project(k, float(s), w, h)
-        if sel is not None:
-            px, py, ok = px[sel], py[sel], ok[sel]
+        kp = R.keep(k, float(s))                       # an excluded point is left out of the mean (no truncation cost)
+        sel = kp if sel is None else (sel & kp)
+        px, py, ok = px[sel], py[sel], ok[sel]
         if len(ok) == 0:
             return np.inf
         c = np.full(len(ok), T, np.float32)
@@ -420,6 +469,45 @@ def walk_test(frames: list[np.ndarray], R: Ruler, limits: dict = LIMITS) -> dict
 # ----------------------------------------------------------------------------------------------------------------
 # the two known failures, built from the end frames (to test the test)
 # ----------------------------------------------------------------------------------------------------------------
+def parse_exclude(x: str) -> tuple[int, float, float]:
+    """'50:1.0-1.8' -> (50, 1.0, 1.8)."""
+    cid, rng = x.split(":")
+    a, b = rng.split("-")
+    return int(cid), float(a), float(b)
+
+
+def load_events(spec: str) -> list[dict]:
+    """jobs.json:clip1a (that job's walk_events) or a JSON file holding a list of events."""
+    path, _, job = spec.partition(":")
+    data = json.load(open(path))
+    if isinstance(data, dict):
+        jobs = {j["id"]: j for j in data.get("jobs", [])}
+        if job not in jobs:
+            raise SystemExit(f"no job {job!r} in {path}")
+        return jobs[job].get("walk_events", [])
+    return data
+
+
+def events_report(events: list[dict], s_table: list[float]) -> list[dict]:
+    """For each event, the clip frames (1-based) where the solved position reaches it: `at_m` -> the first frame at
+    or past it; `window_m` [a, b] -> the frames inside the window. The eye check at 100 % looks there."""
+    s = np.asarray(s_table, np.float64)
+    out = []
+    for e in events:
+        r = dict(what=e.get("what"))
+        if "window_m" in e:
+            a, b = e["window_m"]
+            idx = np.nonzero((s >= a) & (s <= b))[0]
+            r.update(window_m=[a, b], frames=[int(idx[0]) + 1, int(idx[-1]) + 1] if len(idx) else None)
+        else:
+            idx = np.nonzero(s >= e["at_m"])[0]
+            r.update(at_m=e["at_m"], frame=int(idx[0]) + 1 if len(idx) else None)
+        if "check" in e:
+            r["check"] = e["check"]
+        out.append(r)
+    return out
+
+
 def fake_dissolve(first: np.ndarray, last: np.ndarray, n: int) -> list[np.ndarray]:
     a, b = first.astype(np.float32), last.astype(np.float32)
     out = []
@@ -527,6 +615,10 @@ def main(argv=None) -> int:
     t.add_argument("--line-first", type=int, default=0, help="the index on the line of the first id (b/S02 of 12 stations: 2)")
     t.add_argument("--canvas", default="base", choices=["base", "tall", "frame"], help="the canvas of the station passes")
     t.add_argument("--w", type=int, default=960)
+    t.add_argument("--exclude", action="append", default=[], metavar="ID:A-B",
+                   help="clay id ID takes no part in the fit while the position is A-B metres from the route start (repeatable)")
+    t.add_argument("--events", default=None, metavar="FILE[:JOB]",
+                   help="event table: jobs.json with the job id (its walk_events), or a JSON list of events")
     t.add_argument("--out", required=True)
     f = sub.add_parser("fakes")
     f.add_argument("--first", required=True)
@@ -546,13 +638,23 @@ def main(argv=None) -> int:
         ids = a.ids.split(",")
         vec = np.asarray(c1.loc) - np.asarray(c0.loc)
         L = float(np.linalg.norm(vec))
-        clouds, at = [], []
+        clouds, at, labs = [], [], []
+        excl = [parse_exclude(x) for x in a.exclude]
         n_line = a.line_count or len(ids)
         for k, fid in enumerate(ids):
             cam = cg.lerp_cam(l0, l1, (a.line_first + k) / (n_line - 1))
-            clouds.append(load_station(a.stations, fid, cam, a.canvas))
+            if excl:
+                P, lab = load_station(a.stations, fid, cam, a.canvas, with_ids=True)
+                clouds.append(P)
+                labs.append(lab)
+            else:
+                clouds.append(load_station(a.stations, fid, cam, a.canvas))
             at.append(float((np.asarray(cam.loc) - np.asarray(c0.loc)) @ (vec / L)))
-        rep = walk_test(frames, Ruler(c0, c1, clouds, at))
+        rep = walk_test(frames, Ruler(c0, c1, clouds, at, labs if excl else None, excl))
+        if excl:
+            rep["excluded"] = [dict(id=i, from_m=x, to_m=y) for i, x, y in excl]
+        if a.events:
+            rep["events"] = events_report(load_events(a.events), rep["s_filled"])
         os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
         with open(a.out, "w") as fh:
             json.dump(rep, fh, indent=1)

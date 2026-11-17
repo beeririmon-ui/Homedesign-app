@@ -94,6 +94,7 @@ def lerp_cam(a: Cam, b: Cam, s: float) -> Cam:
 # M0 from docs/house-plan.json). Proposed values (plan entry 1.3.9 pending); the clay wins.
 D0 = Cam((7.40, 8.15, 1.20), 90.0, 0.36, 0.48)
 HD = Cam((2.462, 8.15, 1.20), 90.0, 0.36, 0.48)
+HT = Cam((3.60, 8.15, 1.20), 90.0, 0.36, 0.48)        # the threshold still: clip 1 = 1a D0 -> HT (3.80 m) + 1b HT -> HD (1.14 m), adopted 2026-11-15
 HDX = Cam((2.462, 8.15, 1.20), 25.0, 0.47, 0.50)
 M0 = Cam((0.83, 4.64, 1.20), 25.0, 0.47, 0.50)
 H0X = Cam((2.877, 9.039, 1.20), 25.0, 0.47, 0.50)
