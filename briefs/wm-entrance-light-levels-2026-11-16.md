@@ -21,7 +21,7 @@ Add a dated section 11.9, "רמות האור בסטילס", to `docs/proposals/w
 - The still's README with the measurement table: `assets/renders/hall/warm-modern/door-2026-11-16/README.md`.
 - Your chapter 11 (11.1, 11.2 item 19, 11.5).
 - `docs/proposals/wm-arrival-from-door-2026-11-14.md` §2; `docs/studio-rules-digest.md` (DL1, FB5, FB6).
-- `assets/renders/living-room/warm-modern/base.png`.
+- `assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/base.png`.
 
 ## Acceptance
 - render-agent can render D0o, HT, HDx and HD from 11.5 and 11.9 alone, with a measurable target for each still.

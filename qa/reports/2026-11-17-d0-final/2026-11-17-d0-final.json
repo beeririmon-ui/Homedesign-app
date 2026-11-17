@@ -1,0 +1,181 @@
+{
+ "report": "qa/reports/2026-11-17-d0-final/README.md",
+ "date": "2026-11-17",
+ "agent": "qa-agent",
+ "tokens": 0,
+ "asset": "assets/renders/hall/warm-modern/door-2026-11-16/d0.png (sha256 6c3d5dec41a5a1cf37cfd90702464d8fc23308b522efbe2cfa6d0469a6bdb698), graded copy d0-graded.png",
+ "status": "עבר QA",
+ "method": {
+  "display_terms": "sRGB decoded to linear, Y Rec.709, median of the region, stops = log2(median / 0.751) (BASE_BACK_WALL, base.png back wall), as 11.9.1",
+  "regions": "clay id pass D0-closed-id.png and sun pass D0-closed-sun.png; u,v in the camera frame [77.4882, 43.4301, 2642.5118, 1486.5699] of the 2720x1530 canvas",
+  "base_png_path": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/base.png (the brief's assets/renders/living-room/warm-modern/base.png does not exist)",
+  "base_back_wall_recheck": {
+   "x 1150-2550, y 260-880": 0.7499,
+   "x 1300-2200, y 400-800": 0.7678,
+   "x 1150-2550, y 200-1050 minus sofa (x 1290-2360, y>=900)": 0.7435
+  }
+ },
+ "items": {
+  "1_light": {
+   "result": "pass",
+   "anchor_stone": {
+    "region": "id 84, u 0.45-0.56, v 0.52-0.75",
+    "px": 92214,
+    "stops": -0.181,
+    "stops_id_eroded_3px": -0.181,
+    "L_star": 85.1,
+    "target": "-0.42 +-0.25 (-0.67 .. -0.17)",
+    "margin_to_edge_stops": 0.011,
+    "rows": {
+     "anchor rows v 0.52-0.6 stops": -0.18,
+     "anchor rows v 0.6-0.68 stops": -0.192,
+     "anchor rows v 0.68-0.75 stops": -0.169
+    },
+    "note": "the 11.9.2 table and the render README give about -0.41 / L* 80: that is the median of the whole door-wall stone (QA: -0.421, L* 79.7), not of this region. Plaster-equivalent of the region: +0.24 (designer assumed 0)"
+   },
+   "other_stone_for_reference": {
+    "all door-wall stone": -0.421,
+    "left of the door u<0.20": -0.553,
+    "beside the lamp u 0.43-0.60 v 0.05-0.48": -0.321,
+    "top right u 0.56-0.70 v 0-0.25": -0.799
+   },
+   "sunlit_plaster": {
+    "region": "id 63, clay direct sun >= 85 % of p95, u > 0.70",
+    "px": 131963,
+    "stops": 0.22,
+    "L_star": 94.9,
+    "target": "0 +-0.25",
+    "px_with_a_channel_at_255_in_region": 0,
+    "px_with_a_channel_at_255_on_the_whole_right_wall": 26,
+    "still_own_sun_mode_stops": 0.157,
+    "clay_mask_inside_still_sun_mode": 0.983
+   },
+   "sun_over_shaded_plaster": {
+    "stops": 1.09,
+    "target": "0.75-1.25",
+    "shaded_plaster_stops_info": -0.87
+   },
+   "fans": {
+    "up": 0.521,
+    "down": 0.576,
+    "target": "0.4-0.8",
+    "px_with_R_255_up_down": [
+     4,
+     0
+    ],
+    "note": "4 px with R 255 (G 229-239, B 203-213) at the apex of the up fan, canvas (1361-1381, 263-285); not visible at x2"
+   },
+   "leaf_L_star": 31.7,
+   "black_point_L_p0_5": {
+    "master": 15.19,
+    "graded": 12.48
+   },
+   "master_vs_graded": {
+    "anchor_max_diff_levels": 0,
+    "all_medians_identical": true
+   }
+  },
+  "2_lamp_mask": {
+   "result": "pass",
+   "mask": "u 0.47-0.55, v 0.05-0.48 = canvas x 1283-1488, y 116-736",
+   "clay_herbs_id90_px_in_mask": 0,
+   "largest_herb_coloured_component_in_mask_px": 2,
+   "note_small_components": "isolated 1-2 px chroma dots of the stone, no leaf",
+   "leftmost_foliage_px_x": 1524,
+   "leftmost_foliage_u": 0.5641,
+   "gap_to_mask_px": 35.7,
+   "evidence": "lamp-mask-x2.jpg"
+  },
+  "3_lock": {
+   "result": "pass",
+   "rect_canvas_px": {
+    "left": 703.61,
+    "right": 1160.95,
+    "top": 187.31,
+    "bottom": 1284.96
+   },
+   "still_leaf_canvas_px_medians": {
+    "left": 705.2,
+    "right": 1161.9,
+    "top": 188.1,
+    "bottom": 1283.2
+   },
+   "summary_px": {
+    "left": {
+     "n": 26,
+     "median_vs_clay_render": 1.06,
+     "max_abs_vs_clay_render": 1.58,
+     "median_vs_id_pass": 1.17,
+     "max_abs_vs_id_pass": 1.69,
+     "median_vs_rect": 1.56,
+     "max_abs_vs_rect": 2.08,
+     "p90_abs_vs_rect": 2.0
+    },
+    "right": {
+     "n": 26,
+     "median_vs_clay_render": 0.97,
+     "max_abs_vs_clay_render": 1.48,
+     "median_vs_id_pass": 1.94,
+     "max_abs_vs_id_pass": 2.02,
+     "median_vs_rect": 0.98,
+     "max_abs_vs_rect": 1.06,
+     "p90_abs_vs_rect": 1.04
+    },
+    "top": {
+     "n": 17,
+     "median_vs_clay_render": -0.06,
+     "max_abs_vs_clay_render": 0.36,
+     "median_vs_id_pass": 0.04,
+     "max_abs_vs_id_pass": 0.35,
+     "median_vs_rect": 0.73,
+     "max_abs_vs_rect": 1.04,
+     "p90_abs_vs_rect": 0.96
+    },
+    "bottom": {
+     "n": 17,
+     "median_vs_clay_render": -0.95,
+     "max_abs_vs_clay_render": 1.06,
+     "median_vs_id_pass": -0.82,
+     "max_abs_vs_id_pass": 0.89,
+     "median_vs_rect": -1.78,
+     "max_abs_vs_rect": 1.85,
+     "p90_abs_vs_rect": 1.81
+    }
+   },
+   "render_agent_lock_json": {
+    "left": 1.1,
+    "right": 1.17,
+    "top": -0.23,
+    "bottom": -0.69
+   },
+   "method": "per scanline (26 rows, 17 columns), the sub-pixel peak of the signed log-luminance step, 5-px band, on d0.png and on the lit clay D0-closed.png; and the leaf boundary of the id pass"
+  },
+  "4_visible": {
+   "result": "pass, 1 low",
+   "findings": [
+    {
+     "id": "D0-L1",
+     "severity": "low",
+     "what": "isolated patch of coarse plaster texture on the right wall, canvas x 2277-2373, y 266-339 (u 0.858-0.895, v 0.154-0.205); high-pass sigma 1.56 L* vs 0.56-0.80 around; clear at x2, faint at x1; reads as trowel texture",
+     "owner": "render-agent (0-token local heal) if master-designer's eye asks for it",
+     "evidence": "plaster-patch-x2.jpg"
+    },
+    {
+     "id": "D0-I1",
+     "severity": "info",
+     "what": "the two lowest courses left of the door are more mottled than the rest, with several faint hairlines (README lists one); at x1 they read as limestone, not as veins or cracks"
+    },
+    {
+     "id": "D0-I2",
+     "severity": "info",
+     "what": "the fans start about 16-18 cm above and below the lamp body (75-87 px); consistent with a narrow beam on a fixture off the wall; reads right at x1"
+    },
+    {
+     "id": "D0-I3",
+     "severity": "info",
+     "what": "119 px in the frame with a channel at 255: 71 herb highlights, 26 plaster, 12 stone at the up-fan apex and the lamp's edge, 6 lamp, 4 other; none visible"
+    }
+   ]
+  }
+ }
+}
