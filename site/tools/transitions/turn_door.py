@@ -95,6 +95,13 @@ class Still:
     name: str = ""
 
 
+def ray_yaw(D: np.ndarray, centre: float) -> np.ndarray:
+    """World yaw (degrees, the house convention) of every ray, unwrapped into centre +- 180 (2026-11-17: atan2 alone wraps at
+    +-180, so a turn that crosses yaw 180, e.g. from the junction to the corridor, gave its pixels to the wrong still)."""
+    az = np.degrees(np.arctan2(-D[..., 0], -D[..., 1]))
+    return (centre + (az - centre + 180.0) % 360.0 - 180.0).astype(np.float32)
+
+
 class Turn:
     """stills: ordered along the turn (first = start of the turn, last = its end), all at the same point.
     seams: world yaw of the seam between each neighbouring pair (default: the bisector of their axes).
@@ -145,7 +152,7 @@ class Turn:
             return self.last.copy(), 0.0
         cam = self.cam_at(p)
         D = cg.rays(cam, self.out)
-        az = (np.degrees(np.arctan2(-D[..., 0], -D[..., 1]))).astype(np.float32)        # world yaw of every pixel's ray
+        az = ray_yaw(D, (self.a.yaw + self.b.yaw) / 2)                                   # world yaw of every pixel's ray
         W = self._weights(az)
         acc = np.zeros((self.out.h, self.out.w, 3), np.float32)
         wsum = np.zeros((self.out.h, self.out.w), np.float32)
@@ -198,7 +205,7 @@ def coverage(cams: list[cg.Cam], seams: list[float] | None, feather: float, canv
     for p in np.linspace(0, 1, n):
         cam = cg.lerp_cam(a, b, float(p))
         D = cg.rays(cam, fr)
-        az = np.degrees(np.arctan2(-D[..., 0], -D[..., 1]))
+        az = ray_yaw(D, (a.yaw + b.yaw) / 2)
         covered = np.zeros(az.shape, bool)
         for i, c in enumerate(cams):
             lo = seams[i] if i < len(seams) else None           # boundary toward the next still
@@ -252,7 +259,7 @@ def build_from(dst: Still, src: Still, seam: float, feather: float) -> np.ndarra
     destination canvas image. After this the two stills agree pixel for pixel across the seam."""
     sign = 1.0 if src.cam.yaw < dst.cam.yaw else -1.0
     D = cg.rays(dst.cam, dst.cv)
-    az = np.degrees(np.arctan2(-D[..., 0], -D[..., 1])).astype(np.float32)
+    az = ray_yaw(D, seam)
     img, cov = cg.rot_warp(src.img, src.cam, src.cv, dst.cam, dst.cv)
     t = smoothstep((sign * (seam - az) + feather) / (2 * feather)) * cov          # 1 on the source's side
     return dst.img * (1 - t[..., None]) + img * t[..., None]
@@ -264,7 +271,7 @@ def seam_match(dst: Still, src: Still, seam: float, band: float = 4.0, fall: flo
     from the seam (so the destination's far side, the end frame of a clip, is not touched)."""
     sign = 1.0 if src.cam.yaw < dst.cam.yaw else -1.0
     D = cg.rays(dst.cam, dst.cv)
-    az = np.degrees(np.arctan2(-D[..., 0], -D[..., 1])).astype(np.float32)
+    az = ray_yaw(D, seam)
     img, cov = cg.rot_warp(src.img, src.cam, src.cv, dst.cam, dst.cv)
     m = cov & (np.abs(az - seam) < band)
     if m.sum() < 500:
@@ -376,7 +383,7 @@ def seam_joints(dst: Still, src: Still, seam: float = 57.5, band: float = 4.0, c
         dist = dt[yi, xi]
         u = (xs[m] + 0.5 - A.cv.box[0]) / A.cv.fw
         Dw = ((u - A.cam.u0) / cg.KU)[:, None] * A.cam.r + A.cam.f
-        az = np.degrees(np.arctan2(-Dw[:, 0], -Dw[:, 1]))
+        az = (seam + (np.degrees(np.arctan2(-Dw[:, 0], -Dw[:, 1])) - seam + 180.0) % 360.0 - 180.0)
         out[name] = dict(shared_strip=_stats(dist, tol_px), seam_band=_stats(dist[np.abs(az - seam) <= band], tol_px))
     # each still's line edges against its clay lines: the lock of the still itself (for the README, not the gate)
     for key, nm in (("dst", dst_id), ("src", src_id)):

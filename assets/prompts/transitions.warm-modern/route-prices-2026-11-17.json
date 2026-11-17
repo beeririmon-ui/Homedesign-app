@@ -1,0 +1,446 @@
+{
+ "date": "2026-11-17",
+ "author": "motion-agent",
+ "brief": "briefs/wm-route-drawing-animatic-2026-11-17.md (item 4)",
+ "route": "docs/proposals/wm-tour-route-2026-11-17.md (2.7, 4.4)",
+ "source": "var2_estimate_cost, live (fromLiveLookup), 2026-11-17; nothing sent",
+ "unit_prices": {
+  "seedream-5-pro image-to-image 2K": 650,
+  "nano-banana-2 image-to-image 2K": 400,
+  "kling-3-omni image-to-video 1080p, a second": 324,
+  "kling-3-omni 3 / 4 / 7 / 9 s": [
+   972,
+   1296,
+   2268,
+   2916
+  ]
+ },
+ "pilot_left": 2658,
+ "items": [
+  {
+   "id": "HT2",
+   "part": "arrival",
+   "what": "HT with the walnut bench on the stone panel (route 2.2); a mask edit, 0 levels outside the mask",
+   "how": "model",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "alt": {
+    "model": "nano-banana-2",
+    "estimate": 400
+   },
+   "options": [
+    "Q2a",
+    "Q2b",
+    "Q2c"
+   ]
+  },
+  {
+   "id": "HD-strip",
+   "part": "arrival",
+   "what": "the bench top in HD's bottom overscan strip (the 16:9 frame unchanged)",
+   "how": "code",
+   "note": "from HT2 through the bench's clay box (a rigid box seen from the same direction, 1.14 m nearer); as clip 1b carries HT to HD",
+   "estimate": 0,
+   "options": [
+    "Q2a",
+    "Q2b",
+    "Q2c"
+   ]
+  },
+  {
+   "id": "HDx2",
+   "part": "arrival",
+   "what": "HDx with the walnut console on the right (u 0.82-1.0) and the bench corner at the bottom; a mask edit",
+   "how": "model (the console) + code (the bench corner: HD's strip turned 65 deg about the same point, exact)",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "alt": {
+    "model": "nano-banana-2",
+    "estimate": 400
+   },
+   "options": [
+    "Q2a",
+    "Q2b",
+    "Q2c"
+   ]
+  },
+  {
+   "id": "HC130",
+   "part": "arrival",
+   "what": "new still at HX, yaw 130, 3:2 canvas",
+   "how": "model",
+   "needed": "yes: on the clay HD -> HC alone leaves 32 % of the frame without a source at mid-turn; HD -> HC130 -> HC and HC -> HC130 -> HD -> HDx2 have 0 holes",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "options": [
+    "Q2a",
+    "Q2b"
+   ]
+  },
+  {
+   "id": "HC",
+   "part": "arrival",
+   "what": "new still at HX, yaw 180 (the corridor, the bedroom door centred, u 0.46-0.54 on the clay)",
+   "how": "model",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "options": [
+    "Q2a",
+    "Q2b"
+   ]
+  },
+  {
+   "id": "clip2-take2",
+   "part": "arrival",
+   "what": "clip 2 again from HDx2: the arc (0.25 m toward the window), the console and the bench leaving the frame, start from rest",
+   "how": "model",
+   "job": {
+    "model": "kling-3-omni",
+    "type": "image-to-video",
+    "params": {
+     "duration": 4,
+     "resolution": "1080p",
+     "sound": false
+    }
+   },
+   "estimate": 1296,
+   "options": [
+    "Q2a"
+   ]
+  },
+  {
+   "id": "turns-at-HX",
+   "part": "arrival",
+   "what": "HD -> HC130 -> HC and back to HDx2; the left turn may start in the last 0.2 m of 1b (0 holes on the clay for 10 and 20 deg)",
+   "how": "code",
+   "estimate": 0,
+   "options": [
+    "Q2a",
+    "Q2b"
+   ]
+  },
+  {
+   "id": "clip1a-bench",
+   "part": "arrival",
+   "what": "the bench pasted into clip 1a from HT2 (it enters between 0.4 and 0.9 m on the clay)",
+   "how": "code",
+   "estimate": 0,
+   "options": [
+    "Q2a",
+    "Q2b",
+    "Q2c"
+   ],
+   "note": "a 1a retake (1,296) only if the paste fails; not counted"
+  },
+  {
+   "id": "clip2-paste",
+   "part": "arrival",
+   "what": "the existing clip 2 (passed QA) with the console and the bench pasted in its first metre, re-timed (start from rest, 1.3 m/s)",
+   "how": "code",
+   "estimate": 0,
+   "options": [
+    "Q2b",
+    "Q2c"
+   ]
+  },
+  {
+   "id": "HE",
+   "part": "bedroom",
+   "what": "new still at HX, yaw 0 (the hall's front wall, the console, the opening to the living room)",
+   "how": "model (the console part where HDx2 covers it: code, same point)",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "C0",
+   "part": "bedroom",
+   "what": "the corridor station frame in warm-modern",
+   "how": "model",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "MB-in",
+   "part": "bedroom",
+   "what": "in the pilot plan",
+   "how": "model",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "MB0",
+   "part": "bedroom",
+   "what": "in the pilot plan",
+   "how": "model",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "clip-HE-C0",
+   "part": "bedroom",
+   "what": "the retreat HE -> C0, 8.96 m (1.28 m/s)",
+   "how": "model",
+   "job": {
+    "model": "kling-3-omni",
+    "type": "image-to-video",
+    "params": {
+     "duration": 7,
+     "resolution": "1080p",
+     "sound": false
+    }
+   },
+   "estimate": 2268,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "clip-C0-MBin",
+   "part": "bedroom",
+   "what": "the retreat C0 -> MB-in through the bedroom door, 3.94 m (or HE -> MB-in in one 10 s clip: 3,240, the same)",
+   "how": "model",
+   "job": {
+    "model": "kling-3-omni",
+    "type": "image-to-video",
+    "params": {
+     "duration": 3,
+     "resolution": "1080p",
+     "sound": false
+    }
+   },
+   "estimate": 972,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "clip3-MBin-MB0",
+   "part": "bedroom",
+   "what": "the slide MB-in -> MB0, 3.15 m (jobs.json clip3)",
+   "how": "model",
+   "job": {
+    "model": "kling-3-omni",
+    "type": "image-to-video",
+    "params": {
+     "duration": 4,
+     "resolution": "1080p",
+     "sound": false
+    }
+   },
+   "estimate": 1296,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "HE-turn",
+   "part": "bedroom",
+   "what": "HDx2 -> HE, 25 deg",
+   "how": "code",
+   "estimate": 0,
+   "options": [
+    "Q1a"
+   ]
+  },
+  {
+   "id": "MB-fwd",
+   "part": "bedroom",
+   "what": "Q1 (b): a still inside the bedroom at (2.45, 19.60), yaw 180",
+   "how": "model",
+   "job": {
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto"
+    }
+   },
+   "estimate": 650,
+   "options": [
+    "Q1b"
+   ]
+  },
+  {
+   "id": "MB-turn-stills",
+   "part": "bedroom",
+   "what": "Q1 (b): two stills for the 180 deg turn in the room (yaw 120 and 60; the turn itself in code)",
+   "how": "model",
+   "estimate": 1300,
+   "options": [
+    "Q1b"
+   ]
+  },
+  {
+   "id": "MB0-new",
+   "part": "bedroom",
+   "what": "Q1 (b): the bedroom's frame from the new point, yaw 0 (replaces MB0)",
+   "how": "model",
+   "estimate": 650,
+   "options": [
+    "Q1b"
+   ]
+  },
+  {
+   "id": "clip-HC-MBfwd",
+   "part": "bedroom",
+   "what": "Q1 (b): forward HC -> into the bedroom, 11.45 m (1.27 m/s)",
+   "how": "model",
+   "job": {
+    "model": "kling-3-omni",
+    "type": "image-to-video",
+    "params": {
+     "duration": 9,
+     "resolution": "1080p",
+     "sound": false
+    }
+   },
+   "estimate": 2916,
+   "options": [
+    "Q1b"
+   ]
+  }
+ ],
+ "arrival_by_Q2": {
+  "Q2a": 3896,
+  "Q2b": 2600,
+  "Q2c": 1300
+ },
+ "arrival_by_Q2_if_the_two_mask_edits_use_nano": {
+  "Q2a": 3396,
+  "Q2b": 2100,
+  "Q2c": 800
+ },
+ "bedroom_path_by_Q1": {
+  "Q1a": 7136,
+  "Q1b": 5516
+ },
+ "matrix": {
+  "Q1a+Q2a": {
+   "total": 11032,
+   "arrival": 3896,
+   "bedroom": 7136,
+   "left_after": -8374
+  },
+  "Q1a+Q2b": {
+   "total": 9736,
+   "arrival": 2600,
+   "bedroom": 7136,
+   "left_after": -7078
+  },
+  "Q1a+Q2c": {
+   "total": 8436,
+   "arrival": 1300,
+   "bedroom": 7136,
+   "left_after": -5778
+  },
+  "Q1b+Q2a": {
+   "total": 9412,
+   "arrival": 3896,
+   "bedroom": 5516,
+   "left_after": -6754
+  },
+  "Q1b+Q2b": {
+   "total": 8116,
+   "arrival": 2600,
+   "bedroom": 5516,
+   "left_after": -5458
+  },
+  "Q1b+Q2c": {
+   "total": 7466,
+   "arrival": 1300,
+   "bedroom": 6166,
+   "left_after": -4808
+  }
+ },
+ "fits_in_2658": {
+  "Q2a": false,
+  "Q2b": true,
+  "Q2c": true
+ },
+ "history": "the four hall stills of 2026-11-17 cost 4,450 against 2,600 at list price (x1.71: fixes and retakes); budget the stills with that margin",
+ "code_vs_model": {
+  "code": [
+   "HD's bottom strip (from HT2)",
+   "the bench corner in HDx2 (from HD's strip, a pure turn)",
+   "the console in HE where HDx2 covers it (pure turn)",
+   "the bench in clip 1a (from HT2)",
+   "the console and the bench in the existing clip 2 (option Q2 b, c)",
+   "every turn at HX and the 25 deg turn to HE"
+  ],
+  "model": [
+   "HT2 (the bench itself, once)",
+   "HDx2 (the console itself, once)",
+   "HC130, HC, HE, C0, MB-in, MB0 (new views)",
+   "clip 2 take 2 (the arc)",
+   "the bedroom-wing clips"
+  ]
+ }
+}
