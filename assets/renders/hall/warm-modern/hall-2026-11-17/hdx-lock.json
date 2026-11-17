@@ -1,6 +1,6 @@
 {
  "still": "HDx (r2, the resumed run), tall 3:2 canvas 2496 x 1664",
- "status": "accepted by the manager; healed for QA HDx-M1 and HDx-M2 (2026-11-17, 0 tokens); for QA's re-check of the two regions",
+ "status": "QA round 2 passed; then, for HD-M1 (run 5, 0 tokens), ONE stone changed: the lower-left entrance stone (texture healed, tone kept); for QA's look at that corner",
  "composition": {
   "hall": "r2 (wm-hall-hdx-r2)",
   "living_room": "base.png's seed (seeds.py hdx, kept on the clay's living-room ids 30-43); where the seed is missing or dirty, fix1 (same camera, same input, same lock), because r2 left the armchair out of its own living room; the cut is hard at the walnut jamb and the arris, feathered (sigma 4 px) where the floor crosses the threshold (fix1 vs r2 there: 4 %)",
@@ -337,5 +337,18 @@
    }
   },
   "preheal": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-r2-preheal.png"
+ },
+ "run5_corner_stone": {
+  "finding": "QA HD-M1: HD magnifies HDx's lower-left entrance stone about x2; that stone was rougher than the others (pitted texture)",
+  "why_in_HDx": "HD must equal HDx's projection from u 0.765 (the turn's seam), so the rough texture could not be removed inside HD; a course-wide ramp inside HD only softened its start",
+  "fix": "tools/heal_hdx_corner.py: the stone's own masked low-pass (sigma 10, from 4 px inside its joints) x the luminance detail of its smooth neighbour across the vertical joint; neutral detail in a 6 px band along its joints; HDx's own 6 px kept under its upper joint (the lit lip every joint has)",
+  "changed_px": 63943,
+  "changed_inside_the_16x9_frame_px": 26152,
+  "canvas_box": "x 0-218, y 1297-1663",
+  "frame_1920_box": "x 0-120, y 924-1079",
+  "outside_that_stone_changed_px": 0,
+  "stone_median_level_change_pct": 0.6,
+  "levels_unchanged": "the 11.9.3 region (u 0.08-0.24) does not include it: stone -0.817, living back wall +0.01",
+  "previous": "/home/user/homedesign-app/assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-r3-precorner.png"
  }
 }

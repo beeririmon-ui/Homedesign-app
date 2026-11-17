@@ -1,6 +1,6 @@
 {
  "still": "HD (r2, nano-banana-2), tall 3:2 canvas 2496 x 1664",
- "status": "rendered, locked, level in band; for qa-agent and master-designer; not for the site before QA",
+ "status": "QA round 2 fixes (run 5, 0 tokens): HD-M1 fixed; HD-M2 accepted by the manager; for QA's re-check",
  "render": {
   "model": "nano-banana-2 i2i 2K, 400 tokens",
   "returned_px": [
@@ -31,8 +31,7 @@
     "still_u": 0.5197
    }
   },
-  "architecture_worst_px": 6.0,
-  "note": "the left jib seam reads 6 px left of the clay (u 0.0167 vs 0.0193; correlation 0.6 at the canvas edge), inside 11.5.7's +-0.01 (23.5 px)"
+  "architecture_worst_px": 6.0
  },
  "levels_11_9_3": {
   "reference": "jib door",
@@ -141,7 +140,7 @@
   ],
   "paste_edge_after_ramp": {
    "bands": 20,
-   "median_pct": 0.35,
+   "median_pct": 0.34,
    "worst_pct": 3.59,
    "rule": "11.5.7 / motion-agent: the tone at the seam within 3 %"
   },
@@ -154,13 +153,13 @@
   "passed": true,
   "hdx_to_hd": {
    "shared_strip": {
-    "edge_px": 10587,
+    "edge_px": 10586,
     "median_px": 0.0,
     "p90_px": 1.0,
     "share_within_tol": 0.9998
    },
    "seam_band": {
-    "edge_px": 6145,
+    "edge_px": 6146,
     "median_px": 0.0,
     "p90_px": 1.0,
     "share_within_tol": 0.9997
@@ -179,7 +178,8 @@
     "p90_px": 1.0,
     "share_within_tol": 0.9959
    }
-  }
+  },
+  "against": "the corner-healed hdx.png"
  },
  "clipped_px": 0,
  "exposure_correction_attempt": {
@@ -353,7 +353,7 @@
    "n": 16,
    "median_offset_px": -0.61,
    "p90_abs_px": 0.83,
-   "mean_corr": 0.886,
+   "mean_corr": 0.885,
    "clay_row_mid": 1279.0,
    "cols": [
     1301,
@@ -375,9 +375,9 @@
   "stone joint 13 (clay row 1564), rendered / across the seam": {
    "kind": "joint (followed per column)",
    "n": 16,
-   "median_offset_px": -0.38,
+   "median_offset_px": -0.37,
    "p90_abs_px": 0.55,
-   "mean_corr": 0.872,
+   "mean_corr": 0.852,
    "clay_row_mid": 1563.5,
    "cols": [
     1301,
@@ -396,5 +396,25 @@
     2495
    ]
   }
+ },
+ "run5": {
+  "HD_M1": {
+   "finding": "the bottom course split at the paste edge (u 0.717-0.803): the render's smooth stone, then HDx's corner stone magnified x2 (rough, a lit lip)",
+   "fix": "HDx's corner stone healed (hdx-lock.json -> run5_corner_stone), the projection rebuilt (seeds.py hd), and in that course (rows 1282-1561) the ramp runs over the whole width the turn allows (u 0.717-0.765, 113 px; tools/compose_hd2.py); HD = HDx exactly from u 0.765 where the projection's edge is vertical (the canvas corners as before, QA HD-I3)",
+   "why_not_supersampling": "the projection magnifies there (about x2); supersampling only helps where it minifies",
+   "lip_under_joint_1280_L_star_over_the_stone": {
+    "x1650 (render)": 17.1,
+    "x1720 (render)": 12.8,
+    "x1760": 14.5,
+    "x1800": 17.3,
+    "x1850": 17.4,
+    "x1900": 19.0,
+    "x1930": 18.0,
+    "x2000 (HDx, next stone)": 14.3
+   },
+   "lip_note": "every joint in HD has a lit lip under it (+9 to +17 L*, model and HDx alike): it is kept, and is now continuous across the paste edge"
+  },
+  "HD_M2": "the vertical joint at u 0.660 (not in the clay): accepted by the manager (plausible, consistent with HT; that part of HD leaves the frame in the turn); no heal",
+  "previous": "/home/user/homedesign-app/assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hd-r2-preheal.png"
  }
 }

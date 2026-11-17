@@ -1,6 +1,6 @@
 {
  "still": "HT (r2, nano-banana-2), base.png's canvas 2720 x 1530",
- "status": "rendered, locked, level in band; for qa-agent and master-designer; not for the site before QA",
+ "status": "QA round 2 fixes (run 5, 0 tokens): HT-M1, HT-M2, HT-M4 fixed; HT-M3 accepted by the manager; for QA's re-check",
  "render": {
   "model": "nano-banana-2 i2i 2K, 400 tokens",
   "returned_px": [
@@ -104,7 +104,7 @@
    }
   ],
   "walnut_L": 28.5,
-  "frame_L_p0_5": 20.8,
+  "frame_L_p0_5": 20.9,
   "walnut_8_above_the_grade_black_point": true,
   "black_point_note": "the black point of the door doc (10.2 item 4, ch. 2) is the grade's, L* 11-14 (WM-G1), not the frame's darkest 0.5 %, which is the walnut itself here",
   "joints_within_3px": true
@@ -189,8 +189,8 @@
  },
  "seam_with_HD": "the hidden door's measuring region (u 0.18-0.35, v 0.29-0.65) is HD's own pixels: HT -0.50 = HD -0.50; the far wall's texture in HT is HD's (clip 1b sees the same wall)",
  "clipped": {
-  "px_with_a_channel_at_255_share": 0.0017913783160322953,
-  "where": "the view through the glazing (6,390 px) and stone in the top margin above the 16:9 frame (rows 0-42); none on the wall inside the frame"
+  "px_with_a_channel_at_255_share": 0.0017889753940792002,
+  "where": "the view through the glazing (5,814 px in the frame, 447 in the margin), the living room's window frame (153 in the frame), stone in the top margin above the 16:9 frame; 6 stone px inside the frame at its top edge; none on the plaster"
  },
  "rejection_11_5_7_x1": {
   "one_flush_jib_leaf_seams_top_to_floor": true,
@@ -199,11 +199,11 @@
   "stone_no_skirting_uniform": true,
   "corner_0790": true,
   "walnut_0814_0850": true,
-  "living_room_bright_birches_armchair_edge": true,
+  "living_room_bright_birches_armchair_edge": "run 5: the living room bright with birches in the window; no chair edge inside the 16:9 frame (the render's round chair was another product, QA HT-M2); base.png's walnut armchair in the right margin",
   "no_objects": true,
   "no_tone_step_on_plaster": true
  },
- "note_x1": "at 1:1, on the jib door's lower part, the trowel texture shows a faint symmetric swirl from the mirrored input; it reads as trowel marks",
+ "note_x1": "run 5: the symmetric swirl on the jib door's lower part (QA HT-M4) is gone: that part now has the render's own unmirrored trowel texture",
  "turn_door_joints": "not applicable (HT is not part of the HD / HDx turn)",
  "lines": {
   "jib door seam left (u 0.158)": {
@@ -213,34 +213,34 @@
    "p90_abs_px": 0.9,
    "n": 28,
    "mean_corr": 0.952,
-   "tilt_deg_vs_clay": -0.04
+   "tilt_deg_vs_clay": -0.041
   },
   "jib door seam right (u 0.372)": {
    "kind": "vertical",
    "clay_px": 1031,
    "median_offset_px": 0.12,
-   "p90_abs_px": 0.95,
+   "p90_abs_px": 1.04,
    "n": 28,
-   "mean_corr": 0.984,
-   "tilt_deg_vs_clay": -0.134
+   "mean_corr": 0.978,
+   "tilt_deg_vs_clay": -0.12
   },
   "stone edge (u 0.456)": {
    "kind": "vertical",
    "clay_px": 1245,
    "median_offset_px": 0.04,
-   "p90_abs_px": 0.16,
+   "p90_abs_px": 0.14,
    "n": 30,
-   "mean_corr": 0.959,
-   "tilt_deg_vs_clay": -0.056
+   "mean_corr": 0.973,
+   "tilt_deg_vs_clay": -0.014
   },
   "inside corner (u 0.790)": {
    "kind": "vertical",
    "clay_px": 2104,
    "median_offset_px": -0.0,
-   "p90_abs_px": 0.01,
+   "p90_abs_px": 0.06,
    "n": 30,
-   "mean_corr": 1.0,
-   "tilt_deg_vs_clay": -0.0
+   "mean_corr": 0.997,
+   "tilt_deg_vs_clay": -0.003
   },
   "return / walnut (u 0.814)": {
    "kind": "vertical",
@@ -274,10 +274,10 @@
   },
   "stone joint 2 (clay row 154)": {
    "kind": "joint (followed per column)",
-   "n": 8,
-   "median_offset_px": -1.74,
-   "p90_abs_px": 4.0,
-   "mean_corr": 0.567,
+   "n": 10,
+   "median_offset_px": 0.03,
+   "p90_abs_px": 0.12,
+   "mean_corr": 0.974,
    "clay_row_mid": 153.5,
    "cols": [
     1249,
@@ -287,9 +287,9 @@
   "stone joint 3 (clay row 154)": {
    "kind": "joint (followed per column)",
    "n": 10,
-   "median_offset_px": 0.1,
-   "p90_abs_px": 1.66,
-   "mean_corr": 0.904,
+   "median_offset_px": 0.21,
+   "p90_abs_px": 0.29,
+   "mean_corr": 0.946,
    "clay_row_mid": 153.5,
    "cols": [
     1675,
@@ -299,9 +299,9 @@
   "stone joint 4 (clay row 246)": {
    "kind": "joint (followed per column)",
    "n": 10,
-   "median_offset_px": 0.06,
-   "p90_abs_px": 0.08,
-   "mean_corr": 0.998,
+   "median_offset_px": 0.11,
+   "p90_abs_px": 0.14,
+   "mean_corr": 0.969,
    "clay_row_mid": 245.5,
    "cols": [
     1249,
@@ -311,9 +311,9 @@
   "stone joint 5 (clay row 246)": {
    "kind": "joint (followed per column)",
    "n": 10,
-   "median_offset_px": 0.09,
-   "p90_abs_px": 0.1,
-   "mean_corr": 1.0,
+   "median_offset_px": 0.19,
+   "p90_abs_px": 0.26,
+   "mean_corr": 0.95,
    "clay_row_mid": 245.5,
    "cols": [
     1675,
@@ -443,9 +443,9 @@
   "stone joint 16 (clay row 1226)": {
    "kind": "joint (followed per column)",
    "n": 10,
-   "median_offset_px": 0.02,
-   "p90_abs_px": 0.03,
-   "mean_corr": 1.0,
+   "median_offset_px": -0.05,
+   "p90_abs_px": 0.09,
+   "mean_corr": 0.938,
    "clay_row_mid": 1225.5,
    "cols": [
     1249,
@@ -455,9 +455,9 @@
   "stone joint 17 (clay row 1226)": {
    "kind": "joint (followed per column)",
    "n": 10,
-   "median_offset_px": 0.01,
+   "median_offset_px": -0.0,
    "p90_abs_px": 0.04,
-   "mean_corr": 1.0,
+   "mean_corr": 0.991,
    "clay_row_mid": 1225.5,
    "cols": [
     1675,
@@ -469,12 +469,72 @@
    "n": 19,
    "median_offset_px": -2.03,
    "p90_abs_px": 3.11,
-   "mean_corr": 0.765,
+   "mean_corr": 0.761,
    "clay_row_mid": 1469.0,
    "cols": [
     1249,
     2097
    ]
   }
+ },
+ "run5": {
+  "recipe": "tools/compose_ht3.py on the same r2 render; the seed rebuilt from hd.png (r3) and the corner-healed hdx.png (seeds.py ht at 2x, area-averaged)",
+  "HT_M1": {
+   "fix": "on the stone the seed is used only between the middles of the clay's joints at rows 245 and 1225 (the switch sits inside the dark joint line); the render's courses above and below were moved onto the clay by a vertical-only warp of the stone's columns (+4.7 px at the joint at 153, +3.9 at 245; -5.0 at 1225 easing to 0 at the floor line, which stays continuous with the plaster's)",
+   "joints_after": {
+    "stone joint 2 (clay row 154)": 0.03,
+    "stone joint 3 (clay row 154)": 0.21,
+    "stone joint 4 (clay row 246)": 0.11,
+    "stone joint 5 (clay row 246)": 0.19,
+    "stone joint 6 (clay row 490)": -0.04,
+    "stone joint 7 (clay row 490)": -0.01,
+    "stone joint 8 (clay row 582)": -0.02,
+    "stone joint 9 (clay row 582)": -0.02,
+    "stone joint 10 (clay row 705)": -0.01,
+    "stone joint 11 (clay row 705)": -0.0,
+    "stone joint 12 (clay row 950)": -0.02,
+    "stone joint 13 (clay row 950)": -0.02,
+    "stone joint 14 (clay row 1042)": -0.01,
+    "stone joint 15 (clay row 1042)": -0.03,
+    "stone joint 16 (clay row 1226)": -0.05,
+    "stone joint 17 (clay row 1226)": -0.0,
+    "stone joint 18 (clay row 1469)": -2.03
+   },
+   "tone_across_the_switch_joints_pct": {
+    "joint_245": [
+     -12.8,
+     -18.7,
+     -16.8,
+     -15.1,
+     -8.2,
+     -4.1,
+     -3.5,
+     -3.3,
+     -5.3
+    ],
+    "joint_1225": [
+     -16.4,
+     -17.3,
+     -14.4,
+     -6.9,
+     -2.9,
+     -5.5,
+     -10.5,
+     -8.3,
+     -7.9
+    ]
+   },
+   "tone_across_ordinary_joints_pct": "0 to -9 (joints 153, 490, 582, 704, 949, 1041)",
+   "residual": "the change now falls on a joint, not mid-stone; across the two switch joints the course below is up to 19 % darker on the stone's left part (ordinary joints up to 9 %), read at x1 as the slot's wash on separate stones; for the designer's eye. These two joints are the only ones inside the seed's coverage"
+  },
+  "HT_M2": {
+   "fix": "inside the 16:9 frame (x 2626-2642, rows 950-1171, the rows of the render's round chair) the render's own bench and floor cloned from 20 px left; in the margin (x >= 2643) base.png's walnut armchair from the seed, its holes (floor and bench M0 never saw) inpainted per clay surface",
+   "chair_pixels_in_the_frame": 0
+  },
+  "HT_M3": "the extra vertical joints at u 0.538 and 0.689: accepted by the manager; no heal",
+  "HT_M4": {
+   "fix": "the jib door's lower part (rows 1149-1468): its fine texture (luminance high-pass, sigma 6) replaced with the render's own unmirrored trowel texture from the plaster left of the door, its low-pass kept; no symmetric swirl left"
+  },
+  "previous": "/home/user/homedesign-app/assets/renders/hall/warm-modern/hall-2026-11-17/rejected/ht-r2-preheal.png"
  }
 }

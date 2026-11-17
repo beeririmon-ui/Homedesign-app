@@ -15782,10 +15782,10 @@
    "created": "2026-11-17",
    "model": "seedream-5-pro i2i 2K: r2 of the resumed run (650; r1 and fix1 of run 1 rejected)",
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/hdx.json, hdx-r2.txt, hdx-r2-edits.json (designer's 11.5.6: hdx-designer-verbatim.txt)",
-   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_hdx.py, tools/compose_hdx.py (the hall from r2, the living room from base.png's seed and fix1), tools/check_hdx.py; seed: site/tools/transitions/seeds.py hdx; healed for QA HDx-M1/M2: the 2x supersampled seed, tools/heal_legs.py",
-   "status": "accepted by the manager (2026-11-17); healed at 0 tokens for QA HDx-M1 (dotted parquet joints) and HDx-M2 (dots / ring on the table legs): changes only inside the living room, lock and levels unchanged (architecture <= 0.98 px, joints <= 1.06 px, stone -0.82, living back wall +0.01); for QA's re-check of the two regions; not for the site before QA",
-   "sha256": "2259f57366345afbd07153ef463fb581846ab9975e98d0d90b39358d3a477812",
-   "bytes": 5822728
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_hdx.py, tools/compose_hdx.py (the hall from r2, the living room from base.png's seed and fix1), tools/check_hdx.py; seed: site/tools/transitions/seeds.py hdx; healed for QA HDx-M1/M2: the 2x supersampled seed, tools/heal_legs.py; run 5: tools/heal_hdx_corner.py",
+   "status": "passed QA round 2; then in run 5 (HD-M1, 0 tokens) ONE stone changed: the lower-left entrance stone, texture healed, tone kept (63,943 px; hdx-frame x 0-120, y 924-1079; tools/heal_hdx_corner.py, hdx-lock.json run5_corner_stone); lock and levels unchanged (stone -0.82); for QA's look at that stone; not for the site before QA",
+   "sha256": "34c0d266360ce4b0f17a04ffee591b0d0a0bb2ff5ebe72d4f4e7d06d7f722789",
+   "bytes": 5812210
   },
   {
    "id": "wm-hall-hdx-frame-2026-11-17",
@@ -15796,9 +15796,9 @@
    "created": "2026-11-17",
    "model": "code",
    "recipe": "site/tools/transitions/seeds.py frame",
-   "status": "cut from the healed hdx.png; same status as the master",
-   "sha256": "c0b5e10fc80410cf432d6c164539e7554bc606a418ce4a8a74c0532a3b6db1f1",
-   "bytes": 2868077
+   "status": "cut from hdx.png after the run-5 corner heal (changed only at x 0-120, y 924-1079); same status as the master",
+   "sha256": "43b7b138541daddde05fc6ce1b9f5bbfb11a9fe9e9c865b948e1eb647c2f275d",
+   "bytes": 2865220
   },
   {
    "id": "wm-hall-hd-r1-rejected-2026-11-17",
@@ -15823,10 +15823,10 @@
    "created": "2026-11-17",
    "model": "nano-banana-2 i2i 2K (400), run 3; HDx's projection pasted in the right part",
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/hd.json, hd-r2.txt, hd-r2-edits.json (designer's 11.5.5: hd-designer-verbatim.txt)",
-   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_hd.py, tools/align_affine.py, tools/compose_hd.py, tools/check_hd.py; seed: site/tools/transitions/seeds.py hd",
-   "status": "rendered by render-agent; locked (14 joints <= 0.61 px, seams and stone edge within +-0.01); jib door -0.50 vs -0.60 +-1/6, stone 0.28 under it; HD = HDx exactly from u 0.747 (the turn's seam on HDx's pixels), 70 px ramp at the paste edge; turn_door.py joints exit 0 (p90 1.0 / 1.0 px); 11.5.7 passed at x1; for qa-agent and master-designer; not for the site before QA",
-   "sha256": "5776efa6d41fb9fbe0cbf7732862d02de29fd420f379c2ec7f650c628e0ae675",
-   "bytes": 4963296
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_hd.py, tools/align_affine.py, tools/compose_hd.py, tools/check_hd.py; seed: site/tools/transitions/seeds.py hd; run 5: tools/heal_hdx_corner.py (on hdx.png), tools/compose_hd2.py",
+   "status": "run 5 (QA round 2, 0 tokens): HD-M1 fixed (the bottom course continuous at the paste edge; rebuilt from the new hdx.png, tools/compose_hd2.py), HD-M2 accepted by the manager; locked (14 joints <= 0.61 px, seams and stone edge within +-0.01); jib door -0.50, stone 0.28 under it; seam to HDx median 0.34 %, worst 3.59 %; HD = HDx from u 0.765; turn_door.py joints exit 0 (p90 1.0 / 1.0 px); for QA's re-check; not for the site before QA",
+   "sha256": "1ea331d0e2f96fa2e83ad67e8522e2f8ef2caa010f01d51a8c414a055143cf89",
+   "bytes": 4952190
   },
   {
    "id": "wm-hall-hd-frame-2026-11-17",
@@ -15837,9 +15837,9 @@
    "created": "2026-11-17",
    "model": "code",
    "recipe": "site/tools/transitions/seeds.py frame",
-   "status": "cut from hd.png; same status as the master",
-   "sha256": "f622726b350587cd0f147170385c0b62d6dcda60fce50fdc8bbd6d534a2cf1f7",
-   "bytes": 2536307
+   "status": "cut from the run-5 hd.png; same status as the master",
+   "sha256": "6aaa4542b025d190bfde2067a3687e2559a2905649ad1bee607b60aff8bfe796",
+   "bytes": 2530610
   },
   {
    "id": "wm-hall-ht-r1-rejected-2026-11-17",
@@ -15875,12 +15875,12 @@
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-17",
-   "model": "nano-banana-2 i2i 2K (400), run 4; HD, HDx and base.png's seeds pasted back",
+   "model": "nano-banana-2 i2i 2K (400), run 4; recomposed in run 5 (0 tokens); HD, HDx and base.png's seeds pasted back",
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-17/ht.json, ht-r2.txt, ht-r2-edits.json (designer's 11.5.4: ht-designer-verbatim.txt)",
-   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_ht.py, tools/align_affine.py, tools/ht_tools.py, tools/ht_patch_step.py; seed: site/tools/transitions/seeds.py ht (2x, area-averaged)",
-   "status": "rendered by render-agent; locked (17 joints <= 2.03 px, architecture <= 1.73 px, positions within 11.5.7); jib door -0.50 (HD's own pixels), stone 0.31 under it, walnut L* 28.5; one flush jib leaf, no tone step; for qa-agent and master-designer; not for the site before QA",
-   "sha256": "ac1bad7fccbd265fe595fb0aef96733f8dfccc30439c8990a32ee731d4fb1e11",
-   "bytes": 4722993
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json, tools/prep_ht.py, tools/align_affine.py, tools/ht_tools.py, tools/ht_patch_step.py; seed: site/tools/transitions/seeds.py ht (2x, area-averaged); run 5: tools/compose_ht3.py",
+   "status": "run 5 r3 (QA round 2, 0 tokens, the same render; tools/compose_ht3.py): HT-M1 fixed (stone seed between the joints at 245 and 1225, the render's courses warped onto the clay; stone joints <= 0.21 px), HT-M2 fixed (no chair inside the frame; base.png's walnut armchair in the margin), HT-M4 fixed (unmirrored trowel texture), HT-M3 accepted by the manager; architecture <= 1.73 px; jib door -0.50, stone 0.31 under it, walnut L* 28.5; for QA's re-check; not for the site before QA",
+   "sha256": "9494dd0e85a2f0c0806cdb806ed8b9c9281e793955de47c31b75d38659ca6653",
+   "bytes": 4708426
   },
   {
    "id": "wm-hall-ht-frame-2026-11-17",
@@ -15891,9 +15891,9 @@
    "created": "2026-11-17",
    "model": "code",
    "recipe": "site/tools/transitions/seeds.py frame",
-   "status": "cut from ht.png; same status as the master",
-   "sha256": "1379c21e95b3f651e42360fe5bf1fd9d38404eb29f6bd01fb9a2ade1b9d507f0",
-   "bytes": 2435435
+   "status": "cut from the run-5 ht.png; same status as the master",
+   "sha256": "e38780acf23c26130c9f243cf1984357ceb9766e5b84bed038c6d149a565fba8",
+   "bytes": 2451047
   },
   {
    "id": "wm-hall-d0o-pre-multiplier-2026-11-17",
@@ -15907,6 +15907,45 @@
    "status": "SUPERSEDED by d0o.png with the +0.12 multiplier; not for the site",
    "sha256": "90a289bcb00b4bdc1829bdef27ae73ec3b3ba51317c1e302ad5a012ad14de562",
    "bytes": 6364106
+  },
+  {
+   "id": "wm-hall-hd-r2-preheal-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hd-r2-preheal.png",
+   "kind": "HD r2 before the QA round-2 fix (kept for the record)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "nano-banana-2 r2 + HDx's projection (see wm-hall-hd-2026-11-17)",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json",
+   "status": "SUPERSEDED by the run-5 hd.png (QA HD-M1); not for the site",
+   "sha256": "5776efa6d41fb9fbe0cbf7732862d02de29fd420f379c2ec7f650c628e0ae675",
+   "bytes": 4963296
+  },
+  {
+   "id": "wm-hall-hdx-r3-precorner-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-r3-precorner.png",
+   "kind": "HDx after the QA round-1 heal, before the run-5 corner-stone heal (kept for the record)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "seedream-5-pro r2 + seed + fix1 (see wm-hall-hdx-2026-11-17)",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json",
+   "status": "SUPERSEDED by the run-5 hdx.png (only the lower-left entrance stone differs; QA HD-M1); not for the site",
+   "sha256": "2259f57366345afbd07153ef463fb581846ab9975e98d0d90b39358d3a477812",
+   "bytes": 5822728
+  },
+  {
+   "id": "wm-hall-ht-r2-preheal-2026-11-17",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/ht-r2-preheal.png",
+   "kind": "HT r2 before the QA round-2 fixes (kept for the record)",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-17",
+   "model": "nano-banana-2 r2 + seeds (see wm-hall-ht-2026-11-17)",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json",
+   "status": "SUPERSEDED by the run-5 ht.png (QA HT-M1, M2, M4); not for the site",
+   "sha256": "ac1bad7fccbd265fe595fb0aef96733f8dfccc30439c8990a32ee731d4fb1e11",
+   "bytes": 4722993
   }
  ]
 }
