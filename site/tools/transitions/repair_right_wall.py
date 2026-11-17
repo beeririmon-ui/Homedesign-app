@@ -54,8 +54,9 @@ YN, YF, ZH = 4.57, 2.97, 2.40  # O-living-dining: near and far jambs, head
 ZC = 3.00
 XL, XD = -2.30, 7.25           # living left wall, dining far wall
 YE0, YE1, XE0, XE1 = 6.20, 6.35, 0.95, 2.15   # O-entry-living (living face, hall face; jambs)
-X_BAND, X_CEIL = 2.02, 2.05
-X_FLOOR, Y_FLOOR, RAMP_FY, RAMP_FX = 1.892, 3.00, 0.30, 0.004    # the floor patch starts just after the plank joint at 1.876 (the clip's joint stays)
+X_BAND, X_CEIL, RAMP_C = 2.02, 1.85, 0.26   # the ceiling crossfades over 26 cm of clean ceiling, left of the pillar's top (QA C2-M3)
+X_FLOOR, Y_FLOOR, RAMP_FY, RAMP_FX = 1.892, 6.20, 0.05, 0.004    # the floor patch starts just after the plank joint at 1.876 (the clip's joint
+#   stays) and runs to the entry wall: no lower border (QA C2-L1), and every row left of the jamb's cut is painted (C2-M2)
 PLANK = 0.2235                  # the clip's planks (measured on the bank, floor coordinates): joints at 1.428 / 1.650 / 1.876 / 2.098
 SOFA = ((-1.20, 1.45), (0.0, 1.05), (0.0, 0.85))   # a box around the sofa (M0: u 0.469-0.891): no texture is taken from behind it
 RAMP = 0.06
@@ -162,7 +163,7 @@ def trace(cam: cg.Cam, px: np.ndarray, py: np.ndarray):
     ceil = lab == KEEP + 200
     flo = lab == KEEP + 300
     rb = np.clip((P[..., 0] - X_BAND) / RAMP, 0, 1)
-    rc = np.clip((P[..., 0] - X_CEIL) / RAMP, 0, 1)
+    rc = np.clip((P[..., 0] - X_CEIL) / RAMP_C, 0, 1)
     rf = np.clip((P[..., 0] - X_FLOOR) / RAMP_FX + 0.5, 0, 1) * np.clip((Y_FLOOR + RAMP_FY - P[..., 1]) / RAMP_FY, 0, 1)
     lab = np.where(back, np.where(rb > 0, BACK, KEEP), lab)
     lab = np.where(ceil, np.where(rc > 0, CEIL, KEEP), lab)
@@ -256,17 +257,37 @@ def occluder_track(frames: dict, ks: list[int]) -> dict:
         xr = x
         while xr < len(frac) - 1 and xr < x + 60 and (frac[xr] > 0.3 or frac[min(len(frac) - 1, xr + 1)] > 0.3):
             xr += 1
-        raw[k] = 1440.0 + xr
+        # the jamb's own edge with the dark wavy outline the model drew along it: in row bands above the floor, the
+        # rightmost narrow dark line (darker than both sides 6-12 px away) within 26 px of the edge found so far
+        gg = frames[k][60:900, 1440:].astype(np.float32).mean(axis=2)
+        xt = xr
+        for b0 in range(0, gg.shape[0], 70):
+            band = gg[b0:b0 + 70].mean(axis=0)
+            for c in range(max(12, xr - 6), min(len(band) - 13, xr + 26)):
+                if min(band[c - 12:c - 5].mean(), band[c + 6:c + 13].mean()) - band[c - 1:c + 2].min() > 15:
+                    xt = max(xt, c + 3)
+        raw[k] = 1440.0 + xt
     kk = sorted(raw)
     v = np.array([raw[k] for k in kk])
     med = np.array([np.median(v[max(0, i - 2):i + 3]) for i in range(len(v))])
-    med = np.maximum.accumulate(med)
-    return dict(raw={k: raw[k] for k in kk}, x={k: float(x) for k, x in zip(kk, med)})
+    # never left of what this frame shows (an outline uncovered for one frame flashes: QA C2-M1), unless it is a
+    # single miss far to the right; never back (the model's jamb steps back 8 px once: C2-I1); then smooth, and
+    # again never left of the frame's own edge
+    up = np.where((v > med) & (v - med < 25), v, med)
+    up = np.maximum.accumulate(up)
+    fin = np.isfinite(up)
+    sm = up.copy()
+    if fin.sum() > 3:
+        ker = np.exp(-0.5 * (np.arange(-3, 4) / 1.2) ** 2)
+        a = up[fin]
+        s = np.convolve(np.pad(a, 3, mode="edge"), ker / ker.sum(), mode="valid")
+        sm[fin] = np.maximum(s, a)
+    return dict(raw={k: raw[k] for k in kk}, x={k: float(x) for k, x in zip(kk, sm)})
 
 
-def occluder_x(track: dict, k: int, bias: float = 8.0) -> float:
-    """Column from which the clip's own occluder is kept (inf: no occluder). The bias covers the thin wavy dark outline
-    the model drew along the reveal's edge, so that the jamb meets the repaired wall on one straight vertical."""
+def occluder_x(track: dict, k: int, bias: float = 2.0) -> float:
+    """Column from which the clip's own occluder is kept (inf: no occluder); the track already lies past the dark
+    outline the model drew along the reveal's edge, so that the jamb meets the repaired wall on one straight vertical."""
     x = track["x"].get(k)
     if x is None:
         last = max(track["x"]) if track["x"] else None
@@ -314,20 +335,25 @@ def source_points(lab, P):
     S = np.where((lab == DWALL)[..., None], np.stack([X_BAND - 0.02 - tri(X - XR, BAND_TILE), zero, Z], -1), S)
     S = np.where((lab == SOFFIT)[..., None], np.stack([X - 0.7, Y, zero + ZC], -1), S)
     S = np.where((lab == DCEIL)[..., None], np.stack([X - 1.4, Y, zero + ZC], -1), S)
-    S = np.where((lab == CEIL)[..., None], np.stack([X - 0.5, Y, Z], -1), S)
+    S = np.where((lab == CEIL)[..., None], np.stack([X - 0.7, Y, Z], -1), S)     # from left of the crossfade
     S = np.where((lab == DFLOOR)[..., None], np.stack([X - 1.0, Y, zero], -1), S)
     # per plank, from the clean planks 1.650-1.876 and 1.876-2.05 (the ones further left lie in the sofa's shadow): the
     # plank 1.876-2.098 is 1.650-1.876 mirrored (no joint at either end), from 2.092 on it is copied 0.448 to the right,
     # so its joint lands on 2.098 and the next on 2.324: one line per joint
-    Xf = np.where(X < 2.092, 3.752 - X, X - 0.448)
-    S = np.where((lab == FLOOR)[..., None], np.stack([Xf, np.maximum(Y, 0.03), zero], -1), S)
+    # the last strip (from the joint at 2.324): two planks left would land inside the patch itself, four planks left
+    # (1.430-1.65) lies in the sofa's dark contact shadow near the back wall: there (Y < 1.6) it takes the clean plank
+    # 1.650-1.876 a metre further along (a butt joint at Y 1.6), elsewhere four planks left
+    last = X >= 2.318
+    Xf = np.where(X < 2.092, 3.752 - X, np.where(~last, X - 0.448, np.where(Y < 1.6, X - 0.672, X - 0.894)))
+    Yf = np.where(last & (Y < 1.6), Y + 1.0, Y)
+    S = np.where((lab == FLOOR)[..., None], np.stack([Xf, np.maximum(Yf, 0.03), zero], -1), S)
     return S
 
 
 def gains(img_lin: np.ndarray, cam: cg.Cam, shade: Shade, xo: float) -> dict:
     """The clip's colour per unit of clay shading on clean surfaces right next to the painted ones: the back wall
     X 1.85-2.02 per 0.1 m of height, and the ceiling X 1.80-2.02."""
-    zs = np.arange(0.05, ZC, 0.1)
+    zs = np.concatenate([np.arange(0.01, 0.30, 0.02), np.arange(0.35, 2.70, 0.1), np.arange(2.71, ZC, 0.02)])   # fine at both contact lines
     Xs = np.linspace(1.85, X_BAND, 6)
     Gw = np.full((len(zs), 3), np.nan)
     for i, z in enumerate(zs):
@@ -345,7 +371,7 @@ def gains(img_lin: np.ndarray, cam: cg.Cam, shade: Shade, xo: float) -> dict:
         sh = shade("back", Xs[ok][good], np.full(good.sum(), z, np.float32)).ravel()
         Gw[i] = np.median(cols / np.maximum(sh[:, None], 1e-4), axis=0)
     Ys = np.linspace(0.3, 3.0, 10)
-    Xc = np.linspace(1.80, X_BAND, 4)
+    Xc = np.linspace(1.50, X_CEIL - 0.01, 4)
     XX, YY = np.meshgrid(Xc, Ys)
     P = np.stack([XX.ravel(), YY.ravel(), np.full(XX.size, ZC)], -1)
     u, v, d = cam.project(P)
@@ -450,22 +476,40 @@ def paint_frame(img8: np.ndarray, cam: cg.Cam, shade: Shade, xo: float, Gw: np.n
         col = np.zeros((len(Lp), 3), np.float32)
         m = Lp == BACK
         col[m] = shade("back", f32(X[m]), f32(Z[m])).reshape(-1, 1) * Gz[m] * T[m]
+        # its top (the wall / ceiling contact line and the shading under it, QA C2-M3): the clip's own wall 0.5 m to
+        # the left, under the clay's ratio, so that the line runs on unbroken
+        mt = m & valid & (Z > 2.3)
+        if mt.any():
+            wt = np.clip((Z[mt] - 2.3) / 0.2, 0, 1).reshape(-1, 1).astype(np.float32)
+            ratio = (shade("back", f32(X[mt]), f32(Z[mt])) / np.maximum(shade("back", f32(Sp[mt][:, 0]), f32(Z[mt])), 1e-4)).reshape(-1, 1)
+            col[mt] = (1 - wt) * col[mt] + wt * src[mt] * ratio
         m = Lp == RIGHT
         col[m] = shade("right", f32(Y[m]), f32(Z[m])).reshape(-1, 1) * Gz[m] * T[m]
         m = Lp == REVEAL
-        col[m] = shade("reveal", f32(X[m]), f32(Z[m])).reshape(-1, 1) * Gz[m] * T[m]
+        if m.any():                                   # an opening's reveal has no skirting: the gain of plain wall
+            izr = np.interp(np.maximum(Z[m], 0.35), zs, np.arange(len(zs)))
+            Gr = np.stack([np.interp(izr, np.arange(len(zs)), Gw[:, c]) for c in range(3)], -1).astype(np.float32)
+            col[m] = shade("reveal", f32(X[m]), f32(Z[m])).reshape(-1, 1) * Gr * T[m]
         m = Lp == DWALL
         col[m] = 0.85 * shade("back", np.full(m.sum(), 2.3, np.float32), f32(Z[m])).reshape(-1, 1) * Gz[m] * T[m]
         m = Lp == CEIL
         col[m] = shade("ceil", f32(X[m]), f32(Y[m])).reshape(-1, 1) * Gc[None] * T[m]
+        # the clip's own ceiling 0.5 m to the left under the clay's ratio: its tone and the dark band along the wall
+        # carry on across the border (C2-M3)
+        mv = m & valid
+        if mv.any():
+            ratio = (shade("ceil", f32(X[mv]), f32(Y[mv])) / np.maximum(shade("ceil", f32(Sp[mv][:, 0]), f32(Y[mv])), 1e-4)).reshape(-1, 1)
+            col[mv] = src[mv] * ratio
         m = Lp == SOFFIT
         col[m] = 0.8 * shade("ceil", np.full(m.sum(), 2.45, np.float32), f32(Y[m])).reshape(-1, 1) * Gc[None] * T[m]
         m = Lp == DCEIL
         col[m] = 0.85 * shade("ceil", np.full(m.sum(), 2.45, np.float32), f32(Y[m])).reshape(-1, 1) * Gc[None] * T[m]
         m = Lp == DFLOOR
-        if m.any():
-            fb = np.median(src[m & valid], axis=0) if (m & valid).any() else np.array([0.1, 0.07, 0.05], np.float32)
-            col[m] = 0.85 * np.where(valid[m][:, None], src[m], fb)
+        if m.any():                                   # relit like the floor patch (QA C2-L2: it was a hard dark strip)
+            want = 0.92 * shade("floor", np.full(m.sum(), 2.45, np.float32), f32(Y[m])).reshape(-1, 1) * (Gf[None] if Gf is not None else 1.0)
+            have = np.maximum(remap1d(blurL, sx[m], sy[m]), 1e-4)
+            fb = np.median(src[m & valid] / have[valid[m]], axis=0) if (m & valid).any() else np.ones(3, np.float32)
+            col[m] = np.where(valid[m][:, None], src[m] / have, fb[None]) * want
         m = Lp == FLOOR
         if m.any():
             # the source's wood (grain, joints, plank tone) under the light the clay gives the target: the broad light of
@@ -581,5 +625,121 @@ def main(argv=None) -> int:
     return 0
 
 
+# ---------------------------------------------------------------------------------------------------------------
+def check_main(argv=None) -> int:
+    """Self-check of the repair's borders on a played preview (the checks 5 and 6 of walk_test.py cannot see them: the
+    repair is painted from the same clay that measures it). Per preview frame:
+      jamb    (while the clip's near jamb is in view) at the paint's cut line: a narrow line within 5 px of it, darker
+              than both sides by the dip and below 110 (8 bit), in the rows above the floor (the model's outline left
+              uncovered: QA C2-M1), and how far the jamb's left
+              edge in the floor rows (960-1070) sits from the same edge just above the floor (520-720 rows) (a tab
+              at its foot: C2-M2)
+      ceiling along the back wall / ceiling junction (plan line X 1.70-2.45, Y 0, Z 3), the luminance of the contact
+              line, of the ceiling 12-30 px above it and of the wall 12-30 px below, compared across the repair's
+              border: X 1.80-2.00 (the clip's own) against X 2.15-2.40 (repaired) (C2-M3)
+    Luminance in 8-bit levels."""
+    import arrival_timeline as tl
+    ap = argparse.ArgumentParser(description="repair_right_wall.py check")
+    ap.add_argument("--video", required=True, help="the desktop preview (1920 x 1080, 60 fps, segment dolly)")
+    ap.add_argument("--repair", required=True, help="repair.json of the run (registration, occluder)")
+    ap.add_argument("--walk", required=True)
+    ap.add_argument("--version", default="7.3")
+    ap.add_argument("--frames", default="30-120")
+    ap.add_argument("--out")
+    a = ap.parse_args(argv)
+    V = tl.VERSIONS[a.version]
+    s_tab = asm.monotone(np.asarray(json.load(open(a.walk))["s_filled"], np.float64))
+    S0, S1 = float(s_tab[0]), float(s_tab[-1])
+    rep = json.load(open(a.repair))
+    fr = {int(k): v for k, v in rep["frames"].items()}
+    kk = sorted(fr)
+    offs = np.array([fr[k].get("s_registered", fr[k]["s"]) - fr[k]["s"] for k in kk])
+    occ = {int(k): v for k, v in rep.get("occluder", {}).items() if v is not None}
+    f0, f1 = (int(x) for x in a.frames.split("-"))
+    cap = cv2.VideoCapture(a.video)
+    out = dict(jamb=[], ceiling=[])
+    i = 0
+    while True:
+        ok, im = cap.read()
+        i += 1
+        if not ok:
+            break
+        if i < f0 or i > f1:
+            continue
+        g = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY).astype(np.float32)
+        s2 = V.state(V.t_turn_end + (i - 1) / 60.0)["s2"]
+        p = float(np.clip(s2 / L2, 0, 1)) * 144 + 1                     # bank frame (1-based, fractional)
+        off = float(np.interp(p, kk, offs, left=0.0, right=0.0))
+        cam = cam_at(S0 + (p - 1) * (S1 - S0) / 144 + off)
+        # jamb: the paint's cut line (repair.json, per bank frame) and the clip's jamb right of it
+        ko = [k for k in sorted(occ) if math.isfinite(occ[k])]
+        kc = [k for k in kk if fr[k].get("occluder_x") is not None]
+        if kc and kc[0] <= p <= kc[-1] and ko and p <= ko[-1]:
+            xc = float(np.interp(p, kc, [fr[k]["occluder_x"] for k in kc]))
+            dips = []
+            for b0 in range(60, 900, 70):
+                band = g[b0:b0 + 70, int(xc) - 20:int(xc) + 21].mean(axis=0)
+                c0 = 20
+                for c in range(c0 - 5, c0 + 6):
+                    lo = float(band[c - 1:c + 2].min())
+                    nd = min(band[c - 12:c - 5].mean(), band[c + 6:c + 13].mean()) - lo
+                    # an outline is a narrow line that is also dark (the model's is near black, ~45); the grey reveal of
+                    # the dining opening (~190) next to the cut is geometry, not an outline
+                    dips.append(float(nd) if lo < 110 else 0.0)
+            # the jamb's foot: its left edge in the floor rows against its left edge just above the floor (one straight
+            # vertical has 0; a tab at the foot shows as the difference)
+            def edge(r0, r1):
+                prof = cv2.GaussianBlur(g[r0:r1, int(xc) - 25:int(xc) + 11].mean(axis=0).reshape(1, -1), (0, 0), 1.0).ravel()
+                gr = np.abs(np.diff(prof))
+                return (int(xc) - 25 + int(np.argmax(gr)) + 0.5) if gr.max() > 4 else None
+            ef, eu = edge(960, 1070), edge(520, 720)
+            tab = float(eu - ef) if ef is not None and eu is not None else None
+            out["jamb"].append(dict(frame=i, bank=round(p, 2), cut_x=round(xc, 1), outline_dip=round(max(dips), 1),
+                                    foot_tab_px=None if tab is None else round(tab, 1)))
+        # ceiling
+        Xs = np.arange(1.70, 2.451, 0.01)
+        u, v, d = cam.project(np.stack([Xs, np.zeros_like(Xs), np.full_like(Xs, ZC)], -1))
+        x, y = u * W, v * H
+        okc = (d > 0) & (x > 2) & (x < W - 3) & (y > 34) & (y < H - 34)
+        if ko and ko[0] <= p <= ko[-1]:
+            okc &= x < float(np.interp(p, ko, [occ[k] for k in ko])) - 10      # not on the clip's near jamb
+        if i >= 40 and okc.sum() > 40:
+            con, cei, wal = [], [], []
+            for xx, yy, kept in zip(x, y, okc):
+                if not kept:
+                    con.append(np.nan); cei.append(np.nan); wal.append(np.nan)
+                    continue
+                c, r = int(round(xx)), int(round(yy))
+                con.append(float(g[r - 4:r + 5, c].min()))
+                cei.append(float(g[r - 30:r - 12, c].mean()))
+                wal.append(float(g[r + 12:r + 30, c].mean()))
+            con, cei, wal = np.array(con), np.array(cei), np.array(wal)
+            A = (Xs >= 1.80) & (Xs <= 2.00)
+            B = (Xs >= 2.15) & (Xs <= 2.40)
+            if np.isfinite(con[A]).sum() > 5 and np.isfinite(con[B]).sum() > 5:
+                contrast = cei - con
+                out["ceiling"].append(dict(frame=i, bank=round(p, 2),
+                                           contact_contrast_step=round(float(np.nanmean(contrast[B]) - np.nanmean(contrast[A])), 1),
+                                           ceiling_step=round(float(np.nanmean(cei[B]) - np.nanmean(cei[A])), 1),
+                                           wall_step=round(float(np.nanmean(wal[B]) - np.nanmean(wal[A])), 1)))
+    def worst(lst, key):
+        vals = [x[key] for x in lst if x.get(key) is not None]
+        return (round(float(max(vals, key=abs)), 1), [x["frame"] for x in lst if x.get(key) is not None and x[key] == max(vals, key=abs)][0]) if vals else None
+    summ = dict(jamb_frames=len(out["jamb"]), outline_dip_worst=worst(out["jamb"], "outline_dip"),
+                frames_outline_over_12=[x["frame"] for x in out["jamb"] if x["outline_dip"] > 12],
+                foot_tab_worst=worst(out["jamb"], "foot_tab_px"),
+                frames_tab_over_3=[x["frame"] for x in out["jamb"] if x["foot_tab_px"] is not None and abs(x["foot_tab_px"]) > 3],
+                ceiling_frames=len(out["ceiling"]), contact_contrast_step_worst=worst(out["ceiling"], "contact_contrast_step"),
+                ceiling_step_worst=worst(out["ceiling"], "ceiling_step"), wall_step_worst=worst(out["ceiling"], "wall_step"))
+    out["summary"] = summ
+    print(json.dumps(summ, indent=1))
+    if a.out:
+        with open(a.out, "w") as fh:
+            json.dump(out, fh, indent=1)
+    return 0
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "check":
+        sys.exit(check_main(sys.argv[2:]))
     sys.exit(main())

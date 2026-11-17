@@ -23,7 +23,8 @@
   "assemble.py end_lock: the end correction travels with the picture along the flow (it stayed on screen and left a faint second joint line in bank frames 4-12); selftest unchanged (ends identical, PSNR 28.6 / 33.3)",
   "export_arrival.py --segment dolly: clip 2 alone on the same timeline, needs only --bank2",
   "repair_right_wall.py (new): clip 2 take 1's right edge repainted from the clay (option B)",
-  "walk_test.py: check 5 (an excluded id is gone after its window) and check 6 (local verticals at the frame edges); verdict WALK, LOCAL FAIL"
+  "walk_test.py: check 5 (an excluded id is gone after its window) and check 6 (local verticals at the frame edges); verdict WALK, LOCAL FAIL",
+  "repair_right_wall.py r2 (QA C2-M1..M3) and its `check` command (border self-check)"
  ],
  "tools": "site/tools/transitions/: camgeo.py (cameras, canvases, reprojection, room depth I/O), turn_door.py (the turn and the door in code), walk_test.py (the clay is the ruler: --stations with -depth and -edges passes), assemble.py (bank: exposure tracking, end locks, resample in DIS), arrival_timeline.py, export_arrival.py (sequences, manifest, master), seeds.py (frames for the video model, the HD and HDx seeds), room_depth.py, clay_walk.py. proxy_house.py is the test fixture. 2026-11-17: walk_test.py routes clip1a / clip1b, --exclude ID:A-B, --events; turn_door.py joints (and the joints gate in turn); seeds.py ht; camgeo.HT.",
  "canvases": {
@@ -170,7 +171,7 @@
     "a walk with local defects (flicker, a jamb that shakes)": "one retry, same model, prompt tightened on the defect: 1,296",
     "a dissolve or a zoom": "minimax-h3, 2K, 4 s: 1,120 (another family); if it fails the same way, a threshold still in the wall and two 3 s clips: 650 + 2 x 972"
    },
-   "status": "sent 2026-11-17, take 1 (1,296 tokens); right edge repaired in code (option B, 0 tokens); waiting for QA",
+   "status": "sent 2026-11-17, take 1 (1,296 tokens); right edge repaired in code (option B, r2 after QA C2-M1..M3, 0 tokens); waiting for QA re-check",
    "take1": {
     "var2": "3c70d4ab-0af5-414f-bb89-de0539a58af7",
     "tokens": 1296,
@@ -194,6 +195,14 @@
      "stability": "motion-compensated residual p95: repaired area 1.3 (max 2.0) vs the clip's plaster 3.7 (max 4.3) levels",
      "phone_weight": "549 KB per 2 s (AVIF 1080)",
      "remaining": "a few-px light notch at the skirting foot (bank 133-139); one mirrored plank; the repaired plaster slightly smoother than the model's"
+    },
+    "repair_B_r2": {
+     "qa": "qa/reports/2026-11-17-clip2/README.md (r1: C2-M1, C2-M2, C2-M3 medium)",
+     "changes": "the jamb's cut with its outline (never left of it, never back, smoothed); the floor patch to the entry wall; the ceiling and the back wall's top as direct clones (ceiling crossfade X 1.85-2.11); 2 cm gain bins at both contact lines; reveal without skirting gain; dining floor relit; the last floor strip from a clean plank",
+     "selfcheck": "desktop preview, 8-bit levels: outline at the cut worst 152 -> 8.8 (frames > 12: 5 -> 0); jamb foot vs above 23 px -> 1 px (frames > 3: 10 -> 0); contact-line contrast step median -41 -> -7 (worst -48 -> -11); ceiling tone step +6.5 -> -4.7 (crossfaded)",
+     "walk": "WALK; check 5 0/37; check 6 0 frames",
+     "phone_weight": "549 KB per 2 s",
+     "left": "C2-L2 translucent strip and grey wedge unchanged (backlog); C2-I1 now a one-frame hold instead of an 8 px step back"
     }
    }
   },
