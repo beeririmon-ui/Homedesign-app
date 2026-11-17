@@ -35,7 +35,7 @@ def tile(path, label, draw_lock=False):
 
 def main():
     tiles = [tile("B2-plate.png", "B2-plate: output 1, the empty plate (shell + vanity; product lamps off)"),
-             tile("B2.png", "B2: the 7.7 defaults as envelope boxes (no floor planter; sconces provisional)"),
+             tile("B2.png", "B2: the 0א defaults (Style B sconces 8x8x16 up-down, floor planter, ring A3 at Y 13.07, curtain at X 5.34)"),
              tile("B2-shell.png", "B2-shell: the shell alone (plate / shell = the vanity's shadow)"),
              tile("B2-id.png", "B2 id pass (legend: selfcheck.json ids)"),
              tile("B2-plate-edges.png", "B2-plate structure edges"),
