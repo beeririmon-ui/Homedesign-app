@@ -1,0 +1,39 @@
+{
+ "raw": "raw/plate-r1.png",
+ "lock": "raw/plate-r1-lock.json",
+ "warp": {
+  "y_offset_px": 0.824,
+  "y_scale_about_row_707": -0.010724,
+  "x_offset_px": -1.878,
+  "used": {
+   "horizontal_lines": 12,
+   "vertical_lines": 7
+  },
+  "note": "out(x, y) = raw(x + x_offset, y + y_offset + y_scale * (y - 707))"
+ },
+ "left_strip": {
+  "mask_px": 385079,
+  "edge_px": 1715,
+  "skirting_px": 13404,
+  "model_plaster_ref_lin": [
+   0.7055,
+   0.6479,
+   0.5785
+  ],
+  "clay_ref_lin": 0.6067
+ },
+ "bronze": {
+  "px": 35904,
+  "model_median_Lab": [
+   26.0,
+   6.7,
+   13.5
+  ],
+  "target_ab": [
+   4.2,
+   6.8
+  ],
+  "L_down": 3.0
+ },
+ "outside_the_masks": "the warped r1, unchanged"
+}

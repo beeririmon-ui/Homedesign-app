@@ -112,7 +112,7 @@ FRAMES = {"B2": dict(placeholders=PRODUCTS_B2, lamps=["bath/vanity-sconces", "ba
           "B2-plate": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=True),
           "B2-shell": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=False)}
 CAPTURE = {}
-LIGHT = dict(window=18.0, downlight_x=1.0, downlight_size=0.25, b1_lamp_x=0.4, sconce_w=10.0, sconce_spot_deg=110.0, niche_led_w=0.8,
+LIGHT = dict(window=18.0, downlight_x=1.0, downlight_size=0.25, b1_lamp_x=0.4, sconce_w=10.0, sconce_spot_deg=110.0, sconce_glow=0.35, niche_led_w=0.8,
              plate_target_L=80.0)
 
 
@@ -421,7 +421,7 @@ def wm_products(R):
     r2.reg("bath_wm vanity-sconces east", se, "bath", "proxy")       # its own pass index for the id map (east)
     GROUP_ID["bath/vanity-sconces"] = 42
     GROUP_ID["bath_wm vanity-sconces east"] = 43
-    r2.lamp("bath/vanity-sconces", "bath", "wall", [(o, r2.GLOW * 0.45) for o in sw + se], lights, "travertine block pair (provisional)")
+    r2.lamp("bath/vanity-sconces", "bath", "wall", [(o, LIGHT["sconce_glow"]) for o in sw + se], lights, "travertine block pair (provisional)")
     # vanity group
     reg_prod(R, "soap-dispenser", [cyl("soap", (6.07, 12.58), 0.0375, 0.88, 1.01, C["bottle"]), cyl("soap_pump", (6.07, 12.58), 0.011, 1.01, 1.045, C["ring"], 16),
                                    r2.obox("bath_wm_soap_nozzle", (6.07, 12.58, 1.04), (6.035, 12.555, 1.04), (0, 0, 1), 0.008, 0.008, C["ring"])],
@@ -696,8 +696,8 @@ def lock_target(cam, depth_img):
         "mirror profile, bottom (Z 1.15)": ((MIRROR["x_profile"], 11.90, 1.15), (MIRROR["x_profile"], 12.70, 1.15)),
         "vanity top, front edge (Z 0.88)": ((5.76, 11.74, 0.88), (5.76, 12.86, 0.88)),
         "vanity top, underside (Z 0.84)": ((5.76, 11.74, 0.84), (5.76, 12.86, 0.84)),
-        "vanity, front left (Y 11.75)": ((5.77, 11.75, 0.0), (5.77, 11.75, 0.84)),
-        "vanity, front right (Y 12.85)": ((5.77, 12.85, 0.0), (5.77, 12.85, 0.84)),
+        "drawer front, left edge (Y 11.782)": ((5.77, 11.782, 0.505), (5.77, 11.782, 0.815)),
+        "drawer front, right edge (Y 12.818)": ((5.77, 12.818, 0.505), (5.77, 12.818, 0.815)),
         "vanity, back right at the wall (Y 12.85)": ((6.25, 12.85, 0.0), (6.25, 12.85, 0.84)),
         "drawer, bottom (Z 0.50)": ((5.77, 11.78, 0.50), (5.77, 12.82, 0.50)),
         "open shelf, board top (Z 0.15)": ((5.77, 11.78, 0.15), (5.77, 12.82, 0.15)),

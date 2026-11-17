@@ -1,0 +1,108 @@
+{
+ "run": "render-agent, 2026-11-17: the warm-modern bath, stage one, B2 (briefs/wm-bath-stage1-render-2026-11-17.md; manager relay of the same day)",
+ "cap": 3500,
+ "spent": 650,
+ "left_in_cap": 2850,
+ "var2": {
+  "connected": true,
+  "note": "ToolSearch reconnected the Var2 server with its held sign-in; list_models, estimate_cost, request_upload, create_image and get_image_result all answered. No code or token was asked for."
+ },
+ "sent": [
+  {
+   "id": "plate-r1",
+   "output": 1,
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 2,
+   "estimate": 650,
+   "tokens": 650,
+   "placeholder_id": "5ea4a522-abe0-4c10-896e-7964db9f736f",
+   "task_id": "f5aebb1691ca1be58d3981d17b9ee7cb",
+   "prompt_record": "assets/prompts/warm-modern-bath-2026-11-17/plate.json",
+   "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/plate-r1.png",
+   "final": "assets/renders/bath/warm-modern/stage1-2026-11-17/plate.png",
+   "verdict": "accepted with code steps (tools/compose_plate.py): lock warp, the left strip (the model's window) repaired, bronze tone"
+  }
+ ],
+ "priced_not_sent": [
+  {
+   "output": 2,
+   "what": "B2 with the defaults of 4.1 / 7.7 (8 products, no floor planter), from the accepted plate plus the product clay in its masks",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 8,
+   "refs_planned": [
+    "shower-curtain linen-blend-slub 200x270 hook (SKU photo)",
+    "shower-dispensers cj-sand-ribbed (SKU photo)",
+    "vanity-sconces 037853 Style B (SKU photo; waits for the sconce ruling)",
+    "soap-dispenser cj-sand-ribbed",
+    "toothbrush-cup silver-travertine Single Cup",
+    "vanity-vase matte-black-pottery (the SKU in the card)",
+    "towel-ring 842335 A3 12000047580558571",
+    "hand-towel pure-linen 38x55 caramel 2pc 12000059652536006"
+   ],
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 9
+    }
+   },
+   "estimate": 650,
+   "waits_for": [
+    "owner approval 2 of the bath picks (the manager is asking)",
+    "the sconce gate: master-designer's ruling on 037853 (seller ranges only) or the backup 430468"
+   ]
+  },
+  {
+   "output": 3,
+   "what": "hand-towel variants: an edit of output 2 with the SKU photo, composited in the towel mask (+3 px) and its shadow (z 51); 0 difference outside (RND2). As briefed: two edits (800). After the designer's revision during this run (proposal section 0א: black rejected as navy): one edit now, linen 2pc 12000059652334994 (400), and a third (400) only when khaki waffle or light-apricot passes its photo check",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "quantity": 2,
+   "image_refs": 1,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "nano-banana-2",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 1
+    },
+    "quantity": 2
+   },
+   "estimate": 800,
+   "alternative": {
+    "model": "seedream-5-pro",
+    "estimate": 1300
+   },
+   "waits_for": [
+    "output 2",
+    "the linen SKU: stock 5 and its colour field says black; the SKU image decides (manager relay)"
+   ],
+   "estimate_after_designer_revision": {
+    "now": 400,
+    "with_third": 800
+   }
+  }
+ ],
+ "totals": {
+  "three_outputs_as_briefed": 2100,
+  "if_seedream_variants": 2600,
+  "after_designer_revision": {
+   "now": 1700,
+   "with_third_variant": 2100
+  },
+  "designer_estimate": "1,850-2,250"
+ },
+ "designer_revision_during_run": "docs/proposals/wm-bath-render-2026-11-17.md changed while this run worked (commits a9234229, cd083e71): ring 842335 A3 (projection 7.5); the black towel rejected; the designer also writes the sconce gate closed on Style B and the planter passing, while the manager's relay of the same day says the sconce is still open and the planter is out. The clay follows the relay (no planter, provisional sconces); the manager settles."
+}
