@@ -1,0 +1,334 @@
+{
+ "report": "qa/reports/2026-11-17-clip1a/README.md",
+ "agent": "qa-agent",
+ "date": "2026-11-17",
+ "brief": "briefs/qa-clip1a-2026-11-17.md",
+ "asset": "assets/video/transitions/warm-modern/clip1a-d0o--ht/",
+ "tokens": 0,
+ "frame_numbering": "bank frames 1-143 (as burned into the preview)",
+ "verdict": "FAIL",
+ "status_line": "קליפ 1a (טייק 1 + תיקון הרצועה): לא עבר QA (2026-11-17). 3 בינוניים: C1A-M1 (בנק 123-124), C1A-M2 (130-140), C1A-M3 (136-141). תיקון בקוד, 0 טוקנים; טייק שני לא נדרש. בדיקה חוזרת: בנק 120-143.",
+ "items": [
+  {
+   "id": 1,
+   "name": "in motion, x1 and quarter speed (decisive)",
+   "result": "FAIL",
+   "findings": [
+    "C1A-M1",
+    "C1A-M2",
+    "C1A-M3"
+   ],
+   "ranges": {
+    "122-131 jamb leaves": "FAIL (M1): black outline 123 (1065/1080 rows, L* 18 vs 71, x~1634), blobs 124 (371 rows); exit by 132",
+    "126-143 strip": "FAIL (M2 shards 130-140, M3 window seam 136-141); melt gone; wall next to window L* 77.5-77.8",
+    "122-128 band": "PASS: max 8 px step 0.21-0.29 L*, tone 73.4-73.9 L*",
+    "108-111, 121-122 right margin (bank 109-112, 122-123)": "PASS (info): 1.14-1.56 deg, 0.28-0.31 h, ~6-8 px",
+    "1-12 start lock": "PASS: herbs vs planter 0.09-0.24 px (2-6), 2.4 px at 12 of 69 px motion; leaf dx -0.7..+0.1 px",
+    "81-91 herbs": "PASS: last herb bank 85 (s 2.248 m uniform / 2.254 walk), window 2.15-2.40; clay 2.183",
+    "85-98, 116-130 jambs": "left PASS (L2 drip at 85); right FAIL (M1)"
+   }
+  },
+  {
+   "id": 2,
+   "name": "ends",
+   "result": "PASS",
+   "first": {
+    "reference": "seeds.py clip1-first (D0o + leaf), regenerated in scratch",
+    "uniform_offset_dL": -0.66,
+    "codec_roundtrip_dL": -0.49,
+    "vs_codec_roundtrip_bgr": [
+     -1.41,
+     -0.13,
+     -1.25
+    ],
+    "p50": 2.0,
+    "p95": 6.0
+   },
+   "last": {
+    "reference": "ht-frame.png",
+    "uniform_offset_dL": -0.68,
+    "codec_roundtrip_dL": -0.49,
+    "vs_codec_roundtrip_bgr": [
+     -1.34,
+     -0.2,
+     -1.21
+    ],
+    "p50": 2.0,
+    "p95": 5.0
+   },
+   "join_1b": {
+    "signed_mean_bgr": [
+     -0.04,
+     -0.03,
+     0.01
+    ],
+    "p95": 5,
+    "lowpass_p95": 1.78,
+    "motion": "last two steps slow ~40% (C1A-L3)"
+   }
+  },
+  {
+   "id": 3,
+   "name": "geometry vs docs/house-plan.json",
+   "result": "PASS",
+   "walnut_lining_px": {
+    "120": {
+     "L": [
+      1396.8,
+      1396
+     ],
+     "R": [
+      1455.6,
+      1454
+     ]
+    },
+    "125": {
+     "L": [
+      1426.9,
+      1427
+     ],
+     "R": [
+      1488.2,
+      1488
+     ]
+    },
+    "130": {
+     "L": [
+      1459.7,
+      1461
+     ],
+     "R": [
+      1523.8,
+      1525
+     ]
+    },
+    "135": {
+     "L": [
+      1495.6,
+      1502
+     ],
+     "R": [
+      1562.7,
+      1568
+     ]
+    },
+    "140": {
+     "L": [
+      1535.1,
+      1544
+     ],
+     "R": [
+      1605.4,
+      1612
+     ]
+    },
+    "143": {
+     "L": [
+      1560.6,
+      1563
+     ],
+     "R": [
+      1633.1,
+      1633
+     ]
+    }
+   },
+   "note": "plan (uniform s) vs measured; <=3 px to 130, <=9 px at 135-140 (<=6 with walk-test s); jambs of the clip: info C1A-I5"
+  },
+  {
+   "id": 4,
+   "name": "walk test on the repaired preview",
+   "result": "PASS (confirms)",
+   "rerun_repaired": {
+    "verdict": "WALK, LOCAL FAIL",
+    "local_fails": [
+     "edge verticals: 6 frames with a line leaning 1-25 deg at the frame edge longer than 0.20 of the height (worst 0.31, -1.56 deg, frame 109)"
+    ],
+    "parallax_p90": 0.0301,
+    "dissolve_r2_mid_median": 0.0006,
+    "flat_zoom_r2_mid_median": 0.0856,
+    "verticals_max_abs_median_deg": 0.062,
+    "structure_p90_w": 0.00338,
+    "check6_over_frames_0based": [
+     21,
+     80,
+     109,
+     119,
+     121,
+     122
+    ],
+    "check6_over_bank_frames": [
+     22,
+     81,
+     110,
+     120,
+     122,
+     123
+    ],
+    "check6_worst": {
+     "frame": 109,
+     "longest_leaning": {
+      "len_h": 0.313,
+      "tilt_deg": -1.56,
+      "x": 0.886
+     }
+    }
+   },
+   "rerun_unrepaired": {
+    "verdict": "WALK, LOCAL FAIL",
+    "local_fails": [
+     "edge verticals: 9 frames with a line leaning 1-25 deg at the frame edge longer than 0.20 of the height (worst 0.31, -1.5 deg, frame 109)"
+    ],
+    "parallax_p90": 0.0301,
+    "dissolve_r2_mid_median": 0.0006,
+    "flat_zoom_r2_mid_median": 0.0857,
+    "verticals_max_abs_median_deg": 0.062,
+    "structure_p90_w": 0.00338,
+    "check6_over_frames_0based": [
+     21,
+     80,
+     109,
+     122,
+     133,
+     135,
+     136,
+     137,
+     138
+    ],
+    "check6_over_bank_frames": [
+     22,
+     81,
+     110,
+     123,
+     134,
+     136,
+     137,
+     138,
+     139
+    ],
+    "check6_worst": {
+     "frame": 109,
+     "longest_leaning": {
+      "len_h": 0.313,
+      "tilt_deg": -1.5,
+      "x": 0.886
+     }
+    }
+   },
+   "motion_agent": {
+    "verdict": "WALK, LOCAL FAIL",
+    "check6_over_frames_0based": [
+     21,
+     108,
+     109,
+     111,
+     121,
+     122
+    ],
+    "worst": {
+     "len_h": 0.276,
+     "tilt_deg": 1.14,
+     "x": 0.971,
+     "bank_frame": 112
+    }
+   }
+  },
+  {
+   "id": 5,
+   "name": "exposure",
+   "result": "PASS (reads naturally)",
+   "min_stops": -0.636,
+   "min_bank_frame": 113,
+   "end_stops": -0.163,
+   "max_step_stops": 0.059,
+   "max_step_frame": 111,
+   "bank_grade_drift_stops": 0.006
+  }
+ ],
+ "findings": [
+  {
+   "id": "C1A-M1",
+   "severity": "medium",
+   "frames": "123-124 (126-127 faint)",
+   "what": "clip's right-jamb black outline not removed (123: 1065/1080 rows, L* 18 vs 71, x~1634; 124: 371 rows); selfcheck measured at edge_used x (5.6/5.8 at 123)",
+   "fix": "remove at the real x; better: start the clay-timed exit at 122 (or 120)",
+   "owner": "motion-agent",
+   "evidence": "m1-jamb-outline-f122-125-x1.jpg"
+  },
+  {
+   "id": "C1A-M2",
+   "severity": "medium",
+   "frames": "130-140",
+   "what": "grey polygonal shards: ceiling top-right (x 1786-1919, y 0-140; L*<70 px per frame 661,1324,3121,522,1999,273,1151,158,621,165,1549; min L* 33-38 vs 81.5) alternating even/odd = flicker; floor shard under the armchair (x~1840-1900, y~760-860); grey bar at the right edge in 140",
+   "fix": "drop stretched splats over depth jumps, fill from next source not inpaint; temporally stable source map",
+   "owner": "motion-agent",
+   "evidence": "m2-strip-shards-f130-143-x1.jpg"
+  },
+  {
+   "id": "C1A-M3",
+   "severity": "medium",
+   "frames": "136-141",
+   "what": "window seam: dark wavy line at pane left 136-137, frame missing 138, dark seam through the birch 139-140 (x~1840-1860, up to ~8 px), light double line 141; birch NCC 0.97 -> 0.67 -> 0.31 -> 0.57 -> 0.95",
+   "fix": "window from one source (HT on its frame plane) 129-142; seam outside the pane",
+   "owner": "motion-agent",
+   "evidence": "m3-window-seam-f134-143-x2.jpg"
+  },
+  {
+   "id": "C1A-L1",
+   "severity": "low",
+   "backlog": true,
+   "frames": "51,53,57,72,74,76,80,82,84",
+   "what": "edge-replicate streak bands 15-31 px at the right edge in resampled frames (not in raw)",
+   "fix": "assemble.py: take the other source frame instead of BORDER_REPLICATE",
+   "owner": "motion-agent",
+   "evidence": "l1-edge-streaks-f56-81-x1.jpg"
+  },
+  {
+   "id": "C1A-L2",
+   "severity": "low",
+   "backlog": true,
+   "frames": "85",
+   "what": "dark drip on the left-jamb joint (x~0-70, y~470-510), one frame, not in raw",
+   "owner": "motion-agent"
+  },
+  {
+   "id": "C1A-L3",
+   "severity": "low",
+   "backlog": true,
+   "frames": "141-143",
+   "what": "end-lock lands in last 2 frames: s steps 0.016, 0.012 m vs 0.0268; walnut 8.3, 8.4, 4.9, 5.0 px vs 9.0-9.4 in 1b; shared frame 1a-143 = 1b-1",
+   "fix": "spread end-lock ramp over 10-15 frames; show the shared frame once",
+   "owner": "motion-agent"
+  },
+  {
+   "id": "C1A-I1",
+   "severity": "info",
+   "what": "check 6 over_frames are 0-based: bank = +1 (22,109,110,112,122,123)"
+  },
+  {
+   "id": "C1A-I2",
+   "severity": "info",
+   "what": "jamb exit velocity 11.3,11.0,11.3,15.8,24.4,33.2,41.8,50.4,59.2 px/frame; accel 0.3 -> 4.5 -> 8.7 (plan 6-12)"
+  },
+  {
+   "id": "C1A-I3",
+   "severity": "info",
+   "what": "right-margin lean 1.14-1.56 deg not visible at x1"
+  },
+  {
+   "id": "C1A-I4",
+   "severity": "info",
+   "what": "README numbers: exposure min -0.64 (raw 77 / bank 113) not -0.48; exit speed 60 vs repair.json 72 (edge_used 59.2 last visible step)"
+  },
+  {
+   "id": "C1A-I5",
+   "severity": "info",
+   "what": "clip jambs vs plan: left 11-25 px (60-85), leaf edge up to ~80 px vs clay, exits 91-93 vs 96-98; right +80-140 px at 118-123 (the lingering the repair handles), exit 132 vs 130"
+  }
+ ],
+ "not_checked": [
+  "phone preview (none exists for 1a)",
+  "walk_test selftest (not run; EFF1.2)"
+ ],
+ "scratch": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-1a/"
+}
