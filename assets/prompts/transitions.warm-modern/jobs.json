@@ -221,7 +221,7 @@
     "last_frame_url": "<HT 16:9 frame, 1920x1080: python3 site/tools/transitions/seeds.py frame --still <HT> --canvas base --out <scratch>/ht-frame.png>"
    },
    "prompt": "assets/prompts/transitions.warm-modern/clip1a-d0o--ht.txt",
-   "prompt_chars": 2492,
+   "prompt_chars": 2441,
    "estimate": 1296,
    "estimate_live": "2026-11-17",
    "estimate_at_3s": 972,
@@ -309,7 +309,25 @@
     "a dissolve or a zoom": "minimax-h3 2K 4 s: 1,120 (another family)",
     "the herbs out of their window, or the court objects change shape": "a retry only if it shows at x1-x2 (EFF1.3)"
    },
-   "status": "not sent"
+   "status": "sent 2026-11-17, take 1 (1,296 tokens, one take, no retake per the Phase B brief)",
+   "prompt_reread_2026-11-17": {
+    "why": "Phase B brief step 6: the lesson of clip 2 (its [DINING] paragraph made the model build a column and a glass wall that neither end frame shows)",
+    "removed": [
+     "'covered' (the court's canopy is above the frame in both end frames)",
+     "'from a roof-light slot out of sight' (the slot is never in view; the line of daylight it makes is in the first frame and stays)",
+     "'olive-' of 'olive-leaf shadows' (no tree in either frame; the shadows are, and stay)"
+    ],
+    "kept": "every other sentence names something in the first frame, the last frame or both, or is camera, light or a prohibition",
+    "chars": "2,492 -> 2,441"
+   },
+   "take1": {
+    "var2": "33ee7fce-4c60-47c9-af8a-4dea57d9035d",
+    "tokens": 1296,
+    "quote": 1296,
+    "quote_live": "2026-11-17 (324 a second, fromLiveLookup)",
+    "seeds": "first: seeds.py clip1-first (d0.png + d0o.png of hall-2026-11-17), sha256 bcfc373b..., 0 levels from D0o outside the leaf rectangle x 472-548, y 114-923; last: seeds.py frame --still ht.png --canvas base, sha256 e38780ac...",
+    "out": "assets/video/transitions/warm-modern/clip1a-d0o--ht/ (README.md)"
+   }
   },
   {
    "id": "clip1b",

@@ -22,7 +22,10 @@ plays at any speed, forward or backward.
                            --canvas-last base --n 145 --out DIR
   python3 assemble.py clay-bank --stations DIR --prefix b/S --from-cam HDx --to-cam M0 --n 145 --w 960 --out DIR
   python3 assemble.py selftest --out DIR
-"""
+  python3 assemble.py still-bank --first HT.png --first-depth HT-depth.png --cam-first HT --canvas-first base
+                                 --last HD.png --last-depth HD-depth.png --cam-last HD --canvas-last tall --n 43 --out DIR
+                 a move made in code between two stills (clip 1b): both carried through their clay depth, blended
+                 by distance; the ends are the stills"""
 from __future__ import annotations
 
 import argparse
@@ -262,6 +265,40 @@ def clay_view(stations: list[dict], cam: cg.Cam, out: cg.Canvas) -> tuple[np.nda
     return np.clip(res, 0, 1), float(hole.mean())
 
 
+def glass_plane(depth: np.ndarray, valid: np.ndarray, cv: "cg.Canvas", ring: int = 8) -> list[dict]:
+    """Fill, in place, every hole of a depth pass that lies wholly inside the canvas's 16:9 frame with the plane of
+    its rim (window glass: the clay has nothing behind it, so the view through the window is carried as one picture
+    on the glass plane: no hole and no stretch, and the window frame stays its occluding edge). For a planar depth
+    1/d is affine in (u, v): fitted on a ring around the hole, twice, dropping rim pixels off the plane (a sill, a
+    reveal). Holes reaching into the overscan stay holes, so nothing in the margin is read. Returns what was filled."""
+    us, vs = cv.uv()
+    x0, y0, x1, y1 = cv.box
+    n, lab, stats, _ = cv2.connectedComponentsWithStats((~valid).astype(np.uint8), connectivity=8)
+    out = []
+    for k in range(1, n):
+        bx, by, bw, bh, area = (int(t) for t in stats[k])
+        if area < 50:
+            continue
+        if bx < x0 or by < y0 or bx + bw > x1 or by + bh > y1:
+            continue
+        m = lab == k
+        rim = (cv2.dilate(m.astype(np.uint8), np.ones((2 * ring + 1, 2 * ring + 1), np.uint8)) > 0) & ~m & valid
+        A = np.stack([us[rim], vs[rim], np.ones(int(rim.sum()))], axis=1)
+        y = 1.0 / depth[rim].astype(np.float64)
+        keep = np.ones(len(y), bool)
+        for _ in range(2):
+            coef, *_ = np.linalg.lstsq(A[keep], y[keep], rcond=None)
+            r = np.abs(A @ coef - y)
+            keep = r <= max(3.0 * 1.4826 * np.median(r[keep]), 1e-4)
+        inv = us[m] * coef[0] + vs[m] * coef[1] + coef[2]
+        depth[m] = (1.0 / np.maximum(inv, 1e-3)).astype(np.float32)
+        valid[m] = True
+        res_m = float(np.median(np.abs(1.0 / (A[keep] @ coef) - 1.0 / y[keep])))
+        out.append(dict(bbox=[bx, by, bw, bh], px=int(area), depth_m=[round(float(depth[m].min()), 3), round(float(depth[m].max()), 3)],
+                        rim_px=int(keep.sum()), rim_of=int(len(y)), rim_resid_median_m=round(res_m, 4)))
+    return out
+
+
 def load_stations(folder: str, ids: list[str], cams: list[cg.Cam], canvas: str = "base") -> list[dict]:
     out = []
     for fid, cam in zip(ids, cams):
@@ -277,7 +314,8 @@ def load_stations(folder: str, ids: list[str], cams: list[cg.Cam], canvas: str =
 def write_frames(frames: list[np.ndarray], out_dir: str, ext: str = "png", quality: int = 95) -> None:
     os.makedirs(out_dir, exist_ok=True)
     for i, f in enumerate(frames):
-        cv2.imwrite(os.path.join(out_dir, f"{i + 1:04d}.{ext}"), cv2.cvtColor(f, cv2.COLOR_RGB2BGR), [cv2.IMWRITE_JPEG_QUALITY, quality])
+        cv2.imwrite(os.path.join(out_dir, f"{i + 1:04d}.{ext}"), cv2.cvtColor(f, cv2.COLOR_RGB2BGR),
+                    [cv2.IMWRITE_JPEG_QUALITY, quality] if ext == "jpg" else [])
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -367,9 +405,58 @@ def main(argv=None) -> int:
     c.add_argument("--w", type=int, default=960)
     c.add_argument("--ext", default="jpg", choices=["png", "jpg"])
     c.add_argument("--out", required=True)
+    sb = sub.add_parser("still-bank", help="a bank between two stills by depth reprojection (a move made in code, 0 tokens)")
+    sb.add_argument("--first", required=True)
+    sb.add_argument("--first-depth", required=True, help="the clay depth pass on the first still's canvas")
+    sb.add_argument("--cam-first", required=True, help="camgeo camera name (HT, HD, ...)")
+    sb.add_argument("--canvas-first", default="base", choices=["base", "tall", "frame"])
+    sb.add_argument("--last", required=True)
+    sb.add_argument("--last-depth", required=True)
+    sb.add_argument("--cam-last", required=True)
+    sb.add_argument("--canvas-last", default="tall", choices=["base", "tall", "frame"])
+    sb.add_argument("--n", type=int, required=True)
+    sb.add_argument("--w", type=int, default=1920)
+    sb.add_argument("--ext", default="png", choices=["png", "jpg"])
+    sb.add_argument("--glass-plane", action="store_true",
+                    help="a hole in a depth pass (window glass: the clay has nothing behind it) that lies inside the "
+                         "still's 16:9 frame gets the plane of its rim, so the view through the window moves with the "
+                         "window as one picture; holes in the overscan margin stay holes (never read)")
+    sb.add_argument("--out", required=True)
     s = sub.add_parser("selftest")
     s.add_argument("--out", required=True)
     a = ap.parse_args(argv)
+    if a.cmd == "still-bank":
+        # every frame: both stills carried to the frame's camera through their clay depth, blended by distance (the
+        # nearer one weighs more); what one cannot see (a disocclusion, or outside its canvas) comes from the other.
+        # Frame 1 and frame n are the stills' own 16:9 frames, pixel for pixel. Uniform in distance.
+        def station(img_p, dep_p, cam, canvas):
+            img = cv2.cvtColor(cv2.imread(img_p, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
+            depth, valid = cg.load_depth_png(dep_p)
+            if depth.shape != img.shape[:2]:
+                raise SystemExit(f"{dep_p}: {depth.shape} is not the still's canvas {img.shape[:2]}")
+            H, W = depth.shape
+            cvs = {"base": cg.Canvas(W, H, cg.Canvas.base(W).box), "frame": cg.Canvas.frame(W, H),
+                   "tall": cg.Canvas.tall(W, H, cg.BASE_BOX[0] / (cg.BASE_BOX[2] - cg.BASE_BOX[0]))}[canvas]
+            filled = glass_plane(depth, valid, cvs) if a.glass_plane else []
+            return dict(cam=cam, cv=cvs, img=img, depth=depth, valid=valid, glass=filled)
+        c0, c1 = getattr(cg, a.cam_first), getattr(cg, a.cam_last)
+        st = [station(a.first, a.first_depth, c0, a.canvas_first), station(a.last, a.last_depth, c1, a.canvas_last)]
+        L = float(np.linalg.norm(np.asarray(c1.loc) - np.asarray(c0.loc)))
+        out_cv = cg.Canvas.frame(a.w)
+        frames, holes = [], []
+        for i in range(a.n):
+            cam = cg.lerp_cam(c0, c1, i / (a.n - 1))
+            img, hole = clay_view(st, cam, out_cv)
+            frames.append(np.clip(np.rint(img * 255), 0, 255).astype(np.uint8))
+            holes.append(hole)
+        write_frames(frames, a.out, a.ext)
+        rep = dict(frames=a.n, length_m=L, step_m=L / (a.n - 1), cams=[a.cam_first, a.cam_last],
+                   hole_frac_max=float(max(holes)), hole_frac_per_frame=[round(h, 5) for h in holes],
+                   glass_plane={a.cam_first: st[0]["glass"], a.cam_last: st[1]["glass"]} if a.glass_plane else None)
+        with open(os.path.join(a.out, "bank.json"), "w") as fh:
+            json.dump(rep, fh, indent=1)
+        print(json.dumps({k: v for k, v in rep.items() if k != "hole_frac_per_frame"}, indent=1))
+        return 0
     import walk_test as wt
     if a.cmd == "bank":
         frames = wt.read_frames(a.frames, a.w)

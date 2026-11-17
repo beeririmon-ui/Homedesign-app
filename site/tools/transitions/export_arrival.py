@@ -24,6 +24,16 @@ Output (--out, e.g. assets/frames/d0--m0.warm-modern/):
 
   --segment dolly: clip 2 alone (HDx -> M0: dolly, landing, hold) on the same timeline, frame 1 = HDx exactly; needs only --bank2
   (a preview of one clip before the other banks exist, 2026-11-17).
+
+  --bank1 DIR:3.80,DIR:1.138 (2026-11-17): bank 1 in pieces, each uniform in distance over its own length (clip 1a's bank
+  D0 -> HT and clip 1b's code bank HT -> HD); the lengths must add up to L1. The pieces are used as they are (no resampling).
+  --placeholder-1a: the 1a piece is a still placeholder (not a walk): the swinging leaf is drawn from the D0 camera, so it
+  stays on the placeholder's opening, and the manifest says so. For a preview only, never for the site.
+  --d0o D0o.png --d0o-depth D0-none-depth.png (2026-11-17): bank 1 starts from clip1a-first, which already has the leaf at
+  90 deg; while the code leaf swings (theta < 90) that resting leaf and its pull would show beside it (a double pull, frames
+  44-54). The resting leaf's own outline at the frame's camera (door_frame at 90 deg, dilated 2 px) is first painted out
+  of the bank frame with D0o (the doorway without a leaf): D0o itself while the camera is at D0, D0o carried through its
+  clay depth once the camera moves.
 """
 from __future__ import annotations
 
@@ -80,6 +90,30 @@ class Bank:
         return self._get(i) * (1 - f) + self._get(i + 1) * f
 
 
+class Pieces:
+    """Bank 1 in pieces (DIR:LEN,DIR:LEN): at(s) picks the piece that holds s; each piece is a Bank of its own length."""
+
+    def __init__(self, spec: str, total: float, w: int, h: int):
+        parts = [p.rsplit(":", 1) for p in spec.split(",")]
+        if len(parts) == 1 and len(parts[0]) == 1:
+            self.parts = [(0.0, Bank(parts[0][0], total, w, h))]
+            return
+        self.parts, s0 = [], 0.0
+        for p in parts:
+            if len(p) != 2:
+                raise SystemExit(f"--bank1 {spec}: every piece needs DIR:LENGTH")
+            self.parts.append((s0, Bank(p[0], float(p[1]), w, h)))
+            s0 += float(p[1])
+        if abs(s0 - total) > 0.002:
+            raise SystemExit(f"--bank1 {spec}: the pieces add up to {s0:.3f} m, the line is {total:.3f} m")
+
+    def at(self, s: float) -> np.ndarray:
+        for s0, b in reversed(self.parts):
+            if s >= s0:
+                return b.at(s - s0)
+        return self.parts[0][1].at(0.0)
+
+
 def encode(img8: np.ndarray, base: str, aq: int, wq: int) -> tuple[int, int]:
     im = Image.fromarray(img8)
     im.save(base + ".avif", "AVIF", quality=aq, speed=6)
@@ -110,6 +144,10 @@ def main(argv=None) -> int:
     ap.add_argument("--style", default="warm-modern")
     ap.add_argument("--aq", type=int, default=40)
     ap.add_argument("--temporary", action="store_true", help="a test asset: not QA'd, not for the public site")
+    ap.add_argument("--d0o", help="the open doorway without the leaf (D0 camera): paints the resting leaf out of bank 1 while the code leaf swings")
+    ap.add_argument("--d0o-depth", help="D0o's clay depth (D0-none-depth.png), for a moving camera")
+    ap.add_argument("--placeholder-1a", action="store_true", help="bank 1's first piece is a still placeholder for clip 1a: the leaf is "
+                    "drawn from the D0 camera (preview only)")
     ap.add_argument("--note", default="")
     a = ap.parse_args(argv)
 
@@ -125,9 +163,39 @@ def main(argv=None) -> int:
         t0 = V.t_turn_end
         states = [V.state(t0 + i / 60.0) for i in range(int(round((V.t_end + V.hold_s - t0) * 60.0)) + 1)]
     else:
-        b1 = Bank(a.bank1, tl.L1, W, H)
+        b1 = Pieces(a.bank1, tl.L1, W, H)
         d0_full = td.load(a.d0)
         d0 = td.canvas_for(a.canvas_d0, d0_full.shape[1], d0_full.shape[0]).crop_frame(d0_full, W, H)
+        d0o_full = d0o = d0o_dep = None
+        if a.d0o:
+            d0o_full = td.load(a.d0o)
+            d0o_cv = td.canvas_for(a.canvas_d0, d0o_full.shape[1], d0o_full.shape[0])
+            d0o = d0o_cv.crop_frame(d0o_full, W, H)
+            if a.d0o_depth:
+                d0o_dep = cg.load_depth_png(a.d0o_depth)
+        elif not a.placeholder_1a:
+            print("warning: no --d0o: the resting leaf of bank 1 is not painted out while the code leaf swings", file=sys.stderr)
+        if a.placeholder_1a and not a.d0o:
+            raise SystemExit("--placeholder-1a needs --d0o")
+
+        def rest_leaf_out(base: np.ndarray, cam: cg.Cam) -> np.ndarray:
+            """Paint the leaf at 90 deg (as door_frame draws it from `cam`) out of `base` with D0o."""
+            if d0o is None:
+                return base
+            A = td.door_frame(np.zeros_like(base), d0, cam, fr, 90.0, cg.D0, fr)
+            B = td.door_frame(np.ones_like(base), d0, cam, fr, 90.0, cg.D0, fr)
+            alpha = np.clip(1.0 - np.abs(B - A).mean(axis=2), 0, 1)
+            if alpha.max() <= 0:
+                return base
+            alpha = cv2.dilate(alpha, np.ones((5, 5), np.uint8))[..., None]
+            if cam == cg.D0:
+                fill = d0o
+            else:
+                if d0o_dep is None:
+                    raise SystemExit("the camera moves while the door swings: --d0o-depth is needed")
+                fill, ok, _ = cg.dibr(d0o_full, d0o_dep[0], cg.D0, d0o_cv, cam, fr, depth_valid=d0o_dep[1])
+                fill = np.where(ok[..., None], fill, base)
+            return base * (1 - alpha) + fill * alpha
         hd, hdx = td.load(a.hd), td.load(a.hdx)
         T = td.Turn([td.Still(hd, cg.HD, td.canvas_for(a.canvas_turn, hd.shape[1], hd.shape[0]), "HD"),
                      td.Still(hdx, cg.HDX, td.canvas_for(a.canvas_turn, hdx.shape[1], hdx.shape[0]), "HDx")], None, 2.0, W)
@@ -143,8 +211,8 @@ def main(argv=None) -> int:
                 return d0
             base = b1.at(st["s1"])
             if st["door"] < 90 - 1e-3:
-                cam = cg.D0.moved(loc=(cg.D0.loc[0] - st["s1"], cg.D0.loc[1], cg.D0.loc[2]))
-                return td.door_frame(base, d0, cam, fr, st["door"], cg.D0, fr)
+                cam = cg.D0 if a.placeholder_1a else cg.D0.moved(loc=(cg.D0.loc[0] - st["s1"], cg.D0.loc[1], cg.D0.loc[2]))
+                return td.door_frame(rest_leaf_out(base, cam), d0, cam, fr, st["door"], cg.D0, fr)
             return base
         if st["phase"] == "turn":
             p0 = states[max(0, i - 1)]["turn"]
@@ -257,6 +325,10 @@ def main(argv=None) -> int:
         turn_worst_hole_frac=worst_hole,
         swap=dict(blend_out_ms=200, rule="after the hold, a soft swap to the live layers of the empty room (the same picture)"),
         qa="pending", temporary=bool(a.temporary), note=a.note)
+    if a.placeholder_1a:
+        man["placeholder_1a"] = ("bank 1's first piece (D0 -> HT) is a still placeholder, not clip 1a: the bytes of that part are not "
+                                 "representative, and the frames are not for the site")
+        man["temporary"] = True
     if dolly_only:
         man.update(id="T-D0 clip 2 alone", **{"from": "HDx"}, first_frame="HDx: identical to the 16:9 frame of HDx (bank frame 1) at this size",
                    timeline=dict(V.summary(), segment="dolly", segment_starts_at_s=round(V.t_turn_end, 3),

@@ -1,0 +1,184 @@
+{
+ "id": "T-D0",
+ "from": "D0",
+ "to": "M0",
+ "style": "warm-modern",
+ "version": "7.3",
+ "play_s": 7.3,
+ "hold_s": 0.2,
+ "timeline": {
+  "name": "7.3",
+  "play_s": 7.3,
+  "v_m_s": 1.609,
+  "door": [
+   0.0,
+   0.9
+  ],
+  "camera_leaves_rest": [
+   0.35,
+   0.85
+  ],
+  "door_angle_when_camera_starts": 26.9,
+  "walk_const": [
+   0.85,
+   3.669
+  ],
+  "turn": [
+   3.669,
+   4.669
+  ],
+  "turn_speed_deg_s": {
+   "start": 24.8,
+   "peak": 102.0,
+   "end": 20.8
+  },
+  "dolly_const": [
+   4.669,
+   6.852
+  ],
+  "landing": [
+   6.852,
+   7.3
+  ],
+  "hold_s": 0.2,
+  "cut": false
+ },
+ "sampling": "uniform in time: frame i (1-based) of a variant is shown at (i - 1) / fps seconds; ramps, the turn's speed curve and the landing are baked in. Reverse = the same frames from last to first.",
+ "path": "{variant}/{index:04d}.{ext}",
+ "formats": [
+  "avif",
+  "webp"
+ ],
+ "variants": {
+  "1920": {
+   "w": 1920,
+   "h": 1080,
+   "fps": 60,
+   "frames": 451,
+   "avif_quality": 40,
+   "last_frames_quality": 60,
+   "segments": {
+    "door": [
+     1,
+     21
+    ],
+    "door+walk": [
+     22,
+     54
+    ],
+    "walk": [
+     55,
+     221
+    ],
+    "turn": [
+     222,
+     281
+    ],
+    "dolly": [
+     282,
+     412
+    ],
+    "landing": [
+     413,
+     439
+    ],
+    "hold": [
+     440,
+     451
+    ]
+   }
+  },
+  "1080": {
+   "w": 1080,
+   "h": 608,
+   "fps": 30,
+   "frames": 226,
+   "avif_quality": 40,
+   "last_frames_quality": 60,
+   "segments": {
+    "door": [
+     1,
+     11
+    ],
+    "door+walk": [
+     12,
+     27
+    ],
+    "walk": [
+     28,
+     111
+    ],
+    "turn": [
+     112,
+     141
+    ],
+    "dolly": [
+     142,
+     206
+    ],
+    "landing": [
+     207,
+     220
+    ],
+    "hold": [
+     221,
+     226
+    ]
+   }
+  }
+ },
+ "bytes": {
+  "1920": {
+   "avif": 10470490,
+   "webp": 18683824
+  },
+  "1080": {
+   "avif": 1964923,
+   "webp": 3034666
+  }
+ },
+ "bytes_per_2s": {
+  "1920": {
+   "avif": 2792131,
+   "webp": 4982353
+  },
+  "1080": {
+   "avif": 523979,
+   "webp": 809244
+  }
+ },
+ "first_frame": "D0: identical to the door still at this size",
+ "last_frame": "M0: identical to the 16:9 frame of base.png at this size",
+ "cut_version": {
+  "rule": "the version inside U5: skip the frames of segment 'turn' (a cut HD -> HDx); play_s is shorter by the turn",
+  "play_s": 6.3
+ },
+ "loading": {
+  "before_the_press": "the door image (frame 1 is the same picture) and segments door, door+walk, walk",
+  "stream": "segments turn, dolly, landing, hold: requested at once, in play order; the button waits until they are in, or until the measured rate puts their arrival before they are due with a 1.5x margin",
+  "never": "no frame is waited for during play: a late frame is skipped and counted"
+ },
+ "turn_worst_hole_frac": 0.0,
+ "swap": {
+  "blend_out_ms": 200,
+  "rule": "after the hold, a soft swap to the live layers of the empty room (the same picture)"
+ },
+ "qa": "pending",
+ "temporary": true,
+ "note": "S1 partial arrival 2026-11-17: door (code) + PLACEHOLDER for clip 1a (still, dissolve, still; labelled) + clip 1b (code) + turn (code) + clip 2 (take 1 + code repair r2). Not QA'd, not for the site.",
+ "placeholder_1a": "bank 1's first piece (D0 -> HT) is a still placeholder, not clip 1a: the bytes of that part are not representative, and the frames are not for the site",
+ "phone_budget": {
+  "per_2s_limit": 1500000.0,
+  "per_2s": 523979,
+  "per_2s_ok": true,
+  "before_the_press_frames": 111,
+  "before_the_press_bytes": 1080746,
+  "streamed_bytes": 884177,
+  "first_load": 1200746,
+  "first_load_limit": 3000000.0,
+  "first_load_ok": true,
+  "room_layers_stream_during_the_walk": 1130000,
+  "all_by_the_landing": 3214923,
+  "rule": "first load = the door image and the frames up to the turn; the rest of the frames and the living room's layers stream from the press, in play order (they are needed from the turn and from the landing)"
+ }
+}
