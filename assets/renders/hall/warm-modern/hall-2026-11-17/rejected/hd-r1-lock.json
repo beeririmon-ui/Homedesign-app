@@ -1,0 +1,323 @@
+{
+ "still": "HD r1 (rejected), tall 3:2 canvas",
+ "status": "REJECTED: 11.9.3 level: the jib door at +0.03 vs -0.60 +-1/6 (0.63 from the target); the model lifted the whole wall about 0.5 stop, the part it was to keep from HDx by +0.21 to +0.33, so the seed cannot be pasted back within 3 %; no money left in this run for a second render AND HT (HT is built from HD)",
+ "lock_vs_clay": {
+  "architecture_worst_px": 4.73,
+  "joints_n": 14,
+  "joints_worst_px": 0.91,
+  "positions_u": {
+   "jib door seam left (u 0.019)": {
+    "clay_u": 0.0193,
+    "still_u": 0.0188
+   },
+   "jib door seam right (u 0.380)": {
+    "clay_u": 0.38,
+    "still_u": 0.3801
+   },
+   "stone edge (u 0.521)": {
+    "clay_u": 0.5206,
+    "still_u": 0.5226
+   }
+  }
+ },
+ "levels_11_9_3": {
+  "reference": "jib door",
+  "stops_vs_base": 0.033,
+  "L_star": 90.2,
+  "px": 565506,
+  "target": -0.6,
+  "tol": 0.167,
+  "within": false,
+  "off_by": 0.633,
+  "second": {
+   "surface": "stone panel",
+   "stops_vs_base": -0.293,
+   "px": 279576,
+   "vs_reference": -0.326,
+   "band": [
+    -0.6,
+    -0.25
+   ],
+   "within": true
+  }
+ },
+ "lift_vs_input_stops": {
+  "plaster_jib": 0.556,
+  "stone_rendered": 0.513,
+  "stone_in_the_seed_area": [
+   0.211,
+   0.328,
+   0.303
+  ]
+ },
+ "seam_inside_the_raw": {
+  "bands": 20,
+  "median_pct": -0.72,
+  "worst_pct": 2.17,
+  "rule": "11.5.7 / motion-agent: the tone at the seam within 3 %"
+ },
+ "turn_door_joints": {
+  "command": "python3 site/tools/transitions/turn_door.py joints --hd <HD> --hdx assets/renders/hall/warm-modern/hall-2026-11-17/hdx.png",
+  "exit": 3,
+  "raw": {
+   "hdx_to_hd": {
+    "shared_strip": {
+     "edge_px": 64603,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.9851
+    },
+    "seam_band": {
+     "edge_px": 40161,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.9854
+    }
+   },
+   "hd_to_hdx": {
+    "shared_strip": {
+     "edge_px": 279686,
+     "median_px": 5.0,
+     "p90_px": 15.79,
+     "share_within_tol": 0.3137
+    },
+    "seam_band": {
+     "edge_px": 108866,
+     "median_px": 3.2,
+     "p90_px": 14.0,
+     "share_within_tol": 0.4059
+    }
+   },
+   "passed": false
+  },
+  "with_the_hdx_seed_pasted_back": {
+   "hdx_to_hd": {
+    "shared_strip": {
+     "edge_px": 64603,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.9854
+    },
+    "seam_band": {
+     "edge_px": 40161,
+     "median_px": 0.0,
+     "p90_px": 1.0,
+     "share_within_tol": 0.9843
+    }
+   },
+   "hd_to_hdx": {
+    "shared_strip": {
+     "edge_px": 257785,
+     "median_px": 5.0,
+     "p90_px": 16.18,
+     "share_within_tol": 0.3303
+    },
+    "seam_band": {
+     "edge_px": 94813,
+     "median_px": 3.0,
+     "p90_px": 14.18,
+     "share_within_tol": 0.4496
+    }
+   },
+   "passed": false
+  },
+  "reading": "HDx's edges are found in HD within 1 px (p90 1.0, 98.5 %): the joints did not move (my per-joint lock: <= 0.91 px; in the seed area <= 0.14). The other direction fails even with HD's strip = HDx pasted back: HD carries 4x the edge pixels of HDx over the same strip (258k vs 65k), because the tool's Canny thresholds come from each still's own gradients and HD is a flat wall; its faint texture edges have no counterpart in HDx. For motion-agent: the hd_to_hdx direction may need the clay's edges (--edges) or a common threshold"
+ },
+ "lines": {
+  "jib door seam left (u 0.019)": {
+   "kind": "vertical",
+   "clay_px": 116,
+   "median_offset_px": -1.24,
+   "p90_abs_px": 3.3,
+   "n": 41,
+   "mean_corr": 0.785,
+   "tilt_deg_vs_clay": -0.107
+  },
+  "jib door seam right (u 0.380)": {
+   "kind": "vertical",
+   "clay_px": 965,
+   "median_offset_px": 0.28,
+   "p90_abs_px": 0.52,
+   "n": 41,
+   "mean_corr": 0.791,
+   "tilt_deg_vs_clay": 0.013
+  },
+  "stone edge (u 0.521)": {
+   "kind": "vertical",
+   "clay_px": 1296,
+   "median_offset_px": 4.73,
+   "p90_abs_px": 5.77,
+   "n": 33,
+   "mean_corr": 0.701,
+   "tilt_deg_vs_clay": 0.288
+  },
+  "stone joint 1 (clay row 46), rendered / across the seam": {
+   "kind": "joint (followed per column)",
+   "n": 16,
+   "median_offset_px": 0.02,
+   "p90_abs_px": 0.28,
+   "mean_corr": 0.939,
+   "clay_row_mid": 46.5,
+   "cols": [
+    1301,
+    1960
+   ]
+  },
+  "stone joint 2 (clay row 46), in the seed (u >= 0.717)": {
+   "kind": "joint (followed per column)",
+   "n": 13,
+   "median_offset_px": 0.07,
+   "p90_abs_px": 0.11,
+   "mean_corr": 0.994,
+   "clay_row_mid": 46.5,
+   "cols": [
+    1963,
+    2495
+   ]
+  },
+  "stone joint 3 (clay row 426), rendered / across the seam": {
+   "kind": "joint (followed per column)",
+   "n": 16,
+   "median_offset_px": 0.05,
+   "p90_abs_px": 0.28,
+   "mean_corr": 0.912,
+   "clay_row_mid": 425.5,
+   "cols": [
+    1301,
+    1960
+   ]
+  },
+  "stone joint 4 (clay row 426), in the seed (u >= 0.717)": {
+   "kind": "joint (followed per column)",
+   "n": 13,
+   "median_offset_px": 0.12,
+   "p90_abs_px": 0.16,
+   "mean_corr": 0.989,
+   "clay_row_mid": 425.5,
+   "cols": [
+    1963,
+    2495
+   ]
+  },
+  "stone joint 5 (clay row 568), rendered / across the seam": {
+   "kind": "joint (followed per column)",
+   "n": 16,
+   "median_offset_px": -0.08,
+   "p90_abs_px": 0.23,
+   "mean_corr": 0.875,
+   "clay_row_mid": 567.5,
+   "cols": [
+    1301,
+    1960
+   ]
+  },
+  "stone joint 6 (clay row 568), in the seed (u >= 0.717)": {
+   "kind": "joint (followed per column)",
+   "n": 13,
+   "median_offset_px": 0.04,
+   "p90_abs_px": 0.13,
+   "mean_corr": 0.976,
+   "clay_row_mid": 567.5,
+   "cols": [
+    1963,
+    2495
+   ]
+  },
+  "stone joint 7 (clay row 758), rendered / across the seam": {
+   "kind": "joint (followed per column)",
+   "n": 16,
+   "median_offset_px": 0.07,
+   "p90_abs_px": 0.26,
+   "mean_corr": 0.91,
+   "clay_row_mid": 757.5,
+   "cols": [
+    1301,
+    1960
+   ]
+  },
+  "stone joint 8 (clay row 758), in the seed (u >= 0.717)": {
+   "kind": "joint (followed per column)",
+   "n": 13,
+   "median_offset_px": 0.04,
+   "p90_abs_px": 0.1,
+   "mean_corr": 0.992,
+   "clay_row_mid": 757.5,
+   "cols": [
+    1963,
+    2495
+   ]
+  },
+  "stone joint 9 (clay row 1137), rendered / across the seam": {
+   "kind": "joint (followed per column)",
+   "n": 16,
+   "median_offset_px": -0.91,
+   "p90_abs_px": 0.98,
+   "mean_corr": 0.902,
+   "clay_row_mid": 1137.0,
+   "cols": [
+    1301,
+    1960
+   ]
+  },
+  "stone joint 10 (clay row 1137), in the seed (u >= 0.717)": {
+   "kind": "joint (followed per column)",
+   "n": 13,
+   "median_offset_px": -0.09,
+   "p90_abs_px": 0.13,
+   "mean_corr": 0.992,
+   "clay_row_mid": 1137.0,
+   "cols": [
+    1963,
+    2495
+   ]
+  },
+  "stone joint 11 (clay row 1279), rendered / across the seam": {
+   "kind": "joint (followed per column)",
+   "n": 16,
+   "median_offset_px": -0.68,
+   "p90_abs_px": 1.15,
+   "mean_corr": 0.887,
+   "clay_row_mid": 1279.0,
+   "cols": [
+    1301,
+    1960
+   ]
+  },
+  "stone joint 12 (clay row 1279), in the seed (u >= 0.717)": {
+   "kind": "joint (followed per column)",
+   "n": 13,
+   "median_offset_px": -0.14,
+   "p90_abs_px": 0.18,
+   "mean_corr": 0.991,
+   "clay_row_mid": 1279.0,
+   "cols": [
+    1963,
+    2495
+   ]
+  },
+  "stone joint 13 (clay row 1564), rendered / across the seam": {
+   "kind": "joint (followed per column)",
+   "n": 16,
+   "median_offset_px": -0.14,
+   "p90_abs_px": 0.23,
+   "mean_corr": 0.95,
+   "clay_row_mid": 1563.5,
+   "cols": [
+    1301,
+    1960
+   ]
+  },
+  "stone joint 14 (clay row 1564), in the seed (u >= 0.717)": {
+   "kind": "joint (followed per column)",
+   "n": 13,
+   "median_offset_px": -0.0,
+   "p90_abs_px": 0.14,
+   "mean_corr": 0.983,
+   "clay_row_mid": 1563.5,
+   "cols": [
+    1963,
+    2495
+   ]
+  }
+ }
+}

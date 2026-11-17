@@ -103,19 +103,96 @@
    ],
    "raw_sha256_20": "ab61a563c47c708c952b",
    "prompt": "assets/prompts/warm-modern-hall-2026-11-17/hdx-fix1.txt (edits: hdx-fix1-edits.json)",
-   "verdict": "NOT ACCEPTED: the cones and the travertine are gone and the lock holds, but the stone reads -1.48 vs -1.0 +-1/6 (0.48 from the target, beyond the 1/3 that passes with a note); back to master-designer",
+   "verdict": "NOT ACCEPTED: the cones and the travertine are gone and the lock holds, but the stone reads -1.48 vs -1.0 +-1/6 (0.48 from the target, beyond the 1/3 that passes with a note); back to master-designer; the manager (resumed run): not accepted, too dark and soft bands at x1; moved to rejected/",
    "out": {
-    "candidate": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1.png",
-    "candidate_sha256_20": "a905dea80efe7be63811",
-    "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1-frame.png",
-    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-candidate-fix1-lock.json",
-    "made": "tools/compose_hdx.py: the seed (base.png via M0's depth, living-room ids only) pasted back; around the furniture the seed's reprojection artifacts (dE > 12 vs the model) replaced by the model's pixels"
+    "candidate": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-candidate-fix1.png",
+    "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-candidate-fix1-frame.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hdx-candidate-fix1-lock.json"
+   }
+  },
+  {
+   "id": "wm-hall-hdx-r2",
+   "run": 2,
+   "still": "HDx",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "estimate": 650,
+   "tokens": 650,
+   "input": "the same as r1 / fix1",
+   "placeholder_id": "fc425fec-e9a5-46fd-a8a1-427b9cee9a33",
+   "task_id": "f935863d590065057bd2980d64f79268",
+   "batch_id": "44f58eef-6f7c-45c6-9955-16188b92f147",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-f935863d590065057bd2980d64f79268-0-1794896049333-d8978acc.png",
+   "share": "https://www.var2.ai/image/fc425fec-e9a5-46fd-a8a1-427b9cee9a33",
+   "returned_px": [
+    2496,
+    1664
+   ],
+   "raw_sha256_20": "e22f796bd612cb06c35f",
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/hdx-r2.txt (edits vs fix1: hdx-r2-edits.json)",
+   "verdict": "accepted: stone -0.82 vs -1.0 +-1/6 (0.18 from the target: within +-1/3, README line); uniform honed limestone, one wash, no cones, no sun inside; locked (architecture <= 0.98 px, 15 joints <= 1.06 px). r2 left the armchair out of its own living room: the living room comes from the seed and fix1",
+   "out": {
+    "master": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx.png",
+    "master_sha256_20": "09036b5aeb579a39594b",
+    "frame": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-frame.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/hdx-lock.json",
+    "made": "tools/compose_hdx.py raw/hdx-r2 work/hdx-seed-kept work/hdx-keep-mask out seam raw/hdx-fix1"
+   }
+  },
+  {
+   "id": "wm-hall-hd-r1",
+   "run": 2,
+   "still": "HD",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "estimate": 650,
+   "tokens": 650,
+   "input": {
+    "made": "seeds.py hd (from hdx.png), then tools/prep_hd.py",
+    "public_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7de8b57c-7eb2-403f-a2d2-bafc4049bd7d.png",
+    "sha256_20": "ef2278add5585399582f"
+   },
+   "placeholder_id": "71645ada-7c6a-45cb-bad2-21f305f39d48",
+   "task_id": "436d92ca576b161e08eb7d1613795b20",
+   "batch_id": "fb0c355f-5848-432d-95ab-fce7c955c91c",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-436d92ca576b161e08eb7d1613795b20-0-1794896447695-835f746f.png",
+   "share": "https://www.var2.ai/image/71645ada-7c6a-45cb-bad2-21f305f39d48",
+   "returned_px": [
+    2496,
+    1664
+   ],
+   "prompt": "assets/prompts/warm-modern-hall-2026-11-17/hd.txt (edits vs 11.5.5: hd-edits.json)",
+   "verdict": "REJECTED: jib door +0.03 vs -0.60 +-1/6 (0.63 from the target); locked (14 joints <= 0.91 px, seams 0.0188 / 0.3801, stone edge 0.5226); turn_door.py joints exit 3 (hdx_to_hd p90 1.0 px, hd_to_hdx p90 15.8 px: see the record)",
+   "out": {
+    "rejected": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hd-r1.png",
+    "record": "assets/renders/hall/warm-modern/hall-2026-11-17/rejected/hd-r1-lock.json"
    }
   }
  ],
  "not_rendered": {
-  "HD": "depends on HDx (right 28 % = HDx projected, seeds.py hd); 0 tokens spent",
-  "HT": "depends on HD and HDx (seeds.py ht, the addendum); 0 tokens spent"
+  "HD": "r1 rejected; a second HD needs a decision and money (README)",
+  "HT": "built from HD (seeds.py ht, the addendum); not rendered, 0 tokens"
  },
- "tokens_total": 1950
+ "tokens_total": 3250,
+ "run_1": {
+  "cap": 2600,
+  "spent": 1950,
+  "result": "D0o accepted (the manager); HDx r1 and fix1 rejected"
+ },
+ "run_2": {
+  "brief": "the manager's decision on the hand-back (resumed run): HDx one new render, then HD and HT; cap 1,950; no further fix for HDx",
+  "cap": 1950,
+  "spent": 1300,
+  "unspent": 650,
+  "stopped": "HD r1 missed the 11.9.3 level by 0.63 stop (the model lifted the wall about 0.5 stop, and the part to keep from HDx by +0.2-0.33, so the seed cannot be pasted back within 3 %). HT is built from HD, and the 650 left cannot buy both a second HD and HT; the run had no fix money (the brief's one fix went to HDx in run 1). Stopped and reported; 650 unspent",
+  "model_choice": "seedream-5-pro for HDx r2 and HD: the lock evidence (HDx r1/fix1/r2 within 1 px); with 1,300 for HD + HT and no fallback, a failed nano-banana-2 try would have cost HT"
+ },
+ "tokens_by_run": {
+  "run_1": 1950,
+  "run_2": 1300
+ }
 }

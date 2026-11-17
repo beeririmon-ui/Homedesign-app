@@ -1,0 +1,32 @@
+{
+ "asset_id": "wm-hall-hd-2026-11-17",
+ "status": "r1 REJECTED (11.9.3 level +0.63 from the target); HD not delivered in this run",
+ "model": "seedream-5-pro",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "auto",
+ "seed": null,
+ "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7de8b57c-7eb2-403f-a2d2-bafc4049bd7d.png",
+ "input_made_by": "seeds.py hd --hdx hall-2026-11-17/hdx.png, then tools/prep_hd.py (the jib set at -0.52, the stone matched to the seed at its boundary)",
+ "input_sha256_20": "ef2278add5585399582f",
+ "image_refs": [],
+ "jobs": [
+  {
+   "id": "r1",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-17/hd.txt",
+   "prompt": "Photorealistic photograph made from this render. Keep the camera and every edge of the input exactly: both seams of the jib door, the edge of the stone panel and every stone joint stay exactly where they are and the same size. The right part of the picture is already the finished photograph of the same wall: keep it as it is and continue its stone, its light and its tone seamlessly to the left.\n\nSame empty hall, same camera point as HDx, turned 65 degrees to the left. A close, level view of the hall's far wall about 1.65 m away, on the same tall 3:2 canvas: the canvas shows the wall from about 0.3 m to 2.05 m high, and the 16:9 view inside it from about 0.5 m to 1.9 m. No floor, no skirting, no ceiling and no corner anywhere on the canvas. The left part, up to 52% of the width, is bone limewash plaster #ECE5DA with a soft trowel movement; in it, the 3 mm shadow-gap outline of a closed flush jib door in the same plaster, no handle: its two vertical seams run from the top to the bottom of the canvas, one very close to the left edge (about 2% of the width), the other at about 38%. From 52% to the right edge, the wall is clad in honed pale limestone #D8C8AE, the same stone as the door wall outside: smooth, dense and matte, uniform in tone across each stone and from stone to stone, with at most a few fine fossil dots; no veins, streaks, bands or sweeps of colour, no open pores or travertine holes, not travertine; in long horizontal courses of different heights with fine 5 mm recessed joints; in the 16:9 view the joints run at about 19%, 30%, 44%, 73% and 84% of its height, and a vertical joint at about 80% of the width appears in every other course. The stone's clean vertical edge at 52% catches the light as a hairline. The whole wall is washed from above by daylight from an opal roof-light slot along its top, out of frame: one even, diffuse wash, the lower half of the wall only slightly darker than the upper half, never falling off to dark, even along its length, with no beams, cones, spots or pools of light; on the stone, each joint casts a fine shadow line under the course above. A faint, soft daylight brightening from the open front door behind the camera lies over the centre-left. The plaster reads as a soft light tone, a little lighter than the stone. Nothing else: no bench, no hooks, no lamp, no switch, no art, no objects.",
+   "prompt_chars": 2366,
+   "prompt_vs_designer": "11.5.5 verbatim (hd-designer-verbatim.txt) with a lock preamble and three logged edits (hd-edits.json): HDx r2's stone and wash wording, and one level sentence",
+   "idempotency_key": "wm-hall-hd-r1-2026-11-17",
+   "placeholder_id": "71645ada-7c6a-45cb-bad2-21f305f39d48",
+   "task_id": "436d92ca576b161e08eb7d1613795b20",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-436d92ca576b161e08eb7d1613795b20-0-1794896447695-835f746f.png",
+   "estimate": 650,
+   "tokens": 650,
+   "verdict": "rejected: jib door +0.03 vs -0.60 +-1/6; locked (joints <= 0.91 px)"
+  }
+ ],
+ "tokens": 650,
+ "date": "2026-11-17",
+ "jobs_file": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json"
+}

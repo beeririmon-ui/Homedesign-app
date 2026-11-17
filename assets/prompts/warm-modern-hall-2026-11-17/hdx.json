@@ -1,6 +1,6 @@
 {
  "asset_id": "wm-hall-hdx-2026-11-17",
- "status": "not accepted: back to master-designer (11.9.3 level after the one fix)",
+ "status": "accepted render: r2 (the resumed run, 2026-11-17); r1 and fix1 rejected (fix1 kept in rejected/)",
  "model": "seedream-5-pro",
  "type": "image-to-image",
  "resolution": "2K",
@@ -37,10 +37,25 @@
    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-945a49894ef568a43a2b2da572657c2e-0-1794895286456-6f9fefd5.png",
    "estimate": 650,
    "tokens": 650,
-   "verdict": "rejection items cleared; stone -1.48 vs -1.0 +-1/6 (0.48 from the target): not accepted, back to master-designer"
+   "verdict": "rejection items cleared; stone -1.48 vs -1.0 +-1/6 (0.48 from the target): not accepted, back to master-designer; the manager: not accepted (too dark, soft bands at x1)"
+  },
+  {
+   "id": "r2",
+   "run": "resumed (cap 1,950)",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-17/hdx-r2.txt",
+   "prompt": "Photorealistic photograph made from this render. Keep the camera, perspective and every edge of the input exactly: the inside corner, every stone joint, the plaster return and its skirting, the opening and its walnut lining, the floor joints, and everything seen through the opening stay exactly where they are and the same size. The living room seen through the opening is already the finished reference photograph: keep it as it is and only complete what it does not show. Add real materials and light to the hall.\n\nEmpty entrance hall of a warm-minimal family house, same materials, light and grading as the reference hall plate. Camera at eye height 1.20 m, 24 mm, level, everything sharp, standing in the middle of the hall about 2 m from a 1.20 x 2.40 m opening into a brighter living room, and looking straight through it. The picture is a tall 3:2 canvas: the usual 16:9 view with a band of extra wall above and below it. The opening is near the centre of the view and its head is above the view; only along the very top edge of the canvas does the walnut head of the opening appear, as a thin wedge over the left part of the opening that tapers to nothing toward the right. The left reveal is lined in matte-oiled walnut #6B4A33 for the full wall depth, flush with the plaster behind a 3 mm shadow gap, and shows as a warm vertical band. The right side ends in a clean plaster arris. No architrave, casing, door leaf or threshold strip; the smoked oak floor (#8B6F55, 22 cm planks) runs straight on into the living room. Left of the opening: a 14 cm return of bare plaster with its 15 cm skirting in the wall colour, a sharp inside corner, then the hall's left wall, clad in the same honed pale limestone as the door wall outside (#D8C8AE): smooth, dense and matte, uniform in tone across each stone and from stone to stone, with at most a few fine fossil dots; no veins, streaks, bands or sweeps of colour, no open pores or travertine holes, not travertine, not polished, not tiles; in long horizontal courses of different heights with fine recessed joints that converge toward the corner, running straight down to the floor with no skirting, lit softly by daylight from a roof-light slot out of view above it: one even, diffuse wash along the whole length of the wall, the lower half of the wall only slightly darker than the upper half, never falling off to dark, with no beams, cones, spots or pools of light; the joints show as fine lines; near the left edge, a vertical joint in every other course; in the bottom band of the canvas, near the corner, a sliver of floor. Right of the opening: the bare plaster front wall, from the opening to the right edge and from the top to the bottom of the canvas. Through the opening, exactly as in the reference living-room plate: the bone plaster back wall, the bronze steel glazing over an empty limestone bench, part of the greige bouclé sofa, the walnut armchair, the walnut coffee table, smoked oak floor. The living room is two-thirds of a stop brighter than the hall. The hall is in soft shade: the stone wall reads as a quiet, warm mid-tone, about one stop darker than the living room's back wall and a little darker than the plaster return beside it, never bright. Winter afternoon, no sun inside the house, no sun patches on any wall or floor, 4600 K, lamps off and absent. No furniture in the hall, no objects, no switches, no people, no text.",
+   "prompt_chars": 3407,
+   "prompt_vs_designer": "fix1's text with the manager's two changes (the wash: 'the lower half only slightly darker than the upper half'; the stone: 'uniform ... no streaks, bands or sweeps of colour, fine fossil dots at most'), each logged fix1 -> sent in hdx-r2-edits.json",
+   "idempotency_key": "wm-hall-hdx-r2-2026-11-17",
+   "placeholder_id": "fc425fec-e9a5-46fd-a8a1-427b9cee9a33",
+   "task_id": "f935863d590065057bd2980d64f79268",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-f935863d590065057bd2980d64f79268-0-1794896049333-d8978acc.png",
+   "estimate": 650,
+   "tokens": 650,
+   "verdict": "accepted: stone -0.82 (within +-1/3 of -1.0, README line), uniform limestone, one wash, locked; composed with the seed and fix1's living room (r2 left the armchair out)"
   }
  ],
- "tokens": 1300,
+ "tokens": 1950,
  "date": "2026-11-17",
  "jobs_file": "assets/renders/hall/warm-modern/hall-2026-11-17/jobs.json"
 }
