@@ -1,0 +1,102 @@
+{
+ "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2).",
+ "cap": 3500,
+ "spent": 650,
+ "left_in_cap": 2850,
+ "var2": {
+  "connected": true,
+  "note": "ToolSearch loaded the Var2 tools with the held sign-in; estimate_cost, request_upload, create_image and get_image_result answered. No code or token was asked for."
+ },
+ "sent": [
+  {
+   "id": "plate-r1",
+   "output": "the empty plate (room + fixed walnut bed and nightstands + their shadow)",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 3,
+   "estimate": 650,
+   "tokens": 650,
+   "placeholder_id": "fe8fca78-b084-4ddc-8c79-11f1e14b1d29",
+   "task_id": "73b72e3bb838d5f4893cbf45ff996251",
+   "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/plate.json",
+   "raw": "assets/renders/master/warm-modern/stage1-2026-11-17/raw/plate-r1.png",
+   "final": "assets/renders/master/warm-modern/stage1-2026-11-17/plate.png",
+   "verdict": "accepted with code steps (tools/compose_plate.py): lock warp, the bed wall's fall-off flattened by half, WM-G1 toe"
+  }
+ ],
+ "priced_not_sent": [
+  {
+   "output": "MB0 with the defaults (3.2 + 12.2), from the accepted plate plus the product clay in its masks; then the product, shadow and light layers cut in masks (RND2), as in the living room",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 12,
+   "refs_planned": [
+    "bedding V1 Natural Linen CJCS278387611KP",
+    "pillowcases Caramel Pairs CJYD223749802BY",
+    "cushion boucle Milk Tea 30x50 CJZT228600126ZA",
+    "throw muslin Pecan 150x200 CJYD205807508HS",
+    "sconce travertine cone on walnut CJYD241918802BY",
+    "candle holders travertine pedestal CJYD201648001AZ",
+    "tray black walnut 30x20x2",
+    "nightstand bottle Color D (AE 665862)",
+    "trinket dish travertine rough edge 10x10",
+    "sill vase cream fluted column CJJT293877501AZ",
+    "curtains linen-blend S-fold 180502 132x270",
+    "floor lamp pleated walnut 43x158 177278"
+   ],
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 12
+    }
+   },
+   "estimate": 650,
+   "waits_for": [
+    "owner approval 2 of the bedroom picks (HOUSE2, relayed by the manager)",
+    "the curtain stack vs the left nightstand (M-HC2, clay README): the designer's position"
+   ]
+  },
+  {
+   "output": "the sample slot, the throw (12.3 fallback, the manager's brief): Flax brown CJYD205807538LO and Clay CJYD205807510JQ as mask edits of the defaults frame with the SKU photo, composited in the throw's mask (+3 px) and its shadow (z 57); 0 difference outside (RND2)",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "quantity": 2,
+   "image_refs": 1,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "nano-banana-2",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 1
+    },
+    "quantity": 2
+   },
+   "estimate": 800,
+   "alternative": {
+    "model": "seedream-5-pro",
+    "quantity": 2,
+    "estimate": 1300
+   },
+   "waits_for": [
+    "the defaults frame",
+    "owner approval 2"
+   ]
+  }
+ ],
+ "totals": {
+  "three_outputs": 2100,
+  "if_seedream_variants": 2600,
+  "under_cap": true
+ }
+}

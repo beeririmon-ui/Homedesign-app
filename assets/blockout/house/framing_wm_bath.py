@@ -66,7 +66,7 @@ DEPTH_UNITS = 5000.0
 # ---- chapter 1 / 7 values -------------------------------------------------------------------------------------
 HEX = dict(plaster="#ECE5DA", stone="#D8C8AE", joint="#B3A388", gap="#2B2724", walnut="#6B4A33", bronze="#3A322C",
            sanitary="#EDE6DA", curtain="#E4DACB", bottle="#D3BC90", trav="#D6BFA4", cup="#CFC7BA", vase="#262422",
-           sprig="#8A9A7B", ring="#2A2624", towel="#B07A44", brush="#C9B48F")
+           sprig="#8A9A7B", ring="#2A2624", towel="#B07A44", brush="#C9B48F", planter="#BDB6A8")
 ROOM = dict(x=(3.25, 6.25), y=(9.95, 13.59), h=2.70)
 SHOWER = dict(x=(5.20, 6.25), y=(9.95, 11.15))
 NICHE = dict(y=(10.30, 10.90), z=(1.05, 1.40), back=6.37)
@@ -76,11 +76,12 @@ SKIRT_H = 0.08
 MIRROR = dict(y=(11.80, 12.80), z=(1.15, 1.95), r=0.10, profile=0.015, x_profile=6.228, x_glass=6.232)
 VAN = dict(x=(5.77, 6.25), y=(11.75, 12.85), side_t=0.03, r_front=0.03, drawer=(0.50, 0.84), shelf=(0.15, 0.48),
            board=(0.11, 0.15), kick_set=0.08, top=(0.84, 0.88), top_over=0.01, basin_c=(6.00, 12.30), basin_r=0.20, basin_h=0.13)
-SCONCE = dict(plates=((6.25, 11.62, 1.65), (6.25, 12.98, 1.65)), w=0.12, h=0.22, proj=0.10)
+SCONCE = dict(plates=((6.25, 11.62, 1.65), (6.25, 12.98, 1.65)), w=0.08, h=0.16, proj=0.08)       # 0א: 037853 Style B, 8 x 8 x 16
+PLANTER = dict(c=(4.95, 10.20), belly=0.31, mouth=0.26, h=0.26, belly_z=0.11, base=0.20, plant_top=1.20, crown_r=0.27)   # 0א: Beige-Medium
 CURTAIN = dict(n=8, x=(5.225, 5.455), y=11.15, zig=0.022, r=0.033, z=(0.0, 2.70))
-RING = dict(c=(12.98, 0.87), x=6.215, R=0.08, t=0.006, plate=(6.238, 12.98, 0.95))
-TOWEL = dict(top_z=0.875, top_w=0.150, front_bottom=0.50, back_bottom=0.545, bottom_w=0.220, x_front=(6.188, 6.203),
-             x_back=(6.227, 6.240))
+RING = dict(c=(13.07, 0.87), x=6.181, R=0.08, t=0.006, plate=(6.238, 13.07, 0.95))             # 0א: 842335 A3 at Y 13.07, projection 7.5
+TOWEL = dict(top_z=0.875, top_w=0.150, front_bottom=0.50, back_bottom=0.545, bottom_w=0.220, x_front=(6.150, 6.165),
+             x_back=(6.197, 6.210))
 
 IDS = {0: "nothing / outside", 1: "plaster, vanity wall (X 6.25)", 2: "plaster, window wall (Y 9.95)", 3: "plaster, north wall (X 3.25)",
        4: "plaster, west wall (Y 13.59)", 5: "skirting, limestone 8 cm (flush)", 6: "ceiling", 7: "ceiling shadow gap (1 cm)",
@@ -93,26 +94,26 @@ IDS = {0: "nothing / outside", 1: "plaster, vanity wall (X 6.25)", 2: "plaster, 
        40: "shower-curtain (product)", 41: "shower-dispensers x3 (product)", 42: "vanity-sconces, west (product, provisional)",
        43: "vanity-sconces, east (product, provisional)", 44: "soap-dispenser (product)", 45: "toothbrush-cup (product)",
        46: "toothbrush fillers", 47: "vanity-vase (product)", 48: "sprig (filler)", 49: "towel-ring (product)",
-       50: "hand-towel (product)", 90: "other house geometry", 99: "unknown"}
+       50: "hand-towel (product)", 51: "floor-planter (product)", 52: "plant (filler)", 90: "other house geometry", 99: "unknown"}
 PAL = {0: (0, 0, 0), 1: (236, 229, 218), 2: (214, 205, 192), 3: (196, 188, 178), 4: (180, 172, 160), 5: (216, 200, 174),
        6: (245, 241, 233), 7: (40, 36, 34), 8: (90, 60, 30), 9: (200, 185, 160), 10: (120, 105, 85), 11: (230, 214, 186),
        12: (190, 176, 150), 13: (110, 95, 75), 14: (160, 140, 110), 15: (58, 50, 44), 16: (255, 255, 200), 17: (150, 190, 230),
        18: (70, 55, 45), 20: (107, 74, 51), 21: (140, 100, 70), 22: (30, 20, 15), 23: (240, 220, 190), 24: (250, 250, 245),
        25: (20, 20, 60), 40: (255, 120, 120), 41: (255, 180, 60), 42: (255, 255, 0), 43: (200, 255, 0), 44: (0, 200, 120),
-       45: (0, 160, 255), 46: (120, 120, 255), 47: (200, 0, 200), 48: (60, 140, 60), 49: (255, 0, 120), 50: (176, 122, 68),
+       45: (0, 160, 255), 46: (120, 120, 255), 47: (200, 0, 200), 48: (60, 140, 60), 49: (255, 0, 120), 50: (176, 122, 68), 51: (190, 180, 160), 52: (90, 150, 80),
        90: (60, 60, 60), 99: (255, 0, 255)}
-PRODUCT_IDS = set(range(40, 51))
+PRODUCT_IDS = set(range(40, 53))
 ARCH_IDS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}
 FIXED_IDS = {20, 21, 22, 23, 24, 25}
 GROUP_ID = {}                                                   # fr.REG name -> id (filled by wm_bath)
-PRODUCTS_B2 = ["shower-curtain", "shower-dispensers", "vanity-sconces", "soap-dispenser", "toothbrush-cup", "vanity-vase",
+PRODUCTS_B2 = ["shower-curtain", "shower-dispensers", "vanity-sconces", "soap-dispenser", "toothbrush-cup", "vanity-vase", "floor-planter",
                "towel-ring", "hand-towel"]
 FRAMES = {"B2": dict(placeholders=PRODUCTS_B2, lamps=["bath/vanity-sconces", "bath/wall-sconce", "bath/shower-downlight", "bath/niche-led"],
-                     also=["bath/wall-sconce", "bath/toothbrush-cup-filler", "bath/vanity-vase-filler"], vanity=True),
+                     also=["bath/wall-sconce", "bath/toothbrush-cup-filler", "bath/vanity-vase-filler", "bath/floor-planter-filler"], vanity=True),
           "B2-plate": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=True),
           "B2-shell": dict(placeholders=[], lamps=["bath/shower-downlight", "bath/niche-led"], vanity=False)}
 CAPTURE = {}
-LIGHT = dict(window=18.0, downlight_x=1.0, downlight_size=0.25, b1_lamp_x=0.4, sconce_w=10.0, sconce_spot_deg=110.0, sconce_glow=0.35, niche_led_w=0.8,
+LIGHT = dict(window=18.0, downlight_x=1.0, downlight_size=0.25, b1_lamp_x=0.4, sconce_w=3.0, sconce_spot_deg=64.0, sconce_glow=0.35, niche_led_w=0.8,
              plate_target_L=80.0)
 
 
@@ -403,25 +404,36 @@ def wm_products(R):
     for i, dy in enumerate((-0.115, 0.0, 0.115)):
         bot += [cyl(f"shd_{i}", (6.31, yc + dy), 0.0375, 1.05, 1.18, C["bottle"]), cyl(f"shd_pump_{i}", (6.31, yc + dy), 0.011, 1.18, 1.215, C["ring"], 16)]
     reg_prod(R, "shower-dispensers", bot, 41, "7.7: three 7.5 x 16.5 bottles centred in the niche, 4 cm apart (Y 10.485 / 10.60 / 10.715)")
-    # the sconce pair: provisional blocks on the plates (12 x 22 x 10), lit 2700 K with the light below the block
+    # the sconce pair (0א): 037853 Style B, travertine blocks 8 wide x 8 deep x 16 high, straight on the wall, centred at Z 1.65;
+    # up AND down light, 3000 K (the SKU photos: two V beams on the plaster): one spot out of the top and one out of the bottom
     sw, se = [], []
     lights = []
     for i, (px, py, pz) in enumerate(SCONCE["plates"]):
         b = bx(f"sconce_{i}", px - SCONCE["proj"], px, py - SCONCE["w"] / 2, py + SCONCE["w"] / 2, pz - SCONCE["h"] / 2, pz + SCONCE["h"] / 2,
-               C["trav"], 0.006)
+               C["trav"], 0.004)
         (sw if i == 0 else se).append(b)
-        li = r2.mk_light(f"bath_wm_sconce_L{i}", "SPOT", (px - 0.05, py, pz - SCONCE["h"] / 2 - 0.005), LIGHT["sconce_w"])
-        li.data.spot_size = math.radians(LIGHT["sconce_spot_deg"])
-        li.data.spot_blend = 0.7
-        li.data.shadow_soft_size = 0.04
-        li.visible_camera = False
-        li.data.color = r2.WARM
-        lights.append(li)
-    r3.reg(R, "bath/vanity-sconces", sw + se, "bath", src="7.7 + sconce gate open: blocks 12 x 22 x 10 on the plates, provisional")
+        for k, (dz, rot) in enumerate(((-SCONCE["h"] / 2 - 0.004, 0.0), (SCONCE["h"] / 2 + 0.004, math.pi))):
+            li = r2.mk_light(f"bath_wm_sconce_L{i}{'du'[k]}", "SPOT", (px - SCONCE["proj"] / 2, py, pz + dz), LIGHT["sconce_w"])
+            li.rotation_euler = (rot, 0.0, 0.0)                    # 0: down (-Z), pi: up
+            li.data.spot_size = math.radians(LIGHT["sconce_spot_deg"])
+            li.data.spot_blend = 0.35
+            li.data.shadow_soft_size = 0.02
+            li.visible_camera = False
+            li.data.color = (1.0, 0.80, 0.58)                         # about 3000 K
+            lights.append(li)
+    r3.reg(R, "bath/vanity-sconces", sw + se, "bath", src="0א: 037853 Style B, 8 x 8 x 16 on the wall at the plates, centred Z 1.65, up-down 3000 K")
     r2.reg("bath_wm vanity-sconces east", se, "bath", "proxy")       # its own pass index for the id map (east)
     GROUP_ID["bath/vanity-sconces"] = 42
     GROUP_ID["bath_wm vanity-sconces east"] = 43
-    r2.lamp("bath/vanity-sconces", "bath", "wall", [(o, LIGHT["sconce_glow"]) for o in sw + se], lights, "travertine block pair (provisional)")
+    r2.lamp("bath/vanity-sconces", "bath", "wall", [(o, LIGHT["sconce_glow"]) for o in sw + se], lights, "travertine block pair, Style B, up-down")
+    # the floor planter (0א): Beige-Medium, opening 26, belly 31, height 26 (the SKU's own drawing); pothos (filler) to Z 1.20
+    P = PLANTER
+    pc = P["c"]
+    pot = [r3.cone("bath_wm_planter_low", pc, P["base"] / 2, P["belly"] / 2, 0.0, P["belly_z"], mat("planter", "planter", 0.9), 64),
+           r3.cone("bath_wm_planter_up", pc, P["belly"] / 2, P["mouth"] / 2, P["belly_z"], P["h"], mat("planter", "planter", 0.9), 64)]
+    reg_prod(R, "floor-planter", pot, 51, "0א: planter-cj-cement-ribbed-belly Beige-Medium (opening 26, belly 31, height 26) at (4.95, 10.20)")
+    plant = [r3.ell("bath_wm_pothos", pc, P["crown_r"], P["h"] + 0.10, P["plant_top"], C["sprig"])]      # the pot stays readable
+    reg_prod(R, "floor-planter-filler", plant, 52, "pothos (filler), soft leaves, crown r 0.27 to Z 1.20")
     # vanity group
     reg_prod(R, "soap-dispenser", [cyl("soap", (6.07, 12.58), 0.0375, 0.88, 1.01, C["bottle"]), cyl("soap_pump", (6.07, 12.58), 0.011, 1.01, 1.045, C["ring"], 16),
                                    r2.obox("bath_wm_soap_nozzle", (6.07, 12.58, 1.04), (6.035, 12.555, 1.04), (0, 0, 1), 0.008, 0.008, C["ring"])],
@@ -439,8 +451,8 @@ def wm_products(R):
             r2.obox("bath_wm_ring_post", (RING["plate"][0], RING["c"][0], RING["c"][1] + RING["R"]), (RING["x"], RING["c"][0], RING["c"][1] + RING["R"]),
                     (0, 1, 0), 0.012, 0.012, C["ring"]),
             r2.obox("bath_wm_ring_plate", (6.25, RING["c"][0], RING["c"][1] + RING["R"]), (RING["plate"][0], RING["c"][0], RING["c"][1] + RING["R"]),
-                    (0, 1, 0), 0.03, 0.03, C["ring"])]
-    reg_prod(R, "towel-ring", ring, 49, "7.7: (6.238, 12.98), D16 ring on a small plate, Z 0.78-0.96")
+                    (0, 1, 0), 0.05, 0.05, C["ring"])]
+    reg_prod(R, "towel-ring", ring, 49, "0א: 842335 A3 at (6.238, 13.07), D16 ring, projection 7.5, Z 0.78-0.96")
     T = TOWEL
     yc = RING["c"][0]
 
@@ -454,7 +466,7 @@ def wm_products(R):
                   (1, 0, 0), 0.052, 0.03, C["towel"])]
     reg_prod(R, "hand-towel", tw, 50, f"7.7: two layers through the ring, top Z {T['top_z']} ({T['top_w']*100:.0f} wide), bottoms "
              f"{T['front_bottom']} / {T['back_bottom']}, {T['bottom_w']*100:.0f} wide at the hem")
-    notes.append("products: 7.7 defaults without the floor planter; the sconce blocks provisional")
+    notes.append("products: the B2 defaults of 0א: Style B sconces 8 x 8 x 16, the floor planter Beige-Medium + pothos, ring A3 at Y 13.07, curtain stack centre X 5.34")
     return notes
 
 
@@ -620,10 +632,10 @@ def checks_7_3(fid, cam, ids):
         tb = bbox_f(ids, {50})
         rb = bbox_f(ids, {49})
         vb = bbox_f(ids, FIXED_IDS)
-        C["towel_vs_vanity"] = dict(gap_u=g, ok=g is not None and g >= 0.02, towel=tb, vanity=vb)
+        C["towel_vs_vanity"] = dict(rule="0א: at least 0.025 (the ring at Y 13.07)", gap_u=g, ok=g is not None and g >= 0.025, towel=tb, vanity=vb)
         # analytic: the towel hem's near corner vs the vanity's right silhouette (the side panel's back edge / the top's corner)
         van_r = max(UVf(cam, 6.25, VAN["y"][1], 0.5)[0], UVf(cam, 6.25, VAN["y"][1] + VAN["top_over"], 0.86)[0])
-        for name, yc in (("ring at Y 12.98 (slot)", 12.98), ("ring at Y 13.04", 13.04), ("ring at Y 13.05", 13.05)):
+        for name, yc in (("ring at Y 12.98 (slot 1.0.2)", 12.98), ("ring at Y 13.07 (0א)", 13.07)):
             hem = UVf(cam, TOWEL["x_front"][0], yc - TOWEL["bottom_w"] / 2, TOWEL["front_bottom"])[0]
             topc = UVf(cam, TOWEL["x_front"][0], yc - TOWEL["top_w"] / 2, TOWEL["top_z"])[0]
             C["towel_vs_vanity"].setdefault("analytic", {})[name] = dict(gap_hem=round(hem - van_r, 4), gap_top=round(topc - van_r, 4),
@@ -631,16 +643,31 @@ def checks_7_3(fid, cam, ids):
         C["towel_under_east_sconce"] = dict(towel_u=tb["u"] if tb else None, sconce_u=su[1], ring_u=rb["u"] if rb else None)
         C["right_margin_after_towel"] = dict(plaster_from_u=tb["u"][1] if tb else None, note="bare plaster to the right edge")
         cl = bbox_f(ids, {12})
-        C["left_margin"] = dict(note="floor planter out (manager relay): at the left edge plaster of the window wall (u 0 .. X 5.20), its stone "
-                                     "skirting, the floor, then the stone cladding", cladding_east_u=cl["u"] if cl else None,
-                                plaster_east=bbox_f(ids, {2}))
+        pl = bbox_f(ids, {51})
+        pt = bbox_f(ids, {52})
+        C["left_margin"] = dict(note="0א ruling 5: the 7.6 % plaster strip is accepted; the floor planter stands in it", cladding_east_u=cl["u"] if cl else None,
+                                plaster_east=bbox_f(ids, {2}), planter=pl, plant=pt)
+        C["plant_vs_curtain"] = dict(rule="no leaf touches the curtain: >= 0.02", gap_u=gap_u(ids, {51, 52}, {40}),
+                                     ok=(gap_u(ids, {51, 52}, {40}) or 0) >= 0.02)
+        C["curtain_reaches_top_edge"] = dict(rule="0א ruling 3: the curtain leaves the top edge as continuous fabric (no hardware)",
+                                             top_v=cb["v"][0], ok=cb["v"][0] <= 0.0)
+        H_, W_ = ids.shape
+        cnt = {}
+        for g, nm in ((40, "shower-curtain"), (41, "shower-dispensers"), (42, "sconce west"), (43, "sconce east"), (44, "soap-dispenser"),
+                      (45, "toothbrush-cup"), (47, "vanity-vase"), (49, "towel-ring"), (50, "hand-towel"), (51, "floor-planter")):
+            bb = bbox_f(ids, {g})
+            if bb:
+                ht = bb["v"][1] - bb["v"][0]
+                cnt[nm] = dict(frame_pct=bb["frame_pct"], height=round(ht, 4),
+                               counts=bool(bb["frame_pct"] >= 0.5 or (bb["frame_pct"] >= 0.15 and ht >= 0.06)))
+        C["density_V7Q6_clay"] = cnt
     # the ceiling slot as a thin line, top left: where does the top frame edge cut?
     sl = bbox_f(ids, {8})
     def z_at_top(x, y):
         yaw = math.radians(-57.0)
         d = -math.sin(yaw) * (x - 3.80) - math.cos(yaw) * (y - 13.20)
         return round(1.15 + 0.46 * d / 1.1852, 3)
-    C["ceiling_slot_line"] = dict(slot_px_in_frame=sl, ok=sl is not None,
+    C["ceiling_slot_line"] = dict(rule="DROPPED in B2 (0א ruling 3): the ceiling is not in the frame", slot_px_in_frame=sl,
                                   top_edge_Z=dict(at_the_curtain_stack=z_at_top(5.34, 11.15), at_the_SE_corner=z_at_top(6.238, 9.962),
                                                   at_the_mirror_wall_centre=z_at_top(6.25, 12.30)),
                                   ceiling_Z=2.70, ceiling_px_canvas=int((ids == 6).sum()))
@@ -735,9 +762,17 @@ def srgb_to_lin(c):
     return np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
 
 
-def tone_frames(frames, cam, ref_frame, out_dir):
+def tone_frames(frames, cam, ref_frame, out_dir, fixed=None):
     import tone_r4 as T
     toner = T.Toner()
+    if fixed:                                                  # the recorded post of the plate: one exposure and balance for the point
+        e, gains = fixed["exposure"], np.array(fixed["wb_gains"])
+        for fid in frames:
+            img, lin = toner.load(os.path.join(r4.EXR_DIR, f"{fid}.exr"))
+            t = T.shoulder(toner.tone(img, lin, e, gains))
+            bpy.data.images.remove(img)
+            T.save_png(t, os.path.join(out_dir, f"{fid}.png"))
+        return dict(fixed, note=fixed.get("note", "") + "; applied as recorded (--post-from), not re-solved")
     ref_pts = [(6.25, 13.30, 2.05), (6.25, 13.30, 1.40)]       # bare plaster right of the east sconce
     u = [fr.U(cam, *p) for p in ref_pts]
     v = [fr.V(cam, *p) for p in ref_pts]
@@ -806,6 +841,7 @@ def main(argv):
     ap.add_argument("--hall-roof", type=float, default=1.6)
     ap.add_argument("--bath-window", type=float, default=LIGHT["window"])
     ap.add_argument("--out", default=OUT)
+    ap.add_argument("--post-from", default=None, help="selfcheck.json whose recorded post (exposure, gains) is applied, not re-solved")
     a, _ = ap.parse_known_args(argv)
     out = a.out
     os.makedirs(out, exist_ok=True)
@@ -841,6 +877,11 @@ def main(argv):
                            note="u / v in this file are FRAME fractions (the 16:9 frame), pixels are CANVAS pixels"),
                render=f"{a.res}x{int(round(a.res * 9 / 16))}, {a.samples} samples, Cycles CPU, OIDN, AgX MHC; post: tone_frames()",
                build_notes=notes, ids=IDS, frames={})
+    prev = os.path.join(out, "selfcheck.json")
+    if os.path.exists(prev):                                  # keep the frames this run does not render
+        old = json.load(open(prev))
+        rep["frames"] = {k: v for k, v in old.get("frames", {}).items() if k not in frames}
+        rep["post_previous"] = old.get("post")
     tmp = tempfile.mkdtemp(prefix="wm-bath-")
     r4.OS_STATE["on"] = True
     for fid in frames:
@@ -868,7 +909,8 @@ def main(argv):
         print("frame", fid, Rr["runtime_s"], "s", flush=True)
     cam = S["cam"]                                            # still the B2 camera with the overscan, as rendered
     ref = "B2-plate" if "B2-plate" in frames else frames[0]
-    rep["post"] = tone_frames(frames, cam, ref, out)
+    fixed = json.load(open(a.post_from))["post"] if a.post_from else None
+    rep["post"] = tone_frames(frames, cam, ref, out, fixed)
     for fid in frames:
         rep["frames"][fid]["readings"] = plaster_readings(os.path.join(out, f"{fid}.png"), cam)
     rep["build_s"] = round(time.time() - t0)

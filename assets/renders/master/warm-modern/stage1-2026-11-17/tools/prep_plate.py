@@ -8,7 +8,7 @@ sees the house's own materials (chroma per material; the clay's lightness and sh
   floor joints (11)              the oak's chroma, L* 12 below the clay
   walnut (20, 21, 24, 25)        a* 11.4, b* 17.6   base.png's coffee-table top (as the bath)
   plinths, grooves (22, 26, 27)  a* 7.0, b* 9.0, L* capped at 24 (the dark walnut in shade, #3A2A1F)
-  mattress (23)                  a* 0.7, b* 4.6     #E6DFD3; L* capped 2 below the bed wall's median right above the headboard
+  mattress (23)                  a* 0.7, b* 4.6     #E6DFD3; L* 3 below the clay (a little darker than the wall, 6.6)
   bronze frame (13)              a* 2.4, b* 5.1, L* 24   #3A322C (the clay's frame is lit grey)
   limestone slab (14)            a* 2.5, b* 13.5, L* -4 (as the bath)
 Nothing else changes (the sky and the ground outside, ids 0 / 15).
@@ -74,7 +74,7 @@ def main(clay, idp, out, rec):
         if name == "dark walnut":
             L[m, 0] = np.minimum(L[m, 0], 24.0)
         if name == "mattress":
-            L[m, 0] = np.minimum(L[m, 0], wall_ref - 2.0 + (L[m, 0] - before[0]))
+            L[m, 0] = np.clip(L[m, 0] - 3.0, 0, 100)
         rep[name] = dict(px=int(m.sum()), before_Lab=[round(float(x), 1) for x in before], after_ab=[ta, tb],
                          after_median_L=round(float(np.median(L[m, 0])), 1))
     j = ids == 11

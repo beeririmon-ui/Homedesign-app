@@ -1,0 +1,179 @@
+{
+ "plate": "plate.png",
+ "by_material": {
+  "plaster, bed wall": [
+   85.6,
+   0.7,
+   7.2
+  ],
+  "plaster, window wall": [
+   60.5,
+   2.8,
+   13.4
+  ],
+  "plaster, rounded corner": [
+   52.5,
+   2.7,
+   14.1
+  ],
+  "skirting": [
+   42.2,
+   2.9,
+   12.5
+  ],
+  "floor, oak": [
+   36.2,
+   5.8,
+   15.4
+  ],
+  "window reveals": [
+   94.7,
+   -0.0,
+   3.2
+  ],
+  "window frame, bronze": [
+   29.5,
+   3.3,
+   7.0
+  ],
+  "sill slab, limestone": [
+   89.0,
+   1.0,
+   11.2
+  ],
+  "headboard, walnut": [
+   35.2,
+   11.4,
+   17.8
+  ],
+  "mattress": [
+   85.8,
+   1.0,
+   7.0
+  ],
+  "nightstand fronts / sides, walnut": [
+   17.2,
+   8.2,
+   11.2
+  ],
+  "nightstand tops, walnut": [
+   42.9,
+   7.7,
+   15.3
+  ],
+  "bed wall left upper": [
+   89.8,
+   0.5,
+   5.1
+  ],
+  "bed wall left lower": [
+   92.1,
+   0.3,
+   4.5
+  ],
+  "bed wall centre upper": [
+   88.8,
+   0.7,
+   5.9
+  ],
+  "bed wall centre lower": [
+   90.1,
+   0.3,
+   4.6
+  ],
+  "bed wall right upper": [
+   81.4,
+   1.0,
+   9.1
+  ],
+  "bed wall right lower": [
+   85.2,
+   0.8,
+   7.3
+  ],
+  "floor, right of the bed (x 2250-2720, y 1230-1530)": [
+   37.6,
+   5.7,
+   15.5
+  ]
+ },
+ "base_png": {
+  "back wall (x 1150-2650, y 200-1000)": [
+   88.3,
+   0.7,
+   4.6
+  ],
+  "floor right (x 2400-2650, y 1380-1480)": [
+   41.9,
+   7.2,
+   15.3
+  ],
+  "floor far right (x 2500-2700, y 1300-1350)": [
+   44.4,
+   7.2,
+   16.4
+  ],
+  "floor mid-left (x 950-1200, y 1180-1300)": [
+   49.8,
+   8.0,
+   16.9
+  ],
+  "window frames (bath README)": [
+   22.5,
+   4.2,
+   6.8
+  ]
+ },
+ "compare": {
+  "plaster bed wall vs base back wall": {
+   "dL": -2.7,
+   "dE00": 2.7,
+   "rule": "+-3 L*"
+  },
+  "bronze vs base window frames (id median)": {
+   "dE00": 5.3,
+   "note": "the frame is 8-12 px wide here; the id median takes in glass and reveal edges"
+  },
+  "bronze core vs base.png frame core (L* < 30; plate x 215-265, y 100-850; base x 300-330, y 200-900)": {
+   "plate": [
+    18.5,
+    2.7,
+    5.5
+   ],
+   "base": [
+    21.3,
+    3.5,
+    5.5
+   ],
+   "dE00": 2.24,
+   "rule": "dE00 <= 3"
+  },
+  "floor right vs base floor right (x 2400-2650, y 1380-1480)": {
+   "dE00": 4.13,
+   "dE00_chroma_only": 1.7,
+   "rule": "dE00 <= 3"
+  },
+  "floor right vs base floor far right (x 2500-2700, y 1300-1350)": {
+   "dE00": 6.25,
+   "dE00_chroma_only": 1.52,
+   "rule": "dE00 <= 3"
+  },
+  "floor right vs base floor mid-left (x 950-1200, y 1180-1300)": {
+   "dE00": 11.56,
+   "dE00_chroma_only": 2.29,
+   "rule": "dE00 <= 3"
+  }
+ },
+ "black_point": {
+  "p0_5": 12.47,
+  "p1": 14.7,
+  "p5": 26.45,
+  "rule": "WM-G1: 11-14"
+ },
+ "window_brightest": {
+  "window_p99": 97.6,
+  "frame_p99": 96.2,
+  "non_window_p99": 95.7
+ },
+ "frame_mean_L_8bit": 178.6
+}

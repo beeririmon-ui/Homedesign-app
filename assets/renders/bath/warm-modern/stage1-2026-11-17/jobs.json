@@ -29,21 +29,22 @@
  "priced_not_sent": [
   {
    "output": 2,
-   "what": "B2 with the defaults of 4.1 / 7.7 (8 products, no floor planter), from the accepted plate plus the product clay in its masks",
+   "what": "B2 with the defaults of section 0א (9 products: curtain, niche set x3, the Style B sconce pair, soap dispenser, cup, black bud vase, floor planter Beige-Medium, ring A3 at Y 13.07, hand towel caramel 2pc), i2i on the graded plate with the product clay in its masks",
    "model": "seedream-5-pro",
    "type": "image-to-image",
    "resolution": "2K",
    "aspect_ratio": "auto",
-   "image_refs": 8,
+   "image_refs": 9,
    "refs_planned": [
-    "shower-curtain linen-blend-slub 200x270 hook (SKU photo)",
-    "shower-dispensers cj-sand-ribbed (SKU photo)",
-    "vanity-sconces 037853 Style B (SKU photo; waits for the sconce ruling)",
-    "soap-dispenser cj-sand-ribbed",
-    "toothbrush-cup silver-travertine Single Cup",
-    "vanity-vase matte-black-pottery (the SKU in the card)",
+    "shower-curtain slub 200x270 12000059196236303 (pleat tape, hooks)",
+    "niche set + soap dispenser CJYD301460604DW (one photo, both slots)",
+    "vanity-sconces 037853 Style B 12000048654610384",
+    "toothbrush-cup CJYD284387902BY",
+    "vanity-vase CJJJJTJT12606-HQ06",
+    "floor-planter CJJT154204208HS (Beige-Medium drawing)",
     "towel-ring 842335 A3 12000047580558571",
-    "hand-towel pure-linen 38x55 caramel 2pc 12000059652536006"
+    "hand-towel caramel 2pc 12000059652536006",
+    "(spare slot: the planter's family in base.png, if the photo alone is not enough)"
    ],
    "estimate_call": {
     "tool": "var2_estimate_cost",
@@ -53,21 +54,21 @@
      "resolution": "2K",
      "aspect_ratio": "auto",
      "image_refs": 9
-    }
+    },
+    "total_tokens": 650
    },
    "estimate": 650,
    "waits_for": [
-    "owner approval 2 of the bath picks (the manager is asking)",
-    "the sconce gate: master-designer's ruling on 037853 (seller ranges only) or the backup 430468"
+    "owner approval 2 (HOUSE2), relayed by the manager"
    ]
   },
   {
    "output": 3,
-   "what": "hand-towel variants: an edit of output 2 with the SKU photo, composited in the towel mask (+3 px) and its shadow (z 51); 0 difference outside (RND2). As briefed: two edits (800). After the designer's revision during this run (proposal section 0א: black rejected as navy): one edit now, linen 2pc 12000059652334994 (400), and a third (400) only when khaki waffle or light-apricot passes its photo check",
+   "what": "ONE hand-towel variant now: linen 2pc 12000059652334994, an edit of output 2 in the towel mask (+3 px) and its shadow; 0 outside (RND2); then the same WM-G1 curve",
    "model": "nano-banana-2",
    "type": "image-to-image",
    "resolution": "2K",
-   "quantity": 2,
+   "quantity": 1,
    "image_refs": 1,
    "estimate_call": {
     "tool": "var2_estimate_cost",
@@ -78,31 +79,32 @@
      "aspect_ratio": "auto",
      "image_refs": 1
     },
-    "quantity": 2
+    "total_tokens": 400
    },
-   "estimate": 800,
-   "alternative": {
-    "model": "seedream-5-pro",
-    "estimate": 1300
-   },
+   "estimate": 400,
+   "later": "the third variant (khaki waffle or light-apricot) +400 when sourcing passes one",
    "waits_for": [
-    "output 2",
-    "the linen SKU: stock 5 and its colour field says black; the SKU image decides (manager relay)"
-   ],
-   "estimate_after_designer_revision": {
-    "now": 400,
-    "with_third": 800
-   }
+    "output 2"
+   ]
   }
  ],
  "totals": {
-  "three_outputs_as_briefed": 2100,
-  "if_seedream_variants": 2600,
-  "after_designer_revision": {
-   "now": 1700,
-   "with_third_variant": 2100
-  },
-  "designer_estimate": "1,850-2,250"
+  "spent": 650,
+  "priced_now": 1050,
+  "three_outputs_now": 1700,
+  "with_the_third_variant": 2100,
+  "cap": 3500
  },
- "designer_revision_during_run": "docs/proposals/wm-bath-render-2026-11-17.md changed while this run worked (commits a9234229, cd083e71): ring 842335 A3 (projection 7.5); the black towel rejected; the designer also writes the sconce gate closed on Style B and the planter passing, while the manager's relay of the same day says the sconce is still open and the planter is out. The clay follows the relay (no planter, provisional sconces); the manager settles."
+ "designer_revision_during_run": "docs/proposals/wm-bath-render-2026-11-17.md changed while this run worked (commits a9234229, cd083e71): ring 842335 A3 (projection 7.5); the black towel rejected; the designer also writes the sconce gate closed on Style B and the planter passing, while the manager's relay of the same day says the sconce is still open and the planter is out. The clay follows the relay (no planter, provisional sconces); the manager settles.",
+ "qa_round_1": {
+  "report": "qa/reports/2026-11-17-bath-plate/README.md",
+  "fixes_0_tokens": [
+   "BP-M1: the WM-G1 L* toe (tools/grade_plate.py, plate-grade.json): p0.5 1.42 -> 12.5, knee 30, nothing at L* 30 or above changed; the ungraded plate kept as raw/plate-ungraded.png",
+   "BP-L1: the niche LED line painted in the soffit tone (224 px)"
+  ],
+  "backlog": [
+   "BP-L2: the trowel ridges by the ring (status/backlog-low.md, per the manager)"
+  ],
+  "rule": "every asset derived from the plate (output 2, the towel variant(s), the layers) gets the SAME recorded curve: python3 tools/grade_plate.py apply <in> <out> plate-grade.json"
+ }
 }

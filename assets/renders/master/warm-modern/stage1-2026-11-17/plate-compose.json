@@ -1,0 +1,55 @@
+{
+ "source": "raw/plate-r1.png",
+ "out": "plate.png",
+ "steps": [
+  {
+   "step": 1,
+   "what": "lock warp",
+   "y_offset_px": 0.686,
+   "y_scale_about_horizon": 0.99246,
+   "horizon_row": 707.3,
+   "x_offset_px": -1.0,
+   "lines_used": {
+    "horizontal_lines": 10,
+    "vertical_lines": 6
+   },
+   "rule": "locked(x, y) = raw(x + c, y + a + b (y - horizon)); bicubic"
+  },
+  {
+   "step": 2,
+   "what": "one house: the bed wall's fall-off flattened by half toward its bright part (lift only)",
+   "fit": "log Y = c0 + c1 x + c2 x^2 + c3 y + c4 x y (canvas fractions) on the clay's bed-wall mask eroded 12 px, rows 60-850",
+   "coef": [
+    -0.36942,
+    0.97273,
+    -2.15343,
+    -0.65356,
+    2.06886
+   ],
+   "x_span": [
+    0.2445,
+    0.9996
+   ],
+   "rows_clamped": [
+    60,
+    850
+   ],
+   "reference_logY_p85": -0.2816,
+   "flatten": 0.5,
+   "max_gain": 1.5157,
+   "gain_frame_min_max": [
+    1.0,
+    1.5157
+   ]
+  },
+  {
+   "step": 3,
+   "what": "WM-G1 toe on L* (a*, b* kept)",
+   "applied": true,
+   "p05_before": 8.05,
+   "p05_after": 12.5,
+   "knee": 30.0,
+   "curve": "(0, 0) (p05_before, 12.5) (30, 30) (100, 100), piecewise linear on L*; apply the same curve to every derived layer (RND2)"
+  }
+ ]
+}

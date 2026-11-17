@@ -1,0 +1,38 @@
+{
+ "source": "raw/plate-ungraded.png",
+ "rule": "WM-G1: black point L* 11-14; toe on L* only (a*, b* kept), piecewise linear through the points below; nothing at L* 30 or above changes; no exposure change",
+ "curve": {
+  "L_in": [
+   0.0,
+   1.4206,
+   30.0,
+   100.0
+  ],
+  "L_out": [
+   0.0,
+   12.5,
+   30.0,
+   100.0
+  ]
+ },
+ "knee": 30.0,
+ "p05_before_bp_l1": 1.42,
+ "p05_before": 1.42,
+ "p05_after": 12.5,
+ "changed_px_share": 0.0901,
+ "bp_l1": {
+  "px": 224,
+  "box": {
+   "x": [
+    970,
+    1110
+   ],
+   "y": [
+    585,
+    594
+   ]
+  },
+  "rule": "per column: the line's peak row; the soffit = median of rows peak-5..peak-3; rows peak-2..peak+2 brighter than it by more than 2 L* move to it (fully at +6); columns whose peak is not 4 L* over both the soffit and the wall below are left alone"
+ },
+ "derived_assets": "grade every asset derived from this plate with: python3 grade_plate.py apply <in> <out> plate-grade.json"
+}
