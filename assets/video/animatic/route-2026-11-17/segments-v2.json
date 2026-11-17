@@ -1,0 +1,394 @@
+{
+ "frames": 1161,
+ "seconds": 38.7,
+ "fps": 30,
+ "timeline_a": {
+  "door": [
+   0,
+   0.8
+  ],
+  "walk_in": [
+   0.8,
+   5.067
+  ],
+  "head_left": [
+   4.376,
+   5.926
+  ],
+  "rest_HC": [
+   5.926,
+   6.726
+  ],
+  "turn_right": [
+   6.726,
+   8.798
+  ],
+  "clip2": [
+   8.401,
+   11.701
+  ],
+  "landing_M0": 11.701,
+  "reveal": [
+   11.701,
+   13.101
+  ]
+ },
+ "timeline_b": {
+  "length_m": 19.562,
+  "t_turn": [
+   0.3,
+   2.7
+  ],
+  "t_walk_start": 2.278,
+  "s_door": 13.283,
+  "s_room_arc": 15.939,
+  "s_slow0": 14.789,
+  "stop_t0": 16.467,
+  "end_t": 18.9333,
+  "heading_at_stop": 71.2,
+  "marks": {
+   "A": [
+    2.142327917950039,
+    7.45429630202176
+   ],
+   "E": [
+    2.4,
+    8.616579953680827
+   ],
+   "room_arc": [
+    2.45,
+    20.25
+   ],
+   "P0": [
+    1.6500000000000001,
+    21.05
+   ]
+  }
+ },
+ "segments": [
+  {
+   "segment": "a0 D0 before the click (not counted)",
+   "source": "real D0",
+   "file_s": [
+    1.6,
+    2.4
+   ],
+   "from_click_s": [
+    null,
+    0.0
+   ],
+   "frames": [
+    49,
+    72
+   ]
+  },
+  {
+   "segment": "a1 the door opens (code)",
+   "source": "code (turn_door), real D0 / D0o",
+   "file_s": [
+    2.4,
+    3.2
+   ],
+   "from_click_s": [
+    0.0,
+    0.8
+   ],
+   "frames": [
+    73,
+    96
+   ]
+  },
+  {
+   "segment": "a2 the walk in: clip 1a (repaired, passed QA) and 1b (code); the bench in clay; the head turns left in the last 0.2 m",
+   "source": "real 1a bank (repaired) + code 1b + clay bench; clay A stills in the overlap",
+   "file_s": [
+    3.2,
+    7.43
+   ],
+   "from_click_s": [
+    0.8,
+    5.03
+   ],
+   "frames": [
+    97,
+    223
+   ]
+  },
+  {
+   "segment": "a3 the head turns left 90 deg at the junction (clay)",
+   "source": "clay: HD -> HC130 -> HC",
+   "file_s": [
+    7.43,
+    8.33
+   ],
+   "from_click_s": [
+    5.03,
+    5.93
+   ],
+   "frames": [
+    224,
+    250
+   ]
+  },
+  {
+   "segment": "a4 the only rest: the corridor, the doors' names land one by one",
+   "source": "clay HC + interface",
+   "file_s": [
+    8.33,
+    9.13
+   ],
+   "from_click_s": [
+    5.93,
+    6.73
+   ],
+   "frames": [
+    251,
+    274
+   ]
+  },
+  {
+   "segment": "a5 the head turns right 155 deg (clay); 'study' passes on the hidden leaf",
+   "source": "clay: HC -> HC130 -> HD -> HDx2",
+   "file_s": [
+    9.13,
+    10.83
+   ],
+   "from_click_s": [
+    6.73,
+    8.43
+   ],
+   "frames": [
+    275,
+    325
+   ]
+  },
+  {
+   "segment": "a6 the walk to the living room: clip 2 (real, re-timed to 1.5 m/s), starting in the last 20 deg of the turn",
+   "source": "clay in the overlap -> real clip 2 + clay console",
+   "file_s": [
+    10.83,
+    14.13
+   ],
+   "from_click_s": [
+    8.43,
+    11.73
+   ],
+   "frames": [
+    326,
+    424
+   ]
+  },
+  {
+   "segment": "a7 the landing on M0 and the reveal (B)",
+   "source": "real M0 (base.png) -> the reveal on the real layers",
+   "file_s": [
+    14.13,
+    16.33
+   ],
+   "from_click_s": [
+    11.73,
+    13.93
+   ],
+   "frames": [
+    425,
+    490
+   ]
+  },
+  {
+   "segment": "b0 M0 with the products, before the click (not counted)",
+   "source": "real M0, set B",
+   "file_s": [
+    17.93,
+    18.73
+   ],
+   "from_click_s": [
+    null,
+    0.0
+   ],
+   "frames": [
+    539,
+    562
+   ]
+  },
+  {
+   "segment": "b1 the products go down, and the in-place turn of 180 deg to the right (past the kitchen opening)",
+   "source": "real M0 -> clay: G/m0 stills (25, 0, -35, -95, -155)",
+   "file_s": [
+    18.73,
+    21.03
+   ],
+   "from_click_s": [
+    0.0,
+    2.3
+   ],
+   "frames": [
+    563,
+    631
+   ]
+  },
+  {
+   "segment": "b2 forward: through the double door and the hall, the 25 deg bend onto the corridor axis, the corridor",
+   "source": "clay, G stations",
+   "file_s": [
+    21.03,
+    30.2
+   ],
+   "from_click_s": [
+    2.3,
+    11.47
+   ],
+   "frames": [
+    632,
+    906
+   ]
+  },
+  {
+   "segment": "b3 through the bedroom door, along the south side",
+   "source": "clay, G stations",
+   "file_s": [
+    30.2,
+    32.17
+   ],
+   "from_click_s": [
+    11.47,
+    13.43
+   ],
+   "frames": [
+    907,
+    965
+   ]
+  },
+  {
+   "segment": "b4 around the foot of the bed (0.8 m/s, R 0.8), the head leads to the bed wall, the stop on MB0",
+   "source": "clay, G stations",
+   "file_s": [
+    32.17,
+    37.7
+   ],
+   "from_click_s": [
+    13.43,
+    18.93
+   ],
+   "frames": [
+    966,
+    1131
+   ]
+  },
+  {
+   "segment": "b5 the rest on MB0 (clay)",
+   "source": "clay MB0",
+   "file_s": [
+    37.7,
+    38.7
+   ],
+   "from_click_s": [
+    18.93,
+    18.93
+   ],
+   "frames": [
+    1132,
+    1161
+   ]
+  }
+ ],
+ "forward_check": [
+  {
+   "segment": "a0 D0 before the click (not counted)",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 0.0
+  },
+  {
+   "segment": "a1 the door opens (code)",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 0.0
+  },
+  {
+   "segment": "a2 the walk in: clip 1a (repaired, passed QA) and 1b (code); the bench in clay; the head turns left in the last 0.2 m",
+   "max_speed_m_s": 1.5,
+   "max_alpha_at_0_5_m_s_or_more": 1.4,
+   "max_alpha_moving": 29.9,
+   "max_turn_rate_deg_s": 75.0
+  },
+  {
+   "segment": "a3 the head turns left 90 deg at the junction (clay)",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 75.0
+  },
+  {
+   "segment": "a4 the only rest: the corridor, the doors' names land one by one",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 0.0
+  },
+  {
+   "segment": "a5 the head turns right 155 deg (clay); 'study' passes on the hidden leaf",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 90.0
+  },
+  {
+   "segment": "a6 the walk to the living room: clip 2 (real, re-timed to 1.5 m/s), starting in the last 20 deg of the turn",
+   "max_speed_m_s": 1.5,
+   "max_alpha_at_0_5_m_s_or_more": 2.0,
+   "max_alpha_moving": 15.6,
+   "max_turn_rate_deg_s": 89.9
+  },
+  {
+   "segment": "a7 the landing on M0 and the reveal (B)",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 0.0
+  },
+  {
+   "segment": "b0 M0 with the products, before the click (not counted)",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 0.0
+  },
+  {
+   "segment": "b1 the products go down, and the in-place turn of 180 deg to the right (past the kitchen opening)",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 90.0
+  },
+  {
+   "segment": "b2 forward: through the double door and the hall, the 25 deg bend onto the corridor axis, the corridor",
+   "max_speed_m_s": 1.5,
+   "max_alpha_at_0_5_m_s_or_more": 1.6,
+   "max_alpha_moving": 13.6,
+   "max_turn_rate_deg_s": 89.4
+  },
+  {
+   "segment": "b3 through the bedroom door, along the south side",
+   "max_speed_m_s": 1.5,
+   "max_alpha_at_0_5_m_s_or_more": 30.0,
+   "max_alpha_moving": 30.0,
+   "max_turn_rate_deg_s": 56.2
+  },
+  {
+   "segment": "b4 around the foot of the bed (0.8 m/s, R 0.8), the head leads to the bed wall, the stop on MB0",
+   "max_speed_m_s": 0.8,
+   "max_alpha_at_0_5_m_s_or_more": 31.1,
+   "max_alpha_moving": 70.2,
+   "max_turn_rate_deg_s": 57.5
+  },
+  {
+   "segment": "b5 the rest on MB0 (clay)",
+   "max_speed_m_s": 0.0,
+   "max_alpha_at_0_5_m_s_or_more": 0.0,
+   "max_alpha_moving": 0.0,
+   "max_turn_rate_deg_s": 0.0
+  }
+ ]
+}
