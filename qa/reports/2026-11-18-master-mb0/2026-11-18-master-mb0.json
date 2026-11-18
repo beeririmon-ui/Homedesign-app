@@ -1,0 +1,3552 @@
+{
+ "report": "qa/reports/2026-11-18-master-mb0/README.md",
+ "date": "2026-11-18",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-master-mb0-defaults-2026-11-18.md",
+ "assets": [
+  "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-defaults.png",
+  "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-variant-throw-flax.png",
+  "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-variant-throw-clay.png"
+ ],
+ "verdict": "fail",
+ "blocking": [
+  "M1",
+  "M2",
+  "M3",
+  "M4",
+  "M5",
+  "M6",
+  "M7"
+ ],
+ "status_line": "MB0 שלב 1: נכשל QA על M1–M7 (בינוניים; בקוד ב-0 טוקנים; ב-M1 אולי צריך מודל אם הקוד לא מחזיק ב-×2, וזו שאלה למנהל כי התקציב של הריצה נוצל; QA בודק שוב רק אותם)",
+ "status_after_fix": "עבר QA (שלב 1; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
+ "budget_note": "run spent 3,700 of 3,700; any model edit (~400) is a question for the manager",
+ "items": {
+  "1_fidelity": {
+   "result": "fail",
+   "failing": [
+    "M3 sill vase",
+    "M4 bottle",
+    "M6 east sconce plate",
+    "M7 cushion width"
+   ],
+   "throws_dE00_vs_photo": {
+    "pecan": 2.05,
+    "flax": 1.44,
+    "clay": 2.63
+   },
+   "throw_dhue_dC": {
+    "pecan": [
+     2.6,
+     3.9
+    ],
+    "flax": [
+     -0.2,
+     -2.3
+    ],
+    "clay": [
+     1.3,
+     0.5
+    ]
+   },
+   "pillows_px_vs_expected": [
+    [
+     392,
+     404
+    ],
+    395
+   ],
+   "lamp": {
+    "shade_px": [
+     264,
+     266.1
+    ],
+    "height_px": [
+     851,
+     848.3
+    ],
+    "base_cm": 27.5
+   },
+   "candle_holder_px": 59.3,
+   "tray_ratio": 0.96,
+   "duvet_lit_alb": [
+    73.4,
+    2.3,
+    11.2
+   ],
+   "duvet_not_grey_or_white": true
+  },
+  "2_rejection_list": {
+   "result": "fail",
+   "items": {
+    "1": "fail (M3,M4,M6,M7)",
+    "2": "fail (M1)",
+    "3": "pass",
+    "4": "fail (M2)",
+    "5": "pass",
+    "6": "pass",
+    "7": "pass"
+   },
+   "12_7_to_12_9": {
+    "lamp_pole_exception_cancelled": "pass (no cable; base 27.5 cm; ~60% of the base disc behind the duvet drape)",
+    "curtain_in_front_of_sill": "pass",
+    "dish_slot_empty": "pass",
+    "no_picture_above_bed": "pass",
+    "throw_front_soft_fold_no_knots": "pass",
+    "fringes_hidden": "pass (manager)"
+   }
+  },
+  "3_composition": {
+   "result": "fail (M5 only)",
+   "curtain_vs_nightstand_u": 0.0082,
+   "rule": 0.02,
+   "sill_vase_vs_curtain_u": 0.0261,
+   "sill_vase_margin_u": 0.0618,
+   "shade_margin_u": 0.0676,
+   "shade_to_east_cone_u": 0.0729,
+   "curtain_hem_cm": [
+    11.9,
+    12.1
+   ],
+   "caramel_area_pct": 7.36,
+   "count": 9,
+   "count_items": [
+    "curtains",
+    "sconce pair",
+    "sill-vase",
+    "floor-lamp",
+    "bottle",
+    "pillowcases",
+    "bedding",
+    "cushions",
+    "throw"
+   ],
+   "not_counted": [
+    "tray 0.095%",
+    "candle-holders 0.121%"
+   ]
+  },
+  "4_layers_rnd2": {
+   "result": "pass",
+   "detail": {
+    "z": [
+     [
+      "curtains",
+      10,
+      9
+     ],
+     [
+      "bedside-sconces",
+      14,
+      13
+     ],
+     [
+      "sill-vase",
+      16,
+      15
+     ],
+     [
+      "floor-lamp",
+      36,
+      35
+     ],
+     [
+      "nightstand-tray",
+      44,
+      43
+     ],
+     [
+      "nightstand-vase",
+      46,
+      45
+     ],
+     [
+      "candle-holders",
+      46,
+      45
+     ],
+     [
+      "pillowcases",
+      50,
+      49
+     ],
+     [
+      "bedding",
+      52,
+      51
+     ],
+     [
+      "cushions",
+      55,
+      54
+     ],
+     [
+      "throw",
+      58,
+      57
+     ]
+    ],
+    "shadow_one_below": true,
+    "z_sorted_as_listed": true,
+    "light_modes": [
+     [
+      "bedside-sconces",
+      "screen",
+      90
+     ],
+     [
+      "floor-lamp",
+      "screen",
+      90
+     ]
+    ],
+    "light_shapes": [
+     [
+      1530,
+      2720,
+      3
+     ],
+     [
+      1530,
+      2720,
+      3
+     ]
+    ],
+    "recompose_vs_defaults": {
+     "px_diff": 0,
+     "max": 0,
+     "outside_region_diff": 0
+    },
+    "defaults_vs_plate_outside_region": 0,
+    "defaults_region_px": 2265776,
+    "defaults_black_point": {
+     "0.1": 2.29,
+     "0.5": 11.1,
+     "1": 15.63,
+     "5": 32.48
+    },
+    "defaults_mean_luma_8bit": 176.7,
+    "defaults_frame_vs_crop_max": 0,
+    "recompose_vs_flax": {
+     "px_diff": 0,
+     "max": 0,
+     "outside_region_diff": 0
+    },
+    "flax_vs_plate_outside_region": 0,
+    "flax_region_px": 2265776,
+    "flax_black_point": {
+     "0.1": 2.85,
+     "0.5": 13.2,
+     "1": 17.54,
+     "5": 33.27
+    },
+    "flax_mean_luma_8bit": 177.4,
+    "flax_frame_vs_crop_max": 0,
+    "recompose_vs_clay": {
+     "px_diff": 0,
+     "max": 0,
+     "outside_region_diff": 0
+    },
+    "clay_vs_plate_outside_region": 0,
+    "clay_region_px": 2265776,
+    "clay_black_point": {
+     "0.1": 7.02,
+     "0.5": 11.97,
+     "1": 14.56,
+     "5": 28.44
+    },
+    "clay_mean_luma_8bit": 175.1,
+    "clay_frame_vs_crop_max": 0,
+    "flax_alpha_identical": true,
+    "flax_shadow_identical": true,
+    "flax_shadow_diff_px": 0,
+    "flax_vs_defaults_px": 144697,
+    "flax_vs_defaults_outside_throw_alpha": 0,
+    "flax_vs_defaults_outside_throw_alpha_and_shadow": 0,
+    "clay_alpha_identical": true,
+    "clay_shadow_identical": true,
+    "clay_shadow_diff_px": 0,
+    "clay_vs_defaults_px": 147626,
+    "clay_vs_defaults_outside_throw_alpha": 0,
+    "clay_vs_defaults_outside_throw_alpha_and_shadow": 0,
+    "light_only_brightens": true,
+    "light0_bedside-sconces": {
+     "px": 267620,
+     "over_opaque_product": 0,
+     "over_any_product_alpha": 7697,
+     "by_plate_id": {
+      "1": 203210,
+      "5": 34000,
+      "20": 15334,
+      "24": 1837,
+      "25": 12276,
+      "26": 963
+     }
+    },
+    "light1_floor-lamp": {
+     "px": 337187,
+     "over_opaque_product": 0,
+     "over_any_product_alpha": 6165,
+     "by_plate_id": {
+      "1": 223792,
+      "9": 25599,
+      "10": 82608,
+      "23": 924,
+      "24": 1467,
+      "25": 2380,
+      "26": 417
+     }
+    }
+   }
+  },
+  "5_frame_x1_x2": {
+   "result": "fail (M1, M2); one house pass",
+   "fold_band_L": [
+    77,
+    79
+   ],
+   "top_grid_pp_L": 2.42,
+   "foot_grid_pp_L": 3.84,
+   "seam_row": 1299,
+   "seam_step_median_L": -1.79,
+   "right_corner_step_L": [
+    -8.0,
+    11.5
+   ],
+   "grad_x_over_y": {
+    "foot": 1.61,
+    "top": 1.18,
+    "side": 1.11,
+    "r4_same_rows": 0.87
+   },
+   "white_strip_L": [
+    89,
+    97
+   ],
+   "mean_luma_8bit": {
+    "defaults": 176.7,
+    "flax": 177.4,
+    "clay": 175.1,
+    "plate": 178.6
+   }
+  }
+ },
+ "findings": [
+  {
+   "id": "M1",
+   "severity": "medium",
+   "what": "duvet foot does not read as one fall (12.9-4): seam at canvas row 1299 (median signed step -1.79 L*, right corner -8..+11.5), 14 px grid left on the foot (3.8 L* p-p), vertical stretch (grad x/y 1.61 vs 1.1-1.2), small dark specks",
+   "fix": "code first: blend the seam >=30 px with texture match, the grid notch on the foot, texture continuation instead of stretching, heal specks; if not holding at x2, a foot mask edit (~400) = manager question (budget spent)",
+   "owner": "render-agent; manager if a model",
+   "evidence": "mb0-m1-duvet-foot.jpg",
+   "model_maybe": true
+  },
+  {
+   "id": "M2",
+   "severity": "medium",
+   "what": "white strip between the fold band and the throw (rows ~978-1000): L* 89-97, b* 5-8.5 vs lit duvet 71-83 / b* 9-10; reads as a separate white sheet (12.9-3)",
+   "fix": "code: same as the fold band, L* <= lit+8, b* +-2, inside the duvet alpha",
+   "owner": "render-agent",
+   "evidence": "mb0-m2-white-strip-x1.jpg"
+  },
+  {
+   "id": "M3",
+   "severity": "medium",
+   "what": "sill vase without the turned foot (knop + flared base, ~28% of height) of CJJT293877501AZ; two-piece column (left part ends at row 881, strip x 285-301 to 893; notch top-left); size and colour pass",
+   "fix": "code rebuild from the SKU outline at the projected size (as the candle holders), or a mask edit (~400, manager)",
+   "owner": "render-agent",
+   "evidence": "mb0-m3-m4-vase-bottle-x2.jpg"
+  },
+  {
+   "id": "M4",
+   "severity": "medium",
+   "what": "bottle is a shouldered cylinder; Color D photo is a bell (long neck flowing into a wide rounded base); light shoulder wedges left from r4; size and colour pass",
+   "fix": "code rebuild of the bell outline at today's height/place/tone",
+   "owner": "render-agent",
+   "evidence": "mb0-m3-m4-vase-bottle-x2.jpg"
+  },
+  {
+   "id": "M5",
+   "severity": "medium",
+   "what": "curtain vs left nightstand 0.0082 (rule 0.02, 12.6.1-2), at sill height and along the nightstand; heap ~15 cm deep vs 9",
+   "fix": "code: gather the folds tighter within the envelope so the edge is at x <= 517; track not moved; shadow follows; plate fills",
+   "owner": "render-agent",
+   "evidence": "mb0-m5-curtain-gap-x2.jpg"
+  },
+  {
+   "id": "M6",
+   "severity": "medium",
+   "what": "sconce pair, same SKU, plates differ: west L* 44 (48.5 lit) h 47, east L* 26 (28) h 52, dE00 ~15-19; wall differs 4-5 L*; west near the photo (L* 51 rel., h 37)",
+   "fix": "code: east plate to the west's L* a* b* relative to the wall round each; grain, arm, cone untouched",
+   "owner": "render-agent",
+   "evidence": "mb0-m6-sconce-plates-x2.jpg"
+  },
+  {
+   "id": "M7",
+   "severity": "medium",
+   "what": "cushion 334x147 px; standing on the duvet at Y 17.95-18.10 (bottom Z 0.66-0.68) = 56-60 x 25-27 cm vs 50x30 (>+5); aspect 2.27 vs 1.67; vs the pillows 0.82 vs 0.68-0.72",
+   "fix": "code: horizontal 0.85 about the centre (50+-3 cm), fill the uncovered strips from the pillows / headboard gap",
+   "owner": "render-agent",
+   "evidence": "mb0-m7-cushion.jpg"
+  },
+  {
+   "id": "MB-L1",
+   "severity": "low",
+   "what": "dark contact line under the throw's soft fold, L* 1-5 to 77-94 in 1-2 px, light breaks at x ~1132 and ~1356; from r4",
+   "owner": "render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MB-L2",
+   "severity": "low",
+   "what": "vertical seams at the soft-fold span ends x 560 / 2160 (col step 4.0-6.5 vs 1.2-4.3), all three throws; x3 clear, x2 faint",
+   "owner": "render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MB-L3",
+   "severity": "low",
+   "what": "ghost leaves of r4's larger stem on the bronze frame (2,401 px |dL*|>10, many semi-transparent; a thin line x 203-207)",
+   "owner": "render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MB-L4",
+   "severity": "low",
+   "what": "candle holders: dark side outline (933 px darker than both sides by >6 L*), pointed foot ~5 px; faint at x2; edge of rejection 5",
+   "owner": "render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MB-L5",
+   "severity": "low",
+   "what": "x3-only cut traces: flat tray fill right of the bottle, nightstand front-edge break at x ~720, stepped right edge of the west plate",
+   "owner": "render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MB-I1",
+   "severity": "info",
+   "what": "pillowcases lit 59.3/17.0/29.3 h 59-60 vs photo 66.8/23.8/32.3 h 53.6; C/L 0.57 vs 0.60; hue +5.5-6; within Bible caramel; designer's eye at approval 3"
+  },
+  {
+   "id": "MB-I2",
+   "severity": "info",
+   "what": "cones h 80 vs 71-73, C 10-11 vs 12-13; photo on synthetic white; within Bible travertine; equal to the candle holders"
+  },
+  {
+   "id": "MB-I3",
+   "severity": "info",
+   "what": "cushion b* 8.5 vs 4.3, dE00 3.4; pass"
+  },
+  {
+   "id": "MB-I4",
+   "severity": "info",
+   "what": "window p99 97.8, shade 98.2, white strip 97.2: equal within dE00 1"
+  },
+  {
+   "id": "MB-I5",
+   "severity": "info",
+   "what": "floor right of the bed with the pool 40.7/8.1/16.0; matched dE00 median 0.81, p75 0.45, p25 3.25; MP-D3 closed"
+  },
+  {
+   "id": "MB-I6",
+   "severity": "info",
+   "what": "plate MP-L2 (sill end cap) is under the curtain in all three outputs; still relevant to the empty plate"
+  }
+ ],
+ "measurements": {
+  "colour": {
+   "pillowcases": {
+    "abs": {
+     "L": 52.8,
+     "a": 18.0,
+     "b": 30.2,
+     "C": 35.2,
+     "h": 59.2,
+     "px": 48285
+    },
+    "alb": {
+     "L": 53.6,
+     "a": 18.7,
+     "b": 31.3,
+     "C": 36.5,
+     "h": 59.2,
+     "px": 48285
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 80464,
+    "sku": [
+     64.4,
+     27.6,
+     37.6
+    ],
+    "dE00_alb": 10.65,
+    "dE00_abs": 11.52,
+    "d_hue_alb": 5.5,
+    "d_C_alb": -10.1
+   },
+   "cushions": {
+    "abs": {
+     "L": 80.0,
+     "a": 1.8,
+     "b": 8.5,
+     "C": 8.7,
+     "h": 78.3,
+     "px": 24263
+    },
+    "alb": {
+     "L": 81.0,
+     "a": 2.0,
+     "b": 10.1,
+     "C": 10.3,
+     "h": 78.7,
+     "px": 24263
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 40406,
+    "sku": [
+     81.1,
+     1.9,
+     4.3
+    ],
+    "dE00_alb": 4.46,
+    "dE00_abs": 3.44,
+    "d_hue_alb": 12.5,
+    "d_C_alb": 5.6
+   },
+   "throw_defaults": {
+    "abs": {
+     "L": 51.1,
+     "a": 17.6,
+     "b": 23.6,
+     "C": 29.4,
+     "h": 53.3,
+     "px": 59637
+    },
+    "alb": {
+     "L": 51.9,
+     "a": 18.2,
+     "b": 24.7,
+     "C": 30.7,
+     "h": 53.6,
+     "px": 59637
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 99389,
+    "sku": [
+     52.4,
+     16.8,
+     20.8
+    ],
+    "dE00_alb": 2.05,
+    "dE00_abs": 1.95,
+    "d_hue_alb": 2.5,
+    "d_C_alb": 4.0
+   },
+   "throw_flax": {
+    "abs": {
+     "L": 58.0,
+     "a": 4.4,
+     "b": 12.4,
+     "C": 13.1,
+     "h": 70.4,
+     "px": 59664
+    },
+    "alb": {
+     "L": 58.8,
+     "a": 4.8,
+     "b": 13.6,
+     "C": 14.4,
+     "h": 70.7,
+     "px": 59664
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 99389,
+    "sku": [
+     57.8,
+     5.1,
+     14.6
+    ],
+    "dE00_alb": 1.1,
+    "dE00_abs": 1.45,
+    "d_hue_alb": -0.0,
+    "d_C_alb": -1.1
+   },
+   "throw_clay": {
+    "abs": {
+     "L": 26.0,
+     "a": 7.9,
+     "b": 8.6,
+     "C": 11.7,
+     "h": 47.7,
+     "px": 59982
+    },
+    "alb": {
+     "L": 26.5,
+     "a": 8.2,
+     "b": 9.3,
+     "C": 12.4,
+     "h": 48.8,
+     "px": 59982
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 99389,
+    "sku": [
+     22.4,
+     7.7,
+     8.1
+    ],
+    "dE00_alb": 3.11,
+    "dE00_abs": 2.63,
+    "d_hue_alb": 2.3,
+    "d_C_alb": 1.2
+   },
+   "bedding_lit_top": {
+    "abs": {
+     "L": 72.5,
+     "a": 2.1,
+     "b": 9.8,
+     "C": 10.0,
+     "h": 78.1,
+     "px": 148313
+    },
+    "alb": {
+     "L": 73.4,
+     "a": 2.3,
+     "b": 11.2,
+     "C": 11.5,
+     "h": 78.2,
+     "px": 148313
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 247000
+   },
+   "bedding_fold_band": {
+    "abs": {
+     "L": 77.0,
+     "a": 2.0,
+     "b": 9.9,
+     "C": 10.1,
+     "h": 78.3,
+     "px": 23186
+    },
+    "alb": {
+     "L": 78.0,
+     "a": 2.3,
+     "b": 11.4,
+     "C": 11.6,
+     "h": 78.5,
+     "px": 23186
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 38439
+   },
+   "cone_west": {
+    "abs": {
+     "L": 81.7,
+     "a": 1.9,
+     "b": 10.5,
+     "C": 10.7,
+     "h": 79.8,
+     "px": 1877
+    },
+    "alb": {
+     "L": 84.2,
+     "a": 1.2,
+     "b": 10.4,
+     "C": 10.4,
+     "h": 83.3,
+     "px": 1877
+    },
+    "ref_px": 48954,
+    "ref_abs": {
+     "L": 88.5,
+     "a": 0.7,
+     "b": 6.9,
+     "C": 6.9,
+     "h": 84.3,
+     "px": 48954
+    },
+    "px": 3126,
+    "sku": [
+     70.6,
+     4.0,
+     11.4
+    ],
+    "dE00_alb": 10.31,
+    "dE00_abs": 8.43,
+    "d_hue_alb": 12.6,
+    "d_C_alb": -1.7
+   },
+   "cone_east": {
+    "abs": {
+     "L": 80.7,
+     "a": 2.3,
+     "b": 10.9,
+     "C": 11.1,
+     "h": 78.1,
+     "px": 1940
+    },
+    "alb": {
+     "L": 83.2,
+     "a": 1.6,
+     "b": 10.7,
+     "C": 10.9,
+     "h": 81.4,
+     "px": 1940
+    },
+    "ref_px": 48954,
+    "ref_abs": {
+     "L": 88.5,
+     "a": 0.7,
+     "b": 6.9,
+     "C": 6.9,
+     "h": 84.3,
+     "px": 48954
+    },
+    "px": 3221,
+    "sku": [
+     70.6,
+     4.0,
+     11.4
+    ],
+    "dE00_alb": 9.51,
+    "dE00_abs": 7.62,
+    "d_hue_alb": 10.7,
+    "d_C_alb": -1.2
+   },
+   "walnut_plates": {
+    "abs": {
+     "L": 27.8,
+     "a": 16.0,
+     "b": 20.0,
+     "C": 25.6,
+     "h": 51.4,
+     "px": 3969
+    },
+    "alb": {
+     "L": 28.9,
+     "a": 15.9,
+     "b": 20.2,
+     "C": 25.8,
+     "h": 51.8,
+     "px": 3969
+    },
+    "ref_px": 48954,
+    "ref_abs": {
+     "L": 88.5,
+     "a": 0.7,
+     "b": 6.9,
+     "C": 6.9,
+     "h": 84.3,
+     "px": 48954
+    },
+    "px": 6614
+   },
+   "candle_holders": {
+    "abs": {
+     "L": 79.7,
+     "a": 2.9,
+     "b": 11.6,
+     "C": 12.0,
+     "h": 76.2,
+     "px": 828
+    },
+    "alb": {
+     "L": 84.0,
+     "a": 1.8,
+     "b": 10.4,
+     "C": 10.5,
+     "h": 80.3,
+     "px": 828
+    },
+    "ref_px": 14403,
+    "ref_abs": {
+     "L": 86.5,
+     "a": 1.3,
+     "b": 7.7,
+     "C": 7.8,
+     "h": 80.7,
+     "px": 14403
+    },
+    "px": 1371,
+    "sku": [
+     74.9,
+     3.5,
+     17.0
+    ],
+    "dE00_alb": 7.66,
+    "dE00_abs": 4.76,
+    "d_hue_alb": 1.9,
+    "d_C_alb": -6.9
+   },
+   "candles_wax": {
+    "abs": {
+     "L": 90.1,
+     "a": 2.1,
+     "b": 12.6,
+     "C": 12.7,
+     "h": 80.4,
+     "px": 534
+    },
+    "alb": {
+     "L": 94.9,
+     "a": 0.9,
+     "b": 11.2,
+     "C": 11.2,
+     "h": 85.2,
+     "px": 534
+    },
+    "ref_px": 14403,
+    "ref_abs": {
+     "L": 86.5,
+     "a": 1.3,
+     "b": 7.7,
+     "C": 7.8,
+     "h": 80.7,
+     "px": 14403
+    },
+    "px": 884
+   },
+   "bottle": {
+    "abs": {
+     "L": 62.2,
+     "a": 5.0,
+     "b": 18.0,
+     "C": 18.7,
+     "h": 74.3,
+     "px": 2866
+    },
+    "alb": {
+     "L": 69.5,
+     "a": 2.9,
+     "b": 17.1,
+     "C": 17.3,
+     "h": 80.5,
+     "px": 2866
+    },
+    "ref_px": 29399,
+    "ref_abs": {
+     "L": 82.0,
+     "a": 3.4,
+     "b": 10.7,
+     "C": 11.2,
+     "h": 72.4,
+     "px": 29399
+    },
+    "px": 4778,
+    "sku": [
+     60.5,
+     7.1,
+     26.5
+    ],
+    "dE00_alb": 9.25,
+    "dE00_abs": 4.56,
+    "d_hue_alb": 5.5,
+    "d_C_alb": -10.1
+   },
+   "tray": {
+    "abs": {
+     "L": 23.8,
+     "a": 15.1,
+     "b": 12.7,
+     "C": 19.7,
+     "h": 40.2,
+     "px": 1016
+    },
+    "alb": {
+     "L": 55.1,
+     "a": 19.9,
+     "b": 7.6,
+     "C": 21.3,
+     "h": 20.9,
+     "px": 1016
+    },
+    "ref_px": 6949,
+    "ref_abs": {
+     "L": 43.0,
+     "a": 2.5,
+     "b": 12.6,
+     "C": 12.9,
+     "h": 78.6,
+     "px": 6949
+    },
+    "px": 1690,
+    "sku": [
+     31.2,
+     17.7,
+     11.9
+    ],
+    "dE00_alb": 22.32,
+    "dE00_abs": 5.97,
+    "d_hue_alb": -13.0,
+    "d_C_alb": -0.0
+   },
+   "sill_vase_body": {
+    "abs": {
+     "L": 85.0,
+     "a": -0.1,
+     "b": 10.4,
+     "C": 10.4,
+     "h": 90.6,
+     "px": 4088
+    },
+    "alb": {
+     "L": 120.8,
+     "a": -1.8,
+     "b": -4.9,
+     "C": 5.2,
+     "h": 249.7,
+     "px": 4088
+    },
+    "ref_px": 1668,
+    "ref_abs": {
+     "L": 63.3,
+     "a": 3.0,
+     "b": 14.3,
+     "C": 14.6,
+     "h": 78.2,
+     "px": 1668
+    },
+    "px": 6801,
+    "sku": [
+     86.6,
+     -0.4,
+     11.2
+    ],
+    "dE00_alb": 23.52,
+    "dE00_abs": 1.24,
+    "d_hue_alb": 157.7,
+    "d_C_alb": -6.0
+   },
+   "curtain": {
+    "abs": {
+     "L": 75.6,
+     "a": 1.6,
+     "b": 11.1,
+     "C": 11.2,
+     "h": 81.7,
+     "px": 72040
+    },
+    "alb": {
+     "L": 124.4,
+     "a": -0.1,
+     "b": -7.8,
+     "C": 7.8,
+     "h": 269.4,
+     "px": 72040
+    },
+    "ref_px": 49736,
+    "ref_abs": {
+     "L": 54.1,
+     "a": 3.3,
+     "b": 15.1,
+     "C": 15.5,
+     "h": 77.7,
+     "px": 49736
+    },
+    "px": 120000
+   },
+   "lamp_shade": {
+    "abs": {
+     "L": 89.4,
+     "a": 1.8,
+     "b": 13.7,
+     "C": 13.9,
+     "h": 82.5,
+     "px": 21088
+    },
+    "alb": {
+     "L": 96.3,
+     "a": 1.1,
+     "b": 12.1,
+     "C": 12.1,
+     "h": 84.8,
+     "px": 21088
+    },
+    "ref_px": 77284,
+    "ref_abs": {
+     "L": 84.6,
+     "a": 1.0,
+     "b": 9.2,
+     "C": 9.3,
+     "h": 83.6,
+     "px": 77284
+    },
+    "px": 35098
+   },
+   "lamp_pole": {
+    "abs": {
+     "L": 36.2,
+     "a": 17.1,
+     "b": 20.1,
+     "C": 26.4,
+     "h": 49.6,
+     "px": 2161
+    },
+    "alb": {
+     "L": 39.5,
+     "a": 17.4,
+     "b": 20.3,
+     "C": 26.7,
+     "h": 49.4,
+     "px": 2161
+    },
+    "ref_px": 77284,
+    "ref_abs": {
+     "L": 84.6,
+     "a": 1.0,
+     "b": 9.2,
+     "C": 9.3,
+     "h": 83.6,
+     "px": 77284
+    },
+    "px": 3600
+   },
+   "lamp_base": {
+    "abs": {
+     "L": 45.8,
+     "a": 6.1,
+     "b": 22.6,
+     "C": 23.4,
+     "h": 74.9,
+     "px": 897
+    },
+    "alb": {
+     "L": 49.7,
+     "a": 5.6,
+     "b": 22.8,
+     "C": 23.5,
+     "h": 76.1,
+     "px": 897
+    },
+    "ref_px": 77284,
+    "ref_abs": {
+     "L": 84.6,
+     "a": 1.0,
+     "b": 9.2,
+     "C": 9.3,
+     "h": 83.6,
+     "px": 77284
+    },
+    "px": 1458,
+    "sku": [
+     54.4,
+     6.8,
+     19.1
+    ],
+    "dE00_alb": 5.36,
+    "dE00_abs": 8.89,
+    "d_hue_alb": 5.7,
+    "d_C_alb": 3.2
+   },
+   "lamp_collar": {
+    "abs": {
+     "L": 67.5,
+     "a": 10.6,
+     "b": 31.5,
+     "C": 33.2,
+     "h": 71.4,
+     "px": 696
+    },
+    "alb": {
+     "L": 72.8,
+     "a": 10.1,
+     "b": 31.9,
+     "C": 33.5,
+     "h": 72.5,
+     "px": 696
+    },
+    "ref_px": 77284,
+    "ref_abs": {
+     "L": 84.6,
+     "a": 1.0,
+     "b": 9.2,
+     "C": 9.3,
+     "h": 83.6,
+     "px": 77284
+    },
+    "px": 1162
+   }
+  },
+  "colour_lit": {
+   "pillowcases": {
+    "abs": {
+     "L": 59.3,
+     "a": 17.0,
+     "b": 29.3,
+     "C": 33.9,
+     "h": 59.9,
+     "px": 24177
+    },
+    "alb": {
+     "L": 60.3,
+     "a": 17.7,
+     "b": 30.5,
+     "C": 35.3,
+     "h": 59.9,
+     "px": 24177
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 80464
+   },
+   "cushions": {
+    "abs": {
+     "L": 84.7,
+     "a": 1.2,
+     "b": 7.5,
+     "C": 7.6,
+     "h": 81.3,
+     "px": 12153
+    },
+    "alb": {
+     "L": 85.8,
+     "a": 1.4,
+     "b": 9.1,
+     "C": 9.3,
+     "h": 81.3,
+     "px": 12153
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 40406
+   },
+   "cone_west": {
+    "abs": {
+     "L": 84.1,
+     "a": 1.5,
+     "b": 9.9,
+     "C": 10.0,
+     "h": 81.5,
+     "px": 938
+    },
+    "alb": {
+     "L": 86.6,
+     "a": 0.8,
+     "b": 9.7,
+     "C": 9.7,
+     "h": 85.3,
+     "px": 938
+    },
+    "ref_px": 48954,
+    "ref_abs": {
+     "L": 88.5,
+     "a": 0.7,
+     "b": 6.9,
+     "C": 6.9,
+     "h": 84.3,
+     "px": 48954
+    },
+    "px": 3126
+   },
+   "cone_east": {
+    "abs": {
+     "L": 86.9,
+     "a": 1.5,
+     "b": 9.6,
+     "C": 9.7,
+     "h": 81.3,
+     "px": 967
+    },
+    "alb": {
+     "L": 89.5,
+     "a": 0.7,
+     "b": 9.4,
+     "C": 9.4,
+     "h": 85.4,
+     "px": 967
+    },
+    "ref_px": 48954,
+    "ref_abs": {
+     "L": 88.5,
+     "a": 0.7,
+     "b": 6.9,
+     "C": 6.9,
+     "h": 84.3,
+     "px": 48954
+    },
+    "px": 3221
+   },
+   "candle_holders": {
+    "abs": {
+     "L": 82.3,
+     "a": 2.8,
+     "b": 11.6,
+     "C": 12.0,
+     "h": 76.3,
+     "px": 427
+    },
+    "alb": {
+     "L": 86.8,
+     "a": 1.7,
+     "b": 10.3,
+     "C": 10.5,
+     "h": 80.4,
+     "px": 427
+    },
+    "ref_px": 14403,
+    "ref_abs": {
+     "L": 86.5,
+     "a": 1.3,
+     "b": 7.7,
+     "C": 7.8,
+     "h": 80.7,
+     "px": 14403
+    },
+    "px": 1371
+   },
+   "throw_defaults": {
+    "abs": {
+     "L": 63.6,
+     "a": 16.3,
+     "b": 23.7,
+     "C": 28.7,
+     "h": 55.5,
+     "px": 29822
+    },
+    "alb": {
+     "L": 64.5,
+     "a": 16.9,
+     "b": 25.1,
+     "C": 30.2,
+     "h": 55.9,
+     "px": 29822
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 99389
+   },
+   "throw_flax": {
+    "abs": {
+     "L": 70.4,
+     "a": 3.8,
+     "b": 12.4,
+     "C": 12.9,
+     "h": 73.1,
+     "px": 29856
+    },
+    "alb": {
+     "L": 71.4,
+     "a": 4.1,
+     "b": 13.8,
+     "C": 14.4,
+     "h": 73.4,
+     "px": 29856
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 99389
+   },
+   "throw_clay": {
+    "abs": {
+     "L": 32.8,
+     "a": 9.7,
+     "b": 10.9,
+     "C": 14.6,
+     "h": 48.4,
+     "px": 30480
+    },
+    "alb": {
+     "L": 33.3,
+     "a": 10.1,
+     "b": 11.8,
+     "C": 15.5,
+     "h": 49.5,
+     "px": 30480
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 99389
+   },
+   "bedding_lit_top": {
+    "abs": {
+     "L": 82.3,
+     "a": 1.3,
+     "b": 7.7,
+     "C": 7.8,
+     "h": 80.3,
+     "px": 74550
+    },
+    "alb": {
+     "L": 83.3,
+     "a": 1.6,
+     "b": 9.3,
+     "C": 9.4,
+     "h": 80.4,
+     "px": 74550
+    },
+    "ref_px": 65600,
+    "ref_abs": {
+     "L": 90.1,
+     "a": 0.3,
+     "b": 4.5,
+     "C": 4.5,
+     "h": 86.1,
+     "px": 65600
+    },
+    "px": 247000
+   }
+  },
+  "hsl": {
+   "pillowcases": {
+    "scene": [
+     [
+      24.4,
+      40.6,
+      47.8
+     ],
+     [
+      52.9,
+      18.0,
+      30.2
+     ]
+    ],
+    "photo": [
+     [
+      21.2,
+      52.0,
+      54.9
+     ],
+     [
+      58.8,
+      25.7,
+      35.0
+     ]
+    ],
+    "dE00_abs": 6.86
+   },
+   "throw_pecan": {
+    "scene": [
+     [
+      20.3,
+      37.0,
+      47.8
+     ],
+     [
+      51.1,
+      17.6,
+      23.6
+     ]
+    ],
+    "photo": [
+     [
+      20.4,
+      31.9,
+      32.7
+     ],
+     [
+      35.2,
+      12.7,
+      16.9
+     ]
+    ],
+    "dE00_abs": 15.17
+   },
+   "throw_flax": {
+    "scene": [
+     [
+      29.0,
+      17.6,
+      53.5
+     ],
+     [
+      57.9,
+      4.4,
+      12.4
+     ]
+    ],
+    "photo": [
+     [
+      28.3,
+      19.6,
+      53.3
+     ],
+     [
+      57.8,
+      5.1,
+      14.6
+     ]
+    ],
+    "dE00_abs": 1.44
+   },
+   "throw_clay": {
+    "scene": [
+     [
+      17.1,
+      23.1,
+      24.7
+     ],
+     [
+      26.0,
+      7.9,
+      8.6
+     ]
+    ],
+    "photo": [
+     [
+      16.2,
+      24.8,
+      21.8
+     ],
+     [
+      22.4,
+      7.7,
+      8.1
+     ]
+    ],
+    "dE00_abs": 2.63
+   },
+   "cushions": {
+    "scene": [
+     [
+      32.7,
+      21.3,
+      76.7
+     ],
+     [
+      80.0,
+      1.8,
+      8.5
+     ]
+    ],
+    "photo": [
+     [
+      26.2,
+      13.6,
+      78.8
+     ],
+     [
+      81.1,
+      1.9,
+      4.3
+     ]
+    ],
+    "dE00_abs": 3.44
+   },
+   "bottle": {
+    "scene": [
+     [
+      31.8,
+      23.9,
+      56.5
+     ],
+     [
+      62.1,
+      5.0,
+      18.0
+     ]
+    ],
+    "photo": [
+     [
+      33.5,
+      35.3,
+      53.1
+     ],
+     [
+      60.5,
+      7.1,
+      26.5
+     ]
+    ],
+    "dE00_abs": 4.54
+   },
+   "tray": {
+    "scene": [
+     [
+      12.8,
+      37.4,
+      23.7
+     ],
+     [
+      23.8,
+      15.0,
+      12.7
+     ]
+    ],
+    "photo": [
+     [
+      8.7,
+      30.5,
+      31.2
+     ],
+     [
+      31.2,
+      17.7,
+      11.9
+     ]
+    ],
+    "dE00_abs": 6.0
+   },
+   "curtain": {
+    "scene": [
+     [
+      34.8,
+      22.1,
+      71.4
+     ],
+     [
+      75.6,
+      1.6,
+      11.1
+     ]
+    ],
+    "photo": [
+     [
+      46.2,
+      18.3,
+      84.9
+     ],
+     [
+      88.1,
+      -0.7,
+      5.8
+     ]
+    ],
+    "dE00_abs": 9.8
+   },
+   "candle_holders": {
+    "scene": [
+     [
+      31.7,
+      29.4,
+      76.3
+     ],
+     [
+      79.9,
+      2.9,
+      11.6
+     ]
+    ],
+    "photo": [
+     [
+      33.3,
+      32.9,
+      69.8
+     ],
+     [
+      74.9,
+      3.5,
+      17.0
+     ]
+    ],
+    "dE00_abs": 4.86
+   },
+   "cones": {
+    "scene": [
+     [
+      30.8,
+      27.3,
+      56.7
+     ],
+     [
+      61.9,
+      4.5,
+      15.6
+     ]
+    ],
+    "photo": [
+     [
+      29.1,
+      21.1,
+      66.9
+     ],
+     [
+      70.6,
+      4.0,
+      11.4
+     ]
+    ],
+    "dE00_abs": 7.53
+   },
+   "sconce_plates": {
+    "scene": [
+     [
+      19.7,
+      52.1,
+      24.5
+     ],
+     [
+      26.6,
+      17.5,
+      22.0
+     ]
+    ],
+    "photo": [
+     [
+      10.4,
+      21.7,
+      50.2
+     ],
+     [
+      50.9,
+      14.9,
+      11.1
+     ]
+    ],
+    "dE00_abs": 22.03
+   },
+   "sill_vase": {
+    "scene": [
+     [
+      40.9,
+      31.2,
+      81.4
+     ],
+     [
+      85.4,
+      -0.1,
+      10.3
+     ]
+    ],
+    "photo": [
+     [
+      48.0,
+      15.1,
+      71.2
+     ],
+     [
+      76.4,
+      -1.7,
+      10.1
+     ]
+    ],
+    "dE00_abs": 6.53
+   },
+   "lamp_base": {
+    "scene": [
+     [
+      33.1,
+      29.6,
+      39.4
+     ],
+     [
+      45.8,
+      6.1,
+      22.6
+     ]
+    ],
+    "photo": [
+     [
+      29.5,
+      22.6,
+      49.2
+     ],
+     [
+      54.4,
+      6.8,
+      19.1
+     ]
+    ],
+    "dE00_abs": 8.89
+   },
+   "lamp_collar": {
+    "scene": [
+     [
+      32.8,
+      45.7,
+      59.4
+     ],
+     [
+      67.4,
+      10.6,
+      31.3
+     ]
+    ],
+    "photo": [
+     [
+      29.5,
+      26.2,
+      57.6
+     ],
+     [
+      62.8,
+      6.5,
+      18.4
+     ]
+    ],
+    "dE00_abs": 7.29
+   },
+   "lamp_pole": {
+    "scene": [
+     [
+      18.2,
+      39.6,
+      31.6
+     ],
+     [
+      33.3,
+      17.1,
+      19.6
+     ]
+    ],
+    "photo": [
+     [
+      28.0,
+      41.5,
+      53.3
+     ],
+     [
+      59.3,
+      7.1,
+      18.1
+     ]
+    ],
+    "dE00_abs": 26.41
+   }
+  },
+  "composition": {
+   "dlt_residual_px": [
+    0.006,
+    0.003
+   ],
+   "curtain_vs_nightstand": {
+    "nightstand_left_px": 568,
+    "sill_rows": [
+     880,
+     981
+    ],
+    "gap_u_at_sill_min": 0.0082,
+    "gap_u_at_sill_median": 0.0082,
+    "gap_u_along_nightstand_min": 0.0082
+   },
+   "curtain_hem": [
+    {
+     "x": 380,
+     "hem_row": 1293,
+     "row_12cm": 1293.4,
+     "hem_cm": 12.1
+    },
+    {
+     "x": 395,
+     "hem_row": 1284,
+     "row_12cm": 1284.4,
+     "hem_cm": 12.1
+    },
+    {
+     "x": 410,
+     "hem_row": 1275,
+     "row_12cm": 1275.5,
+     "hem_cm": 12.1
+    },
+    {
+     "x": 425,
+     "hem_row": 1266,
+     "row_12cm": 1266.5,
+     "hem_cm": 12.1
+    },
+    {
+     "x": 440,
+     "hem_row": 1258,
+     "row_12cm": 1257.5,
+     "hem_cm": 11.9
+    },
+    {
+     "x": 455,
+     "hem_row": 1249,
+     "row_12cm": 1248.5,
+     "hem_cm": 11.9
+    },
+    {
+     "x": 470,
+     "hem_row": 1240,
+     "row_12cm": 1239.6,
+     "hem_cm": 11.9
+    },
+    {
+     "x": 485,
+     "hem_row": 1231,
+     "row_12cm": 1230.6,
+     "hem_cm": 11.9
+    },
+    {
+     "x": 500,
+     "hem_row": 1222,
+     "row_12cm": 1221.6,
+     "hem_cm": 11.9
+    },
+    {
+     "x": 515,
+     "hem_row": 1213,
+     "row_12cm": 1212.7,
+     "hem_cm": 11.9
+    },
+    {
+     "x": 530,
+     "hem_row": 1204,
+     "row_12cm": 1212.1,
+     "hem_cm": 13.5
+    },
+    {
+     "x": 545,
+     "hem_row": 1195,
+     "row_12cm": 1212.1,
+     "hem_cm": 15.2
+    }
+   ],
+   "sill_vase_vs_curtain_gap_u": 0.0261,
+   "sill_vase_left_margin_u": 0.0618,
+   "lamp_shade": {
+    "u": [
+     0.829,
+     0.9324
+    ],
+    "margin_right_u": 0.0676,
+    "gap_to_east_cone_u": 0.0729,
+    "width_px": 266
+   },
+   "lamp_base_floor_point": [
+    1.11,
+    17.865
+   ],
+   "expected_shade_bottom_43_width_px": 266.1,
+   "expected_base_26_width_px": 160.7,
+   "measured_base_width_px": 64,
+   "measured_shade_max_width_px": 264,
+   "expected_lamp_height_px": 848.3,
+   "measured_lamp_height_px": 865,
+   "base_vs_bedding_gap_u": [
+    -0.0016,
+    0.0004
+   ],
+   "base_overlap_px": 191,
+   "count_areas": {
+    "curtains": {
+     "area_pct": 5.826,
+     "height_pct": 87.1
+    },
+    "bedside-sconces": {
+     "area_pct": 0.467,
+     "height_pct": 8.0
+    },
+    "sill-vase": {
+     "area_pct": 0.328,
+     "height_pct": 24.5
+    },
+    "floor-lamp": {
+     "area_pct": 1.359,
+     "height_pct": 59.9
+    },
+    "nightstand-tray": {
+     "area_pct": 0.095,
+     "height_pct": 2.3
+    },
+    "nightstand-vase": {
+     "area_pct": 0.207,
+     "height_pct": 16.8
+    },
+    "candle-holders": {
+     "area_pct": 0.121,
+     "height_pct": 8.4
+    },
+    "pillowcases": {
+     "area_pct": 3.605,
+     "height_pct": 12.8
+    },
+    "bedding": {
+     "area_pct": 27.153,
+     "height_pct": 39.3
+    },
+    "cushions": {
+     "area_pct": 1.194,
+     "height_pct": 10.2
+    },
+    "throw": {
+     "area_pct": 3.756,
+     "height_pct": 18.4
+    }
+   }
+  },
+  "small_products_projection": {
+   "sill_vase_expected": [
+    240.3,
+    739.7,
+    302.9,
+    896.8
+   ],
+   "sill_vase_alpha_body": [
+    237,
+    745,
+    301,
+    893
+   ],
+   "bottle_expected_(-1.95,17.90,0.55)": [
+    649.4,
+    843.3,
+    713.2,
+    983.5
+   ],
+   "bottle_alpha_body": [
+    652,
+    800,
+    709,
+    978
+   ],
+   "tray_expected_X-2.03..-1.73_Y17.83..18.03": [
+    606.9,
+    972.8,
+    813.0,
+    990.4
+   ],
+   "tray_alpha": [
+    599,
+    959,
+    797,
+    991
+   ],
+   "candle_L_expected_(0.50,17.88)": [
+    1987.3,
+    915.4,
+    2027.5,
+    980.0
+   ],
+   "candle_R_expected_(0.61,17.82)": [
+    2033.7,
+    911.5,
+    2073.4,
+    974.9
+   ],
+   "candle_holders_alpha": [
+    1994,
+    857,
+    2067,
+    977
+   ],
+   "cone_W_expected": [
+    704.8,
+    552.3,
+    787.7,
+    635.8
+   ],
+   "cone_E_expected": [
+    1932.3,
+    552.3,
+    2015.2,
+    635.8
+   ]
+  },
+  "duvet": {
+   "row_mean_steps_1240_1360": {
+    "1297": -0.84,
+    "1298": -0.87,
+    "1299": -1.94,
+    "1300": -0.78
+   },
+   "rows_with_highest_median_abs_step": [
+    [
+     1299,
+     1.79
+    ],
+    [
+     1298,
+     0.83
+    ],
+    [
+     1297,
+     0.83
+    ],
+    [
+     1300,
+     0.78
+    ],
+    [
+     1251,
+     0.68
+    ],
+    [
+     1301,
+     0.66
+    ]
+   ],
+   "median_abs_row_step_typical": 0.39,
+   "rows_with_consistent_signed_step": [
+    [
+     1299,
+     -1.79
+    ],
+    [
+     1298,
+     -0.79
+    ],
+    [
+     1300,
+     -0.77
+    ],
+    [
+     1297,
+     -0.77
+    ],
+    [
+     1301,
+     -0.63
+    ],
+    [
+     1251,
+     0.5
+    ]
+   ],
+   "right_corner_step_per_col": [
+    [
+     2190,
+     1299,
+     1.7
+    ],
+    [
+     2200,
+     1299,
+     -8.0
+    ],
+    [
+     2210,
+     1299,
+     -1.9
+    ],
+    [
+     2220,
+     1300,
+     -0.9
+    ],
+    [
+     2230,
+     1314,
+     -0.9
+    ],
+    [
+     2240,
+     1298,
+     2.2
+    ],
+    [
+     2250,
+     1299,
+     9.1
+    ],
+    [
+     2260,
+     1299,
+     11.5
+    ],
+    [
+     2270,
+     1299,
+     5.7
+    ],
+    [
+     2280,
+     1297,
+     -0.9
+    ],
+    [
+     2290,
+     1299,
+     -2.3
+    ],
+    [
+     2300,
+     1287,
+     0.7
+    ],
+    [
+     2310,
+     1294,
+     0.6
+    ]
+   ],
+   "grad_x_over_y_foot_1330_1480": [
+    1.61,
+    195000
+   ],
+   "grad_x_over_y_top_1270_1295": [
+    1.18,
+    32500
+   ],
+   "grad_x_over_y_top_side_1150_1250_x500_700": [
+    1.11,
+    18000
+   ],
+   "r4_grad_x_over_y_1300_1388": 0.87,
+   "fft_foot_1340_1468_x900_1412": {
+    "period_y_px": 14.2,
+    "peak_y_over_median": 64.4,
+    "period_x_px": 13.5,
+    "peak_x_over_median": 41.4
+   },
+   "fft_top_1180_1296_x900_1412": {
+    "period_y_px": 23.2,
+    "peak_y_over_median": 21.5,
+    "period_x_px": 28.4,
+    "peak_x_over_median": 61.2
+   }
+  },
+  "extra": {
+   "plate_west_lit": [
+    48.5,
+    10.2,
+    10.9,
+    46.8
+   ],
+   "plate_west_all": [
+    44.0,
+    10.8,
+    11.2
+   ],
+   "plate_east_lit": [
+    27.9,
+    16.9,
+    21.7,
+    52.1
+   ],
+   "plate_east_all": [
+    26.1,
+    17.3,
+    21.1
+   ],
+   "wall_above_west_sconce": [
+    91.0,
+    0.3,
+    4.7
+   ],
+   "pillow_left_centre_lit": [
+    60.9,
+    16.7,
+    28.3,
+    59.3,
+    32.8
+   ],
+   "pillow_right_centre_lit": [
+    50.8,
+    18.5,
+    30.8,
+    59.0,
+    35.9
+   ],
+   "pillow_left_outer_lit": [
+    69.0,
+    15.4,
+    26.5,
+    59.8,
+    30.7
+   ],
+   "pillow_right_outer_lit": [
+    40.8,
+    19.7,
+    31.1,
+    57.7,
+    36.8
+   ],
+   "floor_right_defaults": {
+    "px": 51790,
+    "Lab": [
+     40.7,
+     8.1,
+     16.0
+    ]
+   },
+   "floor_right_vs_base_matched": [
+    [
+     34.8,
+     3.25
+    ],
+    [
+     40.7,
+     0.81
+    ],
+    [
+     46.4,
+     0.45
+    ]
+   ],
+   "floor_right_plate_same_mask": [
+    38.0,
+    5.9,
+    15.8
+   ],
+   "grid14_pp_r4_1300_1388": 4.86,
+   "grid14_pp_mb0_1300_1388": 2.73,
+   "grid14_pp_mb0_1400_1480": 3.84,
+   "grid14_pp_mb0_top_1180_1296": 2.42
+  },
+  "halo": {
+   "defaults/curtains": {
+    "light": {
+     "px": 313,
+     "clusters_ge20": [
+      [
+       94,
+       [
+        544,
+        1111,
+        6,
+        17
+       ]
+      ],
+      [
+       93,
+       [
+        544,
+        686,
+        3,
+        43
+       ]
+      ],
+      [
+       60,
+       [
+        544,
+        350,
+        1,
+        60
+       ]
+      ],
+      [
+       47,
+       [
+        544,
+        1089,
+        6,
+        11
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 443,
+     "clusters_ge20": [
+      [
+       69,
+       [
+        544,
+        0,
+        3,
+        36
+       ]
+      ],
+      [
+       61,
+       [
+        544,
+        1101,
+        6,
+        12
+       ]
+      ],
+      [
+       60,
+       [
+        367,
+        1279,
+        6,
+        16
+       ]
+      ],
+      [
+       47,
+       [
+        544,
+        1069,
+        6,
+        20
+       ]
+      ],
+      [
+       35,
+       [
+        544,
+        40,
+        3,
+        18
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 11,
+     "clusters_ge20": []
+    }
+   },
+   "defaults/bedside-sconces": {
+    "light": {
+     "px": 33,
+     "clusters_ge20": [
+      [
+       21,
+       [
+        1978,
+        633,
+        21,
+        1
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 554,
+     "clusters_ge20": [
+      [
+       225,
+       [
+        776,
+        548,
+        34,
+        59
+       ]
+      ],
+      [
+       127,
+       [
+        723,
+        546,
+        7,
+        33
+       ]
+      ],
+      [
+       85,
+       [
+        1999,
+        598,
+        13,
+        26
+       ]
+      ],
+      [
+       50,
+       [
+        1938,
+        596,
+        12,
+        9
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 1,
+     "clusters_ge20": []
+    }
+   },
+   "defaults/sill-vase": {
+    "light": {
+     "px": 3,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 409,
+     "clusters_ge20": [
+      [
+       300,
+       [
+        234,
+        727,
+        18,
+        157
+       ]
+      ],
+      [
+       46,
+       [
+        290,
+        885,
+        12,
+        9
+       ]
+      ],
+      [
+       25,
+       [
+        238,
+        743,
+        1,
+        25
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 132,
+     "clusters_ge20": []
+    }
+   },
+   "defaults/floor-lamp": {
+    "light": {
+     "px": 410,
+     "clusters_ge20": [
+      [
+       287,
+       [
+        2386,
+        602,
+        84,
+        12
+       ]
+      ],
+      [
+       36,
+       [
+        2342,
+        613,
+        11,
+        4
+       ]
+      ],
+      [
+       34,
+       [
+        2311,
+        613,
+        11,
+        5
+       ]
+      ],
+      [
+       29,
+       [
+        2324,
+        622,
+        4,
+        20
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 1856,
+     "clusters_ge20": [
+      [
+       1571,
+       [
+        2336,
+        641,
+        4,
+        497
+       ]
+      ],
+      [
+       109,
+       [
+        2335,
+        1232,
+        35,
+        20
+       ]
+      ],
+      [
+       63,
+       [
+        2367,
+        1283,
+        15,
+        6
+       ]
+      ],
+      [
+       53,
+       [
+        2338,
+        614,
+        4,
+        16
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 631,
+     "clusters_ge20": [
+      [
+       365,
+       [
+        2337,
+        733,
+        1,
+        365
+       ]
+      ],
+      [
+       156,
+       [
+        2325,
+        1166,
+        3,
+        57
+       ]
+      ],
+      [
+       82,
+       [
+        2336,
+        1213,
+        3,
+        30
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/nightstand-tray": {
+    "light": {
+     "px": 321,
+     "clusters_ge20": [
+      [
+       247,
+       [
+        597,
+        991,
+        127,
+        3
+       ]
+      ],
+      [
+       54,
+       [
+        712,
+        973,
+        30,
+        2
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 316,
+     "clusters_ge20": [
+      [
+       245,
+       [
+        599,
+        981,
+        166,
+        10
+       ]
+      ],
+      [
+       61,
+       [
+        631,
+        959,
+        16,
+        8
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 75,
+     "clusters_ge20": [
+      [
+       57,
+       [
+        600,
+        982,
+        38,
+        8
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/nightstand-vase": {
+    "light": {
+     "px": 22,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 277,
+     "clusters_ge20": [
+      [
+       109,
+       [
+        684,
+        843,
+        8,
+        33
+       ]
+      ],
+      [
+       96,
+       [
+        707,
+        945,
+        6,
+        30
+       ]
+      ],
+      [
+       53,
+       [
+        707,
+        906,
+        3,
+        21
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 0,
+     "clusters_ge20": []
+    }
+   },
+   "defaults/candle-holders": {
+    "light": {
+     "px": 176,
+     "clusters_ge20": [
+      [
+       50,
+       [
+        1997,
+        899,
+        3,
+        20
+       ]
+      ],
+      [
+       46,
+       [
+        2044,
+        897,
+        3,
+        18
+       ]
+      ],
+      [
+       42,
+       [
+        2044,
+        858,
+        10,
+        19
+       ]
+      ],
+      [
+       33,
+       [
+        1997,
+        888,
+        10,
+        8
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 933,
+     "clusters_ge20": [
+      [
+       407,
+       [
+        1996,
+        887,
+        27,
+        92
+       ]
+      ],
+      [
+       340,
+       [
+        2057,
+        860,
+        11,
+        96
+       ]
+      ],
+      [
+       55,
+       [
+        1993,
+        919,
+        9,
+        33
+       ]
+      ],
+      [
+       46,
+       [
+        2040,
+        961,
+        29,
+        13
+       ]
+      ],
+      [
+       22,
+       [
+        2043,
+        857,
+        22,
+        1
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 0,
+     "clusters_ge20": []
+    }
+   },
+   "defaults/pillowcases": {
+    "light": {
+     "px": 566,
+     "clusters_ge20": [
+      [
+       216,
+       [
+        1285,
+        753,
+        53,
+        13
+       ]
+      ],
+      [
+       101,
+       [
+        1740,
+        756,
+        40,
+        10
+       ]
+      ],
+      [
+       67,
+       [
+        1770,
+        816,
+        11,
+        22
+       ]
+      ],
+      [
+       53,
+       [
+        1195,
+        915,
+        11,
+        7
+       ]
+      ],
+      [
+       25,
+       [
+        1695,
+        766,
+        13,
+        3
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 1552,
+     "clusters_ge20": [
+      [
+       250,
+       [
+        926,
+        928,
+        77,
+        9
+       ]
+      ],
+      [
+       229,
+       [
+        1698,
+        925,
+        70,
+        9
+       ]
+      ],
+      [
+       198,
+       [
+        1042,
+        925,
+        59,
+        5
+       ]
+      ],
+      [
+       111,
+       [
+        1523,
+        905,
+        11,
+        19
+       ]
+      ],
+      [
+       67,
+       [
+        1333,
+        766,
+        9,
+        14
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 0,
+     "clusters_ge20": []
+    }
+   },
+   "defaults/bedding": {
+    "light": {
+     "px": 588,
+     "clusters_ge20": [
+      [
+       145,
+       [
+        1958,
+        997,
+        41,
+        18
+       ]
+      ],
+      [
+       78,
+       [
+        1194,
+        917,
+        16,
+        7
+       ]
+      ],
+      [
+       50,
+       [
+        239,
+        1519,
+        15,
+        11
+       ]
+      ],
+      [
+       49,
+       [
+        2309,
+        1190,
+        7,
+        13
+       ]
+      ],
+      [
+       42,
+       [
+        2154,
+        1057,
+        14,
+        9
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 1152,
+     "clusters_ge20": [
+      [
+       218,
+       [
+        682,
+        1008,
+        40,
+        14
+       ]
+      ],
+      [
+       204,
+       [
+        403,
+        1169,
+        50,
+        64
+       ]
+      ],
+      [
+       84,
+       [
+        2001,
+        1009,
+        20,
+        8
+       ]
+      ],
+      [
+       55,
+       [
+        2325,
+        1212,
+        17,
+        32
+       ]
+      ],
+      [
+       48,
+       [
+        1889,
+        949,
+        12,
+        8
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 518,
+     "clusters_ge20": [
+      [
+       435,
+       [
+        2000,
+        1009,
+        90,
+        13
+       ]
+      ],
+      [
+       44,
+       [
+        2325,
+        1212,
+        14,
+        31
+       ]
+      ],
+      [
+       22,
+       [
+        688,
+        1019,
+        12,
+        2
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/cushions": {
+    "light": {
+     "px": 212,
+     "clusters_ge20": [
+      [
+       152,
+       [
+        1478,
+        777,
+        45,
+        10
+       ]
+      ],
+      [
+       36,
+       [
+        1510,
+        924,
+        21,
+        2
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 449,
+     "clusters_ge20": [
+      [
+       64,
+       [
+        1285,
+        921,
+        64,
+        2
+       ]
+      ],
+      [
+       52,
+       [
+        1523,
+        906,
+        8,
+        18
+       ]
+      ],
+      [
+       27,
+       [
+        1190,
+        906,
+        6,
+        18
+       ]
+      ],
+      [
+       23,
+       [
+        1235,
+        920,
+        12,
+        5
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 0,
+     "clusters_ge20": []
+    }
+   },
+   "defaults/throw": {
+    "light": {
+     "px": 1025,
+     "clusters_ge20": [
+      [
+       324,
+       [
+        580,
+        1033,
+        100,
+        40
+       ]
+      ],
+      [
+       267,
+       [
+        495,
+        1072,
+        84,
+        56
+       ]
+      ],
+      [
+       115,
+       [
+        2001,
+        1014,
+        51,
+        11
+       ]
+      ],
+      [
+       63,
+       [
+        723,
+        1017,
+        26,
+        6
+       ]
+      ],
+      [
+       57,
+       [
+        1972,
+        1011,
+        27,
+        5
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 6641,
+     "clusters_ge20": [
+      [
+       5680,
+       [
+        515,
+        1088,
+        1702,
+        40
+       ]
+      ],
+      [
+       106,
+       [
+        719,
+        1003,
+        31,
+        9
+       ]
+      ],
+      [
+       34,
+       [
+        1999,
+        1011,
+        17,
+        5
+       ]
+      ],
+      [
+       21,
+       [
+        749,
+        1019,
+        12,
+        4
+       ]
+      ],
+      [
+       21,
+       [
+        702,
+        1018,
+        15,
+        3
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 4343,
+     "clusters_ge20": [
+      [
+       3914,
+       [
+        635,
+        1088,
+        1630,
+        66
+       ]
+      ],
+      [
+       169,
+       [
+        2002,
+        1012,
+        86,
+        10
+       ]
+      ],
+      [
+       84,
+       [
+        2272,
+        1163,
+        32,
+        37
+       ]
+      ],
+      [
+       26,
+       [
+        2262,
+        1133,
+        14,
+        17
+       ]
+      ],
+      [
+       22,
+       [
+        2325,
+        1212,
+        5,
+        17
+       ]
+      ]
+     ]
+    }
+   },
+   "flax/throw": {
+    "light": {
+     "px": 1040,
+     "clusters_ge20": [
+      [
+       533,
+       [
+        495,
+        1034,
+        178,
+        97
+       ]
+      ],
+      [
+       200,
+       [
+        1972,
+        1011,
+        78,
+        15
+       ]
+      ],
+      [
+       65,
+       [
+        723,
+        1017,
+        26,
+        5
+       ]
+      ],
+      [
+       49,
+       [
+        2154,
+        1057,
+        15,
+        10
+       ]
+      ],
+      [
+       35,
+       [
+        503,
+        1123,
+        24,
+        16
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 6415,
+     "clusters_ge20": [
+      [
+       5558,
+       [
+        521,
+        1088,
+        1744,
+        66
+       ]
+      ],
+      [
+       92,
+       [
+        719,
+        1005,
+        29,
+        7
+       ]
+      ],
+      [
+       38,
+       [
+        2163,
+        1066,
+        18,
+        11
+       ]
+      ],
+      [
+       36,
+       [
+        1999,
+        1011,
+        17,
+        5
+       ]
+      ],
+      [
+       29,
+       [
+        687,
+        1019,
+        15,
+        3
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 3427,
+     "clusters_ge20": [
+      [
+       2062,
+       [
+        857,
+        1089,
+        1122,
+        6
+       ]
+      ],
+      [
+       753,
+       [
+        1982,
+        1091,
+        283,
+        63
+       ]
+      ],
+      [
+       289,
+       [
+        632,
+        1093,
+        222,
+        6
+       ]
+      ],
+      [
+       192,
+       [
+        2001,
+        1012,
+        87,
+        10
+       ]
+      ],
+      [
+       23,
+       [
+        688,
+        1020,
+        12,
+        2
+       ]
+      ]
+     ]
+    }
+   },
+   "clay/throw": {
+    "light": {
+     "px": 569,
+     "clusters_ge20": [
+      [
+       244,
+       [
+        594,
+        1035,
+        75,
+        31
+       ]
+      ],
+      [
+       75,
+       [
+        545,
+        1076,
+        28,
+        19
+       ]
+      ],
+      [
+       54,
+       [
+        722,
+        1017,
+        26,
+        6
+       ]
+      ],
+      [
+       46,
+       [
+        1973,
+        1011,
+        26,
+        5
+       ]
+      ],
+      [
+       28,
+       [
+        735,
+        1004,
+        18,
+        10
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 4610,
+     "clusters_ge20": [
+      [
+       3424,
+       [
+        528,
+        1088,
+        1171,
+        32
+       ]
+      ],
+      [
+       622,
+       [
+        1819,
+        1088,
+        202,
+        8
+       ]
+      ],
+      [
+       111,
+       [
+        719,
+        1005,
+        29,
+        7
+       ]
+      ],
+      [
+       31,
+       [
+        2000,
+        1011,
+        16,
+        5
+       ]
+      ],
+      [
+       29,
+       [
+        2160,
+        1099,
+        16,
+        4
+       ]
+      ]
+     ]
+    },
+    "near_black": {
+     "px": 241,
+     "clusters_ge20": [
+      [
+       97,
+       [
+        2002,
+        1012,
+        50,
+        9
+       ]
+      ],
+      [
+       60,
+       [
+        2057,
+        1018,
+        31,
+        4
+       ]
+      ],
+      [
+       41,
+       [
+        1982,
+        1092,
+        18,
+        3
+       ]
+      ],
+      [
+       21,
+       [
+        2325,
+        1212,
+        5,
+        17
+       ]
+      ],
+      [
+       21,
+       [
+        688,
+        1020,
+        12,
+        2
+       ]
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "scripts": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-master/mb0/",
+ "supplier_photos": "read from scratchpad/picks/img only; none copied into the repo",
+ "tokens": 0,
+ "var2": false,
+ "commits": false
+}
