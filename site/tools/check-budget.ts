@@ -166,17 +166,55 @@ if (existsSync(tourPage) && existsSync(tourData)) {
       0,
     );
   const page = gz(tourPage) + sum(js) + sum(css) + sum(chunks) + fonts;
+  // MOCK4: the door is the arrival's first frame, the page's first paint (a phone takes the 1080 one)
+  const door = file('tour/arrival/d0', 1080, ['webp']);
   rows.push(
     ["JS and CSS (gzip), the tour's own chunks (its page, its engine and effects)", sum(chunks), null],
+    ["the door (the arrival's first frame @1080), a phone", door, null],
     [
       `the tour's media on a phone (the empty room @${t.widths.lo}, ${t.slots.length} default products and their shadows)`,
       tourMedia(['avif', 'webp'], t.widths.lo),
       null,
     ],
     [`the same on a wide screen (@${t.widths.hi})`, tourMedia(['avif', 'webp'], t.widths.hi), null],
-    ['first load, the tour (the door, then the room), mobile', page + tourMedia(['avif', 'webp'], t.widths.lo), BUDGET.firstLoad],
-    ['first load, the tour, mobile, no AVIF', page + tourMedia(['webp'], t.widths.lo), BUDGET.firstLoad],
+    ['first load, the tour (the door, then the room), mobile', page + door + tourMedia(['avif', 'webp'], t.widths.lo), BUDGET.firstLoad],
+    ['first load, the tour, mobile, no AVIF', page + door + tourMedia(['webp'], t.widths.lo), BUDGET.firstLoad],
   );
+  // MOCK4: the arrival's walk is a transition with its own budget (the brief: ≤ 3 MB on a phone, ≤ 8 MB on a wide
+  // screen); the bedroom and the bathroom, each a room's first load on the same phone (its base, its atlas pages, the
+  // sample slot's first option, its sheet of cards: tools/make-tour-room.ts)
+  const arrivalFile = sitePath('.generated/arrival.json');
+  if (existsSync(arrivalFile)) {
+    const a = JSON.parse(readFileSync(arrivalFile, 'utf8')) as { videos: Record<'desktop' | 'phone', { src: string }> };
+    const mp4 = (src: string) => (existsSync(sitePath('web/public/media', src)) ? statSync(sitePath('web/public/media', src)).size : 0);
+    rows.push(
+      ["the arrival's walk, a phone (30 fps, to the landing on M0)", mp4(a.videos.phone.src), 3 * MB],
+      ["the arrival's walk, a wide screen (60 fps)", mp4(a.videos.desktop.src), 8 * MB],
+    );
+  }
+  for (const [id, name] of [
+    ['master', 'the bedroom'],
+    ['bath', 'the bathroom'],
+  ] as const) {
+    const f = sitePath(`.generated/tour.${id}.warm-modern.json`);
+    if (!existsSync(f)) continue;
+    const r = JSON.parse(readFileSync(f, 'utf8')) as {
+      widths: { lo: number };
+      base: { src: string };
+      sample: string;
+      atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
+      slots: { id: string; src: string; shadows?: number[]; options: { card: { src: string } }[] }[];
+    };
+    const lo = r.widths.lo;
+    const s0 = r.slots.find((x) => x.id === r.sample)!;
+    const media =
+      file(r.base.src, lo, ['webp']) +
+      [...r.atlas[String(lo)]!.product, ...r.atlas[String(lo)]!.shadow].reduce((n, p) => n + file(p.src, lo, ['webp']), 0) +
+      file(`${s0.src}/1.product`, lo, ['webp']) +
+      file(`${s0.src}/${s0.shadows?.[0] ?? 1}.shadow`, lo, ['webp']) +
+      file(s0.options[0]!.card.src, undefined, ['webp']);
+    rows.push([`first load, ${name} (a room of the tour), mobile`, page + media, BUDGET.firstLoad]);
+  }
 }
 // S5: the story's pages (behind the flag; absent from the public build). A story page's own scripts and styles, and its
 // first view on the phone: HTML, scripts, styles, fonts and the first frame's phone picture at 412 @2x (AVIF, which

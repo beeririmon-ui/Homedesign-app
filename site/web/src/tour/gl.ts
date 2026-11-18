@@ -34,8 +34,12 @@ export type LayerDraw = {
   gain: number;
   /** the product's code in the mask (its depth, see MASK_PER_M); 0: not a product */
   code: number;
+  /** MOCK4: the layer's place in its texture, [x, y, w, h] px (an atlas page); absent: the whole texture */
+  sub?: [number, number, number, number];
+  /** MOCK4: a light, added in screen (the light's own layer of a render folder); `shadow` must be false */
+  screen?: boolean;
 };
-export const layer = (key: string, rect: Box, shadow: boolean, code = 0): LayerDraw => ({
+export const layer = (key: string, rect: Box, shadow: boolean, code = 0, sub?: [number, number, number, number], screen = false): LayerDraw => ({
   key,
   rect,
   shadow,
@@ -45,6 +49,8 @@ export const layer = (key: string, rect: Box, shadow: boolean, code = 0): LayerD
   dy: 0,
   gain: 1,
   code,
+  ...(sub ? { sub } : {}),
+  ...(screen ? { screen } : {}),
 });
 /** [x0, y0, x1, y1] in the target's pixels, y down */
 export type Px = [number, number, number, number];
@@ -128,18 +134,21 @@ uniform float uLod;
 uniform float uGain;
 uniform float uCode;
 uniform vec2 uClip;
-uniform int uMode; // 0 product, 1 shadow (multiply), 2 mask
+uniform int uMode; // 0 product, 1 shadow (multiply), 2 mask, 3 light (screen)
 uniform ivec3 uOrg; // exact: 1, the rect's left, the rect's top row from the target's bottom
+uniform ivec4 uSub; // MOCK4: the layer's place in its texture (an atlas page): x, y, w, h in texels
 out vec4 o;
 void main() {
   if (vFrame.x < uClip.x || vFrame.x > uClip.y) discard;
   // at rest a layer is copied texel for texel: the composition is the layers' own pixels
   // at rest a layer is read texel for texel; the clamp keeps a half-pixel of rounding from reading outside it (a
-  // shadow read outside its own texture is zero, and a zero multiplies the room to black: MOCK2)
+  // shadow read outside its own texture is zero, and a zero multiplies the room to black: MOCK2), and inside its own
+  // place of an atlas page (MOCK4: a neighbour on the page is never read)
   vec4 t = uOrg.x == 1
-    ? texelFetch(uTex, clamp(ivec2(int(gl_FragCoord.x) - uOrg.y, uOrg.z - int(gl_FragCoord.y)), ivec2(0), textureSize(uTex, 0) - 1), 0)
-    : textureLod(uTex, vTex, uLod);
+    ? texelFetch(uTex, uSub.xy + clamp(ivec2(int(gl_FragCoord.x) - uOrg.y, uOrg.z - int(gl_FragCoord.y)), ivec2(0), uSub.zw - 1), 0)
+    : textureLod(uTex, (vec2(uSub.xy) + vTex * vec2(uSub.zw)) / vec2(textureSize(uTex, 0)), uLod);
   if (uMode == 1) o = vec4(mix(vec3(1.0), t.rgb, uOpacity), 1.0);
+  else if (uMode == 3) o = vec4(t.rgb * uOpacity, 1.0);
   else if (uMode == 2) {
     if (t.a < 0.5) discard;
     o = vec4(1.0, uCode, 0.0, 1.0);
@@ -313,7 +322,7 @@ const DISPLAY_UNIFORMS = [
   'uRoomH',
 ] as const;
 type Target = { tex: WebGLTexture; fb: WebGLFramebuffer[]; w: number; h: number };
-type Tex = { tex: WebGLTexture; w: number; h: number };
+type Tex = { tex: WebGLTexture; w: number; h: number; mips: boolean };
 
 export class TourGL {
   private gl: WebGL2RenderingContext;
@@ -361,6 +370,10 @@ export class TourGL {
     }
   }
 
+  /** MOCK4: the room's camera and box (the depth of the scan plane); another room, another camera */
+  setCamera(cam: TourCamera): void {
+    this.camera = cam;
+  }
   private constructor(
     gl: WebGL2RenderingContext,
     readonly width: number,
@@ -371,7 +384,7 @@ export class TourGL {
     this.height = Math.round(width / (16 / 9));
     this.layerProg = this.program(LAYER_VS, LAYER_FS);
     this.edgeProg = this.program(DISPLAY_VS, EDGE_FS);
-    for (const n of ['uRect', 'uDy', 'uTex', 'uOpacity', 'uLod', 'uGain', 'uCode', 'uClip', 'uMode', 'uOrg'])
+    for (const n of ['uRect', 'uDy', 'uTex', 'uOpacity', 'uLod', 'uGain', 'uCode', 'uClip', 'uMode', 'uOrg', 'uSub'])
       this.loc[`l.${n}`] = gl.getUniformLocation(this.layerProg, n);
     const vao = gl.createVertexArray()!;
     gl.bindVertexArray(vao);
@@ -524,7 +537,7 @@ export class TourGL {
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, !('close' in img));
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
     if (mips) gl.generateMipmap(gl.TEXTURE_2D);
-    this.textures.set(key, { tex, w: img.width, h: img.height });
+    this.textures.set(key, { tex, w: img.width, h: img.height, mips });
     metrics.count('upload');
     this.bytes += img.width * img.height * 4 * (mips ? 4 / 3 : 1);
   }
@@ -532,6 +545,18 @@ export class TourGL {
   bytes = 0;
   has(key: string): boolean {
     return this.textures.has(key);
+  }
+  /** MOCK4: the textures of a room the visitor has left go (a phone holds one room's at a time); returns their keys */
+  drop(keep: (key: string) => boolean): string[] {
+    const gone: string[] = [];
+    for (const [key, t] of this.textures)
+      if (!keep(key)) {
+        this.gl.deleteTexture(t.tex);
+        this.textures.delete(key);
+        this.bytes -= t.w * t.h * 4 * (t.mips ? 4 / 3 : 1);
+        gone.push(key);
+      }
+    return gone;
   }
 
   private drawLayers(layers: LayerDraw[], w: number, h: number, mode: 'compose' | 'mask'): void {
@@ -550,14 +575,17 @@ export class TourGL {
       else {
         gl.enable(gl.BLEND);
         if (l.shadow) gl.blendFuncSeparate(gl.DST_COLOR, gl.ZERO, gl.ZERO, gl.ONE);
+        // MOCK4: a light, in screen: out = L + below × (1 − L) = 1 − (1 − below)(1 − L)
+        else if (l.screen) gl.blendFuncSeparate(gl.ONE, gl.ONE_MINUS_SRC_COLOR, gl.ZERO, gl.ONE);
         else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       }
       const x0 = Math.round(l.rect[0] * w);
       const y0 = Math.round(l.rect[2] * h);
       const x1 = Math.round(l.rect[1] * w);
       const y1 = Math.round(l.rect[3] * h);
-      // texel for texel when the layer is at rest and its file is the rectangle's size
-      const exact = mode === 'compose' && l.lod === 0 && l.dy === 0 && t.w === x1 - x0 && t.h === y1 - y0;
+      // texel for texel when the layer is at rest and its file (MOCK4: its place on an atlas page) is the rectangle's size
+      const sub = l.sub ?? [0, 0, t.w, t.h];
+      const exact = mode === 'compose' && l.lod === 0 && l.dy === 0 && sub[2] === x1 - x0 && sub[3] === y1 - y0;
       gl.bindTexture(gl.TEXTURE_2D, t.tex);
       // MOCK2: the quad is placed on whole pixels of the target. At the layers' own width the rectangle already falls
       // there; at the phone's width it does not, and half a pixel of overhang made the rasteriser cover one row more
@@ -569,8 +597,9 @@ export class TourGL {
       gl.uniform1f(this.loc['l.uGain']!, l.gain);
       gl.uniform1f(this.loc['l.uCode']!, l.code / 255);
       gl.uniform2f(this.loc['l.uClip']!, l.clip[0], l.clip[1]);
-      gl.uniform1i(this.loc['l.uMode']!, mode === 'mask' ? 2 : l.shadow ? 1 : 0);
+      gl.uniform1i(this.loc['l.uMode']!, mode === 'mask' ? 2 : l.shadow ? 1 : l.screen ? 3 : 0);
       gl.uniform3i(this.loc['l.uOrg']!, exact ? 1 : 0, x0, h - 1 - y0);
+      gl.uniform4i(this.loc['l.uSub']!, sub[0], sub[1], sub[2], sub[3]);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
     gl.disable(gl.BLEND);

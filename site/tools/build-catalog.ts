@@ -92,6 +92,16 @@ const OUT_NAME = argOf('--out') ?? null;
  * comma separated (S10: tools/house/*.json, the houses' cushion sets, sold through the same shop).
  */
 const EXTRA_PRODUCTS = argOf('--products') ?? null;
+/**
+ * MOCK4: --lenient, for a catalog that is never public (the tour's bedroom and bathroom, behind HD_PUBLIC=0: names and
+ * prices for the owner's preview). The public-text gates (ת12, ת33, ה5, ת27) still run and print what they find; they
+ * do not stop the build. Only with --out (the main catalog never takes it).
+ */
+const LENIENT = process.argv.includes('--lenient') && !!argOf('--out');
+const gate = (): void => {
+  if (LENIENT) console.warn('  (--lenient: a catalog behind the flag, never public; the gate above is reported, not enforced)');
+  else process.exit(1);
+};
 const STYLE = 'nordic';
 
 type HousePlan = {
@@ -1110,7 +1120,7 @@ if (latin.length && existsSync(LABELS_FILE)) {
   console.error(
     `build-catalog: ${latin.length} public labels carry Latin letters (ת12):\n${latin.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,
   );
-  process.exit(1);
+  gate();
 }
 
 // S14, QA ת33: no public name, description or product note in Latin (the studio's notes never reach the page); a unit
@@ -1150,19 +1160,19 @@ if (unknownText.length) {
   console.error(
     `build-catalog: ${unknownText.length} public fields say their value is unknown (ה5: leave the field out):\n${unknownText.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,
   );
-  process.exit(1);
+  gate();
 }
 if (latinText.length) {
   console.error(
     `build-catalog: ${latinText.length} public texts carry Latin letters (ת33):\n${latinText.map((x) => `  ${x.product} · ${x.where}: ${x.text}`).join('\n')}`,
   );
-  process.exit(1);
+  gate();
 }
 if (skuIssues.length) {
   console.error(
     `build-catalog: ${skuIssues.length} sold variants would ask the supplier for the wrong SKU (ת27):\n${skuIssues.map((x) => `  ${x.variant} (${x.card}): ${x.supplier_sku ?? 'none'}, ${x.why}`).join('\n')}`,
   );
-  process.exit(1);
+  gate();
 }
 
 // S12 (S11 question 2): every set of distinct SKUs, sold or not (a hidden draft card too): its parts' SKUs at each size,

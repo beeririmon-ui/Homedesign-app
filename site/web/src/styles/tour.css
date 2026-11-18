@@ -107,6 +107,152 @@
     transform var(--tour-ui) var(--tour-appear);
 }
 
+/* ---------- MOCK4: the door, the arrival's walk and the names on the doors (route ch. 11.1) ---------- */
+/* the door is the walk's first frame (DOOR2): the page's first paint, over the canvas. The walk plays in the same
+   window, and gives it to the room at the landing: the canvas under it already holds that very frame. Between rooms
+   and back to the door, the window dissolves (temporary, until the T-C* clips). Opacity only. */
+.tour-door-img,
+.tour-video,
+.tour-hc {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+/* the door: a picture of its own (a phone takes the 1080 one), under the walk until the walk's first frame is on */
+.tour-door-img {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity calc(900ms * var(--tk, 1)) linear,
+    visibility 0s linear calc(900ms * var(--tk, 1));
+}
+.tour[data-phase='door'] .tour-door-img,
+.tour[data-walk]:not([data-played]) .tour-door-img {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity calc(900ms * var(--tk, 1)) linear;
+}
+.tour-video {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity calc(900ms * var(--tk, 1)) linear,
+    visibility 0s linear calc(900ms * var(--tk, 1));
+}
+.tour[data-phase='door'] .tour-video,
+.tour[data-walk] .tour-video {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity calc(900ms * var(--tk, 1)) linear;
+}
+/* the landing: the walk's last frame and the canvas are the same frame; a short dissolve hides the codec's difference */
+.tour[data-phase='entering']:not([data-walk]) .tour-video {
+  transition:
+    opacity calc(160ms * var(--tk, 1)) linear,
+    visibility 0s linear calc(160ms * var(--tk, 1));
+}
+.tour-hc {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity calc(500ms * var(--tk, 1)) linear,
+    visibility 0s linear calc(500ms * var(--tk, 1));
+}
+.tour[data-hc] .tour-hc {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity calc(500ms * var(--tk, 1)) linear;
+}
+.tour-doors {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+.tour-doors[data-on] {
+  visibility: visible;
+}
+.tour-doors svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* the lintel's hairline: the warm light of reveal B's line (one language for the tour's lines) */
+.tour-doors line {
+  stroke: #ffdcae;
+  stroke-width: 2.25px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+.tour-door-name {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% -100%;
+  padding: 2px clamp(5px, 0.6cqw, 10px) 3px;
+  border-radius: 7px;
+  background: rgba(43, 37, 31, 0.74);
+  color: #fbf6ee;
+  font: 600 clamp(9.5px, 1.15cqw, 16px) / 1.25 var(--f-text);
+  white-space: nowrap;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+/* the hairline down to its door (a name lifted over another one keeps its thread to the lintel) */
+.tour-door-name::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 50%;
+  top: 100%;
+  width: 1px;
+  height: calc(var(--lead, 0px) + 8px);
+  background: rgba(255, 220, 174, 0.9);
+}
+/* the walk's one button ("דלג") stands where the door's stood; nothing else is offered while it plays */
+.tour-walk-act {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--tour-ui) var(--tour-appear);
+}
+.tour-walk-act[inert] {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--tour-fb) var(--tour-leave),
+    visibility 0s linear var(--tour-fb);
+}
+.tour-walk-act .btn {
+  min-width: 72px;
+  min-height: 44px;
+}
+.tour[data-walk] .tour-fold,
+.tour[data-walk] .tour-t.t-room {
+  opacity: 0;
+  visibility: hidden;
+}
+/* MOCK4, temporary, for the owner: how many products the room sells (a dashed chip says it is a working line) */
+.tour-sale {
+  order: 3;
+  display: inline-block;
+  margin-inline-start: var(--s-2);
+  padding: 1px 9px;
+  border: 1px dashed var(--tour-line);
+  border-radius: 999px;
+  font: 600 12px / 20px var(--f-text);
+  color: var(--tour-fg2);
+  white-space: nowrap;
+}
+.tour-sale[hidden] {
+  display: none;
+}
+
 /* ---------- the band over the window: the house and the room ---------- */
 .tour-top {
   grid-area: top;
@@ -258,11 +404,53 @@
   margin: 0 0 var(--s-2);
   color: var(--ink-2);
 }
+
 .tour-t.t-door h1,
 .tour-t.t-door .h {
   font: 300 clamp(22px, 4.2cqw, 52px) / 1.12 var(--f-display);
   color: var(--ink);
   white-space: normal;
+}
+/* MOCK4: the door is a photograph of the real door (DOOR2): on a wide screen its title and its button leave the picture
+   for the band under it — the house's name where the room's will be, the button at the band's end */
+@media (min-aspect-ratio: 11/10) and (min-height: 501px) {
+  .tour-cell {
+    grid-area: count;
+    justify-self: end;
+    align-self: center;
+    display: grid;
+    padding-inline-end: var(--s-5);
+  }
+  .tour-cell > .tour-door-act,
+  .tour-cell > .tour-walk-act {
+    grid-area: 1 / 1;
+  }
+  .tour-door-act {
+    position: static;
+    width: auto;
+    flex-direction: row-reverse;
+    gap: var(--s-3);
+  }
+  .tour-door-act .btn {
+    min-height: 48px;
+  }
+  .tour-t.t-door {
+    position: static;
+    width: auto;
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    text-align: start;
+  }
+  .tour-t.t-door .eyebrow {
+    order: 2;
+    margin: 0;
+  }
+  .tour-t.t-door h1,
+  .tour-t.t-door .h {
+    font: 600 var(--t-btn) var(--f-text);
+    white-space: nowrap;
+  }
 }
 
 /* ---------- the folded control: "המשך הסיור" (FB3) ---------- */
@@ -786,6 +974,20 @@
   .tour-t.t-room .h::after {
     content: none;
   }
+  /* MOCK4: the owner's line beside the room's name */
+  .tour-t.t-room {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--s-2);
+  }
+  .tour-t.t-room .eyebrow {
+    order: 0;
+    flex-basis: 100%;
+  }
+  .tour-sale {
+    margin: 0;
+  }
   .tour-t h1,
   .tour-t .h,
   .tour-t.t-door h1,
@@ -1042,7 +1244,8 @@
   .tour[data-frame='whole'] .arc-card .veil {
     background: var(--tour-bg);
   }
-  .tour[data-frame='whole'] .arc-card img {
+  .tour[data-frame='whole'] .arc-card img,
+  .tour[data-frame='whole'] .arc-card svg.sprite {
     filter: none;
   }
   /* the parts rise; the name over the window only appears */
@@ -1136,6 +1339,10 @@
   .tour-t.t-room h1::after,
   .tour-t.t-room .h::after {
     content: none;
+  }
+  .tour-sale {
+    margin: var(--s-1) 0 0;
+    white-space: normal;
   }
   .tour-t.t-room .eyebrow,
   .tour-t.t-room h1,

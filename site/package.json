@@ -22,7 +22,7 @@
     "story": "tsx tools/build-catalog.ts --rooms=living-room --products=../data/story/story.json,tools/house/living-room.warm-modern.json --out=story && tsx tools/make-house.ts && tsx tools/make-story.ts",
     "test:story": "npm run story",
     "studio": "tsx tools/make-studio.ts",
-    "tour": "tsx tools/make-tour.ts",
+    "tour": "tsx tools/make-tour.ts && tsx tools/build-catalog.ts --rooms=living-room --products=tools/tour/rooms.products.json --out=tour-rooms --lenient && tsx tools/make-tour-room.ts tools/tour/master.warm-modern.json && tsx tools/make-tour-room.ts tools/tour/bath.warm-modern.json && tsx tools/make-arrival.ts",
     "prepare:data": "npm run copy && npm run catalog && npm run assets:temp && npm run assets:supplier && npm run test:page && npm run story && npm run studio && npm run tour",
     "copy": "tsx tools/build-copy.ts",
     "gen:schema": "tsx shared/scripts/gen-product-card-schema.ts",

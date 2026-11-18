@@ -28,6 +28,8 @@ export type House = {
   product: (id: string | null | undefined) => PublicProduct | undefined;
   /** the wheel's picture of an option, when the house has its own (a set on the sofa) */
   thumb?: (position: number) => string | null;
+  /** MOCK4: the wheel's picture as an element of its own (a card that is a place on its room's sheet of cards) */
+  thumbNode?: (position: number) => ComponentChildren | null;
   /** the wheel's panel for an option sold as a set of pieces, in place of the one product's */
   info?: (position: number) => ComponentChildren;
   /** MOCK1: whether the options on the wheel are sets ("3 סטים"); absent: a house with a panel of its own has sets */

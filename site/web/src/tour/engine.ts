@@ -6,12 +6,31 @@
  */
 import type { Box, Cam, Viewport } from '../engine/types';
 import { Loader } from '../engine/loader';
-import { camForBox, clampCam, defaultCam, lerpCam } from '../engine/camera';
+import { camForBox, clampCam, lerpCam } from '../engine/camera';
 import { supportsAvif } from '../media';
 import { timeScale } from '../motion';
 import { FX, MASK_PER_M, TourGL, layer, restDisplay, type Display, type LayerDraw, type Px } from './gl';
 import { metrics, type EffectStat } from './metrics';
-import { NORDIC, WM, baseOf, layerUrl, nordicLayers, tour, widthFor, type Draw, type HouseId, type TourSlot } from './data';
+import {
+  NORDIC,
+  ROOMS,
+  WM,
+  atlasUrl,
+  baseOf,
+  layerUrl,
+  nordicLayers,
+  setRoom,
+  tour,
+  widthFor,
+  type Draw,
+  type HouseId,
+  type RoomId,
+  type TourData,
+  type TourSlot,
+} from './data';
+
+/** MOCK4: whether a texture's key is of room `r` (the living room's keys carry no prefix: MOCK1–3 named them) */
+const ownKey = (r: string, key: string): boolean => (r === 'living-room' ? !/^(master|bath):/.test(key) : key.startsWith(`${r}:`));
 
 /** cubic-bezier(x1, y1, x2, y2), as CSS: the designer's curves (section 7) */
 export function bezier(x1: number, y1: number, x2: number, y2: number): (x: number) => number {
@@ -113,6 +132,8 @@ export class TourEngine {
   private defaults: Promise<void> | null = null;
   private nordic: Draw[] | null = null;
   private loading = new Map<string, Promise<void>>();
+  /** MOCK4: the file of every texture key, so a room that is left gives back its decoded pictures as well */
+  private urls = new Map<string, string>();
 
   static create(o: TourOptions): TourEngine | null {
     // MOCK2: the width is chosen once, from the canvas the tour opens in (data.ts widthFor)
@@ -142,11 +163,12 @@ export class TourEngine {
   private ensure(dr: Draw, priority: number, mips: boolean): Promise<void> {
     let p = this.loading.get(dr.key);
     if (!p) {
+      this.urls.set(dr.key, dr.url);
       p = this.loader
         .load(dr.url, priority)
         .then((img) => {
           metrics.count('decode');
-          return this.upload(() => this.gl.upload(dr.key, img, mips));
+          return this.upload(() => this.gl.upload(dr.key, img, dr.mips ?? mips));
         })
         .then(() => undefined);
       this.loading.set(dr.key, p);
@@ -197,12 +219,51 @@ export class TourEngine {
     };
     requestAnimationFrame(tick);
   }
-  private keys(s: TourSlot, pos: number): [Draw, Draw] {
+  private keys(s: TourSlot, pos: number, r: TourData = tour): [Draw, Draw] {
     const w = this.gl.width;
+    // MOCK4: a product of the bedroom or the bathroom that never changes is a place on its room's atlas pages
+    const a = s.atlas?.[String(w)];
+    if (a)
+      return [
+        {
+          key: `${r.room}:atlas:shadow:${a.shadow[0]}`,
+          url: atlasUrl(r, 'shadow', a.shadow[0], w),
+          rect: s.rect,
+          shadow: true,
+          sub: sub(a.shadow),
+          mips: false,
+        },
+        {
+          key: `${r.room}:atlas:product:${a.product[0]}`,
+          url: atlasUrl(r, 'product', a.product[0], w),
+          rect: s.rect,
+          shadow: false,
+          sub: sub(a.product),
+          mips: false,
+        },
+      ];
+    const pre = r.room === 'living-room' ? '' : `${r.room}:`;
     return [
-      { key: `${s.id}:${pos}:s`, url: layerUrl(s, pos, 'shadow', w), rect: s.rect, shadow: true },
-      { key: `${s.id}:${pos}:p`, url: layerUrl(s, pos, 'product', w), rect: s.rect, shadow: false },
+      { key: `${pre}${s.id}:${s.shadows?.[pos - 1] ?? pos}:s`, url: layerUrl(s, pos, 'shadow', w), rect: s.rect, shadow: true },
+      { key: `${pre}${s.id}:${pos}:p`, url: layerUrl(s, pos, 'product', w), rect: s.rect, shadow: false },
     ];
+  }
+  /** MOCK4: the room's lights (screen), on its shadows' atlas pages */
+  private lights(r: TourData = tour): (Draw & { slot: string })[] {
+    const w = this.gl.width;
+    return (r.lights ?? []).map((l) => {
+      const a = l.atlas[String(w)]!;
+      return {
+        key: `${r.room}:atlas:shadow:${a[0]}`,
+        url: atlasUrl(r, 'shadow', a[0], w),
+        rect: l.rect,
+        shadow: false,
+        sub: sub(a),
+        screen: true,
+        mips: false,
+        slot: l.slot,
+      };
+    });
   }
   /** an option's layer and shadow, loaded and on the GPU */
   option(slotId: string, pos: number, priority = 0): Promise<void> {
@@ -211,6 +272,55 @@ export class TourEngine {
   }
   slot(id: string): TourSlot {
     return tour.slots.find((s) => s.id === id)!;
+  }
+  /** MOCK4: the textures of room `r` on the GPU: its base, every slot's option (the selection's, in the room shown),
+   *  and its lights */
+  loadRoom(r: TourData, priority = 0): Promise<void> {
+    const w = this.gl.width;
+    const pos = (s: TourSlot) => (r === tour ? (this.selection[s.id] ?? 1) : 1);
+    const draws = [baseOf(WM, this.ext, w, r), ...r.slots.flatMap((s) => this.keys(s, pos(s), r)), ...this.lights(r)];
+    return Promise.all(draws.map((d) => this.ensure(d, priority, d.mips ?? !d.key.endsWith(':base')))).then(() => undefined);
+  }
+  /**
+   * MOCK4: to another room of the house. TEMPORARY: a plain dissolve of `ms` between the two rooms at rest (rule ו.6:
+   * never a zoom-in), until the T-C* clips between the rooms exist; a clip will play here instead. The next room is
+   * loaded and on the GPU before anything moves, it comes with its default products in it (`products`: false, empty,
+   * for the arrival's reveal), and the room left behind gives its textures and its decoded pictures back (a phone
+   * holds one room at a time).
+   */
+  async toRoom(id: RoomId, ms: number, products = true): Promise<void> {
+    const next = ROOMS[id];
+    const from = tour.room;
+    await this.loadRoom(next, 0);
+    if (this.destroyed) return;
+    await this.between(`room-${id}`, ms, () => {
+      setRoom(id);
+      this.house = WM;
+      if (from !== id) {
+        this.selection = Object.fromEntries(next.slots.map((s) => [s.id, 1]));
+        this.defaults = null;
+        this.warmed = true;
+        this.warmP = Promise.resolve();
+        this.inBackground = false;
+      }
+      this.poses.clear();
+      this.visible = new Set(products ? next.slots.map((s) => s.id) : []);
+      this.gl.setCamera(next.camera);
+      this.rest = this.restCam();
+      this.cam = { ...this.rest };
+    });
+    if (from !== id) this.release(id);
+    this.mask();
+  }
+  /** MOCK4: every texture that is not room `r`'s goes, with its decoded picture */
+  private release(r: string): void {
+    for (const key of this.gl.drop((k) => ownKey(r, k))) {
+      this.loading.delete(key);
+      const url = this.urls.get(key);
+      if (url) this.loader.forget(url);
+      this.urls.delete(key);
+    }
+    if (r !== 'living-room') this.nordic = null;
   }
 
   /** The empty room first (the door looks into it); the default products behind it; then every other option. */
@@ -261,7 +371,7 @@ export class TourEngine {
     // meant a decode landing in the middle of the door's slow push (FB1: nothing happens inside a move).
     for (const s of tour.slots)
       for (const o of s.options) if (o.position !== this.selection[s.id]) this.later(() => void this.option(s.id, o.position, 2).catch(() => undefined));
-    this.later(() => void this.otherHouse().catch(() => undefined));
+    if (tour.room === 'living-room') this.later(() => void this.otherHouse().catch(() => undefined));
   }
   /** runs `job` on the next frame where nothing is moving (the same queue the uploads wait in) */
   private later(job: () => void): void {
@@ -272,7 +382,10 @@ export class TourEngine {
   private inBackground = false;
   /** the default products are here (the reveal waits for them) */
   products(): Promise<void> {
-    return (this.defaults ??= Promise.all(tour.slots.map((s) => this.option(s.id, this.selection[s.id]!, 1))).then(() => undefined));
+    return (this.defaults ??= Promise.all([
+      ...tour.slots.map((s) => this.option(s.id, this.selection[s.id]!, 1)),
+      ...this.lights().map((l) => this.ensure(l, 1, false)),
+    ]).then(() => undefined));
   }
   /** the Nordic house's layers (the style change waits for them) */
   otherHouse(): Promise<void> {
@@ -289,17 +402,24 @@ export class TourEngine {
       return [layer(baseOf(NORDIC, this.ext, this.gl.width).key, [0, 1, 0, 1], false), ...(this.nordic ?? []).map((l) => layer(l.key, l.rect, l.shadow))];
     const out = [layer(baseOf(WM, this.ext, this.gl.width).key, [0, 1, 0, 1], false)];
     for (const s of tour.slots) {
-      const code = Math.round(s.depth_m * MASK_PER_M);
+      // MOCK4: furniture that is not sold is composed like any layer, and is never a product under a finger
+      const code = s.fixed ? 0 : Math.round(s.depth_m * MASK_PER_M);
       const poses = everything ? [{}] : (this.poses.get(s.id) ?? (this.visible.has(s.id) ? [{}] : []));
       const made = poses.map((p) => {
         const [sh, pr] = this.keys(s, p.pos ?? this.selection[s.id]!);
         return [
-          { ...layer(sh.key, s.rect, true), opacity: p.s ?? p.a ?? 1, lod: p.slod ?? 0, clip: p.sclip ?? p.clip ?? [0, 1] },
-          { ...layer(pr.key, s.rect, false, code), opacity: p.a ?? 1, lod: p.lod ?? 0, dy: p.dy ?? 0, gain: p.gain ?? 1, clip: p.clip ?? [0, 1] },
+          { ...layer(sh.key, s.rect, true, 0, sh.sub), opacity: p.s ?? p.a ?? 1, lod: p.slod ?? 0, clip: p.sclip ?? p.clip ?? [0, 1] },
+          { ...layer(pr.key, s.rect, false, code, pr.sub), opacity: p.a ?? 1, lod: p.lod ?? 0, dy: p.dy ?? 0, gain: p.gain ?? 1, clip: p.clip ?? [0, 1] },
         ] as [LayerDraw, LayerDraw];
       });
       // every shadow of the slot under every product of it (a swap draws two of each)
       out.push(...made.map((m) => m[0]), ...made.map((m) => m[1]));
+    }
+    // MOCK4: the light last, in screen, with its product (the render folder's formula: every product, then the light)
+    for (const l of this.lights()) {
+      const p = this.poses.get(l.slot);
+      if (!everything && !(p ? p.length : this.visible.has(l.slot))) continue;
+      out.push({ ...layer(l.key, l.rect, false, 0, l.sub, true), opacity: p?.[0]?.a ?? 1 });
     }
     return out;
   }
@@ -326,9 +446,9 @@ export class TourEngine {
   /** the slot under a point of the canvas, among the products in the room */
   slotAt(u: number, v: number): TourSlot | null {
     const code = this.gl.codeAt(u, v);
-    return code ? (tour.slots.find((s) => Math.round(s.depth_m * MASK_PER_M) === code && this.visible.has(s.id)) ?? null) : null;
+    return code ? (tour.slots.find((s) => !s.fixed && Math.round(s.depth_m * MASK_PER_M) === code && this.visible.has(s.id)) ?? null) : null;
   }
-  private rect(s: TourSlot): Px {
+  private rect(s: { rect: Box }): Px {
     const { width: w, height: h } = this.gl;
     const pad = 10;
     return [
@@ -338,6 +458,10 @@ export class TourEngine {
       Math.min(h, Math.round(s.rect[3] * h) + pad),
     ];
   }
+  /** what a changed slot asks to compose again: its rectangle, and (MOCK4) its light's, which reaches past it */
+  private rects(id: string): Px[] {
+    return [this.rect(this.slot(id)), ...(tour.lights ?? []).filter((l) => l.slot === id).map((l) => this.rect(l))];
+  }
   /** the frame's width in the device's own pixels at this camera: what decides whether the mip levels are read */
   private frameDevicePx(): number {
     const dpr = Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1);
@@ -345,7 +469,7 @@ export class TourEngine {
   }
   private flush(): number {
     if (!this.all && !this.dirty.size) return 0;
-    this.gl.compose(this.front, this.list(), this.all ? null : [...this.dirty].map((id) => this.rect(this.slot(id))), this.gl.needMips(this.frameDevicePx()));
+    this.gl.compose(this.front, this.list(), this.all ? null : [...this.dirty].flatMap((id) => this.rects(id)), this.gl.needMips(this.frameDevicePx()));
     this.all = false;
     this.dirty.clear();
     return this.gl.shaded;
@@ -398,6 +522,21 @@ export class TourEngine {
   }
 
   // ---------- the camera ----------
+  /**
+   * MOCK4: the rest is the camera's own frame — the 16:9 the room was rendered and approved in, and the frame the
+   * arrival lands on (the walk's last frame is the base's camera frame, not the canvas round it). MOCK1–3 rested on the
+   * whole canvas, the frame and its overscan (6% wider). The overscan stays for the moves that need it.
+   */
+  restCam(): Cam {
+    const f = tour.camera.frame;
+    const z = 1 / Math.max(f[1] - f[0], f[3] - f[2]);
+    const portrait = this.vp.w / this.vp.h < 1.1;
+    return clampCam({ cu: portrait ? tour.mobile_center_u : (f[0] + f[1]) / 2, cv: (f[2] + f[3]) / 2, z }, this.vp, tour.aspect);
+  }
+  /** MOCK4: the picture is closer than the rest (a zoom, a close-up) */
+  get zoomed(): boolean {
+    return this.cam.z > this.rest.z * 1.001;
+  }
   /** the camera at the door: the rest camera, turned to `doorCu` where the screen is narrower than the frame */
   atDoor(): Cam {
     // reduced motion: the wall only fades, so the door already looks where the room rests
@@ -426,7 +565,7 @@ export class TourEngine {
     );
   }
   panBy(dxCss: number): void {
-    if (this.cam.z > 1.001 || this.anims.size) return;
+    if (this.zoomed || this.anims.size) return;
     const fw = Math.max(this.vp.w, this.vp.h * tour.aspect);
     this.cam = clampCam({ ...this.cam, cu: this.cam.cu - dxCss / fw }, this.vp, tour.aspect);
     this.rest = { ...this.cam };
@@ -479,6 +618,15 @@ export class TourEngine {
   hold(label: string): void {
     if (this.sync || [...this.anims].some((a) => a.label === label)) return;
     void this.run(label, Infinity, () => undefined);
+  }
+  /**
+   * MOCK4: the arrival's walk (a video over the canvas) as an effect: it lasts until `stop(label)`, the canvas is not
+   * drawn for it, and the rule holds over it like over any effect — nothing uploads, decodes or compiles while it plays,
+   * and its frames are timed for the report.
+   */
+  walk(label: string): void {
+    if (this.sync || [...this.anims].some((a) => a.label === label)) return;
+    void this.run(label, Infinity, () => undefined, undefined, true);
   }
   /** a pause between beats (the designer's 0.2 s of quiet): nothing is drawn meanwhile */
   wait(ms: number): Promise<void> {
@@ -573,7 +721,7 @@ export class TourEngine {
     if (vp.w === this.vp.w && vp.h === this.vp.h) return false;
     this.vp = vp;
     this.gl.resize(this.vp.w, this.vp.h, Math.min(this.dprCap, devicePixelRatio || 1));
-    this.rest = defaultCam(this.vp, tour.aspect, tour.mobile_center_u);
+    this.rest = this.restCam();
     this.cam = { ...this.rest };
     return true;
   }
@@ -620,3 +768,5 @@ export class TourEngine {
   }
 }
 export { FX };
+/** an atlas reference's place on its page, [x, y, w, h] */
+const sub = (a: readonly number[]): [number, number, number, number] => [a[1]!, a[2]!, a[3]!, a[4]!];

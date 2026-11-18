@@ -79,7 +79,8 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await page.goto('/tour/');
     await expect(page.getByRole('heading', { level: 1, name: 'הבית המודרני החם' })).toBeVisible();
     await expect(page.locator('#tour-enter')).toBeVisible();
-    await expect(page.locator('.tour-temp')).toHaveText('הדלת זמנית');
+    // MOCK4: the door is the arrival's first frame (DOOR2), no longer a temporary one; the button walks in
+    await expect(page.locator('#tour-enter')).toHaveText('היכנסו');
     await ready(page);
     await audit(page, 'the door');
     // the door's button
@@ -128,7 +129,8 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await page.locator('#tour-living').focus();
     await page.keyboard.press('Enter');
     await atRest(page);
-    await expect(page.locator('.tour-rooms button[aria-disabled="true"]')).toHaveCount(2);
+    // MOCK4: the bedroom and the bathroom are built; the dining corner is still "בקרוב"
+    await expect(page.locator('.tour-rooms button[aria-disabled="true"]')).toHaveCount(1);
   });
 
   test('after each reveal (A, B, C) settles, the frame is the plain composition, pixel for pixel', async ({ page }) => {
@@ -374,7 +376,8 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     note('reduced-motion.json', ran);
     const moving = ['reveal-a', 'reveal-b', 'reveal-c', 'collect', 'swap-s1', 'swap-s2', 'swap-s3', 'style-y1', 'style-y2', 'style-y1-nordic', 'door-push'];
     expect(Object.keys(ran).filter((l) => moving.includes(l))).toEqual([]);
-    for (const l of ['enter', 'reveal-fade', 'swap-fade', 'style-fade']) expect(Object.keys(ran), l).toContain(l);
+    // MOCK4: the way in is the arrival (reduced motion: D0 → HC → M0, CSS dissolves, route ch. 11.1), not the door's code
+    for (const l of ['reveal-fade', 'swap-fade', 'style-fade']) expect(Object.keys(ran), l).toContain(l);
     // a dissolve is short: 300 ms, and the swap's 150 ms (plus the frame it starts on)
     for (const [l, ms] of Object.entries(ran)) expect(ms, `${l} took ${ms} ms`).toBeLessThanOrEqual(l === 'swap-fade' ? 320 : 480);
     await ctx.close();
@@ -384,15 +387,23 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     const { defaultBrowserType: _b, ...pixel } = devices['Pixel 7'];
     const ctx = await browser.newContext({ ...pixel, locale: 'he-IL' });
     const page = await ctx.newPage();
-    // what the room needs to be shown; the other options and the Nordic house load behind it once it rests
+    // what the room needs to be shown; the other options and the Nordic house load behind it once it rests. MOCK4: the
+    // arrival's walk is a transition with a budget of its own (the brief: ≤ 3 MB on a phone), counted apart
     const background = (url: string) => /\/slots\/[a-z-]+\/(?!1\.)\d+\./.test(url) || /\/media\/rooms\//.test(url);
+    const isWalk = (url: string) => /\/media\/tour\/arrival\/.*\.mp4$/.test(url);
     let bytes = 0;
     let behind = 0;
+    let walk = 0;
     const urls = new Map<string, string>();
     const client = await ctx.newCDPSession(page);
     await client.send('Network.enable');
     client.on('Network.requestWillBeSent', (e) => void urls.set(e.requestId, e.request.url));
-    client.on('Network.loadingFinished', (e) => (background(urls.get(e.requestId) ?? '') ? (behind += e.encodedDataLength) : (bytes += e.encodedDataLength)));
+    client.on('Network.loadingFinished', (e) => {
+      const u = urls.get(e.requestId) ?? '';
+      if (isWalk(u)) walk += e.encodedDataLength;
+      else if (background(u)) behind += e.encodedDataLength;
+      else bytes += e.encodedDataLength;
+    });
     await page.goto('/tour/');
     await ready(page);
     const door = bytes;
@@ -401,11 +412,12 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await page.locator('#tour-enter').click();
     await atRest(page);
     const room = bytes;
-    note('first-load.json', { door_bytes: door, room_bytes: room });
+    note('first-load.json', { door_bytes: door, room_bytes: room, walk_bytes: walk });
     console.log(
-      `the tour's first load (phone): the door ${(door / 1048576).toFixed(2)} MB, the room with its default products ${(room / 1048576).toFixed(2)} MB`,
+      `the tour's first load (phone): the door ${(door / 1048576).toFixed(2)} MB, the room with its default products ${(room / 1048576).toFixed(2)} MB; the walk ${(walk / 1048576).toFixed(2)} MB`,
     );
     expect(room).toBeLessThanOrEqual(3 * 1024 * 1024);
+    expect(walk).toBeLessThanOrEqual(3 * 1024 * 1024);
     await ctx.close();
   });
 });

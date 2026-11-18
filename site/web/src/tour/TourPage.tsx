@@ -23,14 +23,14 @@ import { clampCam, coverSize, frameToScreen, screenToFrame } from '../engine/cam
 import type { Cam } from '../engine/types';
 import { product } from '../catalog';
 import type { House } from '../house';
-import { mediaUrl } from '../media';
 import { prefersReducedMotion, timeScale } from '../motion';
 import { announce } from '../state/ui';
 import { NOT_FOR_SALE_HE } from '../set-copy';
 import { IconDoor } from '../components/Icons';
 import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
-import { NORDIC, NORDIC_NAME_HE, WM, cardUrl, tour, type HouseId, type TourOption, type TourSlot } from './data';
+import { NORDIC, NORDIC_NAME_HE, ROOMS, ROOM_HE, WM, cardUrl, forSale, setRoom, tour, type HouseId, type RoomId, type TourOption, type TourSlot } from './data';
+import { arrival, camAt, doorUrl, frameAt, hcUrl, labelOpacity, labelPose, layoutLabels, walkFor, walkUrl } from './arrival';
 import type { TourEngine } from './engine';
 import { metrics, report, statLine } from './metrics';
 import type { Reveal, Style, Swap, Ui } from './fx';
@@ -41,7 +41,17 @@ declare global {
   interface Window {
     __hdTour?: TourEngine;
     /** the page's state for the tests and the evidence: where the visitor is, and whether anything is moving */
-    __hdTourState?: { phase: Phase; busy: boolean; house: HouseId; open: string | null; zoomed: boolean; more: boolean; lay: Layout };
+    __hdTourState?: {
+      phase: Phase;
+      busy: boolean;
+      house: HouseId;
+      open: string | null;
+      zoomed: boolean;
+      more: boolean;
+      lay: Layout;
+      room: RoomId;
+      walk: number;
+    };
     /** the effects and the page's marks, for the tests and the frame-rate evidence (they run an effect on its own) */
     __hdTourFx?: Stage & { ui: Ui };
   }
@@ -60,8 +70,22 @@ type Cfg = {
   zoom: 'pinch' | 'double';
   bg: 'paper' | 'dark';
   sharp: boolean;
+  /** MOCK4: with ?skip=1, the room the tour starts in (the tests and the evidence) */
+  room: RoomId;
 };
-const DEFAULTS: Cfg = { fx: 'b', sw: 's1', st: 'y1', way: 'empty', skip: false, frame: 'whole', pick: 'list', zoom: 'pinch', bg: 'paper', sharp: false };
+const DEFAULTS: Cfg = {
+  fx: 'b',
+  sw: 's1',
+  st: 'y1',
+  way: 'empty',
+  skip: false,
+  frame: 'whole',
+  pick: 'list',
+  zoom: 'pinch',
+  bg: 'paper',
+  sharp: false,
+  room: 'living-room',
+};
 const pick = <T extends string>(v: string | null, of: readonly T[], d: T): T => (of.includes(v as T) ? (v as T) : d);
 function readCfg(): Cfg {
   const q = new URLSearchParams(location.search);
@@ -76,6 +100,7 @@ function readCfg(): Cfg {
     zoom: pick(q.get('zoom'), ['pinch', 'double'] as const, DEFAULTS.zoom),
     bg: pick(q.get('bg'), ['paper', 'dark'] as const, DEFAULTS.bg),
     sharp: q.get('sharp') === '1',
+    room: pick(q.get('room'), ['living-room', 'master', 'bath'] as const, DEFAULTS.room),
   };
 }
 
@@ -85,6 +110,32 @@ export { doorRect };
 export const DOOR_CU = 0.2;
 
 const optionOf = (s: TourSlot, sel: Record<string, number>): TourOption => s.options[(sel[s.id] ?? 1) - 1]!;
+/** MOCK4: the products of the room the visitor is in (furniture that is not sold has no mark, no tile, no line) */
+const items = (): TourSlot[] => tour.slots.filter((s) => !s.fixed);
+/** a mark's place: a point in the window, kept 6 px inside its edges (the dot is drawn whole); `on`: in the window */
+const inWin = (p: { x: number; y: number }, vp: { w: number; h: number }) => ({
+  on: p.x > 0 && p.x < vp.w && p.y > 0 && p.y < vp.h,
+  x: Math.min(vp.w - 6, Math.max(6, p.x)),
+  y: Math.min(vp.h - 6, Math.max(6, p.y)),
+});
+/**
+ * MOCK4, TEMPORARY: the move between two rooms is a plain dissolve of this long (rule ו.6: never a zoom-in), until the
+ * T-C* clips between the rooms exist (route ch. 11.2–11.4); then a clip plays in its place (tour/engine.ts toRoom).
+ */
+const ROOM_FADE_MS = 900;
+/** a card: its own file, or (MOCK4) its place on its room's sheet of cards, as an SVG that shows only that place */
+function CardPic({ o, cls, size }: { o: TourOption; cls?: string; size?: number }) {
+  const c = o.card;
+  if (c.sprite && c.sheet) {
+    const [x, y, w, h] = c.sprite;
+    return (
+      <svg class={`sprite${cls ? ` ${cls}` : ''}`} viewBox={`${x} ${y} ${w} ${h}`} width={size} height={size} aria-hidden="true" focusable="false">
+        <image href={cardUrl(o)} width={c.sheet[0]} height={c.sheet[1]} />
+      </svg>
+    );
+  }
+  return <img class={cls} src={cardUrl(o)} alt="" width={size} height={size} draggable={false} loading={cls === 'thumb' ? 'lazy' : undefined} />;
+}
 /** PRE1: a product the shop has and cannot sell now says so; a card the shop does not have yet is "עוד לא במכירה" */
 const OUT_HE = 'המלאי אינו זמין כעת';
 const priceHe = (o: TourOption): string => (o.set ? '' : !o.product_id ? NOT_FOR_SALE_HE : o.price_agorot && o.available ? formatIls(o.price_agorot) : OUT_HE);
@@ -111,6 +162,8 @@ function wheelHouse(s: TourSlot): House {
     drawn: () => [],
     // MOCK2 (FB1): the product on its own — our own studio picture where one passed QA, else its layer trimmed to it
     thumb: (pos) => cardUrl(s.options[pos - 1]!),
+    // MOCK4: a card on its room's sheet is drawn from its place there
+    thumbNode: (pos) => (s.options[pos - 1]!.card.sprite ? <CardPic o={s.options[pos - 1]!} /> : null),
     cardGround: s.ground,
     info: (pos) => {
       const o = s.options[pos - 1]!;
@@ -129,11 +182,11 @@ function wheelHouse(s: TourSlot): House {
 /** the next animation frame: the page has rendered and laid out what was just asked of it */
 const frame = (): Promise<void> => new Promise((r) => requestAnimationFrame(() => r()));
 /** a tiny plan of the house, three cells; the room the visitor is in is brass (FB3: "ריבוע קטן למטה שיסמן את המשך הסיור") */
-const PlanIcon = ({ at }: { at: 'entry' | 'living' | 'rest' }) => (
+const PlanIcon = ({ at }: { at: 'entry' | 'living' | 'rest' | 'bed' | 'bath' }) => (
   <svg class="tour-plan" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
     <rect x="2" y="2" width="9" height="16" data-on={at === 'living' ? '' : undefined} />
-    <rect x="11" y="2" width="7" height="8" data-on={at === 'rest' ? '' : undefined} />
-    <rect x="11" y="10" width="7" height="8" data-on={at === 'entry' ? '' : undefined} />
+    <rect x="11" y="2" width="7" height="8" data-on={at === 'rest' || at === 'bed' ? '' : undefined} />
+    <rect x="11" y="10" width="7" height="8" data-on={at === 'entry' || at === 'bath' ? '' : undefined} />
   </svg>
 );
 const IconZoom = ({ out }: { out: boolean }) => (
@@ -154,6 +207,8 @@ const IconZoom = ({ out }: { out: boolean }) => (
 type Eye = HouseId | 'rotate';
 /** the house's name beside the window (the designer's words); the style's own short name is the shop's (tour.name_he) */
 const HOUSE_HE: Record<HouseId, string> = { [WM]: 'הבית המודרני החם', [NORDIC]: 'הבית הנורדי' };
+/** MOCK4: a room as a sentence names it ("חדר השינה בבית …"); the article goes on the room's own word */
+const PLACE_HE: Record<RoomId, string> = { 'living-room': 'הסלון', master: 'חדר השינה', bath: 'חדר הרחצה' };
 
 export function TourPage() {
   const stage = useRef<HTMLElement>(null);
@@ -174,6 +229,25 @@ export function TourPage() {
   const narrow = useRef(typeof matchMedia === 'function' ? matchMedia('(max-width: 700px), (max-height: 500px)') : null);
   const dimEls = useRef(new Map<string, HTMLSpanElement>());
   const title = useRef<HTMLHeadingElement>(null);
+  /** MOCK4: the arrival's walk, its labels, and the rest on HC for reduced motion */
+  const video = useRef<HTMLVideoElement>(null);
+  const hcImg = useRef<HTMLImageElement>(null);
+  const walkLabels = useRef<HTMLDivElement>(null);
+  const lift = useRef<number[] | null>(null);
+  const walkEnd = useRef<(() => void) | null>(null);
+  /** the part of the walk's frame the window shows (all of it, but in "מילוי וגרירה"): its left edge and its width */
+  const walkView = useRef({ left: 0, vis: 1 });
+  /** "דלג": offered while the walk plays (set on the page directly: nothing renders at the walk's two ends) */
+  const walkAct = useRef<HTMLDivElement>(null);
+  const offerSkip = (on: boolean) => {
+    const el = walkAct.current;
+    if (!el) return;
+    el.inert = !on;
+    el.toggleAttribute('aria-hidden', !on);
+  };
+  /** the walk's file for this screen, chosen in the browser (the page is prerendered: no screen there) */
+  const [walkSrc, setWalkSrc] = useState<(typeof arrival.videos)['desktop'] | null>(null);
+  const [room, setRoomState] = useState<RoomId>('living-room');
   const [phase, setPhaseState] = useState<Phase>('door');
   const [busy, setBusyState] = useState(false);
   const [ready, setReady] = useState(false);
@@ -195,8 +269,8 @@ export function TourPage() {
   /** the line over the room's name: the house, or once a visit the invitation to turn the phone */
   const [eye, setEyeState] = useState<Eye>(WM);
   // what the engine's callbacks and the queued presses read (they outlive a render)
-  const live = useRef({ phase, busy, house, cfg, sel, open, lay, zoomed, more });
-  live.current = { phase, busy, house, cfg, sel, open, lay, zoomed, more };
+  const live = useRef({ phase, busy, house, cfg, sel, open, lay, zoomed, more, room, walk: 0 });
+  live.current = { phase, busy, house, cfg, sel, open, lay, zoomed, more, room, walk: live.current?.walk ?? 0 };
   /** the window's place in the page (CSS px), from the same measurement */
   const box = useRef({ x: 0, y: 0, w: 1, h: 1 });
   const queued = useRef<(() => void) | null>(null);
@@ -205,7 +279,17 @@ export function TourPage() {
   const resized = useRef(false);
   const tell = () => {
     const L = live.current;
-    window.__hdTourState = { phase: L.phase, busy: L.busy, house: L.house, open: L.open?.slot.id ?? null, zoomed: L.zoomed, more: L.more, lay: L.lay };
+    window.__hdTourState = {
+      phase: L.phase,
+      busy: L.busy,
+      house: L.house,
+      open: L.open?.slot.id ?? null,
+      zoomed: L.zoomed,
+      more: L.more,
+      lay: L.lay,
+      room: L.room,
+      walk: L.walk,
+    };
   };
   const setPhase = (p: Phase) => {
     live.current.phase = p;
@@ -225,6 +309,12 @@ export function TourPage() {
       queued.current = null;
       fn();
     }
+  };
+  /** MOCK4: the room the page shows; the engine's `tour` changed already (tour/engine.ts toRoom) */
+  const setRoomUi = (r: RoomId) => {
+    live.current.room = r;
+    setRoomState(r);
+    tell();
   };
   const setCfg = (c: Partial<Cfg>) => {
     live.current.cfg = { ...live.current.cfg, ...c };
@@ -312,6 +402,19 @@ export function TourPage() {
       e.d.doorR = d.r;
       e.doorCu = DOOR_CU;
     }
+    // MOCK4: the walk shows what the room's rest shows: in "מילוי וגרירה" the same part of the frame as the camera
+    const rv = video.current;
+    if (rv) {
+      const { fw } = coverSize(vp, tour.aspect);
+      const f = tour.camera.frame;
+      const vis = Math.min(1, vp.w / (fw * e.rest.z) / (f[1] - f[0]));
+      const left = (e.rest.cu - vp.w / (2 * fw * e.rest.z) - f[0]) / (f[1] - f[0]);
+      const pos = vis < 0.999 ? Math.min(1, Math.max(0, left / (1 - vis))) : 0.5;
+      rv.style.objectPosition = `${(pos * 100).toFixed(2)}% 50%`;
+      walkView.current = { left: vis < 0.999 ? pos * (1 - vis) : 0, vis };
+      if (hcImg.current) hcImg.current.style.objectPosition = rv.style.objectPosition;
+    }
+    lift.current = null;
     for (const s of tour.slots) {
       s.anchors.forEach(([u, v], i) => {
         const p = frameToScreen(u, v, cam, vp, tour.aspect);
@@ -320,9 +423,11 @@ export function TourPage() {
         if (i) return;
         const el = spots.current.get(s.id);
         if (!el) return;
-        el.style.transform = `translate(${(p.x - 23).toFixed(1)}px, ${(p.y - 23).toFixed(1)}px)`;
-        // a mark is shown while the whole of its dot is inside the window (a product at the frame's edge keeps its mark)
-        el.style.visibility = p.x > 5 && p.x < vp.w - 5 && p.y > 5 && p.y < vp.h - 5 ? 'visible' : 'hidden';
+        // MOCK4: a mark whose point is in the window is drawn whole inside it (at the rest, the camera's own frame, a
+        // product's point can fall a few pixels from the window's edge); a point out of the window has no mark
+        const q = inWin(p, vp);
+        el.style.transform = `translate(${(q.x - 23).toFixed(1)}px, ${(q.y - 23).toFixed(1)}px)`;
+        el.style.visibility = q.on ? 'visible' : 'hidden';
         // the label opens toward the room's middle
         el.toggleAttribute('data-flip', p.x < vp.w * 0.3);
       });
@@ -339,8 +444,8 @@ export function TourPage() {
   /** where a slot's mark is in the window now (CSS px), or null when it is out of view */
   function markOf(s: TourSlot, e: TourEngine): Mark | null {
     const [u, v] = s.anchors[0]!;
-    const p = frameToScreen(u, v, e.cam, e.vp, tour.aspect);
-    return p.x > 0 && p.x < e.vp.w && p.y > 0 && p.y < e.vp.h ? { id: s.id, x: p.x, y: p.y } : null;
+    const q = inWin(frameToScreen(u, v, e.cam, e.vp, tour.aspect), e.vp);
+    return q.on ? { id: s.id, x: q.x, y: q.y } : null;
   }
   /** the labels never cover one another: a label that would is moved up or down a row (wide screens; a phone has none) */
   const tagW = useRef(new Map<string, number>());
@@ -434,7 +539,7 @@ export function TourPage() {
     spots(on) {
       for (const el of spots.current.values()) el.toggleAttribute('data-on', on);
       // the strip follows the room: whole when the room rests; gathered from the far wall to the near side, 70 ms apart
-      const order = on ? tour.slots : [...tour.slots].sort((a, b) => b.depth_m - a.depth_m);
+      const order = on ? items() : [...items()].sort((a, b) => b.depth_m - a.depth_m);
       order.forEach((s, i) => tile(s.id, on, on || prefersReducedMotion() ? 0 : i * 70));
     },
     /**
@@ -453,15 +558,16 @@ export function TourPage() {
       if (final) {
         a!.textContent = String(n);
         mid!.textContent = ' פריטים';
-        sep!.textContent = ' · ';
-        b!.textContent = `${Math.round(tour.cover * 100)}%`;
+        // MOCK4: a room built from its render folder has no measure of how much the products fill (yet)
+        sep!.textContent = tour.cover ? ' · ' : '';
+        b!.textContent = tour.cover ? `${Math.round(tour.cover * 100)}%` : '';
         b!.removeAttribute('dir');
-        tail!.textContent = ' מהחדר';
+        tail!.textContent = tour.cover ? ' מהחדר' : '';
       } else {
         a!.textContent = '';
         mid!.textContent = 'פריטים ';
         sep!.textContent = '';
-        b!.textContent = `${n}/${tour.slots.length}`;
+        b!.textContent = `${n}/${items().length}`;
         b!.setAttribute('dir', 'ltr');
         tail!.textContent = '';
       }
@@ -493,7 +599,7 @@ export function TourPage() {
   function otherCards(e: TourEngine) {
     if (cardsStarted.current) return;
     cardsStarted.current = true;
-    const urls = tour.slots.flatMap((s) => s.options.slice(1).map(cardUrl));
+    const urls = [...new Set(tour.slots.flatMap((s) => s.options.slice(1).map(cardUrl)))];
     const next = () => {
       const url = urls.shift();
       if (!url || !engine.current) return;
@@ -512,6 +618,12 @@ export function TourPage() {
       const c = canvas.current;
       if (!c) return null;
       mod.current = m;
+      // MOCK4: ?skip=1&room=…: the tour starts in that room (the tests and the evidence)
+      const first = live.current.cfg.skip ? live.current.cfg.room : 'living-room';
+      if (first !== tour.room) {
+        setRoom(first);
+        setRoomUi(first);
+      }
       const e = m.TourEngine.create({
         canvas: c,
         reduceMotion: prefersReducedMotion(),
@@ -529,10 +641,10 @@ export function TourPage() {
       window.__hdTourFx = { ...m, ui };
       e.observe();
       const { skip, way } = live.current.cfg;
-      e.d.doorAmt = skip ? 0 : 1;
+      // MOCK4: the door is the arrival's first frame (DOOR2), in the page over the room; the engine draws no door
+      e.d.doorAmt = 0;
       e.doorCu = DOOR_CU;
       await e.start();
-      if (!skip) e.cam = e.atDoor();
       place();
       e.render();
       setReady(true);
@@ -545,7 +657,7 @@ export function TourPage() {
       if (skip) {
         setPhase('room');
         ui.spots(true);
-        ui.count(tour.slots.length, true);
+        ui.count(items().length, true);
         e.background();
         otherCards(e);
       } else {
@@ -556,7 +668,8 @@ export function TourPage() {
         void Promise.all([e.whenWarm(), stripReady(), (wheelChunk ??= import('../components/VariantWheel').then((x) => x.VariantWheel))]).then(() => {
           setWarm(true);
           primeRings();
-          m.doorPush(e);
+          // MOCK4: the walk is fetched once the room it lands in is ready (the room first: the door waits for it)
+          if (video.current) video.current.preload = 'auto';
           // a visitor who stays at the door: the rest of the house loads behind it, once the room itself is ready
           idleLoad.current = window.setTimeout(() => e.background(), 5000);
         });
@@ -566,6 +679,7 @@ export function TourPage() {
   }
   useEffect(() => {
     setCfg(readCfg());
+    setWalkSrc(walkFor(innerWidth));
     measure();
     // the page's own measurement of the window: a resize or a rotation, never an animation (the window keeps its size)
     const ro = new ResizeObserver(() => measure());
@@ -573,7 +687,7 @@ export function TourPage() {
     // a pinch is ours, not the browser's: the page neither scrolls nor zooms under two fingers, or under a zoomed picture
     const w = win.current;
     const hold = (ev: TouchEvent) => {
-      if (live.current.phase === 'room' && (ev.touches.length > 1 || gest.current || (engine.current?.cam.z ?? 1) > 1.001)) ev.preventDefault();
+      if (live.current.phase === 'room' && (ev.touches.length > 1 || gest.current || engine.current?.zoomed)) ev.preventDefault();
     };
     const noGesture = (ev: Event) => ev.preventDefault();
     w?.addEventListener('touchmove', hold, { passive: false });
@@ -658,11 +772,11 @@ export function TourPage() {
     otherCards(e);
     if (e.house !== WM) return;
     ui.spots(true);
-    if (e.cam.z < 1.001) spread();
+    if (!e.zoomed) spread();
     void e.wait(800).then(() => !live.current.busy && ui.label(null, false));
     clearTimeout(hint.current);
     hint.current = window.setTimeout(() => {
-      const hero = tour.slots.find((s) => s.hero);
+      const hero = items().find((s) => s.hero);
       if (hero && !live.current.busy && !live.current.open && live.current.phase === 'room') ui.ring(hero, 'burst');
     }, 6000);
     if (rested.current) return;
@@ -708,7 +822,7 @@ export function TourPage() {
   }
   /** before a room or a style: back to the whole frame */
   async function wholeFrame(e: TourEngine) {
-    if (e.cam.z <= 1.001) return;
+    if (!e.zoomed) return;
     stage.current?.classList.add('moving');
     await e.moveCam('zoom-back', e.rest, ZOOM.ms);
     stage.current?.classList.remove('moving');
@@ -731,6 +845,143 @@ export function TourPage() {
     if (d >= 48 || (d > 16 && v > 0.5)) void setMore(false);
   }
 
+  // ---------- MOCK4: the arrival (route ch. 11.1), the labels at the rest on HC, and "דלג" ----------
+  /** the names' places at the rest, laid out once: a measurement, made before the walk moves (never inside it) */
+  function layLabels() {
+    const root = walkLabels.current;
+    if (lift.current || !root) return;
+    const tags = [...root.querySelectorAll<HTMLElement>('.tour-door-name')];
+    const sizes = metrics.dom(() => tags.map((t) => ({ w: t.offsetWidth, h: t.offsetHeight })));
+    lift.current = layoutLabels(sizes, box.current.w, box.current.h);
+  }
+  /** the labels' pixels for a frame of the walk: each lintel's hairline, each name over its door, and its opacity */
+  function drawLabels(f60: number, force = false) {
+    const root = walkLabels.current;
+    if (!root) return;
+    const cam = camAt(f60);
+    const on = !!cam && arrival.labels.some((_, i) => labelOpacity(i, f60) > 0);
+    root.toggleAttribute('data-on', on || force);
+    if (!cam || (!on && !force)) return;
+    const { w, h } = box.current;
+    const { left, vis } = walkView.current;
+    const x = (u: number) => ((u - left) / vis) * w;
+    layLabels();
+    const lines = root.querySelectorAll<SVGLineElement>('line');
+    const names = root.querySelectorAll<HTMLElement>('.tour-door-name');
+    arrival.labels.forEach((l, i) => {
+      const p = labelPose(l, cam);
+      const o = force ? 1 : labelOpacity(i, f60);
+      const line = lines[i];
+      const name = names[i];
+      if (!line || !name) return;
+      if (!p || o <= 0) {
+        line.style.opacity = '0';
+        name.style.opacity = '0';
+        return;
+      }
+      line.setAttribute('x1', (x(p.a.u) / w).toFixed(4));
+      line.setAttribute('y1', p.a.v.toFixed(4));
+      line.setAttribute('x2', (x(p.b.u) / w).toFixed(4));
+      line.setAttribute('y2', p.b.v.toFixed(4));
+      line.style.opacity = o.toFixed(3);
+      const up = lift.current![i] ?? 0;
+      name.style.setProperty('--lead', `${up}px`);
+      name.style.transform = `translate(${x(p.at.u).toFixed(1)}px, ${(p.at.v * h - 8 - up + (1 - o) * 6).toFixed(1)}px)`;
+      name.style.opacity = o.toFixed(3);
+    });
+  }
+  /** the walk itself: plays from the door to the landing on M0, where the room engine takes over; resolves there */
+  function walk(e: TourEngine): Promise<void> {
+    const v = video.current;
+    if (!v) return Promise.resolve();
+    const reduce = prefersReducedMotion();
+    return new Promise<void>((resolve) => {
+      let done = false;
+      let raf = 0;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        cancelAnimationFrame(raf);
+        v.onended = null;
+        walkEnd.current = null;
+        e.stop('arrival');
+        walkLabels.current?.removeAttribute('data-on');
+        v.onplaying = null;
+        // the walk gives the window to the room: the canvas under it is the frame the walk landed on
+        offerSkip(false);
+        stage.current?.removeAttribute('data-walk');
+        stage.current?.removeAttribute('data-played');
+        resolve();
+      };
+      walkEnd.current = () => {
+        v.pause();
+        finish();
+      };
+      stage.current?.setAttribute('data-walk', '');
+      offerSkip(true);
+      if (reduce) {
+        // reduced motion (route ch. 11.1): D0 → HC with the labels for 1.5 s → M0, dissolves only
+        stage.current?.setAttribute('data-hc', '');
+        stage.current?.setAttribute('data-played', '');
+        drawLabels(arrival.hc_60, true);
+        announce('המבואה: ' + arrival.labels.map((l) => l.name_he).join(', '));
+        window.setTimeout(finish, 1900 * timeScale());
+        return;
+      }
+      // the walk is an effect like any other: nothing is uploaded, decoded or measured while it plays (FB1)
+      e.walk('arrival');
+      const tick = (t: number) => {
+        const f = frameAt(t);
+        live.current.walk = f;
+        if (window.__hdTourState) window.__hdTourState.walk = f;
+        drawLabels(f);
+        if (f >= arrival.rest_60[0] && !announced.current) {
+          announced.current = true;
+          announce('המבואה: ' + arrival.labels.map((l) => l.name_he).join(', '));
+        }
+      };
+      const rvfc = (v as HTMLVideoElement & { requestVideoFrameCallback?: (cb: (now: number, m: { mediaTime: number }) => void) => number })
+        .requestVideoFrameCallback;
+      if (rvfc) {
+        const on = (_: number, m: { mediaTime: number }) => {
+          tick(m.mediaTime);
+          if (!done) rvfc.call(v, on);
+        };
+        rvfc.call(v, on);
+      } else {
+        const loop = () => {
+          tick(v.currentTime);
+          if (!done) raf = requestAnimationFrame(loop);
+        };
+        raf = requestAnimationFrame(loop);
+      }
+      v.onended = finish;
+      // the door's picture gives way when the walk's first frame is on screen (the same frame: D0)
+      v.onplaying = () => stage.current?.setAttribute('data-played', '');
+      v.currentTime = 0;
+      announced.current = false;
+      v.play().catch(finish);
+    });
+  }
+  const announced = useRef(false);
+  /** the walk's file has enough to play through (or 6 s have passed: it plays as it comes) */
+  const canPlay = (v: HTMLVideoElement): Promise<void> =>
+    v.readyState >= 3
+      ? Promise.resolve()
+      : new Promise((r) => {
+          const t = window.setTimeout(r, 6000);
+          v.preload = 'auto';
+          v.addEventListener(
+            'canplay',
+            () => {
+              clearTimeout(t);
+              r();
+            },
+            { once: true },
+          );
+        });
+  const skipWalk = () => walkEnd.current?.();
+
   // ---------- the beats ----------
   const goIn = () =>
     live.current.phase === 'door' &&
@@ -738,39 +989,89 @@ export function TourPage() {
       await shut(e);
       // nothing starts moving before the room is ready (the button is held until then; a keyboard press waits here)
       await e.whenWarm();
+      if (video.current && !prefersReducedMotion()) await canPlay(video.current);
       setPhase('entering');
       // a wide screen: the labels of the reveal are given their rows now, before anything moves
       await frame();
       spread();
-      await m.enter(e);
-      await quiet(e);
+      // MOCK4: the arrival v2 (motion-agent, QA-passed): the door opens, the hall, the rest on HC with the names on the
+      // doors, the turn and the walk into the living room; the canvas under it already holds the empty room it lands on
+      e.cam = { ...e.rest };
+      e.render();
+      layLabels();
+      await walk(e);
+      stage.current?.removeAttribute('data-hc');
       await m.reveal(e, ui, live.current.cfg.way === 'full' ? 'c' : live.current.cfg.fx);
       setPhase('room');
       atRest(e);
-      announce(`${tour.slots.length} פריטים בסלון`);
+      announce(`${items().length} פריטים בסלון`);
       title.current?.focus({ preventScroll: true });
     }, goIn);
+  /** MOCK4: back to the door (in the panel, "כניסה"): the door's frame comes over the window (a dissolve, temporary),
+   *  and behind it the living room is made ready, empty, for the next arrival's reveal */
   const goOut = () =>
     live.current.phase === 'room' &&
     !live.current.open &&
-    beat(async (e, m) => {
+    beat(async (e) => {
       await shut(e);
       await wholeFrame(e);
-      if (e.house !== WM) await m.style(e, ui, WM, 'y2', 'b');
+      ui.spots(false);
+      ui.label(null, false);
+      ui.count(null);
+      setPhase('door');
+      if (video.current) video.current.currentTime = 0;
+      await e.ui('door-in', ROOM_FADE_MS);
+      await e.toRoom('living-room', 0, false);
       setHouse(WM);
-      if (live.current.cfg.way === 'empty') await m.collect(e, ui);
-      else {
+      setEye(WM);
+      setRoomUi('living-room');
+      fold.current?.focus({ preventScroll: true });
+    }, goOut);
+  /**
+   * MOCK4: to a room of the house (the panel's "חדרים"). TEMPORARY: a dissolve between the two rooms at rest (engine
+   * toRoom), until the T-C* clips exist. From the door, the door's frame dissolves into the room.
+   */
+  const goRoom = (id: RoomId) =>
+    (live.current.phase === 'room' || live.current.phase === 'door') &&
+    !live.current.open &&
+    !(live.current.phase === 'room' && live.current.room === id) &&
+    beat(
+      async (e) => {
+        await shut(e);
+        await wholeFrame(e);
+        clearTimeout(turn.current);
+        const fromDoor = live.current.phase === 'door';
         ui.spots(false);
         ui.label(null, false);
         ui.count(null);
-      }
-      setPhase('entering');
-      await m.leave(e, doorRect(e.vp.w, e.vp.h, whole()));
-      setPhase('door');
-      m.doorPush(e);
-    }, goOut);
+        setEye(WM);
+        // the next room's sheet of cards (its strip, its wheel) is fetched and decoded before anything moves
+        const sheet = ROOMS[id].slots.find((x) => x.options[0]?.card.sprite)?.options[0];
+        if (sheet) {
+          const img = new Image();
+          img.src = cardUrl(sheet);
+          held.current.push(img);
+          await decoded(img);
+        }
+        await e.toRoom(id, fromDoor ? 0 : ROOM_FADE_MS);
+        setHouse(WM);
+        setRoomUi(id);
+        if (fromDoor) {
+          setPhase('room');
+          await e.ui('door-out', ROOM_FADE_MS);
+        } else setPhase('room');
+        await frame();
+        place();
+        ui.count(items().length, true);
+        atRest(e);
+        announce(`${ROOM_HE[id]}, ${forSale(tour)} מוצרים למכירה בחדר`);
+        title.current?.focus({ preventScroll: true });
+      },
+      () => goRoom(id),
+    );
   const replay = (fx?: Reveal) =>
     live.current.phase === 'room' &&
+    live.current.room === 'living-room' &&
     live.current.house === WM &&
     !live.current.open &&
     beat(
@@ -788,6 +1089,7 @@ export function TourPage() {
     );
   const switchTo = (to: HouseId) =>
     live.current.phase === 'room' &&
+    live.current.room === 'living-room' &&
     !live.current.open &&
     to !== live.current.house &&
     beat(
@@ -805,30 +1107,65 @@ export function TourPage() {
     );
 
   // ---------- zoom (FB2: the whole frame first; the visitor zooms if he wants to) ----------
+  /** MOCK4: whether the visitor may zoom in this room (the bedroom: the art 776445 is ×1 only, its rights) */
+  const canZoom = () => tour.zoom !== false;
   const zoomTo = (z: number, at?: { u: number; v: number }) =>
     live.current.phase === 'room' &&
     !live.current.open &&
+    (z <= 1 || canZoom()) &&
     beat(async (e) => {
       stage.current?.classList.add('moving');
       const to = z <= 1 ? e.rest : clampCam({ cu: at?.u ?? e.cam.cu, cv: at?.v ?? e.cam.cv, z }, e.vp, tour.aspect);
       // the marks are placed again when the camera lands (onCamera), and come back there
       await e.moveCam(z <= 1 ? 'zoom-back' : 'zoom', to, ZOOM.ms);
       stage.current?.classList.remove('moving');
-      setZoomed(e.cam.z > 1.001);
+      setZoomed(e.zoomed);
       sharpen(e);
     });
   /** the sharpness switch (temporary): while the picture rests zoomed, the canvas is drawn at the screen's own pixels */
-  const sharpen = (e: TourEngine) => e.setDprCap(live.current.cfg.sharp && e.cam.z > 1.001 ? 3 : 2);
+  const sharpen = (e: TourEngine) => e.setDprCap(live.current.cfg.sharp && e.zoomed ? 3 : 2);
 
   // ---------- the close-up and the wheel ----------
   const opener = useRef<HTMLElement | null>(null);
   const closing = useRef(false);
   /** the camera of a product's close-up: the product fills about 60% of what the layout leaves free of the window */
   function closeCam(e: TourEngine, s: TourSlot): Cam {
+    // MOCK4: a product shown at ×1 only (its rights) opens its card where it is: the camera stays at the rest
+    if (s.closeup === false) return { ...e.rest };
     const b = optionOf(s, e.selection).box;
-    const cam = e.camFor(padded(b), closeReserve(live.current.lay, e.vp.h, !whole()));
+    let cam = e.camFor(padded(b), closeReserve(live.current.lay, e.vp.h, !whole()));
     // on its side the arc is on the window's bottom edge: the product ends 16 px over it wherever the frame allows
-    return live.current.lay === 'rails' && whole() ? overArc(cam, b, e.vp, tour.aspect) : cam;
+    if (live.current.lay === 'rails' && whole()) cam = overArc(cam, b, e.vp, tour.aspect);
+    if (cam.z < e.rest.z) cam = clampCam({ ...cam, z: e.rest.z }, e.vp, tour.aspect);
+    return clear(e, cam, b) ?? { ...e.rest };
+  }
+  /**
+   * MOCK4: a close-up never shows the room's ×1-only box (the bedroom's art 776445, whose rights are unclear): a view
+   * that would is moved down below it, and closer if it must be, while the product stays in it; if the product cannot
+   * be seen without it, there is no close-up (null). The box is above every product it neighbours in the frames we have.
+   */
+  function clear(e: TourEngine, cam: Cam, b: [number, number, number, number]): Cam | null {
+    const a = tour.avoid;
+    if (!a) return cam;
+    const { fw, fh } = coverSize(e.vp, tour.aspect);
+    const view = (c: Cam) => {
+      const hu = e.vp.w / (2 * fw * c.z);
+      const hv = e.vp.h / (2 * fh * c.z);
+      return [c.cu - hu, c.cu + hu, c.cv - hv, c.cv + hv] as const;
+    };
+    const m = 0.008;
+    const hits = (c: Cam) => {
+      const v = view(c);
+      return v[0] < a[1] + m && v[1] > a[0] - m && v[2] < a[3] + m && v[3] > a[2] - m;
+    };
+    if (!hits(cam)) return cam;
+    // pushed a little further than the test, so the view's edge is clearly past the box
+    const top = a[3] + m * 1.5;
+    if (b[2] < top) return null;
+    const k = e.vp.h / (2 * fh);
+    const z = Math.max(cam.z, (2 * k) / (1 - top));
+    const out = clampCam({ cu: cam.cu, cv: Math.max(cam.cv, top + k / z), z }, e.vp, tour.aspect);
+    return hits(out) ? null : out;
   }
   const picker = () => stage.current?.querySelector<HTMLElement>('.picker') ?? null;
   const openSlot = (s: TourSlot, from?: HTMLElement | null) =>
@@ -936,12 +1273,12 @@ export function TourPage() {
     e.stop(label);
     stretch('');
     // a pinch that ends just over the whole frame goes back to it
-    if (e.cam.z > 1.0001 && e.cam.z < ZOOM.snap) return void zoomTo(1);
-    if (e.cam.z <= 1.0001) e.cam = { ...e.rest };
+    if (e.zoomed && e.cam.z < e.rest.z * ZOOM.snap) return void zoomTo(1);
+    if (!e.zoomed) e.cam = { ...e.rest };
     place();
     e.render();
     stage.current?.classList.remove('moving');
-    setZoomed(e.cam.z > 1.001);
+    setZoomed(e.zoomed);
     sharpen(e);
   }
   function onPointerDown(ev: PointerEvent) {
@@ -952,7 +1289,7 @@ export function TourPage() {
     // the window's place on the glass now (the page may have scrolled since it was measured): read once, at the touch
     if (!ptrs.current.size) origin.current = metrics.dom(() => ({ x: box.current.x - scrollX, y: box.current.y - scrollY }));
     ptrs.current.set(ev.pointerId, { x: ev.clientX - origin.current.x, y: ev.clientY - origin.current.y, moved: 0 });
-    if (ptrs.current.size !== 2 || L.open || !whole()) return;
+    if (ptrs.current.size !== 2 || L.open || !whole() || !canZoom()) return;
     // two fingers: the point of the room between them stays between them
     if (gest.current?.kind === 'drag') e.stop('drag');
     const f = two();
@@ -975,14 +1312,16 @@ export function TourPage() {
     if (g?.kind === 'pinch') {
       if (ptrs.current.size < 2) return;
       const f = two();
-      const { z, stretch: s } = pinchZoom((g.z0 * f.d) / g.d0);
+      const { z: raw, stretch: s } = pinchZoom((g.z0 * f.d) / g.d0);
+      // MOCK4: never less than the frame at rest (the camera's own frame, not the canvas round it)
+      const z = Math.max(raw, e.rest.z);
       e.cam = clampCam({ z, cu: g.u - (f.x - e.vp.w / 2) / (fw * z), cv: g.v - (f.y - e.vp.h / 2) / (fh * z) }, e.vp, tour.aspect);
       stretch(s === 1 ? 'none' : `scale(${s.toFixed(4)})`, f.x, f.y);
       return;
     }
     if (live.current.open || live.current.busy) return;
     if (!g && p.moved > 6) {
-      if (e.cam.z > 1.001 && whole()) begin(e, (g = { kind: 'drag', u: e.cam.cu, v: e.cam.cv }), 'drag');
+      if (e.zoomed && whole()) begin(e, (g = { kind: 'drag', u: e.cam.cu, v: e.cam.cv }), 'drag');
       else if (!whole()) g = gest.current = { kind: 'pan' };
       if (g) win.current?.setPointerCapture(ev.pointerId);
     }
@@ -1012,12 +1351,12 @@ export function TourPage() {
     if (g?.kind === 'pan') return void (gest.current = null);
     if (ev.type === 'pointercancel' || p.moved > 6 || live.current.busy) return;
     // "גם הקשה כפולה" (a switch): a second tap inside 250 ms zooms; a single one waits that long, and says so with a ring
-    if (live.current.cfg.zoom === 'double' && phoneRules() && !live.current.open) {
+    if (live.current.cfg.zoom === 'double' && phoneRules() && !live.current.open && canZoom()) {
       const at = screenToFrame(p.x, p.y, e.cam, e.vp, tour.aspect);
       if (tapWait.current) {
         clearTimeout(tapWait.current);
         tapWait.current = 0;
-        return void zoomTo(e.cam.z > 1.001 ? 1 : ZOOM.step, at);
+        return void zoomTo(e.zoomed ? 1 : ZOOM.step, at);
       }
       const r = tapRule(p.x, p.y, marks(e));
       if (r && 'open' in r) ui.ring(e.slot(r.open), 'tile');
@@ -1029,7 +1368,7 @@ export function TourPage() {
     }
     tap(p.x, p.y);
   }
-  const marks = (e: TourEngine): Mark[] => tour.slots.flatMap((s) => (e.visible.has(s.id) ? (markOf(s, e) ?? []) : []));
+  const marks = (e: TourEngine): Mark[] => items().flatMap((s) => (e.visible.has(s.id) ? (markOf(s, e) ?? []) : []));
   function tap(x: number, y: number) {
     const e = engine.current;
     const L = live.current;
@@ -1049,13 +1388,14 @@ export function TourPage() {
       return;
     }
     // "נקודות בלבד" (a switch): the first tap always zooms ×2 to the place, the second opens the product
-    if (L.cfg.pick === 'dots' && e.cam.z < ZOOM.snap) return void zoomTo(ZOOM.step, at);
+    if (L.cfg.pick === 'dots' && canZoom() && e.cam.z < e.rest.z * ZOOM.snap) return void zoomTo(ZOOM.step, at);
     const r = tapRule(x, y, marks(e));
     if (!r) return;
     const from = (id: string) => (L.cfg.pick === 'list' ? tiles.current.get(id) : spots.current.get(id));
     if ('open' in r) return void openSlot(e.slot(r.open), from(r.open));
-    // two marks too close to tell apart: ×2 to the point, where they stand apart (and once more, up to the limit)
-    const z = e.cam.z < ZOOM.step - 0.01 ? ZOOM.step : e.cam.z < ZOOM.max - 0.01 ? ZOOM.max : 0;
+    // two marks too close to tell apart: ×2 to the point, where they stand apart (and once more, up to the limit);
+    // MOCK4: in a room without zoom, the nearer one opens
+    const z = !canZoom() ? 0 : e.cam.z < ZOOM.step - 0.01 ? ZOOM.step : e.cam.z < ZOOM.max - 0.01 ? ZOOM.max : 0;
     if (z) void zoomTo(z, at);
     else void openSlot(e.slot(r.nearest), from(r.nearest));
   }
@@ -1066,10 +1406,6 @@ export function TourPage() {
   /** the strip is the way to choose (and the screen reader's list); the marks are then decoration */
   const strip = phone && cfg.pick === 'list';
   const listOn = strip && inRoom && wm && !open;
-  // MOCK2: the first paint is the width the engine will compose at on this screen (data.ts widthFor: a phone takes
-  // `lo`), so the picture the browser already holds is the one the room is built from, not a second download
-  const WIDE = '(min-width: 901px)';
-  const poster = (w: number, ext: 'avif' | 'webp') => mediaUrl(tour.base.src, w, ext);
   const off = { inert: true, 'aria-hidden': 'true' } as const;
   const radios = <T extends string>(name: string, legend: string, value: T, options: [T, string][], set: (v: T) => void) => (
     <fieldset>
@@ -1082,16 +1418,23 @@ export function TourPage() {
       ))}
     </fieldset>
   );
-  const rooms: { id?: string; name: string; at: 'entry' | 'living' | 'rest'; here?: boolean; go?: () => void }[] = [
+  // MOCK4: the rooms of the house that are built: the door, the living room, the bedroom and the bathroom (a button
+  // each, TOUR1); the move between rooms is a temporary dissolve until the T-C* clips exist
+  const here = (r: RoomId) => inRoom && room === r;
+  const toRoomBtn = (r: RoomId) => () => void (here(r) ? setMore(false) : phase === 'door' && r === 'living-room' ? goIn() : goRoom(r));
+  const rooms: { id?: string; name: string; at: 'entry' | 'living' | 'rest' | 'bed' | 'bath'; here?: boolean; go?: () => void }[] = [
     // the room the visitor is in: its button only closes the panel
     { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void (phase === 'door' ? setMore(false) : goOut()) },
-    { id: 'tour-living', name: 'סלון', at: 'living', here: inRoom, go: () => void (inRoom ? setMore(false) : goIn()) },
+    { id: 'tour-living', name: ROOM_HE['living-room'], at: 'living', here: here('living-room'), go: toRoomBtn('living-room') },
+    { id: 'tour-master', name: ROOM_HE.master, at: 'bed', here: here('master'), go: toRoomBtn('master') },
+    { id: 'tour-bath', name: ROOM_HE.bath, at: 'bath', here: here('bath'), go: toRoomBtn('bath') },
     { name: 'פינת אוכל', at: 'rest' },
-    { name: 'חדר שינה', at: 'rest' },
   ];
   // "קנה את המראה": the style's own magazine page on the site; the Artifact preview has no such page, and shows the
-  // list of the room's products under the tour instead
-  const lookHref = __ARTIFACT__ ? null : `/story/${tour.room}/${house}/`;
+  // list of the room's products under the tour instead. MOCK4: only the living room has a magazine page so far
+  const lookHref = __ARTIFACT__ || room !== 'living-room' ? null : `/story/${tour.room}/${house}/`;
+  const living = room === 'living-room';
+  const shown = items();
   return (
     <>
       <section
@@ -1141,32 +1484,22 @@ export function TourPage() {
                 </span>
               </p>
               {phase === 'door' ? (
-                <p class="h">סלון</p>
+                <p class="h">{ROOM_HE[room]}</p>
               ) : (
                 <h1 id="tour-title" tabIndex={-1} ref={title}>
-                  סלון
+                  {ROOM_HE[room]}
                   <span class="sr-only"> · {HOUSE_HE[house]}</span>
                 </h1>
               )}
+              {/* MOCK4, temporary, for the owner: how many products the room sells */}
+              <span class="tour-sale" data-temp="" {...(inRoom && wm ? {} : { hidden: true })}>
+                {forSale(tour)} מוצרים למכירה בחדר
+              </span>
             </div>
           </div>
 
           {/* the window: one 16:9 frame in every phase. On it, the products' marks and nothing else. */}
           <div class="tour-win" ref={win} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
-            {/* the first paint, before the engine: the same empty room behind the same portal (CSS), never a dark stage */}
-            <picture>
-              {__ARTIFACT__ ? null : <source media={WIDE} srcset={poster(tour.widths.hi, 'avif')} type="image/avif" />}
-              {__ARTIFACT__ ? null : <source srcset={poster(tour.widths.lo, 'avif')} type="image/avif" />}
-              {__ARTIFACT__ ? null : <source media={WIDE} srcset={poster(tour.widths.hi, 'webp')} type="image/webp" />}
-              <img
-                class="poster tour-poster"
-                src={poster(tour.widths.lo, 'webp')}
-                alt=""
-                fetchpriority="high"
-                style={{ backgroundImage: `url("${tour.base.placeholder}")` }}
-              />
-            </picture>
-            <span class="tour-portal-line" aria-hidden="true" />
             <canvas
               ref={canvas}
               class="room-canvas"
@@ -1174,27 +1507,60 @@ export function TourPage() {
               role="img"
               aria-label={
                 phase === 'door'
-                  ? 'דלת הכניסה: פתח מעוגל בקיר טיח, ודרכו הסלון של הבית המודרני החם, עוד בלי המוצרים.'
+                  ? 'דלת הכניסה של הבית המודרני החם: דלת אגוז בקיר אבן בהיר, מנורת קיר, ואדנית עם לבנדר.'
                   : wm
-                    ? `הסלון בבית המודרני החם, עם ${tour.slots.length} פריטים. הרשימה שמתחת לחדר מפרטת אותם.`
+                    ? `${PLACE_HE[room]} בבית המודרני החם, עם ${shown.length} פריטים. הרשימה שמתחת לחדר מפרטת אותם.`
                     : 'הסלון בבית הנורדי, בתמונות זמניות.'
               }
             />
-            <div class="tour-rings" aria-hidden="true">
-              {tour.slots.flatMap((s) =>
+            {/* MOCK4: the door (DOOR2: the arrival's first frame, the page's first paint) and the arrival's walk over
+                the canvas; the rest on HC for reduced motion; the names on the doors at that rest (ARR-M1) */}
+            <picture>
+              <source media="(max-width: 900px)" srcset={doorUrl(900)} />
+              <img class="tour-door-img" src={doorUrl(1920)} alt="" fetchpriority="high" />
+            </picture>
+            <video
+              ref={video}
+              class="tour-video"
+              src={walkSrc ? walkUrl(walkSrc) : undefined}
+              width={walkSrc?.w ?? 1920}
+              height={walkSrc?.h ?? 1080}
+              muted
+              playsInline
+              preload="metadata"
+              disablePictureInPicture
+              aria-hidden="true"
+              tabIndex={-1}
+            />
+            <img ref={hcImg} class="tour-hc" src={hcUrl()} alt="" loading="lazy" aria-hidden="true" />
+            <div class="tour-doors" ref={walkLabels} aria-hidden="true">
+              <svg viewBox="0 0 1 1" preserveAspectRatio="none" focusable="false">
+                {arrival.labels.map((l) => (
+                  <line key={l.id} x1="0" y1="0" x2="0" y2="0" />
+                ))}
+              </svg>
+              {arrival.labels.map((l) => (
+                <span key={l.id} class="tour-door-name">
+                  {l.name_he}
+                </span>
+              ))}
+            </div>
+            <div class="tour-rings" aria-hidden="true" key={`rings-${room}`}>
+              {shown.flatMap((s) =>
                 s.anchors.map((_, i) => (
                   <span
                     key={`${s.id}:${i}`}
                     class="tour-ring"
                     ref={(el) => {
                       if (el) rings.current.set(`${s.id}:${i}`, el);
+                      else rings.current.delete(`${s.id}:${i}`);
                     }}
                   >
                     <i />
                   </span>
                 )),
               )}
-              {tour.slots
+              {shown
                 .filter((s) => s.options.some((o) => o.dims_he))
                 .map((s) => (
                   <span
@@ -1202,6 +1568,7 @@ export function TourPage() {
                     class="tour-dim"
                     ref={(el) => {
                       if (el) dimEls.current.set(s.id, el);
+                      else dimEls.current.delete(s.id);
                     }}
                   >
                     <b>{optionOf(s, sel).dims_he}</b>
@@ -1209,8 +1576,15 @@ export function TourPage() {
                 ))}
             </div>
             {/* the marks: buttons on a wide screen (and when the strip is switched off); decoration beside the strip */}
-            <div class="hotspots tour-spots" role="group" aria-label="פריטים בחדר" hidden={phase === 'door' || !wm} {...(strip ? off : {})}>
-              {tour.slots.map((s) => {
+            <div
+              class="hotspots tour-spots"
+              role="group"
+              aria-label="פריטים בחדר"
+              hidden={phase === 'door' || !wm}
+              {...(strip ? off : {})}
+              key={`spots-${room}`}
+            >
+              {shown.map((s) => {
                 const o = optionOf(s, sel);
                 const price = priceHe(o);
                 return (
@@ -1221,10 +1595,11 @@ export function TourPage() {
                     data-slot={s.id}
                     ref={(el) => {
                       if (el) spots.current.set(s.id, el);
+                      else spots.current.delete(s.id);
                     }}
                     style={{ left: 0, top: 0 }}
                     tabIndex={strip ? -1 : undefined}
-                    aria-label={`${s.name_he}: ${nameHe(s, o)}${price ? `, ${price}` : ''}. ${s.options.length > 1 ? `פתיחת ${s.options.length} גרסאות` : 'תקריב'}`}
+                    aria-label={`${s.name_he}: ${nameHe(s, o)}${price ? `, ${price}` : ''}. ${s.options.length > 1 ? `פתיחת ${s.options.length} גרסאות` : s.closeup === false ? 'פרטים' : 'תקריב'}`}
                     disabled={busy || !!open}
                     onClick={(ev) => void openSlot(s, ev.currentTarget)}
                   >
@@ -1263,6 +1638,7 @@ export function TourPage() {
                 aria-label={zoomed ? 'כל החדר' : 'הגדלה'}
                 title={zoomed ? 'כל החדר' : 'הגדלה'}
                 disabled={!inRoom || !!open}
+                hidden={tour.zoom === false}
                 onClick={() => void zoomTo(live.current.zoomed ? 1 : ZOOM.step)}
               >
                 <IconZoom out={zoomed} />
@@ -1271,8 +1647,8 @@ export function TourPage() {
             <div class="tour-cell">
               {/* the role is said outright: a list without markers loses it in Safari's screen reader */}
               {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
-              <ul class="tour-strip" role="list" aria-label="פריטים בחדר" {...(listOn ? {} : off)}>
-                {tour.slots.map((s) => {
+              <ul class="tour-strip" role="list" aria-label="פריטים בחדר" {...(listOn ? {} : off)} key={`strip-${room}`}>
+                {shown.map((s) => {
                   const o = optionOf(s, sel);
                   const price = priceHe(o);
                   return (
@@ -1283,15 +1659,16 @@ export function TourPage() {
                         data-slot={s.id}
                         ref={(el) => {
                           if (el) tiles.current.set(s.id, el);
+                          else tiles.current.delete(s.id);
                         }}
-                        aria-label={`${s.name_he}: ${nameHe(s, o)}${price ? `, ${price}` : ''}. ${s.options.length > 1 ? `פתיחת ${s.options.length} גרסאות` : 'תקריב'}`}
+                        aria-label={`${s.name_he}: ${nameHe(s, o)}${price ? `, ${price}` : ''}. ${s.options.length > 1 ? `פתיחת ${s.options.length} גרסאות` : s.closeup === false ? 'פרטים' : 'תקריב'}`}
                         disabled={busy || !!open}
                         // the touch itself answers in the room: one ring on the product's mark ties the list to the picture
                         onPointerDown={() => !live.current.busy && ui.ring(s, 'tile')}
                         onClick={(ev) => void openSlot(s, ev.currentTarget)}
                       >
                         <span class="pic">
-                          <img src={cardUrl(o)} alt="" width={72} height={72} draggable={false} />
+                          <CardPic o={o} size={72} />
                         </span>
                         <span class="nm">{nameHe(s, o)}</span>
                       </button>
@@ -1311,12 +1688,18 @@ export function TourPage() {
                   onClick={() => void goIn()}
                   aria-busy={busy || (ready && !warm) ? 'true' : undefined}
                 >
-                  היכנסו לסלון
+                  היכנסו
                 </button>
                 {/* MOCK2: the room is made ready before anything moves; the quiet line says so while it is (FB1) */}
                 <span class="tour-temp" role="status">
-                  {ready && !warm ? 'מכינים את החדר…' : 'הדלת זמנית'}
+                  {ready && !warm ? 'מכינים את החדר…' : ''}
                 </span>
+              </div>
+              {/* MOCK4 (route ch. 11.1): the first arrival has its labels and "דלג", and no other button */}
+              <div class="tour-walk-act" ref={walkAct} {...off}>
+                <button type="button" class="btn btn-ghost" id="tour-skip" onClick={skipWalk}>
+                  דלג
+                </button>
               </div>
             </div>
             <button
@@ -1330,7 +1713,7 @@ export function TourPage() {
               {...(open ? off : {})}
               onClick={toggleMore}
             >
-              <PlanIcon at={phase === 'door' ? 'entry' : 'living'} />
+              <PlanIcon at={phase === 'door' ? 'entry' : room === 'master' ? 'bed' : room === 'bath' ? 'bath' : 'living'} />
               <span class="long">המשך הסיור</span>
               <span class="short">הסיור</span>
               <svg
@@ -1398,7 +1781,7 @@ export function TourPage() {
                     [WM, tour.name_he],
                   ] as const
                 ).map(([id, name]) => (
-                  <button key={id} type="button" data-house={id} aria-pressed={house === id} disabled={!inRoom} onClick={() => void switchTo(id)}>
+                  <button key={id} type="button" data-house={id} aria-pressed={house === id} disabled={!inRoom || !living} onClick={() => void switchTo(id)}>
                     {name}
                   </button>
                 ))}
@@ -1535,7 +1918,7 @@ export function TourPage() {
                 />
                 חדות בזום
               </label>
-              <button type="button" class="btn btn-ghost" id="tour-replay" disabled={!inRoom || !wm || !!open} onClick={() => void replay()}>
+              <button type="button" class="btn btn-ghost" id="tour-replay" disabled={!inRoom || !wm || !living || !!open} onClick={() => void replay()}>
                 הצגה מחדש
               </button>
               {/* MOCK2: one tap copies the device, the browser, the screen, the card and the table of every effect that
@@ -1573,12 +1956,12 @@ export function TourPage() {
             מה יש בחדר
           </h2>
         </div>
-        <ul class="slot-list">
-          {tour.slots.map((s) => {
+        <ul class="slot-list" key={`list-${room}`}>
+          {shown.map((s) => {
             const o = optionOf(s, sel);
             return (
               <li key={s.id} class="card slot-item">
-                <img class="thumb" src={cardUrl(o)} alt="" loading="lazy" width={64} height={64} />
+                <CardPic o={o} cls="thumb" size={64} />
                 <div class="meta">
                   <strong>{s.name_he}</strong>
                   <span class="small">{o.name_he ?? <span class="muted">{NOT_FOR_SALE_HE}</span>}</span>

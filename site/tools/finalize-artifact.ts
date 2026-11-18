@@ -24,7 +24,7 @@ const page = [
   '<link rel="preconnect" href="https://fonts.googleapis.com">',
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
   `<link rel="stylesheet" href="${FONTS}">`,
-  '<meta name="description" content="תצוגה מקדימה: הדמיית הסיור בבית המודרני החם (דלת הכניסה, הסלון, חשיפת המוצרים, גלגל הגרסאות ומעבר הסגנון), ומאחוריה החנות. חלקים זמניים מסומנים.">',
+  '<meta name="description" content="תצוגה מקדימה: הסיור בבית המודרני החם (הדלת, ההגעה דרך המבואה לסלון, חדר השינה וחדר הרחצה, חשיפת המוצרים, גלגל הגרסאות ומעבר הסגנון), ומאחוריה החנות. חלקים זמניים מסומנים.">',
   '<div id="app"></div>',
   `<script type="module">${scripts[0]!.replace(/<\/script/gi, '<\\/script')}</script>`,
   '',
@@ -66,6 +66,33 @@ for (const s of tour.slots)
     // the wheel's card: the product on its own (a studio picture of ours, or its layer trimmed)
     files.add(`${o.card.src}.webp`);
   }
+// MOCK4: the arrival (tools/make-arrival.ts: the two walks, the door, the rest on HC) and the bedroom and the bathroom
+// (tools/make-tour-room.ts: the base, the atlas pages, the sample slot's options, the sheet of cards), at `lo`
+type Arrival = { videos: Record<string, { src: string }>; door: { src: string; widths: number[] }; hc: { src: string; width: number } };
+const arrival = JSON.parse(readFileSync(sitePath('.generated/arrival.json'), 'utf8')) as Arrival;
+for (const v of Object.values(arrival.videos)) files.add(v.src);
+for (const w of arrival.door.widths) files.add(`${arrival.door.src}.${w}.webp`);
+files.add(`${arrival.hc.src}.${arrival.hc.width}.webp`);
+type Room = {
+  widths: { lo: number };
+  base: { src: string };
+  atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
+  slots: { src: string; atlas?: unknown; shadows?: number[]; options: { position: number; card: { src: string } }[] }[];
+};
+for (const id of ['master', 'bath']) {
+  const r = JSON.parse(readFileSync(sitePath(`.generated/tour.${id}.warm-modern.json`), 'utf8')) as Room;
+  const lo = r.widths.lo;
+  files.add(`${r.base.src}.${lo}.webp`);
+  for (const p of [...r.atlas[String(lo)]!.product, ...r.atlas[String(lo)]!.shadow]) files.add(`${p.src}.${lo}.webp`);
+  for (const s of r.slots) {
+    for (const o of s.options) {
+      files.add(`${o.card.src}.webp`);
+      if (s.atlas) continue;
+      files.add(`${s.src}/${o.position}.product.${lo}.webp`);
+      files.add(`${s.src}/${s.shadows?.[o.position - 1] ?? o.position}.shadow.${lo}.webp`);
+    }
+  }
+}
 // FR-I: the supplier's photo of every shown product (one per product, encoded by tools/supplier-images.ts)
 type SupplierManifest = {
   width: number;

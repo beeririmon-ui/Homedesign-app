@@ -28,6 +28,14 @@ export class Loader {
     return p;
   }
 
+  /** MOCK4: lets a decoded picture go (its texture is on the GPU, or its room was left); a later load fetches it again */
+  forget(url: string): void {
+    const hit = this.cache.get(url);
+    if (!hit) return;
+    this.cache.delete(url);
+    void hit.then(release, () => undefined);
+  }
+
   /** The compressed bytes only (cached); decode with decodeBlob when the frame is about to be drawn. */
   fetch(url: string, priority = 2): Promise<Blob> {
     const hit = this.blobs.get(url);

@@ -32,6 +32,8 @@ const note = (name: string, data: unknown) => {
   writeFileSync(join(dir, 'data', name), JSON.stringify(data, null, 1));
 };
 const HEADER = 60;
+/** MOCK4: the rest is the camera's own frame (tools/make-tour.ts camera.frame, v 0.02839–0.97161: its taller side) */
+const REST_Z = 1 / (0.97161 - 0.02839);
 const ready = (page: Page) => page.waitForFunction(() => window.__hdTour?.ready === true, undefined, { timeout: 60_000 });
 /** the page is not in a beat, and no effect of the engine's (the page's own included) is running */
 const atRest = (page: Page, phase: 'door' | 'room' = 'room') =>
@@ -71,7 +73,8 @@ const overWindow = (page: Page, also = '') =>
     const stage = document.querySelector('.tour')!;
     const win = document.querySelector('.tour-win')!;
     const W = win.getBoundingClientRect();
-    const allowed = `canvas, picture, picture *, .tour-portal-line, .tour-rings, .tour-rings *, .tour-spots, .tour-spots *${extra}`;
+    // MOCK4: the door's picture, the arrival's walk, its rest on HC and the names on the doors are the picture too
+    const allowed = `canvas, picture, picture *, .tour-portal-line, .tour-video, .tour-hc, .tour-doors, .tour-doors *, .tour-rings, .tour-rings *, .tour-spots, .tour-spots *${extra}`;
     const seen = (el: Element): boolean => {
       for (let n: Element | null = el; n && n !== stage.parentElement; n = n.parentElement) {
         const cs = getComputedStyle(n);
@@ -174,8 +177,11 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
       expect(w).toEqual(atDoor);
       const st = await state(page);
       expect(st.lay).toBe(s.lay);
-      // the camera shows the whole frame: nothing of it is outside the window
-      expect(st.cam).toEqual({ cu: 0.5, cv: 0.5, z: 1 });
+      // the camera shows the whole frame: nothing of it is outside the window. MOCK4: the rest is the camera's own
+      // frame (the frame the room was approved in, and the one the arrival lands on), not the canvas round it
+      expect(st.cam).toEqual(st.rest);
+      expect(st.rest.z).toBeCloseTo(REST_Z, 5);
+      expect(st.rest.cu).toBeCloseTo(0.5, 5);
       expect(Math.abs(st.vp.w / st.vp.h - 16 / 9)).toBeLessThan(0.02);
       expect(await overWindow(page), 'the room at rest').toEqual([]);
       // every product has its mark, inside the window
@@ -241,7 +247,7 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     await page.touchscreen.tap(win.x + out.x, win.y + out.y);
     await expect(page.getByRole('dialog')).toBeHidden();
     await atRest(page);
-    expect((await state(page)).cam.z).toBe(1);
+    expect((await state(page)).cam.z).toBeCloseTo(REST_Z, 5);
     // the same product from the strip: the same close-up
     await page.locator(`.tour-tile[data-slot="${lone.id}"]`).tap();
     await page.getByRole('dialog').waitFor();
@@ -303,7 +309,8 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     const apart = await marks(page);
     const a2 = apart.find((m) => m.id === a.id)!;
     const b2 = apart.find((m) => m.id === b.id)!;
-    expect(Math.hypot(a2.x - b2.x, a2.y - b2.y)).toBeGreaterThan(Math.hypot(a.x - b.x, a.y - b.y) * 1.9);
+    // MOCK4: ×2 of the canvas is ×1.89 of the rest, the camera's own frame
+    expect(Math.hypot(a2.x - b2.x, a2.y - b2.y)).toBeGreaterThan(Math.hypot(a.x - b.x, a.y - b.y) * (ZOOM.step / REST_Z) * 0.99);
     // now a tap on one of them opens it, from the zoom it is in
     await page.touchscreen.tap(win.x + a2.x, win.y + a2.y);
     await page.getByRole('dialog').waitFor();
@@ -312,7 +319,7 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     // and leaving the close-up always goes back to the whole frame
     await page.keyboard.press('Escape');
     await atRest(page);
-    expect(await state(page)).toMatchObject({ open: null, zoomed: false, cam: { cu: 0.5, cv: 0.5, z: 1 } });
+    expect(await state(page)).toMatchObject({ open: null, zoomed: false, cam: { cu: 0.5, cv: 0.5, z: REST_Z } });
     note('taps.json', { lone, pair: [a, b], closeup: byMark.cam });
     await ctx.close();
   });
@@ -361,7 +368,7 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     await zoom.tap();
     await page.waitForFunction(() => window.__hdTourState?.zoomed === false);
     await atRest(page);
-    expect((await state(page)).cam).toEqual({ cu: 0.5, cv: 0.5, z: 1 });
+    expect((await state(page)).cam).toEqual((await state(page)).rest);
     expect(await touchAction()).toBe('pan-y');
     // a pinch far past the limit: the camera stops at ×2.5, the picture stretches to ×2.75 in all and no more
     await pinch(page, client, mid, 50, 400, async () => {
@@ -379,20 +386,21 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     await pinch(page, client, mid, 300, 40, async () => {
       held = { cam: (await state(page)).cam, t: await canvasTransform(page) };
     });
-    expect(held.cam.z).toBe(1);
+    expect(held.cam.z).toBeCloseTo(REST_Z, 5);
     await atRest(page);
-    expect(await state(page)).toMatchObject({ zoomed: false, cam: { cu: 0.5, cv: 0.5, z: 1 } });
+    expect(await state(page)).toMatchObject({ zoomed: false, cam: { cu: 0.5, cv: 0.5, z: REST_Z } });
     // a pinch that ends just over the whole frame (under ×1.15) goes back to it
     await pinch(page, client, mid, 200, 220);
     await page.waitForTimeout(200);
     await atRest(page);
-    expect(await state(page)).toMatchObject({ zoomed: false, cam: { cu: 0.5, cv: 0.5, z: 1 } });
+    expect(await state(page)).toMatchObject({ zoomed: false, cam: { cu: 0.5, cv: 0.5, z: REST_Z } });
     // a pinch to about ×1.6 stays where it was left, round the point between the fingers
     const off = { x: win.x + win.w * 0.75, y: win.y + win.h * 0.6 };
     await pinch(page, client, off, 100, 160);
     await atRest(page);
     const kept = await state(page);
-    expect(kept.cam.z).toBeCloseTo(1.6, 1);
+    // MOCK4: from the rest, the camera's own frame (×1.06 of the canvas)
+    expect(kept.cam.z).toBeCloseTo(1.6 * REST_Z, 1);
     expect(kept.cam.cu).toBeGreaterThan(0.5);
     // a room or a style button first goes back to the whole frame
     await page.locator('#tour-fold').tap();
@@ -400,7 +408,7 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     await page.locator('.tour-style button[data-house="nordic"]').tap();
     await expect.poll(() => page.evaluate(() => window.__hdTourState?.house), { timeout: 60_000 }).toBe('nordic');
     await atRest(page);
-    expect(await state(page)).toMatchObject({ zoomed: false, more: false, cam: { cu: 0.5, cv: 0.5, z: 1 } });
+    expect(await state(page)).toMatchObject({ zoomed: false, more: false, cam: { cu: 0.5, cv: 0.5, z: REST_Z } });
     const ran = await page.evaluate(() => window.__hdTourFx!.metrics.order);
     expect(ran).toEqual(expect.arrayContaining(['zoom', 'drag', 'pinch', 'zoom-back', 'panel-open', 'panel-close']));
     // the house's name beside the window changed with it, and the strip says the room has no products of its own
@@ -447,7 +455,8 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     const order = await panel.evaluate((el) => Array.from(el.children).map((c) => c.className.split(' ')[0]));
     expect(order).toEqual(['tour-more-head', 'tour-rooms', 'tour-style', 'tour-links', 'tour-panel']);
     expect(await page.locator('.tour-panel').evaluate((d) => (d as HTMLDetailsElement).open)).toBe(false);
-    await expect(page.locator('.tour-rooms button')).toHaveText([/כניסה/, /סלון/, /פינת אוכל.*בקרוב/, /חדר שינה.*בקרוב/]);
+    // MOCK4: the bedroom and the bathroom are built; the dining corner is still "בקרוב"
+    await expect(page.locator('.tour-rooms button')).toHaveText([/כניסה/, /סלון/, /חדר שינה/, /חדר רחצה/, /פינת אוכל.*בקרוב/]);
     await expect(page.locator('#tour-living')).toHaveAttribute('aria-current', 'true');
     await expect(page.locator('#tour-copy')).toHaveCount(1);
     await audit(page, 'the panel open');
@@ -752,7 +761,7 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     await atRest(page);
     const after = await state(page);
     expect(after.cam.cu).toBeGreaterThan(before.cam.cu);
-    expect(after.cam.z).toBe(1);
+    expect(after.cam.z).toBeCloseTo(REST_Z, 5);
     const spot = await box(page, '.tour-spot[data-slot="cushions"]');
     await page.touchscreen.tap(spot.x + spot.w / 2, spot.y + spot.h / 2);
     await page.getByRole('dialog').waitFor();
@@ -766,7 +775,7 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     await page.locator('.tour-panel summary').tap();
     await page.locator('input[name="tour-frame"][value="whole"]').check();
     await expect.poll(async () => (await state(page)).vp.w / (await state(page)).vp.h).toBeCloseTo(16 / 9, 1);
-    expect((await state(page)).cam).toEqual({ cu: 0.5, cv: 0.5, z: 1 });
+    expect((await state(page)).cam).toEqual((await state(page)).rest);
     await ctx.close();
 
     // the dots alone: no strip; the first tap always zooms ×2 to the place, the second opens the product

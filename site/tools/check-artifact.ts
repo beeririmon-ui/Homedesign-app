@@ -4,8 +4,11 @@ import { join, relative } from 'node:path';
 import { sitePath } from './lib/paths';
 
 const OUT = sitePath('dist-artifact');
-const LIMIT_BYTES = 12 * 1024 * 1024;
-const LIMIT_FILES = 200;
+// MOCK4: the Artifact's own limits (the publish tool, 2026-11): one publish sends at most 255 files and 64 MB, and a
+// binary file is at most 15 MB (the page itself 16 MB). MOCK1–3 held themselves to 200 files and 12 MB, before videos.
+const LIMIT_BYTES = 64 * 1024 * 1024;
+const LIMIT_FILES = 255;
+const LIMIT_FILE = 15 * 1024 * 1024;
 
 const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)]));
 const files = walk(OUT);
@@ -15,7 +18,8 @@ const problems: string[] = [];
 const check = (ok: boolean, msg: string) => void (ok || problems.push(msg));
 
 check(files.length <= LIMIT_FILES, `${files.length} files > ${LIMIT_FILES}`);
-check(bytes <= LIMIT_BYTES, `${(bytes / 1048576).toFixed(2)} MB > 12 MB`);
+check(bytes <= LIMIT_BYTES, `${(bytes / 1048576).toFixed(2)} MB > ${LIMIT_BYTES / 1048576} MB`);
+for (const f of files) check(statSync(f).size <= LIMIT_FILE, `${relative(OUT, f)} is ${(statSync(f).size / 1048576).toFixed(2)} MB > 15 MB`);
 check(!/<!doctype|<html[\s>]|<head[\s>]|<body[\s>]|<\/body>|<\/html>/i.test(html), 'document skeleton tags present (doctype/html/head/body)');
 check(/^<title>[^<]+<\/title>\s*<style>/.test(html), 'the page must start with <title> and then <style>');
 // the light tokens first: since S5 the first :root block is the magazine system's (styles/system.css, --paper …), which
@@ -40,11 +44,14 @@ check(!/["'(]\/media\//.test(html), 'absolute /media/ path found (media must be 
 for (const f of files) {
   const rel = relative(OUT, f);
   if (rel === 'index.html') continue;
-  check(/^media\/[A-Za-z0-9/._-]+\.webp$/.test(rel), `unexpected file: ${rel}`);
+  // WebP pictures, and (MOCK4) the arrival's two walks as H.264 MP4
+  check(/^media\/[A-Za-z0-9/._-]+\.webp$/.test(rel) || /^media\/tour\/arrival\/[A-Za-z0-9._-]+\.mp4$/.test(rel), `unexpected file: ${rel}`);
 }
 
+const biggest = files.reduce((a, f) => (statSync(f).size > statSync(a).size ? f : a));
 console.log(
-  `dist-artifact: ${files.length} files, ${(bytes / 1048576).toFixed(2)} MB (index.html ${(statSync(join(OUT, 'index.html')).size / 1024).toFixed(0)} KB)`,
+  `dist-artifact: ${files.length} files, ${(bytes / 1048576).toFixed(2)} MB (index.html ${(statSync(join(OUT, 'index.html')).size / 1024).toFixed(0)} KB; ` +
+    `the largest ${relative(OUT, biggest)} ${(statSync(biggest).size / 1048576).toFixed(2)} MB)`,
 );
 if (problems.length) {
   for (const p of problems) console.error(`FAIL  ${p}`);

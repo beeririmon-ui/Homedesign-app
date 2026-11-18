@@ -140,9 +140,10 @@ test.describe('MOCK2: the tour moves without a jump', () => {
     await page.goto('/tour/');
     await ready(page);
     // while the room is being made ready the button says so; it stops saying so when it is
-    await expect(page.locator('.tour-temp')).toHaveText(/מכינים את החדר|הדלת זמנית/);
+    await expect(page.locator('.tour-temp')).toHaveText(/מכינים את החדר|^$/);
     await page.waitForFunction(() => window.__hdTour?.warmReady === true, undefined, { timeout: 120_000 });
-    await expect(page.locator('.tour-temp')).toHaveText('הדלת זמנית');
+    // MOCK4: the door is the arrival's first frame (DOOR2), not a temporary one: the line says nothing once ready
+    await expect(page.locator('.tour-temp')).toHaveText('');
     const before = await page.evaluate(() => ({ ...window.__hdTourFx!.metrics.total }));
     await page.locator('#tour-enter').click();
     await atRest(page);
@@ -159,7 +160,7 @@ test.describe('MOCK2: the tour moves without a jump', () => {
     expect(
       after.effects.map((s) => s.label),
       'the way in and a reveal both ran',
-    ).toEqual(expect.arrayContaining(['enter']));
+    ).toEqual(expect.arrayContaining(['arrival', 'reveal-b']));
     expect(after.total.compile - before.compile, 'programs compiled after the door').toBe(0);
     await ctx.close();
   });

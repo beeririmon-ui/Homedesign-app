@@ -285,7 +285,10 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
             const prod = lookup(o.product_id);
             // MOCK2 (FB1): the product on its own — our own studio picture first, then the house's card (the tour's,
             // and a set's: both are the product's own layer, trimmed), then the room layer. Never a supplier photo.
-            const img = studioImage(o.product_id ?? prod?.id)?.src ?? (house?.thumb ? house.thumb(o.position) : optionImage(slot.id, o.position));
+            const node = house?.thumbNode?.(o.position) ?? null;
+            const img = node
+              ? null
+              : (studioImage(o.product_id ?? prod?.id)?.src ?? (house?.thumb ? house.thumb(o.position) : optionImage(slot.id, o.position)));
             // PRE1 / MED1: an option out of stock stays on the wheel, said on its card and in its name, and is never sold
             const oos = !!prod && (slot.on_hold || prod.availability.status !== 'available');
             const label = `${i + 1} מתוך ${n}: ${
@@ -306,9 +309,9 @@ export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose
                 onClick={() => (i === index ? onChoose(i + 1) : goTo(i))}
               >
                 <span class="disc" aria-hidden="true" />
-                {img ? <img src={img} alt="" draggable={false} /> : null}
+                {node ?? (img ? <img src={img} alt="" draggable={false} /> : null)}
                 <span class="veil" aria-hidden="true" />
-                {!img || o.placeholder ? (
+                {(!img && !node) || o.placeholder ? (
                   <span class="ph" aria-hidden="true">
                     <span>
                       <i style={{ background: prod?.color_hex ?? 'rgba(244,241,236,.5)' }} />
