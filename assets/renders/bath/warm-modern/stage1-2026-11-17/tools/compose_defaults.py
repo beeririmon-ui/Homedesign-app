@@ -416,7 +416,7 @@ def alpha_for(k, src, base, clay, zones, prior_kind, info=None, extra_bg=None):
             sh[:, best[0]:] = False
         low = np.zeros_like(fg)
         low[1440:] = True
-        fg &= ~low | dil(sh, 6)
+        fg &= ~low | dil(sh, 2)                          # QA M5: a wider band took floor into the pot (a grey "foot" once recoloured)
         if info is not None:
             info["planter_pot_slide"] = dict(dx=best[0], dy=best[1], iou=round(float(best[2]), 3))
     return fg
@@ -456,6 +456,7 @@ def main(rawp, overrides):
         if k != "vanity-vase":
             xb = dil(fg["vanity-vase"], 2) | old_sprig if k in ("toothbrush-cup", "soap-dispenser") else None
             fg[k] = alpha_for(k, srcs[k], base, clay, zones, SLOTS[k]["prior"], rec, xb)
+    fg["hand-towel"], rec["towel_trim_px"] = trim_towel(srcs["hand-towel"], fg["hand-towel"])
     render = srcs["shower-curtain"]                      # the defaults render, matched (the light is read from it)
     fg_old = fg["vanity-sconces"].copy()
     srcs["vanity-sconces"], fg["vanity-sconces"], sc_part, moves = refit(render, fg_old, ids, SCONCE_RENDER_BOX, "centre", True)
@@ -466,10 +467,69 @@ def main(rawp, overrides):
     bsrc, bfg = srcs["shower-dispensers"], fg["shower-dispensers"].copy()
     srcs["shower-dispensers"], fg["shower-dispensers"], b_part, bmoves = refit(bsrc, bfg, ids, BOTTLES_RENDER_BOX, "bottom", False, 0.15)
     rec["sconce_fix"], rec["vase_fix"], rec["soap_fix"], rec["bottles_fix"] = moves, vmoves, smoves, bmoves
+    # M3: the east lamp is the block only (Style B, no plate): nothing right of the clay block's edge
+    east = np.zeros((H, W), bool)
+    ys43, xs43 = np.nonzero(ids == 43)
+    east[:, xs43.max() + 1:] = True
+    east[:ys43.min() - 12] = False
+    east[ys43.max() + 12:] = False
+    rec["east_cap_px_removed"] = int((fg["vanity-sconces"] & east).sum())
+    fg["vanity-sconces"] &= ~east
+    # and nothing right of the drawn block's own right edge (its middle rows), above or below it: the tab at its top-right corner
+    ys43, xs43 = np.nonzero(ids == 43)
+    mid = fg["vanity-sconces"].copy()
+    mid[:ys43.min() + 40] = False
+    mid[ys43.max() - 25:] = False
+    mid[:, :xs43.min() - 30] = False
+    xr_ = int(np.nonzero(mid.any(0))[0].max())
+    tab = np.zeros((H, W), bool)
+    tab[ys43.min() - 12:ys43.max() + 12, xr_ + 2:xs43.max() + 12] = True
+    rec["east_cap_px_removed"] += int((fg["vanity-sconces"] & tab).sum())
+    rec["east_block_right_edge"] = xr_
+    fg["vanity-sconces"] &= ~tab
     allfg0 = np.zeros((H, W), bool)
     for k in order:
         allfg0 |= fg[k]
-    srcs["hand-towel"], rec["towel_match"] = match_towel(srcs["hand-towel"], fg["hand-towel"], base, allfg0, "caramel")
+    plate_g0 = plate8.astype(np.float64) / 255
+    # M1: a gain alone, solved after the grade, lands on L* 38.5 but the toe pulls the dark towel redder and greyer (dE00 about 5),
+    # so the caramel is recoloured like the linen: its own shading, the SKU photo's colour in the light of the plaster round it
+    lowm_t, rings_t = towel_rings(fg["hand-towel"], allfg0)
+    refs_t = [np.median(lin(plate_g0[r]), 0) for r in rings_t]
+    ref_t = np.exp(np.mean(np.log(np.array(refs_t)), 0))
+    srcs["hand-towel"], rec["towel_match"] = recolour_r5(srcs["hand-towel"], fg["hand-towel"], lowm_t, ref_t, "plaster", R5_SKU["caramel"], cv)
+    gt = cv(srcs["hand-towel"])
+    labs_t = [r5_lab(gt, lowm_t, rf, "plaster") for rf in refs_t]
+    rec["towel_match"].update(method="R5 after the grade: lower half, mid-tone, against the plaster round the towel (#ECE5DA); solved on the rings' "
+                              "geometric mean, read on each of the three rings (10-40, 25-70, 45-90 px)",
+                              rings_lab=[[round(float(v), 2) for v in l] for l in labs_t], de00_rings=[round(de(l, R5_SKU["caramel"]), 2) for l in labs_t])
+    # M4: the soap dispenser's body (not its black pump) to the SKU, read against the basin beside it (#EDE6DA)
+    labs_ = lab_of(srcs["soap-dispenser"])
+    pump = dil((labs_[..., 0] < 25) & (np.hypot(labs_[..., 1], labs_[..., 2]) < 12) & fg["soap-dispenser"], 1)
+    body = fg["soap-dispenser"] & ~pump
+    # the reference as QA reads it (b2_cyl.py): the basin's outer wall (its lower 55 % of rows), centre-right two thirds
+    basin = (ids == 24) & ~dil(allfg0, 4)
+    bys, bxs = np.nonzero(basin)
+    yyb, xxb = np.mgrid[0:H, 0:W]
+    wallb = basin & (yyb > bys.min() + 0.45 * (bys.max() - bys.min())) & (xxb >= bxs.min() + 0.33 * (bxs.max() - bxs.min()))
+    ref_basin = np.median(lin(plate_g0[wallb]), 0)
+    srcs["soap-dispenser"] = srcs["soap-dispenser"].copy()
+    srcs["soap-dispenser"], rec["soap_recolour"] = recolour_r5(srcs["soap-dispenser"], body, ero(body, 3), ref_basin, "basin", R5_SKU["soap"], cv)
+    rec["soap_recolour"]["reference"] = "the basin's outer wall, centre-right (QA's b2_cyl.py reference), #EDE6DA"
+    # M5: the planter's pot (not the pothos) to the SKU, read against the window wall's plaster beside it (#ECE5DA)
+    labp = lab_of(srcs["floor-planter"])
+    yy_ = np.arange(H)[:, None]
+    leafy = ((labp[..., 1] < -4) & (np.hypot(labp[..., 1], labp[..., 2]) > 6)) | ((labp[..., 0] < 22) & (yy_ < 1420))   # below: all pot
+    pot = fg["floor-planter"] & ~dil(leafy, 1) & (yy_ >= 1290)
+    smooth = pot & ero(pot, 3) & (yy_ >= 1420)
+    pl = np.isin(np.asarray(Image.open(CLAY + "B2-plate-id.png")), PLASTER) & ~dil(allfg0, 6)
+    pl[:, 300:] = False
+    pl[:1000] = False
+    pl[1300:] = False
+    Lp = G.to_lab(plate_g0[pl])[:, 0]
+    lo_, hi_ = np.percentile(Lp, [20, 80])
+    ref_pl = np.median(lin(plate_g0[pl][(Lp >= lo_) & (Lp <= hi_)]), 0)
+    srcs["floor-planter"], rec["planter_recolour"] = recolour_r5(srcs["floor-planter"], pot, smooth, ref_pl, "plaster", R5_SKU["planter"], cv)
+    rec["planter_recolour"]["reference"] = "the window wall's plaster beside the pot (plate ids 1-4, x < 300, y 1000-1300, mid-tone), #ECE5DA"
     refits = {"vanity-sconces": (render, sc_part, moves), "vanity-vase": (vsrc, v_part, vmoves),
               "soap-dispenser": (ssrc, s_part, smoves), "shower-dispensers": (bsrc, b_part, bmoves)}
     alpha = {k: soft(fg[k]) for k in order}
@@ -494,6 +554,14 @@ def main(rawp, overrides):
             s0 = shadow_of(so, base, fo, SLOTS[k], clay_shadow, dil(oth, 1))
             sk = warp_dark(s0, mv, H, W)
             sk[dil(oth, 1)] = 1
+            if k == "vanity-sconces" and "east_block_right_edge" in rec:   # M3: the cap's tab left a dark stroke at the corner
+                ys43, xs43 = np.nonzero(ids == 43)
+                xr_ = rec["east_block_right_edge"]
+                yy3 = np.arange(H)[:, None].astype(np.float64)
+                keep = np.clip((yy3 - (ys43.min() + 34)) / 10, 0, 1)                      # 0 at the corner, 1 from 44 px down
+                zone = np.zeros((H, W), bool)
+                zone[ys43.min() - 12:ys43.min() + 44, xr_ + 1:xr_ + 40] = True
+                sk = np.where(zone, 1 - (1 - sk) * keep, sk)
             shadow[k] = np.where(sk > 0.996, 1.0, sk)
         else:
             shadow[k] = shadow_of(srcs[k], base, fg[k], SLOTS[k], clay_shadow, dil(oth, 1))
@@ -523,8 +591,33 @@ def main(rawp, overrides):
     Lu = np.clip(blur(np.clip(Lu, 0, 1), 2) - 0.01, 0, 1)
     Lu = move_beams(Lu, moves)
     lenv = light_env & ~dil(prod, 1)
+    Lu, rec["light_holes_filled_px"] = fill_light_holes(Lu, lenv)
+    # M3: the light leaves a block only from its top and bottom: beside it, and at its corners, nothing (no cap). A soft V mask per
+    # lamp: half-width = the block's half-width + 1.2 x the distance above its top or below its bottom, a 6 px ramp outside
+    yy2, xx2 = np.mgrid[0:H, 0:W].astype(np.float64)
+    for i in (42, 43):
+        ys_, xs_ = np.nonzero(ids == i)
+        x0_, x1_, y0_, y1_ = xs_.min(), xs_.max(), ys_.min(), ys_.max()
+        if i == 43:
+            x1_ = min(x1_, rec["east_block_right_edge"] + 1)
+        cx_, hb = (x0_ + x1_) / 2, (x1_ - x0_) / 2
+        win = (slice(max(0, y0_ - 400), y1_ + 400), slice(max(0, x0_ - 300), x1_ + 300))
+        dd = np.maximum(0, np.maximum(y0_ - yy2[win], yy2[win] - y1_))
+        hw = hb + 1.2 * np.maximum(0, dd - 4)            # the V starts at the block's own width
+        vm = np.clip(1 - (np.abs(xx2[win] - cx_) - hw) / 3, 0, 1)
+        Lu[win] = Lu[win] * vm[..., None]
+        # each V reaches its block's edge: the unlit rows left between the beam and the block (the cut's soft edge) take the
+        # beam's value next to them, over the block's width
+        cols = slice(x0_, x1_ + 1)
+        for r0, r1, step in ((y0_ - 12, y0_ + 2, 1), (y1_ + 12, y1_ - 2, -1)):
+            last = None
+            for r in range(r0, r1, step):
+                row = Lu[r, cols]
+                if last is not None:
+                    Lu[r, cols] = np.maximum(row, last * (row.max(1, keepdims=True) == 0))
+                last = np.maximum(Lu[r, cols], last) if last is not None else Lu[r, cols].copy()
     Lu = Lu * lenv[..., None]
-    fe = np.clip(blur(lenv.astype(np.float64), 25) * 2, 0, 1) * lenv
+    fe = np.clip(blur(light_env.astype(np.float64), 25) * 2, 0, 1) * lenv   # feather the envelope, not the products' holes
     Lu = Lu * fe[..., None]
     tgt = cv(1 - (1 - stack_u) * (1 - Lu))
     Lg = np.clip(np.where(lenv[..., None], 1 - (1 - tgt) / np.maximum(1 - stack_g, 1e-3), 0.0), 0, 1)
@@ -646,6 +739,10 @@ def write_set(order, alpha, s_g, rgb_g, Lg, plate8, rec, rawp, overrides, H, W, 
                                   shadow_px=int((s8 < 255).sum()), bbox_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1]))
         if k == "hand-towel" and "towel_match" in rec:
             man["layers"][-1]["colour_match"] = rec["towel_match"]
+        if k == "soap-dispenser" and "soap_recolour" in rec:
+            man["layers"][-1]["colour_match"] = rec["soap_recolour"]
+        if k == "floor-planter" and "planter_recolour" in rec:
+            man["layers"][-1]["colour_match"] = rec["planter_recolour"]
         if k == "vanity-sconces" and "sconce_fix" in rec:
             man["layers"][-1]["refit"] = {str(i): {x: m[x] for x in ("render_box", "clay_box", "scale", "new_box")} for i, m in rec["sconce_fix"].items()}
         for kk, rk in (("vanity-vase", "vase_fix"), ("soap-dispenser", "soap_fix"), ("shower-dispensers", "bottles_fix")):
@@ -697,32 +794,126 @@ def albedo_lab(src, mask, plate, allfg):
     return G.to_lab(srgb(np.clip(alb, 0, 1))), illum
 
 
-def match_towel(src, fg_t, base, allfg, colour):
-    """the drawn towel's light level against the plate's light round it and its SKU: one gain on its pixels (linear), so that
-    its lower half, put back under the lit plaster, has the SKU photo's mid-tone luminance"""
-    ys, xs = np.nonzero(fg_t)
-    lowm = fg_t.copy()
-    lowm[:(ys.min() + ys.max()) // 2] = False
-    lowm &= ero(fg_t, 4)
-    lab0, illum = albedo_lab(src, lowm, base, allfg)
-    target = SKU_MID[colour]["lab"][0]
-    y_now = ((lab0[0] + 16) / 116) ** 3
-    y_tgt = ((target + 16) / 116) ** 3
-    g = y_tgt / y_now
-    out = src.copy()
-    reg = dil(fg_t, 3)
-    out[reg] = srgb(lin(src[reg]) * g)
-    lab1, _ = albedo_lab(out, lowm, base, allfg)
-    return out, dict(gain_linear=round(float(g), 4), albedo_lab_before=[round(float(v), 2) for v in lab0],
-                     albedo_lab_after=[round(float(v), 2) for v in lab1], sku_mid_lab=SKU_MID[colour]["lab"],
-                     de00_after_vs_sku=round(float(G.de00(lab1[None], np.array([SKU_MID[colour]["lab"]]))[0]), 2),
-                     plate_light_rgb=[round(float(v), 4) for v in illum])
-
-
 def albedo_rec(src, mask, base, allfg, colour):
     lab, _ = albedo_lab(src, mask, base, allfg)
     return dict(albedo_lab=[round(float(v), 2) for v in lab], sku_mid_lab=SKU_MID[colour]["lab"],
                 de00_vs_sku=round(float(G.de00(lab[None], np.array([SKU_MID[colour]["lab"]]))[0]), 2))
+
+
+# ---- QA round 1 on B2 (qa/reports/2026-11-18-bath-b2): colours read as QA reads them (R5): the product's mid-tone (L* 20-80th
+# percentile) median, linear, over the median of a known neutral in the same light, times that neutral's albedo; solved AFTER
+# the WM-G1 grade (M1) ----
+R5_SKU = {"caramel": (38.5, 40.4, 49.8), "soap": (62.3, 26.3, 70.1), "planter": (58.3, 4.1, 87.9)}   # L*, C*, h (QA's readings)
+WHITE = {"plaster": "#ECE5DA", "basin": "#EDE6DA"}
+
+
+def lch_lab(lch):
+    L, C, h = lch
+    return np.array([L, C * np.cos(np.radians(h)), C * np.sin(np.radians(h))])
+
+
+def hex_lin(hx):
+    return lin(np.array([int(hx[i:i + 2], 16) for i in (1, 3, 5)]) / 255.0)
+
+
+def r5_lab(img, mask, ref_lin, white):
+    L = G.to_lab(img[mask])[:, 0]
+    lo, hi = np.percentile(L, [20, 80])
+    mid = (L >= lo) & (L <= hi)
+    med = np.median(lin(img[mask][mid]), 0)
+    return G.to_lab(srgb(np.clip(med / np.maximum(ref_lin, 1e-5) * hex_lin(WHITE[white]), 0, 1)))
+
+
+def de(lab, lch):
+    return float(G.de00(np.asarray(lab)[None], lch_lab(lch)[None])[0])
+
+
+def towel_rings(fg_t, allfg):
+    """QA's three reference rings round the towel's lower half (10-40, 25-70, 45-90 px), off every product"""
+    ys, xs = np.nonzero(fg_t)
+    lower = np.zeros_like(fg_t)
+    lower[(ys.min() + ys.max()) // 2:] = True
+    lowm = fg_t & lower & ero(fg_t, 3)
+    rings = []
+    for a, b in ((10, 40), (25, 70), (45, 90)):
+        rings.append(dil(fg_t, b) & ~dil(fg_t, a) & lower & ~dil(allfg & ~fg_t, 3))
+    return lowm, rings
+
+
+def crop_box(m, pad=6):
+    ys, xs = np.nonzero(m)
+    return slice(max(0, ys.min() - pad), ys.max() + pad + 1), slice(max(0, xs.min() - pad), xs.max() + pad + 1)
+
+
+def recolour_r5(src, body, meas, ref_lin, white, lch, cv):
+    """M4/M5: the product keeps its own shading (luminance over its mid-tone median); its colour becomes the SKU photo's in the
+    light of the reference (the SKU's albedo x the reference's light), one level solved on the graded result so that the R5
+    reading has the SKU's L*"""
+    sl = crop_box(dil(body, 3))
+    b, m = body[sl], meas[sl]
+    reg = b                                              # the soft edge takes the interior's new colour in defringe()
+    c0 = src[sl]
+    Y = lin(c0) @ np.array([0.2126, 0.7152, 0.0722])
+    Lm = G.to_lab(c0[m])[:, 0]
+    lo, hi = np.percentile(Lm, [20, 80])
+    shade = Y / np.median(Y[m][(Lm >= lo) & (Lm <= hi)])
+    inner = ero(b, 2)
+    shade = np.minimum(shade, np.percentile(shade[inner], 99.5))
+    sku_lin = lin(G.from_lab(lch_lab(lch)[None])[0])
+    t_lin = sku_lin / hex_lin(WHITE[white]) * ref_lin    # the SKU in the reference's light
+    def make(t):
+        c = c0.copy()
+        c[reg] = srgb(np.clip(shade[reg][:, None] * t[None, :], 0, 1))
+        return cv(c)
+    def r5_lin(c):
+        L = G.to_lab(c[m])[:, 0]
+        lo, hi = np.percentile(L, [20, 80])
+        return np.median(lin(c[m][(L >= lo) & (L <= hi)]), 0) / np.maximum(ref_lin, 1e-5) * hex_lin(WHITE[white])
+    # the grade's toe lifts a dark product with nearly neutral light, which the reading in a warm light turns redder and greyer:
+    # the colour is solved per channel on the graded result (damped fixed point), so the reading lands on the SKU
+    t = t_lin.copy()
+    for _ in range(16):
+        got = r5_lin(make(t))
+        t = t * (sku_lin / np.maximum(got, 1e-6)) ** 0.85
+    k = float(np.dot(t, [0.2126, 0.7152, 0.0722]) / np.dot(t_lin, [0.2126, 0.7152, 0.0722]))
+    out = src.copy()
+    full = np.zeros(src.shape[:2], bool)
+    full[sl] = reg
+    out[full] = srgb(np.clip(shade[reg][:, None] * t[None, :], 0, 1))
+    lab = r5_lab(make(t), m, ref_lin, white)
+    return out, dict(level=round(float(k), 4), sku_lch=lch, r5_lab_after=[round(float(v), 2) for v in lab], de00_after=round(de(lab, lch), 2))
+
+
+def trim_towel(src, fg):
+    """M2: the wall the cut took along the towel's right edge (shadowed plaster: L* over 18, a* under 8, C* under 16), joined to
+    the outside of the cut, comes out; opened 1 px, the largest piece kept"""
+    lab = lab_of(src)
+    wall = (lab[..., 0] > 18) & (lab[..., 1] < 8) & (np.hypot(lab[..., 1], lab[..., 2]) < 16) & fg
+    n, labm = cv2.connectedComponents(wall.astype(np.uint8), connectivity=8)
+    edge = dil(~fg, 1)
+    drop = np.isin(labm, list(set(np.unique(labm[edge & wall])) - {0}))
+    out = fg & ~drop
+    out = cv2.morphologyEx(out.astype(np.uint8), cv2.MORPH_OPEN, disk(1)).astype(bool)
+    n, lab2, st, _ = cv2.connectedComponentsWithStats(out.astype(np.uint8), connectivity=8)
+    out = lab2 == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
+    inv = (~out).astype(np.uint8)
+    n2, lab3, st3, _ = cv2.connectedComponentsWithStats(inv, connectivity=4)
+    border = set(np.unique(np.concatenate([lab3[0], lab3[-1], lab3[:, 0], lab3[:, -1]])))
+    out |= np.isin(lab3, [i for i in range(1, n2) if st3[i, cv2.CC_STAT_AREA] < 150 and i not in border])
+    return out, int((fg & ~out).sum())
+
+
+def fill_light_holes(L, env):
+    """small unlit pockets inside a beam (where a product's cut was taken back) take the light round them"""
+    nz = L.max(2) > 0
+    closed = cv2.morphologyEx(nz.astype(np.uint8), cv2.MORPH_CLOSE, disk(6)).astype(bool)
+    holes = closed & ~nz & env
+    if holes.any():
+        w = blur(nz.astype(np.float64), 3)
+        for c in range(3):
+            v = blur(L[..., c] * nz, 3) / np.maximum(w, 1e-6)
+            L[..., c][holes] = v[holes]
+    return L, int(holes.sum())
 
 
 def recolour_variant(rawp, slot, vpath, pid, name, frm, to):
@@ -739,7 +930,7 @@ def recolour_variant(rawp, slot, vpath, pid, name, frm, to):
     allfg = np.zeros((H, W), bool)
     for l in man["layers"]:
         allfg |= np.asarray(Image.open(os.path.join(ST, l["layer"])))[..., 3] > 0
-    src0, _ = match_towel(srcs["shower-curtain"], fg, base, allfg, frm)   # the default as it went into its layer
+    src0 = srcs["shower-curtain"]                             # the default's shading (a gain does not change it)
     src = defringe(src0, fg)
     # the default's shading (its luminance over its lower half's median) x the new SKU's mid-tone x the plate's light round the
     # towel (per channel): the folds, the weave and the hem stay the default's, the colour is the new SKU's in this light
@@ -754,6 +945,12 @@ def recolour_variant(rawp, slot, vpath, pid, name, frm, to):
     w = blur(inner.astype(np.float64), 2.0)                   # the soft edge carries the shading of the fabric next to it
     edge = dil(fg, 2) & ~inner
     shade[edge] = (blur(shade * inner, 2.0) / np.maximum(w, 1e-6))[edge]
+    # M2: the hem's turned edge, drawn lighter than the fabric in the caramel, reads as a light line in the linen: within 4 px of
+    # the cut, the shading never exceeds the fabric's own local median (12 px)
+    band = fg & ~ero(fg, 4)
+    in4 = ero(fg, 4).astype(np.float64)
+    loc = blur(shade * in4, 3) / np.maximum(blur(in4, 3), 1e-6)         # the fabric just inside, not a wide median
+    shade = np.where(band & (blur(in4, 3) > 0.05), np.minimum(shade, loc), shade)
     ring = dil(lowm, 90) & ~dil(lowm, 45) & ~dil(allfg, 45)
     x0, y0, x1, y1 = PLASTER_REF
     illum = np.median(lin(base[ring]), 0) / np.median(lin(base[y0:y1, x0:x1]).reshape(-1, 3), 0)

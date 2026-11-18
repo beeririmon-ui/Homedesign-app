@@ -83,12 +83,12 @@
    "layer": "layers/vanity-sconces/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
    "shadow": "shadows/vanity-sconces/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
    "shadow_z": 13,
-   "alpha_px": 17549,
-   "shadow_px": 6408,
+   "alpha_px": 17332,
+   "shadow_px": 5569,
    "bbox_px": [
     1372,
     230,
-    2372,
+    2355,
     470
    ],
    "refit": {
@@ -161,14 +161,29 @@
    "layer": "layers/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
    "shadow": "shadows/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
    "shadow_z": 29,
-   "alpha_px": 88040,
-   "shadow_px": 24974,
+   "alpha_px": 87433,
+   "shadow_px": 25452,
    "bbox_px": [
     0,
     1105,
     338,
     1530
-   ]
+   ],
+   "colour_match": {
+    "level": 1.0,
+    "sku_lch": [
+     58.3,
+     4.1,
+     87.9
+    ],
+    "r5_lab_after": [
+     58.3,
+     0.15,
+     4.1
+    ],
+    "de00_after": 0.0,
+    "reference": "the window wall's plaster beside the pot (plate ids 1-4, x < 300, y 1000-1300, mid-tone), #ECE5DA"
+   }
   },
   {
    "slot": "soap-dispenser",
@@ -186,6 +201,21 @@
     1998,
     930
    ],
+   "colour_match": {
+    "level": 1.0,
+    "sku_lch": [
+     62.3,
+     26.3,
+     70.1
+    ],
+    "r5_lab_after": [
+     62.3,
+     8.95,
+     24.73
+    ],
+    "de00_after": 0.0,
+    "reference": "the basin's outer wall, centre-right (QA's b2_cyl.py reference), #EDE6DA"
+   },
    "refit": {
     "44": {
      "render_box": [
@@ -275,13 +305,13 @@
    "layer": "layers/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3.png",
    "shadow": "shadows/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3.png",
    "shadow_z": 49,
-   "alpha_px": 7450,
-   "shadow_px": 7647,
+   "alpha_px": 7361,
+   "shadow_px": 7699,
    "bbox_px": [
     2319,
     849,
     2497,
-    1021
+    1019
    ],
    "refit": {
     "49": {
@@ -290,13 +320,13 @@
       2318,
       873,
       2504,
-      1039
+      1038
      ],
      "outer_box_after": [
       2331,
       874,
-      2493,
-      1018
+      2492,
+      1017
      ],
      "about": "the wall base"
     }
@@ -310,36 +340,49 @@
    "layer": "layers/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
    "shadow": "shadows/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
    "shadow_z": 51,
-   "alpha_px": 68864,
-   "shadow_px": 29609,
+   "alpha_px": 68038,
+   "shadow_px": 31184,
    "bbox_px": [
     2271,
-    939,
-    2530,
-    1407
+    952,
+    2529,
+    1408
    ],
    "colour_match": {
-    "gain_linear": 1.6469,
-    "albedo_lab_before": [
-     30.33,
-     21.99,
-     27.87
+    "level": 0.6036,
+    "sku_lch": [
+     38.5,
+     40.4,
+     49.8
     ],
-    "albedo_lab_after": [
-     38.71,
-     25.97,
-     32.91
+    "r5_lab_after": [
+     38.58,
+     26.45,
+     27.64
     ],
-    "sku_mid_lab": [
-     38.71,
-     23.86,
-     28.96
+    "de00_after": 1.91,
+    "method": "R5 after the grade: lower half, mid-tone, against the plaster round the towel (#ECE5DA); solved on the rings' geometric mean, read on each of the three rings (10-40, 25-70, 45-90 px)",
+    "rings_lab": [
+     [
+      38.09,
+      26.24,
+      27.72
+     ],
+     [
+      38.46,
+      26.41,
+      27.49
+     ],
+     [
+      39.19,
+      26.68,
+      27.71
+     ]
     ],
-    "de00_after_vs_sku": 1.69,
-    "plate_light_rgb": [
-     0.2152,
-     0.1798,
-     0.1367
+    "de00_rings": [
+     1.82,
+     1.98,
+     2.06
     ]
    },
    "moved_up_px": 19
@@ -350,11 +393,11 @@
   "file": "light/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
   "z": 90,
   "blend": "screen",
-  "px": 88933,
+  "px": 79146,
   "note": "the beams on the plaster and the stone top only; the light that falls on a product is in that product's own layer"
  },
  "rnd2": {
-  "region_px": 842698,
+  "region_px": 831989,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
@@ -371,7 +414,7 @@
    "alpha_identical_to_default": true,
    "shadow_identical_to_default": true,
    "kY_sku": 4.5405,
-   "kY_scene": 6.5824,
+   "kY_scene": 10.9935,
    "lab_lower_half": {
     "recoloured": [
      35.85,
@@ -379,17 +422,17 @@
      9.75
     ],
     "edit_render": [
-     43.9,
+     43.91,
      4.14,
-     14.22
+     14.24
     ],
     "default": [
-     15.96,
-     17.05,
-     20.09
+     10.94,
+     14.35,
+     14.44
     ]
    },
-   "de00_recoloured_vs_edit_lower_half": 7.73,
+   "de00_recoloured_vs_edit_lower_half": 7.75,
    "albedo_check": {
     "albedo_lab": [
      74.96,
@@ -403,7 +446,7 @@
     ],
     "de00_vs_sku": 0.36
    },
-   "differing_px_vs_defaults": 68740,
+   "differing_px_vs_defaults": 67935,
    "differing_px_vs_defaults_outside_alpha": 0,
    "outside_differing_px_vs_plate": 0,
    "edit_render": {
@@ -433,15 +476,15 @@
    "rule": "0א 4: the A3 SKU (ring 16, base 5); diameter within +-5 % of the clay; the base stays",
    "fit": {
     "centre": [
-     2411.0,
-     956.0
+     2410.9,
+     955.4
     ],
     "axes": [
-     155.5,
-     174.6
+     154.0,
+     174.5
     ],
-    "angle_deg": 92.3,
-    "rod_half_thickness": 6.6,
+    "angle_deg": 91.2,
+    "rod_half_thickness": 6.52,
     "wall_base": [
      2417.2,
      877.7
@@ -452,13 +495,13 @@
     2318,
     873,
     2504,
-    1039
+    1038
    ],
    "outer_box_after": [
     2331,
     874,
-    2493,
-    1018
+    2492,
+    1017
    ],
    "clay_box": [
     2314,
@@ -466,20 +509,20 @@
     2476,
     971
    ],
-   "width_ratio_to_clay": 1.0,
+   "width_ratio_to_clay": 0.994,
    "height_before_after_px": [
-    167,
-    145
+    166,
+    144
    ],
    "clay_height_note": "the clay ring's visible part (its lower arc is under the clay towel)",
    "bar_top_before_after": [
-    1027.0,
-    1008.0
+    1026.0,
+    1007.0
    ],
    "towel_rise_px": 19,
    "towel_top_at_bar_before_after": [
-    1004,
-    985
+    1005,
+    986
    ],
    "visible_rod_pieces_touching_the_towel": [
     1
@@ -494,17 +537,38 @@
    "rule": "0א 5: the left lamp's peak 0.8-1.25 of the right's (added light, linear luminance, p99.5 over the beams)",
    "before": {
     "left": 0.1987,
-    "right": 0.3919,
+    "right": 0.392,
     "ratio": 0.507
    },
    "gain_linear_left": 2.0,
    "gain_linear_right": 0.657,
    "after": {
     "left": 0.2317,
-    "right": 0.2574,
+    "right": 0.2575,
     "ratio": 0.9
    },
-   "note": "the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8"
+   "note": "the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8",
+   "right_trim_after_colour": 0.9724,
+   "colour": {
+    "rule": "M6: the left wash's colour from the right's by intensity (3000 K as drawn on the right); luminance kept",
+    "edge_hue_deg": {
+     "left": 72.3,
+     "right": 72.4
+    },
+    "share_G0": {
+     "left": 0.543,
+     "right": 0.3
+    },
+    "burnt_white_px": {
+     "left": 0,
+     "right": 0
+    },
+    "peaks_after": {
+     "left": 0.2253,
+     "right": 0.2494,
+     "ratio": 0.903
+    }
+   }
   }
  }
 }

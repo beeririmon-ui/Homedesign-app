@@ -310,6 +310,67 @@ def main():
         wash.update(gain_linear_left=round(float(gL), 3), gain_linear_right=round(float(gR), 3),
                     after=dict(left=round(pk2[42]["p995"], 4), right=round(pk2[43]["p995"], 4), ratio=round(pk2[42]["p995"] / pk2[43]["p995"], 3)),
                     note="the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8")
+    # M6 (QA 2026-11-18): the left lamp's wash went magenta at its edges (G = 0 in most of its light). Its colour is rebuilt from
+    # the right lamp's (the same SKU), intensity by intensity: the added light keeps its luminance and takes the right wash's
+    # R:G:B at the same luminance; where a channel would pass white the whole colour is scaled down (no burnt core)
+    Y3 = np.array([0.2126, 0.7152, 0.0722])
+    lin_b = C.lin(below)
+    add = C.lin(C.light_one(below, L8)) - lin_b
+    Ya = add @ Y3
+    def lamp_win(i):
+        x0, y0, x1, y1 = boxes[i]
+        w = np.zeros((H, W), bool)
+        w[max(0, y0 - 380):y1 + 340, max(0, x0 - 250):x1 + 250] = True
+        return w & (L8.max(2) > 0)
+    wl, wr = lamp_win(42), lamp_win(43)
+    edges = np.geomspace(0.002, 1.0, 25)
+    ref = wr & (Ya > 0.002)
+    ratios = []
+    for lo_, hi_ in zip(edges[:-1], edges[1:]):
+        m = ref & (Ya >= lo_) & (Ya < hi_)
+        ratios.append(np.median(add[m] / Ya[m][:, None], 0) if m.sum() >= 30 else None)
+    filled = [i for i, r in enumerate(ratios) if r is not None]
+    ratios = [ratios[i] if ratios[i] is not None else ratios[min(filled, key=lambda f: abs(f - i))] for i in range(len(ratios))]
+    ratios = np.array(ratios)
+    tgt = wl & (Ya > 0)
+    bi = np.clip(np.searchsorted(edges, Ya[tgt]) - 1, 0, len(ratios) - 1)
+    new_add = Ya[tgt][:, None] * ratios[bi]
+    head = (1 - lin_b[tgt]) / np.maximum(new_add, 1e-6)
+    new_add *= np.minimum(1.0, head.min(1))[:, None] * 0.999
+    f = lin_b.copy()
+    f[tgt] = lin_b[tgt] + new_add
+    Fn = C.srgb(np.clip(f, 0, 1))
+    Ln = 1 - (1 - Fn) / np.maximum(1 - below, 1e-3)
+    Lw = L8.astype(np.float64) / 255
+    Lw[tgt] = np.clip(Ln[tgt], 0, 1)
+    L8 = np.clip(np.rint(Lw * 255), 0, 255).astype(np.uint8)
+    # the headroom scaling took a little off the left's core: the right is trimmed (linear, no clipping) back to the 0.90 balance
+    pk3, add3 = lamp_peaks(below, L8, boxes)
+    trim = 1.0
+    if pk3[42]["p995"] / pk3[43]["p995"] < 0.9:
+        trim = pk3[42]["p995"] / 0.9 / pk3[43]["p995"]
+        lin_f2 = C.lin(C.light_one(below, L8))
+        f2 = lin_f2.copy()
+        f2[wr] = lin_b[wr] + trim * (lin_f2[wr] - lin_b[wr])
+        Ln2 = 1 - (1 - C.srgb(np.clip(f2, 0, 1))) / np.maximum(1 - below, 1e-3)
+        Lw = L8.astype(np.float64) / 255
+        Lw[wr] = np.clip(Ln2[wr], 0, 1)
+        L8 = np.clip(np.rint(Lw * 255), 0, 255).astype(np.uint8)
+    wash["right_trim_after_colour"] = round(float(trim), 4)
+    Image.fromarray(L8).save(os.path.join(ST, man["light"]["file"]))
+    pk3, add3 = lamp_peaks(below, L8, boxes)
+    Ff = C.light_one(below, L8)
+    labf = C.G.to_lab(Ff)
+    def edge_hue(w):
+        m = w & (add3 >= 0.02) & (add3 <= 0.06)
+        return round(float(np.degrees(np.arctan2(np.median(labf[..., 2][m]), np.median(labf[..., 1][m]))) % 360), 1)
+    def g0(w):
+        return round(float(((L8[..., 1] == 0) & w).sum() / max(w.sum(), 1)), 3)
+    burnt = lambda w: int(((C.q(Ff) == 255).all(2) & w & ~(C.q(below) == 255).all(2)).sum())  # noqa: E731
+    wash["colour"] = dict(rule="M6: the left wash's colour from the right's by intensity (3000 K as drawn on the right); luminance kept",
+                          edge_hue_deg=dict(left=edge_hue(wl), right=edge_hue(wr)), share_G0=dict(left=g0(wl), right=g0(wr)),
+                          burnt_white_px=dict(left=burnt(wl), right=burnt(wr)),
+                          peaks_after=dict(left=round(pk3[42]["p995"], 4), right=round(pk3[43]["p995"], 4), ratio=round(pk3[42]["p995"] / pk3[43]["p995"], 3)))
     rec["washes"] = wash
     # ---- recompose both composites from the files ----
     L8 = np.asarray(Image.open(os.path.join(ST, man["light"]["file"])).convert("RGB"))
