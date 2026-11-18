@@ -1214,8 +1214,9 @@ def soft_front_fold(fg, srcs, rec):
 
 
 # ---------------------------------------------------------------------------------------------------------------- QA M3-M7 (2026-11-18)
-SILL_PROF = [0.193, 0.193, 0.211, 0.215, 0.23, 0.222, 0.211, 0.217, 0.201, 0.179, 0.177, 0.173, 0.171, 0.171, 0.169, 0.167, 0.181,
-             0.197, 0.234, 0.226, 0.163, 0.215, 0.311, 0.315, 0.315]                # the SKU photo's outline (CJJT293877501AZ), w / h
+_SILL_FOOT = [0.181, 0.197, 0.234, 0.226, 0.163, 0.215, 0.311, 0.315, 0.315]        # the turned foot (t 0.667-1), the SKU photo's
+SILL_T = list(np.linspace(0, 0.64, 17)) + list(np.linspace(0.667, 1, 9))
+SILL_PROF = list(np.linspace(61, 52, 17) / (152 * 63 / (0.315 * 152))) + _SILL_FOOT   # QA r2 M3: a straight tapered column, 61 to 52 px
 BELL_T = [0, 0.1, 0.2, 0.3, 0.36, 0.43, 0.5, 0.6, 0.73, 0.86, 0.95, 1.0]
 BELL_W = [0.055, 0.057, 0.06, 0.075, 0.10, 0.20, 0.30, 0.375, 0.44, 0.475, 0.475, 0.455]  # Color D's bell (12000045681158503), w / h
 
@@ -1286,7 +1287,7 @@ def qa_fixes(srcs, fg, base, rec):
     out = {}
     # M3 the sill vase: the SKU's outline (fluted column 72 %, then neck, ball and the flared turned base), 8.5 x 24.7 where the
     # projection puts it (bottom row 894, axis x 269.5, 152 px; the base 63 px wide); the flutes from the vase as drawn (column only)
-    out["M3_sill_vase"] = rebuild_turned(srcs, fg, "sill-vase", (215, 700, 335, 905), 269.5, 894, 152, np.linspace(0, 1, 25), SILL_PROF,
+    out["M3_sill_vase"] = rebuild_turned(srcs, fg, "sill-vase", (215, 700, 335, 905), 269.5, 894, 152, SILL_T, SILL_PROF,
                                          63 / (0.315 * 152), -0.5, 26, 742, tex_box=(247, 760, 292, 870), tex_until=0.70)
     # M4 the bottle: Color D's bell, 11 x 24.5 (133 px, the widest 60 px, near the bottom), its sand and its fine rings; the stems stay
     out["M4_bottle"] = rebuild_turned(srcs, fg, "nightstand-vase", (630, 700, 735, 985), 680.5, 975, 133, BELL_T, BELL_W,
@@ -1310,9 +1311,16 @@ def qa_fixes(srcs, fg, base, rec):
     lab[..., 0] = np.where(pe, lab[..., 0] + (Lt - le_[0]), lab[..., 0])
     lab[..., 1] = np.where(pe, lab[..., 1] + (lw[1] - le_[1]), lab[..., 1])
     lab[..., 2] = np.where(pe, lab[..., 2] + (lw[2] - le_[2]), lab[..., 2])
+    # MB-L6: no pixel of the moved plate brighter than the west plate's p95 (the crescent by the cone sparkled), then a 3 px median
+    cap = float(np.percentile(lab[..., 0][pw], 95))
+    lab[..., 0] = np.where(pe, np.minimum(lab[..., 0], cap), lab[..., 0])
+    for c in range(3):
+        med = cv2.medianBlur(np.clip((lab[..., c] + 128) * 0.5, 0, 255).astype(np.uint8), 3).astype(np.float64) * 2 - 128
+        lab[..., c] = np.where(pe & ero(pe, 1), med, lab[..., c])
     srcs["bedside-sconces"] = np.where(pe[..., None], np.clip(from_lab(lab), 0, 1), srcs["bedside-sconces"])
     out["M6_east_plate"] = dict(west_Lab=[round(float(t), 1) for t in lw], east_before_Lab=[round(float(t), 1) for t in le_],
-                                walls_L=[round(float(ww_[0]), 1), round(float(we_[0]), 1)], east_target_L=round(float(Lt), 1), px=int(pe.sum()))
+                                walls_L=[round(float(ww_[0]), 1), round(float(we_[0]), 1)], east_target_L=round(float(Lt), 1), px=int(pe.sum()),
+                                cap_L_west_p95=round(cap, 1))
     # M7 the cushion: 0.85 across about its own centre (50 +-3 cm), the height as drawn
     cm = fg["cushions"]
     xs_ = np.nonzero(cm.any(0))[0]
@@ -1356,8 +1364,10 @@ def duvet_fix(srcs, fg, rec):
     # QA M2: the white strip between the fold band and the throw (rows ~978-1000) and every pixel of the band: L* softly capped at
     # the lit duvet + 8 (knee + 4), b* onto the lit duvet's; the shading under it kept
     strip = np.zeros((H, W), bool)
-    for x in range(W):
-        strip[930:int(round(topline[x])) + 4, x] = True
+    for x in range(W):                                    # QA r2 M2: down to the throw's real top edge in each column (not the trace)
+        col = np.nonzero(fg["throw"][940:1160, x])[0]
+        yend = 940 + col.min() if col.size else int(round(topline[x])) + 4
+        strip[930:max(yend, int(round(topline[x])) + 4), x] = True
     strip &= a & ~fg["throw"] & ~dil(fg["pillowcases"], 1) & ~dil(fg["cushions"], 1)
     lab2 = to_lab(rgb)
     kn, ce = lit_lab[0] + 4, lit_lab[0] + 8
