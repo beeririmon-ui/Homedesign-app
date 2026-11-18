@@ -21,6 +21,8 @@ ST = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import compose_defaults as C  # noqa: E402
 
+EDIT_FLAX = os.path.join(ST, "raw/defaults-r7-flax-edit.jpg")    # the manager's one mask edit for Flax brown (round 7, 400)
+EDIT_FLAX_IN = os.path.join(ST, "inputs/defaults-edit-r7-input.png")
 RATIOS = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/render-master/comp/throw-ratios.json"
 VARIANTS = {"flax": dict(pid="sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200", sku="CJYD205807538LO"),
             "clay": dict(pid="sofa-cover-cj-cotton-muslin-fringe-clay-150x200", sku="CJYD205807510JQ")}
@@ -82,6 +84,30 @@ def main():
         labv = np.stack([Lv, tgt[1] * sc, tgt[2] * sc], -1)
         new = np.clip(C.from_lab(labv), 0, 1)
         r = np.array([Yt / Ypm] * 3)
+        if k == "flax" and os.path.exists(EDIT_FLAX):
+            # round 7: the mask edit, used inside Pecan's alpha only (its contour checked: the ring outside changed on 0.4 %, the
+            # outline on the same edges, p90 1 px); locked onto its input, matched to it outside the throw (the field, sigma 60);
+            # its hue turned onto the SKU photo's (69.8 deg) and its C* scaled to it (13.0), the lightness and the weave kept
+            ids = np.asarray(Image.open(C.CLAY + "MB0-id.png"))
+            e, rl = C.lock(ids, EDIT_FLAX, EDIT_FLAX_IN)
+            ref = C.load(EDIT_FLAX_IN)
+            g = C.gain_field(e, ref, ~C.dil(C.dil(a > 127, 40), 30))
+            em = C.srgb(C.lin(e) * g)
+            le = C.to_lab(em)
+            inner_e = le[inner]
+            sel_e = (inner_e[:, 0] > np.percentile(inner_e[:, 0], 25)) & (inner_e[:, 0] < np.percentile(inner_e[:, 0], 75))
+            me = np.median(inner_e[sel_e], 0)
+            h_e, c_e = hc(me)
+            h_s, c_s = hc(rt[k]["fab_lab"])
+            rot = np.radians(h_s - h_e)
+            ca, sa = np.cos(rot), np.sin(rot)
+            a2 = (le[..., 1] * ca - le[..., 2] * sa) * (c_s / c_e)
+            b2 = (le[..., 1] * sa + le[..., 2] * ca) * (c_s / c_e)
+            new = np.clip(C.from_lab(np.stack([le[..., 0], a2, b2], -1)), 0, 1)
+            tgt = np.array([me[0], *(np.array([np.cos(np.radians(h_s)), np.sin(np.radians(h_s))]) * c_s)])
+            r = np.array([np.nan] * 3)
+            rec.setdefault("flax_edit", dict(raw="raw/defaults-r7-flax-edit.jpg", lock=rl, hue_turn_deg=round(h_s - h_e, 1),
+                                             chroma_scale=round(c_s / c_e, 3), edit_mid_Lab=me.round(1).tolist()))
         out = np.dstack([C.q(new), a])
         out[..., :3][a == 0] = 0
         lp = os.path.join(ST, "layers", "throw", v["pid"] + ".png")
@@ -98,7 +124,7 @@ def main():
         h_v, c_v = hc(mid)
         h_s, c_s = hc(rt[k]["fab_lab"])
         diff = np.abs(o8.astype(int) - C.q(recompose(man)).astype(int)).max(2) > 0
-        rec["variants"][k] = dict(product=v["pid"], sku=v["sku"], ratio_lin_rgb=r.round(3).tolist(), target_mid_Lab=tgt.round(1).tolist(), dL_vs_pecan_from_photos=round(float(dl), 1), mid_Lab=mid.round(1).tolist(),
+        rec["variants"][k] = dict(product=v["pid"], sku=v["sku"], ratio_lin_rgb=[None if np.isnan(t) else round(float(t), 3) for t in r], target_mid_Lab=tgt.round(1).tolist(), dL_vs_pecan_from_photos=round(float(dl), 1), mid_Lab=mid.round(1).tolist(),
                                   hue_deg=round(h_v, 1), C=round(c_v, 1), sku_hue_deg=round(h_s, 1), sku_C=round(c_s, 1),
                                   d_hue=round(h_v - h_s, 1), d_C=round(c_v - c_s, 1), dE00_vs_duvet=round(C.de00(mid, duv), 1),
                                   dE00_vs_headboard=round(C.de00(mid, head), 1), alpha_identical=True,

@@ -1,8 +1,8 @@
 {
  "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2). Round 2 (manager relay after QA, 0 tokens): MP-D2 sill edge honed in code (step 4), MP-I1 / MP-I2 recorded as mandatory, the clay moved to 12.6, re-priced; nothing sent.",
  "cap": 3700,
- "spent": 3300,
- "left_in_cap": 400,
+ "spent": 3700,
+ "left_in_cap": 0,
  "var2": {
   "connected": true,
   "note": "2026-11-18 round 5: the Var2 tools answered with the held sign-in; no code or token asked for"
@@ -321,6 +321,32 @@
   "not_sent": {
    "flax_mask_edit": "Flax brown in code (twice: per-channel ratio with a shoulder; luminance ratio + SKU chroma + shoulder) reads painted at x2 (flat highlights with dark strokes). Reported before sending: a mask edit is about 400 = 3,700, the cap"
   },
+  "spent": 400
+ },
+ "round7": {
+  "date": "2026-11-18",
+  "why": "manager decision on round 6: Pecan stays (fringes hidden by the styling), one Flax brown mask edit (400), cap 3,700",
+  "sent": [
+   {
+    "id": "defaults-r7-flax-edit",
+    "model": "nano-banana-2",
+    "type": "image-to-image (mask edit of the throw, used inside Pecan's alpha only)",
+    "resolution": "2K",
+    "aspect_ratio": "16:9",
+    "image_refs": 1,
+    "refs": "the Flax brown SKU photo (uploaded .../34cf93a1-6999-4362-93a9-8ae6d83339aa.png; the photo itself only in the scratchpad)",
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "396aa5aa-79e0-40cd-8013-a3bcdb16cae6",
+    "task_id": "c919a5832069f1580ae6989674095c62",
+    "idempotency_key": "wm-master-mb0-defaults-r7-flax-edit-2026-11-18",
+    "input": "inputs/defaults-edit-r7-input.png (sha c54b4c22...)",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-c919a5832069f1580ae6989674095c62-0-1795006321187-b79500ad.jpg",
+    "raw": "raw/defaults-r7-flax-edit.jpg",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults-r7-flax-edit.txt",
+    "verdict": "USED inside Pecan's alpha: contour held (outside ring changed on 0.4 %, outline edges p90 1 px as Pecan's); hue turned +7.8 deg and C* x 0.827 onto the SKU photo in code; dE00 8.7 vs the duvet; weave and fold shadows readable"
+   }
+  ],
   "spent": 400
  }
 }
