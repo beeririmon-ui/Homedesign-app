@@ -1,0 +1,3011 @@
+{
+ "report": "qa/reports/2026-11-18-bath-b2/README.md",
+ "date": "2026-11-18",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-bath-b2-defaults-2026-11-18.md",
+ "scope": "B2 stage one (warm-modern bath): defaults, linen hand-towel variant, layers; full QA (owner approval 3 milestone)",
+ "tokens": 0,
+ "verdict": "FAIL",
+ "status_line": "B2 stage one: failed QA on M1-M6 (medium; all fixable in code at 0 tokens; QA re-checks only these)",
+ "items": {
+  "1_fidelity": {
+   "result": "fail",
+   "fails": [
+    "M1",
+    "M3",
+    "M4",
+    "M5"
+   ]
+  },
+  "2_rejection_list": {
+   "result": "fail",
+   "failed_clauses": [
+    2,
+    7,
+    11
+   ],
+   "accepted_deviations_ok": true
+  },
+  "3_composition": {
+   "result": "pass",
+   "curtain_overlap_min": 0.0347,
+   "curtain_overlap_median": 0.0394,
+   "ring_vs_analytic_D16": [
+    -0.015,
+    0.013
+   ],
+   "ring_width_vs_clay": 1.0,
+   "towel_vs_vanity": 0.0378,
+   "towel_top_row": 985,
+   "bar_top_row": 1008,
+   "wash_ratio_p995": 0.896,
+   "wash_ratio_p99": 0.902
+  },
+  "4_layers_rnd2": {
+   "result": "pass",
+   "recompose_defaults_px": 0,
+   "recompose_linen_px": 0,
+   "outside_region_vs_plate_px": 0,
+   "region_px": 842698,
+   "shadow_one_z_below": true,
+   "light_screen_z90": true,
+   "light_px_on_products": 0,
+   "linen_vs_defaults_px": 68740,
+   "linen_vs_defaults_outside_alpha_px": 0,
+   "grade_apply_reproduces_plate_px": 0,
+   "frame_p05_L": 11.41
+  },
+  "5_frame_x1_x2": {
+   "result": "fail",
+   "fails": [
+    "M2",
+    "M3",
+    "M6"
+   ],
+   "same_house_magazine": "pass",
+   "plaster_left_L": 90.7,
+   "plaster_right_L_out_of_beams": 83.6,
+   "mean_luma8": 170.5
+  }
+ },
+ "findings": [
+  {
+   "id": "M1",
+   "severity": "medium",
+   "what": "caramel towel lighter/more chromatic than the SKU after the WM-G1 toe; lower half albedo L 42.9-44.5 C 41.7-42.5 h 50.0 vs SKU 38.5/40.4/49.8; dE00 3.9/4.7/5.4 (graded), 1.9-2.4 un-graded",
+   "fix": "solve the towel gain after curve_apply",
+   "owner": "render-agent",
+   "tokens": 0
+  },
+  {
+   "id": "M2",
+   "severity": "medium",
+   "what": "linen towel: wall chunks in the shared alpha at the right edge (x 2483-2505, y 1190-1393) recoloured to linen: pale halo at x2 (FB1, rejection 11)",
+   "fix": "trim the alpha, re-derive both variants, no SKU colour on wall-sourced shade",
+   "owner": "render-agent",
+   "tokens": 0
+  },
+  {
+   "id": "M3",
+   "severity": "medium",
+   "what": "east sconce: white cap line over the block extending past it with a tab (alpha x 2351-2358, y 232-245): a plate the SKU does not have",
+   "fix": "remove the alpha and highlight beyond the block",
+   "owner": "render-agent",
+   "tokens": 0
+  },
+  {
+   "id": "M4",
+   "severity": "medium",
+   "what": "vanity soap dispenser darker and more chromatic than the SKU: albedo vs basin 51.9/C 34.5/72.6 deg vs 62.3/26.3/70.1, dE00 10.2 (the cup by the same reference 1.8)",
+   "fix": "recolour the body to the SKU after the grade",
+   "owner": "render-agent",
+   "tokens": 0
+  },
+  {
+   "id": "M5",
+   "severity": "medium",
+   "what": "floor planter beige not greige: albedo vs window-wall plaster 53.1/C 16.5/79.7 deg vs SKU 58.3/4.1/87.9, dE00 10.0",
+   "fix": "lower the pot chroma to about 4-6, L* about +5; designer eye",
+   "owner": "render-agent; master-designer",
+   "tokens": 0
+  },
+  {
+   "id": "M6",
+   "severity": "medium",
+   "what": "left sconce wash has a magenta/pink fringe (light layer G=0 in 70% of px, median 22/0/11; fringe hue 54 vs 73 deg right); 71 clipped px",
+   "fix": "rebuild the left light layer's chroma from the right's per intensity, keep 0.90",
+   "owner": "render-agent",
+   "tokens": 0
+  },
+  {
+   "id": "B2-L1",
+   "severity": "low",
+   "what": "planter: white gaps between pothos leaves (901 px), bright crescent at the pot foot",
+   "owner": "render-agent"
+  },
+  {
+   "id": "B2-L2",
+   "severity": "low",
+   "what": "vase base: thin dark sliver with orange ends",
+   "owner": "render-agent"
+  },
+  {
+   "id": "B2-L3",
+   "severity": "low",
+   "what": "curtain left edge: thin grey dashes along the cut",
+   "owner": "render-agent"
+  },
+  {
+   "id": "B2-L4",
+   "severity": "low",
+   "what": "ring shadow: symmetric halo, ghost line left of the rod",
+   "owner": "render-agent"
+  },
+  {
+   "id": "B2-L5",
+   "severity": "low",
+   "what": "cup speckle contrast 7.3 vs 4.9 L* (high-pass) vs SKU",
+   "owner": "render-agent"
+  },
+  {
+   "id": "B2-I1",
+   "severity": "info",
+   "what": "data/selections/bath.warm-modern.json stale vs 0א (1pc towel SKUs, gates NOT PASSED, ring A3 missing)",
+   "owner": "sourcing-agent via manager"
+  },
+  {
+   "id": "B2-I2",
+   "severity": "info",
+   "what": "soap h 0.915, cup h 0.90 of the clay; ring 1.8 cm right; planter 38 px left: under the visibility threshold"
+  },
+  {
+   "id": "B2-I3",
+   "severity": "info",
+   "what": "V7Q6 count on the still: 5 (curtain, towel, planter, sconce pair, ring)"
+  },
+  {
+   "id": "B2-I4",
+   "severity": "info",
+   "what": "towel texture more crinkled than the SKU photos; not stiff"
+  }
+ ],
+ "measurements": {
+  "layers": {
+   "z": [
+    [
+     "shower-dispensers",
+     14,
+     13
+    ],
+    [
+     "vanity-sconces",
+     14,
+     13
+    ],
+    [
+     "shower-curtain",
+     26,
+     25
+    ],
+    [
+     "floor-planter",
+     30,
+     29
+    ],
+    [
+     "soap-dispenser",
+     46,
+     45
+    ],
+    [
+     "toothbrush-cup",
+     46,
+     45
+    ],
+    [
+     "vanity-vase",
+     46,
+     45
+    ],
+    [
+     "towel-ring",
+     50,
+     49
+    ],
+    [
+     "hand-towel",
+     52,
+     51
+    ]
+   ],
+   "shadow_one_below": true,
+   "z_sorted": true,
+   "recompose_vs_defaults": {
+    "px_diff": 0,
+    "px_diff_gt1": 0,
+    "max": 0,
+    "inside_region_diff": 0,
+    "outside_region_diff": 0
+   },
+   "region_px": 842698,
+   "defaults_vs_plate_outside_region": 0,
+   "defaults_vs_plate_inside_region_changed": 831941,
+   "recompose_vs_linen": {
+    "px_diff": 0,
+    "px_diff_gt1": 0,
+    "max": 0,
+    "inside_region_diff": 0,
+    "outside_region_diff": 0
+   },
+   "linen_alpha_identical": true,
+   "linen_shadow_identical": true,
+   "linen_vs_defaults_px": 68740,
+   "linen_vs_defaults_outside_towel_alpha": 0,
+   "linen_diff_bbox": [
+    2299,
+    968,
+    2506,
+    1402
+   ],
+   "light_only_brightens": true,
+   "light_px": 88933,
+   "light_px_over_product_alpha": 0,
+   "light_px_over_product_alpha_opaque": 0
+  },
+  "composition": {
+   "curtain": {
+    "corner_u": 0.2335,
+    "right_edge_u_median": 0.3164,
+    "right_edge_u_min": 0.3117,
+    "right_edge_u_max": 0.3191,
+    "overlap_median": 0.0828,
+    "overlap_min": 0.0782
+   },
+   "curtain_vs_niche": {
+    "niche_left_u": 0.3168,
+    "first_bottle_left_u": 0.3448,
+    "curtain_right_u_in_niche_rows_max": 0.3179,
+    "rule": "not beyond u 0.325 and not touching the first bottle (0.344)",
+    "ok": true
+   },
+   "towel_vs_vanity": {
+    "min_gap_px": 97,
+    "at_row": 1270,
+    "min_gap_u": 0.0378,
+    "rule": ">= 0.025"
+   },
+   "ring_alpha_box": [
+    2331,
+    854,
+    2494,
+    1019
+   ],
+   "towel_ring_contact": {
+    "columns_with_ring_above_towel": 163,
+    "columns_with_gap": 146,
+    "max_gap_px": 183
+   },
+   "sprig_vs_mirror": {
+    "sprig_top_row": 744,
+    "mirror_bottom_row_over_sprig": 706,
+    "gap_v": 0.0263,
+    "rule": ">= 0.02 below the mirror bottom"
+   },
+   "sizes": {
+    "sconce W": {
+     "layer": [
+      1374,
+      356,
+      1438,
+      459
+     ],
+     "clay": [
+      1372,
+      357,
+      1436,
+      462
+     ],
+     "w_ratio": 1.0,
+     "h_ratio": 0.981
+    },
+    "sconce E": {
+     "layer": [
+      2267,
+      232,
+      2358,
+      372
+     ],
+     "clay": [
+      2273,
+      233,
+      2351,
+      379
+     ],
+     "w_ratio": 1.167,
+     "h_ratio": 0.959
+    },
+    "niche bottles": {
+     "layer": [
+      962,
+      683,
+      1073,
+      760
+     ],
+     "clay": [
+      959,
+      675,
+      1076,
+      756
+     ],
+     "w_ratio": 0.949,
+     "h_ratio": 0.951
+    },
+    "soap": {
+     "layer": [
+      1936,
+      803,
+      1992,
+      922
+     ],
+     "clay": [
+      1928,
+      787,
+      1988,
+      917
+     ],
+     "w_ratio": 0.933,
+     "h_ratio": 0.915
+    },
+    "cup (no brushes)": {
+     "layer": [
+      1993,
+      861,
+      2055,
+      927
+     ],
+     "clay": [
+      2014,
+      828,
+      2079,
+      918
+     ],
+     "w_ratio": 0.954,
+     "h_ratio": 0.733
+    },
+    "vase (body, below the sprig)": {
+     "layer": [
+      2090,
+      846,
+      2152,
+      934
+     ],
+     "clay": [
+      2090,
+      843,
+      2151,
+      927
+     ],
+     "w_ratio": 1.016,
+     "h_ratio": 1.048
+    },
+    "ring": {
+     "layer": [
+      2331,
+      854,
+      2494,
+      1019
+     ],
+     "clay": [
+      2314,
+      847,
+      2477,
+      972
+     ],
+     "w_ratio": 1.0,
+     "h_ratio": 1.32
+    },
+    "towel": {
+     "layer": [
+      2301,
+      972,
+      2505,
+      1401
+     ],
+     "clay": [
+      2289,
+      928,
+      2502,
+      1268
+     ],
+     "w_ratio": 0.958,
+     "h_ratio": 1.262
+    },
+    "planter pot": {
+     "layer": [
+      6,
+      1231,
+      315,
+      1501
+     ],
+     "clay": [
+      37,
+      1265,
+      290,
+      1494
+     ],
+     "w_ratio": 1.221,
+     "h_ratio": 1.179
+    },
+    "sconce E, mid rows 280-349 (no cap)": {
+     "layer_w": 73.0,
+     "clay_w": 78.0,
+     "w_ratio": 0.936
+    },
+    "sconce W, mid rows 390-439": {
+     "layer_w": 59.0,
+     "clay_w": 64.0,
+     "w_ratio": 0.922
+    }
+   },
+   "sconce_E_cap": {
+    "clay_block": [
+     2273,
+     233,
+     2351,
+     379
+    ],
+    "alpha_rows_above_clay_top_plus6": 600,
+    "alpha_px_right_of_clay_block_top20": 77,
+    "box_right_part": [
+     2351,
+     232,
+     2358,
+     245
+    ]
+   },
+   "washes": {
+    "left": {
+     "px": 30434,
+     "added_lin_p995": 0.2298,
+     "added_lin_p99": 0.2244,
+     "layer_enc_p995": 255.0,
+     "final_L_p995": 99.9,
+     "up_added_lin_p995": 0.2324,
+     "down_added_lin_p995": 0.2206
+    },
+    "right": {
+     "px": 58499,
+     "added_lin_p995": 0.2564,
+     "added_lin_p99": 0.2487,
+     "layer_enc_p995": 174.0,
+     "final_L_p995": 95.5,
+     "up_added_lin_p995": 0.2611,
+     "down_added_lin_p995": 0.2342
+    },
+    "ratio_left_over_right_p995": 0.896,
+    "ratio_left_over_right_p99": 0.902,
+    "ratio_up": 0.89,
+    "ratio_down": 0.942
+   },
+   "frame": {
+    "L_p05": 11.41,
+    "L_p1": 11.61,
+    "mean8": 167.3
+   },
+   "frame_linen": {
+    "L_p05": 11.41,
+    "mean8": 168.2
+   },
+   "opaque_product_px_below_L10_5": 26,
+   "opaque_product_L_p01": 11.31,
+   "plaster left of the mirror": {
+    "all": {
+     "L": 90.7,
+     "a": 0.7,
+     "b": 4.2,
+     "C": 4.3,
+     "h": 81.0,
+     "px": 155979
+    },
+    "out_of_beams": {
+     "L": 90.6,
+     "a": 0.7,
+     "b": 4.2,
+     "C": 4.3,
+     "h": 81.2,
+     "px": 125757
+    }
+   },
+   "plaster right of the mirror": {
+    "all": {
+     "L": 85.5,
+     "a": 1.3,
+     "b": 7.0,
+     "C": 7.1,
+     "h": 79.8,
+     "px": 123636
+    },
+    "out_of_beams": {
+     "L": 83.6,
+     "a": 1.2,
+     "b": 6.6,
+     "C": 6.7,
+     "h": 79.8,
+     "px": 85172
+    }
+   },
+   "count_V7Q6": {
+    "shower-dispensers": {
+     "area_pct": 0.19,
+     "h": 0.053,
+     "counts": false
+    },
+    "sconce W": {
+     "area_pct": 0.159,
+     "h": 0.071,
+     "counts": true
+    },
+    "sconce E": {
+     "area_pct": 0.27,
+     "h": 0.097,
+     "counts": true
+    },
+    "shower-curtain": {
+     "area_pct": 10.8,
+     "h": 1.0,
+     "counts": true
+    },
+    "floor-planter": {
+     "area_pct": 0.788,
+     "h": 0.177,
+     "counts": true
+    },
+    "soap-dispenser": {
+     "area_pct": 0.144,
+     "h": 0.082,
+     "counts": false
+    },
+    "toothbrush-cup": {
+     "area_pct": 0.102,
+     "h": 0.046,
+     "counts": false
+    },
+    "vanity-vase": {
+     "area_pct": 0.106,
+     "h": 0.061,
+     "counts": false
+    },
+    "towel-ring": {
+     "area_pct": 0.17,
+     "h": 0.114,
+     "counts": true
+    },
+    "hand-towel": {
+     "area_pct": 1.794,
+     "h": 0.297,
+     "counts": true
+    }
+   }
+  },
+  "composition_2": {
+   "curtain_vs_corner": {
+    "corner_u": 0.277,
+    "corner_rows": 230,
+    "curtain_right_u_median": 0.3164,
+    "curtain_right_u_min": 0.3117,
+    "overlap_min": 0.0347,
+    "overlap_median": 0.0394,
+    "rule": "overlap >= 0.03 or clear >= 0.02"
+   },
+   "curtain_width": {
+    "render_u": [
+     0.2076,
+     0.3164
+    ],
+    "clay_u": [
+     0.2337,
+     0.3152
+    ],
+    "ratio": 1.33
+   },
+   "cup_body": {
+    "layer": [
+     1994,
+     840,
+     2055,
+     921
+    ],
+    "clay": [
+     2014,
+     828,
+     2079,
+     918
+    ],
+    "w_ratio": 0.938,
+    "h_ratio": 0.9
+   },
+   "ring_outer_fit": {
+    "centre": [
+     2411.9,
+     946.0
+    ],
+    "axes": [
+     145.1,
+     161.6
+    ],
+    "angle": 92.1,
+    "n": 210
+   },
+   "towel_over_lower_bar": {
+    "columns": 163,
+    "towel_top_above_bar": 129,
+    "towel_below_bar_in_air": 28
+   },
+   "junction_pockets_px": 432,
+   "beam left 0.02-0.06": {
+    "px": 4003,
+    "final": {
+     "L": 91.9,
+     "a": 4.1,
+     "b": 5.6,
+     "C": 6.9,
+     "h": 54.0,
+     "px": 4003
+    },
+    "added_rgb_ratio_r_over_b": 7.24,
+    "added_rgb_ratio_g_over_b": 1.12
+   },
+   "beam left 0.06-0.12": {
+    "px": 1588,
+    "final": {
+     "L": 94.3,
+     "a": 3.8,
+     "b": 8.5,
+     "C": 9.3,
+     "h": 66.1,
+     "px": 1588
+    },
+    "added_rgb_ratio_r_over_b": 12.0,
+    "added_rgb_ratio_g_over_b": 4.31
+   },
+   "beam left 0.12-0.2": {
+    "px": 1509,
+    "final": {
+     "L": 97.2,
+     "a": -0.7,
+     "b": 10.9,
+     "C": 10.9,
+     "h": 93.9,
+     "px": 1509
+    },
+    "added_rgb_ratio_r_over_b": 4.36,
+    "added_rgb_ratio_g_over_b": 3.46
+   },
+   "beam right 0.02-0.06": {
+    "px": 11259,
+    "final": {
+     "L": 86.3,
+     "a": 2.3,
+     "b": 7.5,
+     "C": 7.9,
+     "h": 73.1,
+     "px": 11259
+    },
+    "added_rgb_ratio_r_over_b": 3.44,
+    "added_rgb_ratio_g_over_b": 1.52
+   },
+   "beam right 0.06-0.12": {
+    "px": 6084,
+    "final": {
+     "L": 88.1,
+     "a": 2.9,
+     "b": 9.8,
+     "C": 10.2,
+     "h": 73.4,
+     "px": 6084
+    },
+    "added_rgb_ratio_r_over_b": 4.32,
+    "added_rgb_ratio_g_over_b": 2.23
+   },
+   "beam right 0.12-0.2": {
+    "px": 7120,
+    "final": {
+     "L": 91.6,
+     "a": 1.1,
+     "b": 11.3,
+     "C": 11.3,
+     "h": 84.4,
+     "px": 7120
+    },
+    "added_rgb_ratio_r_over_b": 2.53,
+    "added_rgb_ratio_g_over_b": 2.01
+   }
+  },
+  "ring": {
+   "mirror_centre_u_check": 0.6718220808169253,
+   "analytic ring plane X 6.173 D0.16": {
+    "w": 152.9,
+    "h": 133.2,
+    "box": [
+     2318.3,
+     873.2,
+     2471.3,
+     1006.3
+    ]
+   },
+   "analytic ring plane X 6.173 D0.172": {
+    "w": 164.4,
+    "h": 143.2,
+    "box": [
+     2312.9,
+     868.2,
+     2477.3,
+     1011.3
+    ]
+   },
+   "clay_box": [
+    2314,
+    847,
+    2477,
+    972
+   ],
+   "clay_fit_all_contour": {
+    "centre": [
+     2390.0,
+     1060.5
+    ],
+    "axes": [
+     205.0,
+     397.6
+    ],
+    "angle": 1.2
+   },
+   "drawn_alpha_box": [
+    2331,
+    854,
+    2494,
+    1019
+   ],
+   "drawn_w_h": [
+    163,
+    165
+   ]
+  },
+  "colour": {
+   "room_white": {
+    "px": 49441,
+    "abs": {
+     "L": 91.9,
+     "a": 0.5,
+     "b": 3.5,
+     "C": 3.5,
+     "h": 82.2,
+     "px": 49441
+    }
+   },
+   "photos": {
+    "towel_caramel": {
+     "abs": {
+      "L": 35.4,
+      "a": 24.6,
+      "b": 29.1,
+      "C": 38.1,
+      "h": 49.8,
+      "px": 92459
+     },
+     "white_abs": {
+      "L": 93.4,
+      "a": 0.0,
+      "b": -0.0,
+      "C": 0.0,
+      "h": 296.8,
+      "px": 1
+     },
+     "rel": {
+      "L": 38.5,
+      "a": 26.1,
+      "b": 30.8,
+      "C": 40.4,
+      "h": 49.8,
+      "px": 92459
+     }
+    },
+    "towel_linen": {
+     "abs": {
+      "L": 74.5,
+      "a": 2.1,
+      "b": 4.6,
+      "C": 5.0,
+      "h": 64.9,
+      "px": 58593
+     },
+     "white_abs": {
+      "L": 96.9,
+      "a": 0.0,
+      "b": -0.0,
+      "C": 0.0,
+      "h": 296.8,
+      "px": 1
+     },
+     "rel": {
+      "L": 77.0,
+      "a": 2.2,
+      "b": 4.7,
+      "C": 5.2,
+      "h": 64.9,
+      "px": 58593
+     }
+    },
+    "dispenser": {
+     "abs": {
+      "L": 62.3,
+      "a": 9.0,
+      "b": 24.8,
+      "C": 26.3,
+      "h": 70.1,
+      "px": 37831
+     },
+     "white_abs": {
+      "L": 100.0,
+      "a": 0.0,
+      "b": -0.0,
+      "C": 0.0,
+      "h": 296.8,
+      "px": 1
+     },
+     "rel": {
+      "L": 62.3,
+      "a": 9.0,
+      "b": 24.8,
+      "C": 26.3,
+      "h": 70.1,
+      "px": 37831
+     }
+    },
+    "cup": {
+     "abs": {
+      "L": 77.4,
+      "a": 2.8,
+      "b": 8.4,
+      "C": 8.9,
+      "h": 71.3,
+      "px": 27732
+     },
+     "white_abs": {
+      "L": 89.8,
+      "a": 0.7,
+      "b": 3.5,
+      "C": 3.6,
+      "h": 79.5,
+      "px": 1
+     },
+     "rel": {
+      "L": 86.4,
+      "a": 2.3,
+      "b": 5.8,
+      "C": 6.3,
+      "h": 68.8,
+      "px": 27732
+     }
+    },
+    "vase": {
+     "abs": {
+      "L": 7.7,
+      "a": 0.0,
+      "b": -1.3,
+      "C": 1.3,
+      "h": 272.2,
+      "px": 18495
+     }
+    },
+    "planter": {
+     "abs": {
+      "L": 58.3,
+      "a": 0.2,
+      "b": 4.1,
+      "C": 4.1,
+      "h": 87.9,
+      "px": 104908
+     },
+     "white_abs": {
+      "L": 100.0,
+      "a": 0.0,
+      "b": -0.0,
+      "C": 0.0,
+      "h": 296.8,
+      "px": 1
+     },
+     "rel": {
+      "L": 58.3,
+      "a": 0.2,
+      "b": 4.1,
+      "C": 4.1,
+      "h": 87.9,
+      "px": 104908
+     }
+    },
+    "ring": {
+     "abs": {
+      "L": 23.1,
+      "a": 0.0,
+      "b": -0.0,
+      "C": 0.0,
+      "h": 296.6,
+      "px": 3413
+     },
+     "white_abs": {
+      "L": 43.2,
+      "a": 0.0,
+      "b": -0.0,
+      "C": 0.0,
+      "h": 296.8,
+      "px": 1
+     },
+     "rel": {
+      "L": 60.6,
+      "a": 0.0,
+      "b": -0.0,
+      "C": 0.0,
+      "h": 296.6,
+      "px": 3413
+     }
+    },
+    "sconce_B": {
+     "abs": {
+      "L": 79.1,
+      "a": 5.4,
+      "b": 12.1,
+      "C": 13.2,
+      "h": 65.7,
+      "px": 41523
+     },
+     "white_abs": {
+      "L": 80.8,
+      "a": 3.9,
+      "b": 4.8,
+      "C": 6.1,
+      "h": 50.9,
+      "px": 1
+     },
+     "rel": {
+      "L": 97.8,
+      "a": 1.5,
+      "b": 9.2,
+      "C": 9.3,
+      "h": 80.9,
+      "px": 41523
+     }
+    },
+    "sconce_3of8": {
+     "abs": {
+      "L": 79.3,
+      "a": 5.2,
+      "b": 10.8,
+      "C": 12.0,
+      "h": 64.0,
+      "px": 16898
+     },
+     "white_abs": {
+      "L": 76.3,
+      "a": 1.9,
+      "b": 1.2,
+      "C": 2.3,
+      "h": 32.9,
+      "px": 1
+     },
+     "rel": {
+      "L": 103.7,
+      "a": 3.7,
+      "b": 11.9,
+      "C": 12.5,
+      "h": 72.6,
+      "px": 16898
+     }
+    },
+    "curtain": {
+     "abs": {
+      "L": 87.1,
+      "a": -0.4,
+      "b": 6.5,
+      "C": 6.5,
+      "h": 93.3,
+      "px": 79942
+     }
+    }
+   },
+   "scene": {
+    "towel_caramel": {
+     "abs": {
+      "L": 18.3,
+      "a": 18.0,
+      "b": 21.2,
+      "C": 27.8,
+      "h": 49.7,
+      "px": 18551
+     },
+     "mask_px": 30895,
+     "rel_room": {
+      "L": 20.7,
+      "a": 18.7,
+      "b": 22.4,
+      "C": 29.2,
+      "h": 50.1,
+      "px": 18551
+     },
+     "ref_px": 30530,
+     "ref_abs": {
+      "L": 44.3,
+      "a": 1.8,
+      "b": 11.3,
+      "C": 11.5,
+      "h": 81.0,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 48.2,
+      "a": 28.0,
+      "b": 32.4,
+      "C": 42.8,
+      "h": 49.2,
+      "px": 18551
+     },
+     "alb_local": {
+      "L": 43.9,
+      "a": 27.6,
+      "b": 32.5,
+      "C": 42.7,
+      "h": 49.7,
+      "px": 18551
+     }
+    },
+    "towel_linen": {
+     "abs": {
+      "L": 35.7,
+      "a": 2.7,
+      "b": 9.6,
+      "C": 10.0,
+      "h": 74.5,
+      "px": 18567
+     },
+     "mask_px": 30895,
+     "rel_room": {
+      "L": 39.6,
+      "a": 2.4,
+      "b": 8.7,
+      "C": 9.1,
+      "h": 74.6,
+      "px": 18567
+     },
+     "ref_px": 30530,
+     "ref_abs": {
+      "L": 44.3,
+      "a": 1.8,
+      "b": 11.3,
+      "C": 11.5,
+      "h": 81.0,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 83.4,
+      "a": 2.0,
+      "b": -0.1,
+      "C": 2.0,
+      "h": 356.6,
+      "px": 18567
+     },
+     "alb_local": {
+      "L": 75.9,
+      "a": 2.3,
+      "b": 5.2,
+      "C": 5.7,
+      "h": 66.1,
+      "px": 18567
+     }
+    },
+    "dispenser_soap": {
+     "abs": {
+      "L": 32.4,
+      "a": 11.0,
+      "b": 27.7,
+      "C": 29.8,
+      "h": 68.4,
+      "px": 1952
+     },
+     "mask_px": 3254,
+     "rel_room": {
+      "L": 35.9,
+      "a": 10.9,
+      "b": 28.8,
+      "C": 30.8,
+      "h": 69.2,
+      "px": 1952
+     },
+     "ref_px": 3447,
+     "ref_abs": {
+      "L": 75.3,
+      "a": 1.2,
+      "b": 9.5,
+      "C": 9.6,
+      "h": 83.0,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 44.8,
+      "a": 10.6,
+      "b": 30.9,
+      "C": 32.7,
+      "h": 71.1,
+      "px": 1952
+     },
+     "alb_local": {
+      "L": 40.6,
+      "a": 11.4,
+      "b": 30.8,
+      "C": 32.8,
+      "h": 69.7,
+      "px": 1952
+     }
+    },
+    "niche_bottles": {
+     "abs": {
+      "L": 49.3,
+      "a": 10.7,
+      "b": 29.8,
+      "C": 31.6,
+      "h": 70.3,
+      "px": 2336
+     },
+     "mask_px": 3894,
+     "rel_room": {
+      "L": 54.0,
+      "a": 10.5,
+      "b": 30.4,
+      "C": 32.2,
+      "h": 71.0,
+      "px": 2336
+     },
+     "ref_px": 1523,
+     "ref_abs": {
+      "L": 87.6,
+      "a": 2.8,
+      "b": 11.5,
+      "C": 11.8,
+      "h": 76.4,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 56.4,
+      "a": 7.4,
+      "b": 27.1,
+      "C": 28.1,
+      "h": 74.8,
+      "px": 2336
+     },
+     "alb_local": {
+      "L": 45.4,
+      "a": 9.8,
+      "b": 29.8,
+      "C": 31.4,
+      "h": 71.8,
+      "px": 2336
+     }
+    },
+    "cup": {
+     "abs": {
+      "L": 57.9,
+      "a": 3.3,
+      "b": 14.0,
+      "C": 14.3,
+      "h": 76.6,
+      "px": 1605
+     },
+     "mask_px": 2677,
+     "rel_room": {
+      "L": 63.4,
+      "a": 2.9,
+      "b": 12.8,
+      "C": 13.1,
+      "h": 77.1,
+      "px": 1605
+     },
+     "ref_px": 1526,
+     "ref_abs": {
+      "L": 87.6,
+      "a": 0.5,
+      "b": 5.1,
+      "C": 5.2,
+      "h": 84.5,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 66.5,
+      "a": 2.7,
+      "b": 12.0,
+      "C": 12.3,
+      "h": 77.2,
+      "px": 1605
+     },
+     "alb_local": {
+      "L": 60.4,
+      "a": 3.5,
+      "b": 15.0,
+      "C": 15.4,
+      "h": 76.8,
+      "px": 1605
+     }
+    },
+    "vase": {
+     "abs": {
+      "L": 12.6,
+      "a": 2.9,
+      "b": 5.1,
+      "C": 5.8,
+      "h": 60.4,
+      "px": 1690
+     },
+     "mask_px": 2700,
+     "rel_room": {
+      "L": 14.7,
+      "a": 2.8,
+      "b": 4.6,
+      "C": 5.4,
+      "h": 58.1,
+      "px": 1690
+     },
+     "ref_px": 3263,
+     "ref_abs": {
+      "L": 86.3,
+      "a": 0.8,
+      "b": 5.3,
+      "C": 5.3,
+      "h": 80.9,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 16.4,
+      "a": 2.7,
+      "b": 4.2,
+      "C": 5.0,
+      "h": 56.8,
+      "px": 1690
+     },
+     "alb_local": {
+      "L": 14.0,
+      "a": 2.9,
+      "b": 5.5,
+      "C": 6.2,
+      "h": 61.9,
+      "px": 1690
+     }
+    },
+    "planter": {
+     "abs": {
+      "L": 45.6,
+      "a": 3.3,
+      "b": 15.6,
+      "C": 16.0,
+      "h": 78.2,
+      "px": 23589
+     },
+     "mask_px": 39317,
+     "rel_room": {
+      "L": 50.2,
+      "a": 2.9,
+      "b": 15.1,
+      "C": 15.3,
+      "h": 79.2,
+      "px": 23589
+     },
+     "ref_px": 8611,
+     "ref_abs": {
+      "L": 91.5,
+      "a": 0.5,
+      "b": 4.0,
+      "C": 4.0,
+      "h": 83.1,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 50.3,
+      "a": 2.7,
+      "b": 14.8,
+      "C": 15.0,
+      "h": 79.6,
+      "px": 23589
+     },
+     "alb_local": {
+      "L": 45.4,
+      "a": 3.5,
+      "b": 16.7,
+      "C": 17.0,
+      "h": 78.2,
+      "px": 23589
+     }
+    },
+    "ring": {
+     "abs": {
+      "L": 12.4,
+      "a": 2.9,
+      "b": 5.1,
+      "C": 5.8,
+      "h": 60.5,
+      "px": 410
+     },
+     "mask_px": 499,
+     "rel_room": {
+      "L": 14.5,
+      "a": 2.8,
+      "b": 4.6,
+      "C": 5.4,
+      "h": 58.1,
+      "px": 410
+     },
+     "ref_px": 17896,
+     "ref_abs": {
+      "L": 84.6,
+      "a": 1.0,
+      "b": 5.9,
+      "C": 6.0,
+      "h": 80.1,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 16.7,
+      "a": 2.7,
+      "b": 4.0,
+      "C": 4.8,
+      "h": 56.2,
+      "px": 410
+     },
+     "alb_local": {
+      "L": 14.3,
+      "a": 2.9,
+      "b": 5.4,
+      "C": 6.1,
+      "h": 61.9,
+      "px": 410
+     }
+    },
+    "sconce_L": {
+     "abs": {
+      "L": 82.5,
+      "a": 4.2,
+      "b": 13.8,
+      "C": 14.5,
+      "h": 73.1,
+      "px": 2753
+     },
+     "mask_px": 4585,
+     "rel_room": {
+      "L": 89.9,
+      "a": 3.9,
+      "b": 11.8,
+      "C": 12.4,
+      "h": 71.8,
+      "px": 2753
+     },
+     "ref_px": 25497,
+     "ref_abs": {
+      "L": 90.4,
+      "a": 0.3,
+      "b": 4.5,
+      "C": 4.5,
+      "h": 86.0,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 91.3,
+      "a": 3.8,
+      "b": 10.8,
+      "C": 11.5,
+      "h": 70.4,
+      "px": 2753
+     },
+     "alb_local": {
+      "L": 83.3,
+      "a": 4.6,
+      "b": 15.4,
+      "C": 16.0,
+      "h": 73.4,
+      "px": 2753
+     }
+    },
+    "sconce_R": {
+     "abs": {
+      "L": 79.3,
+      "a": 3.4,
+      "b": 13.1,
+      "C": 13.6,
+      "h": 75.6,
+      "px": 4941
+     },
+     "mask_px": 8234,
+     "rel_room": {
+      "L": 86.4,
+      "a": 3.0,
+      "b": 11.1,
+      "C": 11.5,
+      "h": 75.0,
+      "px": 4941
+     },
+     "ref_px": 28063,
+     "ref_abs": {
+      "L": 81.7,
+      "a": 1.1,
+      "b": 7.1,
+      "C": 7.2,
+      "h": 81.4,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 96.9,
+      "a": 2.1,
+      "b": 7.7,
+      "C": 8.0,
+      "h": 74.5,
+      "px": 4941
+     },
+     "alb_local": {
+      "L": 88.5,
+      "a": 2.9,
+      "b": 12.9,
+      "C": 13.3,
+      "h": 77.3,
+      "px": 4941
+     }
+    },
+    "curtain": {
+     "abs": {
+      "L": 79.7,
+      "a": 2.1,
+      "b": 13.0,
+      "C": 13.2,
+      "h": 80.8,
+      "px": 127508
+     },
+     "mask_px": 212480,
+     "rel_room": {
+      "L": 86.9,
+      "a": 1.6,
+      "b": 11.0,
+      "C": 11.1,
+      "h": 81.5,
+      "px": 127508
+     },
+     "ref_px": 41513,
+     "ref_abs": {
+      "L": 67.5,
+      "a": 3.7,
+      "b": 17.5,
+      "C": 17.9,
+      "h": 78.1,
+      "px": 1
+     },
+     "rel_local": {
+      "L": 117.5,
+      "a": -0.4,
+      "b": -11.3,
+      "C": 11.3,
+      "h": 268.0,
+      "px": 127508
+     },
+     "alb_local": {
+      "L": 95.6,
+      "a": -0.3,
+      "b": 8.7,
+      "C": 8.7,
+      "h": 91.7,
+      "px": 127508
+     }
+    }
+   },
+   "dE00": {
+    "towel_caramel vs towel_caramel": {
+     "alb_local": 4.9,
+     "rel_local": 9.0,
+     "rel_room": 14.39
+    },
+    "towel_linen vs towel_linen": {
+     "alb_local": 0.9,
+     "rel_local": 6.23,
+     "rel_room": 33.85
+    },
+    "dispenser_soap vs dispenser": {
+     "alb_local": 21.73,
+     "rel_local": 17.16,
+     "rel_room": 26.4
+    },
+    "niche_bottles vs dispenser": {
+     "alb_local": 16.45,
+     "rel_local": 5.63,
+     "rel_room": 7.91
+    },
+    "cup vs cup": {
+     "alb_local": 20.35,
+     "rel_local": 14.99,
+     "rel_room": 17.54
+    },
+    "planter vs planter": {
+     "alb_local": 15.72,
+     "rel_local": 11.02,
+     "rel_room": 11.26
+    },
+    "sconce_L vs sconce_B": {
+     "alb_local": 10.34,
+     "rel_local": 4.92,
+     "rel_room": 5.79
+    },
+    "sconce_R vs sconce_B": {
+     "alb_local": 6.34,
+     "rel_local": 1.56,
+     "rel_room": 7.33
+    },
+    "sconce_R vs sconce_3of8": {
+     "alb_local": 9.1,
+     "rel_local": 5.07,
+     "rel_room": 10.39
+    }
+   }
+  },
+  "towel_sensitivity": {
+   "caramel 10-40 both": {
+    "ref_L": 45.2,
+    "alb": [
+     42.9,
+     26.8,
+     32.0,
+     41.7,
+     50.0
+    ],
+    "dE": 3.94,
+    "dE_vs_ra_sku": 4.03
+   },
+   "caramel 10-40 left": {
+    "ref_L": 39.1,
+    "alb": [
+     49.2,
+     28.8,
+     34.6,
+     45.0,
+     50.2
+    ],
+    "dE": 10.09,
+    "dE_vs_ra_sku": 10.12
+   },
+   "caramel 10-40 right": {
+    "ref_L": 50.7,
+    "alb": [
+     38.1,
+     25.3,
+     29.3,
+     38.7,
+     49.3
+    ],
+    "dE": 0.74,
+    "dE_vs_ra_sku": 0.94
+   },
+   "caramel 25-70 both": {
+    "ref_L": 44.4,
+    "alb": [
+     43.7,
+     27.1,
+     32.3,
+     42.1,
+     50.0
+    ],
+    "dE": 4.69,
+    "dE_vs_ra_sku": 4.77
+   },
+   "caramel 25-70 left": {
+    "ref_L": 37.4,
+    "alb": [
+     51.2,
+     29.3,
+     35.7,
+     46.2,
+     50.6
+    ],
+    "dE": 12.17,
+    "dE_vs_ra_sku": 12.2
+   },
+   "caramel 25-70 right": {
+    "ref_L": 52.0,
+    "alb": [
+     37.1,
+     24.4,
+     29.0,
+     38.0,
+     49.9
+    ],
+    "dE": 1.5,
+    "dE_vs_ra_sku": 1.41
+   },
+   "caramel 45-90 both": {
+    "ref_L": 43.5,
+    "alb": [
+     44.5,
+     27.3,
+     32.5,
+     42.5,
+     50.0
+    ],
+    "dE": 5.44,
+    "dE_vs_ra_sku": 5.51
+   },
+   "caramel 45-90 left": {
+    "ref_L": 35.9,
+    "alb": [
+     53.0,
+     29.1,
+     36.5,
+     46.7,
+     51.4
+    ],
+    "dE": 14.08,
+    "dE_vs_ra_sku": 14.08
+   },
+   "caramel 45-90 right": {
+    "ref_L": 52.8,
+    "alb": [
+     36.5,
+     24.2,
+     28.8,
+     37.7,
+     49.9
+    ],
+    "dE": 1.98,
+    "dE_vs_ra_sku": 1.9
+   },
+   "caramel 90-140 both": {
+    "ref_L": 46.7,
+    "alb": [
+     41.5,
+     26.4,
+     30.8,
+     40.6,
+     49.4
+    ],
+    "dE": 2.64,
+    "dE_vs_ra_sku": 2.75
+   },
+   "caramel 90-140 left": {
+    "ref_L": 33.5,
+    "alb": [
+     56.4,
+     31.6,
+     37.6,
+     49.1,
+     50.0
+    ],
+    "dE": 17.81,
+    "dE_vs_ra_sku": 17.83
+   },
+   "caramel 90-140 right": {
+    "ref_L": 54.6,
+    "alb": [
+     35.2,
+     24.2,
+     28.2,
+     37.2,
+     49.4
+    ],
+    "dE": 3.02,
+    "dE_vs_ra_sku": 3.02
+   },
+   "linen 10-40 both": {
+    "ref_L": 45.2,
+    "alb": [
+     74.6,
+     1.7,
+     5.3,
+     5.5,
+     71.7
+    ],
+    "dE": 1.96
+   },
+   "linen 10-40 left": {
+    "ref_L": 39.1,
+    "alb": [
+     84.7,
+     1.2,
+     4.1,
+     4.2,
+     73.5
+    ],
+    "dE": 5.47
+   },
+   "linen 10-40 right": {
+    "ref_L": 50.7,
+    "alb": [
+     67.0,
+     2.6,
+     4.3,
+     5.0,
+     59.0
+    ],
+    "dE": 7.59
+   },
+   "linen 25-70 both": {
+    "ref_L": 44.4,
+    "alb": [
+     75.8,
+     1.7,
+     5.0,
+     5.3,
+     70.9
+    ],
+    "dE": 1.15
+   },
+   "linen 25-70 left": {
+    "ref_L": 37.4,
+    "alb": [
+     87.8,
+     0.7,
+     4.6,
+     4.6,
+     81.1
+    ],
+    "dE": 7.58
+   },
+   "linen 25-70 right": {
+    "ref_L": 52.0,
+    "alb": [
+     65.5,
+     1.8,
+     5.2,
+     5.5,
+     70.6
+    ],
+    "dE": 8.8
+   },
+   "linen 45-90 both": {
+    "ref_L": 43.5,
+    "alb": [
+     77.0,
+     1.7,
+     4.7,
+     5.0,
+     70.0
+    ],
+    "dE": 0.68
+   },
+   "linen 45-90 left": {
+    "ref_L": 35.9,
+    "alb": [
+     90.9,
+     -0.6,
+     4.9,
+     4.9,
+     96.5
+    ],
+    "dE": 10.06
+   },
+   "linen 45-90 right": {
+    "ref_L": 52.8,
+    "alb": [
+     64.5,
+     1.8,
+     5.4,
+     5.7,
+     71.1
+    ],
+    "dE": 9.62
+   },
+   "linen 90-140 both": {
+    "ref_L": 46.7,
+    "alb": [
+     72.3,
+     2.4,
+     3.9,
+     4.6,
+     59.0
+    ],
+    "dE": 3.53
+   },
+   "linen 90-140 left": {
+    "ref_L": 33.5,
+    "alb": [
+     96.0,
+     1.3,
+     2.8,
+     3.1,
+     64.1
+    ],
+    "dE": 12.46
+   },
+   "linen 90-140 right": {
+    "ref_L": 54.6,
+    "alb": [
+     62.4,
+     2.5,
+     5.2,
+     5.8,
+     64.4
+    ],
+    "dE": 11.35
+   }
+  },
+  "halo": {
+   "defaults/shower-dispensers": {
+    "light": {
+     "px": 105,
+     "clusters_ge20": [
+      [
+       101,
+       [
+        964,
+        710,
+        4,
+        31
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 819,
+     "clusters_ge20": [
+      [
+       334,
+       [
+        1053,
+        690,
+        19,
+        70
+       ]
+      ],
+      [
+       158,
+       [
+        1001,
+        684,
+        26,
+        24
+       ]
+      ],
+      [
+       121,
+       [
+        971,
+        684,
+        16,
+        25
+       ]
+      ],
+      [
+       76,
+       [
+        1017,
+        755,
+        21,
+        4
+       ]
+      ],
+      [
+       70,
+       [
+        980,
+        753,
+        20,
+        5
+       ]
+      ],
+      [
+       53,
+       [
+        1047,
+        690,
+        6,
+        18
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/vanity-sconces": {
+    "light": {
+     "px": 534,
+     "clusters_ge20": [
+      [
+       341,
+       [
+        2267,
+        248,
+        4,
+        106
+       ]
+      ],
+      [
+       38,
+       [
+        2301,
+        233,
+        20,
+        3
+       ]
+      ],
+      [
+       36,
+       [
+        2342,
+        231,
+        9,
+        7
+       ]
+      ],
+      [
+       34,
+       [
+        1400,
+        455,
+        15,
+        3
+       ]
+      ],
+      [
+       21,
+       [
+        2268,
+        363,
+        4,
+        8
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 354,
+     "clusters_ge20": [
+      [
+       65,
+       [
+        1429,
+        394,
+        3,
+        36
+       ]
+      ],
+      [
+       33,
+       [
+        1412,
+        449,
+        14,
+        6
+       ]
+      ],
+      [
+       32,
+       [
+        2339,
+        348,
+        3,
+        17
+       ]
+      ],
+      [
+       29,
+       [
+        1411,
+        357,
+        11,
+        3
+       ]
+      ],
+      [
+       28,
+       [
+        2340,
+        235,
+        2,
+        15
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/shower-curtain": {
+    "light": {
+     "px": 4074,
+     "clusters_ge20": [
+      [
+       3639,
+       [
+        600,
+        42,
+        27,
+        1417
+       ]
+      ],
+      [
+       100,
+       [
+        881,
+        556,
+        4,
+        39
+       ]
+      ],
+      [
+       88,
+       [
+        888,
+        1435,
+        8,
+        25
+       ]
+      ],
+      [
+       38,
+       [
+        624,
+        20,
+        4,
+        20
+       ]
+      ],
+      [
+       33,
+       [
+        883,
+        606,
+        3,
+        18
+       ]
+      ],
+      [
+       33,
+       [
+        878,
+        246,
+        2,
+        26
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 429,
+     "clusters_ge20": [
+      [
+       282,
+       [
+        603,
+        1457,
+        6,
+        73
+       ]
+      ],
+      [
+       23,
+       [
+        882,
+        160,
+        2,
+        15
+       ]
+      ],
+      [
+       20,
+       [
+        879,
+        195,
+        5,
+        12
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/floor-planter": {
+    "light": {
+     "px": 392,
+     "clusters_ge20": [
+      [
+       55,
+       [
+        146,
+        1144,
+        10,
+        15
+       ]
+      ],
+      [
+       53,
+       [
+        250,
+        1295,
+        13,
+        12
+       ]
+      ],
+      [
+       41,
+       [
+        273,
+        1277,
+        5,
+        24
+       ]
+      ],
+      [
+       38,
+       [
+        44,
+        1267,
+        11,
+        12
+       ]
+      ],
+      [
+       23,
+       [
+        19,
+        1463,
+        9,
+        11
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 1568,
+     "clusters_ge20": [
+      [
+       187,
+       [
+        53,
+        1493,
+        57,
+        7
+       ]
+      ],
+      [
+       162,
+       [
+        273,
+        1233,
+        29,
+        25
+       ]
+      ],
+      [
+       138,
+       [
+        187,
+        1442,
+        33,
+        38
+       ]
+      ],
+      [
+       138,
+       [
+        0,
+        1155,
+        44,
+        17
+       ]
+      ],
+      [
+       100,
+       [
+        23,
+        1231,
+        27,
+        16
+       ]
+      ],
+      [
+       87,
+       [
+        210,
+        1138,
+        30,
+        7
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/soap-dispenser": {
+    "light": {
+     "px": 111,
+     "clusters_ge20": [
+      [
+       110,
+       [
+        1936,
+        832,
+        15,
+        22
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 601,
+     "clusters_ge20": [
+      [
+       524,
+       [
+        1935,
+        856,
+        56,
+        66
+       ]
+      ],
+      [
+       67,
+       [
+        1969,
+        826,
+        9,
+        20
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/toothbrush-cup": {
+    "light": {
+     "px": 26,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 302,
+     "clusters_ge20": [
+      [
+       92,
+       [
+        2029,
+        911,
+        25,
+        13
+       ]
+      ],
+      [
+       87,
+       [
+        2027,
+        825,
+        11,
+        22
+       ]
+      ],
+      [
+       78,
+       [
+        2001,
+        837,
+        24,
+        5
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/vanity-vase": {
+    "light": {
+     "px": 0,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 189,
+     "clusters_ge20": [
+      [
+       189,
+       [
+        2091,
+        885,
+        23,
+        46
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/towel-ring": {
+    "light": {
+     "px": 0,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 53,
+     "clusters_ge20": [
+      [
+       53,
+       [
+        2384,
+        882,
+        16,
+        7
+       ]
+      ]
+     ]
+    }
+   },
+   "defaults/hand-towel": {
+    "light": {
+     "px": 235,
+     "clusters_ge20": [
+      [
+       102,
+       [
+        2352,
+        972,
+        28,
+        11
+       ]
+      ],
+      [
+       55,
+       [
+        2454,
+        981,
+        14,
+        8
+       ]
+      ],
+      [
+       38,
+       [
+        2340,
+        975,
+        11,
+        13
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 387,
+     "clusters_ge20": [
+      [
+       188,
+       [
+        2467,
+        978,
+        13,
+        50
+       ]
+      ],
+      [
+       62,
+       [
+        2335,
+        989,
+        7,
+        22
+       ]
+      ],
+      [
+       34,
+       [
+        2492,
+        1169,
+        4,
+        16
+       ]
+      ],
+      [
+       29,
+       [
+        2390,
+        983,
+        10,
+        6
+       ]
+      ],
+      [
+       25,
+       [
+        2340,
+        971,
+        9,
+        10
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/shower-dispensers": {
+    "light": {
+     "px": 105,
+     "clusters_ge20": [
+      [
+       101,
+       [
+        964,
+        710,
+        4,
+        31
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 819,
+     "clusters_ge20": [
+      [
+       334,
+       [
+        1053,
+        690,
+        19,
+        70
+       ]
+      ],
+      [
+       158,
+       [
+        1001,
+        684,
+        26,
+        24
+       ]
+      ],
+      [
+       121,
+       [
+        971,
+        684,
+        16,
+        25
+       ]
+      ],
+      [
+       76,
+       [
+        1017,
+        755,
+        21,
+        4
+       ]
+      ],
+      [
+       70,
+       [
+        980,
+        753,
+        20,
+        5
+       ]
+      ],
+      [
+       53,
+       [
+        1047,
+        690,
+        6,
+        18
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/vanity-sconces": {
+    "light": {
+     "px": 534,
+     "clusters_ge20": [
+      [
+       341,
+       [
+        2267,
+        248,
+        4,
+        106
+       ]
+      ],
+      [
+       38,
+       [
+        2301,
+        233,
+        20,
+        3
+       ]
+      ],
+      [
+       36,
+       [
+        2342,
+        231,
+        9,
+        7
+       ]
+      ],
+      [
+       34,
+       [
+        1400,
+        455,
+        15,
+        3
+       ]
+      ],
+      [
+       21,
+       [
+        2268,
+        363,
+        4,
+        8
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 354,
+     "clusters_ge20": [
+      [
+       65,
+       [
+        1429,
+        394,
+        3,
+        36
+       ]
+      ],
+      [
+       33,
+       [
+        1412,
+        449,
+        14,
+        6
+       ]
+      ],
+      [
+       32,
+       [
+        2339,
+        348,
+        3,
+        17
+       ]
+      ],
+      [
+       29,
+       [
+        1411,
+        357,
+        11,
+        3
+       ]
+      ],
+      [
+       28,
+       [
+        2340,
+        235,
+        2,
+        15
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/shower-curtain": {
+    "light": {
+     "px": 4074,
+     "clusters_ge20": [
+      [
+       3639,
+       [
+        600,
+        42,
+        27,
+        1417
+       ]
+      ],
+      [
+       100,
+       [
+        881,
+        556,
+        4,
+        39
+       ]
+      ],
+      [
+       88,
+       [
+        888,
+        1435,
+        8,
+        25
+       ]
+      ],
+      [
+       38,
+       [
+        624,
+        20,
+        4,
+        20
+       ]
+      ],
+      [
+       33,
+       [
+        883,
+        606,
+        3,
+        18
+       ]
+      ],
+      [
+       33,
+       [
+        878,
+        246,
+        2,
+        26
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 429,
+     "clusters_ge20": [
+      [
+       282,
+       [
+        603,
+        1457,
+        6,
+        73
+       ]
+      ],
+      [
+       23,
+       [
+        882,
+        160,
+        2,
+        15
+       ]
+      ],
+      [
+       20,
+       [
+        879,
+        195,
+        5,
+        12
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/floor-planter": {
+    "light": {
+     "px": 392,
+     "clusters_ge20": [
+      [
+       55,
+       [
+        146,
+        1144,
+        10,
+        15
+       ]
+      ],
+      [
+       53,
+       [
+        250,
+        1295,
+        13,
+        12
+       ]
+      ],
+      [
+       41,
+       [
+        273,
+        1277,
+        5,
+        24
+       ]
+      ],
+      [
+       38,
+       [
+        44,
+        1267,
+        11,
+        12
+       ]
+      ],
+      [
+       23,
+       [
+        19,
+        1463,
+        9,
+        11
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 1568,
+     "clusters_ge20": [
+      [
+       187,
+       [
+        53,
+        1493,
+        57,
+        7
+       ]
+      ],
+      [
+       162,
+       [
+        273,
+        1233,
+        29,
+        25
+       ]
+      ],
+      [
+       138,
+       [
+        187,
+        1442,
+        33,
+        38
+       ]
+      ],
+      [
+       138,
+       [
+        0,
+        1155,
+        44,
+        17
+       ]
+      ],
+      [
+       100,
+       [
+        23,
+        1231,
+        27,
+        16
+       ]
+      ],
+      [
+       87,
+       [
+        210,
+        1138,
+        30,
+        7
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/soap-dispenser": {
+    "light": {
+     "px": 111,
+     "clusters_ge20": [
+      [
+       110,
+       [
+        1936,
+        832,
+        15,
+        22
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 601,
+     "clusters_ge20": [
+      [
+       524,
+       [
+        1935,
+        856,
+        56,
+        66
+       ]
+      ],
+      [
+       67,
+       [
+        1969,
+        826,
+        9,
+        20
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/toothbrush-cup": {
+    "light": {
+     "px": 26,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 302,
+     "clusters_ge20": [
+      [
+       92,
+       [
+        2029,
+        911,
+        25,
+        13
+       ]
+      ],
+      [
+       87,
+       [
+        2027,
+        825,
+        11,
+        22
+       ]
+      ],
+      [
+       78,
+       [
+        2001,
+        837,
+        24,
+        5
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/vanity-vase": {
+    "light": {
+     "px": 0,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 189,
+     "clusters_ge20": [
+      [
+       189,
+       [
+        2091,
+        885,
+        23,
+        46
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/towel-ring": {
+    "light": {
+     "px": 0,
+     "clusters_ge20": []
+    },
+    "dark": {
+     "px": 53,
+     "clusters_ge20": [
+      [
+       53,
+       [
+        2384,
+        882,
+        16,
+        7
+       ]
+      ]
+     ]
+    }
+   },
+   "linen/hand-towel": {
+    "light": {
+     "px": 1255,
+     "clusters_ge20": [
+      [
+       457,
+       [
+        2483,
+        1275,
+        19,
+        118
+       ]
+      ],
+      [
+       185,
+       [
+        2410,
+        984,
+        58,
+        9
+       ]
+      ],
+      [
+       179,
+       [
+        2339,
+        974,
+        53,
+        14
+       ]
+      ],
+      [
+       151,
+       [
+        2496,
+        1190,
+        10,
+        31
+       ]
+      ],
+      [
+       82,
+       [
+        2482,
+        1048,
+        5,
+        27
+       ]
+      ],
+      [
+       50,
+       [
+        2322,
+        1330,
+        17,
+        7
+       ]
+      ]
+     ]
+    },
+    "dark": {
+     "px": 476,
+     "clusters_ge20": [
+      [
+       196,
+       [
+        2468,
+        978,
+        12,
+        54
+       ]
+      ],
+      [
+       137,
+       [
+        2433,
+        1375,
+        43,
+        24
+       ]
+      ],
+      [
+       28,
+       [
+        2324,
+        1084,
+        5,
+        13
+       ]
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "evidence": [
+  "m2-towel-edges-frame-x2.jpg",
+  "m3-east-sconce-cap-frame-x2.jpg",
+  "m6-washes-left-right-frame-x2.jpg",
+  "l1-planter-canvas-x2.jpg"
+ ],
+ "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-b2-arrival/tools/"
+}

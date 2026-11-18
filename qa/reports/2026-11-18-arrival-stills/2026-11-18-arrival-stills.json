@@ -1,0 +1,398 @@
+{
+ "report": "qa/reports/2026-11-18-arrival-stills/README.md",
+ "date": "2026-11-18",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-arrival-stills-v2-2026-11-18.md",
+ "tokens": 0,
+ "verdict": {
+  "HT2": "pass",
+  "HDx2": "pass",
+  "HC": "pass (label anchors to fix before export: ARR-M1)",
+  "HC130": "pass",
+  "across_arrival": "pass"
+ },
+ "status_lines": {
+  "HT2": "עבר QA (זמני, לא לאתר עדיין)",
+  "HDx2": "עבר QA (זמני, לא לאתר עדיין)",
+  "HC": "עבר QA (זמני, לא לאתר עדיין); לתקן label_anchors לפני הייצוא (ARR-M1)",
+  "HC130": "עבר QA (זמני, לא לאתר עדיין)"
+ },
+ "budget_question_to_owner": false,
+ "findings": [
+  {
+   "id": "ARR-M1",
+   "severity": "medium (labels, not the still)",
+   "fix": "code, 0 tokens",
+   "owner": "render-agent; motion-agent on export",
+   "what": "hc-lock.json label_anchors: bath far edge 0.4254 is the laundry's near edge; the bath walnut face is 0.3944-0.4114; laundry edge 0.4248 is right (opening 0.4252-0.4335); main bedroom [0.47, 0.5357] should be [0.4618, 0.5298], centre 0.496"
+  },
+  {
+   "id": "ARR-L1",
+   "severity": "low",
+   "fix": "designer wording, or code tint (0 tokens)",
+   "owner": "master-designer; render-agent",
+   "what": "HC laundry opening reveal reads as plaster (L* 53.2, C* 12.7, h 80) not walnut (bath walnut L* 20.2, C* 18.1, h 58): contradicts the 12.7.1 canon wording"
+  },
+  {
+   "id": "ARR-I1",
+   "severity": "info",
+   "what": "HC-L1 (in the backlog) may read as a small latch at canvas x2"
+  },
+  {
+   "id": "ARR-I2",
+   "severity": "info",
+   "what": "HC130 corner: back wall L* 84.2 vs far wall 73.8 (about 0.47 stop); accepted, judged in the turn"
+  },
+  {
+   "id": "ARR-I3",
+   "severity": "info",
+   "what": "HC130 faint texture line at u about 0.590, no tone step (<= 0.02 stop)"
+  },
+  {
+   "id": "ARR-I4",
+   "severity": "info",
+   "what": "render-agent's -5.82 deg bedroom-jamb tilt is a measurement artefact; verticals <= 0.10 deg; door centre 0.496 (not 0.503), both within +-0.01"
+  }
+ ],
+ "measurements": {
+  "edits": {
+   "HT2_outside_mask": {
+    "px_diff": 0,
+    "max": 0,
+    "mask_px": 279275,
+    "inside_changed": 276280
+   },
+   "HT2_clay_bench_uv": {
+    "u": [
+     0.516,
+     0.7628
+    ],
+    "v": [
+     0.8,
+     1.0301
+    ]
+   },
+   "HT2_still_bench_uv": {
+    "u": [
+     0.4875,
+     0.7659
+    ],
+    "v": [
+     0.7696,
+     1.0301
+    ]
+   },
+   "HT2_silhouette_vs_clay_px": {
+    "left_median": -70.0,
+    "left_p90abs": 72.0,
+    "right_median": 1.0,
+    "right_p90abs": 11.0,
+    "rows": 71
+   },
+   "HT2_seat_hue": {
+    "top": {
+     "L": 51.5,
+     "a": 14.33,
+     "b": 22.37,
+     "C": 26.56,
+     "h": 57.4,
+     "C_over_L": 0.516,
+     "px": 35964
+    },
+    "front_edge": {
+     "L": 25.1,
+     "a": 11.03,
+     "b": 14.94,
+     "C": 18.57,
+     "h": 53.6,
+     "C_over_L": 0.741,
+     "px": 18810
+    },
+    "lining": {
+     "L": 30.8,
+     "a": 12.15,
+     "b": 18.39,
+     "C": 22.04,
+     "h": 56.5,
+     "C_over_L": 0.716,
+     "px": 53084
+    },
+    "dh": 0.9,
+    "C_over_L_pct": -27.9
+   },
+   "HT2_seat_b_over_a": {
+    "top": 1.561,
+    "lining": 1.514
+   },
+   "HT2_jib_stops": -0.578,
+   "HT2_frame_black_L_p01_p05": [
+    14.69,
+    19.09
+   ],
+   "HT2_bench_L_p1_min": [
+    16.8,
+    6.1
+   ],
+   "HDx2_opening_u0291_0651_changed_px": 0,
+   "HDx2_changed_outside_console_mask": {
+    "px": 176007,
+    "components": [
+     [
+      0,
+      1343,
+      728,
+      321,
+      176007
+     ]
+    ]
+   },
+   "HDx2_clay_console_uv": {
+    "u": [
+     0.8216,
+     1.0302
+    ],
+    "v": [
+     0.7991,
+     1.1284
+    ]
+   },
+   "HDx2_console_L": {
+    "p2": 13.1,
+    "p05": 12.34,
+    "median": 23.17,
+    "px_below_L11": 0,
+    "px": 151493
+   },
+   "HDx2_drum_L": {
+    "p2": 12.98,
+    "median": 21.12,
+    "px": 121431,
+    "slab_bottom_row": 1308.3
+   },
+   "HDx2_frame_black_L_p01_p05": [
+    4.75,
+    12.98
+   ],
+   "HDx_frame_black_L_p01_p05": [
+    4.75,
+    13.59
+   ]
+  },
+  "seams": {
+   "HD2_to_HDx2_bench_corner": {
+    "px": 111587,
+    "median_pct": -0.846,
+    "p90abs_pct": 20.65,
+    "p99abs_pct": 26.78
+   },
+   "HD2_to_HDx2_rest_of_overlap": {
+    "px": 748281,
+    "median_pct": -0.041,
+    "p90abs_pct": 2.18,
+    "p99abs_pct": 10.18
+   },
+   "HDx2_corner_boundary_px": {
+    "inner": 2977,
+    "outer": 1786
+   },
+   "HD2_to_HC130_overlap": {
+    "px": 1587237,
+    "median_pct": -0.0,
+    "p90abs_pct": 0.54,
+    "p99abs_pct": 0.97
+   },
+   "HD2_to_HC130_by_u": {
+    "0.57": [
+     0.005,
+     0.65
+    ],
+    "0.62": [
+     -0.007,
+     0.68
+    ],
+    "0.67": [
+     -0.001,
+     0.48
+    ],
+    "0.72": [
+     -0.0,
+     0.46
+    ],
+    "0.77": [
+     -0.0,
+     0.46
+    ],
+    "0.82": [
+     0.001,
+     0.49
+    ],
+    "0.87": [
+     -0.001,
+     0.52
+    ],
+    "0.92": [
+     0.002,
+     0.58
+    ],
+    "0.97": [
+     0.003,
+     0.65
+    ],
+    "1.02": [
+     -0.002,
+     0.7
+    ]
+   },
+   "HC_to_HC130_overlap": {
+    "px": 1464425,
+    "median_pct": 0.011,
+    "p90abs_pct": 1.57,
+    "p99abs_pct": 4.9
+   },
+   "HC_to_HC130_by_u": {
+    "-0.03": [
+     0.063,
+     1.94
+    ],
+    "0.02": [
+     0.044,
+     1.65
+    ],
+    "0.07": [
+     0.022,
+     1.4
+    ],
+    "0.12": [
+     0.006,
+     2.3
+    ],
+    "0.17": [
+     -0.024,
+     1.93
+    ],
+    "0.22": [
+     0.002,
+     0.86
+    ],
+    "0.27": [
+     -0.001,
+     1.13
+    ],
+    "0.32": [
+     0.003,
+     1.35
+    ]
+   }
+  },
+  "hc130": {
+   "jib_anchor_stops": -0.498,
+   "jib_anchor_px": 510035,
+   "back_wall_steps": {
+    "max_dx_stops": 0.028,
+    "p99_dx": 0.0179,
+    "max_dy_stops": 0.027,
+    "at_u_v": [
+     0.299,
+     0.084
+    ]
+   },
+   "far_wall_steps": {
+    "max_dx_stops": 0.028,
+    "p99_dx": 0.0158,
+    "max_dy_stops": 0.028,
+    "at_u_v": [
+     0.712,
+     0.681
+    ]
+   },
+   "corner_back_vs_far_Lab": {
+    "back": [
+     84.16,
+     0.33,
+     4.97
+    ],
+    "far": [
+     73.77,
+     1.75,
+     4.55
+    ],
+    "corner_x": 1116.4
+   },
+   "black_L_p01_p05": [
+    12.36,
+    14.66
+   ],
+   "clipped_any_channel_255_pct_frame": 0.0
+  },
+  "hc_levels": {
+   "bedroom": 0.042,
+   "corridor right wall mid": -1.363,
+   "corridor left wall mid": -0.803,
+   "floor in portal": -1.937,
+   "ceiling in portal": -1.033,
+   "hall back wall left": -1.19,
+   "hall back wall right": -0.236,
+   "frame_L_p01_p05": [
+    11.82,
+    13.71
+   ],
+   "frame_any_255_pct": 0.004,
+   "slot_px": 62108,
+   "slot_255_pct": 0.195,
+   "portal_walnut_L_median_p5": [
+    29.7,
+    15.6
+   ],
+   "toe_px_changed": 230104,
+   "toe_changed_above_L30_raw": 0
+  },
+  "hc_corridor_walls_Y11_13": {
+   "right_X1.70": -1.161,
+   "left_X3.10": -0.809
+  },
+  "hc_bedroom_door": {
+   "opening_u": [
+    0.4618,
+    0.5298
+   ],
+   "centre_u": 0.496,
+   "centre_v": 0.494,
+   "clay_u": [
+    0.468,
+    0.533
+   ]
+  },
+  "hc_left_doors": {
+   "bath_walnut_face_u": [
+    0.3944,
+    0.4114
+   ],
+   "laundry_opening_u": [
+    0.4252,
+    0.4335
+   ]
+  },
+  "hc_verticals_deg_max": 0.101,
+  "ht2_mask_boundary_ratio_median": 0.9875,
+  "bench_walnut_h_C_over_L": {
+   "HDx2_corner": [
+    58.4,
+    0.441
+   ],
+   "HD2_strip": [
+    58.2,
+    0.48
+   ],
+   "HT2_seat": [
+    57.4,
+    0.516
+   ]
+  }
+ },
+ "evidence": [
+  "hc-label-anchors-left-doors.jpg",
+  "hc-label-anchors-bedroom-door.jpg",
+  "hc-laundry-reveal-x4.jpg"
+ ],
+ "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-b2-arrival/tools/"
+}

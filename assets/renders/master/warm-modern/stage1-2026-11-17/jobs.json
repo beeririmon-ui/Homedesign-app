@@ -4,8 +4,8 @@
  "spent": 2500,
  "left_in_cap": 1000,
  "var2": {
-  "connected": true,
-  "note": "ToolSearch loaded the Var2 tools with the held sign-in; estimate_cost, request_upload, create_image and get_image_result answered. No code or token was asked for."
+  "connected": false,
+  "note": "2026-11-18, round 4: the session reports var2 as needing authorisation; no var2 call was made, no code or token asked for."
  },
  "sent": [
   {
@@ -241,5 +241,27 @@
    "reading": "with the floor lamp on, the floor reads as the same oak in a lamp pool; the same-lightness test holds"
   },
   "spent": 1850
+ },
+ "round4": {
+  "date": "2026-11-18",
+  "why": "designer ruling (a), proposal 12.7: r4 is the base; compose it on the plate at 0 tokens (12.7 table 1-4f, MP-I1, MP-I2), then the two throw variants as mask edits (800), then the layers (RND2)",
+  "sent": [],
+  "tokens": 0,
+  "composed": {
+   "frame": "mb0-defaults.png / mb0-defaults-frame.png",
+   "tool": "tools/compose_defaults.py all",
+   "record": "mb0-defaults-compose.json",
+   "layers": "layers/manifest.json (11 product layers, 11 shadows, 2 lights)",
+   "qa_sheet": "mb0-defaults-qa-sheet.jpg"
+  },
+  "not_sent": {
+   "throw_variants": "Flax brown and Clay (nano-banana-2 2K x2, 800): NOT priced or sent. (1) 12.7 4c: at x2 the Pecan in r4 has no fringe: the band's front edge is a row of knots/bobbles, the drapes' ends are hidden under the duvet's sides, no short frayed strands as in the SKU swatch. The designer does not approve Pecan without fringes and prices that fix at about 400: 2,500 + 800 + 400 = 3,700 over the 3,500 cap, so stopped and reported (manager rule). (2) var2 asked for re-authorisation during this round (the session lists it as needing sign-in): stopped there, no code asked for.",
+   "pecan_fringe_fix": "about 400 (designer's estimate), not sent: over the cap with the variants"
+  },
+  "failed_fifth_attempt": {
+   "jobs_json": "defaults-r1-error: unknown (error before generation; the message said credits_refunded false)",
+   "var2": "not checkable: the var2 tools have no usage or billing view, and this round var2 needs re-authorisation. If it was charged, the round-3 total is 1,850 + its price (seedream-5-pro 2K, 650) = 2,500 + 650 = 3,150 spent."
+  },
+  "spent": 0
  }
 }
