@@ -3548,5 +3548,224 @@
  "supplier_photos": "read from scratchpad/picks/img only; none copied into the repo",
  "tokens": 0,
  "var2": false,
- "commits": false
+ "commits": false,
+ "round2": {
+  "date": "2026-11-18",
+  "scope": "M1-M7 re-check only (EFF1.2)",
+  "files": "commit 6f77aa7b (render-agent round 8) vs f91779b2 (round 7)",
+  "verdict": "fail",
+  "blocking": [
+   "M2",
+   "M3"
+  ],
+  "closed": [
+   "M1",
+   "M4",
+   "M5",
+   "M6",
+   "M7"
+  ],
+  "status_line": "MB0 שלב 1: נכשל QA בסבב 2 על M2 (הפס הלבן) ו-M3 (העמוד של האגרטל על האדן); בינוניים, בקוד, 0 טוקנים; M1 ו-M4–M7 נסגרו; QA בודק שוב רק את שניהם",
+  "checks": {
+   "M1": {
+    "result": "pass",
+    "seam_row_1299": "no longer among consistent signed steps (strongest now -0.37 vs row noise 0.40; was -1.79)",
+    "right_corner_max_abs_step": 2.4,
+    "grid_fft_peak_over_median": {
+     "before": 64.4,
+     "now": 11.6
+    },
+    "grad_x_over_y_foot": {
+     "before": 1.61,
+     "now": 1.27,
+     "top": 1.14
+    },
+    "eye": "x1 linen drape with vertical folds, no seam/band; x2 soft irregular folds mixed with diagonal creases; reads as fabric, not smear; faint fine horizontal texture reads as weave"
+   },
+   "M2": {
+    "result": "fail",
+    "strip_rows": [
+     984,
+     1001
+    ],
+    "px": 18994,
+    "median_L": 93.2,
+    "median_b": 8.4,
+    "p99_L": 99.2,
+    "bright_rows_per_column": {
+     "median": 18,
+     "max": 36
+    },
+    "target": "<= lit duvet + 8 (70.3 + 8 = 78.3 per render-agent)",
+    "note": "the cap reached rows to ~985 (fold band); render-agent's 76.5 is the fold band",
+    "fix": "same soft cap on rows 984 to the throw top, inside the duvet alpha (code)"
+   },
+   "M3": {
+    "result": "fail",
+    "foot_added": true,
+    "height_px": 150,
+    "base_px": 60,
+    "column_px": {
+     "top": 36,
+     "0.15H": 44,
+     "0.40-0.65H": 32
+    },
+    "sku_column": "0.275H at the top to 0.23H at 0.65H, straight taper; top width 8.5 cm (~61 px), ~7.2 cm (~52 px) at 0.65H",
+    "column_to_base": {
+     "render_waist": 0.53,
+     "sku": 0.85
+    },
+    "eye": "x2 pinched, wavy column on a wide foot; x1 identity kept",
+    "fix": "column as a straight gently tapered cylinder 8.5 -> 7.2 cm, today's flutes/tone/light; keep the foot (code)"
+   },
+   "M4": {
+    "result": "pass",
+    "neck_w_H": 0.045,
+    "neck_len_H": 0.35,
+    "max_w_H": 0.44,
+    "sku": {
+     "neck_w_H": 0.061,
+     "neck_len_H": 0.33,
+     "max_w_H": 0.47
+    },
+    "height_px": 133,
+    "dark_edge_px": {
+     "before": 277,
+     "now": 151
+    }
+   },
+   "M5": {
+    "result": "pass",
+    "curtain_edge_x": 515,
+    "gap_u": 0.0207,
+    "gap_u_soft_edge": 0.0199,
+    "sill_vase_vs_curtain_u": 0.0285,
+    "sill_vase_margin_u": 0.0645,
+    "hem_in_layer_cm": [
+     12.2,
+     12.6,
+     12.9,
+     13.2,
+     13.6,
+     14.0,
+     14.4,
+     14.6,
+     15.2,
+     15.4
+    ],
+    "hem_visible": false
+   },
+   "M6": {
+    "result": "pass",
+    "west": [
+     44.2,
+     10.8,
+     11.2
+    ],
+    "east": [
+     41.7,
+     10.6,
+     12.6
+    ],
+    "walls": [
+     90.9,
+     86.8
+    ],
+    "plate_over_wall_Y": [
+     0.179,
+     0.177
+    ],
+    "dE00_plates": 2.57,
+    "cone_px_changed": 12,
+    "alpha_changed": 0,
+    "new_light_speckles": 117
+   },
+   "M7": {
+    "result": "pass",
+    "bbox_px": [
+     284,
+     147
+    ],
+    "median_row_width_px": 270.5,
+    "width_cm": [
+     46.7,
+     49.0
+    ],
+    "aspect": 1.84,
+    "pillows_px": [
+     392,
+     404
+    ]
+   },
+   "RND2": {
+    "result": "pass",
+    "recompose": {
+     "recompose_vs_defaults": {
+      "px_diff": 0,
+      "max": 0,
+      "outside_region_diff": 0
+     },
+     "recompose_vs_flax": {
+      "px_diff": 0,
+      "max": 0,
+      "outside_region_diff": 0
+     },
+     "recompose_vs_clay": {
+      "px_diff": 0,
+      "max": 0,
+      "outside_region_diff": 0
+     }
+    },
+    "outside_region": {
+     "defaults_vs_plate_outside_region": 0,
+     "flax_vs_plate_outside_region": 0,
+     "clay_vs_plate_outside_region": 0
+    },
+    "black_point_p05": [
+     11.11,
+     13.23,
+     11.97
+    ],
+    "light_only_brightens": true,
+    "throw_swap_outside_alpha": [
+     0,
+     0
+    ]
+   }
+  },
+  "findings": [
+   {
+    "id": "MB-L6",
+    "severity": "low",
+    "what": "117 new light speckles in the east sconce's shadow crescent and the cone's right rim (x 1917-2010, y 548-611), from the M6 transfer; x2 sparkle, x1 not visible",
+    "fix": "restore those px from round 7 (f91779b2) or keep the crescent out of the transfer mask",
+    "owner": "render-agent",
+    "backlog": "status/backlog-low.md"
+   },
+   {
+    "id": "MB-L7",
+    "severity": "low",
+    "what": "cushion rescale traces: small white chip at the duvet edge left of the cushion base (x ~1195-1215, y ~918-925); jagged right-pillow edge at the gap (x ~1500-1560, y 840-930); faint x2, clear x4",
+    "fix": "local heal",
+    "owner": "render-agent",
+    "backlog": "status/backlog-low.md"
+   },
+   {
+    "id": "MB-I7",
+    "severity": "info",
+    "what": "curtain hem in the layer after compression 12.2 cm (x 380) to 15.4 cm (x 515), hidden behind the duvet/throw in every column; not visible in MB0"
+   }
+  ],
+  "evidence": [
+   "r2-m1-duvet-foot.jpg",
+   "r2-m2-white-strip-x1.jpg",
+   "r2-m3-m4-vase-bottle.jpg",
+   "r2-m6-sconces-x2.jpg"
+  ],
+  "model_needed": false,
+  "tokens": 0,
+  "var2": false,
+  "commits": false
+ },
+ "verdict_latest": "fail (round 2): M2, M3 open (code, 0 tokens); M1, M4-M7 closed"
 }
