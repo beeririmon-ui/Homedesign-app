@@ -511,8 +511,9 @@ def p2(e, ref, man, rec):
     upper = np.zeros((H, W))
     upper[:CROWN["split_y"]] = 1
     upper = C.blur(upper, 1.0)
-    pm = np.dstack([rgb_p * (a_soft * upper)[..., None], a_soft * upper])
-    wc = cv2.warpAffine(pm.astype(np.float32), Mc.astype(np.float32), (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+    pm = np.dstack([rgb_p * (a_soft * upper)[..., None], a_soft * upper]).astype(np.float32)
+    pm = np.pad(pm, ((0, 0), (0, 160), (0, 0)), mode="reflect")      # the crown runs off the canvas at the right: mirrored there only
+    wc = cv2.warpAffine(pm, Mc.astype(np.float32), (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     # the bare trunk below the crown, stretched from the scaled crown down to the new pot's soil
     xs_soil, ys_soil = proj(POT["X"], POT["Y"], POT["SOIL"])
     y_top_new = ay + s * (CROWN["split_y"] - ay)
@@ -780,7 +781,7 @@ def main():
     dark_by["bedside-carafe"] = cv2.warpAffine(dark_by["bedside-carafe"].astype(np.float32), np.array(rec.pop("_pitcher_M"), np.float32), (W, H)).astype(np.float64)
     cr = np.zeros((H, W))
     sx, (ax, ay) = CROWN["s"], CROWN["about"]
-    crw = cv2.warpAffine(dark_by["planter"].astype(np.float32), scale_about(sx, sx, ax, ay).astype(np.float32), (W, H), borderMode=cv2.BORDER_REFLECT).astype(np.float64)
+    crw = cv2.warpAffine(np.pad(dark_by["planter"].astype(np.float32), ((0, 0), (0, 160)), mode="reflect"), scale_about(sx, sx, ax, ay).astype(np.float32), (W, H)).astype(np.float64)
     yy = np.arange(H)[:, None] * np.ones((1, W))
     dark_by["planter"] = np.where(yy < ay + sx * (CROWN["split_y"] - ay), crw, dark_by["planter"])
     xd, yd = proj(-1.79, 17.95, 0.55)
@@ -793,6 +794,15 @@ def main():
     block["magazine-holder"] = lamp
     block["bedside-carafe"] = layer_alpha("candle-holders", man) > 0.02
     shadows = shadow_maps(dark_by, new, band, block)
+    # MP-I2 on the new layers' darks (MB0's toe, once), and the lift of the deepest values the variants use, so the frame keeps
+    # WM-G1 (p0.5 11-14): the edit's new blacks (the holder's tube, the charcoal vase, the soil) came under the toe's floor
+    for s, (rgb, a) in list(outs.items()):
+        lab_ = C.to_lab(rgb)
+        Lv = np.interp(lab_[..., 0], [0, 8.05, 30, 100], [0, 12.5, 30, 100])
+        Lv = np.interp(Lv, [0, 24, 100], [10, 24, 100])
+        lab_[..., 0] = np.where(a > 0, Lv, lab_[..., 0])
+        outs[s] = (np.clip(C.from_lab(lab_), 0, 1), a)
+    rec["tone_new_layers"] = "L* -> interp([0, 8.05, 30, 100], [0, 12.5, 30, 100]) (MP-I2, once) -> interp([0, 24, 100], [10, 24, 100]) (the deep lift, as in throw_variants)"
     # write the layers
     a_new = np.zeros((H, W))
     for s, (rgb, a) in outs.items():
