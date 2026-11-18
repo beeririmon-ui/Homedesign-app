@@ -1,0 +1,634 @@
+{
+ "rule": "walk_test.py test on the straight parts of the assembled arrival, cut from the clean desktop master (60 fps -> 960 px); stations, lines and events as for the clips (assets/prompts/transitions.warm-modern/jobs.json)",
+ "parts": {
+  "1a": {
+   "verdict": "WALK, LOCAL FAIL",
+   "fails": [],
+   "local_fails": [
+    "edge verticals: 4 frames with a line leaning 1-25 deg at the frame edge longer than 0.20 of the height (worst 0.28, -1.8 deg, frame 135)"
+   ],
+   "defects": [],
+   "frames": 171,
+   "length_m": 3.8000000000000003,
+   "parallax": {
+    "frames_measured": 26,
+    "p90_abs": 0.039506215001973266,
+    "median_abs": 0.024172679953132825,
+    "max_abs": 0.0636799272974009
+   },
+   "dissolve": {
+    "r2_mid_median": 0.000902031153699856,
+    "r2_mid_max": 0.019948962348756316,
+    "flat_zoom_r2_mid_median": 0.10530549970598169
+   },
+   "progress": {
+    "start_m": -0.016,
+    "end_m": 3.804,
+    "length_m": 3.8000000000000003,
+    "back_steps": 0,
+    "worst_back_m": -0.03200000000000003,
+    "stall_frac": 0.08235294117647059,
+    "largest_step_frac": 0.03684210526315781,
+    "wild_frames": 0,
+    "unknown_frames": 0,
+    "speed_max_over_median": 5.833333333333369
+   },
+   "structure_residual": {
+    "median_w": 0.0024811533590157826,
+    "p90_w": 0.003283392389615377
+   },
+   "verticals": {
+    "frames": 43,
+    "max_abs_median_deg": 0.062,
+    "p90_worst_deg": 0.7738
+   },
+   "edge_verticals": {
+    "band": 0.2,
+    "tilt_deg": [
+     1.0,
+     25.0
+    ],
+    "frames_over": 4,
+    "over_frames": [
+     131,
+     132,
+     135,
+     146
+    ],
+    "worst": {
+     "frame": 135,
+     "longest_leaning": {
+      "len_h": 0.278,
+      "tilt_deg": -1.8,
+      "x": 0.886
+     }
+    },
+    "passed": false
+   },
+   "exclusion_closed": [],
+   "events": [
+    {
+     "what": "the stone head of the doorway (outer arris) out past the top",
+     "at_m": 0.49,
+     "frame": 39
+    },
+    {
+     "what": "the stone threshold and the doormat out past the bottom",
+     "window_m": [
+      0.71,
+      0.75
+     ],
+     "frames": [
+      48,
+      49
+     ]
+    },
+    {
+     "what": "the corner of the bench seat out past the bottom",
+     "at_m": 0.94,
+     "frame": 57
+    },
+    {
+     "what": "the corner of the planter out past the right edge",
+     "at_m": 1.5,
+     "frame": 80
+    },
+    {
+     "what": "the wall light out past the top (its top, then its bottom)",
+     "window_m": [
+      1.54,
+      2.26
+     ],
+     "frames": [
+      81,
+      109
+     ]
+    },
+    {
+     "what": "the light line of the slot (top of the opening) out past the top",
+     "window_m": [
+      1.86,
+      2.16
+     ],
+     "frames": [
+      94,
+      105
+     ],
+     "check": "by about 2.2 m (11.5.8)"
+    },
+    {
+     "what": "the herbs out past the right edge",
+     "window_m": [
+      2.15,
+      2.4
+     ],
+     "frames": [
+      106,
+      115
+     ],
+     "check": "ACCEPTANCE (11.9.4): no herb left in frame after 2.40 m, none gone before 2.15 m"
+    },
+    {
+     "what": "the left stone reveal out past the left edge",
+     "window_m": [
+      2.25,
+      2.6
+     ],
+     "frames": [
+      109,
+      122
+     ]
+    },
+    {
+     "what": "the right stone reveal out past the right edge",
+     "window_m": [
+      3.09,
+      3.44
+     ],
+     "frames": [
+      143,
+      156
+     ]
+    },
+    {
+     "what": "the corner, the walnut and the living room enter from behind the right reveal",
+     "at_m": 3.16,
+     "frame": 146
+    },
+    {
+     "what": "the camera inside the wall thickness",
+     "window_m": [
+      3.45,
+      3.8
+     ],
+     "frames": [
+      157,
+      170
+     ]
+    },
+    {
+     "what": "the open leaf out past the left edge",
+     "at_m": 3.71,
+     "frame": 167
+    }
+   ],
+   "frames_60_in_the_arrival": [
+    49,
+    219
+   ]
+  },
+  "1b (straight part, to the head's turn)": {
+   "verdict": "NOT A WALK",
+   "fails": [
+    "flat zoom: the middle frames are the first frame enlarged as one flat picture (R2 0.63 > 0.55): no parallax, not a walk",
+    "the picture changes on 14% of the frames while the camera does not advance: a morph"
+   ],
+   "local_fails": [],
+   "defects": [
+    "parallax could be measured on few frames (near and far structure too close in depth): judge by eye too",
+    "the clip runs from 0.03 m to 0.95 m of a 1.14 m line"
+   ],
+   "frames": 44,
+   "length_m": 1.138,
+   "parallax": {
+    "frames_measured": 0,
+    "p90_abs": null,
+    "median_abs": null,
+    "max_abs": null
+   },
+   "dissolve": {
+    "r2_mid_median": 0.009959704818025439,
+    "r2_mid_max": 0.039667476989649564,
+    "flat_zoom_r2_mid_median": 0.6344814001832223
+   },
+   "progress": {
+    "start_m": 0.033999999999999996,
+    "end_m": 0.95,
+    "length_m": 1.138,
+    "back_steps": 0,
+    "worst_back_m": -0.0020000000000000018,
+    "stall_frac": 0.13953488372093023,
+    "largest_step_frac": 0.040421792618629215,
+    "wild_frames": 0,
+    "unknown_frames": 0,
+    "speed_max_over_median": 1.7692307692307712
+   },
+   "structure_residual": {
+    "median_w": 0.0017297407612204552,
+    "p90_w": 0.0028230800479650507
+   },
+   "verticals": {
+    "frames": 11,
+    "max_abs_median_deg": 0.015,
+    "p90_worst_deg": 0.256
+   },
+   "edge_verticals": {
+    "band": 0.2,
+    "tilt_deg": [
+     1.0,
+     25.0
+    ],
+    "frames_over": 0,
+    "over_frames": [],
+    "worst": null,
+    "passed": true
+   },
+   "exclusion_closed": [],
+   "events": [
+    {
+     "what": "the floor strip out past the bottom",
+     "at_m": 0.07,
+     "frame": 3
+    },
+    {
+     "what": "the skirting out past the bottom",
+     "at_m": 0.41,
+     "frame": 16
+    },
+    {
+     "what": "the living room covered by the walnut edge and out past the right edge",
+     "at_m": 0.62,
+     "frame": 26
+    },
+    {
+     "what": "the walnut lining out past the right edge",
+     "at_m": 0.78,
+     "frame": 35
+    },
+    {
+     "what": "the inside corner and the plaster return out past the right edge",
+     "at_m": 0.93,
+     "frame": 43
+    }
+   ],
+   "frames_60_in_the_arrival": [
+    220,
+    263
+   ]
+  },
+  "clip 2 (after the turn)": {
+   "verdict": "WALK",
+   "fails": [],
+   "local_fails": [],
+   "defects": [],
+   "frames": 173,
+   "length_m": 3.8708557193468223,
+   "parallax": {
+    "frames_measured": 142,
+    "p90_abs": 0.004200324527950774,
+    "median_abs": 0.0011782225198126994,
+    "max_abs": 0.019046369020289777
+   },
+   "dissolve": {
+    "r2_mid_median": 0.0028239650778860703,
+    "r2_mid_max": 0.017084588104029796,
+    "flat_zoom_r2_mid_median": 0.1151386067529786
+   },
+   "progress": {
+    "start_m": 0.18,
+    "end_m": 3.867999999999993,
+    "length_m": 3.8708557193468223,
+    "back_steps": 0,
+    "worst_back_m": -0.008000000000000007,
+    "stall_frac": 0.046511627906976744,
+    "largest_step_frac": 0.010333632380064461,
+    "wild_frames": 0,
+    "unknown_frames": 0,
+    "speed_max_over_median": 1.6666666666666512
+   },
+   "structure_residual": {
+    "median_w": 0.002362709989150365,
+    "p90_w": 0.002829174945751826
+   },
+   "verticals": {
+    "frames": 44,
+    "max_abs_median_deg": 0.076,
+    "p90_worst_deg": 8.336400000000003
+   },
+   "edge_verticals": {
+    "band": 0.2,
+    "tilt_deg": [
+     1.0,
+     25.0
+    ],
+    "frames_over": 0,
+    "over_frames": [],
+    "worst": {
+     "frame": 37,
+     "longest_leaning": {
+      "len_h": 0.183,
+      "tilt_deg": -1.27,
+      "x": 0.858
+     }
+    },
+    "passed": true
+   },
+   "exclusion_closed": [
+    {
+     "id": 50,
+     "window_m": [
+      1.0,
+      1.8
+     ],
+     "after_m": 1.0,
+     "region_x": [
+      850,
+      960
+     ],
+     "frames": [
+      {
+       "frame": 67,
+       "s": 1.812,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 68,
+       "s": 1.838,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 69,
+       "s": 1.862,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 70,
+       "s": 1.888,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 71,
+       "s": 1.918,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 72,
+       "s": 1.942,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 73,
+       "s": 1.976,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 74,
+       "s": 1.994,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 75,
+       "s": 2.016,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 76,
+       "s": 2.046,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 77,
+       "s": 2.064,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 78,
+       "s": 2.096,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 79,
+       "s": 2.122,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 80,
+       "s": 2.144,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 81,
+       "s": 2.172,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 82,
+       "s": 2.194,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 83,
+       "s": 2.226,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 84,
+       "s": 2.252,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 85,
+       "s": 2.274,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 86,
+       "s": 2.296,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 87,
+       "s": 2.322,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 88,
+       "s": 2.348,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 89,
+       "s": 2.372,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 90,
+       "s": 2.396,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 91,
+       "s": 2.424,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 92,
+       "s": 2.448,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 93,
+       "s": 2.474,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 94,
+       "s": 2.5,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 95,
+       "s": 2.522,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 96,
+       "s": 2.55,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 97,
+       "s": 2.574,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 98,
+       "s": 2.6,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 99,
+       "s": 2.624,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 100,
+       "s": 2.65,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 101,
+       "s": 2.67,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 102,
+       "s": 2.694,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 103,
+       "s": 2.72,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 104,
+       "s": 2.748,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 105,
+       "s": 2.77,
+       "unexplained_h": 0.0
+      },
+      {
+       "frame": 106,
+       "s": 2.794,
+       "unexplained_h": 0.0
+      }
+     ],
+     "worst": {
+      "frame": 67,
+      "s": 1.812,
+      "unexplained_h": 0.0
+     },
+     "over": 0,
+     "passed": true
+    }
+   ],
+   "events": [
+    {
+     "what": "the stone's vertical joint (Y 7.05) out past the left edge",
+     "at_m": 0.23,
+     "frame": 4
+    },
+    {
+     "what": "the walnut face of the right jamb turns into view",
+     "at_m": 0.74,
+     "frame": 25
+    },
+    {
+     "what": "the dining glimpse at the right edge (id 50 out of the fit)",
+     "window_m": [
+      1.01,
+      1.76
+     ],
+     "frames": [
+      36,
+      66
+     ],
+     "check": "may be missing or simpler, may not be wrong: no dark hole, leaf, walnut frame, furniture, lamp, pendant, saturated colour, sunny or blue view, no flash over 1/3 stop, never wider than 1/10 of the frame or moving toward the centre (10.4)"
+    },
+    {
+     "what": "the right jamb out past the right edge",
+     "window_m": [
+      1.16,
+      1.22
+     ],
+     "frames": [
+      43,
+      44
+     ]
+    },
+    {
+     "what": "the limestone wall out past the left edge (the corner at 1.275)",
+     "window_m": [
+      1.21,
+      1.28
+     ],
+     "frames": [
+      44,
+      46
+     ]
+    },
+    {
+     "what": "the plaster return, then the left walnut band, out past the left edge",
+     "window_m": [
+      1.4,
+      1.63
+     ],
+     "frames": [
+      52,
+      61
+     ]
+    },
+    {
+     "what": "the camera inside the wall thickness",
+     "window_m": [
+      1.99,
+      2.15
+     ],
+     "frames": [
+      75,
+      81
+     ]
+    },
+    {
+     "what": "the landing on M0",
+     "window_m": [
+      3.51,
+      3.87
+     ],
+     "frames": [
+      136,
+      173
+     ]
+    }
+   ],
+   "frames_60_in_the_arrival": [
+    529,
+    701
+   ]
+  }
+ }
+}

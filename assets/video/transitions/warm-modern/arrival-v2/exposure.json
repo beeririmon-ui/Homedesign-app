@@ -1,0 +1,112 @@
+{
+ "rule": "Exposure along the route, independent of what comes into view: each frame against the one before it on the content\nthey share (the previous frame turned into this frame's camera; in the walks the step is 2.5 cm, small against the\ndepth), median of log2 of the luminance ratio; also each segment's level against the landing frame.",
+ "per_segment": {
+  "door": {
+   "max_abs_step_stops": 0.0,
+   "drift_stops": 0.0
+  },
+  "1a": {
+   "max_abs_step_stops": 0.0149,
+   "drift_stops": -0.098
+  },
+  "1b": {
+   "max_abs_step_stops": 0.0,
+   "drift_stops": 0.0
+  },
+  "1b+left turn (overlap)": {
+   "max_abs_step_stops": 0.0017,
+   "drift_stops": 0.002
+  },
+  "left turn": {
+   "max_abs_step_stops": 0.0024,
+   "drift_stops": 0.001
+  },
+  "rest HC": {
+   "max_abs_step_stops": 0.0,
+   "drift_stops": 0.0
+  },
+  "right turn": {
+   "max_abs_step_stops": 0.0024,
+   "drift_stops": -0.001
+  },
+  "right turn + clip 2 (overlap)": {
+   "max_abs_step_stops": 0.0091,
+   "drift_stops": 0.012
+  },
+  "clip 2": {
+   "max_abs_step_stops": 0.0012,
+   "drift_stops": 0.002
+  },
+  "M0 landing": {
+   "max_abs_step_stops": 0.0,
+   "drift_stops": 0.0
+  },
+  "M0 reveal B": {
+   "max_abs_step_stops": 0.0,
+   "drift_stops": 0.0
+  },
+  "hold": {
+   "max_abs_step_stops": 0.0,
+   "drift_stops": 0.0
+  }
+ },
+ "joins": [
+  {
+   "frame": 49,
+   "into": "1a",
+   "step_stops": 0.0
+  },
+  {
+   "frame": 220,
+   "into": "1b",
+   "step_stops": 0.0
+  },
+  {
+   "frame": 264,
+   "into": "1b+left turn (overlap)",
+   "step_stops": 0.0
+  },
+  {
+   "frame": 305,
+   "into": "left turn",
+   "step_stops": 0.0002
+  },
+  {
+   "frame": 357,
+   "into": "rest HC",
+   "step_stops": 0.0
+  },
+  {
+   "frame": 405,
+   "into": "right turn",
+   "step_stops": 0.0
+  },
+  {
+   "frame": 506,
+   "into": "right turn + clip 2 (overlap)",
+   "step_stops": -0.0091
+  },
+  {
+   "frame": 529,
+   "into": "clip 2",
+   "step_stops": 0.0012
+  },
+  {
+   "frame": 702,
+   "into": "M0 landing",
+   "step_stops": 0.0
+  },
+  {
+   "frame": 703,
+   "into": "M0 reveal B",
+   "step_stops": 0.0
+  },
+  {
+   "frame": 786,
+   "into": "hold",
+   "step_stops": 0.0
+  }
+ ],
+ "max_abs_step_stops": 0.0149,
+ "max_abs_step_frame": 171
+}
