@@ -252,16 +252,21 @@ def p1(e, ref, rec):
     col_br = np.median(e[core], 0) if core.any() else np.array([0.25, 0.2, 0.17])
     a_vl = C.soft(vl)
     rgb_vl = C.defringe(e, vl)
-    rgb = np.where((a_br > a_vl)[..., None], col_br, rgb_vl)
-    a = np.maximum(a_vl, a_br)
+    a_with_branch = np.maximum(a_vl, a_br)
     M = scale_about(1.08, 1.08, axis, SHELF_Y)
-    rgb2, a2 = warp_layer(rgb, a, M)
+    rgb2, a2 = warp_layer(rgb_vl, a_vl, M)                      # 13.11 5a: the vase alone, its branch out (the plate shows under it)
+    _, a_part = warp_layer(rgb_vl, a_with_branch, M)
     r["_vase_left_M"] = M.tolist()
+    r["_vase_left_partition"] = (a_part * above_shelf()) > 0.5   # the shadows are shared out as before, so no other layer's shadow moves
     a2 *= above_shelf()
+    stub = np.zeros((H, W), bool)                               # the branch's stub over the mouth (inside the vase's own cut): out
+    stub[:306] = True
+    body = cv2.morphologyEx((a2 > 0.5).astype(np.uint8), cv2.MORPH_OPEN, np.ones((1, 9), np.uint8)).astype(bool)
+    a2 = np.where(stub & ~C.dil(body, 1), 0, a2)
     out["shelf-vase-left"] = (rgb2, a2)
-    old["shelf-vase-left"] = (a > 0.5)
+    old["shelf-vase-left"] = (a_with_branch > 0.5)
     r["shelf-vase-left"] = dict(scale=1.08, about=[round(float(axis), 1), SHELF_Y], edit_px=[int(np.ptp(np.nonzero(vl)[1])) + 1, int(SHELF_Y - np.nonzero(vl)[0].min())],
-                                branch="the edit's branch: alpha from its depth under the local median L* (median 21 px), its core colour")
+                                branch="removed in 13.11 (5a): the vase stands alone; its shadow over the mouth removed with it")
     # the white plum vase: the SKU outline (card 22.6 x 33 = 118 x 173 px at Y 17.78), the edit's surface mapped across each row
     yt = proj(0, 17.78, 1.83)[1]
     hpx = proj(0, 17.78, 1.50)[1] - yt
@@ -301,7 +306,15 @@ def p1(e, ref, rec):
 # ---------------------------------------------------------------------------------------------------------------- p2: the right corner
 POT = dict(X=1.45, Y=17.88, H=0.355, R=0.21, R_IN=0.1775, SOIL=0.325, sku="6bde6ef7_564d83ce-d066-4da9-ab34-952570829362.jpg",
            sku_rect=(90, 130, 565, 520), lab=(64.0, 2.5, 9.5))
+POT_L_1311 = 71.1                     # 13.11 5d: the base L* that puts the pot 8 under the wall ring by QA's R5 reading (r5_check below; FB10 had 64.0)
 CROWN = dict(s=0.70, about=(2455.0, 600.0), split_y=770)      # the ficus crown scaled about a point inside the lamp shade
+# 13.11 (master-designer, 2026-11-18) with the manager's notes after QA: all in code
+R1311 = dict(
+    pot_dL_target=-8.0,               # 5d / 1: the pot's median L* 8 under the wall ring at the same rows (y 1050-1280), the living room's R5
+    leaf_C=0.80, leaf_dL=3.0,         # 5c: the crown's leaves C* x 0.80, L* +3 in the mid-tones (30-60), same hue, highlights kept
+    clone=dict(src_x=(2470, 2600), seed=1311, step=(20, 14), start_x=2652, fade=10),   # 3: no mirror past x 2641: cloned leaves
+    holder_dx=0,                      # 5b: NOT shifted: every shift that gives the 47-60 px margin hides 60 % of the visible lamp base (README 13.11)
+    branch_box=(847, 60, 1078, 296))  # 5a: the branch and its shadow out (everything over the charcoal vase's mouth, left of frame A)
 LAMP_BULB = (0.95, 18.25, 1.42)
 
 
@@ -455,6 +468,148 @@ def layer_alpha(slot, man):
     return np.asarray(Image.open(os.path.join(ST, l["layer"])))[..., 3].astype(np.float64) / 255
 
 
+COVERS = {   # the magazines in the holder, on the locked edit (before any shift): what each visible cover is, and its one soft photo block
+    "back": dict(poly=[(2499, 1206), (2597, 1218), (2597, 1246), (2499, 1240)], block=(2542, 1223, 2580, 1243), block_L=70.0),
+    "front": dict(poly=[(2452, 1231), (2584, 1240), (2584, 1400), (2452, 1400)], block=(2516, 1246, 2553, 1277), block_L=66.0),
+    "edge": dict(poly=[(2590, 1212), (2604, 1212), (2604, 1404), (2590, 1404)], block=None, block_L=None)}
+ROD = ((2452, 1270.0), (2580, 1294.5))                       # the holder's front rod across the front cover (kept)
+
+
+def blank_covers(e, holder, rec):
+    """13.11 point 4: no text on the magazines. Inside each cover, on its paper (not the straps, the tube or the rod), every mark
+    goes: the paper's own tone (its bright pixels, a normalised 5 px blur, so the light and the straps' shading stay) with a faint
+    paper grain; the page edges (x 2604-2622) stay; one soft warm photo block per cover (L* 66-70, blurred 2 px), no letters,
+    logo or faces"""
+    lab = C.to_lab(e)
+    L, A, B = lab[..., 0], lab[..., 1], lab[..., 2]
+    chroma, hue = np.hypot(A, B), np.degrees(np.arctan2(B, A)) % 360
+    strap = C.dil((chroma > 18) & (hue > 38) & (hue < 72), 1)
+    tube = (L < 26) & (chroma < 9) & (np.arange(W)[None, :] >= 2576)
+    tube = cv2.morphologyEx(tube.astype(np.uint8), cv2.MORPH_OPEN, np.ones((17, 1), np.uint8)).astype(bool)   # the tube's long runs only
+    tube = C.dil(tube, 1)
+    (rx0, ry0), (rx1, ry1) = ROD
+    rod = np.zeros((H, W), np.uint8)
+    cv2.line(rod, (rx0, int(round(ry0))), (rx1, int(round(ry1))), 1, 7)
+    keep = strap | tube | rod.astype(bool) | ~holder
+    out = e.copy()
+    rng = np.random.default_rng(13)
+    grain = C.blur(rng.normal(0, 1, (H, W)), 0.7)
+    rep = {}
+    for name, cv in COVERS.items():
+        pm = poly_mask(cv["poly"], (H, W)) & ~keep
+        if not pm.any():
+            continue
+        lmax = cv2.dilate(np.clip(L * 2.55, 0, 255).astype(np.uint8), np.ones((9, 9), np.uint8)).astype(np.float64) / 2.55
+        bright = pm & (L > lmax - 7)
+        if cv["block"] is not None:
+            bx0, by0, bx1, by1 = cv["block"]
+            bright &= ~C.box_mask([(bx0 - 4, by0 - 4, bx1 + 4, by1 + 4)])
+        tone = np.zeros((H, W, 3))
+        for c in range(3):
+            num = C.blur(e[..., c] * bright, 5)
+            den = C.blur(bright.astype(np.float64), 5)
+            tone[..., c] = num / np.maximum(den, 1e-6)
+        miss = pm & (C.blur(bright.astype(np.float64), 5) < 0.03)
+        if miss.any():
+            for c in range(3):
+                num = C.blur(e[..., c] * bright, 16)
+                den = C.blur(bright.astype(np.float64), 16)
+                tone[..., c][miss] = (num / np.maximum(den, 1e-6))[miss]
+        tone = np.clip(tone * (1 + 0.012 * grain)[..., None], 0, 1)
+        if cv["block"] is not None:
+            bx0, by0, bx1, by1 = cv["block"]
+            bm = C.blur(rect_alpha(bx0, by0, bx1, by1), 2.0)
+            tl = C.to_lab(tone)
+            blk = tl.copy()
+            blk[..., 0] = cv["block_L"] + (tl[..., 0] - np.median(tl[..., 0][pm])) * 0.5
+            blk[..., 1], blk[..., 2] = 3.0, 10.0
+            tone = tone * (1 - bm[..., None]) + np.clip(C.from_lab(blk), 0, 1) * bm[..., None]
+        out[pm] = tone[pm]
+        rep[name] = dict(px=int(pm.sum()), paper_Lab=[round(float(v), 1) for v in np.median(C.to_lab(tone)[pm & ~C.box_mask([cv["block"]] if cv["block"] else [])], 0)],
+                         block=cv["block"], block_L=cv["block_L"])
+    rec["covers"] = rep
+    return out
+
+
+def refill_crown_edge(wc, edge_x, r):
+    cfg = R1311["clone"]
+    a = wc[..., 3].astype(np.float64)
+    rgb = wc[..., :3] / np.maximum(wc[..., 3:4], 1e-6)
+    lab = C.to_lab(np.clip(rgb, 0, 1))
+    hue, chroma = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360, np.hypot(lab[..., 1], lab[..., 2])
+    leaf = (a > 0.5) & (hue > 80) & (hue < 210) & (chroma > 2.5)
+    y0, y1, x0, x1 = 330, 800, 2440, 2640
+    m = leaf[y0:y1, x0:x1].astype(np.uint8)
+    Lc = lab[y0:y1, x0:x1, 0]
+    outline = (cv2.GaussianBlur(Lc.astype(np.float32), (0, 0), 3) - Lc) > 7
+    dist = cv2.distanceTransform((m.astype(bool) & ~outline).astype(np.uint8), cv2.DIST_L2, 5)
+    peaks = (dist == cv2.dilate(dist, np.ones((15, 15), np.uint8))) & (dist > 5)
+    n, mk = cv2.connectedComponents(peaks.astype(np.uint8))
+    markers = mk.astype(np.int32) + 1
+    markers[m == 0] = 1
+    markers[(m == 1) & (mk == 0)] = 0
+    img = C.q(np.clip(rgb[y0:y1, x0:x1], 0, 1))[..., ::-1].copy()
+    img[m == 0] = (160, 90, 40)
+    ws = cv2.watershed(img, markers)
+    segs = []
+    for i in range(2, n + 1):
+        sg = ws == i
+        ar = int(sg.sum())
+        if ar < 450 or ar > 2600:
+            continue
+        cnt, _ = cv2.findContours(sg.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        c = max(cnt, key=cv2.contourArea)
+        if len(c) < 5:
+            continue
+        sol = ar / max(cv2.contourArea(cv2.convexHull(c)), 1)
+        (_, _), (ma1, ma2), _ = cv2.fitEllipse(c)
+        asp = max(ma1, ma2) / max(min(ma1, ma2), 1)
+        full = np.zeros((H, W), bool)
+        full[y0:y1, x0:x1] = sg
+        Lm = float(np.median(lab[..., 0][full & (a > 0.5)]))
+        twig = ((chroma < 6) & full & (a > 0.5)).sum() / max((full & (a > 0.5)).sum(), 1)
+        cx = np.nonzero(sg)[1].mean() + x0
+        if sol > 0.84 and 1.3 < asp < 3.4 and cfg["src_x"][0] <= cx <= cfg["src_x"][1] and 26 <= Lm <= 50 and twig < 0.08:
+            segs.append((full, Lm))
+    rng = np.random.default_rng(cfg["seed"])
+    cov = np.convolve(np.array([(a[y, 2596:2640] > 0.5).mean() for y in range(H)]), np.ones(41) / 41, mode="same")
+    Lrow = np.full(H, np.nan)
+    for y in range(320, 810):
+        sel = a[y - 20:y + 21, 2590:2640] > 0.5
+        if sel.sum() > 30:
+            Lrow[y] = np.median(lab[y - 20:y + 21, 2590:2640, 0][sel])
+    canvas = np.zeros((H, W, 4))
+    placed = 0
+    sxs, sys_ = cfg["step"]
+    for y in range(345, 795, sys_):
+        for x in range(cfg["start_x"], 2745, sxs):
+            p = min(1.0, cov[y] * 1.15) * (1.0 - 0.2 * (x - cfg["start_x"]) / 93)
+            if rng.random() > p:
+                continue
+            sg, Ls = segs[rng.integers(len(segs))]
+            ys, xs = np.nonzero(sg)
+            cy, cx = ys.mean(), xs.mean()
+            ang = rng.choice([-1, 1]) * rng.uniform(15, 25)
+            sc = rng.uniform(0.9, 1.1)
+            M = cv2.getRotationMatrix2D((cx, cy), ang, sc)
+            M[0, 2] += x + rng.uniform(-7, 7) - cx
+            M[1, 2] += y + rng.uniform(-7, 7) - cy
+            sm = np.clip(C.blur(C.dil(sg, 2).astype(np.float64), 1.0), 0, 1) * a
+            wa = cv2.warpAffine(sm.astype(np.float32), M, (W, H), flags=cv2.INTER_CUBIC).astype(np.float64).clip(0, 1)
+            wr = cv2.warpAffine((rgb * sm[..., None]).astype(np.float32), M, (W, H), flags=cv2.INTER_CUBIC).astype(np.float64).clip(0, None)
+            Lt = Lrow[y] if not np.isnan(Lrow[y]) else Ls
+            f = np.clip(C.lin(C.from_lab(np.array([[[Lt, 0, 0]]])))[0, 0, 1] / C.lin(C.from_lab(np.array([[[Ls, 0, 0]]])))[0, 0, 1], 0.8, 1.25)
+            piece = np.dstack([wr * f, wa])
+            canvas = piece + canvas * (1 - wa[..., None]) if rng.random() < 0.5 else canvas + piece * (1 - canvas[..., 3:4])
+            placed += 1
+    fo = np.clip((edge_x - np.arange(W)) / cfg["fade"], 0, 1)[None, :, None]
+    top = wc.astype(np.float64) * fo
+    out = top + canvas * (1 - top[..., 3:4])
+    r["_crown_edge"] = dict(method="leaf clones (13.11 point 3), no mirror", leaf_pieces=len(segs), clones=placed, crown_cut_x=round(float(edge_x), 1),
+                            rotation_deg="15-25 either way", scale="0.9-1.1", centres_x_from=cfg["start_x"], fade_px=cfg["fade"], seed=cfg["seed"])
+    return out.astype(np.float32)
+
+
 def p2(e, ref, man, rec):
     out, old, r = {}, {}, {}
     lab = C.to_lab(e)
@@ -490,7 +645,15 @@ def p2(e, ref, man, rec):
     n_, lab_, st_, _ = cv2.connectedComponentsWithStats(holder.astype(np.uint8), connectivity=8)
     holder = np.isin(lab_, [i for i in range(1, n_) if st_[i, cv2.CC_STAT_AREA] >= 60])
     holder &= ~bed & ~lamp
-    out["magazine-holder"] = (C.defringe(e, holder), C.soft(holder))
+    eh = blank_covers(e, holder, r)
+    rgb_h, a_h = C.defringe(eh, holder), C.soft(holder)
+    dx = R1311["holder_dx"]
+    if dx:                                                     # 13.11 5b: the holder moved left with its shadow (main moves the shadow)
+        rgb_h = np.roll(rgb_h, -dx, axis=1)
+        a_h = np.roll(a_h, -dx, axis=1)
+        a_h[:, W - dx:] = 0
+        a_h *= ~bed
+    out["magazine-holder"] = (rgb_h, a_h)
     old["magazine-holder"] = holder
     ys, xs = np.nonzero(holder)
     r["magazine-holder"] = dict(source="the edit's holder as drawn (its look matches the listing photo; the 3/4 view and the off-axis stretch at x 2520, 1.21, make its 265 px plausible for 35 x 19 x 27.5 cm); GrabCut seeded by its colours",
@@ -518,6 +681,18 @@ def p2(e, ref, man, rec):
             rgb_p[y, l_ + 1:r_] = (1 - t)[:, None] * e[y, l_] + t[:, None] * e[y, r_]
     a_p *= ~(lamp & ~pole)
     rgb_p = C.defringe(rgb_p, a_p > 0.5)
+    # 13.11 5c: a calmer crown: on the leaves (green hue, C* over 4; not the pale trunk) C* x 0.80 and L* +3 in the mid-tones
+    lp = C.to_lab(rgb_p)
+    cp, hp = np.hypot(lp[..., 1], lp[..., 2]), np.degrees(np.arctan2(lp[..., 2], lp[..., 1])) % 360
+    leafm = (a_p > 0.5) & (hp > 90) & (hp < 200) & (cp > 4)
+    r["_leaf_before"] = [round(float(v), 1) for v in np.median(lp[leafm], 0)] + [round(float(np.median(cp[leafm])), 1)]
+    wmid = np.interp(lp[..., 0], [22, 30, 60, 68], [0, 1, 1, 0])
+    lp2 = lp.copy()
+    lp2[..., 0] = lp[..., 0] + R1311["leaf_dL"] * wmid
+    lp2[..., 1] = lp[..., 1] * R1311["leaf_C"]
+    lp2[..., 2] = lp[..., 2] * R1311["leaf_C"]
+    rgb_p = np.where(leafm[..., None], np.clip(C.from_lab(lp2), 0, 1), rgb_p)
+    r["_leaf_after"] = [round(float(v), 1) for v in np.median(lp2[leafm], 0)] + [round(float(np.median(np.hypot(lp2[..., 1], lp2[..., 2])[leafm])), 1)]
     a_soft = C.soft(a_p > 0.5)
     ys_t = np.nonzero(crown[CROWN["split_y"]:1075].any(1))[0]
     y_soil_e = CROWN["split_y"] + int(ys_t.max()) if ys_t.size else 1050
@@ -528,8 +703,13 @@ def p2(e, ref, man, rec):
     upper[:CROWN["split_y"]] = 1
     upper = C.blur(upper, 1.0)
     pm = np.dstack([rgb_p * (a_soft * upper)[..., None], a_soft * upper]).astype(np.float32)
-    pm = np.pad(pm, ((0, 0), (0, 160), (0, 0)), mode="reflect")      # the crown runs off the canvas at the right: mirrored there only
     wc = cv2.warpAffine(pm, Mc.astype(np.float32), (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+    # 13.11 point 3: past x 2640.5 the edit has no crown (its canvas edge); no mirror. Leaves cloned from the crown's interior
+    # (x 2470-2600): the scaled crown split into leaves (watershed on its distance map, split on the dark leaf outlines), whole-leaf
+    # pieces kept (solidity > 0.84, aspect 1.3-3.4, mid-lit, no twig); each copy unmirrored, turned 15-25 deg either way, scaled
+    # 0.9-1.1, its light set to the crown's at that height near the edge (x 2590-2640), set past the edge as densely as the crown is
+    # there; the crown's cut edge fades over its last 10 px over them
+    wc = refill_crown_edge(wc, ax + s * (W - ax), r)
     # the bare trunk below the crown, stretched from the scaled crown down to the new pot's soil
     xs_soil, ys_soil = proj(POT["X"], POT["Y"], POT["SOIL"])
     y_top_new = ay + s * (CROWN["split_y"] - ay)
@@ -566,7 +746,9 @@ def p2(e, ref, man, rec):
     rgb_pl = np.clip(tot[..., :3] / np.maximum(tot[..., 3:4], 1e-6), 0, 1).astype(np.float64)
     # the pot, in code; the plant's trunk goes into its soil (the pot's rim in front of the trunk's foot)
     sk = sku_pot()
+    POT["lab"] = (POT_L_1311, POT["lab"][1], POT["lab"][2])
     rgb_pot, a_pot = render_pot(sk, r)
+
     yy = np.arange(H)[:, None]
     front_rim = (a_pot > 0) & (yy > ys_soil - 2)
     a_pl = np.where(front_rim & (a_pot > 0.5), 0, a_pl)
@@ -806,6 +988,9 @@ def main():
         outs[s] = (set_print(rgb, edits["p1-wall"], s, rec), a)
     # shadows: the edit's darkening round each product (filled under where the edit drew it), following the corrections
     new = {s: outs[s][1] > 0.5 for s in outs}
+    part = dict(new)
+    part["shelf-vase-left"] = rec.pop("_vase_left_partition")      # 13.11 5a: the shares as before the branch came out
+    r1311 = {k[1:]: rec.pop(k) for k in ("_leaf_before", "_leaf_after", "_crown_edge")}
     dark_by, band, block = {}, {}, {}
     lamp = layer_alpha("floor-lamp", man) > 0.02
     for p, e in edits.items():
@@ -834,7 +1019,19 @@ def main():
         band[s] = {"wall-shelf": 45, "planter": 40, "magazine-holder": 30}.get(s, 22)
     block["magazine-holder"] = lamp
     block["bedside-carafe"] = layer_alpha("candle-holders", man) > 0.02
-    shadows = shadow_maps(dark_by, new, band, block)
+    dxh = R1311["holder_dx"]
+    if dxh:
+        dark_by["magazine-holder"] = np.roll(dark_by["magazine-holder"], -dxh, axis=1)
+    shadows = shadow_maps(dark_by, part, band, block)
+    bx0, by0, bx1, by1 = R1311["branch_box"]
+    sv = shadows["shelf-vase-left"]
+    removed = int((sv[by0:by1, bx0:bx1] < 1).sum())
+    sv[by0:by1, bx0:bx1] = 1.0                                         # 13.11 5a: the branch's shadow out with it
+    sv[(part["shelf-vase-left"]) & ~new["shelf-vase-left"]] = 1.0
+    r1311["branch"] = dict(box=list(R1311["branch_box"]), shadow_px_removed=removed,
+                           alpha_px_removed=int((part["shelf-vase-left"] & ~new["shelf-vase-left"]).sum()))
+    r1311["holder_dx"] = dxh
+    rec["13.11"] = r1311
     # MP-I2 on the new layers' darks (MB0's toe, once), and the lift of the deepest values the variants use, so the frame keeps
     # WM-G1 (p0.5 11-14): the edit's new blacks (the holder's tube, the charcoal vase, the soil) came under the toe's floor
     for s, (rgb, a) in list(outs.items()):
@@ -908,5 +1105,45 @@ def main():
     print(json.dumps(man["rnd2"]), rec["changed_vs_round9_outside_new_layers_px"], rec["black_point_p0_5_L"])
 
 
+def r5_check():
+    """13.11 5d, read the way QA reads it (qa-master/fb10 planter_rule): on mb0-defaults.png, rows 1050-1280; the pot = the planter's
+    alpha 255 eroded 3 with nothing of a higher z over it; the wall = the plaster (plate ids 1, 2, 5) 20-60 px out of the planter's
+    alpha, under no layer's alpha and no shadow (< 250)"""
+    man = json.load(open(os.path.join(ST, "layers", "manifest.json")))
+    al = {l["slot"]: np.asarray(Image.open(os.path.join(ST, l["layer"])))[..., 3] for l in man["layers"]}
+    shd = {l["slot"]: np.asarray(Image.open(os.path.join(ST, l["shadow"]))) for l in man["layers"]}
+    zz = {l["slot"]: l["z"] for l in man["layers"]}
+    ids = np.asarray(Image.open(C.CLAY + "MB0-plate-id.png"))
+    lab = C.to_lab(C.load(os.path.join(ST, "mb0-defaults.png")))
+    anyA = np.zeros((H, W), bool)
+    anyS = np.zeros((H, W), bool)
+    for k in al:
+        anyA |= al[k] > 0
+        anyS |= shd[k] < 250
+    rows = np.zeros((H, W), bool)
+    rows[1050:1281] = True
+    m = al["planter"] > 0
+    ring = C.dil(m, 60) & ~C.dil(m, 20) & np.isin(ids, (1, 2, 5)) & ~anyA & ~anyS & rows
+    pot = C.ero(al["planter"] == 255, 3) & rows
+    for k in al:
+        if zz[k] > zz["planter"]:
+            pot &= ~(al[k] > 0)
+    mp, mw = np.median(lab[pot], 0), np.median(lab[ring], 0)
+    cp, cw = float(np.hypot(mp[1], mp[2])), float(np.hypot(mw[1], mw[2]))
+    hp, hw = float(np.degrees(np.arctan2(mp[2], mp[1]))), float(np.degrees(np.arctan2(mw[2], mw[1])))
+    return dict(pot_Lab=[round(float(v), 1) for v in mp], wall_Lab=[round(float(v), 1) for v in mw], dL=round(float(mp[0] - mw[0]), 2),
+                pot_C=round(cp, 1), C_limit=round(cw + 1.5, 1), dh=round(hp - hw, 1), pot_px=int(pot.sum()), ring_px=int(ring.sum()), base_L=POT_L_1311)
+
+
 if __name__ == "__main__":
     main()
+    chk = r5_check()
+    if abs(chk["dL"] - R1311["pot_dL_target"]) > 0.4 and "--calibrate" in sys.argv:
+        POT_L_1311 += R1311["pot_dL_target"] - chk["dL"]
+        print("re-run with POT_L_1311", round(POT_L_1311, 2))
+        main()
+        chk = r5_check()
+    rec = json.load(open(os.path.join(ST, "fb10", "fb10-compose.json")))
+    rec.setdefault("13.11", {})["pot_r5_qa_reading"] = chk
+    json.dump(rec, open(os.path.join(ST, "fb10", "fb10-compose.json"), "w"), indent=1)
+    print("R5", json.dumps(chk))
