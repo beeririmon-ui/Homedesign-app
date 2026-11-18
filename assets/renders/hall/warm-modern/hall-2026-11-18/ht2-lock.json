@@ -1,0 +1,199 @@
+{
+ "still": "HT2: ht.png + the walnut bench; base.png canvas 2720 x 1530",
+ "status": "built in code from r1 (warp_ht2.py) after r1 and fix1 both drew the bench frontally; for the designer and QA",
+ "outside_mask_max_diff_levels_vs_ht": 0,
+ "mask_px": 279275,
+ "bench_geometry_uv": {
+  "note": "the clay quads (exact projection of route 2.2 box; each face of HT2 is mapped onto them)",
+  "top": [
+   [
+    0.5153,
+    0.7986
+   ],
+   [
+    0.7065,
+    0.7986
+   ],
+   [
+    0.7645,
+    0.8519
+   ],
+   [
+    0.5413,
+    0.8519
+   ]
+  ],
+  "front": [
+   [
+    0.5413,
+    0.8519
+   ],
+   [
+    0.7645,
+    0.8519
+   ],
+   [
+    0.7645,
+    0.8767
+   ],
+   [
+    0.5413,
+    0.8767
+   ]
+  ],
+  "lpanel": [
+   [
+    0.5413,
+    0.8767
+   ],
+   [
+    0.5553,
+    0.8767
+   ],
+   [
+    0.5553,
+    1.03
+   ],
+   [
+    0.5413,
+    1.03
+   ]
+  ],
+  "rpanel": [
+   [
+    0.7505,
+    0.8767
+   ],
+   [
+    0.7645,
+    0.8767
+   ],
+   [
+    0.7645,
+    1.03
+   ],
+   [
+    0.7505,
+    1.03
+   ]
+  ],
+  "outer": [
+   [
+    0.5153,
+    0.7986
+   ],
+   [
+    0.5413,
+    0.8519
+   ],
+   [
+    0.5413,
+    1.03
+   ],
+   [
+    0.5153,
+    0.9511
+   ]
+  ],
+  "inner": [
+   [
+    0.6945,
+    0.8198
+   ],
+   [
+    0.7505,
+    0.8767
+   ],
+   [
+    0.7505,
+    1.03
+   ],
+   [
+    0.6945,
+    0.9511
+   ]
+  ]
+ },
+ "bench_positions": {
+  "left_end_back_u": 0.5153,
+  "front_left_corner_u": 0.5413,
+  "right_end_u": 0.7645,
+  "seat_front_edge_v": 0.8519,
+  "designer": {
+   "left": 0.542,
+   "right": 0.764,
+   "seat_v": 0.85
+  },
+  "verdict": "left (front corner) 0.5413, right 0.7645, seat 0.8519: inside +-0.01"
+ },
+ "levels_11_9_3": {
+  "reference": "jib door",
+  "stops_vs_base": -0.501,
+  "L_star": 77.9,
+  "px": 225848,
+  "target": -0.6,
+  "tol": 0.167,
+  "within": true,
+  "off_by": 0.099,
+  "second": {
+   "surface": "stone panel",
+   "stops_vs_base": -0.812,
+   "px": 379850,
+   "vs_reference": -0.31,
+   "band": [
+    -0.6,
+    -0.25
+   ],
+   "within": true
+  }
+ },
+ "bench_levels": {
+  "lining_Y": 0.0607,
+  "lining_L": 29.6,
+  "black_point_L_p01": 12.7,
+  "walnut_floor_L": 20.7,
+  "faces": {
+   "lpanel": {
+    "gain": 1.044,
+    "L_star": 23.3,
+    "vs_lining": -0.637
+   },
+   "rpanel": {
+    "gain": 2.268,
+    "L_star": 23.3,
+    "vs_lining": -0.637
+   },
+   "inner": {
+    "gain": 5.081,
+    "L_star": 20.9,
+    "vs_lining": -0.909
+   }
+  }
+ },
+ "faces_px": {
+  "top": 42392,
+  "front": 15297,
+  "lpanel": 7943,
+  "rpanel": 7418,
+  "outer": 17314,
+  "inner": 28929,
+  "_groove": 977
+ },
+ "groove_px": 977,
+ "r1_vs_clay": {
+  "front_left_corner_u": 0.506,
+  "left_extent_u": 0.506,
+  "right_u": 0.766,
+  "seat_top_v": [
+   0.8046,
+   0.845
+  ],
+  "verdict": "rejected: 12.1 item 1 (front-left corner 0.036 off); inner face of the right panel L* ~6"
+ },
+ "fix1_vs_clay": {
+  "left_extent_u": 0.48,
+  "right_u": 0.768,
+  "verdict": "rejected: longer and frontal"
+ },
+ "clipped_px_in_bench": 0
+}

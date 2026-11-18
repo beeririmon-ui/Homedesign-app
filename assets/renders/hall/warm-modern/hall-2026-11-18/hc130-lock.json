@@ -1,0 +1,162 @@
+{
+ "still": "HC130: the bridge, seeds from HD2 and HC by pure rotation, the gap between them in code (fill_hc130.py); tall 3:2 canvas 2496 x 1664",
+ "status": "built in code after the one render (nano-banana-2 r1) drew a doorway into a lit room in the gap; for the designer and QA",
+ "seeds": {
+  "seed_hd_px": 1592208,
+  "seed_hc_px": 1469616,
+  "new_px": 1091520,
+  "seed_hd_u": [
+   0.6149,
+   1.03
+  ],
+  "seed_hc_u": [
+   -0.03,
+   0.363
+  ],
+  "back_gain_rows": [
+   0.756,
+   1.398,
+   1664
+  ],
+  "far_gain_rows": [
+   1.445,
+   1.656,
+   1664
+  ]
+ },
+ "gap_fill": {
+  "gap_px": 1091520,
+  "far wall X 0.80": {
+   "px": 701373,
+   "mirror_about": 9.1167,
+   "sampled_inside_seed_pct": 85.0
+  },
+  "back wall Y 9.80": {
+   "px": 385383,
+   "mirror_about": 1.1566,
+   "sampled_inside_seed_pct": 61.5
+  },
+  "edge_colour_hc": {
+   "rows": 1664,
+   "ratio_min": [
+    0.8,
+    0.8,
+    0.8
+   ],
+   "ratio_max": [
+    1.191,
+    1.25,
+    1.25
+   ]
+  },
+  "edge_colour_hd": {
+   "rows": 1664,
+   "ratio_min": [
+    0.968,
+    0.961,
+    0.949
+   ],
+   "ratio_max": [
+    1.079,
+    1.065,
+    1.086
+   ]
+  }
+ },
+ "compose": {
+  "model_px": [
+   2496,
+   1664
+  ],
+  "shift_vs_seeds_px": {
+   "dx": -0.0,
+   "dy": 0.0,
+   "response": 0.999
+  },
+  "seed_core_max_diff_levels": 0,
+  "seam_hd_model_vs_seed_pct": {
+   "median": 0.0,
+   "p90_abs": 0.0
+  },
+  "seam_hc_model_vs_seed_pct": {
+   "median": 0.0,
+   "p90_abs": 0.0
+  }
+ },
+ "lock_vs_clay": {
+  "still": "HC130",
+  "lines": {
+   "portal north reveal, corridor side (u 0.144)": {
+    "kind": "vertical",
+    "clay_px": 409,
+    "median_offset_px": 0.13,
+    "p90_abs_px": 0.18,
+    "n": 26,
+    "mean_corr": 1.0,
+    "tilt_deg_vs_clay": 0.001
+   },
+   "portal north reveal, hall side (u 0.189)": {
+    "kind": "vertical",
+    "clay_px": 515,
+    "median_offset_px": 0.1,
+    "p90_abs_px": 0.23,
+    "n": 26,
+    "mean_corr": 1.0,
+    "tilt_deg_vs_clay": -0.003
+   },
+   "inside corner (u 0.444)": {
+    "kind": "vertical",
+    "clay_px": 1116,
+    "median_offset_px": -0.01,
+    "p90_abs_px": 0.03,
+    "n": 26,
+    "mean_corr": 0.999,
+    "tilt_deg_vs_clay": -0.002
+   },
+   "jib door seam (u 0.653)": {
+    "kind": "vertical",
+    "clay_px": 1606,
+    "median_offset_px": 0.05,
+    "p90_abs_px": 0.06,
+    "n": 26,
+    "mean_corr": 1.0,
+    "tilt_deg_vs_clay": -0.001
+   }
+  },
+  "worst_median_offset_px": 0.13,
+  "px_per_u": 2353.8
+ },
+ "levels": {
+  "jib_door_mid": {
+   "stops": -0.498,
+   "target": "-0.60 +-1/6"
+  },
+  "back_wall": {
+   "stops": -0.237,
+   "target": "-0.60 to -0.90"
+  },
+  "corridor_wall_through_portal": {
+   "stops": -1.536,
+   "target": "-0.8 +-1/6"
+  },
+  "clipped_pct": 0.115
+ },
+ "seams": {
+  "HD_to_HC130": {
+   "how": "HD2 rotated about HX (exact); the jib door seam",
+   "jib_seam_offset_px": 0.05,
+   "seed_core_max_diff_levels": 0
+  },
+  "HC130_to_HC": {
+   "how": "HC rotated about HX (exact); the north reveal",
+   "reveal_offsets_px": [
+    0.13,
+    0.1
+   ]
+  }
+ },
+ "r1_model": {
+  "verdict": "rejected: in the gap it drew a walnut-lined doorway onto a lit room with a window and an oak floor (the reference plate hdx.png copied), 12.4 items 3 and 5",
+  "file": "rejected/hc130-r1-model.jpg"
+ }
+}

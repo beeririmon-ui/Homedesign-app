@@ -1,0 +1,65 @@
+{
+ "asset_id": "wm-hall-ht2-2026-11-18",
+ "status": "HT2 = r1 + code (warp_ht2.py): both renders drew the bench frontally",
+ "files": [
+  "ht2.txt",
+  "ht2-fix1.txt",
+  "ht2-edits.json",
+  "ht2-fix1-edits.json",
+  "ht2-designer-verbatim.txt"
+ ],
+ "still": "HT2",
+ "seed": null,
+ "seed_note": "no seed is exposed by nano-banana-2 or seedream-5-pro",
+ "jobs": [
+  {
+   "still": "HT2",
+   "id": "r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/432c2033-49e5-4638-ae3b-c602990b9af8.png",
+   "input_sha256_20": "4522183301ded78622e2",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-18/ht2.txt",
+   "idempotency_key": "wm-hall-ht2-r1-nano-2026-11-18",
+   "placeholder_id": "a252eefc-3546-4e68-8cd3-75b45b9ebc6d",
+   "task_id": "0e140b316c68b4e1850b7c0c68658a6d",
+   "estimate": 400,
+   "tokens": 400,
+   "running_total": 400,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-0e140b316c68b4e1850b7c0c68658a6d-0-1794981270922-cb9920fa.png",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "verdict": "rejected, 12.1 item 1: the bench drawn frontally, its front-left corner at u ~0.506 for 0.542 +-0.01 (no outer side of the left end panel); right end 0.766-0.768 (ok), seat v 0.805-0.85 (ok); shift vs input 0.02 px"
+  },
+  {
+   "still": "HT2",
+   "id": "fix1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/60159154-5c64-424d-a72b-ad64d53eb70e.png",
+   "input_sha256_20": "1e5ccf7ca6c01a62be17",
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-18/ht2-fix1.txt",
+   "idempotency_key": "wm-hall-ht2-fix1-nano-2026-11-18",
+   "placeholder_id": "3df5f016-5e43-4b1d-b61e-9cec9a6b6ab6",
+   "task_id": "3ed6295320151485f539264d680ab022",
+   "estimate": 400,
+   "tokens": 400,
+   "running_total": 800,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-3ed6295320151485f539264d680ab022-0-1794981525161-0f4cc457.png",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "verdict": "rejected, 12.1 item 1 again and worse: a longer frontal bench, left end at u ~0.48-0.49; no outer side of the left panel"
+  }
+ ],
+ "tokens": 800,
+ "date": "2026-11-18",
+ "jobs_file": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json"
+}

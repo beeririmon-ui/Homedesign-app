@@ -1,0 +1,70 @@
+{
+ "asset_id": "wm-hall-hc-2026-11-18",
+ "status": "not accepted: r1 (seedream) misses 12.3 items 8, 9; fix1 (nano) worse; back to the designer",
+ "files": [
+  "hc.txt",
+  "hc-fix1.txt",
+  "hc-fix1-edits.json",
+  "hc-designer-verbatim.txt"
+ ],
+ "still": "HC",
+ "seed": null,
+ "seed_note": "no seed is exposed by nano-banana-2 or seedream-5-pro",
+ "jobs": [
+  {
+   "still": "HC",
+   "id": "r1",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "3:2",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/389fa7bc-f675-4dfa-b4ac-7050a8852085.png",
+   "input_sha256_20": "ae0b2092905ef182dfc9",
+   "image_refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7dd478a5-8421-41fc-80bb-da261f4b2ab7.png (hall-2026-11-17/hdx.png, the reference hall plate, route 12.0)"
+   ],
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-18/hc.txt",
+   "idempotency_key": "wm-hall-hc-r1-seedream-2026-11-18",
+   "placeholder_id": "1d4e89f6-8796-4f8d-8f74-0f2ee471809b",
+   "task_id": "c7882533f70a4ce3b5d0c700193a8efe",
+   "estimate": 650,
+   "tokens": 650,
+   "running_total": 1850,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-c7882533f70a4ce3b5d0c700193a8efe-0-1794983298075-227dfd4d.png",
+   "returned_px": [
+    2496,
+    1664
+   ],
+   "verdict": "rejected on 12.3 item 8 (left wall -0.83 brighter than right -1.17; hall around the portal -1.05 vs -0.60) and item 9 (side doors 5-18 px, portal 2-10 px from the clay); the bedroom door 0.470-0.536 (centre 0.503, item 1 ok); at x1 a magazine frame (kept in rejected/ for the designer)"
+  },
+  {
+   "still": "HC",
+   "id": "fix1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "3:2",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/389fa7bc-f675-4dfa-b4ac-7050a8852085.png",
+   "input_sha256_20": "ae0b2092905ef182dfc9",
+   "image_refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7dd478a5-8421-41fc-80bb-da261f4b2ab7.png (hdx.png)"
+   ],
+   "prompt_file": "assets/prompts/warm-modern-hall-2026-11-18/hc-fix1.txt",
+   "idempotency_key": "wm-hall-hc-fix1-nano-2026-11-18",
+   "placeholder_id": "8f255d3d-22c5-4dbc-a1ee-46f33b53e68c",
+   "task_id": "7ff043b888360f943934e539e26b0341",
+   "estimate": 400,
+   "tokens": 400,
+   "running_total": 2250,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-7ff043b888360f943934e539e26b0341-0-1794983613190-feced510.png",
+   "returned_px": [
+    2528,
+    1696
+   ],
+   "verdict": "rejected: much darker (hall around the portal -2.39, right wall -1.90, left -1.70: still brighter than the right), a white door leaf with a handle drawn in the bedroom doorway (12.3 item 7), the slot clipped (62 % of its pixels at 255), lines 1-19 px off; worse than r1"
+  }
+ ],
+ "tokens": 1050,
+ "date": "2026-11-18",
+ "jobs_file": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json"
+}
