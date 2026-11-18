@@ -1,8 +1,8 @@
 {
  "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2). Round 2 (manager relay after QA, 0 tokens): MP-D2 sill edge honed in code (step 4), MP-I1 / MP-I2 recorded as mandatory, the clay moved to 12.6, re-priced; nothing sent.",
- "cap": 4100,
- "spent": 4100,
- "left_in_cap": 0,
+ "cap": "none for FB10 (HOUSE2B: no fixed cap, report the total); 4,100 was the HOUSE1 cap through round 8",
+ "spent": 5300,
+ "left_in_cap": null,
  "var2": {
   "connected": true,
   "note": "2026-11-18 round 5: the Var2 tools answered with the held sign-in; no code or token asked for"
@@ -374,5 +374,72 @@
    }
   ],
   "spent": 400
+ },
+ "round_fb10": {
+  "date": "2026-11-18",
+  "why": "FB9/FB10 (HOUSE2B, no fixed cap): the wall group, the right corner and the nightstand islands added to MB0 as new layers on the round-9 set; MB1 not done",
+  "sent": [
+   {
+    "id": "fb10-p1-wall",
+    "model": "nano-banana-2",
+    "type": "image-to-image (placeholders on the approved composite: the shelf, two blank framed canvases #D8C8AE, the two vases)",
+    "resolution": "2K",
+    "aspect_ratio": "16:9",
+    "image_refs": 1,
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "f640e548-5b97-40c4-be93-54c63e212bcc",
+    "task_id": "00de1d99b6b8360b194ff3eb3b8341a8",
+    "idempotency_key": "wm-master-mb0-fb10-p1-wall-2026-11-18",
+    "input": "inputs/fb10-p1-wall-input.png (sha 96d13c1f...), uploaded https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2634de39-62fb-42f0-ac9f-12bdcf96bd7d.png",
+    "ref_board": "scratchpad render-master/fb10/board-p1-wall (vase B + plum M listing photos), uploaded https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/bdbe9a73-b6c0-40c0-897f-c74d423d6aaf.png",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/fb10-p1-wall.txt",
+    "raw": "raw/fb10-p1-wall.png",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-00de1d99b6b8360b194ff3eb3b8341a8-0-1795023883448-9accdb0a.png",
+    "verdict": "USED: shelf (on its projected box), both frames (rectangles from the edit's edges; the prints set in code), the charcoal vase and branch (x1.08 to the card), the plum vase (the SKU outline, the edit's surface remapped: the edit's lower body was 16-31 % too full)"
+   },
+   {
+    "id": "fb10-p2-corner",
+    "model": "nano-banana-2",
+    "type": "image-to-image (planter + crown and magazine-holder placeholders; the lamp layer pasted back over the crown placeholder)",
+    "resolution": "2K",
+    "aspect_ratio": "16:9",
+    "image_refs": 1,
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "ef243f2a-c605-45b0-818f-d86cdab6e940",
+    "task_id": "d029a2da3dd4ade3a675508cb9cd0c17",
+    "idempotency_key": "wm-master-mb0-fb10-p2-corner-2026-11-18",
+    "input": "inputs/fb10-p2-corner-input.png (sha 57213e90...), uploaded https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e68cfd31-110d-41d2-ba79-0a16d4578764.png",
+    "ref_board": "scratchpad render-master/fb10/board-p2-corner (planter L + magazine holder listing photos), uploaded https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/0da6b53e-139c-4645-8b15-2a733a7120c9.png",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/fb10-p2-corner.txt",
+    "raw": "raw/fb10-p2-corner.png",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-d029a2da3dd4ade3a675508cb9cd0c17-0-1795023880712-9faba1cd.png",
+    "verdict": "PARTLY USED: the magazine holder as drawn; the ficus (crown x0.70 inside the shade so its top keeps Z 1.75; trunk stretched to the new soil). The edit's pot NOT used (fully ribbed tan, squat; the listing is half-ribbed with a speckled smooth base): the pot is built in code from the listing photo and the card"
+   },
+   {
+    "id": "fb10-p3-islands",
+    "model": "nano-banana-2",
+    "type": "image-to-image (pitcher and dish placeholders)",
+    "resolution": "2K",
+    "aspect_ratio": "16:9",
+    "image_refs": 1,
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "94a21872-57fe-4c71-9763-78109e289e0b",
+    "task_id": "bd1622d7a5ea9c47ed82aa7ef2c5edfc",
+    "idempotency_key": "wm-master-mb0-fb10-p3-islands-2026-11-18",
+    "input": "inputs/fb10-p3-islands-input.png (sha 545604c7...), uploaded https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/c8d24cab-e9d2-42d9-854d-81606b8986e1.png",
+    "ref_board": "scratchpad render-master/fb10/board-p3-islands (pitcher C03D140 + dish listing photos), uploaded https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/347d6467-e278-419c-8871-01822df58290.png",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/fb10-p3-islands.txt",
+    "raw": "raw/fb10-p3-islands.jpg",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-bd1622d7a5ea9c47ed82aa7ef2c5edfc-0-1795023904182-68c2baf5.jpg",
+    "verdict": "PARTLY USED: the pitcher (x0.691 to 24 cm = 131 px; its patina toned band by band to the listing photo: the edit was 5-13 L* darker). The dish NOT used (the model drew a book): the slab is built in code"
+   }
+  ],
+  "spent": 1200,
+  "retries": 0,
+  "tool": "tools/fb10_compose.py (0 tokens), then tools/throw_variants.py",
+  "record": "fb10/fb10-compose.json"
  }
 }

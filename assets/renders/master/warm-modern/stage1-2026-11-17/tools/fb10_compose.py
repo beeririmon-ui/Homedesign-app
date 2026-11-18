@@ -843,7 +843,7 @@ def main():
         Lv = np.interp(Lv, [0, 24, 100], [11.5, 24, 100])
         lab_[..., 0] = np.where(a > 0, Lv, lab_[..., 0])
         outs[s] = (np.clip(C.from_lab(lab_), 0, 1), a)
-    rec["tone_new_layers"] = "L* -> interp([0, 8.05, 30, 100], [0, 12.5, 30, 100]) (MP-I2, once) -> interp([0, 24, 100], [10, 24, 100]) (the deep lift of throw_variants, its floor 11.5 not 10: at 10 the holder's black tube alone put 536 px under L* 11 and the frame's p0.5 at 10.96)"
+    rec["tone_new_layers"] = "L* -> interp([0, 8.05, 30, 100], [0, 12.5, 30, 100]) (MP-I2, once) -> interp([0, 24, 100], [11.5, 24, 100]) (the deep lift of throw_variants, its floor 11.5 not 10: at 10 the holder's black tube alone put 536 px under L* 11 and the frame's p0.5 at 10.96)"
     # write the layers
     a_new = np.zeros((H, W))
     for s, (rgb, a) in outs.items():
@@ -863,6 +863,9 @@ def main():
                                   alpha_px=int((a8 > 0).sum()), shadow_px=int((s8 < 255).sum()),
                                   bbox_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1], sold=sold, fixed=not sold,
                                   source="FB10 %s: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)" % p if s != "trinket-dish" else "FB10 p3: in code (fb10_compose.py)"))
+        if s == "framed-art":
+            man["layers"][-1]["closeup"] = False
+            man["layers"][-1]["closeup_note"] = "776445: usage rights unclear; no close-up or zoom frame (FB10 instruction)"
         a_new = 1 - (1 - a_new) * (1 - a8 / 255)
     order = {s: i for i, s in enumerate(["nightstand-vase", "candle-holders", "bedside-carafe", "trinket-dish"])}
     man["layers"].sort(key=lambda l: (l["z"], order.get(l["slot"], -1)))

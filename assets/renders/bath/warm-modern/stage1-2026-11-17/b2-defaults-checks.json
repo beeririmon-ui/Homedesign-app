@@ -628,8 +628,85 @@
    ],
    "columns": "area %, height %"
   },
-  "low_not_fixed": [
-   "the basket's lower-left corner and the bottom of the canvas (rows 1478-1530) carry a small dark wedge and a faint seam from the render: below the frame box (1486.57), not visible in the frame"
-  ]
+  "low_not_fixed": [],
+  "low_correction": "B2F-L1 (QA): the basket's lower-left corner reaches about 10 rows into the frame (1476-1486), not only the overscan as first written; healed in shift_fb10.py. The faint vertical seam at the canvas' bottom (rows 1503-1530) stays: overscan only"
+ },
+ "fb10_shift": {
+  "date": "2026-11-18",
+  "tool": "tools/shift_fb10.py (after compose_fb10.py)",
+  "source": "qa/reports/2026-11-18-bath-fb10 (3b, B2F-L1); the designer's ruling: the right gap 0.005 is not accepted",
+  "shift_px": {
+   "bath-towels": [
+    -40,
+    -10
+   ],
+   "storage-basket": [
+    -40,
+    0
+   ]
+  },
+  "shift_u": 0.01559,
+  "why_40_px": "QA: 0.0155-0.016 balances the two ends; by QA's own reading 41 px (0.016) leaves the left end at 0.0199, 40 px (0.0156) gives about 0.0203 / 0.0207; whole pixels, no resampling",
+  "stack_on_the_shelf_line": "the stack slides along the shelf (40 left, 10 up): it keeps its depth, 5 cm behind the board's front edge; a level move would have brought it to 1.5 cm",
+  "basket_level": "the basket moves level (4.4 cm along, 3.4 cm forward): its foot is below the canvas, a rise would cut it flat in the overscan",
+  "gaps_u_after": {
+   "alpha_over_0": {
+    "left (upright to stack)": {
+     "min": 0.0199,
+     "at_row": 1351
+    },
+    "middle (stack to basket)": {
+     "min": 0.0242,
+     "at_row": 1343
+    },
+    "right (basket to upright)": {
+     "min": 0.0199,
+     "at_row": 1343
+    }
+   },
+   "alpha_128": {
+    "left (upright to stack)": {
+     "min": 0.0207,
+     "at_row": 1347
+    },
+    "middle (stack to basket)": {
+     "min": 0.0257,
+     "at_row": 1343
+    },
+    "right (basket to upright)": {
+     "min": 0.0207,
+     "at_row": 1344
+    }
+   },
+   "edges": "the uprights' inner edges in plate.png, per row: the first dark pixel of the interior (left), the first light pixel of the upright (right)",
+   "before_shift_qa": [
+    0.0359,
+    0.0242,
+    0.0051
+   ],
+   "qa_prediction_for_0_0156": [
+    0.0203,
+    0.0242,
+    0.0207
+   ]
+  },
+  "b2f_l1": {
+   "region": [
+    1745,
+    1472,
+    1773,
+    1495
+   ],
+   "alpha_px_before": 504,
+   "alpha_px_after": 352,
+   "px_changed": 517
+  },
+  "b2f_l1_fix": "inside the corner box the alpha keeps only the rope (L* over 55), soft-edged and coloured from the rope just inside: the light wedge and the dark arc are gone; the walnut of the plate shows round the curve",
+  "rnd2_outside_differing_px": {
+   "defaults": 0,
+   "b2-variant-linen": 0,
+   "b2-variant-khaki": 0
+  },
+  "filler": "the rolled towels in the basket are filler: no hotspot, 'sold without contents' (the designer)"
  }
 }
