@@ -22,6 +22,9 @@
    "vanity-sconces-shadow, vanity-sconces",
    "shower-curtain-shadow, shower-curtain",
    "floor-planter-shadow, floor-planter",
+   "bath-towels-shadow, bath-towels",
+   "storage-basket-shadow, storage-basket",
+   "vanity-tray-shadow, vanity-tray",
    "soap-dispenser-shadow, soap-dispenser",
    "toothbrush-cup-shadow, toothbrush-cup",
    "vanity-vase-shadow, vanity-vase",
@@ -73,7 +76,8 @@
       762
      ]
     }
-   }
+   },
+   "pass": "defaults"
   },
   {
    "slot": "vanity-sconces",
@@ -134,7 +138,8 @@
       379
      ]
     }
-   }
+   },
+   "pass": "defaults"
   },
   {
    "slot": "shower-curtain",
@@ -151,7 +156,8 @@
     0,
     973,
     1530
-   ]
+   ],
+   "pass": "defaults"
   },
   {
    "slot": "floor-planter",
@@ -183,7 +189,8 @@
     ],
     "de00_after": 0.0,
     "reference": "the window wall's plaster beside the pot (plate ids 1-4, x < 300, y 1000-1300, mid-tone), #ECE5DA"
-   }
+   },
+   "pass": "defaults"
   },
   {
    "slot": "soap-dispenser",
@@ -238,7 +245,9 @@
       924
      ]
     }
-   }
+   },
+   "raised_on_tray_px": 14,
+   "pass": "defaults"
   },
   {
    "slot": "toothbrush-cup",
@@ -255,7 +264,9 @@
     784,
     2067,
     936
-   ]
+   ],
+   "raised_on_tray_px": 14,
+   "pass": "defaults"
   },
   {
    "slot": "vanity-vase",
@@ -295,7 +306,8 @@
       933
      ]
     }
-   }
+   },
+   "pass": "defaults"
   },
   {
    "slot": "towel-ring",
@@ -330,7 +342,8 @@
      ],
      "about": "the wall base"
     }
-   }
+   },
+   "pass": "defaults"
   },
   {
    "slot": "hand-towel",
@@ -385,7 +398,68 @@
      2.06
     ]
    },
-   "moved_up_px": 19
+   "moved_up_px": 19,
+   "pass": "defaults"
+  },
+  {
+   "slot": "bath-towels",
+   "product": "bath-towels-cj-waffle-cotton-milky-white-70x140-brown",
+   "card": "data/products/bath/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140.json",
+   "sku": "CJYD178122205EV",
+   "z": 36,
+   "default": true,
+   "layer": "layers/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140-brown.png",
+   "shadow": "shadows/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140-brown.png",
+   "shadow_z": 35,
+   "alpha_px": 38768,
+   "shadow_px": 3510,
+   "bbox_px": [
+    1383,
+    1302,
+    1694,
+    1476
+   ],
+   "pass": "fb10-a"
+  },
+  {
+   "slot": "storage-basket",
+   "product": "storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white",
+   "card": "data/products/bath/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23.json",
+   "sku": "CJYD180710801AZ",
+   "z": 38,
+   "default": true,
+   "layer": "layers/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white.png",
+   "shadow": "shadows/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white.png",
+   "shadow_z": 37,
+   "alpha_px": 82268,
+   "shadow_px": 6352,
+   "bbox_px": [
+    1729,
+    1264,
+    2115,
+    1530
+   ],
+   "pass": "fb10-a"
+  },
+  {
+   "slot": "vanity-tray",
+   "product": "pool-cj-travertine-organic-tray-24",
+   "card": "data/products/pool/tray/pool-cj-travertine-organic-tray-24.json",
+   "sku": "CJYD238979001AZ",
+   "z": 44,
+   "default": true,
+   "layer": "layers/vanity-tray/pool-cj-travertine-organic-tray-24.png",
+   "shadow": "shadows/vanity-tray/pool-cj-travertine-organic-tray-24.png",
+   "shadow_z": 43,
+   "alpha_px": 7017,
+   "shadow_px": 2420,
+   "bbox_px": [
+    1865,
+    894,
+    2091,
+    946
+   ],
+   "pass": "fb10-a"
   }
  ],
  "light": {
@@ -397,7 +471,7 @@
   "note": "the beams on the plaster and the stone top only; the light that falls on a product is in that product's own layer"
  },
  "rnd2": {
-  "region_px": 831989,
+  "region_px": 964977,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
@@ -466,6 +540,22 @@
      1.25
     ]
    }
+  },
+  {
+   "slot": "hand-towel",
+   "product": "tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki",
+   "card": "data/products/dining/tea-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair.json",
+   "sku": "CJYD223761707GT",
+   "z": 52,
+   "default": false,
+   "method": "its own render (pass T3), own alpha and shadow",
+   "layer": "layers/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.png",
+   "shadow": "shadows/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.png",
+   "composite": "b2-variant-khaki.png",
+   "alpha_px": 92773,
+   "shadow_px": 22063,
+   "outside_differing_px_vs_plate": 0,
+   "differing_px_vs_defaults_outside_the_swap_region": 0
   }
  ],
  "post_b2": {
@@ -569,6 +659,55 @@
      "ratio": 0.903
     }
    }
+  }
+ },
+ "fb10": {
+  "date": "2026-11-18",
+  "tool": "tools/compose_fb10.py",
+  "source": "docs/proposals/wm-bath-render-2026-11-17.md 12.6 (HOUSE2B)",
+  "passes": [
+   "fb10-a (nano-banana-2, 400)",
+   "fb10-t3 (nano-banana-2, 400)"
+  ],
+  "rnd2_outside_differing_px": {
+   "defaults": 0,
+   "b2-variant-linen": 0,
+   "b2-variant-khaki": 0
+  },
+  "a_render": {
+   "warp": {
+    "file": "/home/user/homedesign-app/assets/renders/bath/warm-modern/stage1-2026-11-17/raw/fb10-a-r1.png",
+    "y_offset_px": 0.0,
+    "y_scale_about_row_707": 0.0,
+    "x_offset_px": 0.608,
+    "used": {
+     "horizontal_lines": 15,
+     "vertical_lines": 10
+    }
+   },
+   "gain_p1_p50_p99": [
+    0.903,
+    0.99,
+    1.044
+   ]
+  },
+  "tray_rise_px": 14,
+  "t3_render": {
+   "warp": {
+    "file": "/home/user/homedesign-app/assets/renders/bath/warm-modern/stage1-2026-11-17/raw/fb10-t3-r1.png",
+    "y_offset_px": 0.0,
+    "y_scale_about_row_707": 0.0,
+    "x_offset_px": 0.76,
+    "used": {
+     "horizontal_lines": 15,
+     "vertical_lines": 11
+    }
+   },
+   "gain_p1_p50_p99": [
+    0.885,
+    0.994,
+    1.25
+   ]
   }
  }
 }
