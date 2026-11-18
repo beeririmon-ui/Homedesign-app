@@ -246,7 +246,7 @@
      ]
     }
    },
-   "raised_on_tray_px": 14,
+   "raised_on_tray_px": 7,
    "pass": "defaults"
   },
   {
@@ -265,7 +265,7 @@
     2067,
     936
    ],
-   "raised_on_tray_px": 14,
+   "raised_on_tray_px": 9,
    "pass": "defaults"
   },
   {
@@ -411,13 +411,13 @@
    "layer": "layers/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140-brown.png",
    "shadow": "shadows/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140-brown.png",
    "shadow_z": 35,
-   "alpha_px": 38768,
-   "shadow_px": 3510,
+   "alpha_px": 30940,
+   "shadow_px": 4764,
    "bbox_px": [
-    1383,
-    1302,
-    1694,
-    1476
+    1414,
+    1301,
+    1684,
+    1475
    ],
    "pass": "fb10-a"
   },
@@ -431,12 +431,12 @@
    "layer": "layers/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white.png",
    "shadow": "shadows/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white.png",
    "shadow_z": 37,
-   "alpha_px": 82268,
-   "shadow_px": 6352,
+   "alpha_px": 78469,
+   "shadow_px": 9166,
    "bbox_px": [
     1729,
     1264,
-    2115,
+    2103,
     1530
    ],
    "pass": "fb10-a"
@@ -451,13 +451,13 @@
    "layer": "layers/vanity-tray/pool-cj-travertine-organic-tray-24.png",
    "shadow": "shadows/vanity-tray/pool-cj-travertine-organic-tray-24.png",
    "shadow_z": 43,
-   "alpha_px": 7017,
-   "shadow_px": 2420,
+   "alpha_px": 6652,
+   "shadow_px": 2469,
    "bbox_px": [
     1865,
     894,
     2091,
-    946
+    945
    ],
    "pass": "fb10-a"
   }
@@ -471,7 +471,7 @@
   "note": "the beams on the plaster and the stone top only; the light that falls on a product is in that product's own layer"
  },
  "rnd2": {
-  "region_px": 964977,
+  "region_px": 955318,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
@@ -553,7 +553,7 @@
    "shadow": "shadows/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.png",
    "composite": "b2-variant-khaki.png",
    "alpha_px": 92773,
-   "shadow_px": 22063,
+   "shadow_px": 22055,
    "outside_differing_px_vs_plate": 0,
    "differing_px_vs_defaults_outside_the_swap_region": 0
   }
@@ -691,7 +691,97 @@
     1.044
    ]
   },
-  "tray_rise_px": 14,
+  "towels_refit": {
+   "drawn_bbox": [
+    1392,
+    1257,
+    1721,
+    1467
+   ],
+   "box_bbox": [
+    1402.4,
+    1304.8,
+    1695.5,
+    1467.4
+   ],
+   "scale": 0.7745,
+   "anchor": "bottom centre",
+   "affine": [
+    [
+     0.7745,
+     0.0,
+     343.3813
+    ],
+    [
+     0.0,
+     0.7745,
+     331.1785
+    ]
+   ],
+   "new_bbox": [
+    1421.5,
+    1304.8,
+    1676.4,
+    1467.4
+   ]
+  },
+  "basket_gap_trim_px": 3704,
+  "tray_fill_under_bases_px": 323,
+  "tray_rise_px": {
+   "soap-dispenser": 7,
+   "toothbrush-cup": 9,
+   "rim_1_8cm_px": 14
+  },
+  "towels_match": {
+   "level": 1.0,
+   "sku_lch": [
+    72.0,
+    5.0,
+    47.0
+   ],
+   "r5_lab_after": [
+    72.0,
+    3.41,
+    3.66
+   ],
+   "de00_after": 0.0,
+   "method": "R5 after the grade: the stack's front faces (its lower 70 %), mid-tone, against the basket's white body beside it (its lower third, C* under 12), whose albedo is its photo's (#E9E4DE)",
+   "reference_px": 17378,
+   "r5_lab_before": [
+    64.64,
+    5.42,
+    7.29
+   ],
+   "de00_before": 6.76,
+   "de00_after_vs_qa_photo_abs": 2.43
+  },
+  "basket_band_match": {
+   "method": "the jute band (rows 10-60 % of the basket, C* over 10), mid-tone, against the basket's white body; target the photo's tan by QA's photo method",
+   "target_lab": [
+    57.3,
+    9.1,
+    19.4
+   ],
+   "gain_rgb": [
+    0.902,
+    0.7889,
+    0.7499
+   ],
+   "band_px": 33047,
+   "lab_before": [
+    62.16,
+    5.87,
+    17.88
+   ],
+   "lab_after": [
+    57.3,
+    9.1,
+    19.4
+   ],
+   "de00_before": 5.25,
+   "de00_after": 0.0
+  },
+  "tray_unshadowed_px": 1855,
   "t3_render": {
    "warp": {
     "file": "/home/user/homedesign-app/assets/renders/bath/warm-modern/stage1-2026-11-17/raw/fb10-t3-r1.png",
@@ -704,9 +794,51 @@
     }
    },
    "gain_p1_p50_p99": [
-    0.885,
+    0.884,
     0.994,
     1.25
+   ]
+  },
+  "t3_khaki_match": {
+   "level": 0.6528,
+   "sku_lch": [
+    42.8,
+    17.2,
+    70.2
+   ],
+   "r5_lab_after": [
+    42.8,
+    5.83,
+    16.17
+   ],
+   "de00_after": 0.01,
+   "method": "R5 after the grade, as the caramel (M1): lower half, mid-tone, against the plaster round the towel (#ECE5DA); target the supplier photo read by QA's photo method (b2_colour.photo)",
+   "rings_lab": [
+    [
+     41.38,
+     5.6,
+     16.25
+    ],
+    [
+     42.6,
+     5.62,
+     16.3
+    ],
+    [
+     44.46,
+     6.28,
+     15.94
+    ]
+   ],
+   "de00_rings": [
+    1.31,
+    0.32,
+    1.65
+   ],
+   "de00_rings_vs_designer_sheet": [
+    2.5,
+    1.5,
+    0.99
    ]
   }
  }

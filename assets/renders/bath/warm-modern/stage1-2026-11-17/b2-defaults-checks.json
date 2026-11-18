@@ -377,5 +377,259 @@
    },
    "note_G0": "G rounds to 0 only in the faint 8-bit tail (the warm light's weakest channel above blue); the hue on the plaster is the check"
   }
+ },
+ "fb10": {
+  "date": "2026-11-18",
+  "source": "docs/proposals/wm-bath-render-2026-11-17.md 12.6 (overrides 12.1-12.5); HOUSE2B; manager relay",
+  "tool": "tools/compose_fb10.py (after compose_defaults.py, --recolour, post_b2.py)",
+  "rnd2_outside_differing_px": {
+   "defaults": 0,
+   "b2-variant-linen": 0,
+   "b2-variant-khaki": 0
+  },
+  "rnd2_rule": "outside every alpha, shadow and light: plate.png byte for byte (defaults, linen, khaki)",
+  "shadows": "each new shadow one z below its product: bath-towels 35/36, storage-basket 37/38, vanity-tray 43/44",
+  "colour_method": "QA's R5 (b2_colour.py set-up, read-only): median Lab of lin(px)/reference x the reference's albedo over the mid-tone (L* 20-80 percentile); photo targets by QA's photo method (b2_colour.photo)",
+  "khaki_t3": {
+   "target_photo_qa_method": [
+    42.8,
+    17.2,
+    70.2
+   ],
+   "designer_sheet": [
+    44,
+    16,
+    70
+   ],
+   "as_rendered_alb_L": [
+    78.8,
+    80.2,
+    83.0
+   ],
+   "as_rendered_de00": [
+    30.03,
+    30.95,
+    32.76
+   ],
+   "after_rings_10_40_25_70_45_90_vs_sheet": {
+    "alb_LCh": [
+     [
+      41.6,
+      17.4,
+      71.3
+     ],
+     [
+      42.2,
+      17.7,
+      70.0
+     ],
+     [
+      43.9,
+      17.3,
+      68.9
+     ]
+    ],
+    "de00": [
+     2.37,
+     1.94,
+     0.87
+    ]
+   },
+   "after_rings_vs_photo": [
+    1.31,
+    0.32,
+    1.65
+   ],
+   "fix": "recolour_r5 (as M1): the render's own waffle shading, the photo's khaki in the light of the plaster round it; the shadow read off the render as drawn"
+  },
+  "bath_towels": {
+   "target": "designer sheet (72, 5, 47), to the photo not the card HEX; QA photo method abs (69.2, 6.2, 48.4)",
+   "reference": "the basket's white body beside it (its lower third, C* under 12), albedo its photo's (#E9E4DE, 90.9 / 0.7 / 3.5): the shelf's only neutral",
+   "before_front_faces": [
+    64.64,
+    5.42,
+    7.29
+   ],
+   "de00_before_vs_sheet": 6.76,
+   "after_front_faces_vs_body": [
+    73.6,
+    5.0,
+    50.1
+   ],
+   "de00_vs_sheet": 1.25,
+   "de00_vs_qa_photo_abs": 3.56,
+   "after_front_faces_rel_room": [
+    71.8,
+    5.3,
+    72.0
+   ],
+   "de00_rel_room_vs_sheet": 2.84,
+   "whole_alpha_note": "read on the whole alpha the stack gives L* 61.7 (dE00 8.31): its top face lies in the shade under the drawer; the front faces (lower 70 %) face the room like the reference",
+   "refit": {
+    "drawn_bbox": [
+     1392,
+     1257,
+     1721,
+     1467
+    ],
+    "box_bbox": [
+     1402.4,
+     1304.8,
+     1695.5,
+     1467.4
+    ],
+    "scale": 0.7745,
+    "anchor": "bottom centre",
+    "affine": [
+     [
+      0.7745,
+      0.0,
+      343.3813
+     ],
+     [
+      0.0,
+      0.7745,
+      331.1785
+     ]
+    ],
+    "new_bbox": [
+     1421.5,
+     1304.8,
+     1676.4,
+     1467.4
+    ]
+   },
+   "refit_why": "the model drew the stack 328 x 208 px against the box's 293 x 163 (puffy folds); taken whole (its top face and the ends of its folds had been cut off by the zone) and scaled to the box's height about its bottom centre, as the lamps and the vase of the defaults"
+  },
+  "storage_basket": {
+   "body_rel_room": [
+    88.8,
+    5.3,
+    104.7
+   ],
+   "body_de00_vs_photo": 3.52,
+   "body_de00_vs_sheet_81_6_75": 6.65,
+   "band_rel_room": [
+    57.9,
+    23.6,
+    67.4
+   ],
+   "band_de00_vs_photo_tan": 1.5,
+   "band_vs_body": [
+    59.4,
+    23.9,
+    63.9
+   ],
+   "band_vs_body_de00": 2.32,
+   "band_fix": {
+    "method": "the jute band (rows 10-60 % of the basket, C* over 10), mid-tone, against the basket's white body; target the photo's tan by QA's photo method",
+    "target_lab": [
+     57.3,
+     9.1,
+     19.4
+    ],
+    "gain_rgb": [
+     0.902,
+     0.7889,
+     0.7499
+    ],
+    "band_px": 33047,
+    "lab_before": [
+     62.16,
+     5.87,
+     17.88
+    ],
+    "lab_after": [
+     57.3,
+     9.1,
+     19.4
+    ],
+    "de00_before": 5.25,
+    "de00_after": 0.0
+   },
+   "gap_trim_px": 3704,
+   "gap_trim_note": "the cut had taken the black gap between the basket's right end and the vanity's upright (L* under 13.5): removed"
+  },
+  "vanity_tray": {
+   "top_face_vs_vanity_top": [
+    85.0,
+    16.8,
+    84.6
+   ],
+   "reference": "the vanity top in front of the tray (limestone #D8C8AE, the brief's)",
+   "de00_vs_photo_white_balanced": 1.95,
+   "de00_vs_photo_as_shot": 9.87,
+   "de00_vs_sheet_77_5_78": 9.68,
+   "photo_note": "the supplier photo is shot in cool light: its white background reads L* 90.6, b* -11.5. Balanced on it the travertine reads 83.9 / C* 16.2 / h 79, as the tray in the room; the sheet's (77, 5, 78) is the unbalanced photo",
+   "shape_note": "the photo's tray is an organic pebble outline; at the camera's few degrees over the vanity top it reads as a shallow oval with a rim, as drawn",
+   "on_the_tray": {
+    "rise_px": {
+     "soap-dispenser": 7,
+     "toothbrush-cup": 9,
+     "rim_1_8cm_px": 14
+    },
+    "fill_under_bases_px": 323,
+    "tray_px_unshadowed_under_their_shadows": 1855,
+    "note": "the render stands the dispenser and the cup in the tray's well (bases at rows 913-914 and 916); their layers and shadows rise 7 and 9 px; the tray is filled up to 2 px under each base, and its pixels under their shadows are divided by them (the render already carries the contact)"
+   },
+   "qa_method_soap_cup_after_rise": {
+    "soap_de00": 1.31,
+    "cup_de00": 1.5,
+    "before_fb10": {
+     "soap": 0.19,
+     "cup": 1.22
+    }
+   }
+  },
+  "shelf_gaps_u": {
+   "rule": "12.6 b: QA measures 0.02 at least",
+   "left (upright to stack)": {
+    "min": 0.0366,
+    "at_row": 1357
+   },
+   "middle (stack to basket)": {
+    "min": 0.0257,
+    "at_row": 1353
+   },
+   "right (basket to upright)": {
+    "min": 0.0047,
+    "at_row": 1344
+   },
+   "right_note": "the basket's right end reads against the upright's front edge: by the projection of 12.6's own boxes the 7 cm right gap is 0.003 in the frame at this yaw (it lies in depth); the drawn basket is the box's size (1741-2104 against 1745-2101). For the designer"
+  },
+  "khaki_hang": {
+   "bbox": [
+    2293,
+    970,
+    2520,
+    1461
+   ],
+   "hem_row": 1460,
+   "plan_hem_row_Z_0_21": 1471,
+   "gap_u_to_vanity": 0.0347,
+   "rule": ">= 0.025 (rejection 10 / 0א)"
+  },
+  "frame_share_pct": {
+   "storage-basket": [
+    1.758,
+    14.9
+   ],
+   "bath-towels": [
+    0.808,
+    11.29
+   ],
+   "vanity-tray": [
+    0.153,
+    2.77
+   ],
+   "khaki (variant)": [
+    2.434,
+    34.02
+   ],
+   "columns": "area %, height %"
+  },
+  "low_not_fixed": [
+   "the basket's lower-left corner and the bottom of the canvas (rows 1478-1530) carry a small dark wedge and a faint seam from the render: below the frame box (1486.57), not visible in the frame"
+  ]
  }
 }

@@ -1,0 +1,380 @@
+{
+ "passes": {
+  "p1-wall": {
+   "lock": {
+    "method": "ECC affine on the gradient magnitude, masked to the stable ids outside the pass's zone",
+    "ecc": {
+     "4": 0.9971,
+     "2": 0.9953,
+     "1": 0.9917
+    },
+    "warp": [
+     [
+      1.000621,
+      -1.9e-05,
+      0.146639
+     ],
+     [
+      4.8e-05,
+      1.008907,
+      -5.86156
+     ]
+    ]
+   },
+   "gain_p1_p50_p99": [
+    0.945,
+    0.986,
+    1.022
+   ],
+   "dE_outside_zone_p50_p95": [
+    1.02,
+    3.37
+   ]
+  },
+  "p2-corner": {
+   "lock": {
+    "method": "ECC affine on the gradient magnitude, masked to the stable ids outside the pass's zone",
+    "ecc": {
+     "4": 0.9974,
+     "2": 0.996,
+     "1": 0.9932
+    },
+    "warp": [
+     [
+      1.000613,
+      2.7e-05,
+      0.081651
+     ],
+     [
+      6e-06,
+      1.00905,
+      -5.909982
+     ]
+    ]
+   },
+   "gain_p1_p50_p99": [
+    0.952,
+    0.983,
+    1.023
+   ],
+   "dE_outside_zone_p50_p95": [
+    0.93,
+    3.33
+   ]
+  },
+  "p3-islands": {
+   "lock": {
+    "method": "ECC affine on the gradient magnitude, masked to the stable ids outside the pass's zone",
+    "ecc": {
+     "4": 0.996,
+     "2": 0.9942,
+     "1": 0.991
+    },
+    "warp": [
+     [
+      0.999806,
+      0.000181,
+      0.151648
+     ],
+     [
+      1.7e-05,
+      1.00807,
+      -6.269957
+     ]
+    ]
+   },
+   "gain_p1_p50_p99": [
+    0.936,
+    0.989,
+    1.039
+   ],
+   "dE_outside_zone_p50_p95": [
+    0.99,
+    3.27
+   ]
+  }
+ },
+ "wall-shelf": {
+  "geometry": {
+   "front": [
+    [
+     871.4,
+     463.0
+    ],
+    [
+     1848.6,
+     463.0
+    ],
+    [
+     1848.6,
+     484.7
+    ],
+    [
+     871.4,
+     484.7
+    ]
+   ],
+   "underside": [
+    [
+     871.4,
+     484.7
+    ],
+    [
+     1848.6,
+     484.7
+    ],
+    [
+     1814.0,
+     500.5
+    ],
+    [
+     906.0,
+     500.5
+    ]
+   ]
+  },
+  "note": "the box from the slot (X -1.60..0.20, Y 17.66..17.90, Z 1.46..1.50); the edit's shelf sits on it within 1 px"
+ },
+ "framed-art": {
+  "outer": [
+   1082.5,
+   94.5,
+   1362.5,
+   463.0
+  ],
+  "canvas": [
+   1096.5,
+   108.5,
+   1348.5,
+   459.0
+  ],
+  "moulding_px": 14.0,
+  "print": {
+   "file": "c2511450 (listing file, scratchpad only)",
+   "file_px": [
+    801,
+    1101
+   ],
+   "canvas_px": [
+    252.0,
+    350.5
+   ],
+   "cover_scale": 0.3183,
+   "cropped_px": [
+    3.0,
+    0.0
+   ],
+   "canvas_light_p5_p50_p95": [
+    0.801,
+    0.999,
+    1.006
+   ]
+  }
+ },
+ "framed-art-2": {
+  "outer": [
+   1391.5,
+   302.5,
+   1621.5,
+   463.0
+  ],
+  "canvas": [
+   1406.5,
+   315.0,
+   1606.5,
+   461.0
+  ],
+  "moulding_px": 15.0,
+  "print": {
+   "file": "5aff04c0 (listing file, scratchpad only)",
+   "file_px": [
+    732,
+    549
+   ],
+   "canvas_px": [
+    200.0,
+    146.0
+   ],
+   "cover_scale": 0.2732,
+   "cropped_px": [
+    0.0,
+    4.0
+   ],
+   "canvas_light_p5_p50_p95": [
+    0.879,
+    1.002,
+    1.015
+   ]
+  }
+ },
+ "shelf-vase-left": {
+  "scale": 1.08,
+  "about": [
+   996.5,
+   463.0
+  ],
+  "edit_px": [
+   105,
+   159
+  ],
+  "branch": "the edit's branch: alpha from its depth under the local median L* (median 21 px), its core colour"
+ },
+ "shelf-vase-right": {
+  "outline": "SKU (GrabCut of the listing photo, 37 rows), scaled to 118 x 173 px; the edit's surface remapped across each row",
+  "top_y": 299.4,
+  "height_px": 172.6,
+  "max_width_px": 118.2,
+  "edit_vs_card_width_at_f": {
+   "0.25": 1.08,
+   "0.5": 1.16,
+   "0.7": 1.26,
+   "0.9": 1.31
+  }
+ },
+ "magazine-holder": {
+  "source": "the edit's holder as drawn (its 3/4 view: 265 px wide at the floor 1440-1465; the card's 35 x 19 x 27.5 cm in this view is about 267 x 262 px)",
+  "bbox": [
+   2375,
+   1171,
+   2673,
+   1475
+  ]
+ },
+ "planter_pot": {
+  "method": "lathe from the listing photo's outline (GrabCut), the card's 42 x 35.5 cm, splatted 3x; relief and speckles from the photo",
+  "centre_XY": [
+   1.45,
+   17.88
+  ],
+  "bbox": [
+   2386,
+   1060,
+   2662,
+   1296
+  ],
+  "colour_lab": [
+   64.0,
+   2.5,
+   9.5
+  ],
+  "median_L": 62.7
+ },
+ "planter": {
+  "plant": "the edit's ficus 'Audrey': crown x 0.70 about (2455, 600) (a point inside the lamp shade, so what the shade hid stays hidden); the bare trunk stretched to the new pot's soil",
+  "crown_top_edit": 221,
+  "crown_top_new": 334.7,
+  "crown_top_limit_y": 329.7,
+  "soil": [
+   2519.8,
+   1098.4
+  ],
+  "trunk_rows_edit": [
+   770,
+   1063
+  ]
+ },
+ "bedside-carafe": {
+  "scale": 0.691,
+  "lip_y": 851.1,
+  "foot_y": 982.4,
+  "body_axis_x": 1903.9,
+  "tone": {
+   "edit_bands_Lab": [
+    [
+     57.5,
+     3.0,
+     13.7
+    ],
+    [
+     65.2,
+     3.4,
+     11.6
+    ],
+    [
+     57.8,
+     4.2,
+     14.6
+    ],
+    [
+     50.8,
+     6.9,
+     17.6
+    ],
+    [
+     42.8,
+     8.0,
+     18.3
+    ],
+    [
+     32.2,
+     8.5,
+     17.6
+    ]
+   ],
+   "sku_bands_Lab": [
+    [
+     62.0,
+     2.6,
+     10.2
+    ],
+    [
+     67.6,
+     2.2,
+     8.9
+    ],
+    [
+     63.7,
+     3.5,
+     10.5
+    ],
+    [
+     56.4,
+     5.5,
+     14.7
+    ],
+    [
+     50.1,
+     6.3,
+     15.8
+    ],
+    [
+     45.0,
+     5.9,
+     15.2
+    ]
+   ]
+  },
+  "note": "the edit's outline traced (its foot behind the pillow mirrored from the right); the patina: the listing photo's band tones, the edit's speckle and light"
+ },
+ "trinket-dish": {
+  "method": "code: a 10 x 10 x 1.8 cm slab (the card gives no height; the photo shows about 1.5-2), its outline roughened 0.6 px, the photo's stone face (its relief over a 6 px blur) as texture",
+  "top_face": [
+   [
+    750.8,
+    964.9
+   ],
+   [
+    804.2,
+    964.9
+   ],
+   [
+    786.3,
+    973.2
+   ],
+   [
+    731.2,
+    973.2
+   ]
+  ],
+  "hidden_below_y": 975.0,
+  "sku_face_Lab": [
+   77.8,
+   2.0,
+   5.8
+  ],
+  "edit": "the edit drew a book here: not used"
+ },
+ "changed_vs_round9_outside_new_layers_px": 0,
+ "changed_vs_round9_px": 559416,
+ "black_point_p0_5_L": 6.81
+}

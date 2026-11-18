@@ -1,11 +1,12 @@
 {
  "run": "render-agent, 2026-11-17: the warm-modern bath, stage one, B2 (briefs/wm-bath-stage1-render-2026-11-17.md; manager relay of the same day)",
  "cap": 3500,
- "spent": 2100,
- "left_in_cap": 1400,
+ "spent": 2900,
+ "left_in_cap": 600,
  "var2": {
   "connected": true,
-  "note": "ToolSearch reconnected the Var2 server with its held sign-in; list_models, estimate_cost, request_upload, create_image and get_image_result all answered. No code or token was asked for."
+  "note": "ToolSearch reconnected the Var2 server with its held sign-in; list_models, estimate_cost, request_upload, create_image and get_image_result all answered. No code or token was asked for.",
+  "note_fb10": "both FB10 sends and their results went through on the held sign-in. After the results were in, the session reported that the var2 server now needs re-authorisation; nothing further was sent and no code or token was asked for. The rest of FB10 is 0 tokens."
  },
  "sent": [
   {
@@ -72,18 +73,60 @@
    "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/towel-linen-r1.jpg",
    "final": "assets/renders/bath/warm-modern/stage1-2026-11-17/b2-variant-linen.png",
    "verdict": "drape changed by the model (fails rejection 11 as drawn); used as the colour reference; the variant layer is a recolour of the default's geometry"
+  },
+  {
+   "id": "fb10-a-r1",
+   "output": "FB10 pass A",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "image_refs": 3,
+   "estimate": 400,
+   "tokens": 400,
+   "placeholder_id": "44132654-41dd-4fb6-9e45-aeed079cd0ab",
+   "task_id": "0294b061388d59e3bc51935c7df8f1c7",
+   "prompt_record": "assets/prompts/warm-modern-bath-2026-11-17/fb10-a.json",
+   "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/fb10-a-r1.png",
+   "final": [
+    "assets/renders/bath/warm-modern/stage1-2026-11-17/b2-defaults.png",
+    "assets/renders/bath/warm-modern/stage1-2026-11-17/layers/storage-basket/",
+    "assets/renders/bath/warm-modern/stage1-2026-11-17/layers/bath-towels/",
+    "assets/renders/bath/warm-modern/stage1-2026-11-17/layers/vanity-tray/"
+   ],
+   "verdict": "used: the basket as drawn (its jute band to the photo's tan); the towel stack whole, refitted to the box (0.7745) and recoloured to the photo reading; the tray as drawn (cut on an oval guess); the dispenser and the cup raised onto the drawn well"
+  },
+  {
+   "id": "fb10-t3-r1",
+   "output": "FB10 pass T3 (hand-towel variant 3, khaki)",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "image_refs": 1,
+   "estimate": 400,
+   "tokens": 400,
+   "placeholder_id": "e980bd35-42b1-4e46-8796-4dd066e49514",
+   "task_id": "c08f82dae803e0857ca0b0dfee96f584",
+   "prompt_record": "assets/prompts/warm-modern-bath-2026-11-17/fb10-t3.json",
+   "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/fb10-t3-r1.png",
+   "final": [
+    "assets/renders/bath/warm-modern/stage1-2026-11-17/b2-variant-khaki.png",
+    "assets/renders/bath/warm-modern/stage1-2026-11-17/layers/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.png"
+   ],
+   "verdict": "used: its own geometry and shadow; drawn as light as the linen (R5 albedo L* about 80), recoloured to the photo's khaki (L* 42.8)"
   }
  ],
  "priced_not_sent": [],
  "totals": {
-  "spent": 2100,
+  "spent": 2900,
   "plate": 650,
   "defaults": 650,
   "sprig_fix": 400,
   "towel_linen": 400,
   "cap": 3500,
-  "left_in_cap": 1400,
-  "not_spent": "the third towel variant (waits for sourcing)"
+  "left_in_cap": 600,
+  "not_spent": "pass B (the stool and the print) waits for sourcing; B1 waits for approval 3",
+  "fb10_a": 400,
+  "fb10_t3": 400
  },
  "designer_revision_during_run": "docs/proposals/wm-bath-render-2026-11-17.md changed while this run worked (commits a9234229, cd083e71): ring 842335 A3 (projection 7.5); the black towel rejected; the designer also writes the sconce gate closed on Style B and the planter passing, while the manager's relay of the same day says the sconce is still open and the planter is out. The clay follows the relay (no planter, provisional sconces); the manager settles.",
  "qa_round_1": {
@@ -123,7 +166,10 @@
  },
  "run_round4": "2026-11-18: owner approval HOUSE2 ('מאשר את שניהם'), manager relay: output 2 (650), one towel variant linen 2pc (400) as a mask edit, then the layers (RND2)",
  "waiting": [
-  "the third towel variant (waits for sourcing)",
-  "QA of outputs 2-3 and the layers; owner approval 3; the 1.3.9 registration"
- ]
+  "pass B: the shower stool and the print (waits for sourcing, 400)",
+  "B1 (waits for owner approval 3)",
+  "QA of FB10 (pass A and T3) together with stage one; owner approval 3; the 1.3.9 registration",
+  "var2 re-authorisation by the owner before any further send"
+ ],
+ "run_fb10": "2026-11-18: owner FB9/FB10 (20 products a room) and HOUSE2B; designer 12.6; manager relay: pass A (400) and pass T3 (400) on the QA-passed B2 defaults, as new layers. Priced first (var2_estimate_cost: 800). No jar (IKEA out on commercial grounds)."
 }
