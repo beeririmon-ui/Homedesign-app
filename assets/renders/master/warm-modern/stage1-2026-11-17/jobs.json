@@ -1,8 +1,8 @@
 {
  "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2). Round 2 (manager relay after QA, 0 tokens): MP-D2 sill edge honed in code (step 4), MP-I1 / MP-I2 recorded as mandatory, the clay moved to 12.6, re-priced; nothing sent.",
  "cap": 3500,
- "spent": 650,
- "left_in_cap": 2850,
+ "spent": 2500,
+ "left_in_cap": 1000,
  "var2": {
   "connected": true,
   "note": "ToolSearch loaded the Var2 tools with the held sign-in; estimate_cost, request_upload, create_image and get_image_result answered. No code or token was asked for."
@@ -99,12 +99,9 @@
   }
  ],
  "totals": {
-  "spent": 650,
-  "waiting": 1450,
-  "waiting_if_seedream_variants": 1950,
-  "three_outputs": 2100,
-  "if_seedream_variants": 2600,
-  "under_cap": true
+  "spent": 2500,
+  "left_in_cap": 1000,
+  "note": "plate 650 + defaults attempts 650 + 400 + 400 + 400; the throw variants (800) and the layers wait for a decision"
  },
  "repricing_call": {
   "tool": "var2_estimate_cost",
@@ -147,5 +144,102 @@
  "not_needed": {
   "what": "the designer's fallback for the sill, a mask edit (about 400)",
   "why": "the code fix reads honed at x2; not sent, not authorised"
+ },
+ "round3": {
+  "date": "2026-11-18",
+  "why": "HOUSE2 approved (status/decisions.json, 2026-11-18, 'מאשר את שניהם'); manager relay: the defaults (650), the two throw variants (800), then the layers",
+  "result": "STOPPED before the throw variants and the layers: no defaults frame passes the rejection list (the bed's textiles). Manager / designer decision needed (README, round 3).",
+  "input": {
+   "file": "inputs/defaults-input.png (r1, r2) and inputs/defaults-input-r3.png (r3)",
+   "made_by": "tools/prep_defaults.py: plate.png + the 12.6 clay MB0 inside the product masks, recoloured to the SKU photos",
+   "refs_note": "SKU photos (supplier images) kept in the scratchpad, not in the repo; uploaded to var2 and verified by sha256"
+  },
+  "sent": [
+   {
+    "id": "defaults-r1-error",
+    "model": "seedream-5-pro",
+    "image_refs": 12,
+    "tokens": "unknown (error before generation, credits_refunded false in the message; to be checked in var2 usage)",
+    "note": "seedream-5-pro takes at most 9 refs (var2_list_models)"
+   },
+   {
+    "id": "defaults-r1",
+    "model": "seedream-5-pro",
+    "type": "image-to-image",
+    "resolution": "2K",
+    "image_refs": 9,
+    "estimate": 650,
+    "tokens": 650,
+    "placeholder_id": "61b1ea2f-f172-4656-996f-d6cdcd1a9f13",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-a79bfeced9d1cff1875867956ed8fdd1-0-1794979198226-572ee50c.png",
+    "raw": "raw/defaults-r1.png",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults.txt",
+    "verdict": "rejected: the model re-composed the room (a right wall corner, a longer bed, the floor lamp moved with its base on the floor, a full curtain to the floor, the throw across the middle of the bed)"
+   },
+   {
+    "id": "defaults-r2",
+    "model": "nano-banana-2",
+    "type": "image-to-image",
+    "resolution": "2K",
+    "image_refs": 9,
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "7d800810-ef39-4d46-83c0-1eda9c3c2309",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-31a666626ac2173ec861171523edc0ad-0-1794979376247-b0cd0d98.jpg",
+    "raw": "raw/defaults-r2.jpg",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults-r2.txt",
+    "verdict": "rejected: the room kept, but the pillows stand, the throw lies across the middle of the bed, a green blob on the sill vase (from the clay)"
+   },
+   {
+    "id": "defaults-r3",
+    "model": "nano-banana-2",
+    "type": "image-to-image",
+    "resolution": "2K",
+    "image_refs": 9,
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "970b3701-fc69-4372-bcda-076ae68f3011",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-8abf93fbd6b93a075550a23fd56d8a4f-0-1794979679278-2dc2c1c5.png",
+    "raw": "raw/defaults-r3.png",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults-r3.txt",
+    "verdict": "rejected: pillows stand, the throw mid-bed, an upholstered base under the duvet, the curtain to the floor, a short-neck bottle, candle holders on a disc base, a marble dish"
+   },
+   {
+    "id": "defaults-r4-edit",
+    "model": "nano-banana-2",
+    "type": "image-to-image (edit of r3)",
+    "resolution": "2K",
+    "image_refs": 2,
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "410a0baf-3dda-4e1e-b607-1077ca584ec3",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-25a0196119549f9a319493185a17165a-0-1794979925700-7ca28b20.png",
+    "raw": "raw/defaults-r4.png",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults-r4-edit.txt",
+    "verdict": "not accepted: the curtain hem, the tall narrow-neck bottle and the pedestal shape fixed; the pillows still stand, the throw still mid-bed, the upholstered base still there, three candle holders instead of a pair, a white block for the dish"
+   }
+  ],
+  "not_sent": {
+   "throw_variants": "Flax brown and Clay as mask edits (nano-banana-2 2K x2, 800): not sent, they need an accepted defaults frame",
+   "layers": "no product, shadow or light layers cut: they need an accepted defaults frame"
+  },
+  "floor_right_of_bed_12_6_1_3": {
+   "frame": "r4 (not locked)",
+   "r4_floor_Lab": [
+    45.1,
+    10.2,
+    16.5
+   ],
+   "dE00_same_lightness_vs_base": [
+    2.75,
+    2.94
+   ],
+   "dE00_full_vs_base": [
+    3.01,
+    4.01
+   ],
+   "reading": "with the floor lamp on, the floor reads as the same oak in a lamp pool; the same-lightness test holds"
+  },
+  "spent": 1850
  }
 }

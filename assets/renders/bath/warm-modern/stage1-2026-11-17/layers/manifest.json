@@ -1,0 +1,206 @@
+{
+ "id": "wm-bath-b2-layers-2026-11-18",
+ "room": "bath",
+ "style": "warm-modern",
+ "frame": "B2",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "base": "plate.png (graded, WM-G1 round 3), byte for byte",
+ "color": "8-bit sRGB, no ICC profile; blending on the sRGB-encoded values",
+ "compose": {
+  "order": [
+   "base",
+   "shower-dispensers-shadow, shower-dispensers",
+   "vanity-sconces-shadow, vanity-sconces",
+   "shower-curtain-shadow, shower-curtain",
+   "floor-planter-shadow, floor-planter",
+   "soap-dispenser-shadow, soap-dispenser",
+   "toothbrush-cup-shadow, toothbrush-cup",
+   "vanity-vase-shadow, vanity-vase",
+   "towel-ring-shadow, towel-ring",
+   "hand-towel-shadow, hand-towel",
+   "light (screen)"
+  ],
+  "formula": "for each product in z order: out = round((below * shadow / 255) * (1 - a) + rgb * a), a = alpha / 255, straight alpha; then the light: out = 255 - round((255 - out) * (255 - L) / 255)",
+  "swap_region": "per product: alpha > 0 or shadow < 255; a product changes nothing outside its region"
+ },
+ "grade": "every layer is cut from the graded composite (plate-grade.json, round 3); the site applies no further grade",
+ "cut": "tools/compose_defaults.py v2 (GrabCut in the slot zone, clay-bounded shadows, clay-bounded light)",
+ "layers": [
+  {
+   "slot": "shower-dispensers",
+   "product": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+   "z": 14,
+   "default": true,
+   "layer": "layers/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow": "shadows/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow_z": 13,
+   "alpha_px": 10316,
+   "shadow_px": 4856,
+   "bbox_px": [
+    938,
+    654,
+    1098,
+    765
+   ]
+  },
+  {
+   "slot": "vanity-sconces",
+   "product": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
+   "z": 14,
+   "default": true,
+   "layer": "layers/vanity-sconces/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "shadow": "shadows/vanity-sconces/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "shadow_z": 13,
+   "alpha_px": 22240,
+   "shadow_px": 1278,
+   "bbox_px": [
+    1357,
+    222,
+    2367,
+    478
+   ]
+  },
+  {
+   "slot": "shower-curtain",
+   "product": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+   "z": 26,
+   "default": true,
+   "layer": "layers/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "shadow": "shadows/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "shadow_z": 25,
+   "alpha_px": 373047,
+   "shadow_px": 14864,
+   "bbox_px": [
+    598,
+    0,
+    923,
+    1530
+   ]
+  },
+  {
+   "slot": "floor-planter",
+   "product": "planter-cj-cement-ribbed-belly-beige-medium",
+   "z": 30,
+   "default": true,
+   "layer": "layers/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "shadow": "shadows/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "shadow_z": 29,
+   "alpha_px": 255313,
+   "shadow_px": 24950,
+   "bbox_px": [
+    0,
+    626,
+    411,
+    1530
+   ]
+  },
+  {
+   "slot": "soap-dispenser",
+   "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle",
+   "z": 46,
+   "default": true,
+   "layer": "layers/soap-dispenser/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow": "shadows/soap-dispenser/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow_z": 45,
+   "alpha_px": 8640,
+   "shadow_px": 2554,
+   "bbox_px": [
+    1904,
+    766,
+    2005,
+    930
+   ]
+  },
+  {
+   "slot": "toothbrush-cup",
+   "product": "toothbrush-cup-cj-silver-travertine-cup",
+   "z": 46,
+   "default": true,
+   "layer": "layers/toothbrush-cup/toothbrush-cup-cj-silver-travertine-cup.png",
+   "shadow": "shadows/toothbrush-cup/toothbrush-cup-cj-silver-travertine-cup.png",
+   "shadow_z": 45,
+   "alpha_px": 6731,
+   "shadow_px": 862,
+   "bbox_px": [
+    1990,
+    814,
+    2093,
+    935
+   ]
+  },
+  {
+   "slot": "vanity-vase",
+   "product": "vanity-vase-cj-matte-black-pottery-bud-vase-10",
+   "z": 46,
+   "default": true,
+   "layer": "layers/vanity-vase/vanity-vase-cj-matte-black-pottery-bud-vase-10.png",
+   "shadow": "shadows/vanity-vase/vanity-vase-cj-matte-black-pottery-bud-vase-10.png",
+   "shadow_z": 45,
+   "alpha_px": 9356,
+   "shadow_px": 2140,
+   "bbox_px": [
+    2039,
+    744,
+    2170,
+    940
+   ]
+  },
+  {
+   "slot": "towel-ring",
+   "product": "towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3",
+   "z": 50,
+   "default": true,
+   "layer": "layers/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3.png",
+   "shadow": "shadows/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3.png",
+   "shadow_z": 49,
+   "alpha_px": 5057,
+   "shadow_px": 2862,
+   "bbox_px": [
+    2303,
+    846,
+    2496,
+    979
+   ]
+  },
+  {
+   "slot": "hand-towel",
+   "product": "hand-towel-aliexpress-pure-linen-towel-38x55-caramel",
+   "z": 52,
+   "default": true,
+   "layer": "layers/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "shadow": "shadows/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "shadow_z": 51,
+   "alpha_px": 86835,
+   "shadow_px": 26012,
+   "bbox_px": [
+    2254,
+    850,
+    2528,
+    1425
+   ]
+  }
+ ],
+ "light": {
+  "product": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
+  "file": "light/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
+  "z": 90,
+  "blend": "screen",
+  "px": 497317,
+  "note": "the beams on the plaster and the stone top only; the light that falls on a product is in that product's own layer"
+ },
+ "rnd2": {
+  "region_px": 1341832,
+  "outside_differing_px": 0,
+  "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+ },
+ "variants": []
+}
