@@ -947,10 +947,10 @@ def recolour_variant(rawp, slot, vpath, pid, name, frm, to):
     shade[edge] = (blur(shade * inner, 2.0) / np.maximum(w, 1e-6))[edge]
     # M2: the hem's turned edge, drawn lighter than the fabric in the caramel, reads as a light line in the linen: within 4 px of
     # the cut, the shading never exceeds the fabric's own local median (12 px)
-    band = fg & ~ero(fg, 4)
-    in4 = ero(fg, 4).astype(np.float64)
-    loc = blur(shade * in4, 3) / np.maximum(blur(in4, 3), 1e-6)         # the fabric just inside, not a wide median
-    shade = np.where(band & (blur(in4, 3) > 0.05), np.minimum(shade, loc), shade)
+    band = fg & ~ero(fg, 8)                                             # (QA M2 re-check: the fold edge's 4-6 px highlight)
+    in8 = ero(fg, 8).astype(np.float64)
+    loc = blur(shade * in8, 5) / np.maximum(blur(in8, 5), 1e-6)         # the fabric just inside, not a wide median
+    shade = np.where(band & (blur(in8, 5) > 0.05), np.minimum(shade, loc), shade)
     ring = dil(lowm, 90) & ~dil(lowm, 45) & ~dil(allfg, 45)
     x0, y0, x1, y1 = PLASTER_REF
     illum = np.median(lin(base[ring]), 0) / np.median(lin(base[y0:y1, x0:x1]).reshape(-1, 3), 0)

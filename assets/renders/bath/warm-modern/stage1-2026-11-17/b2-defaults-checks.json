@@ -1,5 +1,5 @@
 {
- "date": "2026-11-18 (updated after post_b2: the ring and the washes)",
+ "date": "2026-11-18 (updated after QA round 1: M1-M6)",
  "measured_on": "the final layers (layers/manifest.json); frame u, v = the 16:9 frame inside the canvas (K = 4072/3840)",
  "curtain_vs_corner": {
   "rule": "rejection 10: overlap >= 0.03 or clear >= 0.02",
@@ -190,7 +190,7 @@
  },
  "rnd2": {
   "defaults": {
-   "region_px": 842698,
+   "region_px": 831989,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
   },
@@ -211,8 +211,8 @@
   "outer_box_after": [
    2331,
    874,
-   2493,
-   1018
+   2492,
+   1017
   ],
   "clay_box": [
    2314,
@@ -220,7 +220,7 @@
    2476,
    971
   ],
-  "width_ratio_to_clay": 1.0,
+  "width_ratio_to_clay": 0.994,
   "ok_width": true,
   "height_px_before_after": [
    167,
@@ -229,12 +229,12 @@
   "height_note": "the model drew the ring rounder than the lens draws the clay's (the clay's ellipse is 1.4x wider than tall at the frame's edge): with one uniform scale the width matches and the height stays the drawn shape's",
   "towel_rise_px": 19,
   "bar_top_before_after": [
-   1027.0,
-   1008.0
+   1026.0,
+   1007.0
   ],
   "towel_top_at_the_bar_before_after": [
-   1004,
-   985
+   1005,
+   986
   ],
   "towel_in_the_air": "no: the towel's top (row 985) is above the bar's top (row 1008): the fold lies over the bar",
   "gap_ring_towel_px": 0,
@@ -245,16 +245,137 @@
   "rule": "0א 5: the left lamp's peak 0.8-1.25 of the right's (added light, linear luminance, p99.5 over the beams)",
   "before": {
    "left": 0.1987,
-   "right": 0.3919,
+   "right": 0.392,
    "ratio": 0.507
   },
   "gain_linear_left": 2.0,
   "gain_linear_right": 0.657,
   "after": {
    "left": 0.2317,
-   "right": 0.2574,
+   "right": 0.2575,
    "ratio": 0.9
   },
-  "note": "the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8"
+  "note": "the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8",
+  "right_trim_after_colour": 0.9724,
+  "colour": {
+   "rule": "M6: the left wash's colour from the right's by intensity (3000 K as drawn on the right); luminance kept",
+   "edge_hue_deg": {
+    "left": 72.3,
+    "right": 72.4
+   },
+   "share_G0": {
+    "left": 0.543,
+    "right": 0.3
+   },
+   "burnt_white_px": {
+    "left": 0,
+    "right": 0
+   },
+   "peaks_after": {
+    "left": 0.2253,
+    "right": 0.2494,
+    "ratio": 0.903
+   }
+  }
+ },
+ "qa_round1_fixes": {
+  "date": "2026-11-18",
+  "report": "qa/reports/2026-11-18-bath-b2/README.md",
+  "tokens": 0,
+  "method_note": "every colour below re-read with QA's own measurement (b2_colour.py set-up; b2_towel_sens / b2_cyl / b2_planter logic), read-only, on the final files",
+  "M1_caramel": {
+   "fix": "recoloured after the WM-G1 grade: the drawn towel's shading x the SKU photo's colour in the light of the plaster round it, solved per channel on the graded result (a gain alone gave L* 38.5 but dE00 about 5: the toe turns the dark towel redder and greyer)",
+   "de00_rings_10_40_25_70_45_90": [
+    2.09,
+    1.71,
+    2.03
+   ],
+   "albedo_LCh_25_70": [
+    38.4,
+    38.4,
+    46.6
+   ],
+   "sku_LCh": [
+    38.5,
+    40.4,
+    49.8
+   ],
+   "ok": true
+  },
+  "M2_linen_edge": {
+   "fix": "the shared towel cut trimmed of the wall it took along the right edge (718 px; both variants re-derived on the same geometry); in the recolour, the 8 px edge band never brighter than the fabric just inside",
+   "halo_light_px_before_after": [
+    1255,
+    393
+   ],
+   "right_edge_cluster_after": "none (the clusters left are the top fold's highlight at the ring, as in QA's own list)",
+   "linen_de00_rings": [
+    1.53,
+    1.64,
+    0.24
+   ]
+  },
+  "M3_east_cap": {
+   "fix": "the east lamp's alpha cut to the drawn block's own right edge (x 2339; 116 px of cap and tab removed); its light shaped as a V that starts at the block's width (a soft mask), its corner shadow stroke removed"
+  },
+  "M4_soap": {
+   "fix": "the body (not the pump) recoloured to the SKU photo: its shading x the SKU's colour in the light of the basin's outer wall (QA's reference), solved after the grade",
+   "albedo_LCh": [
+    62.5,
+    26.2,
+    69.9
+   ],
+   "sku_LCh": [
+    62.3,
+    26.3,
+    70.1
+   ],
+   "de00": 0.19,
+   "cup_control_de00": 1.22,
+   "ok": true
+  },
+  "M5_planter": {
+   "fix": "the pot (not the pothos) recoloured to the SKU photo: its shading x the SKU's colour in the light of the window wall's plaster beside it, solved after the grade; the band of floor the old cut took under the pot narrowed",
+   "lower_smooth": {
+    "albedo_LCh": [
+     59.4,
+     4.1,
+     88.3
+    ],
+    "de00": 1.0
+   },
+   "sku_LCh": [
+    58.3,
+    4.1,
+    87.9
+   ],
+   "upper_fluted": {
+    "albedo_LCh": [
+     44.9,
+     4.0,
+     87.8
+    ],
+    "note": "C* 4.0 at the SKU's hue; darker because it sits in the pothos' shade (the plaster reference round it is lit)"
+   },
+   "ok": true,
+   "designer_glance": "requested by QA"
+  },
+  "M6_washes": {
+   "fix": "the left lamp's added light takes the right lamp's colour at the same intensity (luminance kept; scaled under white instead of clipping); the right trimmed back to the 0.90 balance",
+   "edge_hue_deg": {
+    "left": 72.3,
+    "right": 72.4
+   },
+   "ratio_p995": 0.903,
+   "burnt_white_px": {
+    "left": 0,
+    "right": 0
+   },
+   "share_G0_in_the_light_layer": {
+    "left": 0.543,
+    "right": 0.3
+   },
+   "note_G0": "G rounds to 0 only in the faint 8-bit tail (the warm light's weakest channel above blue); the hue on the plaster is the check"
+  }
  }
 }
