@@ -1,0 +1,1664 @@
+{
+ "report": "qa/reports/2026-11-18-master-fb10/README.md",
+ "date": "2026-11-18",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-master-fb10-2026-11-18.md + manager scope update after 13.11",
+ "files_at": "4df6a420",
+ "verdict": "pass (what stays); 13.11 regions recorded, re-check pending",
+ "blocking": [],
+ "status_line": "FB10 ב-MB0: מה שנשאר עבר QA; ארבעת התיקונים של 13.11 בבדיקה חוזרת",
+ "status_after_recheck": "עבר QA (FB10; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
+ "items": {
+  "1_fidelity": {
+   "result": "pass",
+   "sizes": {
+    "shelf_front_top_row": 463.0,
+    "shelf_x_ends": [
+     871.4,
+     1848.6
+    ],
+    "shelf_underside_back_row": 500.5,
+    "A outer 54x74": {
+     "expected_w": 275.6,
+     "measured_w": 281,
+     "expected_visible_h": 363.2,
+     "measured_h": 369,
+     "hidden_cm": 2.9,
+     "x": [
+      1082,
+      1362
+     ],
+     "top": 94
+    },
+    "B outer 44x34": {
+     "expected_w": 225.9,
+     "measured_w": 231,
+     "expected_visible_h": 161.4,
+     "measured_h": 161,
+     "hidden_cm": 2.6,
+     "x": [
+      1391,
+      1621
+     ],
+     "top": 302
+    },
+    "charcoal B 22x32": {
+     "expected_max_w": 111.3,
+     "measured_max_w": 112,
+     "expected_visible_h": 158.4,
+     "measured_body_h": 163,
+     "body_rows": [
+      300,
+      462
+     ],
+     "x": [
+      939,
+      1051
+     ],
+     "centre_x": 995.0
+    },
+    "meiping M 22.6x33": {
+     "expected_max_w": 114.2,
+     "measured_max_w": 118,
+     "expected_visible_h": 163.6,
+     "measured_body_h": 154,
+     "body_rows": [
+      309,
+      462
+     ],
+     "x": [
+      1667,
+      1784
+     ],
+     "centre_x": 1725.5
+    },
+    "shelf_gaps_u": {
+     "vaseL_to_A": 0.0117,
+     "A_to_B": 0.0109,
+     "B_to_vaseR": 0.0175,
+     "shelf_left_end_to_vaseL": 0.0265,
+     "vaseR_to_shelf_right_end": 0.0253,
+     "pairAB_centre_x": 1351.5,
+     "bed_axis_x": 1360.0,
+     "group_centre_x": 1361.5
+    },
+    "ranges": {
+     "vaseL": [
+      939,
+      1051
+     ],
+     "A": [
+      1082,
+      1362
+     ],
+     "B": [
+      1391,
+      1621
+     ],
+     "vaseR": [
+      1667,
+      1784
+     ]
+    },
+    "carafe": {
+     "expected_h": 126.3,
+     "measured_h": 132,
+     "expected_w_15_5": 81.6,
+     "measured_w": 82,
+     "body_w": 77,
+     "x": [
+      1868,
+      1949
+     ],
+     "y": [
+      851,
+      982
+     ]
+    },
+    "dish": {
+     "expected_box": [
+      719.4,
+      956.5,
+      793.6,
+      974.7
+     ],
+     "measured": [
+      731,
+      964,
+      804,
+      974
+     ]
+    }
+   },
+   "colour": {
+    "charcoal_lit": {
+     "abs": {
+      "L": 29.6,
+      "a": 1.2,
+      "b": 3.1,
+      "C": 3.4,
+      "h": 68.3,
+      "px": 4213
+     },
+     "alb": {
+      "L": 30.5,
+      "a": 1.1,
+      "b": 3.6,
+      "C": 3.7,
+      "h": 72.7,
+      "px": 4213
+     },
+     "ring_abs": {
+      "L": 89.1,
+      "a": 0.5,
+      "b": 5.1,
+      "C": 5.1,
+      "h": 84.6,
+      "px": 36119
+     },
+     "px": 14044
+    },
+    "charcoal_mid": {
+     "abs": {
+      "L": 20.6,
+      "a": 1.1,
+      "b": 3.0,
+      "C": 3.2,
+      "h": 69.4,
+      "px": 8428
+     },
+     "alb": {
+      "L": 21.3,
+      "a": 1.1,
+      "b": 3.4,
+      "C": 3.6,
+      "h": 72.8,
+      "px": 8428
+     },
+     "ring_abs": {
+      "L": 89.1,
+      "a": 0.5,
+      "b": 5.1,
+      "C": 5.1,
+      "h": 84.6,
+      "px": 36119
+     },
+     "px": 14044
+    },
+    "meiping_lit": {
+     "abs": {
+      "L": 81.4,
+      "a": 2.1,
+      "b": 6.3,
+      "C": 6.7,
+      "h": 71.6,
+      "px": 3433
+     },
+     "alb": {
+      "L": 85.6,
+      "a": 1.8,
+      "b": 5.0,
+      "C": 5.3,
+      "h": 70.3,
+      "px": 3433
+     },
+     "ring_abs": {
+      "L": 86.7,
+      "a": 1.0,
+      "b": 7.5,
+      "C": 7.6,
+      "h": 82.5,
+      "px": 14028
+     },
+     "px": 11438
+    },
+    "meiping_mid": {
+     "abs": {
+      "L": 68.2,
+      "a": 3.1,
+      "b": 10.6,
+      "C": 11.0,
+      "h": 73.9,
+      "px": 6867
+     },
+     "alb": {
+      "L": 71.9,
+      "a": 2.7,
+      "b": 9.7,
+      "C": 10.1,
+      "h": 74.2,
+      "px": 6867
+     },
+     "ring_abs": {
+      "L": 86.7,
+      "a": 1.0,
+      "b": 7.5,
+      "C": 7.6,
+      "h": 82.5,
+      "px": 14028
+     },
+     "px": 11438
+    },
+    "carafe_lit": {
+     "abs": {
+      "L": 73.2,
+      "a": 2.4,
+      "b": 11.0,
+      "C": 11.3,
+      "h": 77.9,
+      "px": 1597
+     },
+     "alb": {
+      "L": 81.5,
+      "a": 2.2,
+      "b": 8.5,
+      "C": 8.8,
+      "h": 75.7,
+      "px": 1597
+     },
+     "ring_abs": {
+      "L": 82.2,
+      "a": 3.0,
+      "b": 10.7,
+      "C": 11.1,
+      "h": 74.5,
+      "px": 13809
+     },
+     "px": 5324
+    },
+    "carafe_mid": {
+     "abs": {
+      "L": 54.4,
+      "a": 3.7,
+      "b": 12.1,
+      "C": 12.6,
+      "h": 73.1,
+      "px": 3194
+     },
+     "alb": {
+      "L": 60.9,
+      "a": 3.5,
+      "b": 10.4,
+      "C": 10.9,
+      "h": 71.3,
+      "px": 3194
+     },
+     "ring_abs": {
+      "L": 82.2,
+      "a": 3.0,
+      "b": 10.7,
+      "C": 11.1,
+      "h": 74.5,
+      "px": 13809
+     },
+     "px": 5324
+    },
+    "dish_top": {
+     "abs": {
+      "L": 79.6,
+      "a": 2.4,
+      "b": 9.4,
+      "C": 9.7,
+      "h": 75.6,
+      "px": 71
+     },
+     "alb": {
+      "L": 81.3,
+      "a": 2.8,
+      "b": 10.6,
+      "C": 10.9,
+      "h": 75.0,
+      "px": 71
+     },
+     "ring_abs": {
+      "L": 89.3,
+      "a": 0.5,
+      "b": 4.6,
+      "C": 4.6,
+      "h": 84.0,
+      "px": 3151
+     },
+     "px": 110
+    },
+    "shelf_front": {
+     "abs": {
+      "L": 43.3,
+      "a": 11.0,
+      "b": 17.9,
+      "C": 21.0,
+      "h": 58.6,
+      "px": 11062
+     },
+     "alb": {
+      "L": 43.6,
+      "a": 11.4,
+      "b": 18.8,
+      "C": 22.0,
+      "h": 58.9,
+      "px": 11062
+     },
+     "ring_abs": {
+      "L": 90.9,
+      "a": 0.3,
+      "b": 4.6,
+      "C": 4.6,
+      "h": 86.1,
+      "px": 37204
+     },
+     "px": 18422
+    },
+    "shelf_under": {
+     "abs": {
+      "L": 28.3,
+      "a": 7.8,
+      "b": 12.0,
+      "C": 14.3,
+      "h": 56.9,
+      "px": 6018
+     },
+     "alb": {
+      "L": 28.5,
+      "a": 8.1,
+      "b": 12.7,
+      "C": 15.0,
+      "h": 57.4,
+      "px": 6018
+     },
+     "ring_abs": {
+      "L": 90.9,
+      "a": 0.3,
+      "b": 4.6,
+      "C": 4.6,
+      "h": 86.1,
+      "px": 37204
+     },
+     "px": 9988
+    },
+    "planter_pot_lit": {
+     "abs": {
+      "L": 77.5,
+      "a": 2.9,
+      "b": 11.2,
+      "C": 11.5,
+      "h": 75.5,
+      "px": 5198
+     },
+     "alb": {
+      "L": 85.4,
+      "a": 2.6,
+      "b": 9.1,
+      "C": 9.4,
+      "h": 74.3,
+      "px": 5198
+     },
+     "ring_abs": {
+      "L": 82.7,
+      "a": 1.0,
+      "b": 9.1,
+      "C": 9.2,
+      "h": 83.5,
+      "px": 82607
+     },
+     "px": 17085
+    },
+    "planter_crown": {
+     "abs": {
+      "L": 27.7,
+      "a": -5.5,
+      "b": 13.0,
+      "C": 14.1,
+      "h": 113.1,
+      "px": 28675
+     },
+     "alb": {
+      "L": 31.4,
+      "a": -6.3,
+      "b": 12.9,
+      "C": 14.4,
+      "h": 116.2,
+      "px": 28675
+     },
+     "ring_abs": {
+      "L": 82.7,
+      "a": 1.0,
+      "b": 9.1,
+      "C": 9.2,
+      "h": 83.5,
+      "px": 82607
+     },
+     "px": 47791
+    },
+    "mag_strap": {
+     "abs": {
+      "L": 51.2,
+      "a": 6.8,
+      "b": 12.6,
+      "C": 14.4,
+      "h": 61.6,
+      "px": 11737
+     },
+     "alb": {
+      "L": 103.4,
+      "a": 3.5,
+      "b": -6.0,
+      "C": 6.9,
+      "h": 300.4,
+      "px": 11737
+     },
+     "ring_abs": {
+      "L": 44.1,
+      "a": 5.9,
+      "b": 16.4,
+      "C": 17.5,
+      "h": 70.3,
+      "px": 192
+     },
+     "px": 39124
+    },
+    "print_A": {
+     "dark (file L* < 40)": {
+      "px": 1217,
+      "file": [
+       29.1,
+       4.3,
+       14.1
+      ],
+      "render": [
+       31.0,
+       3.3,
+       13.8
+      ],
+      "file_C_h": [
+       14.7,
+       73.1
+      ],
+      "render_C_h": [
+       14.1,
+       76.5
+      ],
+      "dE00": 1.91
+     },
+     "mid (40-70)": {
+      "px": 1884,
+      "file": [
+       57.2,
+       0.4,
+       11.7
+      ],
+      "render": [
+       70.3,
+       -0.2,
+       11.4
+      ],
+      "file_C_h": [
+       11.7,
+       88.1
+      ],
+      "render_C_h": [
+       11.4,
+       91.1
+      ],
+      "dE00": 10.96
+     },
+     "light (>= 70)": {
+      "px": 85099,
+      "file": [
+       84.0,
+       -1.0,
+       10.1
+      ],
+      "render": [
+       83.6,
+       -1.4,
+       10.5
+      ],
+      "file_C_h": [
+       10.1,
+       95.6
+      ],
+      "render_C_h": [
+       10.5,
+       97.4
+      ],
+      "dE00": 0.57
+     },
+     "L_corr": 0.656
+    },
+    "print_B_rough": "see print_b.py (the listing image has white margins; render-agent cropped them)"
+   },
+   "print_B": {
+    "sky_dE00": 0.93,
+    "field_dE00": 0.41,
+    "field_h": 73.6,
+    "field_C": 30.1,
+    "dark_dE00": 0.54,
+    "L_corr": 0.985
+   },
+   "carafe_bands_dE00": [
+    3.89,
+    1.89,
+    1.62,
+    6.15,
+    12.67,
+    7.78
+   ],
+   "carafe_note": "lower three bands darker from the room's shadow, not the material; hue and chroma match in all bands",
+   "photo_readings": {
+    "charcoal_lit": [
+     33.9,
+     1.0,
+     3.3
+    ],
+    "meiping_lit_on_grey": [
+     74.7,
+     3.2,
+     9.5
+    ],
+    "carafe_lit": [
+     69.0,
+     4.5,
+     14.1
+    ],
+    "dish_face": [
+     79.6,
+     1.9,
+     5.8
+    ]
+   },
+   "dE00": {
+    "charcoal_lit_vs_photo": 3.41,
+    "dish_vs_photo": 2.71,
+    "dish_vs_candle_holders_alb": 2.23
+   }
+  },
+  "2_rnd2": {
+   "result": "pass",
+   "layers": {
+    "z": [
+     [
+      "curtains",
+      10,
+      9
+     ],
+     [
+      "wall-shelf",
+      11,
+      10
+     ],
+     [
+      "framed-art",
+      12,
+      11
+     ],
+     [
+      "framed-art-2",
+      13,
+      12
+     ],
+     [
+      "bedside-sconces",
+      14,
+      13
+     ],
+     [
+      "sill-vase",
+      16,
+      15
+     ],
+     [
+      "shelf-vase-left",
+      18,
+      17
+     ],
+     [
+      "shelf-vase-right",
+      18,
+      17
+     ],
+     [
+      "planter",
+      30,
+      29
+     ],
+     [
+      "floor-lamp",
+      36,
+      35
+     ],
+     [
+      "magazine-holder",
+      38,
+      37
+     ],
+     [
+      "nightstand-tray",
+      44,
+      43
+     ],
+     [
+      "nightstand-vase",
+      46,
+      45
+     ],
+     [
+      "candle-holders",
+      46,
+      45
+     ],
+     [
+      "bedside-carafe",
+      46,
+      45
+     ],
+     [
+      "trinket-dish",
+      46,
+      45
+     ],
+     [
+      "pillowcases",
+      50,
+      49
+     ],
+     [
+      "bedding",
+      52,
+      51
+     ],
+     [
+      "cushions",
+      55,
+      54
+     ],
+     [
+      "throw",
+      58,
+      57
+     ]
+    ],
+    "shadow_one_below": true,
+    "z_sorted_as_listed": true,
+    "light_modes": [
+     [
+      "bedside-sconces",
+      "screen",
+      90
+     ],
+     [
+      "floor-lamp",
+      "screen",
+      90
+     ]
+    ],
+    "light_shapes": [
+     [
+      1530,
+      2720,
+      3
+     ],
+     [
+      1530,
+      2720,
+      3
+     ]
+    ],
+    "recompose_vs_defaults": {
+     "px_diff": 0,
+     "max": 0,
+     "outside_region_diff": 0
+    },
+    "defaults_vs_plate_outside_region": 0,
+    "defaults_region_px": 2554916,
+    "defaults_black_point": {
+     "0.1": 2.29,
+     "0.5": 11.11,
+     "1": 14.78,
+     "5": 27.33
+    },
+    "defaults_mean_luma_8bit": 167.9,
+    "defaults_frame_vs_crop_max": 0,
+    "recompose_vs_flax": {
+     "px_diff": 0,
+     "max": 0,
+     "outside_region_diff": 0
+    },
+    "flax_vs_plate_outside_region": 0,
+    "flax_region_px": 2554916,
+    "flax_black_point": {
+     "0.1": 2.87,
+     "0.5": 12.92,
+     "1": 16.21,
+     "5": 28.18
+    },
+    "flax_mean_luma_8bit": 168.7,
+    "flax_frame_vs_crop_max": 0,
+    "recompose_vs_clay": {
+     "px_diff": 0,
+     "max": 0,
+     "outside_region_diff": 0
+    },
+    "clay_vs_plate_outside_region": 0,
+    "clay_region_px": 2554916,
+    "clay_black_point": {
+     "0.1": 7.09,
+     "0.5": 11.97,
+     "1": 14.11,
+     "5": 24.43
+    },
+    "clay_mean_luma_8bit": 166.3,
+    "clay_frame_vs_crop_max": 0,
+    "flax_alpha_identical": true,
+    "flax_shadow_identical": true,
+    "flax_shadow_diff_px": 0,
+    "flax_vs_defaults_px": 144906,
+    "flax_vs_defaults_outside_throw_alpha": 0,
+    "flax_vs_defaults_outside_throw_alpha_and_shadow": 0,
+    "clay_alpha_identical": true,
+    "clay_shadow_identical": true,
+    "clay_shadow_diff_px": 0,
+    "clay_vs_defaults_px": 147631,
+    "clay_vs_defaults_outside_throw_alpha": 0,
+    "clay_vs_defaults_outside_throw_alpha_and_shadow": 0,
+    "light_only_brightens": true,
+    "light0_bedside-sconces": {
+     "px": 265215,
+     "over_opaque_product": 0,
+     "over_any_product_alpha": 6944,
+     "by_plate_id": {
+      "1": 197067,
+      "5": 39501,
+      "20": 15334,
+      "24": 1490,
+      "25": 11029,
+      "26": 794
+     }
+    },
+    "light1_floor-lamp": {
+     "px": 254748,
+     "over_opaque_product": 0,
+     "over_any_product_alpha": 12064,
+     "by_plate_id": {
+      "1": 197145,
+      "9": 9027,
+      "10": 43388,
+      "23": 924,
+      "24": 1467,
+      "25": 2380,
+      "26": 417
+     }
+    }
+   },
+   "vs_round9": {
+    "mb0-defaults.png": {
+     "changed": 527360,
+     "outside_new_regions": 0
+    },
+    "mb0-variant-throw-flax.png": {
+     "changed": 527360,
+     "outside_new_regions": 0
+    },
+    "mb0-variant-throw-clay.png": {
+     "changed": 527360,
+     "outside_new_regions": 0
+    },
+    "light bedside-sconces": {
+     "max_abs_vs_pre_times_1_minus_alpha": 0,
+     "px_over_1": 0,
+     "pre_px_under_new_opaque": 6581,
+     "now_px_under_new_opaque": 0,
+     "changed_outside_new_alpha": 0
+    },
+    "light floor-lamp": {
+     "max_abs_vs_pre_times_1_minus_alpha": 0,
+     "px_over_1": 0,
+     "pre_px_under_new_opaque": 82259,
+     "now_px_under_new_opaque": 0,
+     "changed_outside_new_alpha": 0
+    }
+   }
+  },
+  "3_frame_x1_x2": {
+   "result": "pass (MF-L1 low)",
+   "halo": {
+    "defaults/wall-shelf": {
+     "light": {
+      "px": 19,
+      "clusters_ge20": []
+     },
+     "dark": {
+      "px": 3331,
+      "clusters_ge20": [
+       [
+        3233,
+        [
+         912,
+         484,
+         936,
+         17
+        ]
+       ],
+       [
+        50,
+        [
+         872,
+         484,
+         22,
+         9
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/framed-art": {
+     "light": {
+      "px": 41,
+      "clusters_ge20": [
+       [
+        23,
+        [
+         1346,
+         94,
+         17,
+         5
+        ]
+       ]
+      ]
+     },
+     "dark": {
+      "px": 1428,
+      "clusters_ge20": [
+       [
+        643,
+        [
+         1099,
+         96,
+         262,
+         71
+        ]
+       ],
+       [
+        597,
+        [
+         1082,
+         126,
+         4,
+         279
+        ]
+       ],
+       [
+        118,
+        [
+         1082,
+         416,
+         4,
+         47
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/framed-art-2": {
+     "light": {
+      "px": 838,
+      "clusters_ge20": [
+       [
+        373,
+        [
+         1391,
+         319,
+         12,
+         144
+        ]
+       ],
+       [
+        358,
+        [
+         1406,
+         460,
+         203,
+         3
+        ]
+       ],
+       [
+        61,
+        [
+         1610,
+         421,
+         9,
+         42
+        ]
+       ],
+       [
+        25,
+        [
+         1607,
+         302,
+         15,
+         4
+        ]
+       ]
+      ]
+     },
+     "dark": {
+      "px": 613,
+      "clusters_ge20": [
+       [
+        380,
+        [
+         1404,
+         304,
+         213,
+         2
+        ]
+       ],
+       [
+        69,
+        [
+         1510,
+         460,
+         69,
+         1
+        ]
+       ],
+       [
+        52,
+        [
+         1393,
+         323,
+         2,
+         49
+        ]
+       ],
+       [
+        31,
+        [
+         1406,
+         460,
+         31,
+         1
+        ]
+       ],
+       [
+        26,
+        [
+         1580,
+         460,
+         26,
+         1
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/shelf-vase-left": {
+     "light": {
+      "px": 22,
+      "clusters_ge20": [
+       [
+        20,
+        [
+         952,
+         446,
+         8,
+         15
+        ]
+       ]
+      ]
+     },
+     "dark": {
+      "px": 254,
+      "clusters_ge20": [
+       [
+        254,
+        [
+         963,
+         298,
+         66,
+         10
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/shelf-vase-right": {
+     "light": {
+      "px": 111,
+      "clusters_ge20": [
+       [
+        111,
+        [
+         1703,
+         443,
+         18,
+         20
+        ]
+       ]
+      ]
+     },
+     "dark": {
+      "px": 48,
+      "clusters_ge20": [
+       [
+        44,
+        [
+         1725,
+         300,
+         17,
+         9
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/planter": {
+     "light": {
+      "px": 304,
+      "clusters_ge20": [
+       [
+        97,
+        [
+         2394,
+         1205,
+         15,
+         29
+        ]
+       ],
+       [
+        53,
+        [
+         2595,
+         1281,
+         14,
+         10
+        ]
+       ],
+       [
+        36,
+        [
+         2450,
+         603,
+         18,
+         6
+        ]
+       ],
+       [
+        35,
+        [
+         2528,
+         1290,
+         10,
+         4
+        ]
+       ],
+       [
+        23,
+        [
+         2490,
+         1282,
+         8,
+         6
+        ]
+       ]
+      ]
+     },
+     "dark": {
+      "px": 2774,
+      "clusters_ge20": [
+       [
+        275,
+        [
+         2641,
+         1096,
+         18,
+         83
+        ]
+       ],
+       [
+        203,
+        [
+         2517,
+         1021,
+         12,
+         48
+        ]
+       ],
+       [
+        195,
+        [
+         2526,
+         381,
+         40,
+         37
+        ]
+       ],
+       [
+        110,
+        [
+         2511,
+         441,
+         17,
+         24
+        ]
+       ],
+       [
+        95,
+        [
+         2600,
+         490,
+         20,
+         19
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/magazine-holder": {
+     "light": {
+      "px": 713,
+      "clusters_ge20": [
+       [
+        307,
+        [
+         2505,
+         1208,
+         93,
+         19
+        ]
+       ],
+       [
+        117,
+        [
+         2402,
+         1212,
+         8,
+         31
+        ]
+       ],
+       [
+        57,
+        [
+         2419,
+         1260,
+         26,
+         6
+        ]
+       ],
+       [
+        52,
+        [
+         2469,
+         1253,
+         5,
+         15
+        ]
+       ],
+       [
+        30,
+        [
+         2496,
+         1236,
+         10,
+         5
+        ]
+       ]
+      ]
+     },
+     "dark": {
+      "px": 1592,
+      "clusters_ge20": [
+       [
+        330,
+        [
+         2403,
+         1247,
+         36,
+         39
+        ]
+       ],
+       [
+        305,
+        [
+         2412,
+         1286,
+         13,
+         59
+        ]
+       ],
+       [
+        244,
+        [
+         2428,
+         1351,
+         53,
+         39
+        ]
+       ],
+       [
+        149,
+        [
+         2663,
+         1318,
+         3,
+         65
+        ]
+       ],
+       [
+        98,
+        [
+         2485,
+         1217,
+         9,
+         19
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/bedside-carafe": {
+     "light": {
+      "px": 318,
+      "clusters_ge20": [
+       [
+        116,
+        [
+         1881,
+         851,
+         17,
+         21
+        ]
+       ],
+       [
+        92,
+        [
+         1872,
+         924,
+         9,
+         27
+        ]
+       ],
+       [
+        33,
+        [
+         1901,
+         979,
+         10,
+         4
+        ]
+       ],
+       [
+        29,
+        [
+         1869,
+         908,
+         5,
+         13
+        ]
+       ]
+      ]
+     },
+     "dark": {
+      "px": 603,
+      "clusters_ge20": [
+       [
+        287,
+        [
+         1896,
+         851,
+         39,
+         29
+        ]
+       ],
+       [
+        175,
+        [
+         1937,
+         871,
+         12,
+         34
+        ]
+       ],
+       [
+        79,
+        [
+         1910,
+         971,
+         18,
+         13
+        ]
+       ],
+       [
+        29,
+        [
+         1928,
+         951,
+         5,
+         12
+        ]
+       ]
+      ]
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    },
+    "defaults/trinket-dish": {
+     "light": {
+      "px": 0,
+      "clusters_ge20": []
+     },
+     "dark": {
+      "px": 0,
+      "clusters_ge20": []
+     },
+     "near_black": {
+      "px": 0,
+      "clusters_ge20": []
+     }
+    }
+   }
+  },
+  "4_composition": {
+   "result": "pass (MF-L2 low); right corner after 13.11",
+   "group_centre_x": 1361.5,
+   "bed_axis_x": 1360.0,
+   "pair_AB_centre_x": 1351.5,
+   "gaps_u": {
+    "A_B": 0.0109,
+    "vaseL_A": 0.0117,
+    "B_vaseR": 0.0175,
+    "shelf_ends": [
+     0.0265,
+     0.0253
+    ]
+   },
+   "rule_13_10": {
+    "A_B": 0.012,
+    "near_vases": 0.015
+   },
+   "hero_overlaps": {
+    "bedding_over_carafe": 543,
+    "bedding_over_dish": 35,
+    "floor_lamp_over_planter": 2546
+   }
+  },
+  "5_count": {
+   "for_sale_in_frame": 19,
+   "v7q6_counted": 15,
+   "below": {
+    "bottle": 0.147,
+    "candle_holders": 0.121,
+    "tray": 0.092,
+    "dish": 0.017
+   },
+   "detail": {
+    "curtains": {
+     "area_pct": 4.532,
+     "height_pct": 86.5,
+     "visible_frac": 0.91,
+     "in_frame_frac": 0.96,
+     "counted": true
+    },
+    "wall-shelf": {
+     "area_pct": 0.988,
+     "height_pct": 2.6,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "framed-art": {
+     "area_pct": 2.801,
+     "height_pct": 25.6,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "framed-art-2": {
+     "area_pct": 1.005,
+     "height_pct": 11.2,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "bedside-sconces": {
+     "area_pct": 0.467,
+     "height_pct": 8.0,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "sill-vase": {
+     "area_pct": 0.293,
+     "height_pct": 24.5,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "shelf-vase-left": {
+     "area_pct": 0.467,
+     "height_pct": 27.3,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "shelf-vase-right": {
+     "area_pct": 0.351,
+     "height_pct": 11.3,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "planter": {
+     "area_pct": 2.499,
+     "height_pct": 64.7,
+     "visible_frac": 0.76,
+     "in_frame_frac": 0.89,
+     "counted": true
+    },
+    "floor-lamp": {
+     "area_pct": 1.353,
+     "height_pct": 59.9,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "magazine-holder": {
+     "area_pct": 1.092,
+     "height_pct": 20.0,
+     "visible_frac": 0.9,
+     "in_frame_frac": 0.9,
+     "counted": true
+    },
+    "nightstand-tray": {
+     "area_pct": 0.092,
+     "height_pct": 2.3,
+     "visible_frac": 0.97,
+     "in_frame_frac": 1.0,
+     "counted": false
+    },
+    "nightstand-vase": {
+     "area_pct": 0.147,
+     "height_pct": 16.6,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": false
+    },
+    "candle-holders": {
+     "area_pct": 0.121,
+     "height_pct": 8.4,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": false
+    },
+    "bedside-carafe": {
+     "area_pct": 0.191,
+     "height_pct": 9.1,
+     "visible_frac": 0.93,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "trinket-dish": {
+     "area_pct": 0.017,
+     "height_pct": 0.8,
+     "visible_frac": 0.95,
+     "in_frame_frac": 1.0,
+     "counted": false
+    },
+    "pillowcases": {
+     "area_pct": 2.533,
+     "height_pct": 12.8,
+     "visible_frac": 0.71,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "bedding": {
+     "area_pct": 23.454,
+     "height_pct": 39.4,
+     "visible_frac": 0.79,
+     "in_frame_frac": 0.91,
+     "counted": true
+    },
+    "cushions": {
+     "area_pct": 1.014,
+     "height_pct": 10.2,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    },
+    "throw": {
+     "area_pct": 3.756,
+     "height_pct": 18.4,
+     "visible_frac": 1.0,
+     "in_frame_frac": 1.0,
+     "counted": true
+    }
+   }
+  }
+ },
+ "record_only_13_11": {
+  "pot_median_Lab": [
+   64.8,
+   2.5,
+   9.0
+  ],
+  "pot_L_p10_p90": [
+   28.4,
+   85.9
+  ],
+  "wall_x2560_2640_y950_1000": [
+   83.5,
+   1.0,
+   8.1
+  ],
+  "pot_over_wall_Y": 0.536,
+  "crown_median_Lab": [
+   29.3,
+   -4.7,
+   12.6
+  ],
+  "crown_C_median": 13.7,
+  "crown_px": 64367,
+  "crown_px_right_of_2642": 10979,
+  "holder_x": [
+   2394,
+   2668
+  ],
+  "holder_dark_tube_rightmost_x_p50_max": [
+   2666,
+   2666
+  ],
+  "tube_gap_to_2642_u_min": -0.0094,
+  "branch_top_row": 69,
+  "branch_top_gap_to_frame_top_u": 0.0177,
+  "planter_corrected_rule": {
+   "pot": [
+    65.5,
+    2.5,
+    9.1
+   ],
+   "wall_ring_rows_1050_1280": [
+    80.5,
+    1.7,
+    10.0
+   ],
+   "ring_px": 6484,
+   "dL": -15.0,
+   "pot_C": 9.5,
+   "wall_C": 10.2,
+   "pot_h": 74.4,
+   "wall_h": 80.1
+  }
+ },
+ "record_notes": {
+  "holder": "right tube ends at x ~2666, past the frame edge 2642; after a 40 px shift its outer edge is at ~2626 = 0.006 from the margin, not 0.018-0.023; about 70-85 px needed. Question to the designer and render-agent before the shift",
+  "crown": "10,979 crown px past x 2642 (the mirror)",
+  "planter": "corrected 13.11 (1): Beige Large stays, relative rule vs the wall ring at rows 1050-1280: pot 65.5/2.5/9.1 vs wall 80.5/1.7/10.0 -> dL -15.0 (target -6..-10, aim -8), C 9.5 (limit 11.7), hue -6 deg (within 10): already meets chroma and hue and is darker than the target; the fix would be to lighten ~7 L*, not darken. Question to the designer and render-agent before the change",
+  "branch": "top at row 69, 0.0177 from the frame top",
+  "corner_margin": "holder and crown cross the frame edge today; judged in the re-check"
+ },
+ "findings": [
+  {
+   "id": "MF-L1",
+   "severity": "low",
+   "what": "seam between the charcoal vase's shadow (ends x 1063) and frame A's (starts 1064): a straight light ridge (row 380: L* 56 between 42 and 37); x3-x4 a vertical line, x2 a shadow band with a straight edge",
+   "fix": "0 tokens: blend the two shadow layers across ~20 px within each swap region; best with 13.11 5a",
+   "owner": "render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MF-L2",
+   "severity": "low",
+   "what": "two shelf gaps slightly under 13.10's numbers: A-B 0.0109 vs 0.012 (3 px), vase-left-A 0.0117 vs 0.015 (8 px); frames and vase 2-4% wider than projected; clear gaps at x1-x2; 13.11 (5) froze A, B and the light vase",
+   "fix": "designer: accept, or move only the charcoal vase 9 px left with 5a (-> 0.0152, shelf end 0.0230)",
+   "owner": "master-designer; render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MF-I1",
+   "severity": "info",
+   "what": "correction to the MB0 round-2 report: after M4 the bottle is 0.147% of the frame, under the V7Q6 threshold (round 2 said the count was still 9)"
+  },
+  {
+   "id": "MF-I2",
+   "severity": "info",
+   "what": "the dark smudge between the dish and the bedding (x ~805-812, y ~955-962) is unchanged from round 9: the contact shadow of pillow, duvet and nightstand"
+  }
+ ],
+ "evidence": [
+  "fb10-wall-carafe-dish.jpg",
+  "fb10-corner-record.jpg"
+ ],
+ "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-master/fb10",
+ "supplier_photos": "read from scratchpad/picks/img only; none copied into the repo",
+ "tokens": 0,
+ "var2": false,
+ "commits": false
+}

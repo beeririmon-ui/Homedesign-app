@@ -45,3 +45,8 @@ Don't touch the sizes, the art placement, the carafe, the dish or the bedding.
 - 0 tokens, no var2 sends, no commits, no keys.
 - Supplier images stay in the scratchpad.
 - Return a short Hebrew summary: the numbers per fix and the regions for QA.
+
+## Manager's notes after QA (2026-11-18), which override the numbers above where they differ
+- **The planter:** QA measured the pot about 15 L* below the wall ring at the same rows. The target is 8, so it must be **lightened** by about 7 L*, not darkened. The R5 rule decides, not an absolute L*. Chroma and hue are already in range; keep them there.
+- **The magazine holder:** the right tube reaches x 2666, past the frame edge, so a 40 px shift leaves it only 0.006 from the edge. Apply the designer's intended margin: **47–60 px inside the frame edge, which is a shift of about 72–85 px.** Keep a clear overlap with the lamp base. If that shift hides the lamp base or crowds the planter, stop and report the numbers instead of choosing.
+- QA's FB10 report: `qa/reports/2026-11-18-master-fb10/README.md`. Its other findings, MF-L1 and MF-L2, are low and stay in the backlog. Don't fix them now.
