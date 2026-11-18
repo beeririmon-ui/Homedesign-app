@@ -734,3 +734,326 @@
   - חדר השינה (ב) מחליף את רשימת ROUTE-Q1 (א) ומתומחר מחדש.
   - החזרה (ג) תבוא אחר כך, ועד אז קפיצה במפה.
 - **אין שאלה חדשה לבעלים.** FB8 ו-ROUTE1 מכסים את הכיוון.
+
+---
+
+## 12. הסטילס של ההגעה: תיאורים ורשימות דחייה (2026-11-18)
+
+**master-designer, 2026-11-18. ‏0 טוקנים, בלי var2, בלי commit, ולא נערך שום מסמך מחייב.**
+- **האישור:** הבעלים אישר לרנדר את ההגעה מאנימטיק v2, ‏0–14 ש' (2026-11-18: "מאשר את שניהם").
+- **הקלט:**
+  - פרק 11 כאן.
+  - פרק 13 במסמך ההגעה של motion-agent, ופרק v2 ב-README של האנימטיק.
+  - פרקים 11.5 ו-11.9 במסמך הכניסה (`wm-entrance-magazine-2026-11-15.md`).
+  - הסטילס ב-`assets/renders/hall/warm-modern/hall-2026-11-17/` ‏(`ht.png`, ‏`hd.png`, ‏`hdx.png`).
+  - פרקים 1, 2 ו-4 במסמך הארכיטקטורה של המסדרון (`wm-corridor-architecture-2026-11-14.md`): החומרים, האור ומה חייב להיות ריק.
+
+### 12.0 בקצרה
+| סטיל | סוג | הקלט | מה המודל מצייר | מה הקוד עושה |
+| --- | --- | --- | --- | --- |
+| **HT2** | **עריכה במסכה** של HT (עבר QA) | ‏`ht.png` ומסכת הספסל מה-clay | הספסל בלבד, וצל המגע שלו | כל פיקסל מחוץ למסכה מוחזר מ-HT: אפס רמות הפרש |
+| **HDx2** | **עריכה במסכה** של HDx (עבר QA) | ‏`hdx.png` ומסכת הקונסולה מה-clay | הקונסולה בלבד, וצל המגע שלה | פינת הספסל ברצועה התחתונה: מהרצועה של HD מ-HT2, בסיבוב טהור של 65° (motion-agent). כל השאר מוחזר מ-HDx |
+| **HC** | **מבט חדש,** מה-clay | ה-clay של HC (‏HX, ‏yaw 180), קנבס 3:2 | הכול | — |
+| **HC130** | **מבט חדש,** מה-clay | ה-clay של HC130 (‏HX, ‏yaw 130), קנבס 3:2, והחפיפות עם HD ועם HC | הכול | הזרעים מ-HD ומ-HC בחפיפות, כמו ש-HD נבנה מ-HDx |
+
+**מה v2 קבע, ומה נכנס לכאן:**
+- **HC130 נחוץ.** בלעדיו יש 25–28% חורים בסיבוב שמאלה.
+- **כנף דלת הכניסה סגורה ב-HC130 וב-HC.** סגורה, היא מחוץ לשני הפריימים. פתוחה, היא הייתה מכסה את השליש השמאלי של HC. לכן אין שום כנף באף אחד מהם.
+- **בחזרה מהסלון, ההליכה נעצרת ב-HX והראש משלים את 25° אל HC.** זה שייך לסבב של אגף החדרים, ו-HC כמו שהוא מרונדר עכשיו משרת גם אותו: הפריים האחרון של הקליפ מכסה את שאר הסיבוב. אין סטיל ב-205.
+- **מה M0b רואה ומה לא:** לסבב של אגף החדרים. לא כאן.
+- **העצם הכהה של ה-clay בשוליים השמאליים של HC** (X ‏3.49, ‏Y ‏9.62) לא שייך למסלול. render-agent מוחק אותו מה-clay לפני השליחה (0 טוקנים). אחרת המודל יצייר שם חפץ.
+
+**הסדר:**
+1. HT2.
+2. הרצועה של HD (קוד).
+3. HDx2.
+4. HC.
+5. HC130.
+
+HC לפני HC130, כי HC130 הוא הגשר: הוא נזרע מהחפיפה עם HD ועם HC.
+
+**כללים לכל הארבעה:**
+- **כמו ב-11.3 של מסמך הכניסה:** ניסיון אחד, ותיקון אחד לכל היותר, ורק על סעיף מרשימת הדחייה. ‏`var2_estimate_cost` לפני כל שליחה.
+- **הכסף:**
+  - 4 × 650 = 2,600, מתוך 2,658 שנשארו.
+  - בסטילס של המבואה התיקונים עלו פי 1.7 מהמחירון. לכן אם צריך תיקון שעובר את התקרה, עוצרים ושואלים.
+  - **ההמלצה שלי ל-render-agent:** ‏nano-banana-2 ‏(400) לשתי העריכות במסכה, אם הוא מחזיק את הנעילה. זה חוסך 500, ומשאיר 558 לתיקון אחד. ‏seedream-5-pro לשני המבטים החדשים.
+- **בלי רפרנסים של גאומטריה:** לא הקונספטים, ולא תמונות מוצר. המודל מעתיק גאומטריה מרפרנס.
+  - רפרנס לחומר ולאור ("the reference hall plate") מותר רק מהסטילס המאושרים של המבואה, כמו בסבב של 2026-11-17.
+  - ל-HC ול-HC130: ‏`hdx.png`, כי יש בו טיח, ציפוי אגוז ואלון. לא `hd.png`, כי יש בו חצי פריים של אבן, וזה עלול לזלוג למסדרון.
+- **הבית ריק בדרך** (11.3): אין מוצרים, אין מנורות, אין חפצים. הספסל והקונסולה הם רהיטים קבועים בשכבת הבסיס.
+
+**הספסל והקונסולה, המפרט המשותף** (2.2; ‏F3, תוכנית ב'):
+
+| | ספסל | קונסולה |
+| --- | --- | --- |
+| **מיקום** | X ‏0.81–1.21 (עומק 0.40, לפני האבן), ‏Y ‏6.70–7.50 (אורך 0.80) | X ‏2.55–3.35, ‏Y ‏6.35–6.70, צמודה לקיר הקדמי, מימין לפתח לסלון |
+| **גובה** | מושב ב-0.45 | ‏0.80 |
+| **חומר** | אגוז #6B4A33 בשמן מט, סיב ישר, בלי ברק | כמו הספסל |
+| **מבנה** | משטח בעובי 5. שתי דפנות קצה מלאות בעובי 5, ופתוח ביניהן (שם עמדת הסל, ריקה). פינות ברדיוס 1.5 | משטח בעובי 5, הפינות הקדמיות ברדיוס 6. שני בסיסי תוף אליפטיים, שקועים 8 מהקצוות. השפה של שולחן הקפה בסלון |
+| **עליו** | כלום | כלום |
+
+- **מעמד:** תוכנית ב' לפי F3. מצויר כמו שתוכנן, קבוע, ובלי נקודה. הליקוט מחפש דגם תואם במקביל, ולא מרנדרים מחדש בגלל הליקוט (2.2).
+- **האגוז בסטיל:** בשמן מט, עם אותו חום וברק כמו ציפוי האגוז של הפתח לסלון באותו פריים (ΔE00 ‏≤ 4 באור דומה). לפחות 8 L* מעל נקודת השחור. אף פעם לא כתום, אדום או שחור.
+
+**רשימת דחייה משותפת** (בנוסף לזו של כל סטיל):
+1. **מחוץ למסכה** (בעריכות): הפרש של יותר מ-0 רמות, אחרי ההחזרה מהקוד.
+2. **הספסל והקונסולה:**
+   - לא אגוז: אלון, עץ בהיר, צבוע, שחור, או מבריק.
+   - רגליים דקות, רגלי סיכה או מתכת.
+   - מגירות, מדף תחתון או גב.
+   - כרית, שמיכה, סל, מגש, כלי, מנורה או שום דבר אחר עליהם או מתחתם.
+   - ספסל עם מושב מרופד או קלוע.
+   - מידות רחוקות מטבלת ה-clay ביותר מ-0.03 בכל קצה.
+3. **חפצים:** מנורות (דולקות או לא), מתלים, ווים, תמונות, שטיח, עציצים, מתגים, אנשים, טקסט.
+4. **אור:** שמש או כתם אור בפנים. צללים חדים. רואים את הזיגוג או את המסגרת של חריץ האור, או קווי LED. איזון לבן קר או ירקרק.
+5. **הצילום:** עומק שדה, גרעין, וינייטה, אנכיים נוטים ביותר מ-0.5°.
+
+### 12.1 HT2: הספסל על האבן (עריכה במסכה של HT)
+**מה רואים:**
+- HT כמו שהוא: הטיח עם הדלת הנסתרת, פאנל האבן (u ‏0.456–0.790), הפינה, ציפוי האגוז של הפתח, והסלון.
+- **ועוד ספסל האגוז, לפני האבן:**
+  - הקצה של Y ‏7.50 ב-u כ-0.542, וזה של Y ‏6.70 ב-u כ-0.764, כלומר 0.026 משמאל לפינה (0.790).
+  - המושב ב-v כ-0.85 (הטלה; ה-clay גובר, ‏±0.03 מ' לכל קצה).
+  - מהדופן השמאלית רואים את הפנים החיצוניות כפס צר. מתחת למושב פתוח, והאלון והאבן ממשיכים לרצפה. בעומק רואים את הפנים הפנימיות של הדופן הימנית.
+- **למה זה חשוב:** HT2 הוא המקור היחיד של הספסל. ממנו בקוד: הספסל בקליפ 1a (נכנס ב-0.4–0.9 מ'), ב-1b, ברצועה של HD ובפינה של HDx2. טעות כאן מתפשטת לכל ההגעה.
+
+**המסכה:**
+- הצללית של הספסל מה-clay, מורחבת בכ-12 פיקסלים.
+- ועוד צל המגע על הרצפה, והאזור הכהה על האבן מתחת לשפת המושב.
+- כל השאר מוחזר מ-`ht.png`.
+- ‏D0o לא משתנה: הקצה של Y ‏7.50 נשאר שם מאחורי המשקוף (2.2).
+
+**הטקסט ל-render-agent:**
+> Edit this photograph only inside the mask. Outside the mask every pixel stays exactly as it is: the plaster wall with the jib door, the limestone panel and every joint, the inside corner, the walnut lining of the living-room opening, the living room beyond, the floor and the light.
+>
+> Inside the mask, add one freestanding entrance bench standing on the floor against the limestone panel, exactly where the mask and the clay box are. It is a simple low bench in matte-oiled walnut (#6B4A33), straight grain, no gloss. The seat is a single 5 cm walnut slab at 45 cm height, 40 cm deep and 80 cm long, its long side parallel to the wall and just in front of the stone. It rests on two solid walnut end panels, 5 cm thick and flush with the ends of the seat. Between them the bench is open: under the seat you see the oak floor and the lowest limestone courses running down to the floor. All edges softly eased (1.5 cm radius). No legs, stretchers, mouldings, drawer, back or plinth. The seat is bare: nothing lies on it and nothing stands under it.
+>
+> Light as in the rest of the photograph. Soft daylight from the roof-light slot along the top of the wall falls from above: the top of the seat carries a soft, even sheen, with a fine highlight on its front edge. The front face and the end panel are in soft shade, filled by daylight from the open front door behind the camera. A short, soft contact shadow lies on the floor under the seat, and a soft darker zone on the stone just below the seat edge. No hard shadow, no sun. The walnut matches the walnut lining of the opening on the right in colour and sheen: a rich, mid-dark warm brown, never orange, red or black.
+
+**האור:**
+- מחוץ למסכה, הרמות של HT לא זזות. הדלת הנסתרת ב-‎−0.60 ‏±1/6 (11.9.3), וזה אוטומטי.
+- **בתוך המסכה:**
+  - חזית הספסל בין 0 ל-2/3 סטופ מתחת לציפוי האגוז של הפתח (u ‏0.814–0.850). הציפוי מקבל את אור הסלון מהצד, והספסל עומד בצל של הכניסה.
+  - לפחות 8 L* מעל נקודת השחור.
+  - הברק על המושב בלי ערוץ שרוף.
+
+**רשימת הדחייה של HT2** (בנוסף לרשימה המשותפת):
+1. **המיקום:**
+   - הקצה הימני לא ב-u ‏0.764 ‏±0.01. הספסל לא יכול לגעת בפינה או בציפוי האגוז, וגם לא להיות משיק להם.
+   - הקצה השמאלי לא ב-0.542 ‏±0.01, או המושב לא ב-v ‏0.85 ‏±0.01.
+2. **האבן:**
+   - מישק זז, נדבך נוסף או חסר, או שיפולים מתחת לספסל.
+   - הספסל עומד על הטיח ולא לפני האבן.
+3. **המבנה:**
+   - הספסל נראה בנוי: גוף מאבן או מטיח, או בסיס סגור.
+   - הספסל מרחף, בלי צל מגע.
+   - הדפנות דקות מ-5 או שקועות מהקצוות.
+4. **המעבר:** תפר, הילה או שינוי גוון בגבול המסכה, שנראים ב-×1 או ב-×2.
+
+### 12.2 HDx2: הקונסולה (עריכה במסכה של HDx)
+**מה רואים:**
+- HDx כמו שהוא (קנבס 3:2): האבן משמאל (u ‏0–0.259), הפינה, החזרה בטיח, הפתח בציפוי אגוז (u ‏0.291–0.651), והסלון דרכו. מימין, הקיר הקדמי בטיח.
+- **ועוד קונסולת האגוז, צמודה לקיר הקדמי** (הטלה; ה-clay גובר):
+  - הקצה השמאלי שלה ב-u ‏0.822–0.832, והיא יוצאת מהשוליים הימניים.
+  - המשטח ב-v ‏0.80–0.87, בפריים 16:9.
+  - רואים את פני הקצה שפונים אל הפתח, את החזית, ופס דק של המשטח מלמעלה. מתחתיו, החלק העליון של בסיס התוף השמאלי.
+  - הרצפה וצל המגע מתחת לקנבס, ולא נראים.
+  - בין המשקוף הימני של הפתח (0.651) לקונסולה נשאר טיח פנוי, כ-0.40 מ' בקיר.
+- **פינת הספסל** ברצועה התחתונה (u כ-0.28, ‏v כ-0.98) לא באה מהמודל. היא נבנית בקוד מהרצועה של HD (מ-HT2), בסיבוב טהור של 65° (motion-agent).
+
+**המסכה:**
+- הצללית של הקונסולה מה-clay, מורחבת בכ-12 פיקסלים.
+- ועוד הצל הרך על הטיח מתחת למשטח ומימין לו.
+- **בלי הפינה השמאלית התחתונה.** כל השאר, וכל הפתח והסלון, מוחזרים מ-`hdx.png`.
+
+**הטקסט ל-render-agent:**
+> Edit this photograph only inside the mask. Outside the mask every pixel stays exactly as it is: the limestone wall on the left and its joints, the corner, the walnut-lined opening, the whole living room seen through it, the plaster front wall and the light.
+>
+> Inside the mask, add one freestanding console table standing against the plaster front wall to the right of the opening, exactly where the mask and the clay box are. Its left end is in view and it runs out of the right edge of the picture. It is in matte-oiled walnut (#6B4A33), straight grain, no gloss. The top is a single 5 cm walnut slab, 35 cm deep, at 80 cm height, with its front corners rounded to a 6 cm radius and softly eased edges; seen slightly from above, its upper surface shows as a thin band. Under the top, set back about 8 cm from the left end and centred in the depth, the upper part of a solid elliptical walnut drum base (about 22 x 16 cm in plan) runs down out of the bottom of the picture. No legs, apron, drawer, shelf or back. The top is completely bare.
+>
+> Light as in the rest of the photograph: soft daylight. The end face of the console that faces the opening catches a little more of the brighter living-room light. The front face is in soft hall light. The top carries a soft, even sheen from the roof-light slot behind and to the left. A soft shadow lies on the plaster under the top and slightly to its right. No hard shadow, no sun, no lamp. The walnut matches the walnut lining of the opening in colour and sheen: a rich, mid-dark warm brown, never orange, red or black.
+
+**האור:**
+- מחוץ למסכה, הרמות של HDx לא זזות (11.9.3): פאנל האבן ב-‎−1.0 ‏±1/6, והקיר האחורי של הסלון בתוך הפתח ב-0 ‏±1/12.
+- **בתוך המסכה:**
+  - חזית הקונסולה בין 0 ל-2/3 סטופ מתחת לציפוי האגוז השמאלי של הפתח (u ‏0.291–0.319).
+  - פני הקצה שמול הפתח בהירים מהחזית.
+  - לפחות 8 L* מעל נקודת השחור, ובלי ערוץ שרוף בברק.
+- **פינת הספסל (קוד):** אותו אגוז ואותו ברק כמו ב-HT2. בתפר שלה, הפרש של עד 3%.
+
+**רשימת הדחייה של HDx2** (בנוסף לרשימה המשותפת):
+1. **המיקום:**
+   - הקצה השמאלי לא ב-u ‏0.822–0.832 ‏±0.01, או המשטח לא ב-v ‏0.80–0.87 ‏±0.01.
+   - הקונסולה נוגעת במשקוף הפתח או מתקרבת אליו.
+   - הקצה הימני שלה נראה: קונסולה קצרה שלא יוצאת מהשוליים.
+2. **המבנה:**
+   - רגליים, בסיס מרכזי אחד, מסגרת, או תוף בקצה ממש (לא שקוע).
+   - משטח עבה מ-6 ס"מ, או סינר גלוי.
+3. **הפתח והסלון:** שינוי כלשהו בפיקסלים של u ‏0.291–0.651 מחוץ למסכה, כולל ההבהרה של הסלון.
+4. **הספסל:** המודל מצייר ספסל או פינת ספסל. הפינה באה רק מהקוד.
+
+### 12.3 HC: המסדרון מהצומת (מבט חדש, מה-clay)
+**מה רואים** (הטלה, שיפט 0.50 / 0.50, קנבס 3:2; ה-clay גובר):
+
+| מה | u | v |
+| --- | --- | --- |
+| הקיר האחורי של המבואה בטיח, עם שיפולים. בקצה השמאלי, פינה פשוטה עם הקיר של דלת הכניסה. **הדלת מחוץ לפריים וסגורה: אין כנף בשום מקום** | 0–0.242 ו-0.808–1.0 | |
+| שני ספי האגוז של הפורטל. יוצאים מהשוליים העליונים והתחתונים, והראש (2.62) מעל הקנבס | 0.242–0.264 ו-0.782–0.808 | כל הגובה |
+| דלת הרחצה (שמאל): הסף הרחוק באגוז, פס דק וכהה מעט | 0.400–0.419 | |
+| דלת הכביסה (שמאל): כנף נסתרת וסגורה, רק חריץ צל | 0.431–0.439 | |
+| דלת חדר הילד ודלת חדר הילדה (ימין): פסי אגוז דקים, עם קצה רך של אור יום | 0.594–0.613 ו-0.556–0.563 | |
+| **דלת חדר השינה, פתוחה וממורכזת** | **0.469–0.533** | 0.349–0.651 |
+| הכנף של חדר השינה: סנפיר בגוון הטיח משמאל לפתח, כמעט בקו | 0.467–0.470 | |
+| חריץ האור: קו בהיר בראש הקיר **הימני**, שמתכנס אל נקודת המגוז. התקרה נראית מ-Y כ-11.2 והלאה | | |
+| נקודת המגוז | 0.50 | 0.50 |
+
+- **דרך דלת חדר השינה:** הקיר המערבי של החדר בטיח, מואר מאור החלון הצפוני שמימין, מחוץ למבט. רצפת האלון ממשיכה. בלי מיטה ובלי רהיט: הטריז שנראה דרך הדלת מכסה רק את X ‏1.80–3.09.
+- **המסדרון ריק** (מסמך המסדרון, פרק 4): בלי ראנר, גופי תאורה, הדפסים, מנורות תמונה או שרפרף. נקודות החשמל הן טיח נקי.
+- **הקלט:** ה-clay של HC, בלי העצם הכהה שבשוליים השמאליים (12.0).
+
+**הטקסט ל-render-agent:**
+> Photorealistic photograph made from this clay render. Keep the camera, the perspective and every edge of the input exactly: the walls, the corners, the portal and its reveals, every door opening, the ceiling line, the floor joints and the roof-light slot stay exactly where they are and the same size. Only add real materials and light.
+>
+> Empty interior of a warm-minimal family house: the same house, materials, light and grading as the reference hall plate. Tall 3:2 canvas. The camera stands in the middle of the entrance hall, eye height 1.20 m, 24 mm, perfectly level, verticals vertical, everything sharp, no depth of field, no grain, no vignette. It looks straight down a long corridor through a wide opening in the hall's back wall.
+>
+> In front is the hall's back wall in matte bone limewash plaster (#ECE5DA) with a very soft trowel movement and a 15 cm skirting in the wall colour. At the far left edge, a plain inside corner with the hall's front wall, also in plaster. The front door is out of view and closed: no door leaf anywhere. The opening into the corridor is 1.40 m wide. Its reveals are lined in matte-oiled walnut (#6B4A33) for the full wall depth, flush with the plaster behind a 3 mm shadow gap, with no casing or architrave. The two walnut reveals run off the top and bottom of the picture, and the head of the opening is above the picture.
+>
+> Through it, a calm, narrow corridor about 7.7 m long in the same plaster, with a lower 2.70 m plaster ceiling and a 1 cm shadow gap at the top of the walls. Smoked oak planks (#8B6F55, matte oil, 22 cm) run straight away from the camera, from the hall into the corridor with no threshold. Along the top of the right-hand wall runs a continuous opal roof-light slot, with no glass or frame visible. It reads as one soft, bright line converging toward the far end, and washes the right wall softly from above. The left wall is about half a stop darker. Doors open off both walls, seen almost edge-on. On the left: the bathroom doorway, its walnut-lined reveal a thin, slightly darker vertical strip, and further on a closed flush jib door in the plaster, showing only its 3 mm shadow-gap outline. On the right: two doorways to the children's rooms, their walnut reveals thin vertical strips with a soft edge of daylight across them. Nothing is visible through the side doors.
+>
+> At the far end, exactly in the centre of the picture, is the open door of the main bedroom: a walnut-lined doorway with no architrave. Its flush, plaster-coloured leaf stands open into the corridor as a hairline-thin pale fin just to its left. Through it, a softly lit plaster wall of the bedroom, with daylight coming from a window out of view on the right, and the oak floor running on. It is the brightest point in the picture after the roof-light line. No furniture is visible through it.
+>
+> Winter afternoon, daylight only. No sun anywhere inside, no sun patches, no hard shadows. White balance 4600 K, warm brown-grey shadows. The corridor is a little darker than the hall, and the bedroom at the end is brightest. Completely empty: no rug or runner, no art, no picture lights, no ceiling lights or fixtures, no stool or bench, no switches, sockets, grilles or vents, no handles, no objects, no people, no text.
+
+**האור** (מדידה לפי 11.9.1, מול הקיר האחורי ב-`base.png`):
+
+| משטח | האזור (הטלה) | היעד |
+| --- | --- | --- |
+| הטיח של המבואה סביב הפורטל | u ‏0.05–0.20 ו-0.85–0.95, ‏v ‏0.40–0.60 | **‎−0.60 ‏±1/6** (כמו HT, ‏HD ו-HC130) |
+| הקיר הימני במסדרון, בגובה האמצע | Y ‏11–13 | **‎−0.8 ‏±1/6** (BIB2) |
+| הקיר השמאלי במסדרון | אותו Y | 0.4–0.6 סטופ מתחת לימני |
+| הקיר של חדר השינה דרך הדלת | בתוך הפתח | **0 ‏±1/4,** בלי ערוץ שרוף |
+| קו החריץ | | בהיר. עד 0.1% מהפיקסלים עם ערוץ ב-255 |
+| האגוז בצל | הספים | לפחות 8 L* מעל נקודת השחור (L ‏11–14) |
+
+**רשימת הדחייה של HC** (בנוסף לרשימה המשותפת):
+1. **דלת חדר השינה:**
+   - המרכז שלה לא ב-u ‏0.50 ‏±0.01, או שהקצוות שלה רחוקים מה-clay ביותר מ-0.01.
+   - היא לא הנקודה הבהירה ביותר אחרי קו החריץ.
+2. **דלת הכניסה:** כנף כלשהי בפריים. או שהעצם הכהה של ה-clay מופיע בשוליים השמאליים כחפץ כלשהו.
+3. **החריץ:** בקיר השמאלי, חסר, עם זכוכית או מסגרת גלויה, או מחולק לגופי תאורה.
+4. **דלתות הצד:**
+   - רואים חדר דרך אחת מהן.
+   - דלת צד סגורה (חוץ מהכביסה).
+   - לדלת הכביסה יש ידית או מסגרת.
+5. **הפורטל:**
+   - יש משקוף או ארכיטרב, או שהציפוי מאלון או צבוע.
+   - הספים רחוקים מה-clay ביותר מ-0.01.
+6. **הרצפה:** הלוחות רוחביים, יש סף, או שטיח או ראנר.
+7. **דרך דלת חדר השינה:**
+   - מיטה, רהיט, מנורה, או החלון עצמו.
+   - הכנף מימין, מעץ, או עם ידית.
+8. **הרמות:** המסדרון בהיר מהמבואה שסביב הפורטל, או הקיר השמאלי בהיר מהימני.
+9. **הגאומטריה:** נקודת המגוז לא ב-(0.50, 0.50) ‏±0.01, או קצוות שרחוקים מה-clay ביותר מ-2 פיקסלים.
+10. **התקרה:** סבכות, פתחי מיזוג או ספוטים.
+
+### 12.4 HC130: באמצע הסיבוב (מבט חדש, מה-clay)
+**התפקיד:** גשר. רואים אותו כחצי שנייה בכל כיוון של המבט סביב, ואף פעם לא נחים עליו. מה שחשוב בו הוא שאין חורים, והתפרים עם HD ועם HC נקיים. כאן לא צריך "וואו": הוא מראה את הקירות שבין שני הפריימים, וזה כל מה שהוא צריך לעשות.
+
+**מה רואים** (‏yaw 130, כלומר מ-167 בשוליים השמאליים עד 93 בימניים. הטלה בשיפט 0.50 / 0.50; ה-clay והשיפט שלו גוברים):
+
+| מה | u |
+| --- | --- |
+| דרך הפורטל: הקיר הצפוני של המסדרון בטיח, מתרחק שמאלה, מואר מלמעלה מהחריץ שמחוץ למבט. בלי רצפה ובלי תקרה בקנבס | 0–0.160 |
+| הסף הצפוני של הפורטל, באגוז. יוצא מהשוליים העליונים והתחתונים | 0.160–0.186 |
+| הקיר האחורי של המבואה בטיח (0.90 מ') | 0.186–0.444 |
+| הפינה הפנימית (X ‏0.80, ‏Y ‏9.80) | 0.444 |
+| הקיר הרחוק בטיח. בו התפר של הדלת הנסתרת לחדר העבודה, הקרוב לפינה. הדלת יוצאת מהשוליים הימניים | 0.444–1.0; התפר ב-0.653 |
+
+- **בלי אבן:** הפאנל נגמר ב-yaw ‏76.5, מחוץ לפריים.
+- **בלי רצפה ובלי שיפולים בקנבס:** הרצפה בפינה ב-v כ-1.11, מתחת לקנבס.
+- **בלי חריץ גלוי:** רואים רק את השטיפה שלו על הקיר הרחוק.
+- **בלי כנף של דלת הכניסה,** ובלי ספסל או קונסולה (שניהם ב-yaw מתחת ל-63).
+- **החפיפות:**
+  - עם HD: ‏yaw ‏93–127, כלומר u ‏0.535–1.0 כאן. התפר של הדלת הנסתרת ב-0.653 כאן וב-0.021 ב-HD.
+  - עם HC: ‏yaw ‏143–167, כלומר u ‏0–0.346 כאן. הסף הצפוני ב-0.160–0.186 כאן וב-0.782–0.808 ב-HC.
+- **הקלט:** ה-clay של HC130, והזרעים מ-HD ומ-HC בחפיפות. כך בנינו את HD מ-HDx.
+
+**הטקסט ל-render-agent:**
+> Photorealistic photograph made from this clay render, continuing the two seeded areas exactly. Keep the camera, the perspective and every edge of the input exactly: the walls, the inside corner, the opening and its reveal, and the door seam stay exactly where they are and the same size. Only add real materials and light. Where the input already shows finished photograph (the left and right overlaps), keep it as it is and continue it seamlessly.
+>
+> The same empty entrance hall as the reference hall plate, from the same camera point, turned between the hall's far wall and the corridor. Tall 3:2 canvas, eye height 1.20 m, 24 mm, perfectly level, verticals vertical, everything sharp, no depth of field, no grain, no vignette.
+>
+> On the right, the hall's far wall in matte bone limewash plaster (#ECE5DA) with a very soft trowel movement. In it, about two-thirds of the way across the picture, a single vertical 3 mm shadow-gap line from the top to the bottom of the picture: the seam of a closed flush jib door in the same plaster, with no handle and no frame; the door continues out of the right edge. Left of the centre, a plain, sharp inside corner, then the hall's back wall in the same plaster. Near the left edge, the side of a wide opening into a corridor: its reveal is lined in matte-oiled walnut (#6B4A33) for the full wall depth, flush with the plaster behind a 3 mm shadow gap, with no casing, and runs off the top and bottom of the picture. Through the opening, at the left edge, the corridor's plaster wall recedes away to the left, washed softly from above by daylight from a roof-light slot out of view.
+>
+> Light: soft daylight from an opal roof-light slot along the top of the far wall, out of view. The far wall is brightest at the top and fades gently downward, evenly along its length. The back wall is a little darker, and the light falls softly into the inside corner, never black. Winter afternoon, no sun, no sun patches, no hard shadows, white balance 4600 K, warm brown-grey shadows. Completely empty: no door leaf, no stone, no bench, no console, no hooks, no lamp, no switch, no art, no objects, no people, no text.
+
+**האור:**
+- הדלת הנסתרת בגובה האמצע (u ‏0.70–0.95, ‏Z ‏0.80–1.65): **‎−0.60 ‏±1/6.** זה העוגן של הכניסה (11.9.3), כמו ב-HD.
+- הקיר האחורי: בין ‎−0.60 ל-‎−0.90. נפילה רכה אל הפינה.
+- הקיר של המסדרון דרך הפורטל: **‎−0.8 ‏±1/6,** כמו ב-HC.
+- הסף באגוז: לפחות 8 L* מעל נקודת השחור.
+
+**רשימת הדחייה של HC130** (בנוסף לרשימה המשותפת):
+1. **התפרים:**
+   - מול HD: התפר של הדלת הנסתרת רחוק ביותר מ-2 פיקסלים, או הפרש גוון של יותר מ-3% בחפיפה.
+   - מול HC: הסף הצפוני רחוק ביותר מ-2 פיקסלים, או הפרש גוון של יותר מ-3%.
+2. **הגאומטריה:**
+   - הפינה לא ב-u ‏0.444 ‏±0.01 (או כמו ב-clay).
+   - הסף לא ב-0.160–0.186 ‏±0.01.
+   - התפר לא ב-0.653 ‏±0.01.
+3. **המצאות:**
+   - אבן, שיפולים שנכנסים לקנבס, או תקרה.
+   - חריץ אור גלוי, עם זכוכית או מסגרת.
+   - ידית או מסגרת לדלת הנסתרת, או דלת רגילה במקומה.
+4. **הפינה:** שחורה, או עם קו כהה חד.
+5. **דרך הפורטל:** רואים חדר, דלת, הדפס או גוף תאורה על קיר המסדרון.
+
+### 12.5 האור והתפרים, ארבעת הסטילס
+**המוסכמה:** כמו ב-11.9.1 של מסמך הכניסה. רמות תצוגה, מול הקיר האחורי ב-`base.png` (Y ‏0.751). אותו יום חורף, ‏15:00, ‏4600K. אין שמש בפנים, והמנורות כבויות ואין להן גוף (DL1, ‏ARC2, ‏BIB2).
+
+| סטיל | העוגן | היעד | מה עוד נמדד |
+| --- | --- | --- | --- |
+| **HT2** | הדלת הנסתרת (מחוץ למסכה) | ‎−0.60 ‏±1/6, ללא שינוי מ-HT | חזית הספסל: 0 עד 2/3 מתחת לציפוי האגוז שבאותו פריים |
+| **HDx2** | פאנל האבן (מחוץ למסכה) | ‎−1.0 ‏±1/6, ללא שינוי מ-HDx. הסלון בתוך הפתח: 0 ‏±1/12 | חזית הקונסולה: 0 עד 2/3 מתחת לציפוי האגוז השמאלי |
+| **HC130** | הדלת הנסתרת | ‎−0.60 ‏±1/6 | הקיר של המסדרון דרך הפורטל: ‎−0.8 ‏±1/6 |
+| **HC** | הטיח של המבואה סביב הפורטל | ‎−0.60 ‏±1/6 | הקיר הימני במסדרון ‎−0.8; השמאלי 0.4–0.6 מתחתיו; חדר השינה 0 ‏±1/4 |
+
+**התפרים לאורך ההגעה** (החשיפה נעולה):
+
+| תפר | איך נבנה | הסף |
+| --- | --- | --- |
+| ‏HT2 ← 1a ו-1b | הספסל מודבק בקוד מ-HT2 | כמו ב-QA של 1a: נעילת הסוף זהה ל-HT2 עד רמה אחת |
+| ‏HT2 ← הרצועה של HD | קוד, דרך תיבת הספסל ב-clay | הפרש של עד 3% בתפר, ובלי קצה כפול |
+| ‏HD ← HC130 | זרע מ-HD | עד 3%, והתפר של הדלת הנסתרת ‏±2 פיקסלים |
+| ‏HC130 ← HC | זרע מ-HC | עד 3%, והסף הצפוני ‏±2 פיקסלים |
+| ‏HD ← HDx2 | הסיבוב הקיים | ללא שינוי: עד 3%, ונעילה על המישקים (11.5.8). פינת הספסל בקוד, מהרצועה |
+| ‏HDx2 ← קליפ 2 | הקונסולה והספסל מודבקים בקוד במטר הראשון | הפריים הראשון זהה ל-HDx2 עד רמה אחת |
+
+- **בלי גריידינג מקומי ובלי מכפיל רמה באף אחד מהארבעה** (11.9.3: מכפיל רק ב-D0o).
+- **החטאה קטנה,** עד 1/6 מחוץ לטווח כשכל התפרים עוברים: הסטיל עובר, עם שורה ב-README.
+- **החטאה גדולה יותר:** התיקון האחד, עם הרמה במילים בפרומפט.
+
+### 12.6 למנהל
+- **render-agent:**
+  1. מוחק את העצם הכהה מה-clay של HC (0 טוקנים).
+  2. מכין את המסכות של הספסל ושל הקונסולה מה-clay.
+  3. מרנדר לפי הסדר של 12.0: ‏HT2 ← הרצועה של HD (motion-agent, קוד) ← HDx2 ← HC ← HC130.
+  - ‏`var2_estimate_cost` לפני כל שליחה. ‏var2 צריך להתחבר מחדש לפני הכול.
+  - ניסיון אחד ותיקון אחד לכל היותר לכל סטיל.
+  - תיקון שעובר את 2,658 עוצר ושואל.
+- **motion-agent:**
+  - הרצועה של HD מ-HT2.
+  - פינת הספסל ב-HDx2.
+  - ההדבקות ב-1a, ב-1b ובקליפ 2, מהסטילס הסופיים ולא מה-clay.
+  - הסיבובים בצומת על HD, ‏HC130 ו-HC.
+  - ההרכבה של ההגעה לפי 11.1 ו-v2.
+- **qa-agent, רק מה שהשתנה (EFF1.2):**
+  - **ב-HT2 וב-HDx2:** אפס רמות מחוץ למסכה, הרשימה של כל סטיל, והרמות של 12.5.
+  - **ב-HC וב-HC130:** אלה מבטים חדשים. בודקים אותם במלואם לפי 12.3 ו-12.4, וגם את התפרים של 12.5.
+  - ב-×1 וב-×2 (EFF1.3): האגוז נקרא כאגוז ולא כתום; דלת חדר השינה היא הנקודה הבהירה ב-HC; אין כנף ואין עצם בשוליים של HC; התפרים לא נראים בסיבוב.
+- **הליקוט (F3):** במקביל, דגם תואם לספסל ולקונסולה, לפי התנאים של 2.2. הרינדור לא מחכה לו.
+- **לבעלים:**
+  - הוא רואה את ארבעת הסטילס ואת ההגעה המורכבת, לפני החיבור לאתר. כמו בכל סבב בפיילוט, כל שלב מוקדם.
+  - **אין שאלה חדשה.**
+- **אני, אחרי הסטילס:** ביקורת עיצובית על הארבעה, ממוקדת בסעיפים של 12.1–12.4, בסבב אחד עם QA (EFF1.3).
