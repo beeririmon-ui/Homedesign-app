@@ -1,7 +1,7 @@
 {
  "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2). Round 2 (manager relay after QA, 0 tokens): MP-D2 sill edge honed in code (step 4), MP-I1 / MP-I2 recorded as mandatory, the clay moved to 12.6, re-priced; nothing sent.",
- "cap": 3700,
- "spent": 3700,
+ "cap": 4100,
+ "spent": 4100,
  "left_in_cap": 0,
  "var2": {
   "connected": true,
@@ -345,6 +345,32 @@
     "raw": "raw/defaults-r7-flax-edit.jpg",
     "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults-r7-flax-edit.txt",
     "verdict": "USED inside Pecan's alpha: contour held (outside ring changed on 0.4 %, outline edges p90 1 px as Pecan's); hue turned +7.8 deg and C* x 0.827 onto the SKU photo in code; dE00 8.7 vs the duvet; weave and fold shadows readable"
+   }
+  ],
+  "spent": 400
+ },
+ "round8": {
+  "date": "2026-11-18",
+  "why": "QA 2026-11-18-master-mb0 failed M1-M7 (medium): code fixes; M1 foot mask edit authorised (400, bedroom to 4,100)",
+  "sent": [
+   {
+    "id": "defaults-r8-foot-edit",
+    "model": "nano-banana-2",
+    "type": "image-to-image (mask edit of the duvet foot, used inside the duvet alpha from row 1285)",
+    "resolution": "2K",
+    "aspect_ratio": "16:9",
+    "image_refs": 0,
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "558f3b2f-3d7e-48c8-85ef-296a84faadee",
+    "task_id": "a711f8f3ad34200f692ad54bacd4cf70",
+    "idempotency_key": "wm-master-mb0-defaults-r8-foot-edit-2026-11-18",
+    "input": "inputs/defaults-edit-r8-input.png (sha baaa0231...)",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults-r8-foot-edit.txt",
+    "state": "completed after about 30 minutes",
+    "raw": "raw/defaults-r8-foot-edit.jpg",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-a711f8f3ad34200f692ad54bacd4cf70-0-1795011017331-f7d18af3.jpg",
+    "verdict": "NOT USED: composited inside the duvet alpha it reads no better: x/y gradient 2.21 against 1.64 code-only (more vertical streaks), grid 4.4x against 6.5x, seam -0.46 against -0.48"
    }
   ],
   "spent": 400
