@@ -1,5 +1,5 @@
 {
- "date": "2026-11-18",
+ "date": "2026-11-18 (updated after post_b2: the ring and the washes)",
  "measured_on": "the final layers (layers/manifest.json); frame u, v = the 16:9 frame inside the canvas (K = 4072/3840)",
  "curtain_vs_corner": {
   "rule": "rejection 10: overlap >= 0.03 or clear >= 0.02",
@@ -32,19 +32,21 @@
  "towel_vs_vanity": {
   "rule": "rejection 10 / 0א: >= 0.025",
   "gap_u": 0.037,
-  "ok": true
+  "ok": true,
+  "after": "the ring fix (post_b2)"
  },
  "towel_hang": {
   "render_rows": [
-   987,
-   1421
+   968,
+   1402
   ],
   "clay_rows": [
    928,
    1267
   ],
-  "hem_lower_than_clay_px": 154,
-  "note": "the drawn towel hangs about 15 cm lower than the clay's (its hem near Z 0.33 against about 0.50); the same in both variants (one geometry); not a rejection item: for the designer"
+  "hem_lower_than_clay_px": 135,
+  "note": "the drawn towel hangs about 15 cm lower than the clay's (its hem near Z 0.33 against about 0.50); the same in both variants (one geometry); not a rejection item: for the designer",
+  "ruling": "0א 2: accepted as the new spec; raised 19 px with the ring's bar"
  },
  "sizes_vs_clay": {
   "sconce L": {
@@ -142,25 +144,9 @@
    ],
    "w_ratio": 1.108,
    "h_ratio": 0.96
-  },
-  "ring": {
-   "layer_box": [
-    2316,
-    849,
-    2506,
-    1018
-   ],
-   "clay_box": [
-    2314,
-    847,
-    2476,
-    971
-   ],
-   "w_ratio": 1.172,
-   "h_ratio": 1.36
   }
  },
- "sizes_note": "refitted in code to the clay (the card's size): the two lamps (drawn 1.34x), the vase (1.43x), the soap dispenser and the niche bottles (1.17-1.19x). Left as drawn: the ring (about 1.15x across; the towel hangs from it), the cup. Width ratios include spouts, side faces and the clay's own occlusion",
+ "sizes_note": "refitted in code to the clay (the card's size): the two lamps (drawn 1.34x), the vase (1.43x), the soap dispenser and the niche bottles (1.17-1.19x). The ring: scaled to the clay's width about its wall base (post_b2.py, 0א 4). Left as drawn: the cup. Width ratios include spouts, side faces and the clay's own occlusion",
  "towel_colour": {
   "rule": "rejection 11: dE00 <= 4 in the lower half, outside the lamp pool, against the SKU photo",
   "method": "albedo estimate: the towel's lower-half median, linear, divided by the plate's light round it (relative to the lit plaster left of the mirror); against the SKU photo's fabric mid-tone",
@@ -204,14 +190,71 @@
  },
  "rnd2": {
   "defaults": {
-   "region_px": 846170,
+   "region_px": 842698,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
   },
   "linen": {
    "outside_differing_px_vs_plate": 0,
    "differing_px_vs_defaults_outside_alpha": 0
+  }
+ },
+ "ring": {
+  "rule": "0א 4: the A3 SKU (ring 16, base 5); diameter within +-5 % of the clay; the base stays",
+  "scale": 0.8717,
+  "outer_box_before": [
+   2318,
+   873,
+   2504,
+   1039
+  ],
+  "outer_box_after": [
+   2331,
+   874,
+   2493,
+   1018
+  ],
+  "clay_box": [
+   2314,
+   847,
+   2476,
+   971
+  ],
+  "width_ratio_to_clay": 1.0,
+  "ok_width": true,
+  "height_px_before_after": [
+   167,
+   145
+  ],
+  "height_note": "the model drew the ring rounder than the lens draws the clay's (the clay's ellipse is 1.4x wider than tall at the frame's edge): with one uniform scale the width matches and the height stays the drawn shape's",
+  "towel_rise_px": 19,
+  "bar_top_before_after": [
+   1027.0,
+   1008.0
+  ],
+  "towel_top_at_the_bar_before_after": [
+   1004,
+   985
+  ],
+  "towel_in_the_air": "no: the towel's top (row 985) is above the bar's top (row 1008): the fold lies over the bar",
+  "gap_ring_towel_px": 0,
+  "visible_rod_reaches_the_towel": true,
+  "same_geometry_both_variants": true
+ },
+ "washes": {
+  "rule": "0א 5: the left lamp's peak 0.8-1.25 of the right's (added light, linear luminance, p99.5 over the beams)",
+  "before": {
+   "left": 0.1987,
+   "right": 0.3919,
+   "ratio": 0.507
   },
-  "recompose_from_files_vs_direct": null
+  "gain_linear_left": 2.0,
+  "gain_linear_right": 0.657,
+  "after": {
+   "left": 0.2317,
+   "right": 0.2574,
+   "ratio": 0.9
+  },
+  "note": "the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8"
  }
 }

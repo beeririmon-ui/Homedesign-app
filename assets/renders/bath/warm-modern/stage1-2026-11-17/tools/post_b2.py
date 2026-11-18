@@ -120,6 +120,11 @@ def complete_ring(R, towel, e):
     rj = np.clip(((np.clip(rho[need], -0.99, 0.99) + 1) / 0.25).astype(int), 0, 7)
     rgb[need] = table[ai, rj]
     rgb = np.nan_to_num(rgb)
+    base_zone = (alpha > 0) & (mdist <= MOUNT_R - 2) & (R[..., 3] < 0.95)   # round the wall base: its own colour carried in
+    wgt = cv2.GaussianBlur(R[..., 3].astype(np.float32), (0, 0), 2).astype(np.float64)
+    for c in range(3):
+        v = cv2.GaussianBlur((R[..., c] * R[..., 3]).astype(np.float32), (0, 0), 2).astype(np.float64) / np.maximum(wgt, 1e-6)
+        rgb[..., c][base_zone] = v[base_zone]
     return np.dstack([rgb, alpha])
 
 
@@ -186,7 +191,14 @@ def main():
     M = np.float32([[s, 0, mx - s * mx], [0, s, my - s * my]])
     full = complete_ring(R, towel, e)
     ring_new = warp_rgba(full, M, H, W)
-    sh_new = 1 - cv2.warpAffine((1 - Rs).astype(np.float32), M, (W, H), flags=cv2.INTER_AREA).astype(np.float64)
+    # the ring's shadow is carried on under the drawn ring's footprint (normalised blur from the plaster round it), so the new,
+    # smooth rod leaves no unshadowed sliver where the old cut was ragged
+    dark = 1 - Rs
+    hole = C.dil(R[..., 3] > 0, 3)
+    wv = C.blur((~hole).astype(np.float64), 3)
+    fillv = C.blur(dark * ~hole, 3) / np.maximum(wv, 1e-6)
+    dark = np.where(hole & (wv > 0.05), fillv, dark)
+    sh_new = 1 - cv2.warpAffine(dark.astype(np.float32), M, (W, H), flags=cv2.INTER_AREA).astype(np.float64)
     sh_new = np.where(sh_new > 0.996, 1.0, sh_new)
     e2 = dict(e, cx=mx + s * (e["cx"] - mx), cy=my + s * (e["cy"] - my), A=e["A"] * s, B=e["B"] * s, c0=e["c0"] * s, t=e["t"] * s)
     box1, _ = extent(e2, H, W)
@@ -249,32 +261,55 @@ def main():
     wash = dict(rule="0א 5: the left lamp's peak 0.8-1.25 of the right's (added light, linear luminance, p99.5 over the beams)",
                 before=dict(left=round(pk[42]["p995"], 4), right=round(pk[43]["p995"], 4), ratio=round(ratio, 3)))
     if not 0.8 <= ratio <= 1.25:
-        x0, y0, x1, y1 = boxes[42]
-        win = np.zeros((H, W), bool)
-        win[max(0, y0 - 380):y1 + 340, max(0, x0 - 250):x1 + 250] = True
-        win &= L8.max(2) > 0
+        # the left plaster is lit more by the window, so the left lamp has less headroom before white: its added light cannot
+        # reach the right's peak without blowing its whole V. Both gains move: the left up (at most 2x, linear), then the right
+        # down until the left is 0.9 of it
         lin_b, lin_f = C.lin(below), C.lin(C.light_one(below, L8))
-        target = pk[43]["p995"]
-        lo, hi = 1.0, 12.0
-        for _ in range(30):                               # the gain that brings the left's p99.5 to the right's (with the clip)
-            g = (lo + hi) / 2
-            f = np.clip(lin_b + g * (lin_f - lin_b), 0, 1)
-            a2 = (f - lin_b) @ np.array([0.2126, 0.7152, 0.0722])
-            ww = np.zeros((H, W), bool)
-            ww[max(0, y0 - 380):y0, max(0, x0 - 250):x1 + 250] = True
-            ww[y1:y1 + 340, max(0, x0 - 250):x1 + 250] = True
-            v = a2[ww & win]
-            p = np.percentile(v[v > 0], 99.5)
-            lo, hi = (g, hi) if p < target else (lo, g)
-        f = np.clip(lin_b + g * (lin_f - lin_b), 0, 1)
-        Fn = C.srgb(f)
+        Y3 = np.array([0.2126, 0.7152, 0.0722])
+
+        def beam_win(i):
+            x0, y0, x1, y1 = boxes[i]
+            w = np.zeros((H, W), bool)
+            w[max(0, y0 - 380):y0, max(0, x0 - 250):x1 + 250] = True
+            w[y1:y1 + 340, max(0, x0 - 250):x1 + 250] = True
+            return w & (L8.max(2) > 0)
+
+        def with_gain(i, g, f_in):
+            w = beam_win(i)
+            x0, y0, x1, y1 = boxes[i]
+            full = np.zeros((H, W), bool)
+            full[max(0, y0 - 380):y1 + 340, max(0, x0 - 250):x1 + 250] = True
+            full &= L8.max(2) > 0
+            f = f_in.copy()
+            f[full] = np.clip(lin_b[full] + g * (lin_f[full] - lin_b[full]), 0, 1)
+            a2 = (f - lin_b) @ Y3
+            v = a2[w]
+            return f, float(np.percentile(v[v > 0], 99.5))
+
+        def solve(i, target, lo, hi, f_in):
+            for _ in range(30):
+                g = (lo + hi) / 2
+                _, p = with_gain(i, g, f_in)
+                lo, hi = (g, hi) if p < target else (lo, g)
+            return g
+
+        gL = solve(42, pk[43]["p995"], 1.0, 2.0, lin_f)
+        fL, pL = with_gain(42, gL, lin_f)
+        gR = 1.0
+        fR, pR = fL, pk[43]["p995"]
+        if pL / pR < 0.9:
+            gR = solve(43, pL / 0.9, 0.2, 1.0, fL)
+            fR, pR = with_gain(43, gR, fL)
+        Fn = C.srgb(fR)
+        changed = np.abs(fR - lin_f).max(2) > 1e-9
         Ln = 1 - (1 - Fn) / np.maximum(1 - below, 1e-3)
-        Ln = np.clip(np.where(win[..., None], Ln, L8 / 255), 0, 1)
+        Ln = np.clip(np.where(changed[..., None], Ln, L8 / 255), 0, 1)
         L8 = np.clip(np.rint(Ln * 255), 0, 255).astype(np.uint8)
         Image.fromarray(L8).save(os.path.join(ST, man["light"]["file"]))
         pk2, _ = lamp_peaks(below, L8, boxes)
-        wash.update(gain_linear_left=round(float(g), 3), after=dict(left=round(pk2[42]["p995"], 4), right=round(pk2[43]["p995"], 4),
-                                                                     ratio=round(pk2[42]["p995"] / pk2[43]["p995"], 3)))
+        wash.update(gain_linear_left=round(float(gL), 3), gain_linear_right=round(float(gR), 3),
+                    after=dict(left=round(pk2[42]["p995"], 4), right=round(pk2[43]["p995"], 4), ratio=round(pk2[42]["p995"] / pk2[43]["p995"], 3)),
+                    note="the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8")
     rec["washes"] = wash
     # ---- recompose both composites from the files ----
     L8 = np.asarray(Image.open(os.path.join(ST, man["light"]["file"])).convert("RGB"))
