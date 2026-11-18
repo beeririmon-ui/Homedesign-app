@@ -1,9 +1,9 @@
 {
- "convention": "route 12.5 / 11.9.1: display stops against base.png back wall (Y 0.751); medians of the clay-defined regions",
+ "convention": "12.7 (2026-11-18) restated targets; display stops against base.png back wall (Y 0.751); medians of clay-defined regions; black point = L* percentiles of the 16:9 frame",
  "HT2": {
   "anchor": "jib door",
   "value": -0.501,
-  "target": "-0.60 +-1/6, unchanged from HT (outside the mask)",
+  "target": "-0.60 +-1/6",
   "bench": {
    "lining_Y": 0.0607,
    "lining_L": 29.6,
@@ -26,12 +26,44 @@
      "vs_lining": -0.909
     }
    }
+  },
+  "seat_hue": {
+   "test": "12.7.2: the seat (top face) vs the walnut lining u 0.814-0.850: hue within +-5 deg, C*/L* at most 15 % above the lining",
+   "lining": {
+    "L": 29.6,
+    "a": 12.53,
+    "b": 18.81,
+    "C": 22.6,
+    "h_deg": 56.3,
+    "C_over_L": 0.764
+   },
+   "seat_top": {
+    "L": 51.7,
+    "a": 14.23,
+    "b": 22.09,
+    "C": 26.28,
+    "h_deg": 57.2,
+    "C_over_L": 0.509
+   },
+   "seat_front_edge": {
+    "L": 24.4,
+    "a": 11.04,
+    "b": 14.89,
+    "C": 18.54,
+    "h_deg": 53.5,
+    "C_over_L": 0.758
+   },
+   "seat_dh_deg": 0.9,
+   "seat_C_over_L_vs_lining_pct": -33.4,
+   "front_edge_dh_deg": -2.8,
+   "front_edge_C_over_L_vs_lining_pct": -0.8,
+   "seat_passes": true
   }
  },
  "HDx2": {
   "anchor": "stone panel",
   "value": -0.817,
-  "target": "-1.0 +-1/6 (unchanged from HDx: -0.82, its README line)",
+  "target": "-1.0 +-1/6 (as HDx, -0.82, its README line)",
   "living_back_wall": {
    "surface": "living back wall in the opening",
    "stops_vs_base": 0.01,
@@ -42,75 +74,139 @@
    "target": "0 +-1/12"
   },
   "console": {
-   "top front edge": {
-    "px": 27243,
-    "L_star": 21.3,
-    "L_p2": 15.7,
-    "stops_vs_left_lining": -0.853
+   "left_lining_L": 29.4,
+   "frame_p01_outside_mask": 4.62,
+   "parts": {
+    "top front edge (turned away from the opening)": {
+     "L_median": 22.3,
+     "L_p2": 18.0,
+     "stops_vs_left_lining": -0.738,
+     "band": [
+      -1.0,
+      0.0
+     ],
+     "within": true
+    },
+    "top surface": {
+     "L_median": 33.2,
+     "L_p2": 26.0,
+     "stops_vs_left_lining": 0.339,
+     "band": null,
+     "within": null
+    },
+    "end face (toward the opening)": {
+     "L_median": 40.3,
+     "L_p2": 25.7,
+     "stops_vs_left_lining": 0.929,
+     "band": null,
+     "within": null
+    },
+    "drum": {
+     "L_median": 19.0,
+     "L_p2": 12.6,
+     "stops_vs_left_lining": -1.127,
+     "band": null,
+     "within": null
+    }
    },
-   "top surface": {
-    "px": 49240,
-    "L_star": 33.2,
-    "L_p2": 25.9,
-    "stops_vs_left_lining": 0.339
-   },
-   "end face toward the opening": {
-    "px": 2601,
-    "L_star": 40.3,
-    "L_p2": 25.5,
-    "stops_vs_left_lining": 0.929
-   },
-   "drum": {
-    "px": 77330,
-    "L_star": 16.9,
-    "L_p2": 5.8,
-    "stops_vs_left_lining": -1.394
+   "targets_12_7_3": "a walnut face toward the light 0 to 2/3 under the lining, a face turned away 0 to 1.0 under; >= 8 L* over the black point; console p2 >= the frame p0.1 outside the mask, the drum median >= it + 8",
+   "drum_checks": {
+    "console_p2": 12.99,
+    "drum_median": 19.0,
+    "drum_p2": 12.6,
+    "ok": true
    }
   }
  },
  "HC": {
-  "hall_around_portal": {
-   "stops": -1.051,
-   "target": "-0.60 +-1/6"
+  "convention": "12.7.1 restated targets; display stops vs base.png back wall; on hc.png after the WM-G1 toe (hc-grade.json)",
+  "hall_back_wall_around_portal": {
+   "stops_median": -1.051,
+   "left_side": -1.191,
+   "right_side": -0.246,
+   "target": "no anchor: -1.2 to -0.2, darker on the front-door side; the seam with HC130 within 3 %"
   },
-  "corridor_right": {
-   "stops": -1.165,
-   "target": "-0.8 +-1/6"
-  },
-  "corridor_left": {
-   "stops": -0.834,
-   "under_right": -0.331,
-   "target": "0.4-0.6 under the right"
+  "corridor_walls_mid": {
+   "right": -1.165,
+   "left": -0.834,
+   "left_minus_right": 0.331,
+   "target": "-1.3 to -0.7; the opposite wall may equal or exceed the slot wall at mid height by up to 1/2 stop",
+   "within": true
   },
   "bedroom": {
    "stops": 0.051,
-   "target": "0 +-1/4",
-   "clipped_px": 0
+   "target": "0 +-1/4; the brightest inside the portal after the slot line, by median",
+   "medians_inside_portal": {
+    "right": -1.428,
+    "left": -0.857,
+    "floor": -2.248,
+    "ceiling": -1.041,
+    "bedroom": 0.026
+   },
+   "brightest_by_median_inside_portal": true
   },
   "slot": {
-   "px": 36304,
    "channel_255_pct": 0.044,
-   "frame_255_pct": 0.005
+   "target": "<= 0.1 %"
+  },
+  "black_point": {
+   "frame_p05": 13.71,
+   "frame_p01": 11.82,
+   "target": "L* 11-14"
   },
   "walnut": {
-   "L_median": 27.4,
-   "L_p5": 8.7,
-   "black_point_L_p01": 4.9
+   "L_median": 29.1,
+   "over_black_point_p05": 15.3,
+   "target": ">= 8 over the black point"
   }
  },
  "HC130": {
-  "jib_door_mid": {
-   "stops": -0.498,
-   "target": "-0.60 +-1/6"
+  "levels": {
+   "jib_door_mid": {
+    "stops": -0.498,
+    "target": "-0.60 +-1/6"
+   },
+   "back_wall": {
+    "stops": -0.237,
+    "target": "-0.60 to -0.90"
+   },
+   "corridor_wall_through_portal": {
+    "stops": -1.536,
+    "target": "-0.8 +-1/6"
+   },
+   "clipped_pct": 0.113,
+   "targets_12_7_4": "anchor: the jib door -0.60 +-1/6; the back wall and the corridor wall: no target of their own (inherited from HC); seams <= 3 %, no tone jump within one surface"
   },
-  "back_wall": {
-   "stops": -0.237,
-   "target": "-0.60 to -0.90"
+  "seams": {
+   "HC_seed_core_vs_HC_rotated_median_pct": 0.249,
+   "HD_seed_core_vs_HD2_rotated_median_pct": 0.184,
+   "target": "<= 3 %",
+   "jib_seam_offset_px": 0.05,
+   "north_reveal_offsets_px": [
+    0.14,
+    0.1
+   ]
   },
-  "corridor_wall_through_portal": {
-   "stops": -1.536,
-   "target": "-0.8 +-1/6"
+  "tone_steps": {
+   "back wall Y 9.80 (X < 1.66, above the skirting)": {
+    "largest_step_over_8px_stops_31px_smoothed": 0.037,
+    "at_v_u": [
+     0.6,
+     0.237
+    ]
+   },
+   "far wall X 0.80 (off the jib seam, above the skirting)": {
+    "largest_step_over_8px_stops_31px_smoothed": 0.032,
+    "at_v_u": [
+     0.4,
+     0.707
+    ],
+    "note": "30 px each side of the jib seam left out (the seam is a line, not a tone step)"
+   }
   },
-  "clipped_pct": 0.115
+  "black_point": {
+   "frame_p01": 12.36,
+   "frame_p05": 14.66
+  }
  }
 }

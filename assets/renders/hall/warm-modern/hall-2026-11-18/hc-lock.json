@@ -1,6 +1,6 @@
 {
- "still": "HC: the corridor from the junction, seedream-5-pro r1 as returned (2496 x 1664, no alignment); tall 3:2 canvas",
- "status": "NOT ACCEPTED: r1 misses 12.3 items 8 and 9; the one fix (fix1, nano-banana-2) was worse; back to the designer (12.5). Kept here as the candidate the bridge HC130 is seeded from",
+ "still": "HC: the corridor from the junction; seedream-5-pro r1 with the WM-G1 toe (A 9); the raw kept as hc-raw.png; tall 3:2 2496 x 1664",
+ "status": "ACCEPTED by master-designer (12.7.1): r1 as it is; light targets restated; item 9 accepted, labels anchor to label_anchors; the laundry as an open walnut-lined opening is the corridor canon; HC-L1 (a 4-6 px dark mark on the bedroom leaf, about (900, 420) in the 1920 frame): low, in the backlog, not fixed",
  "lock_vs_clay": {
   "still": "HC",
   "lines": {
@@ -336,12 +336,249 @@
   },
   "item2_front_door_leaf_or_dark_object": "none (the bath window is out of the clay; plain plaster corner)",
   "item3_slot": "right wall, one soft line, no glass or frame: ok",
-  "item4_side_doors": "walnut reveals; nothing seen through them; laundry: reads as a narrow opening edge at x2, not a handle or frame (for the designer)",
+  "item4_side_doors": "walnut reveals, nothing seen through them; the laundry drawn as an open walnut-lined opening: the corridor canon (12.7.1)",
   "item5_portal": "walnut, flush, no casing (the clay now without the Nordic casing); reveals 2-10 px from the clay (< 0.01 u)",
   "item6_floor": "planks along the corridor, no threshold, no runner: ok",
   "item7_through_bedroom_door": "plaster wall and floor, no furniture, no window; the leaf: a thin pale fin on the left: ok",
-  "item8_levels": "FAIL: the left wall brighter than the right (-0.83 / -1.17) and than the hall around the portal (-1.05)",
-  "item9_geometry": "FAIL: side doors 5-18 px, portal 2-10 px from the clay (2 px allowed); the vanishing point within 0.01 (the bedroom door centre 0.503)",
+  "item8_levels": "restated in 12.7.1: see levels_12_7_1",
+  "item9_geometry": "accepted in 12.7.1 (lines 2-18 px; the bedroom door centre 0.503 and the vanishing point hold); labels anchor to label_anchors",
   "item10_ceiling": "no grilles, vents or spots: ok"
+ },
+ "label_anchors": {
+  "rule": "12.7.1: the door labels in HC anchor to these measured positions (u of the 16:9 frame), not to the plan's projection; motion-agent exports them with the camera data, frontend-dev uses them",
+  "bathroom": {
+   "u": [
+    0.3945,
+    0.4254
+   ]
+  },
+  "laundry": {
+   "u_edge": 0.4248,
+   "label": null,
+   "canon": "12.7.1: an open walnut-lined opening, nothing seen through it; no label"
+  },
+  "girls_room": {
+   "u": 0.559
+  },
+  "boys_room": {
+   "u": [
+    0.5932,
+    0.6102
+   ]
+  },
+  "main_bedroom": {
+   "u": [
+    0.47,
+    0.5357
+   ],
+   "centre": 0.5028,
+   "v": [
+    0.349,
+    0.651
+   ]
+  },
+  "portal": {
+   "left": [
+    0.2356,
+    0.2756
+   ],
+   "right": [
+    0.7655,
+    0.8105
+   ]
+  },
+  "note": "measured on the raw (hc-raw.png); the toe moves no pixel position, so they hold for hc.png; the laundry edge has a low correlation (0.70)",
+  "caution": "the laundry edge (corr 0.70) and the bath far reveal land on the same line (0.425): one of the two matches may be false; QA checks at x2 before the labels use them"
+ },
+ "line_anchors_measured": {
+  "portal left reveal, hall side (u 0.240)": {
+   "u_clay": 0.24,
+   "u_measured": 0.2356,
+   "v_range": [
+    0.1,
+    0.9
+   ],
+   "offset_px": -10.31,
+   "corr": 0.984
+  },
+  "portal left reveal, corridor side (u 0.279)": {
+   "u_clay": 0.2787,
+   "u_measured": 0.2756,
+   "v_range": [
+    0.15,
+    0.85
+   ],
+   "offset_px": -7.36,
+   "corr": 0.96
+  },
+  "bath door reveal near (u 0.400)": {
+   "u_clay": 0.3997,
+   "u_measured": 0.3945,
+   "v_range": [
+    0.38,
+    0.62
+   ],
+   "offset_px": -12.23,
+   "corr": 0.98
+  },
+  "bath door reveal far (u 0.418)": {
+   "u_clay": 0.4176,
+   "u_measured": 0.4254,
+   "v_range": [
+    0.4,
+    0.6
+   ],
+   "offset_px": 18.44,
+   "corr": 0.923
+  },
+  "laundry jib seam (u 0.431)": {
+   "u_clay": 0.4307,
+   "u_measured": 0.4248,
+   "v_range": [
+    0.42,
+    0.58
+   ],
+   "offset_px": -13.95,
+   "corr": 0.696
+  },
+  "bedroom door left jamb (u 0.469)": {
+   "u_clay": 0.469,
+   "u_measured": 0.47,
+   "v_range": [
+    0.4,
+    0.62
+   ],
+   "offset_px": 2.43,
+   "corr": 0.785
+  },
+  "bedroom door right jamb (u 0.533)": {
+   "u_clay": 0.5325,
+   "u_measured": 0.5357,
+   "v_range": [
+    0.4,
+    0.62
+   ],
+   "offset_px": 7.42,
+   "corr": 0.75
+  },
+  "girl's door reveal (u 0.557-0.563)": {
+   "u_clay": 0.5569,
+   "u_measured": 0.559,
+   "v_range": [
+    0.4,
+    0.6
+   ],
+   "offset_px": 5.06,
+   "corr": 0.98
+  },
+  "boy's door reveal far (u 0.596)": {
+   "u_clay": 0.5956,
+   "u_measured": 0.5932,
+   "v_range": [
+    0.38,
+    0.62
+   ],
+   "offset_px": -5.69,
+   "corr": 0.923
+  },
+  "boy's door reveal near (u 0.613)": {
+   "u_clay": 0.6134,
+   "u_measured": 0.6102,
+   "v_range": [
+    0.36,
+    0.64
+   ],
+   "offset_px": -7.63,
+   "corr": 0.846
+  },
+  "portal right reveal, corridor side (u 0.767)": {
+   "u_clay": 0.7672,
+   "u_measured": 0.7655,
+   "v_range": [
+    0.15,
+    0.85
+   ],
+   "offset_px": -4.06,
+   "corr": 0.978
+  },
+  "portal right reveal, hall side (u 0.810)": {
+   "u_clay": 0.8097,
+   "u_measured": 0.8105,
+   "v_range": [
+    0.1,
+    0.9
+   ],
+   "offset_px": 1.85,
+   "corr": 0.939
+  }
+ },
+ "levels_12_7_1": {
+  "convention": "12.7.1 restated targets; display stops vs base.png back wall; on hc.png after the WM-G1 toe (hc-grade.json)",
+  "hall_back_wall_around_portal": {
+   "stops_median": -1.051,
+   "left_side": -1.191,
+   "right_side": -0.246,
+   "target": "no anchor: -1.2 to -0.2, darker on the front-door side; the seam with HC130 within 3 %"
+  },
+  "corridor_walls_mid": {
+   "right": -1.165,
+   "left": -0.834,
+   "left_minus_right": 0.331,
+   "target": "-1.3 to -0.7; the opposite wall may equal or exceed the slot wall at mid height by up to 1/2 stop",
+   "within": true
+  },
+  "bedroom": {
+   "stops": 0.051,
+   "target": "0 +-1/4; the brightest inside the portal after the slot line, by median",
+   "medians_inside_portal": {
+    "right": -1.428,
+    "left": -0.857,
+    "floor": -2.248,
+    "ceiling": -1.041,
+    "bedroom": 0.026
+   },
+   "brightest_by_median_inside_portal": true
+  },
+  "slot": {
+   "channel_255_pct": 0.044,
+   "target": "<= 0.1 %"
+  },
+  "black_point": {
+   "frame_p05": 13.71,
+   "frame_p01": 11.82,
+   "target": "L* 11-14"
+  },
+  "walnut": {
+   "L_median": 29.1,
+   "over_black_point_p05": 15.3,
+   "target": ">= 8 over the black point"
+  }
+ },
+ "grade": {
+  "curve": {
+   "A": 9.0,
+   "knee": 30.0,
+   "chroma_per_lift": [
+    0.3542,
+    0.4444
+   ],
+   "slope_at_black": 0.4
+  },
+  "scope": "the whole canvas",
+  "px_moved": 299842,
+  "before": {
+   "frame_p01": 6.14,
+   "frame_p05": 9.45,
+   "frame_p1": 11.97,
+   "canvas_p01": 4.93
+  },
+  "after": {
+   "frame_p01": 11.82,
+   "frame_p05": 13.71,
+   "frame_p1": 15.24,
+   "canvas_p01": 11.2
+  },
+  "above_knee_max_diff_levels": 0,
+  "target": "black point L* 11-14 (12.7.1)"
  }
 }

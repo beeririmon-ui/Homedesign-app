@@ -1,6 +1,6 @@
 {
- "still": "HC130: the bridge, seeds from HD2 and HC by pure rotation, the gap between them in code (fill_hc130.py); tall 3:2 canvas 2496 x 1664",
- "status": "built in code after the one render (nano-banana-2 r1) drew a doorway into a lit room in the gap; for the designer and QA",
+ "still": "HC130: the bridge, rebuilt in code from the toned HC and HD2 (12.7.4); tall 3:2 2496 x 1664",
+ "status": "accepted in code by master-designer (12.7.4); rebuilt from the toned HC seed; for QA: the seams and the jib anchor; the corner (the back wall a little brighter and more neutral than the far wall) is judged in the turn, not on the still",
  "seeds": {
   "seed_hd_px": 1592208,
   "seed_hc_px": 1469616,
@@ -44,7 +44,7 @@
     0.8
    ],
    "ratio_max": [
-    1.191,
+    1.188,
     1.25,
     1.25
    ]
@@ -89,11 +89,11 @@
    "portal north reveal, corridor side (u 0.144)": {
     "kind": "vertical",
     "clay_px": 409,
-    "median_offset_px": 0.13,
-    "p90_abs_px": 0.18,
+    "median_offset_px": 0.14,
+    "p90_abs_px": 0.2,
     "n": 26,
     "mean_corr": 1.0,
-    "tilt_deg_vs_clay": 0.001
+    "tilt_deg_vs_clay": 0.002
    },
    "portal north reveal, hall side (u 0.189)": {
     "kind": "vertical",
@@ -123,7 +123,7 @@
     "tilt_deg_vs_clay": -0.001
    }
   },
-  "worst_median_offset_px": 0.13,
+  "worst_median_offset_px": 0.14,
   "px_per_u": 2353.8
  },
  "levels": {
@@ -139,24 +139,43 @@
    "stops": -1.536,
    "target": "-0.8 +-1/6"
   },
-  "clipped_pct": 0.115
+  "clipped_pct": 0.113,
+  "targets_12_7_4": "anchor: the jib door -0.60 +-1/6; the back wall and the corridor wall: no target of their own (inherited from HC); seams <= 3 %, no tone jump within one surface"
  },
  "seams": {
-  "HD_to_HC130": {
-   "how": "HD2 rotated about HX (exact); the jib door seam",
-   "jib_seam_offset_px": 0.05,
-   "seed_core_max_diff_levels": 0
-  },
-  "HC130_to_HC": {
-   "how": "HC rotated about HX (exact); the north reveal",
-   "reveal_offsets_px": [
-    0.13,
-    0.1
-   ]
-  }
+  "HC_seed_core_vs_HC_rotated_median_pct": 0.249,
+  "HD_seed_core_vs_HD2_rotated_median_pct": 0.184,
+  "target": "<= 3 %",
+  "jib_seam_offset_px": 0.05,
+  "north_reveal_offsets_px": [
+   0.14,
+   0.1
+  ]
  },
  "r1_model": {
   "verdict": "rejected: in the gap it drew a walnut-lined doorway onto a lit room with a window and an oak floor (the reference plate hdx.png copied), 12.4 items 3 and 5",
   "file": "rejected/hc130-r1-model.jpg"
- }
+ },
+ "tone_steps_within_surface": {
+  "back wall Y 9.80 (X < 1.66, above the skirting)": {
+   "largest_step_over_8px_stops_31px_smoothed": 0.037,
+   "at_v_u": [
+    0.6,
+    0.237
+   ]
+  },
+  "far wall X 0.80 (off the jib seam, above the skirting)": {
+   "largest_step_over_8px_stops_31px_smoothed": 0.032,
+   "at_v_u": [
+    0.4,
+    0.707
+   ],
+   "note": "30 px each side of the jib seam left out (the seam is a line, not a tone step)"
+  }
+ },
+ "black_point": {
+  "frame_p01": 12.36,
+  "frame_p05": 14.66
+ },
+ "previous_build": "the same tools from the untoned HC (hc-raw.png): 400,383 px differ, at most 30 levels, all below L* 30 (the walnut reveal, shadow gaps)"
 }

@@ -16602,12 +16602,13 @@
    "tokens": 800,
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-18/ht2.json, ht2.txt, ht2-fix1.txt, *-edits.json, ht2-designer-verbatim.txt",
    "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json, tools/prep_ht2.py, tools/compose_edit.py, tools/warp_ht2.py; source assets/renders/hall/warm-modern/hall-2026-11-18/sources/ht2-r1-model.png",
-   "status": "0 levels outside the mask from ht.png; bench on the clay (0.5413 / 0.7645 / v 0.852); jib -0.50; code-built bench: for the designer's eye and QA; not for the site before QA",
+   "status": "ACCEPTED by master-designer (12.7.2): the code-built bench and its documented level exception; seat hue vs the walnut lining dh +0.9 deg, C*/L* 33 % under (passes); for QA (x1/x2 and the hue test); not for the site before QA",
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-18",
    "sha256": "835ef38bf5a3733abb09991c464ddc1318893abb4754ba356a214776195b452d",
-   "bytes": 4666465
+   "bytes": 4666465,
+   "updated": "2026-11-18 (12.7 round, code)"
   },
   {
    "id": "wm-hall-ht2-frame-2026-11-18",
@@ -16640,16 +16641,17 @@
    "id": "wm-hall-hdx2-2026-11-18",
    "path": "assets/renders/hall/warm-modern/hall-2026-11-18/hdx2.png",
    "kind": "arrival still HDx2: HDx + the walnut console (mask edit) + the bench corner (code); tall 3:2 2496 x 1664; the rest frame of the hall and clip 2's first frame",
-   "model": "nano-banana-2 i2i 2K, r1 (console); bench corner in code",
+   "model": "nano-banana-2 i2i 2K, r1 (console); bench corner in code; the WM-G1 toe inside the console mask (tools/tone.py hdx2, A 10.51)",
    "tokens": 400,
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-18/hdx2.json, hdx2.txt, hdx2-edits.json, hdx2-designer-verbatim.txt",
-   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json, tools/prep_hdx2.py, tools/compose_edit.py, tools/bench_code.py corner",
-   "status": "console within 0.0025 of the clay; 0 levels outside the mask; the opening untouched; stone -0.82 as HDx; console front -0.85 vs the lining (0.19 past the 2/3 band: README line); for QA",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json, tools/prep_hdx2.py, tools/compose_edit.py, tools/bench_code.py corner, tools/tone.py hdx2; assets/renders/hall/warm-modern/hall-2026-11-18/hdx2-console-grade.json; pre-tone assets/renders/hall/warm-modern/hall-2026-11-18/sources/hdx2-pre-tone.png",
+   "status": "ACCEPTED by master-designer (12.7.3); after the toe: drum p2 5.8 -> 12.6, median 16.9 -> 19.0; front -0.74 vs the lining (restated band 0 to 1.0); 0 levels outside the mask; the opening untouched; for QA; not for the site before QA",
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "sha256": "ccd7e3ee928edb619fc76d99a9532e45e193c38c2affcb43e91c0c00d9d31436",
-   "bytes": 5711520
+   "sha256": "b16ea48e557ac5d1fbd842c8078fa849eef923593dc0f02335e468263d127a1a",
+   "bytes": 5708402,
+   "updated": "2026-11-18 (12.7 round, code)"
   },
   {
    "id": "wm-hall-hdx2-frame-2026-11-18",
@@ -16657,55 +16659,59 @@
    "kind": "the 16:9 frame of HDx2 at 1920 x 1080",
    "model": "code",
    "recipe": "site/tools/transitions/seeds.py frame --canvas tall",
-   "status": "same as the master",
+   "status": "cut from the toned hdx2.png; same status as the master",
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "sha256": "a1343a9a0fb1c144d02d1b2263c6941562c2b581996b0012e84f2e7c039038e0",
-   "bytes": 2856540
+   "sha256": "7d29d3b2fbcd85428d687f745a3850ffbdd96089509bcb052ed45b103c79ed65",
+   "bytes": 2853861,
+   "updated": "2026-11-18 (12.7 round, code)"
   },
   {
    "id": "wm-hall-hc-candidate-2026-11-18",
    "path": "assets/renders/hall/warm-modern/hall-2026-11-18/hc.png",
-   "kind": "arrival still HC CANDIDATE: the corridor from the junction, the bedroom door centred; tall 3:2 2496 x 1664",
-   "model": "seedream-5-pro i2i 2K r1 (650) with hdx.png as the reference plate; fix1 nano-banana-2 (400) rejected",
+   "kind": "arrival still HC: the corridor from the junction, the bedroom door centred; tall 3:2 2496 x 1664; seedream r1 with the WM-G1 toe",
+   "model": "seedream-5-pro i2i 2K r1 (650) with hdx.png as the reference plate; fix1 nano-banana-2 (400) rejected; the WM-G1 toe in code (tools/tone.py hc, A 9)",
    "tokens": 1050,
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-18/hc.json, hc.txt, hc-fix1.txt, hc-fix1-edits.json, hc-designer-verbatim.txt",
-   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json, tools/prep_hc.py, tools/lock_hc.py, tools/levels_hc.py",
-   "status": "NOT ACCEPTED: route 12.3 items 8 (left wall brighter than right and than the hall) and 9 (lines 2-18 px from the clay); bedroom door 0.470-0.536, centre 0.503; back to master-designer; HC130 is seeded from it; not for the site",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json, tools/prep_hc.py, tools/lock_hc.py, tools/levels_hc.py, tools/tone.py hc; assets/renders/hall/warm-modern/hall-2026-11-18/hc-grade.json; raw assets/renders/hall/warm-modern/hall-2026-11-18/hc-raw.png",
+   "status": "ACCEPTED by master-designer (12.7.1, targets restated; geometry accepted); black point p0.5 13.71 / p0.1 11.82; labels anchor to hc-lock.json label_anchors; the laundry as an open walnut-lined opening is the corridor canon; HC-L1 (dark mark on the bedroom leaf) low, in the backlog; for QA; not for the site before QA",
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "sha256": "0ed7a3629f397ef9158e450f3e56b79c83711ae9431f21e4d89f3bd66235d077",
-   "bytes": 6793238
+   "sha256": "021df2a80fc6be492feae508aa0dea12678973bbc8366be0254cc63caee26391",
+   "bytes": 6773504,
+   "updated": "2026-11-18 (12.7 round, code)"
   },
   {
    "id": "wm-hall-hc-candidate-frame-2026-11-18",
    "path": "assets/renders/hall/warm-modern/hall-2026-11-18/hc-frame.png",
-   "kind": "the 16:9 frame of the HC candidate",
+   "kind": "the 16:9 frame of HC (toned)",
    "model": "code",
    "recipe": "site/tools/transitions/seeds.py frame --canvas tall",
-   "status": "same as the master: not accepted",
+   "status": "cut from the toned hc.png; same status as the master",
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "sha256": "a654891649947827b450336fd76fd8e39a67cf0eb7ec7e2d2f084533d020950e",
-   "bytes": 3328531
+   "sha256": "ba8a6c7be4b1a642773acb56cd37c4a8ee87f8da2ad62c167469318cb7ae501d",
+   "bytes": 3307426,
+   "updated": "2026-11-18 (12.7 round, code)"
   },
   {
    "id": "wm-hall-hc130-2026-11-18",
    "path": "assets/renders/hall/warm-modern/hall-2026-11-18/hc130.png",
-   "kind": "arrival still HC130, the bridge: seeds from HD2 and HC by pure rotation, the gap between them in code; tall 3:2 2496 x 1664",
+   "kind": "arrival still HC130, the bridge: seeds from HD2 and the toned HC by pure rotation, the gap in code; tall 3:2 2496 x 1664",
    "model": "nano-banana-2 i2i 2K r1 (400) rejected (a room drawn in the gap); built in code (tools/hc130.py, tools/fill_hc130.py)",
    "tokens": 400,
    "prompt_record": "assets/prompts/warm-modern-hall-2026-11-18/hc130.json, hc130.txt, hc130-designer-verbatim.txt",
-   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json, tools/hc130.py, tools/fill_hc130.py, tools/lock_hc.py HC130, tools/levels_hc130.py; assets/renders/hall/warm-modern/hall-2026-11-18/sources/hc130-input.png",
-   "status": "lines within 0.13 px of the clay; seams exact (seeds); jib -0.50; back wall -0.24 and corridor -1.54 inherited from the HC candidate; for the designer and QA after HC is decided",
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json, tools/hc130.py, tools/fill_hc130.py, tools/lock_hc.py HC130, tools/levels_hc130.py; assets/renders/hall/warm-modern/hall-2026-11-18/sources/hc130-input.png (the rebuild), sources/hc130-input-sent.png (sent with r1)",
+   "status": "ACCEPTED in code by master-designer (12.7.4); rebuilt from the toned HC; seams 0.25 % / 0.18 %; lines <= 0.14 px; jib -0.50; no tone step in a surface (<= 0.04 stop); for QA; not for the site before QA",
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "sha256": "745b0f44ce1695223942d599a63cb2159d4af84b6b2405937e5a6cde40b627be",
-   "bytes": 5107930
+   "sha256": "df0a3e9ec78f230ed86e23d237d135d4d0be2293f774bfbe914a411f476e380a",
+   "bytes": 5099045,
+   "updated": "2026-11-18 (12.7 round, code)"
   },
   {
    "id": "wm-hall-hc130-frame-2026-11-18",
@@ -16713,12 +16719,13 @@
    "kind": "the 16:9 frame of HC130",
    "model": "code",
    "recipe": "site/tools/transitions/seeds.py frame --canvas tall",
-   "status": "same as the master",
+   "status": "cut from the rebuilt hc130.png; same status as the master",
    "room": "hall",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "sha256": "99b840bed1235d2e1b4eb8f4a1fc2aa4657bfed7c5a6f8c114d5f1973493d0cb",
-   "bytes": 2499661
+   "sha256": "99b296ab699a3af9853c894d520c4acf66dfa6578e57572d45227c576b583a8e",
+   "bytes": 2487508,
+   "updated": "2026-11-18 (12.7 round, code)"
   },
   {
    "id": "wm-hall-junction-clay-2026-11-18",
@@ -16733,6 +16740,20 @@
    "created": "2026-11-18",
    "sha256": "bf8de4e850429ed9789e12f223ee790ab8e77b088a415d2a352094971a485453",
    "bytes": 3329501
+  },
+  {
+   "id": "wm-hall-hc-raw-2026-11-18",
+   "path": "assets/renders/hall/warm-modern/hall-2026-11-18/hc-raw.png",
+   "kind": "HC as the model returned it (seedream-5-pro r1 on the canvas), before the WM-G1 toe",
+   "room": "hall",
+   "style": "warm-modern",
+   "created": "2026-11-18",
+   "model": "seedream-5-pro i2i 2K r1",
+   "tokens": 0,
+   "recipe": "assets/renders/hall/warm-modern/hall-2026-11-18/jobs.json",
+   "status": "the raw kept (12.7.1); the master is hc.png; not for the site",
+   "sha256": "0ed7a3629f397ef9158e450f3e56b79c83711ae9431f21e4d89f3bd66235d077",
+   "bytes": 6793238
   }
  ]
 }

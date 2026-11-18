@@ -1,6 +1,6 @@
 {
  "still": "HT2: ht.png + the walnut bench; base.png canvas 2720 x 1530",
- "status": "built in code from r1 (warp_ht2.py) after r1 and fix1 both drew the bench frontally; for the designer and QA",
+ "status": "accepted by master-designer (12.7.2): the code-built bench and its level exception (documented; only inside the bench mask and what code derives from it); QA: the bench at x1 / x2 and the hue test (seat_hue_vs_lining_12_7_2)",
  "outside_mask_max_diff_levels_vs_ht": 0,
  "mask_px": 279275,
  "bench_geometry_uv": {
@@ -195,5 +195,37 @@
   "right_u": 0.768,
   "verdict": "rejected: longer and frontal"
  },
- "clipped_px_in_bench": 0
+ "clipped_px_in_bench": 0,
+ "seat_hue_vs_lining_12_7_2": {
+  "test": "12.7.2: the seat (top face) vs the walnut lining u 0.814-0.850: hue within +-5 deg, C*/L* at most 15 % above the lining",
+  "lining": {
+   "L": 29.6,
+   "a": 12.53,
+   "b": 18.81,
+   "C": 22.6,
+   "h_deg": 56.3,
+   "C_over_L": 0.764
+  },
+  "seat_top": {
+   "L": 51.7,
+   "a": 14.23,
+   "b": 22.09,
+   "C": 26.28,
+   "h_deg": 57.2,
+   "C_over_L": 0.509
+  },
+  "seat_front_edge": {
+   "L": 24.4,
+   "a": 11.04,
+   "b": 14.89,
+   "C": 18.54,
+   "h_deg": 53.5,
+   "C_over_L": 0.758
+  },
+  "seat_dh_deg": 0.9,
+  "seat_C_over_L_vs_lining_pct": -33.4,
+  "front_edge_dh_deg": -2.8,
+  "front_edge_C_over_L_vs_lining_pct": -0.8,
+  "seat_passes": true
+ }
 }
