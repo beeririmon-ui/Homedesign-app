@@ -4,9 +4,9 @@
  "agent": "qa-agent",
  "brief": "briefs/qa-master-fb10-2026-11-18.md + manager scope update after 13.11",
  "files_at": "4df6a420",
- "verdict": "pass (what stays); 13.11 regions recorded, re-check pending",
+ "verdict": "pass: FB10 in MB0 incl. the 13.11 re-check; no medium or higher",
  "blocking": [],
- "status_line": "FB10 ב-MB0: מה שנשאר עבר QA; ארבעת התיקונים של 13.11 בבדיקה חוזרת",
+ "status_line": "עבר QA (FB10; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
  "status_after_recheck": "עבר QA (FB10; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
  "items": {
   "1_fidelity": {
@@ -1654,11 +1654,565 @@
  ],
  "evidence": [
   "fb10-wall-carafe-dish.jpg",
-  "fb10-corner-record.jpg"
+  "fb10-corner-record.jpg",
+  "fb10-1311-recheck.jpg"
  ],
  "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-master/fb10",
  "supplier_photos": "read from scratchpad/picks/img only; none copied into the repo",
  "tokens": 0,
  "var2": false,
- "commits": false
+ "commits": false,
+ "recheck_1311": {
+  "date": "2026-11-18",
+  "files_at": "98df8f42",
+  "baseline": "4df6a420 (render files identical in 04c4c184)",
+  "verdict": "pass",
+  "blocking": [],
+  "status_line": "עבר QA (FB10; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
+  "rnd2": {
+   "recompose_px_diff": [
+    0,
+    0,
+    0
+   ],
+   "outside_region_vs_plate": 0,
+   "throw_swap_outside_alpha": 0,
+   "light_only_brightens": true,
+   "shadow_one_below": true,
+   "black_point_p05": [
+    11.11,
+    12.92,
+    11.97
+   ],
+   "render_agent": [
+    11.13,
+    12.93,
+    11.97
+   ],
+   "note": "frame-box rounding"
+  },
+  "changes_vs_fb10": {
+   "mb0-defaults.png": {
+    "changed": 129765,
+    "outside": 0
+   },
+   "mb0-variant-throw-flax.png": {
+    "changed": 129765,
+    "outside": 0
+   },
+   "mb0-variant-throw-clay.png": {
+    "changed": 129765,
+    "outside": 0
+   },
+   "light bedside-sconces changed vs lights in 04c4c184": "n/a",
+   "light floor-lamp changed vs lights in 04c4c184": "n/a",
+   "branch_box_free_px": 53884,
+   "branch_box_free_differing_from_plate": 0,
+   "old_branch_alpha_px_in_box": 2558,
+   "new_vase_alpha_px_in_box_above_mouth_row_296": 0,
+   "vase_alpha_top_row": 299,
+   "vase_shadow_px_before_after": [
+    13026,
+    3756
+   ]
+  },
+  "A_vase": {
+   "result": "pass",
+   "branch_box_free_px": 53884,
+   "differing_from_plate": 0,
+   "vase_alpha_top_row": 299,
+   "shadow_px": [
+    13026,
+    3756
+   ],
+   "halo_edge_px": 1846,
+   "max_L_above_plate": 0.0,
+   "info": "MF-I3: 1 dark px at the mouth rim where the stem entered (x 986, rows 299-300, L* 32 vs 58-65); x4 only"
+  },
+  "B_crown": {
+   "result": "pass",
+   "crown": {
+    "leaf_tone_before_2300_2642": [
+     29.1,
+     -5.4,
+     13.1,
+     14.2,
+     47708
+    ],
+    "leaf_tone_after_2300_2642": [
+     31.6,
+     -4.3,
+     10.4,
+     11.3,
+     48050
+    ],
+    "leaf_tone_after_clones_2643_2720": [
+     31.3,
+     -4.6,
+     9.8,
+     10.8,
+     14376
+    ],
+    "leaf_tone_after_source_2470_2600": [
+     31.5,
+     -4.5,
+     10.3,
+     11.2,
+     32610
+    ],
+    "grey_frag_clones_px_per1000": [
+     276,
+     18.1
+    ],
+    "grey_frag_source_px_per1000": [
+     1297,
+     35.8
+    ],
+    "straight_edges_clones_2643_2718": {
+     "boundary_px": 610,
+     "straight_px": 93,
+     "straight_segments": 9,
+     "share": 0.152
+    },
+    "straight_edges_source_2470_2600": {
+     "boundary_px": 2066,
+     "straight_px": 506,
+     "straight_segments": 33,
+     "share": 0.245
+    },
+    "straight_edges_before_mirror_2643_2718": {
+     "boundary_px": 1014,
+     "straight_px": 209,
+     "straight_segments": 15,
+     "share": 0.206
+    },
+    "semi_alpha_share_clones": [
+     2308,
+     0.139
+    ],
+    "semi_alpha_share_source": [
+     4256,
+     0.108
+    ],
+    "mirror_corr_about_2641_before": 0.948,
+    "mirror_corr_about_2641_after": 0.694,
+    "max_mirror_corr_any_centre_k20_after": [
+     0.914,
+     2678
+    ]
+   },
+   "seams": {
+    "clones_2643_2718": {
+     "opaque": 14404,
+     "v_px": 49,
+     "v_segs": 5,
+     "h_px": 10,
+     "h_segs": 1,
+     "per1000": 4.1
+    },
+    "in_frame_edge_2620_2642": {
+     "opaque": 2387,
+     "v_px": 9,
+     "v_segs": 1,
+     "h_px": 0,
+     "h_segs": 0,
+     "per1000": 3.77
+    },
+    "natural_2470_2600": {
+     "opaque": 35303,
+     "v_px": 424,
+     "v_segs": 38,
+     "h_px": 173,
+     "h_segs": 14,
+     "per1000": 16.91
+    },
+    "natural_2300_2470": {
+     "opaque": 11114,
+     "v_px": 53,
+     "v_segs": 4,
+     "h_px": 10,
+     "h_segs": 1,
+     "per1000": 5.67
+    },
+    "mirror_k60_natural_centres_2380_2560": [
+     0.059,
+     0.239,
+     0.31,
+     0.423,
+     0.657,
+     0.681,
+     0.574
+    ],
+    "shift_k60_2641(no flip)": 0.715,
+    "mirror_k20_natural_max_2350_2600": 0.809
+   },
+   "clone_interior_gradient": {
+    "clones": 7.19,
+    "source": 10.77,
+    "p90": [
+     16.38,
+     27.77
+    ]
+   },
+   "low": "MF-L3: ghost fade of the horizontal leaf over wall at x 2630-2642, y 514-539 (10 px fade not over a clone); x2 a soft ~12x26 px patch at the screen edge",
+   "info": "MF-I4 (motion-agent): overscan clones softer (gradient x0.67), slightly choppy at x3; not in the frame; check in the clip"
+  },
+  "C_planter": {
+   "result": "pass",
+   "r5": {
+    "after": {
+     "pot": [
+      72.24,
+      2.37,
+      8.98
+     ],
+     "wall": [
+      80.51,
+      1.74,
+      10.01
+     ],
+     "pot_px": 52227,
+     "ring_px": 6484,
+     "dL": -8.27,
+     "pot_C": 9.29,
+     "wall_C": 10.16,
+     "dC": -0.87,
+     "pot_h": 75.2,
+     "wall_h": 80.1,
+     "dh": -4.9,
+     "bands_dL": [
+      [
+       1060,
+       -36.2,
+       7735,
+       2658
+      ],
+      [
+       1100,
+       30.9,
+       9950,
+       1885
+      ],
+      [
+       1140,
+       34.9,
+       10209,
+       809
+      ]
+     ],
+     "base_L": 66.0
+    },
+    "after_clean": {
+     "pot": [
+      73.32,
+      2.5,
+      9.52
+     ],
+     "wall": [
+      80.51,
+      1.74,
+      10.01
+     ],
+     "pot_px": 36887,
+     "ring_px": 6484,
+     "dL": -7.19,
+     "pot_C": 9.84,
+     "wall_C": 10.16,
+     "dC": -0.31,
+     "pot_h": 75.3,
+     "wall_h": 80.1,
+     "dh": -4.8,
+     "bands_dL": [
+      [
+       1060,
+       -36.2,
+       7735,
+       2658
+      ],
+      [
+       1100,
+       30.9,
+       9950,
+       1885
+      ],
+      [
+       1140,
+       34.9,
+       10157,
+       809
+      ]
+     ],
+     "base_L": 70.4
+    },
+    "before": {
+     "pot": [
+      65.53,
+      2.54,
+      9.12
+     ],
+     "wall": [
+      80.51,
+      1.74,
+      10.01
+     ],
+     "pot_px": 52227,
+     "ring_px": 6484,
+     "dL": -14.98,
+     "pot_C": 9.47,
+     "wall_C": 10.16,
+     "dC": -0.69,
+     "pot_h": 74.4,
+     "wall_h": 80.1,
+     "dh": -5.7,
+     "bands_dL": [
+      [
+       1060,
+       -41.0,
+       7735,
+       2658
+      ],
+      [
+       1100,
+       23.1,
+       9950,
+       1885
+      ],
+      [
+       1140,
+       27.1,
+       10209,
+       809
+      ]
+     ],
+     "base_L": 56.2
+    }
+   },
+   "rule": "dL -6..-10, C* <= wall C*+1.5, hue +-10 deg",
+   "ribs": {
+    "rib_profile_std": [
+     11.24,
+     11.87
+    ],
+    "speckle_std": [
+     8.02,
+     8.37
+    ]
+   },
+   "info": "MF-I5: the ring is bimodal: x 2342-2376 rows 1074-1161 plaster in the plate shade (L* ~47) vs lit plaster ~84; vs lit only ~-12; agreed method -8.27; reads right at x1-x2"
+  },
+  "D_covers": {
+   "result": "pass",
+   "paper_L": 86.4,
+   "dark_enclosed_components": {
+    "before": [
+     11,
+     129
+    ],
+    "after": [
+     4,
+     7
+    ]
+   },
+   "letters_x3": 0,
+   "alpha_changed": 0,
+   "low": "MF-L4: the paper fill also covered the dark shadow wedge between the straps; a light ragged fragment with two dark dots at x 2549-2566, y 1393-1400; x2 close look only",
+   "info": "x2: the soft picture blocks read more as smudges than prints; brand covers already logged post-launch"
+  },
+  "holder_edge": {
+   "result": "no thin strip at x 2642; no shift needed",
+   "measure": {
+    "holder_alpha_x": [
+     2397,
+     2666
+    ],
+    "holder_alpha_y": [
+     1179,
+     1467
+    ],
+    "rows_with_dark_tube_at_x2642": 112,
+    "in_frame_width_px_min_med_max": [
+     1,
+     19.0,
+     46
+    ],
+    "runs": [
+     {
+      "y": [
+       1211,
+       1265
+      ],
+      "in_frame_w": [
+       15,
+       46
+      ],
+      "right_end_x": [
+       2643,
+       2665
+      ]
+     },
+     {
+      "y": [
+       1268,
+       1312
+      ],
+      "in_frame_w": [
+       1,
+       23
+      ],
+      "right_end_x": [
+       2643,
+       2666
+      ]
+     },
+     {
+      "y": [
+       1314,
+       1314
+      ],
+      "in_frame_w": [
+       1,
+       1
+      ],
+      "right_end_x": [
+       2644,
+       2644
+      ]
+     },
+     {
+      "y": [
+       1317,
+       1317
+      ],
+      "in_frame_w": [
+       2,
+       2
+      ],
+      "right_end_x": [
+       2642,
+       2642
+      ]
+     },
+     {
+      "y": [
+       1340,
+       1340
+      ],
+      "in_frame_w": [
+       2,
+       2
+      ],
+      "right_end_x": [
+       2643,
+       2643
+      ]
+     },
+     {
+      "y": [
+       1376,
+       1376
+      ],
+      "in_frame_w": [
+       2,
+       2
+      ],
+      "right_end_x": [
+       2642,
+       2642
+      ]
+     },
+     {
+      "y": [
+       1378,
+       1385
+      ],
+      "in_frame_w": [
+       1,
+       36
+      ],
+      "right_end_x": [
+       2642,
+       2666
+      ]
+     }
+    ],
+    "right_leg_columns_dark_>50%_rows_1280_1420": [
+     2605,
+     2666
+    ],
+    "holder_alpha_cols_2630_2642_rows_1280_1420": [
+     2630,
+     2631,
+     2632,
+     2633,
+     2634,
+     2635,
+     2636,
+     2637,
+     2638,
+     2639,
+     2640,
+     2641,
+     2642
+    ]
+   },
+   "right_leg_x": [
+    2649,
+    2666
+   ],
+   "frame_edge": 2642.51,
+   "in_frame_crossings": "arc rows 1210-1233 (diagonal, last 12 rows 8->1 px); rods rows 1265-1290 and 1378-1385 (2-5 px)",
+   "info": "MF-I6 (frontend-dev): the leg is ~7 px past the edge; showing more than the frame box on the right would show a thin leg strip; 8-15 px right shift adds margin if wanted"
+  },
+  "count": {
+   "shelf_vase_left": {
+    "area_pct": 0.44,
+    "height_pct": 11.4,
+    "counted": true
+   },
+   "planter": {
+    "area_pct": 2.53,
+    "visible_frac": 0.73
+   },
+   "counted": 15,
+   "for_sale": 19
+  },
+  "findings": [
+   {
+    "id": "MF-L3",
+    "severity": "low",
+    "owner": "render-agent",
+    "fix": "0 tokens: start the crown-edge fade at x>=2643 (or keep the crossing leaf opaque to the edge) at rows 514-539",
+    "backlog": "status/backlog-low.md"
+   },
+   {
+    "id": "MF-L4",
+    "severity": "low",
+    "owner": "render-agent",
+    "fix": "0 tokens: limit the paper fill to the cover mask; restore the shadow wedge from 4df6a420 at x 2540-2570, y 1380-1404",
+    "backlog": "status/backlog-low.md"
+   },
+   {
+    "id": "MF-I3",
+    "severity": "info"
+   },
+   {
+    "id": "MF-I4",
+    "severity": "info",
+    "owner": "motion-agent"
+   },
+   {
+    "id": "MF-I5",
+    "severity": "info"
+   },
+   {
+    "id": "MF-I6",
+    "severity": "info",
+    "owner": "frontend-dev"
+   }
+  ],
+  "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-master/fb10/r1311_*.py",
+  "tokens": 0,
+  "var2": false,
+  "commits": false
+ }
 }
