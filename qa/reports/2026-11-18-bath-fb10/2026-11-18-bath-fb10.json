@@ -551,5 +551,97 @@
   "khaki-frame-x2.jpg",
   "l1-basket-corner-canvas-x8.jpg"
  ],
- "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-fb10"
+ "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-fb10",
+ "recheck": {
+  "date": "2026-11-18",
+  "scope": "shelf shift (40 px, 0.0156) and B2F-L1 only",
+  "commit": "1a28dd69",
+  "verdict": "pass",
+  "gaps_u": {
+   "alpha_over_0": {
+    "left": {
+     "min": 0.0199,
+     "at_row": 1351,
+     "rows": 157
+    },
+    "middle": {
+     "min": 0.0242,
+     "at_row": 1343,
+     "rows": 165
+    },
+    "right": {
+     "min": 0.0199,
+     "at_row": 1343,
+     "rows": 197
+    }
+   },
+   "alpha_128": {
+    "left": {
+     "min": 0.0207,
+     "at_row": 1347,
+     "rows": 155
+    },
+    "middle": {
+     "min": 0.0257,
+     "at_row": 1343,
+     "rows": 163
+    },
+    "right": {
+     "min": 0.0207,
+     "at_row": 1344,
+     "rows": 197
+    }
+   }
+  },
+  "render_agent_alpha_128": [
+   0.0207,
+   0.0257,
+   0.0207
+  ],
+  "before_shift_qa": [
+   0.0359,
+   0.0242,
+   0.0051
+  ],
+  "b2f_l1": "closed: arc and wedge gone at x8; 0 dark edge px in the halo scan",
+  "exposed_shelf": {
+   "px": 12456,
+   "differing_from_plate": 0,
+   "ring6_brighter_than_plate_by_2": 0,
+   "ring6_dL_p1": {
+    "basket": -7.22,
+    "towels": -10.49
+   }
+  },
+  "rnd2": {
+   "shadow_one_below": true,
+   "defaults": {
+    "px_diff": 0,
+    "max": 0,
+    "inside": 0,
+    "outside": 0
+   },
+   "defaults_vs_plate_outside_region": 0,
+   "b2-variant-linen.png": {
+    "px_diff": 0,
+    "max": 0,
+    "inside": 0,
+    "outside": 0
+   },
+   "b2-variant-khaki.png": {
+    "px_diff": 0,
+    "max": 0,
+    "inside": 0,
+    "outside": 0
+   }
+  },
+  "evidence": [
+   "recheck-shelf-x2-corner-x8.jpg"
+  ],
+  "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-fb10/recheck",
+  "tokens": 0,
+  "var2": false,
+  "commits": false
+ },
+ "verdict_latest": "pass (recheck): gaps 0.0207/0.0257/0.0207 at alpha>=128; B2F-L1 closed"
 }
