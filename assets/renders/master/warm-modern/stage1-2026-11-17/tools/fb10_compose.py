@@ -257,6 +257,7 @@ def p1(e, ref, rec):
     a = np.maximum(a_vl, a_br)
     M = scale_about(1.08, 1.08, axis, SHELF_Y)
     rgb2, a2 = warp_layer(rgb, a, M)
+    r["_vase_left_M"] = M.tolist()
     a2 *= above_shelf()
     out["shelf-vase-left"] = (rgb2, a2)
     old["shelf-vase-left"] = (a > 0.5)
@@ -352,8 +353,6 @@ def render_pot(sk, rec):
     dr = np.gradient(r, zz)
     for i in range(len(zz)):
         z = zz[i]
-        if i % 1:
-            continue
         P = np.stack([Xc + r[i] * np.cos(th), Yc + r[i] * np.sin(th), np.full_like(th, z)], -1)
         nrm = np.stack([np.cos(th), np.sin(th), np.full_like(th, -dr[i])], -1)
         nrm /= np.linalg.norm(nrm, axis=-1, keepdims=True)
@@ -385,7 +384,7 @@ def render_pot(sk, rec):
         nrm = np.stack([-np.cos(tt), -np.sin(tt), np.zeros_like(tt)], -1)
         vis = (nrm * (cam - P)).sum(-1) > 0
         pts.append(P[vis])
-        cols.append(np.stack([np.full(vis.sum(), 0.45 + 0.15 * (z - POT["SOIL"]) / (POT["H"] - POT["SOIL"])), np.full(vis.sum(), 2.0)], -1))
+        cols.append(np.stack([np.full(vis.sum(), 0.30 + 0.14 * (z - POT["SOIL"]) / (POT["H"] - POT["SOIL"])), np.full(vis.sum(), 2.0)], -1))
     rng = np.random.default_rng(7)
     for rr in np.linspace(0, POT["R_IN"], 60):
         P = np.stack([Xc + rr * np.cos(tt), Yc + rr * np.sin(tt), np.full_like(tt, POT["SOIL"])], -1)
@@ -411,7 +410,7 @@ def render_pot(sk, rec):
     cov[idx[sel]] = True
     val = val.reshape(h, w, 2)
     cov = cov.reshape(h, w)
-    holes = ~cov & C.ero(cv2.morphologyEx(cov.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(2)).astype(bool), 0)
+    holes = ~cov & cv2.morphologyEx(cov.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(2)).astype(bool)
     if holes.any():
         for c in range(2):
             num = cv2.blur((val[..., c] * cov).astype(np.float32), (5, 5))
@@ -464,20 +463,39 @@ def p2(e, ref, man, rec):
     L, A, B = lab[..., 0], lab[..., 1], lab[..., 2]
     lamp = layer_alpha("floor-lamp", man) > 0.02
     bed = layer_alpha("bedding", man) > 0.5
-    # the magazine holder: GrabCut, seeded by its black tube, its cognac straps and the white magazines
+    # the magazine holder: GrabCut seeded by its own colours (the black tube, the lit cognac straps, the white pages), what differs
+    # from the round-9 frame as probable, the edit's lit pot as background; the printed pages filled; the floor seen between the
+    # left arch and the first strap left out
     hz = C.box_mask([(2372, 1168, 2676, 1478)])
     chroma, hue = np.hypot(A, B), np.degrees(np.arctan2(B, A)) % 360
-    tube = (L < 24) & hz
-    strap = (chroma > 30) & (hue > 40) & (hue < 75) & (L > 30) & (L < 70) & hz
-    mags = (L > 82) & (chroma < 10) & C.box_mask([(2470, 1205, 2640, 1420)])
-    sure = C.ero(tube, 1) | C.ero(strap, 2) | C.ero(mags, 2)
-    hard = (hz & ~C.ero(hz, 3)) | (lamp & hz) | bed
-    holder = C.gc_cut(e, sure, C.dil(sure, 6) & hz, hz, hard, iters=10)
-    holder = fill_holes(holder, 400) & hz & ~bed
+    tube = (L < 9) & (chroma < 8) & hz
+    strap = (chroma > 34) & (hue > 42) & (hue < 68) & hz
+    mags = (L > 80) & (chroma < 8) & C.box_mask([(2470, 1200, 2645, 1430)])
+    sure = tube | C.ero(strap, 1) | C.ero(mags, 2)
+    dd = np.linalg.norm(C.blur(lab, 1.0) - C.blur(C.to_lab(ref), 1.0), axis=-1)
+    potlit = (chroma > 12.5) & (chroma < 18) & (L > 56) & (L < 82) & (hue > 64) & (hue < 80)
+    m = np.full((H, W), cv2.GC_PR_BGD, np.uint8)
+    m[(dd > 12) & hz] = cv2.GC_PR_FGD
+    m[potlit & ~C.dil(sure, 2)] = cv2.GC_BGD
+    m[~hz] = cv2.GC_BGD
+    m[(np.arange(H)[:, None] < 1200) & ~C.dil(sure, 3) & hz] = cv2.GC_PR_BGD
+    m[sure] = cv2.GC_FGD
+    sl = (slice(1155, 1490), slice(2360, 2690))
+    mm = m[sl].copy()
+    cv2.grabCut(C.q(e[sl])[..., ::-1].copy(), mm, None, np.zeros((1, 65)), np.zeros((1, 65)), 10, cv2.GC_INIT_WITH_MASK)
+    holder = np.zeros((H, W), bool)
+    holder[sl] = (mm == 1) | (mm == 3)
+    holder = fill_holes(holder, 1500)
+    floorlike = (chroma > 11) & (chroma < 21) & (L > 18) & (L < 48) & (hue > 50) & (hue < 70)
+    xx_, yy_ = np.meshgrid(np.arange(W), np.arange(H))
+    holder &= ~(floorlike & (xx_ < 2425) & (yy_ > 1255) & (yy_ < 1385) & ~C.dil(tube | strap, 1))
+    n_, lab_, st_, _ = cv2.connectedComponentsWithStats(holder.astype(np.uint8), connectivity=8)
+    holder = np.isin(lab_, [i for i in range(1, n_) if st_[i, cv2.CC_STAT_AREA] >= 60])
+    holder &= ~bed & ~lamp
     out["magazine-holder"] = (C.defringe(e, holder), C.soft(holder))
     old["magazine-holder"] = holder
     ys, xs = np.nonzero(holder)
-    r["magazine-holder"] = dict(source="the edit's holder as drawn (its 3/4 view: 265 px wide at the floor 1440-1465; the card's 35 x 19 x 27.5 cm in this view is about 267 x 262 px)",
+    r["magazine-holder"] = dict(source="the edit's holder as drawn (its look matches the listing photo; the 3/4 view and the off-axis stretch at x 2520, 1.21, make its 265 px plausible for 35 x 19 x 27.5 cm); GrabCut seeded by its colours",
                                 bbox=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1])
     # the ficus: leaves (green) and the pale trunk, never the lamp
     cz = C.box_mask([(2200, 150, 2720, 1075)])
@@ -526,18 +544,27 @@ def p2(e, ref, man, rec):
         cols_e[y] = (2440 + xx.mean()) if xx.size else None
     yk = np.array([k for k, v in cols_e.items() if v is not None], float)
     xk = np.array([cols_e[int(k)] for k in yk])
+    xk_s = np.convolve(np.pad(xk, 6, mode="edge"), np.ones(13) / 13, mode="valid")
+    x_top_e, x_bot_e = xk_s[0], xk_s[-1]
     for yn in rows_new:
         t = (yn - y_top_new) / max(ys_soil - y_top_new, 1)
         ye = CROWN["split_y"] + t * (y_soil_e - CROWN["split_y"])
-        xc_e = np.interp(ye, yk, xk)
-        xc_new = (ax + s * (xc_e - ax)) * (1 - t) + xs_soil * t
+        xc_e = np.interp(ye, yk, xk_s)
+        bend = xc_e - (x_top_e + (x_bot_e - x_top_e) * (ye - CROWN["split_y"]) / max(y_soil_e - CROWN["split_y"], 1))
+        xc_new = (ax + s * (x_top_e - ax)) * (1 - t) + xs_soil * t + bend * 0.9
+        wsc = s + (0.82 - s) * t                                   # the trunk thickens towards the soil
         xn = np.arange(int(xc_new) - 30, int(xc_new) + 31)
-        mapx[yn, xn] = (xc_e + (xn - xc_new) / s).astype(np.float32)
+        mapx[yn, xn] = (xc_e + (xn - xc_new) / wsc).astype(np.float32)
         mapy[yn, xn] = ye
     pm2 = np.dstack([rgb_p * a_soft[..., None] * (1 - upper)[..., None], a_soft * (1 - upper)]).astype(np.float32)
     wt = cv2.remap(pm2, mapx, mapy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     tot = wc + wt
     a_pl = np.clip(tot[..., 3], 0, 1).astype(np.float64)
+    lamp_a = layer_alpha("floor-lamp", man)
+    n_, lab_, st_, _ = cv2.connectedComponentsWithStats((a_pl * (1 - lamp_a) > 0.3).astype(np.uint8), connectivity=8)
+    big = 1 + int(np.argmax(st_[1:, cv2.CC_STAT_AREA]))
+    stray = (lab_ > 0) & (lab_ != big) & np.isin(lab_, [i for i in range(1, n_) if st_[i, cv2.CC_STAT_AREA] < 2500])
+    a_pl[C.dil(stray, 2) & ~C.dil(lab_ == big, 1)] = 0          # leaf pieces the shade cut off from the crown (one sat on the shade's top)
     rgb_pl = np.clip(tot[..., :3] / np.maximum(tot[..., 3:4], 1e-6), 0, 1).astype(np.float64)
     # the pot, in code; the plant's trunk goes into its soil (the pot's rim in front of the trunk's foot)
     sk = sku_pot()
@@ -548,6 +575,8 @@ def p2(e, ref, man, rec):
     a_out = a_pl + a_pot * (1 - a_pl)
     rgb_out = (rgb_pl * a_pl[..., None] + rgb_pot * (a_pot * (1 - a_pl))[..., None]) / np.maximum(a_out[..., None], 1e-6)
     out["planter"] = (np.clip(rgb_out, 0, 1), np.clip(a_out, 0, 1))
+    r["_plant_alpha"] = a_pl
+    r["_pot_alpha"] = a_pot
     old["planter"] = old_plant | (C.box_mask([(2390, 1030, 2672, 1250)]) & ~holder)
     top_new = ay + s * (crown_top - ay)
     r["planter"] = dict(plant="the edit's ficus 'Audrey': crown x %.2f about (%.0f, %.0f) (a point inside the lamp shade, so what the shade hid stays hidden); the bare trunk stretched to the new pot's soil" % (s, ax, ay),
@@ -568,7 +597,7 @@ PITCHER_SKU = [(285, 277), (290, 272), (480, 272), (510, 280), (535, 295), (540,
 PITCHER_SKU_HOLE = [(500, 292), (515, 310), (515, 410), (502, 445), (495, 370), (470, 340), (440, 320), (430, 300)]
 PITCHER = dict(sku="024df36f_bf476452-1265-4a56-97cd-190f98e87005.jpg", slot=(0.33, 17.84), top_Z=0.78, foot_Z=0.54, foot_front_Y=17.88)
 DISH = dict(X=(-1.84, -1.74), Y=(17.85, 17.95), Z=(0.550, 0.568), rim_y=975.0, sku="33039093_d2de0c80-3921-4551-80a8-5817ef6af558.jpg",
-            sku_face=(345, 500, 455, 640))
+            sku_face=(355, 520, 445, 620), lab=(80.0, 2.5, 9.5))
 
 
 def poly_mask(pts, shape):
@@ -647,35 +676,39 @@ def p3(e, ref, man, rec):
                 nrm /= max(np.linalg.norm(nrm), 1e-6)
                 out_.append(q_ + nrm * rng.normal(0, amp))
         return out_
+    side = [proj(X1, Yb, Z1), proj(X1, Yf, Z1), proj(X1, Yf, Z0), proj(X1, Yb, Z0)]
     a_top = poly_alpha(rough(top))
     a_front = poly_alpha(rough(front)) * (1 - a_top)
+    a_side = poly_alpha(rough(side)) * (1 - a_top) * (1 - a_front)
     rim = np.clip(DISH["rim_y"] - (np.arange(H) + 0.5) + 0.5, 0, 1)[:, None]
     a_top *= rim
     a_front *= rim
+    a_side *= rim
     skd = C.load(PICKS + DISH["sku"])
     x0s, y0s, x1s, y1s = DISH["sku_face"]
     face = skd[y0s:y1s, x0s:x1s]
     fl = C.lin(face)
     det = C.luma(fl) / np.maximum(C.blur(C.luma(fl), 6), 1e-4)
     alb = np.median(C.to_lab(face).reshape(-1, 3), 0)
-    ys_, xs_ = np.nonzero((a_top + a_front) > 0)
+    ys_, xs_ = np.nonzero((a_top + a_front + a_side) > 0)
     bx0, by0, bx1, by1 = xs_.min(), ys_.min(), xs_.max() + 1, ys_.max() + 1
     tex = cv2.resize(det.astype(np.float32), (bx1 - bx0, max(2, int((by1 - by0)))), interpolation=cv2.INTER_AREA).astype(np.float64)
-    tex = 1 + (tex - 1) * 1.6
+    tex = 1 + (tex - 1) * 1.2
     lit = np.zeros((H, W))
     lit[by0:by1, bx0:bx1] = 1.0
-    alb_lin = C.lin(C.from_lab(np.array([[[alb[0], alb[1], alb[2]]]])))[0, 0]
-    k_top, k_front = 1.00, 0.70
+    alb_lin = C.lin(C.from_lab(np.array([[list(DISH["lab"])]])))[0, 0]       # the photo's face (cool studio light) warmed to the room, as the
+    k_top, k_front = 1.00, 0.72                                                 # travertine holders on the other nightstand read
     rgb_d = np.zeros((H, W, 3))
     t_full = np.ones((H, W))
     t_full[by0:by1, bx0:bx1] = tex
-    for kk, aa in ((k_top, a_top), (k_front, a_front)):
-        rgb_d += (alb_lin * kk)[None, None, :] * (t_full * (aa > 0))[..., None]
-    a_d = np.clip(a_top + a_front, 0, 1)
+    a_d = np.clip(a_top + a_front + a_side, 0, 1)
+    for kk, aa in ((k_top, a_top), (k_front, a_front), (0.62, a_side)):
+        rgb_d += (alb_lin * kk)[None, None, :] * (t_full * aa / np.maximum(a_d, 1e-6))[..., None]
     out["trinket-dish"] = (C.srgb(np.clip(rgb_d, 0, 1)), a_d)
     old["trinket-dish"] = C.box_mask([(705, 945, 815, 982)]) & (C.blur(lab[..., 0], 1) > 0)
     r["trinket-dish"] = dict(method="code: a 10 x 10 x 1.8 cm slab (the card gives no height; the photo shows about 1.5-2), its outline roughened 0.6 px, the photo's stone face (its relief over a 6 px blur) as texture",
                              top_face=[[round(a_, 1) for a_ in p] for p in top], hidden_below_y=DISH["rim_y"], sku_face_Lab=[round(float(v), 1) for v in alb],
+                             colour_Lab=list(DISH["lab"]), colour_note="the photo's face is a cool studio grey (L* 78, b* 6); set to the room's warm light like the round-9 travertine holders (L* 85, b* 8)",
                              edit="the edit drew a book here: not used")
     return out, old, r
 
@@ -714,21 +747,30 @@ def set_print(rgb, e, slot, rec):
 
 
 def shadow_maps(dark_by, objs, band, block):
-    names = list(objs)
-    dist = np.stack([cv2.distanceTransform((~objs[n]).astype(np.uint8), cv2.DIST_L2, 5) for n in names])
-    near = np.argmin(dist, 0)
+    """per pass: the edit's darkening (already following the corrections) tapered by the distance to the pass's products together
+    (one band per pass, so no seams between them), shared out to the nearest product; a normalised blur inside each share, so a
+    shadow runs up to its product's edge and 2 px under it (its soft edge shows what is behind); never on another product"""
     allfg = np.zeros((H, W), bool)
-    for n in names:
+    for n in objs:
         allfg |= objs[n]
     out = {}
-    for i, n in enumerate(names):
-        bw = band[n]
-        env = (dist[i] <= bw) & (near == i) & ~allfg & ~block.get(n, np.zeros((H, W), bool))
-        taper = np.clip(1 - dist[i] / max(bw, 1), 0, 1) ** 1.2
-        d = dark_by[n] * env * taper
-        s = 1 - C.blur(d, 1.2)
-        s[~C.dil(env, 2) | allfg] = 1
-        out[n] = np.where(s > 0.996, 1.0, np.clip(s, 0, 1))
+    for p in sorted({LAYERS[n][0] for n in objs}):
+        names = [n for n in objs if LAYERS[n][0] == p]
+        bw = max(band[n] for n in names)
+        dist = np.stack([cv2.distanceTransform((~objs[n]).astype(np.uint8), cv2.DIST_L2, 5) for n in names])
+        du = dist.min(0)
+        near = np.argmin(dist, 0)
+        taper = np.clip(1 - du / bw, 0, 1) ** 1.2
+        for i, n in enumerate(names):
+            env = (du <= bw) & (near == i) & ~allfg & ~block.get(n, np.zeros((H, W), bool))
+            d = dark_by[n] * taper
+            num = C.blur(d * env, 1.2)
+            den = C.blur(env.astype(np.float64), 1.2)
+            val = np.where(den > 0.05, num / np.maximum(den, 1e-6), 0)
+            reg = env | (C.dil(env, 2) & objs[n])
+            sm = np.ones((H, W))
+            sm[reg] = 1 - val[reg]
+            out[n] = np.where(sm > 0.996, 1.0, np.clip(sm, 0, 1))
     return out
 
 
@@ -778,12 +820,14 @@ def main():
         for s in LAYERS:
             if LAYERS[s][0] == p:
                 dark_by[s] = dk
+    dark_by["shelf-vase-left"] = cv2.warpAffine(dark_by["shelf-vase-left"].astype(np.float32), np.array(rec.pop("_vase_left_M"), np.float32), (W, H)).astype(np.float64)
     dark_by["bedside-carafe"] = cv2.warpAffine(dark_by["bedside-carafe"].astype(np.float32), np.array(rec.pop("_pitcher_M"), np.float32), (W, H)).astype(np.float64)
-    cr = np.zeros((H, W))
-    sx, (ax, ay) = CROWN["s"], CROWN["about"]
-    crw = cv2.warpAffine(np.pad(dark_by["planter"].astype(np.float32), ((0, 0), (0, 160)), mode="reflect"), scale_about(sx, sx, ax, ay).astype(np.float32), (W, H)).astype(np.float64)
-    yy = np.arange(H)[:, None] * np.ones((1, W))
-    dark_by["planter"] = np.where(yy < ay + sx * (CROWN["split_y"] - ay), crw, dark_by["planter"])
+    a_plant, a_pot = rec.pop("_plant_alpha"), rec.pop("_pot_alpha")
+    synth = np.zeros((H, W))
+    synth[12:, 18:] = a_plant[:-12, :-18]                               # the plant on the wall: the floor lamp is left of it and in front
+    synth = C.blur(synth, 6) * 0.20
+    near_pot = C.dil(a_pot > 0.5, 60)
+    dark_by["planter"] = np.maximum(np.where(near_pot, dark_by["planter"], 0), synth)
     xd, yd = proj(-1.79, 17.95, 0.55)
     dish_dark = np.zeros((H, W))
     dd = C.dil(new["trinket-dish"], 3) & ~new["trinket-dish"]
@@ -799,10 +843,10 @@ def main():
     for s, (rgb, a) in list(outs.items()):
         lab_ = C.to_lab(rgb)
         Lv = np.interp(lab_[..., 0], [0, 8.05, 30, 100], [0, 12.5, 30, 100])
-        Lv = np.interp(Lv, [0, 24, 100], [10, 24, 100])
+        Lv = np.interp(Lv, [0, 24, 100], [11.5, 24, 100])
         lab_[..., 0] = np.where(a > 0, Lv, lab_[..., 0])
         outs[s] = (np.clip(C.from_lab(lab_), 0, 1), a)
-    rec["tone_new_layers"] = "L* -> interp([0, 8.05, 30, 100], [0, 12.5, 30, 100]) (MP-I2, once) -> interp([0, 24, 100], [10, 24, 100]) (the deep lift, as in throw_variants)"
+    rec["tone_new_layers"] = "L* -> interp([0, 8.05, 30, 100], [0, 12.5, 30, 100]) (MP-I2, once) -> interp([0, 24, 100], [10, 24, 100]) (the deep lift of throw_variants, its floor 11.5 not 10: at 10 the holder's black tube alone put 536 px under L* 11 and the frame's p0.5 at 10.96)"
     # write the layers
     a_new = np.zeros((H, W))
     for s, (rgb, a) in outs.items():

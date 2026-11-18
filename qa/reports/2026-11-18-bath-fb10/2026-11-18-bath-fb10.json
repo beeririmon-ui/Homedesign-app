@@ -1,0 +1,555 @@
+{
+ "date": "2026-11-18",
+ "scope": "bath B2 FB10 additions (changes only, EFF1.2)",
+ "agent": "qa-agent",
+ "inputs": "assets/renders/bath/warm-modern/stage1-2026-11-17/ (b2-defaults, b2-variant-linen, b2-variant-khaki, layers/manifest.json fb10); spec 12.6; ruling af0f0af9",
+ "verdict": "pass",
+ "right_shelf_gap": "known pending fix (designer ruling af0f0af9), not a finding",
+ "items": {
+  "1a bath-towels CJYD178122205EV": {
+   "result": "pass",
+   "front_alb_vs_basket_body": [
+    70.1,
+    5.6,
+    48.3
+   ],
+   "photo_front_rel_white": [
+    71.5,
+    9.3,
+    60.3
+   ],
+   "de00_vs_photo": 3.32,
+   "de00_vs_sheet_72_5_47": 1.55,
+   "for_info": "chroma 5.6 vs 9.3: reads greige-grey beside the walnut; under threshold"
+  },
+  "1b storage-basket CJYD180710801AZ": {
+   "result": "pass",
+   "body_rel_room": [
+    91.2,
+    4.9,
+    110.6
+   ],
+   "photo_body": [
+    90.6,
+    3.6,
+    79.5
+   ],
+   "de00_body": 3.54,
+   "band_rel_room": [
+    61.6,
+    22.4,
+    68.1
+   ],
+   "photo_band": [
+    65.1,
+    20.6,
+    65.4
+   ],
+   "de00_band": 3.23,
+   "de00_band_vs_body": 3.63
+  },
+  "1c vanity-tray CJYD238979001AZ": {
+   "result": "pass (after white balance)",
+   "render_C_h": "C 14.6-18.1, h 81-87",
+   "photo_wb_C_h": "C 14.5-17.5, h 80.5-82.6",
+   "photo_white_L_range": [
+    80.5,
+    89.7
+   ],
+   "de00": {
+    "lit_top_faces_88.0_vs_full_wb_bright_white_86.7": 2.07,
+    "midtone_79.9_vs_chroma_only_wb_77.6": [
+     2.35,
+     2.67
+    ],
+    "render_agent": 1.95,
+    "as_shot_not_used": [
+     9.49,
+     9.84
+    ]
+   },
+   "size_px": {
+    "drawn": 212,
+    "planned_ellipse": 193,
+    "planned_box": 224
+   },
+   "for_info": "reads as an oval at this angle; the close-up must show the organic outline"
+  },
+  "1d khaki CJYD223761707GT": {
+   "result": "pass",
+   "rings_alb": {
+    "10-40": {
+     "L": 40.9,
+     "a": 5.6,
+     "b": 16.4,
+     "C": 17.3,
+     "h": 71.3,
+     "px": 28327
+    },
+    "25-70": {
+     "L": 42.5,
+     "a": 5.6,
+     "b": 16.5,
+     "C": 17.4,
+     "h": 71.3,
+     "px": 28327
+    },
+    "45-90": {
+     "L": 44.2,
+     "a": 5.6,
+     "b": 16.6,
+     "C": 17.5,
+     "h": 71.3,
+     "px": 28327
+    }
+   },
+   "photo": [
+    42.9,
+    17.2,
+    70.2
+   ],
+   "de00_rings": [
+    1.83,
+    0.5,
+    1.26
+   ],
+   "hem_row": 1460,
+   "plan_hem_row": 1471,
+   "for_info": [
+    "top under the ring not lit: lit/shade 1.28 vs 7.55 in the caramel default (642 px, x 2370-2475, rows 979-1019)",
+    "dark untextured back-layer tab under the hem, x 2445-2485, rows 1442-1460"
+   ]
+  },
+  "2 RND2": {
+   "result": "pass",
+   "recompose": {
+    "defaults": {
+     "px_diff": 0,
+     "max": 0,
+     "inside": 0,
+     "outside": 0
+    },
+    "b2-variant-linen.png": {
+     "px_diff": 0,
+     "max": 0,
+     "inside": 0,
+     "outside": 0
+    },
+    "b2-variant-khaki.png": {
+     "px_diff": 0,
+     "max": 0,
+     "inside": 0,
+     "outside": 0
+    }
+   },
+   "outside_vs_plate": {
+    "defaults": 0,
+    "linen": 0,
+    "khaki": 0
+   },
+   "swap_khaki_vs_defaults": {
+    "px": 113601,
+    "outside_towel_alpha_or_shadow": 0,
+    "alpha_identical": false,
+    "shadow_identical": false,
+    "bbox": [
+     2272,
+     952,
+     2533,
+     1474
+    ]
+   },
+   "swap_linen_vs_defaults": {
+    "px": 67935,
+    "outside_towel_alpha_or_shadow": 0,
+    "alpha_identical": true,
+    "shadow_identical": true,
+    "bbox": [
+     2299,
+     971,
+     2506,
+     1401
+    ]
+   },
+   "shadow_one_below": true,
+   "light_px_over_new_alphas": 0
+  },
+  "3a cut edges": {
+   "result": "pass (B2F-L1 low)",
+   "halo": {
+    "defaults/bath-towels": {
+     "light_px": 72,
+     "dark_px": 18,
+     "light_clusters": [
+      [
+       32,
+       [
+        1589,
+        1460,
+        12,
+        6
+       ]
+      ]
+     ],
+     "dark_clusters": []
+    },
+    "defaults/storage-basket": {
+     "light_px": 318,
+     "dark_px": 589,
+     "light_clusters": [
+      [
+       120,
+       [
+        1741,
+        1302,
+        5,
+        35
+       ]
+      ],
+      [
+       72,
+       [
+        1743,
+        1372,
+        4,
+        29
+       ]
+      ],
+      [
+       38,
+       [
+        1815,
+        1277,
+        15,
+        6
+       ]
+      ]
+     ],
+     "dark_clusters": [
+      [
+       360,
+       [
+        1789,
+        1270,
+        98,
+        28
+       ]
+      ],
+      [
+       149,
+       [
+        1895,
+        1290,
+        67,
+        18
+       ]
+      ],
+      [
+       70,
+       [
+        1963,
+        1300,
+        49,
+        11
+       ]
+      ]
+     ]
+    },
+    "defaults/vanity-tray": {
+     "light_px": 121,
+     "dark_px": 717,
+     "light_clusters": [
+      [
+       99,
+       [
+        2073,
+        908,
+        16,
+        24
+       ]
+      ]
+     ],
+     "dark_clusters": [
+      [
+       294,
+       [
+        1998,
+        921,
+        88,
+        17
+       ]
+      ],
+      [
+       150,
+       [
+        1942,
+        903,
+        52,
+        13
+       ]
+      ],
+      [
+       115,
+       [
+        1934,
+        932,
+        37,
+        5
+       ]
+      ]
+     ]
+    },
+    "defaults/soap-dispenser": {
+     "light_px": 120,
+     "dark_px": 644,
+     "light_clusters": [
+      [
+       118,
+       [
+        1936,
+        824,
+        15,
+        24
+       ]
+      ]
+     ],
+     "dark_clusters": [
+      [
+       548,
+       [
+        1935,
+        852,
+        56,
+        63
+       ]
+      ],
+      [
+       74,
+       [
+        1969,
+        818,
+        9,
+        22
+       ]
+      ]
+     ]
+    },
+    "defaults/toothbrush-cup": {
+     "light_px": 53,
+     "dark_px": 316,
+     "light_clusters": [
+      [
+       24,
+       [
+        1994,
+        828,
+        11,
+        7
+       ]
+      ]
+     ],
+     "dark_clusters": [
+      [
+       110,
+       [
+        2029,
+        902,
+        25,
+        14
+       ]
+      ],
+      [
+       86,
+       [
+        2027,
+        816,
+        11,
+        22
+       ]
+      ],
+      [
+       78,
+       [
+        2001,
+        828,
+        24,
+        5
+       ]
+      ]
+     ]
+    },
+    "khaki/hand-towel": {
+     "light_px": 44,
+     "dark_px": 9,
+     "light_clusters": [],
+     "dark_clusters": []
+    }
+   }
+  },
+  "3b shelf gaps": {
+   "result": "pass; right = known pending fix",
+   "qa_u": {
+    "left": 0.0359,
+    "middle": 0.0242,
+    "right": 0.0051
+   },
+   "render_agent_u": {
+    "left": 0.0366,
+    "middle": 0.0257,
+    "right": 0.0047
+   },
+   "after_shift_0.015": {
+    "qa": [
+     0.0209,
+     0.0242,
+     0.0201
+    ],
+    "render_agent": [
+     0.0216,
+     0.0257,
+     0.0197
+    ]
+   },
+   "note": "both ends land on the 0.02 line; a shift of 0.0155-0.016 balances them (about 0.020-0.021 each); re-measure after the shift"
+  },
+  "3c tray seating": {
+   "result": "pass",
+   "bases_rows": [
+    913,
+    916
+   ],
+   "tray_bbox": [
+    1873,
+    899,
+    2085,
+    936
+   ],
+   "gap_to_vase_px": 10
+  },
+  "3d double shadows": {
+   "result": "pass",
+   "basket_shadow_over_towels_px": 0,
+   "towels_shadow_over_basket_px": 0,
+   "soap_cup_shadow_outside_tray": "wall behind only, rows 786-911"
+  },
+  "3e khaki x1-x2": {
+   "result": "pass",
+   "for_info": "see 1d"
+  },
+  "4 count V7Q6": {
+   "result": "pass",
+   "counted": 8,
+   "designer_expected": 8,
+   "designer_with_gaps": 10,
+   "by_eye_sold_products": 12,
+   "items": {
+    "shower-dispensers": {
+     "area_pct": 0.19,
+     "h": 0.053,
+     "counts": false
+    },
+    "sconce W": {
+     "area_pct": 0.159,
+     "h": 0.071,
+     "counts": true
+    },
+    "sconce E": {
+     "area_pct": 0.267,
+     "h": 0.097,
+     "counts": true
+    },
+    "vanity-sconces (pair, one product)": {
+     "area_pct": 0.426,
+     "h": 0.157,
+     "counts": true
+    },
+    "shower-curtain": {
+     "area_pct": 10.8,
+     "h": 1.0,
+     "counts": true
+    },
+    "floor-planter": {
+     "area_pct": 0.793,
+     "h": 0.177,
+     "counts": true
+    },
+    "soap-dispenser": {
+     "area_pct": 0.144,
+     "h": 0.082,
+     "counts": false
+    },
+    "toothbrush-cup": {
+     "area_pct": 0.088,
+     "h": 0.039,
+     "counts": false
+    },
+    "vanity-vase": {
+     "area_pct": 0.106,
+     "h": 0.061,
+     "counts": false
+    },
+    "towel-ring": {
+     "area_pct": 0.168,
+     "h": 0.114,
+     "counts": true
+    },
+    "hand-towel": {
+     "area_pct": 1.775,
+     "h": 0.296,
+     "counts": true
+    },
+    "bath-towels": {
+     "area_pct": 0.808,
+     "h": 0.113,
+     "counts": true,
+     "share_in_frame": 1.0
+    },
+    "storage-basket": {
+     "area_pct": 1.758,
+     "h": 0.149,
+     "counts": true,
+     "share_in_frame": 0.851
+    },
+    "vanity-tray": {
+     "area_pct": 0.153,
+     "h": 0.028,
+     "counts": false,
+     "share_in_frame": 1.0
+    },
+    "GROUP trio + tray (soap, cup, vase, tray)": {
+     "area_pct": 0.485,
+     "h": 0.098,
+     "counts": true
+    },
+    "GROUP trio without tray": {
+     "area_pct": 0.338,
+     "h": 0.096,
+     "counts": true
+    },
+    "hand-towel khaki (variant)": {
+     "area_pct": 2.434,
+     "h": 0.34,
+     "counts": true
+    }
+   },
+   "reads_full": "vanity zone full and styled; left margin and floor still empty (stool and art gaps): fuller, not yet full; the room count of 20 is the designer's"
+  }
+ },
+ "findings": [
+  {
+   "id": "B2F-L1",
+   "severity": "low",
+   "what": "basket lower-left corner: 1-px dark arc inside the alpha and a light plate wedge, x 1749-1770, rows 1476-1490; about 10 rows inside the frame box (render-agent recorded it as below the frame box)",
+   "visible": "not at x1; a hairline at x2",
+   "owner": "render-agent (0 tokens, heal with the shift)",
+   "evidence": "l1-basket-corner-canvas-x8.jpg"
+  }
+ ],
+ "evidence": [
+  "shelf-frame-x2.jpg",
+  "vanity-tray-frame-x2.jpg",
+  "khaki-frame-x2.jpg",
+  "l1-basket-corner-canvas-x8.jpg"
+ ],
+ "tools": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/qa-fb10"
+}
