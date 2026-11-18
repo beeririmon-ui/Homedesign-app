@@ -1,0 +1,217 @@
+{
+ "date": "2026-11-18",
+ "measured_on": "the final layers (layers/manifest.json); frame u, v = the 16:9 frame inside the canvas (K = 4072/3840)",
+ "curtain_vs_corner": {
+  "rule": "rejection 10: overlap >= 0.03 or clear >= 0.02",
+  "corner_u": 0.2771,
+  "curtain_right_u": 0.3199,
+  "overlap": 0.0428,
+  "ok": true
+ },
+ "curtain_stack_width": {
+  "render_u": [
+   0.2025,
+   0.3199
+  ],
+  "clay_u": [
+   0.2337,
+   0.3152
+  ],
+  "ratio": 1.44,
+  "note": "drawn wider to the left than the clay's 30 cm stack; not a rejection item: for QA and the designer"
+ },
+ "sprig_vs_mirror": {
+  "rule": "rejection 10: the sprig never touches the mirror; 7.7: top Z 1.10 (the clay's sprig top, row 747) and >= 0.02 below the mirror bottom",
+  "sprig_top_row": 742,
+  "mirror_bottom_row": 706,
+  "gap_below_mirror_bottom_v": 0.025,
+  "min_distance_to_the_mirror_v": 0.0518,
+  "ok": true,
+  "deviation": "it arches right, toward the ring (7.7: left, toward the mirror centre); the model's drawing, kept"
+ },
+ "towel_vs_vanity": {
+  "rule": "rejection 10 / 0א: >= 0.025",
+  "gap_u": 0.037,
+  "ok": true
+ },
+ "towel_hang": {
+  "render_rows": [
+   987,
+   1421
+  ],
+  "clay_rows": [
+   928,
+   1267
+  ],
+  "hem_lower_than_clay_px": 154,
+  "note": "the drawn towel hangs about 15 cm lower than the clay's (its hem near Z 0.33 against about 0.50); the same in both variants (one geometry); not a rejection item: for the designer"
+ },
+ "sizes_vs_clay": {
+  "sconce L": {
+   "layer_box": [
+    1372,
+    354,
+    1439,
+    460
+   ],
+   "clay_box": [
+    1372,
+    357,
+    1435,
+    461
+   ],
+   "w_ratio": 1.062,
+   "h_ratio": 1.019
+  },
+  "sconce R": {
+   "layer_box": [
+    2265,
+    230,
+    2359,
+    373
+   ],
+   "clay_box": [
+    2273,
+    233,
+    2350,
+    378
+   ],
+   "w_ratio": 1.218,
+   "h_ratio": 0.986
+  },
+  "niche bottles": {
+   "layer_box": [
+    960,
+    681,
+    1074,
+    761
+   ],
+   "clay_box": [
+    959,
+    675,
+    1075,
+    755
+   ],
+   "w_ratio": 0.983,
+   "h_ratio": 1.0
+  },
+  "soap": {
+   "layer_box": [
+    1934,
+    801,
+    1993,
+    923
+   ],
+   "clay_box": [
+    1928,
+    787,
+    1987,
+    916
+   ],
+   "w_ratio": 1.0,
+   "h_ratio": 0.946
+  },
+  "vase + sprig": {
+   "layer_box": [
+    2088,
+    742,
+    2299,
+    935
+   ],
+   "clay_box": [
+    2073,
+    747,
+    2150,
+    926
+   ],
+   "w_ratio": 2.718,
+   "h_ratio": 1.078
+  },
+  "cup + brushes": {
+   "layer_box": [
+    1991,
+    786,
+    2062,
+    928
+   ],
+   "clay_box": [
+    2014,
+    769,
+    2078,
+    917
+   ],
+   "w_ratio": 1.108,
+   "h_ratio": 0.96
+  },
+  "ring": {
+   "layer_box": [
+    2316,
+    849,
+    2506,
+    1018
+   ],
+   "clay_box": [
+    2314,
+    847,
+    2476,
+    971
+   ],
+   "w_ratio": 1.172,
+   "h_ratio": 1.36
+  }
+ },
+ "sizes_note": "refitted in code to the clay (the card's size): the two lamps (drawn 1.34x), the vase (1.43x), the soap dispenser and the niche bottles (1.17-1.19x). Left as drawn: the ring (about 1.15x across; the towel hangs from it), the cup. Width ratios include spouts, side faces and the clay's own occlusion",
+ "towel_colour": {
+  "rule": "rejection 11: dE00 <= 4 in the lower half, outside the lamp pool, against the SKU photo",
+  "method": "albedo estimate: the towel's lower-half median, linear, divided by the plate's light round it (relative to the lit plaster left of the mirror); against the SKU photo's fabric mid-tone",
+  "caramel": {
+   "gain_linear": 1.6469,
+   "albedo_lab_before": [
+    30.33,
+    21.99,
+    27.87
+   ],
+   "albedo_lab_after": [
+    38.71,
+    25.97,
+    32.91
+   ],
+   "sku_mid_lab": [
+    38.71,
+    23.86,
+    28.96
+   ],
+   "de00_after_vs_sku": 1.69,
+   "plate_light_rgb": [
+    0.2152,
+    0.1798,
+    0.1367
+   ]
+  },
+  "linen": {
+   "albedo_lab": [
+    74.96,
+    1.95,
+    4.68
+   ],
+   "sku_mid_lab": [
+    74.98,
+    2.14,
+    5.04
+   ],
+   "de00_vs_sku": 0.36
+  }
+ },
+ "rnd2": {
+  "defaults": {
+   "region_px": 846170,
+   "outside_differing_px": 0,
+   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+  },
+  "linen": {
+   "outside_differing_px_vs_plate": 0,
+   "differing_px_vs_defaults_outside_alpha": 0
+  },
+  "recompose_from_files_vs_direct": null
+ }
+}

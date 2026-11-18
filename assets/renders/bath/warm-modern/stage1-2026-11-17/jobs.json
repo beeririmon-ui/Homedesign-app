@@ -1,8 +1,8 @@
 {
  "run": "render-agent, 2026-11-17: the warm-modern bath, stage one, B2 (briefs/wm-bath-stage1-render-2026-11-17.md; manager relay of the same day)",
  "cap": 3500,
- "spent": 650,
- "left_in_cap": 2850,
+ "spent": 2100,
+ "left_in_cap": 1400,
  "var2": {
   "connected": true,
   "note": "ToolSearch reconnected the Var2 server with its held sign-in; list_models, estimate_cost, request_upload, create_image and get_image_result all answered. No code or token was asked for."
@@ -24,76 +24,66 @@
    "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/plate-r1.png",
    "final": "assets/renders/bath/warm-modern/stage1-2026-11-17/plate.png",
    "verdict": "accepted with code steps (tools/compose_plate.py): lock warp, the left strip (the model's window) repaired, bronze tone"
-  }
- ],
- "priced_not_sent": [
+  },
   {
+   "id": "defaults-r1",
    "output": 2,
-   "what": "B2 with the defaults of section 0א (9 products: curtain, niche set x3, the Style B sconce pair, soap dispenser, cup, black bud vase, floor planter Beige-Medium, ring A3 at Y 13.07, hand towel caramel 2pc), i2i on the graded plate with the product clay in its masks",
    "model": "seedream-5-pro",
    "type": "image-to-image",
    "resolution": "2K",
    "aspect_ratio": "auto",
-   "image_refs": 9,
-   "refs_planned": [
-    "shower-curtain slub 200x270 12000059196236303 (pleat tape, hooks)",
-    "niche set + soap dispenser CJYD301460604DW (one photo, both slots)",
-    "vanity-sconces 037853 Style B 12000048654610384",
-    "toothbrush-cup CJYD284387902BY",
-    "vanity-vase CJJJJTJT12606-HQ06",
-    "floor-planter CJJT154204208HS (Beige-Medium drawing)",
-    "towel-ring 842335 A3 12000047580558571",
-    "hand-towel caramel 2pc 12000059652536006",
-    "(spare slot: the planter's family in base.png, if the photo alone is not enough)"
-   ],
-   "estimate_call": {
-    "tool": "var2_estimate_cost",
-    "model_id": "seedream-5-pro",
-    "type": "image-to-image",
-    "params": {
-     "resolution": "2K",
-     "aspect_ratio": "auto",
-     "image_refs": 9
-    },
-    "total_tokens": 650
-   },
+   "image_refs": 8,
    "estimate": 650,
-   "waits_for": [
-    "owner approval 2 (HOUSE2), relayed by the manager"
-   ]
+   "tokens": 650,
+   "placeholder_id": "9fdd5f1f-8dd7-415e-b11a-a312cee198bf",
+   "task_id": "42cd4a945cd3a9959044952dd7c67d28",
+   "prompt_record": "assets/prompts/warm-modern-bath-2026-11-17/defaults.json",
+   "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/defaults-r1.png",
+   "final": "assets/renders/bath/warm-modern/stage1-2026-11-17/b2-defaults.png",
+   "verdict": "accepted for the layers with code steps (tools/compose_defaults.py v2); the sprig re-edited"
   },
   {
-   "output": 3,
-   "what": "ONE hand-towel variant now: linen 2pc 12000059652334994, an edit of output 2 in the towel mask (+3 px) and its shadow; 0 outside (RND2); then the same WM-G1 curve",
+   "id": "sprig-fix-r1",
+   "output": "2 (fix)",
    "model": "nano-banana-2",
    "type": "image-to-image",
    "resolution": "2K",
-   "quantity": 1,
-   "image_refs": 1,
-   "estimate_call": {
-    "tool": "var2_estimate_cost",
-    "model_id": "nano-banana-2",
-    "type": "image-to-image",
-    "params": {
-     "resolution": "2K",
-     "aspect_ratio": "auto",
-     "image_refs": 1
-    },
-    "total_tokens": 400
-   },
+   "image_refs": 0,
    "estimate": 400,
-   "later": "the third variant (khaki waffle or light-apricot) +400 when sourcing passes one",
-   "waits_for": [
-    "output 2"
-   ]
+   "tokens": 400,
+   "placeholder_id": "0e05012a-fb2e-415c-9011-e6c1f2f8df79",
+   "task_id": "8f20fa2244d0cf9c25cf2d1d1f0092bf",
+   "prompt_record": "assets/prompts/warm-modern-bath-2026-11-17/sprig-fix.json",
+   "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/sprig-fix-r1.png",
+   "verdict": "the vase slot taken from it; the sprig arches right (asked: left)"
+  },
+  {
+   "id": "towel-linen-r1",
+   "output": 3,
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "image_refs": 1,
+   "estimate": 400,
+   "tokens": 400,
+   "placeholder_id": "81ba1a8d-b956-49a2-a8a4-f0fb928f387e",
+   "task_id": "d723a86b4ed0bfe5943874c269a3340a",
+   "prompt_record": "assets/prompts/warm-modern-bath-2026-11-17/towel-linen.json",
+   "raw": "assets/renders/bath/warm-modern/stage1-2026-11-17/raw/towel-linen-r1.jpg",
+   "final": "assets/renders/bath/warm-modern/stage1-2026-11-17/b2-variant-linen.png",
+   "verdict": "drape changed by the model (fails rejection 11 as drawn); used as the colour reference; the variant layer is a recolour of the default's geometry"
   }
  ],
+ "priced_not_sent": [],
  "totals": {
-  "spent": 650,
-  "priced_now": 1050,
-  "three_outputs_now": 1700,
-  "with_the_third_variant": 2100,
-  "cap": 3500
+  "spent": 2100,
+  "plate": 650,
+  "defaults": 650,
+  "sprig_fix": 400,
+  "towel_linen": 400,
+  "cap": 3500,
+  "left_in_cap": 1400,
+  "not_spent": "the third towel variant (waits for sourcing)"
  },
  "designer_revision_during_run": "docs/proposals/wm-bath-render-2026-11-17.md changed while this run worked (commits a9234229, cd083e71): ring 842335 A3 (projection 7.5); the black towel rejected; the designer also writes the sconce gate closed on Style B and the planter passing, while the manager's relay of the same day says the sconce is still open and the planter is out. The clay follows the relay (no planter, provisional sconces); the manager settles.",
  "qa_round_1": {
@@ -130,5 +120,10 @@
     "C_over_L": 0.803
    }
   }
- }
+ },
+ "run_round4": "2026-11-18: owner approval HOUSE2 ('מאשר את שניהם'), manager relay: output 2 (650), one towel variant linen 2pc (400) as a mask edit, then the layers (RND2)",
+ "waiting": [
+  "the third towel variant (waits for sourcing)",
+  "QA of outputs 2-3 and the layers; owner approval 3; the 1.3.9 registration"
+ ]
 }
