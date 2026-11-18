@@ -16762,12 +16762,12 @@
    "room": "master",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "model": "none (code on r4 and plate.png, tools/compose_defaults.py)",
-   "tokens": 0,
+   "model": "code on r4 and plate.png + nano-banana-2 edit r5 inside its two regions (tools/compose_defaults.py)",
+   "tokens": 400,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "PENDING QA, and the manager on 12.7 4c (Pecan has no fringe at x2: the fix ~400 is over the cap); not for the site",
-   "sha256": "d19f125209666bed2dd1723d235c1a65558043ac791f57c4b78747066f9fb33a",
-   "bytes": 6585605,
+   "status": "PENDING QA (round 5, 12.8): code fixes + the r5 edit inside two regions; open: the duvet R5 reading (designer), Flax brown reads washed out at x2",
+   "sha256": "9d452f23b3500ce84d158de454fe62f60d39051ab07964987972f5b147cb84c5",
+   "bytes": 6597701,
    "record": "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-defaults-compose.json"
   },
   {
@@ -16777,12 +16777,12 @@
    "room": "master",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "model": "none (code on r4 and plate.png, tools/compose_defaults.py)",
+   "model": "code on r4 and plate.png + nano-banana-2 edit r5 inside its two regions (tools/compose_defaults.py)",
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "PENDING QA, and the manager on 12.7 4c (Pecan has no fringe at x2: the fix ~400 is over the cap); not for the site",
-   "sha256": "2e0684b5e1c0cae6df223c54f6e1924f5c2281f03fd54c37e2a9679f41a88328",
-   "bytes": 3243949
+   "status": "PENDING QA (round 5, 12.8): code fixes + the r5 edit inside two regions; open: the duvet R5 reading (designer), Flax brown reads washed out at x2",
+   "sha256": "eae67766598d3ff13d472f53065c35dcb720cef887939bfed6f245c1df3535ce",
+   "bytes": 3264685
   },
   {
    "id": "wm-master-mb0-layers-2026-11-18",
@@ -16791,12 +16791,12 @@
    "room": "master",
    "style": "warm-modern",
    "created": "2026-11-18",
-   "model": "none (code on r4 and plate.png, tools/compose_defaults.py)",
+   "model": "code on r4 and plate.png + nano-banana-2 edit r5 inside its two regions (tools/compose_defaults.py)",
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "PENDING QA, and the manager on 12.7 4c (Pecan has no fringe at x2: the fix ~400 is over the cap); not for the site",
-   "sha256": "5610dca73e2d161cb034ff69b06b34825b5b9e6db6ebb25cc2d32ef3d7a4e287",
-   "bytes": 6961
+   "status": "PENDING QA (round 5, 12.8): code fixes + the r5 edit inside two regions; open: the duvet R5 reading (designer), Flax brown reads washed out at x2",
+   "sha256": "9cde5137e12e68e36d7796effbc5dc32ec3072ee9cb71b81fb6cd1fa7c3142b4",
+   "bytes": 7978
   },
   {
    "id": "wm-master-mb0-defaults-qa-sheet-2026-11-18",
@@ -16809,8 +16809,50 @@
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
    "status": "working sheet; not for the site",
-   "sha256": "241d44be39ff662d609097ea52b912c5e0e38d6b5f782158049bd415cbd087c7",
-   "bytes": 505108
+   "sha256": "8e06a1c6ae59572f88e7c8637567ecbf9b41349c85c18c6677f9a2b7cb477098",
+   "bytes": 572607
+  },
+  {
+   "id": "wm-master-mb0-defaults-r5-edit-2026-11-18",
+   "path": "assets/renders/master/warm-modern/stage1-2026-11-17/raw/defaults-r5-edit.jpg",
+   "kind": "nano-banana-2 edit of the composed frame (fringes, duvet foot), as returned",
+   "room": "master",
+   "style": "warm-modern",
+   "created": "2026-11-18",
+   "model": "nano-banana-2 2K image-to-image",
+   "tokens": 400,
+   "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
+   "status": "raw; used only inside its two regions; not for the site",
+   "sha256": "6c0fe3c4bc212c8bdc3eeffe3630b0a1fdd229bcd7342dc25ae7bda05158f527",
+   "bytes": 2653719
+  },
+  {
+   "id": "wm-master-mb0-variant-throw-flax-2026-11-18",
+   "path": "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-variant-throw-flax.png",
+   "kind": "MB0 with the throw in Flax brown (code recolour of the fixed Pecan, identical alpha)",
+   "room": "master",
+   "style": "warm-modern",
+   "created": "2026-11-18",
+   "model": "code (tools/throw_variants.py)",
+   "tokens": 0,
+   "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
+   "status": "REJECT-CANDIDATE at x2: highlights wash out; reported before any mask edit",
+   "sha256": "7bf652c61c181177fac48fbcfdf0d7e55b067a458dfb8bf731c3cd327a11cbf6",
+   "bytes": 6606525
+  },
+  {
+   "id": "wm-master-mb0-variant-throw-clay-2026-11-18",
+   "path": "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-variant-throw-clay.png",
+   "kind": "MB0 with the throw in Clay (code recolour of the fixed Pecan, identical alpha)",
+   "room": "master",
+   "style": "warm-modern",
+   "created": "2026-11-18",
+   "model": "code (tools/throw_variants.py)",
+   "tokens": 0,
+   "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
+   "status": "PENDING QA",
+   "sha256": "36e2d6394029efe70666b14bb7ee2cdb1d2fb995c7be16800442b3a117179f9b",
+   "bytes": 6560279
   }
  ]
 }

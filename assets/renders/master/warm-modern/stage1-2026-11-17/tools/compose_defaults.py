@@ -148,11 +148,12 @@ def proj(X, Y, Z):
 
 
 # ---------------------------------------------------------------------------------------------------------------- 1. lock
-def lock(ids):
-    """r4 at the canvas size, warped onto plate.png: an affine fit (ECC, masked to the walls, headboard and nightstands)"""
-    r = Image.open(RAW).convert("RGB")
+def lock(ids, raw=RAW, ref=None):
+    """a still at the canvas size, warped onto its reference (plate.png for r4; the edit's input for an edit): an affine fit (ECC,
+    masked to the walls, headboard and nightstands)"""
+    r = Image.open(raw).convert("RGB")
     r = np.asarray(r.resize((W, H), Image.LANCZOS)).astype(np.float32)
-    pl = np.asarray(Image.open(os.path.join(ST, "plate.png")).convert("RGB")).astype(np.float32)
+    pl = np.asarray(Image.open(ref or os.path.join(ST, "plate.png")).convert("RGB")).astype(np.float32)
     prod = dil((ids >= 40) & (ids < 90), 30)
     stable = np.isin(ids, [20, 24, 25, 26, 1, 2, 5, 9, 10, 12, 13, 14]) & ~prod
     stable[1450:] = False
@@ -570,6 +571,11 @@ def holder_sprites(src, fg_h):
     ys = sorted(prof)
     hs = ys[-1] - ys[0] + 1
     lv = np.linspace(0, 1, len(SKU_HOLDER))
+    # 12.8 4d: matte, opaque travertine: the colour and the pores of the sconces' cones in this frame, a matte cylinder's shading
+    # (light from the upper left, the sconce and the window), no gloss. r4's holder gives only the outline's rows now
+    cone = to_lab(src[610:628, 746:776])                # inside the west cone (its lower part), no wall, no rim
+    cmed = np.median(cone.reshape(-1, 3), 0)
+    tex = cone - np.stack([blur(cone[..., c], 2.0) for c in range(3)], -1)
 
     def make(h_px):
         h_px = int(round(h_px))
@@ -587,9 +593,12 @@ def holder_sprites(src, fg_h):
             xs_t = np.arange(wmax)
             u = (xs_t - (cx - tw / 2)) / max(tw, 1e-3)
             inside = (u >= 0) & (u <= 1)
-            sxs = l + u * (rr - l)
-            for c in range(3):
-                out[r, :, c] = np.interp(sxs, np.arange(img.shape[1]), img[yi, :, c])
+            uu = np.clip((xs_t - cx) / max(tw / 2, 1e-3), -1, 1)
+            shade = np.maximum(0, np.cos(np.arcsin(uu) + 0.5))
+            Lm = cmed[0] - 18 + 26 * shade + (4 if f < 0.10 else 0) - 6 * max(0.0, (f - 0.88) / 0.12)
+            tr_, tc_ = tex[r % tex.shape[0]], tex[r % tex.shape[0], (xs_t % tex.shape[1])]
+            lab_px = np.stack([Lm + tc_[:, 0], np.full(xs_t.size, cmed[1]) + 0.5 * tc_[:, 1], np.full(xs_t.size, cmed[2]) + 0.5 * tc_[:, 2]], -1)
+            out[r, :, :3] = np.clip(from_lab(lab_px), 0, 1)
             out[r, :, 3] = np.clip(np.minimum(xs_t - (cx - tw / 2) + 0.5, (cx + tw / 2) - xs_t + 0.5), 0, 1)
         return out
 
@@ -667,7 +676,7 @@ def holders_fix(src, fg_h, rec):
         out.append(dict(point=[hd["X"], hd["Y"]], foot_px=[round(x, 1), round(y, 1)], height_px=round(hp, 1), rim_px=round(rim, 1),
                         candle_cm=hd["candle"] * 100, candle_visible_px=round(F * vis / d, 1), candle_w_px=round(0.8 * rim, 1)))
     rec["candle_holders_rebuilt"] = dict(pair=out, outline="the SKU photo's Small (70 x 110): rim 0.48 h, waist 0.22 h, foot 0.46 h",
-                                         texture="r4's left holder (its left foot edge mirrored from the right where the duvet touches it), resampled row by row",
+                                         texture="12.8 4d: opaque matte travertine; colour and pores from the sconces' cones in this frame, a matte cylinder's shading; r4's left holder gives only the outline rows",
                                          removed="r4's three holders (about 2x the card: 130 px tall and 73 px wide at 3.17 m)")
     sh[a > 0.02] = 1
     return rgb, a, sh
@@ -744,6 +753,218 @@ def lamp_fix(src, fg_l, parts, rec):
     return out
 
 
+def cover_corners(a, rgb):
+    """where the plate's mattress shows beside the duvet's corner drapes (rows 1150 down), the drape is drawn out over it: a
+    horizontal remap of the layer fading over 220 px, 8 px past the mattress"""
+    pid = np.asarray(Image.open(CLAY + "MB0-plate-id.png"))
+    mat = pid == 23
+    moves = {}
+    for side in ("left", "right"):
+        need = np.zeros(H)
+        for y in range(1150, H):
+            row_b, row_m = np.nonzero(a[y])[0], np.nonzero(mat[y])[0]
+            if row_b.size == 0 or row_m.size == 0:
+                continue
+            need[y] = max(0.0, (row_b.min() - row_m.min() + 8) if side == "left" else (row_m.max() - row_b.max() + 8))
+        need = np.array([need[max(0, y - 25):y + 26].max() for y in range(H)])
+        need = blur(need[:, None], 12)[:, 0]
+        if need.max() < 1:
+            continue
+        mx, my = np.meshgrid(np.arange(W, dtype=np.float32), np.arange(H, dtype=np.float32))
+        sx = mx.copy()
+        for y in range(1100, H):
+            if need[y] < 0.5 or not a[y].any():
+                continue
+            row_b = np.nonzero(a[y])[0]
+            if side == "left":
+                x0, x1 = row_b.min() - need[y], row_b.min() + 220
+                sx[y] = mx[y] + need[y] * np.clip((x1 - mx[y]) / (x1 - x0), 0, 1)
+            else:
+                x0, x1 = row_b.max() - 220, row_b.max() + need[y]
+                sx[y] = mx[y] - need[y] * np.clip((mx[y] - x0) / (x1 - x0), 0, 1)
+        a = cv2.remap(a.astype(np.float32), sx, my, cv2.INTER_LINEAR) > 0.5
+        rgb = np.stack([cv2.remap(rgb[..., c].astype(np.float32), sx, my, cv2.INTER_CUBIC) for c in range(3)], -1).astype(np.float64)
+        moves[side] = round(float(need.max()), 1)
+    return a, rgb, moves
+
+
+EDIT_RAW = os.path.join(ST, "raw/defaults-r5-edit.jpg")          # nano-banana-2 edit of the composed frame (12.8, 1a + 4a-b)
+EDIT_IN = os.path.join(ST, "inputs/defaults-edit-r5-input.png")   # its input: the composed frame as sent
+FOOT_Y0 = 1292                                            # the duvet's foot from the edit below this row (blended over 30 rows)
+
+
+def compose_edit(ids, src, fg, srcs, rec):
+    """the edit, locked onto its input and matched to it (the field, sigma 60, outside its two regions), used only in them:
+    the foot: the duvet's front drop and corners from the edit below row FOOT_Y0 (no mattress side, no band), its straight crease
+    softened into a fold (a vertical wave, 6 + 3 px); the throw: the edit's Pecan with its fringes, below r4's top edge of the band
+    (the duvet's fold strip stays r4's), the fringes' gaps open onto the duvet"""
+    e_raw, rl = lock(ids, EDIT_RAW, EDIT_IN)
+    ref = load(EDIT_IN)
+    foot = box_mask([(150, FOOT_Y0 - 40, 2570, H), (150, 1160, 560, H), (2230, 1160, 2570, H)])
+    tpoly = poly(THROW_OUTER + [(2420, 1330), (330, 1330)])
+    tzone = dil(tpoly, 45) & box_mask([(0, 0, W, 1335)])
+    xs_top = np.arange(W)
+    top_pts = [p for p in THROW_OUTER if 546 <= p[0] <= 2205]
+    topline = np.interp(xs_top, [p[0] for p in top_pts], [p[1] for p in top_pts], left=-1, right=-1)
+    above = np.zeros((H, W), bool)
+    for x in range(546, 2206):
+        above[:int(round(topline[x])), x] = True
+    tzone &= ~above
+    keep = ~(dil(foot, 30) | dil(tzone, 30))
+    g = gain_field(e_raw, ref, keep)
+    e = srgb(lin(e_raw) * g)
+    same = np.linalg.norm(blur(to_lab(e), 1.5) - blur(to_lab(ref), 1.5), axis=-1) < 4
+    pr = priors(e)
+    # the throw: r4's Pecan stays above its own middle fold (its top fold, drapes and contour). Below that fold, across the band
+    # (x 560-2160), the edit's hem and fringe strands, in place (the edit hung them where r4's lower layer was: tips at r4's lower
+    # edge, no shift); the alpha below the fold is a chroma matte of the edit, so the duvet shows between the strands
+    Le = lab_of(e)
+    Ce = np.hypot(Le[..., 1], Le[..., 2])
+    he = np.degrees(np.arctan2(Le[..., 2], Le[..., 1])) % 360
+    pec = (Ce > 14) & (he > 25) & (he < 75) & (Le[..., 0] < 66) & tzone & ~same
+    t_old = fg["throw"]
+    xs_b = np.arange(560, 2161)
+    tips = np.array([1000 + (np.nonzero(pec[1000:1140, x])[0].max() if pec[1000:1140, x].any() else 95) for x in xs_b], float)
+    tips = np.array([np.median(tips[max(0, i - 30):i + 31]) for i in range(tips.size)])
+    fold = tips - 52
+    strand_a = np.zeros((H, W))
+    rgb_t = srcs["throw"].copy()
+    am_all = np.clip((Ce - 10.0) / 10.0, 0, 1) * ((he > 25) & (he < 75))
+    for i, x in enumerate(xs_b):
+        f0, t0 = int(round(fold[i])), int(round(tips[i])) + 3
+        strand_a[f0:t0, x] = am_all[f0:t0, x]
+        strand_a[f0:int(round(tips[i])) - 40, x] = 1.0          # the hem itself is solid; the strands below it a matte
+        rgb_t[f0:t0, x] = e[f0:t0, x]
+    below_fold = np.zeros((H, W), bool)
+    for i, x in enumerate(xs_b):
+        below_fold[int(round(fold[i])):, x] = True
+    t_new = (t_old & ~below_fold) | (strand_a > 0.5)
+    fg["throw"] = t_new
+    fg["throw_fringe_alpha"] = np.where(below_fold, strand_a, 0.0)
+    srcs["throw"] = np.where(below_fold[..., None], rgb_t, srcs["throw"])
+    rec["fringe_transfer"] = dict(span_x=[560, 2160], fold_rows_p10_p50_p90=[int(v) for v in np.percentile(fold, [10, 50, 90])],
+                                  tip_rows_p10_p50_p90=[int(v) for v in np.percentile(tips, [10, 50, 90])],
+                                  note="the edit's hem and strands in place below r4's middle fold; the drapes stay r4's (no strands there)")
+    # the foot
+    L = lab_of(e)
+    C_ = np.hypot(L[..., 1], L[..., 2])
+    duv = foot & (C_ < 14) & (L[..., 0] > 30) & ~fg["throw"]
+    duv = cv2.morphologyEx(duv.astype(np.uint8), cv2.MORPH_OPEN, disk(2)).astype(bool)
+    n_, lab_ = cv2.connectedComponents(duv.astype(np.uint8), connectivity=8)
+    core = box_mask([(700, FOOT_Y0, 2000, H)])
+    duv = np.isin(lab_, list(set(np.unique(lab_[core & duv])) - {0}))
+    inv = (~duv).astype(np.uint8)
+    n2, lab2, st2, _ = cv2.connectedComponentsWithStats(inv, connectivity=4)
+    border = set(np.unique(np.concatenate([lab2[0], lab2[-1], lab2[:, 0], lab2[:, -1]])))
+    duv |= np.isin(lab2, [i for i in range(1, n2) if i not in border])
+    yy = np.arange(H)[:, None].astype(np.float64)
+    xx_ = np.arange(W)[None, :]
+    y0c = np.where((xx_ < 560) | (xx_ > 2230), 1200, FOOT_Y0)     # the corners' drapes from the edit from row 1200
+    wgt = np.clip((yy - (y0c - 30)) / 30.0, 0, 1)
+    a_old = fg["bedding"].astype(np.float64)
+    foot = foot | box_mask([(150, 1160, 560, H), (2230, 1160, 2570, H)])
+    below = yy >= y0c
+    a_new = np.where(below, duv, fg["bedding"] | (duv & (wgt > 0)))
+    rgb = srcs["bedding"] * (1 - wgt[..., None]) + e * wgt[..., None]
+    rgb = np.where((fg["bedding"] & ~duv)[..., None] & (wgt[..., None] > 0), srcs["bedding"], rgb)
+    # the crease: the strongest light-to-dark step in rows 1380-1425 between the corners, a soft fold instead of a ruler line
+    Yl = blur(luma(e), 1.0)
+    dy = np.zeros_like(Yl)
+    dy[2:-2] = Yl[4:] - Yl[:-4]
+    cx_ = np.arange(700, 2000)
+    crease = float(np.median(1380 + np.argmax(np.abs(dy[1380:1425, cx_]), 0)))
+    mx, my = np.meshgrid(np.arange(W, dtype=np.float32), np.arange(H, dtype=np.float32))
+    wave = 6 * np.sin(2 * np.pi * mx / 420 + 0.7) + 3 * np.sin(2 * np.pi * mx / 170 + 2.1)
+    env = np.exp(-((my - crease) / 34.0) ** 2) * (my > crease - 90)
+    sy = (my + wave * env).astype(np.float32)
+    rgb = np.stack([cv2.remap(rgb[..., c].astype(np.float32), mx, sy, cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE) for c in range(3)], -1)
+    a_new = cv2.remap(a_new.astype(np.float32), mx, sy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE) > 0.5
+    a_new, rgb, cmoves = cover_corners(a_new, rgb.astype(np.float64))
+    fg["bedding"] = a_new
+    srcs["bedding"] = np.clip(rgb, 0, 1)
+    rec["edit_r5_corners_drawn_out_px"] = cmoves
+    fg["floor-lamp"] &= ~ero(a_new, 3)
+    rec["edit_r5"] = dict(raw="raw/defaults-r5-edit.jpg", input="inputs/defaults-edit-r5-input.png", lock=rl,
+                          gain_p1_p50_p99=[round(float(v), 3) for v in np.percentile(g[keep], [1, 50, 99])],
+                          used=["the throw's fringe strands only, hung under r4's Pecan (its fold, drop and contour kept)",
+                                f"the duvet's foot below row {FOOT_Y0} (blend 30 rows), crease at row {crease:.0f} waved 6 + 3 px"],
+                          throw_px=int(fg["throw"].sum()), foot_px=int((a_new & below).sum()))
+    return fg, srcs, crease
+
+
+LAMP_CONTACT = (2332.0, 1271.5)                           # the disc base's floor contact as r4 drew it (its centre, bottom)
+
+
+def pole_band(fg_l, parts, rec):
+    """the pole below the collar as one clean band: its two edges fitted with robust lines over rows 610-1235 (the cut had a step)"""
+    st = parts["stem"]
+    rows = np.arange(610, 1236)
+    L_, R_ = [], []
+    for y in rows:
+        xs_ = np.nonzero(st[y, 2300:2365])[0]
+        L_.append(2300 + xs_.min() if xs_.size else np.nan)
+        R_.append(2300 + xs_.max() if xs_.size else np.nan)
+    out = {}
+    for nm, v in (("left", np.array(L_)), ("right", np.array(R_))):
+        ok = ~np.isnan(v)
+        use = ok.copy()
+        for _ in range(4):
+            b, a = np.polyfit(rows[use], v[use], 1)
+            use = ok & (np.abs(v - (a + b * rows)) < 2.5)
+        out[nm] = (a, b)
+    band = np.zeros((H, W), bool)
+    for y in range(596, 1262):
+        l = out["left"][0] + out["left"][1] * y
+        r = out["right"][0] + out["right"][1] * y
+        band[y, int(round(l)):int(round(r)) + 1] = True
+    zone = box_mask([(2306, 596, 2360, 1262)]) & ~parts["base"] & ~parts["shade"]
+    rec["pole_band"] = dict(left=[round(out["left"][0] + out["left"][1] * 610, 1), round(out["left"][0] + out["left"][1] * 1235, 1)],
+                            right=[round(out["right"][0] + out["right"][1] * 610, 1), round(out["right"][0] + out["right"][1] * 1235, 1)])
+    return (fg_l & ~zone) | (band & zone) | (fg_l & parts["shade"])
+
+
+def lamp_scale(parts, rec):
+    """12.8, 3: uniform about the base's floor contact so the lamp reads 158 at the base's depth; then, if the shade still reads over
+    43 +-2, the shade alone horizontally about the pole (the off-axis widening of a circle at the lamp's place taken out)"""
+    cx, cy = LAMP_CONTACT
+    d = F * CAM[2] / (cy - HZ)
+    ys = np.nonzero(parts["shade"].any(1))[0]
+    xs = np.nonzero(parts["shade"].any(0))[0]
+    top, rim = ys.min(), ys.max()
+    h_m = (cy - top) * d / F
+    s = 1.58 / h_m
+    X = CAM[0] + (cx - CX) * d / F
+    th = np.linspace(0, 2 * np.pi, 1441)
+
+    def width(r):
+        u = CX + F * (X + r * np.cos(th) - CAM[0]) / (d - r * np.sin(th))
+        return u.max() - u.min()
+    wf = width(0.215) / (2 * 0.215 * F / d)
+    w_m = (xs.max() - xs.min() + 1) * s * d / F / wf
+    k = 1.0 if w_m <= 0.45 else 0.43 / w_m
+    rim_dest = cy + (rim - cy) * s
+    new_l = cx - (cx - xs.min()) * s * k
+    new_r = cx + (xs.max() + 1 - cx) * s * k
+    u = lambda x: (x - FRAME[0]) / (FRAME[2] - FRAME[0])  # noqa: E731
+    rec["floor_lamp_scale"] = dict(depth_m=round(d, 3), drawn_height_m=round(h_m, 3), uniform=round(s, 4), shade_drawn_m=round(w_m / s, 3),
+                                   shade_after_uniform_m=round(w_m, 3), shade_x=round(k, 4), shade_final_m=round(w_m * k, 3),
+                                   offaxis_widening=round(wf, 3), base_final_cm=round(27.5 * s, 1),
+                                   shade_u=[round(u(new_l), 4), round(u(new_r), 4)], right_margin_u=round(1 - u(new_r), 4),
+                                   gap_to_right_cone_u=round(u(new_l) - u(2015), 4))
+    return dict(s=s, k=k, cx=cx, cy=cy, rim_dest=rim_dest)
+
+
+def lamp_remap(arr, lm, interp):
+    mx, my = np.meshgrid(np.arange(W, dtype=np.float32), np.arange(H, dtype=np.float32))
+    t = np.clip((lm["rim_dest"] + 4 - my) / 6.0, 0, 1)
+    kk = 1 * (1 - t) + lm["k"] * t
+    sx = (lm["cx"] + (mx - lm["cx"]) / (lm["s"] * kk)).astype(np.float32)
+    sy = (lm["cy"] + (my - lm["cy"]) / lm["s"]).astype(np.float32)
+    if arr.ndim == 2:
+        return cv2.remap(arr.astype(np.float32), sx, sy, interp, borderMode=cv2.BORDER_CONSTANT, borderValue=0).astype(np.float64)
+    return np.stack([cv2.remap(arr[..., c].astype(np.float32), sx, sy, interp, borderMode=cv2.BORDER_REPLICATE) for c in range(arr.shape[2])], -1).astype(np.float64)
+
+
 def curtain_fix(src, fg_c, rec):
     """the hem level at 12 cm (WM-C3): at the panel's X (-2.255) the hem row is HZ + F (1.05 - 0.12) / d(x); r4's hem is about level
     in the picture, so the near folds hang short. Per column, rows 300 .. r4's hem are stretched to 300 .. the target"""
@@ -784,8 +1005,8 @@ def soft(fg):
     return np.clip(a, 0, 1)
 
 
-def defringe(rgb, fg):
-    inner = ero(fg, 2).astype(np.float64)
+def defringe(rgb, fg, r=2):
+    inner = ero(fg, r).astype(np.float64)
     w = blur(inner, 2.0)
     out = rgb.copy()
     edge = dil(fg, 2) & (inner == 0) & (w > 0.02)
@@ -899,11 +1120,25 @@ def main_all():
     srcs["nightstand-tray"], fg["nightstand-tray"] = dish_fix(src, fg["nightstand-tray"], rec)
     srcs["nightstand-vase"], fg["nightstand-vase"] = bottle_fix(src, fg["nightstand-vase"], rec)
     srcs["floor-lamp"] = lamp_fix(src, fg["floor-lamp"], lamp_parts, rec)
+    fg["floor-lamp"] = pole_band(fg["floor-lamp"], lamp_parts, rec)
+    old["floor-lamp"] = fg["floor-lamp"].copy()
+    lm = lamp_scale(lamp_parts, rec)
+    srcs["floor-lamp"] = np.clip(lamp_remap(srcs["floor-lamp"], lm, cv2.INTER_CUBIC), 0, 1)
+    fg["floor-lamp"] = lamp_remap(fg["floor-lamp"], lm, cv2.INTER_LINEAR) > 0.5
     fg["floor-lamp"] &= ~ero(a_bed, 3)
     srcs["curtains"], fg["curtains"] = curtain_fix(src, fg["curtains"], rec)
+    edited = os.path.exists(EDIT_RAW) and "noedit" not in sys.argv
+    if edited:                                            # 12.8: the one model edit, used only inside its two regions
+        fg, srcs, foot_line = compose_edit(ids, src, fg, srcs, rec)
+        fringe_a = fg.pop("throw_fringe_alpha")
+        a_bed = fg["bedding"]
+    # the duvet closes up to the throw's lower edge (GrabCut left a seam there: the throw's shadow line), 12.8 4c
+    comb = cv2.morphologyEx((fg["bedding"] | fg["throw"]).astype(np.uint8), cv2.MORPH_CLOSE, disk(6)).astype(bool)
+    fg["bedding"] |= comb & dil(fg["throw"], 6) & box_mask([(0, 900, W, H)])
     # the hidden parts under the layer above: the duvet under the throw, the pillows under the cushion
-    under_t = dil(fg["throw"], 3) & fg["bedding"]
-    srcs["bedding"] = fill_under(srcs["bedding"], fg["bedding"] & ~dil(fg["throw"], 2), under_t | dil(fg["throw"], 2) & fg["bedding"], 0)
+    t_any = fg["throw"] | old["throw"]                    # the old throw's lower layer too: the duvet shows between the new strands
+    under_t = dil(t_any, 3) & fg["bedding"]
+    srcs["bedding"] = fill_under(srcs["bedding"], fg["bedding"] & ~dil(t_any, 2), under_t, 0)
     pill_under = dil(fg["cushions"], 3) & box_mask([(1185, 762, 1540, 960)]) & ~fg["bedding"]
     srcs["pillowcases"] = fill_under(srcs["pillowcases"], fg["pillowcases"] & ~dil(fg["cushions"], 2), pill_under, 1)
     fg["pillowcases"] = fg["pillowcases"] | pill_under
@@ -918,6 +1153,8 @@ def main_all():
                                note="the wall above the headboard reads L* 90.1 a* 0.3 b* 4.5")
     order = sorted(SLOTS, key=lambda k: SLOTS[k]["z"])
     alpha = {k: soft(fg[k]) for k in order}
+    if edited:                                            # the fringe strands keep their own soft (chroma) matte
+        alpha["throw"] = np.maximum(soft(fg["throw"] & ~(fringe_a > 0)), fringe_a)
     alpha["candle-holders"] = a_h
     srcs["candle-holders"] = np.where(a_h[..., None] > 0, rgb_h, src)
     fgb = {k: alpha[k] > 0.5 for k in order}
@@ -959,14 +1196,17 @@ def main_all():
             continue
         extra = None
         cap = 0.7
-        if k == "bedding":
+        if k == "bedding" and not edited:
             extra = below_hem
         if k == "curtains":
             cap = 0.25
         sk = shadow_of(srcs[k] if k not in ("bedding",) else src, base, old[k] if k not in ("bedding", "curtains") else fgb[k],
                        sp, dil(oth, 1), extra, cap)
         if k == "bedding":
-            sk = sk * contact_shadow_hem(hem_line, fgb["bedding"], base)
+            if not edited:
+                sk = sk * contact_shadow_hem(hem_line, fgb["bedding"], base)
+        if k == "floor-lamp":                             # the lamp's own shadow goes with it
+            sk = 1 - lamp_remap(1 - sk, lm, cv2.INTER_LINEAR)
         if k == "candle-holders" or k == "nightstand-tray":
             sk[dil(old["candle-holders"], 2)] = 1
         sk[dil(oth, 1)] = 1
@@ -975,6 +1215,7 @@ def main_all():
     gone = (old["candle-holders"] & ~fgb["candle-holders"]) | box_mask([DISH_BOX]) & ~fgb["nightstand-tray"]
     gone |= old["nightstand-vase"] & ~fgb["nightstand-vase"]
     gone |= lamp_parts["chains"] & ~fgb["floor-lamp"]
+    gone |= old["floor-lamp"] & ~fgb["floor-lamp"]
     hole = dil(gone, 6)                                   # under what was removed: each shadow carried on from round it, softly
     t = np.clip(blur(hole.astype(np.float64), 4) * 1.5, 0, 1)
     for k in order:
@@ -993,7 +1234,12 @@ def main_all():
     rgb_out = {}
     for k in order:
         a = alpha[k][..., None]
-        rgb_out[k] = defringe(srcs[k], fgb[k]) if k != "candle-holders" else srcs[k]
+        if k == "throw":                                  # over the duvet r4's own edge pixels are right (the duvet is under them);
+            rgb_out[k] = np.where(dil(fgb["bedding"], 1)[..., None], srcs[k], defringe(srcs[k], fgb[k], 3))   # only the outer edge defringed
+        elif k == "candle-holders":
+            rgb_out[k] = srcs[k]
+        else:
+            rgb_out[k] = defringe(srcs[k], fgb[k])
         stack = stack * shadow[k][..., None]
         stack = stack * (1 - a) + rgb_out[k] * a
     prod = np.zeros((H, W), bool)
@@ -1003,22 +1249,28 @@ def main_all():
     gone_px = dil(gone, 3)
     src_c = cv2.inpaint(q(src), gone_px.astype(np.uint8), 6, cv2.INPAINT_TELEA).astype(np.float64) / 255
     lights = {}
+    a_all = 1 - np.prod(np.stack([1 - alpha[k] for k in order]), axis=0)
+    prod_l = prod | dil(old["floor-lamp"], 2)
     for nm, e in env.items():
-        e2 = dil(e, 60) & ~dil(prod, 1)
+        e2 = dil(e, 60) & ~dil(prod_l, 1)
         Lr = np.where(e2[..., None] & (src_c > stack), 1 - (1 - src_c) / np.maximum(1 - stack, 1e-3), 0.0)
         Lr = np.clip(blur(np.clip(Lr, 0, 1), 4) - 0.012, 0, 1) * e2[..., None]
-        hole = dil(gone, 8) & dil(e, 60)                  # where something was removed: the light carried on from round it, softly
-        if hole.any():
-            w = (e2 & ~hole).astype(np.float64)
-            t = np.clip(blur(hole.astype(np.float64), 4) * 1.5, 0, 1)
-            for c in range(3):
-                v = blur(Lr[..., c] * w, 12) / np.maximum(blur(w, 12), 1e-6)
-                Lr[..., c] = Lr[..., c] * (1 - t) + v * t
-            Lr *= (e2 | hole)[..., None]
+        hole = (dil(gone, 8) | dil(prod_l, 1)) & dil(e, 60)   # removed things and the products: carried on from round them
+        w = (e2 & ~hole).astype(np.float64)
+        t = np.clip(blur(hole.astype(np.float64), 4) * 1.5, 0, 1)
+        bw = blur(w, 12)
+        for c in range(3):
+            v = np.where(bw > 1e-3, blur(Lr[..., c] * w, 12) / np.maximum(bw, 1e-3), 0)
+            Lr[..., c] = Lr[..., c] * (1 - t) + v * t
+        Lr *= (e2 | hole)[..., None]
         fe = np.clip(blur(e.astype(np.float64), 30) * 1.25, 0, 1)
-        lights[nm] = np.clip(Lr * fe[..., None], 0, 1)
+        Lx = np.clip(Lr * fe[..., None], 0, 1)
+        if nm == "floor-lamp":
+            Lx = np.clip(lamp_remap(Lx, lm, cv2.INTER_LINEAR), 0, 1)
+        lights[nm] = Lx * (1 - a_all)[..., None]       # never on a product; at a soft edge, as much as the plate shows
     rec["light_solve"] = "screen solved on the stack (plate, shadows, products), from r4 with the removed objects inpainted; blur 4 px, " \
-                         "minus 0.012; the lamps' windows feathered 30 px (no hard edge)"
+                         "minus 0.012; the lamps' windows feathered 30 px (no hard edge); continuous under the products, then x (1 - their alpha); " \
+                         "the floor lamp's moved with the lamp's scaling"
     write_set(order, alpha, shadow, rgb_out, lights, base, rec)
 
 

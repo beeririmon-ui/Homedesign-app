@@ -120,7 +120,7 @@
    }
   ],
   "outline": "the SKU photo's Small (70 x 110): rim 0.48 h, waist 0.22 h, foot 0.46 h",
-  "texture": "r4's left holder (its left foot edge mirrored from the right where the duvet touches it), resampled row by row",
+  "texture": "12.8 4d: opaque matte travertine; colour and pores from the sconces' cones in this frame, a matte cylinder's shading; r4's left holder gives only the outline rows",
   "removed": "r4's three holders (about 2x the card: 130 px tall and 73 px wide at 3.17 m)"
  },
  "dish": {
@@ -174,6 +174,33 @@
   "base_floor_row": 1271.5,
   "base_depth_m": 3.18
  },
+ "pole_band": {
+  "left": [
+   2323.2,
+   2323.3
+  ],
+  "right": [
+   2339.2,
+   2338.5
+  ]
+ },
+ "floor_lamp_scale": {
+  "depth_m": 3.182,
+  "drawn_height_m": 1.68,
+  "uniform": 0.9407,
+  "shade_drawn_m": 0.486,
+  "shade_after_uniform_m": 0.457,
+  "shade_x": 0.9413,
+  "shade_final_m": 0.43,
+  "offaxis_widening": 1.154,
+  "base_final_cm": 25.9,
+  "shade_u": [
+   0.8289,
+   0.9328
+  ],
+  "right_margin_u": 0.0672,
+  "gap_to_right_cone_u": 0.0735
+ },
  "curtain_hem": {
   "rule": "12 cm over the floor at X -2.255",
   "r4_rows": {
@@ -190,6 +217,62 @@
    "501": 1221.0,
    "545": 1194.7
   }
+ },
+ "fringe_transfer": {
+  "span_x": [
+   560,
+   2160
+  ],
+  "fold_rows_p10_p50_p90": [
+   1038,
+   1042,
+   1051
+  ],
+  "tip_rows_p10_p50_p90": [
+   1090,
+   1094,
+   1103
+  ],
+  "note": "the edit's hem and strands in place below r4's middle fold; the drapes stay r4's (no strands there)"
+ },
+ "edit_r5_corners_drawn_out_px": {
+  "left": 41.9,
+  "right": 30.9
+ },
+ "edit_r5": {
+  "raw": "raw/defaults-r5-edit.jpg",
+  "input": "inputs/defaults-edit-r5-input.png",
+  "lock": {
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.9628,
+    "2": 0.9401,
+    "1": 0.9277
+   },
+   "warp": [
+    [
+     1.00037,
+     -0.000185,
+     0.098793
+    ],
+    [
+     -2.4e-05,
+     1.000165,
+     -0.175659
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.92,
+   0.998,
+   1.515
+  ],
+  "used": [
+   "the throw's fringe strands only, hung under r4's Pecan (its fold, drop and contour kept)",
+   "the duvet's foot below row 1292 (blend 30 rows), crease at row 1405 waved 6 + 3 px"
+  ],
+  "throw_px": 139046,
+  "foot_px": 522049
  },
  "cushion_tone": {
   "before_Lab": [
@@ -210,8 +293,8 @@
  "tones_4d": {
   "bedding": {
    "albedo_Lab": [
-    62.2,
-    2.9,
+    64.2,
+    2.5,
     11.1
    ],
    "sku_Lab": [
@@ -224,10 +307,10 @@
     1.0,
     1.0
    ],
-   "dE00": 21.03,
-   "dL": -24.2,
+   "dE00": 19.63,
+   "dL": -22.2,
    "dab": [
-    2.5,
+    2.1,
     13.2
    ]
   },
@@ -284,51 +367,14 @@
   ],
   "method": "cones: median linear colour over the plate's light round them relative to the lit plaster (x 1250-1450, y 150-300); duvet and cushion: their median in the frame (no plaster round them), next to the lit plaster's reading"
  },
- "light_solve": "screen solved on the stack (plate, shadows, products), from r4 with the removed objects inpainted; blur 4 px, minus 0.012; the lamps' windows feathered 30 px (no hard edge)",
+ "light_solve": "screen solved on the stack (plate, shadows, products), from r4 with the removed objects inpainted; blur 4 px, minus 0.012; the lamps' windows feathered 30 px (no hard edge); continuous under the products, then x (1 - their alpha); the floor lamp's moved with the lamp's scaling",
  "rnd2": {
-  "region_px": 2132513,
+  "region_px": 2260322,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
  "black_point_L_p01_p001": [
-  15.49,
-  2.73
- ],
- "master_json_proposal_12_7": {
-  "note": "12.7: measured on the locked r4 against the clay camera (d from the floor and bed-top rows); a proposal for by_style.warm-modern, master.json NOT edited",
-  "pillowcases": {
-   "plan_m": {
-    "x": [
-     -1.56,
-     0.18
-    ],
-    "y": [
-     17.71,
-     17.92
-    ],
-    "z": [
-     0.55,
-     0.97
-    ]
-   },
-   "pose": "pair leaning almost upright on the headboard, symmetric about X -0.69"
-  },
-  "throw": {
-   "plan_m": {
-    "x": [
-     -1.62,
-     0.22
-    ],
-    "y": [
-     18.5,
-     19.24
-    ],
-    "z": [
-     0.45,
-     0.66
-    ]
-   },
-   "pose": "folded band across the front half; ends draped down both sides"
-  }
- }
+  18.8,
+  5.69
+ ]
 }

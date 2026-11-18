@@ -1,11 +1,11 @@
 {
  "run": "render-agent, 2026-11-17: the warm-modern master bedroom, stage one, MB0 (briefs/wm-master-stage1-render-2026-11-17.md; proposal docs/proposals/wm-master-bedroom-render-2026-11-17.md, chapter 12 over the earlier chapters). Resumed after a rate-limit stop (coordinator relay): clay, prices, the plate; the defaults and the throw variants wait for owner approval 2 (HOUSE2). Round 2 (manager relay after QA, 0 tokens): MP-D2 sill edge honed in code (step 4), MP-I1 / MP-I2 recorded as mandatory, the clay moved to 12.6, re-priced; nothing sent.",
  "cap": 3500,
- "spent": 2500,
- "left_in_cap": 1000,
+ "spent": 2900,
+ "left_in_cap": 600,
  "var2": {
-  "connected": false,
-  "note": "2026-11-18, round 4: the session reports var2 as needing authorisation; no var2 call was made, no code or token asked for."
+  "connected": true,
+  "note": "2026-11-18 round 5: the Var2 tools answered with the held sign-in; no code or token asked for"
  },
  "sent": [
   {
@@ -263,5 +263,35 @@
    "var2": "not checkable: the var2 tools have no usage or billing view, and this round var2 needs re-authorisation. If it was charged, the round-3 total is 1,850 + its price (seedream-5-pro 2K, 650) = 2,500 + 650 = 3,150 spent."
   },
   "spent": 0
+ },
+ "round5": {
+  "date": "2026-11-18",
+  "why": "proposal 12.8 (manager relay): code fixes, one model edit (fringes + the duvet foot), the throw variants in code, layers",
+  "sent": [
+   {
+    "id": "defaults-r5-edit",
+    "model": "nano-banana-2",
+    "type": "image-to-image (edit of the composed frame)",
+    "resolution": "2K",
+    "aspect_ratio": "16:9",
+    "image_refs": 1,
+    "refs": "the Pecan swatch s04 (fabric and fringe), already on var2",
+    "estimate": 400,
+    "tokens": 400,
+    "placeholder_id": "e340ecc9-85eb-4db8-b751-a3e8295aed55",
+    "task_id": "070bf7334b762e60a42f9d25dc82a264",
+    "idempotency_key": "wm-master-mb0-defaults-r5-edit-2026-11-18",
+    "input": "inputs/defaults-edit-r5-input.png (sha 496f9059...)",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-070bf7334b762e60a42f9d25dc82a264-0-1795003155513-b284e6db.jpg",
+    "raw": "raw/defaults-r5-edit.jpg",
+    "prompt": "assets/prompts/warm-modern-master-2026-11-17/defaults-r5-edit.txt",
+    "verdict": "used inside its two regions only: the hem and fringe strands below r4's middle fold (x 560-2160), and the duvet foot. Outside them the model redrew the throw bigger (over the fold strip) and moved small things; not used"
+   }
+  ],
+  "var2": "answered (estimate_cost, request_upload, create_image, get_image_result); no re-authorisation asked this round",
+  "not_sent": {
+   "flax_mask_edit": "Flax brown in code reads washed out at x2 (highlights at the upper fold clip; target L* 80.8 from the photos). Reported before any edit (manager rule); a mask edit would be about 400 (3,300 of 3,500)"
+  },
+  "spent": 400
  }
 }

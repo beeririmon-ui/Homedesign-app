@@ -46,12 +46,12 @@
    "shadow": "shadows/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
    "shadow_z": 9,
    "alpha_px": 228736,
-   "shadow_px": 113635,
+   "shadow_px": 112326,
    "bbox_px": [
     256,
     0,
     688,
-    1422
+    1344
    ]
   },
   {
@@ -96,13 +96,13 @@
    "layer": "layers/floor-lamp/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light.png",
    "shadow": "shadows/floor-lamp/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light.png",
    "shadow_z": 35,
-   "alpha_px": 64646,
-   "shadow_px": 18969,
+   "alpha_px": 54817,
+   "shadow_px": 12390,
    "bbox_px": [
-    2185,
-    367,
-    2518,
-    1302
+    2202,
+    421,
+    2497,
+    1299
    ]
   },
   {
@@ -114,7 +114,7 @@
    "shadow": "shadows/nightstand-tray/nightstand-tray-cj-black-walnut-rect-tray.png",
    "shadow_z": 43,
    "alpha_px": 4385,
-   "shadow_px": 2766,
+   "shadow_px": 2750,
    "bbox_px": [
     585,
     945,
@@ -181,12 +181,12 @@
    "layer": "layers/bedding/bedding-cj-washed-linen-natural-set-natural-linen-1-8m.png",
    "shadow": "shadows/bedding/bedding-cj-washed-linen-natural-set-natural-linen-1-8m.png",
    "shadow_z": 51,
-   "alpha_px": 878938,
-   "shadow_px": 111591,
+   "alpha_px": 1097968,
+   "shadow_px": 51236,
    "bbox_px": [
-    213,
+    206,
     866,
-    2624,
+    2481,
     1530
    ]
   },
@@ -215,8 +215,8 @@
    "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png",
    "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png",
    "shadow_z": 57,
-   "alpha_px": 147966,
-   "shadow_px": 5289,
+   "alpha_px": 148528,
+   "shadow_px": 4584,
    "bbox_px": [
     398,
     980,
@@ -232,7 +232,7 @@
    "file": "light/wall-sconce-cj-travertine-cone-walnut.png",
    "z": 90,
    "blend": "screen",
-   "px": 262862,
+   "px": 267597,
    "note": "the light on the plate only; the light that falls on a product is in that product's own layer"
   },
   {
@@ -241,14 +241,40 @@
    "file": "light/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light.png",
    "z": 90,
    "blend": "screen",
-   "px": 363700,
+   "px": 338686,
    "note": "the light on the plate only; the light that falls on a product is in that product's own layer"
   }
  ],
  "rnd2": {
-  "region_px": 2132513,
+  "region_px": 2260322,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
- "variants": []
+ "variants": [
+  {
+   "slot": "throw",
+   "product": "sofa-cover-cj-cotton-muslin-fringe-pecan-150x200",
+   "default": true,
+   "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png",
+   "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png"
+  },
+  {
+   "slot": "throw",
+   "product": "sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200",
+   "default": false,
+   "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200.png",
+   "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200.png",
+   "alpha": "identical to the default's",
+   "frame": "mb0-variant-throw-flax.png"
+  },
+  {
+   "slot": "throw",
+   "product": "sofa-cover-cj-cotton-muslin-fringe-clay-150x200",
+   "default": false,
+   "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-clay-150x200.png",
+   "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-clay-150x200.png",
+   "alpha": "identical to the default's",
+   "frame": "mb0-variant-throw-clay.png"
+  }
+ ]
 }
