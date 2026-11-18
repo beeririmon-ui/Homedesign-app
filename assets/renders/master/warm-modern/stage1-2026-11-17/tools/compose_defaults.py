@@ -796,8 +796,7 @@ FOOT_Y0 = 1292                                            # the duvet's foot fro
 def compose_edit(ids, src, fg, srcs, rec):
     """the edit, locked onto its input and matched to it (the field, sigma 60, outside its two regions), used only in them:
     the foot: the duvet's front drop and corners from the edit below row FOOT_Y0 (no mattress side, no band), its straight crease
-    softened into a fold (a vertical wave, 6 + 3 px); the throw: the edit's Pecan with its fringes, below r4's top edge of the band
-    (the duvet's fold strip stays r4's), the fringes' gaps open onto the duvet"""
+    redrawn as one roll (12.9); the throw is not taken from this edit (12.9 rejected its fringe strip)"""
     e_raw, rl = lock(ids, EDIT_RAW, EDIT_IN)
     ref = load(EDIT_IN)
     foot = box_mask([(150, FOOT_Y0 - 40, 2570, H), (150, 1160, 560, H), (2230, 1160, 2570, H)])
@@ -815,36 +814,7 @@ def compose_edit(ids, src, fg, srcs, rec):
     e = srgb(lin(e_raw) * g)
     same = np.linalg.norm(blur(to_lab(e), 1.5) - blur(to_lab(ref), 1.5), axis=-1) < 4
     pr = priors(e)
-    # the throw: r4's Pecan stays above its own middle fold (its top fold, drapes and contour). Below that fold, across the band
-    # (x 560-2160), the edit's hem and fringe strands, in place (the edit hung them where r4's lower layer was: tips at r4's lower
-    # edge, no shift); the alpha below the fold is a chroma matte of the edit, so the duvet shows between the strands
-    Le = lab_of(e)
-    Ce = np.hypot(Le[..., 1], Le[..., 2])
-    he = np.degrees(np.arctan2(Le[..., 2], Le[..., 1])) % 360
-    pec = (Ce > 14) & (he > 25) & (he < 75) & (Le[..., 0] < 66) & tzone & ~same
-    t_old = fg["throw"]
-    xs_b = np.arange(560, 2161)
-    tips = np.array([1000 + (np.nonzero(pec[1000:1140, x])[0].max() if pec[1000:1140, x].any() else 95) for x in xs_b], float)
-    tips = np.array([np.median(tips[max(0, i - 30):i + 31]) for i in range(tips.size)])
-    fold = tips - 52
-    strand_a = np.zeros((H, W))
-    rgb_t = srcs["throw"].copy()
-    am_all = np.clip((Ce - 10.0) / 10.0, 0, 1) * ((he > 25) & (he < 75))
-    for i, x in enumerate(xs_b):
-        f0, t0 = int(round(fold[i])), int(round(tips[i])) + 3
-        strand_a[f0:t0, x] = am_all[f0:t0, x]
-        strand_a[f0:int(round(tips[i])) - 40, x] = 1.0          # the hem itself is solid; the strands below it a matte
-        rgb_t[f0:t0, x] = e[f0:t0, x]
-    below_fold = np.zeros((H, W), bool)
-    for i, x in enumerate(xs_b):
-        below_fold[int(round(fold[i])):, x] = True
-    t_new = (t_old & ~below_fold) | (strand_a > 0.5)
-    fg["throw"] = t_new
-    fg["throw_fringe_alpha"] = np.where(below_fold, strand_a, 0.0)
-    srcs["throw"] = np.where(below_fold[..., None], rgb_t, srcs["throw"])
-    rec["fringe_transfer"] = dict(span_x=[560, 2160], fold_rows_p10_p50_p90=[int(v) for v in np.percentile(fold, [10, 50, 90])],
-                                  tip_rows_p10_p50_p90=[int(v) for v in np.percentile(tips, [10, 50, 90])],
-                                  note="the edit's hem and strands in place below r4's middle fold; the drapes stay r4's (no strands there)")
+    # the throw: round 5's fringe strip is rejected (12.9); r4's Pecan stays here, the whole-throw edit replaces it later
     # the foot
     L = lab_of(e)
     C_ = np.hypot(L[..., 1], L[..., 2])
@@ -859,26 +829,52 @@ def compose_edit(ids, src, fg, srcs, rec):
     duv |= np.isin(lab2, [i for i in range(1, n2) if i not in border])
     yy = np.arange(H)[:, None].astype(np.float64)
     xx_ = np.arange(W)[None, :]
-    y0c = np.where((xx_ < 560) | (xx_ > 2230), 1200, FOOT_Y0)     # the corners' drapes from the edit from row 1200
-    wgt = np.clip((yy - (y0c - 30)) / 30.0, 0, 1)
-    a_old = fg["bedding"].astype(np.float64)
-    foot = foot | box_mask([(150, 1160, 560, H), (2230, 1160, 2570, H)])
+    sm = lambda t: np.clip(t, 0, 1) ** 2 * (3 - 2 * np.clip(t, 0, 1))   # noqa: E731
+    xf = xx_.astype(np.float64)
+    y0c = FOOT_Y0 - (FOOT_Y0 - 1200) * np.maximum(sm((700 - xf) / 240), sm((xf - 2090) / 240))   # 12.9: no vertical seam at the corners
+    SEAM = 60
+    wgt = sm((yy - (y0c - SEAM)) / SEAM)
+    foot = foot | box_mask([(150, 1160, 700, H), (2090, 1160, 2570, H)])
     below = yy >= y0c
     a_new = np.where(below, duv, fg["bedding"] | (duv & (wgt > 0)))
-    rgb = srcs["bedding"] * (1 - wgt[..., None]) + e * wgt[..., None]
+    lo_o, lo_e = (np.stack([blur(v[..., c], 4) for c in range(3)], -1) for v in (srcs["bedding"], e))
+    hi_o, hi_e = srcs["bedding"] - lo_o, e - lo_e
+    rng = np.random.default_rng(7)
+    noise = np.clip(blur(rng.random((H, W)), 3) * 6 - 2.5, 0, 1)           # a smooth random field: the texture crosses over in patches
+    pick = (noise < wgt)[..., None]
+    rgb = lo_o * (1 - wgt[..., None]) + lo_e * wgt[..., None] + np.where(pick, hi_e, hi_o)
     rgb = np.where((fg["bedding"] & ~duv)[..., None] & (wgt[..., None] > 0), srcs["bedding"], rgb)
-    # the crease: the strongest light-to-dark step in rows 1380-1425 between the corners, a soft fold instead of a ruler line
+    # the crease the edit drew (a ruler line between the top surface and the drop): its low band redrawn as one roll, light above
+    # and a soft shadow below, and its fine texture taken from 48 rows lower, between the corners
     Yl = blur(luma(e), 1.0)
     dy = np.zeros_like(Yl)
     dy[2:-2] = Yl[4:] - Yl[:-4]
     cx_ = np.arange(700, 2000)
     crease = float(np.median(1380 + np.argmax(np.abs(dy[1380:1425, cx_]), 0)))
-    mx, my = np.meshgrid(np.arange(W, dtype=np.float32), np.arange(H, dtype=np.float32))
-    wave = 6 * np.sin(2 * np.pi * mx / 420 + 0.7) + 3 * np.sin(2 * np.pi * mx / 170 + 2.1)
-    env = np.exp(-((my - crease) / 34.0) ** 2) * (my > crease - 90)
-    sy = (my + wave * env).astype(np.float32)
-    rgb = np.stack([cv2.remap(rgb[..., c].astype(np.float32), mx, sy, cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE) for c in range(3)], -1)
-    a_new = cv2.remap(a_new.astype(np.float32), mx, sy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE) > 0.5
+    c0, c1 = int(crease) - 26, int(crease) + 26
+    lo = np.stack([blur(rgb[..., c], 4) for c in range(3)], -1)
+    hi = rgb - lo
+    t = ((np.arange(c0, c1 + 1) - c0) / (c1 - c0))[:, None, None]
+    xs_c = slice(560, 2240)
+    roll = lo[c0:c0 + 1, xs_c] * (1 - sm(t)) + lo[c1:c1 + 1, xs_c] * sm(t)
+    roll = roll * (1 - 0.10 * np.exp(-((t - 0.62) / 0.16) ** 2))           # the soft shadow under the roll
+    side = np.clip(np.minimum(np.arange(W)[xs_c] - 560, 2240 - np.arange(W)[xs_c]) / 120.0, 0, 1)[None, :, None]
+    hi_band = hi[c0 + 48:c1 + 49, xs_c]
+    rgb[c0:c1 + 1, xs_c] = (roll + hi_band) * side + rgb[c0:c1 + 1, xs_c] * (1 - side)
+    # 12.9: one continuous fall. Between the corners the drop is r4's own front drop (rows 1300-1388, above its old hem) hung down
+    # to the margin (a vertical stretch: a hanging drop's folds run down), a little darker towards the floor; the edit's corners stay,
+    # joined over 120 px
+    pre = srcs["bedding"]
+    S0, S1 = 1300, 1388
+    mxs, mys = np.meshgrid(np.arange(W, dtype=np.float32), np.arange(H, dtype=np.float32))
+    sy2 = np.where(mys >= S0, S0 + (mys - S0) * (S1 - S0) / (H - 1 - S0), mys).astype(np.float32)
+    hung = np.stack([cv2.remap(pre[..., c].astype(np.float32), mxs, sy2, cv2.INTER_CUBIC) for c in range(3)], -1).astype(np.float64)
+    shade = (1 - 0.14 * sm((mys - S1) / (H - S1)))[..., None]
+    wx = np.clip(np.minimum(mxs - 470, 2330 - mxs) / 120.0, 0, 1)[..., None] * (mys >= S0)[..., None]
+    wy = sm((mys - (S0 - 10)) / 10.0)[..., None]
+    w2 = wx * wy
+    rgb = hung * shade * w2 + rgb * (1 - w2)
+    a_new = a_new | ((w2[..., 0] > 0.5) & (mys >= S0))
     a_new, rgb, cmoves = cover_corners(a_new, rgb.astype(np.float64))
     fg["bedding"] = a_new
     srcs["bedding"] = np.clip(rgb, 0, 1)
@@ -886,8 +882,8 @@ def compose_edit(ids, src, fg, srcs, rec):
     fg["floor-lamp"] &= ~ero(a_new, 3)
     rec["edit_r5"] = dict(raw="raw/defaults-r5-edit.jpg", input="inputs/defaults-edit-r5-input.png", lock=rl,
                           gain_p1_p50_p99=[round(float(v), 3) for v in np.percentile(g[keep], [1, 50, 99])],
-                          used=["the throw's fringe strands only, hung under r4's Pecan (its fold, drop and contour kept)",
-                                f"the duvet's foot below row {FOOT_Y0} (blend 30 rows), crease at row {crease:.0f} waved 6 + 3 px"],
+                          used=["the foot only (round 5's fringe strip was rejected in 12.9)",
+                                f"the duvet's foot below row {FOOT_Y0} (the corners from 1200, smooth in x), a 60-row seam (low pass cross-faded, texture in patches), the crease at row {crease:.0f} redrawn as one roll"],
                           throw_px=int(fg["throw"].sum()), foot_px=int((a_new & below).sum()))
     return fg, srcs, crease
 
@@ -1106,6 +1102,155 @@ def de00(l1, l2):
     return float(np.sqrt((dLp / SL) ** 2 + (dCp / SC) ** 2 + (dHp / SH) ** 2 + RT * (dCp / SC) * (dHp / SH)))
 
 
+THROW_RAW = os.path.join(ST, "raw/defaults-r6-throw-edit.png")    # 12.9: the whole throw, one edit (soft front fold, fringed ends)
+THROW_IN = os.path.join(ST, "inputs/defaults-edit-r6-input.png")
+
+
+def compose_throw_r6(ids, fg, srcs, rec):
+    """the whole throw from the r6 edit, no cut inside it: locked onto its input, matched to it outside the throw's zone (the field,
+    sigma 60), the alpha a Pecan matte of the edit (largest piece, opened 2 px, closed 3 px), the colour the edit's"""
+    e_raw, rl = lock(ids, THROW_RAW, THROW_IN)
+    ref = load(THROW_IN)
+    old = fg["throw"]
+    zone = dil(old, 70)
+    g = gain_field(e_raw, ref, ~dil(zone, 30))
+    e = srgb(lin(e_raw) * g)
+    Le = to_lab(e)
+    Ce = np.hypot(Le[..., 1], Le[..., 2])
+    he = np.degrees(np.arctan2(Le[..., 2], Le[..., 1])) % 360
+    pec = (Ce > 14) & (he > 25) & (he < 75) & (Le[..., 0] < 66) & zone
+    same = np.linalg.norm(blur(to_lab(e), 1.5) - blur(to_lab(ref), 1.5), axis=-1) < 4
+    pec &= ~(same & ~old)
+    pec = cv2.morphologyEx(pec.astype(np.uint8), cv2.MORPH_OPEN, disk(2)).astype(bool)
+    pec = cv2.morphologyEx(pec.astype(np.uint8), cv2.MORPH_CLOSE, disk(3)).astype(bool)
+    n_, lab_, st_, _ = cv2.connectedComponentsWithStats(pec.astype(np.uint8), connectivity=8)
+    pec = lab_ == 1 + int(np.argmax(st_[1:, cv2.CC_STAT_AREA]))
+    inv = (~pec).astype(np.uint8)
+    n2, lab2, st2, _ = cv2.connectedComponentsWithStats(inv, connectivity=4)
+    border = set(np.unique(np.concatenate([lab2[0], lab2[-1], lab2[:, 0], lab2[:, -1]])))
+    pec |= np.isin(lab2, [i for i in range(1, n2) if st2[i, cv2.CC_STAT_AREA] < 400 and i not in border])
+    d_old = cv2.distanceTransform((~old).astype(np.uint8), cv2.DIST_L2, 5)
+    d_new = cv2.distanceTransform((~pec).astype(np.uint8), cv2.DIST_L2, 5)
+    en, eo = pec & ~ero(pec, 1), old & ~ero(old, 1)
+    parts = {}
+    for nm, (x0, x1) in {"left drape": (380, 620), "band": (620, 2140), "right drape": (2140, 2370)}.items():
+        m = en.copy()
+        m[:, :x0] = False
+        m[:, x1:] = False
+        mo = eo.copy()
+        mo[:, :x0] = False
+        mo[:, x1:] = False
+        parts[nm] = dict(new_to_old_p90=round(float(np.percentile(d_old[m], 90)), 1), new_to_old_max=round(float(d_old[m].max()), 1),
+                         old_to_new_p90=round(float(np.percentile(d_new[mo], 90)), 1), area_old=int(old[:, x0:x1].sum()), area_new=int(pec[:, x0:x1].sum()))
+    rec["throw_r6"] = dict(raw="raw/defaults-r6-throw-edit.png", input="inputs/defaults-edit-r6-input.png", lock=rl,
+                           gain_p1_p50_p99=[round(float(v), 3) for v in np.percentile(g, [1, 50, 99])], contour_vs_r4=parts,
+                           rule="12.9: the outer contour as today's +-3 px")
+    fg["throw"] = pec
+    srcs["throw"] = np.where(dil(pec, 3)[..., None], e, srcs["throw"])
+    return fg, srcs, old
+
+
+USE_R6 = False                                            # 12.9's contour check failed on r6 (band old-to-new p90 54 px, drapes +13-21)
+
+
+def soft_front_fold(fg, srcs, rec):
+    """12.9: the front long edge of the band is a soft rounded fold, no knots. On r4's Pecan (x 560-2160) the band's lower outline is
+    smoothed (running median 31 + mean 15 of its lowest row) and its last 18 rows are smoothed along x (sigma 5) with a fold's
+    shading: a soft light 6 px into the fold, rolling off darker to the edge. The contour moves by the knots' height only"""
+    a = fg["throw"].copy()
+    rgb = srcs["throw"].copy()
+    xs_ = np.arange(560, 2161)
+    yb = np.array([np.nonzero(a[1000:1160, x])[0].max() + 1000 if a[1000:1160, x].any() else -1 for x in xs_], float)
+    ok = yb > 0
+    ys_ = np.interp(xs_, xs_[ok], yb[ok])
+    ys_ = np.array([np.median(ys_[max(0, i - 15):i + 16]) for i in range(ys_.size)])
+    ys_ = np.convolve(np.pad(ys_, 7, mode="edge"), np.ones(15) / 15, mode="valid")
+    bx = np.stack([cv2.GaussianBlur(rgb[..., c].astype(np.float32), (0, 0), sigmaX=5, sigmaY=0.6) for c in range(3)], -1).astype(np.float64)
+    moved = []
+    for i, x in enumerate(xs_):
+        yb_s = int(round(ys_[i]))
+        moved.append(abs(yb_s - yb[i]) if ok[i] else 0)
+        top = yb_s - 18
+        a[yb_s + 1:1160, x] = False
+        a[top:yb_s + 1, x] = True
+        t = (np.arange(top, yb_s + 1) - top) / 18.0
+        shade = 1 + 0.06 * np.exp(-((t - 0.35) / 0.2) ** 2) - 0.20 * t ** 2
+        rgb[top:yb_s + 1, x] = np.clip(bx[top:yb_s + 1, x] * shade[:, None], 0, 1)
+    fg["throw"] = a
+    srcs["throw"] = rgb
+    rec["throw_front_fold"] = dict(span_x=[560, 2160], outline_moved_px_p50_p90_max=[round(float(v), 1) for v in np.percentile(moved, [50, 90, 100])],
+                                   rows_reshaded=18, note="knots out of the front edge (a fold has no fringe); the drapes are r4's")
+    return fg, srcs
+
+
+def duvet_fix(srcs, fg, rec):
+    """12.9, 3-4, on the bedding layer only. (a) The fold band at the head (above the throw's top edge) read as a separate white sheet:
+    its linear light scaled so its median L* is 6 over the lit duvet's, and a* b* moved onto the lit duvet's. (b) The periodic grid:
+    in the layer's high band (minus a 2.5 px blur) the spectral peaks (over 5x the local median, periods 2.5-14 px) are notched out
+    and the rest of the high band kept at 0.85; the wrinkles and the shading (the low band) are untouched"""
+    rgb = srcs["bedding"].copy()
+    a = fg["bedding"]
+    lab = to_lab(rgb)
+    lit = a & box_mask([(560, 1130, 2160, 1380)]) & ~dil(fg["throw"], 10)
+    Lv = lab[..., 0][lit]
+    sel = (Lv > np.percentile(Lv, 40)) & (Lv < np.percentile(Lv, 95))
+    lit_lab = np.median(lab[lit][sel], 0)
+    top_pts = [p for p in THROW_OUTER if 546 <= p[0] <= 2205]
+    topline = np.interp(np.arange(W), [p[0] for p in top_pts], [p[1] for p in top_pts], left=1000, right=1000)
+    band = np.zeros((H, W), bool)
+    for x in range(W):
+        band[900:int(round(topline[x])) - 1, x] = True
+    band &= a & ~dil(fg["pillowcases"], 1) & ~dil(fg["cushions"], 1)
+    b_lab = np.median(lab[band], 0)
+    tL = lit_lab[0] + 6
+    k = (((tL + 16) / 116) ** 3) / (((b_lab[0] + 16) / 116) ** 3)
+    new = to_lab(srgb(lin(rgb) * k))
+    new[..., 1] += lit_lab[1] - np.median(new[band][:, 1])
+    new[..., 2] += lit_lab[2] - np.median(new[band][:, 2])
+    w = np.clip(blur(band.astype(np.float64), 4) * 1.2, 0, 1) * a
+    rgb = np.clip(from_lab(new), 0, 1) * w[..., None] + rgb * (1 - w[..., None])
+    after = np.median(to_lab(rgb)[band], 0)
+    # (b) the grid
+    ys, xs = np.nonzero(a)
+    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+    sub = rgb[y0:y1, x0:x1]
+    lo = np.stack([blur(sub[..., c], 2.5) for c in range(3)], -1)
+    hi = sub - lo
+    hy, hx = sub.shape[:2]
+    win = np.outer(np.hanning(hy), np.hanning(hx)) * 0 + 1
+    Fl = np.fft.fft2(luma(hi) * a[y0:y1, x0:x1])
+    mag = np.abs(np.fft.fftshift(Fl))
+    med = cv2.medianBlur(np.clip(mag / (mag.max() + 1e-9) * 65535, 0, 65535).astype(np.uint16), 5).astype(np.float64) / 65535 * (mag.max() + 1e-9)
+    fy = np.fft.fftshift(np.fft.fftfreq(hy))[:, None]
+    fx = np.fft.fftshift(np.fft.fftfreq(hx))[None, :]
+    rad = np.hypot(fy, fx)
+    peaks = (mag > 5 * np.maximum(med, 1e-9)) & (rad > 1 / 14.0) & (rad < 1 / 2.5)
+    notch = 1 - np.clip(blur(peaks.astype(np.float64), 1.5) * 4, 0, 1) * 0.95
+    notch = np.fft.ifftshift(notch)
+    out = np.empty_like(hi)
+    for c in range(3):
+        hc_ = np.real(np.fft.ifft2(np.fft.fft2(hi[..., c]) * notch))
+        med5 = cv2.medianBlur(np.clip((hc_ + 0.5) * 255, 0, 255).astype(np.uint8), 5).astype(np.float64) / 255 - 0.5
+        out[..., c] = (0.25 * hc_ + 0.75 * med5) * 0.85        # the dots of the grid out (a 5 px median), the creases' lines kept
+    rgb[y0:y1, x0:x1] = np.where(a[y0:y1, x0:x1][..., None], np.clip(lo + out, 0, 1), sub)
+    # (c) small holes in the duvet's alpha (a dark wedge at x 2200-2230, y 1235-1252 let the plate through): filled, and their colour
+    # inpainted from the duvet round them
+    inv = (~a).astype(np.uint8)
+    n2, lab2, st2, _ = cv2.connectedComponentsWithStats(inv, connectivity=4)
+    border = set(np.unique(np.concatenate([lab2[0], lab2[-1], lab2[:, 0], lab2[:, -1]])))
+    holes = np.isin(lab2, [i for i in range(1, n2) if st2[i, cv2.CC_STAT_AREA] < 3000 and i not in border])
+    holes &= ~dil(fg["throw"] | fg["pillowcases"] | fg["cushions"] | fg["floor-lamp"], 2)
+    if holes.any():
+        rgb = np.where(dil(holes, 2)[..., None], cv2.inpaint(q(rgb), dil(holes, 2).astype(np.uint8), 4, cv2.INPAINT_TELEA).astype(np.float64) / 255, rgb)
+        fg["bedding"] = a | holes
+    spot = holes
+    srcs["bedding"] = rgb
+    rec["duvet_fix_12_9"] = dict(holes_filled_px=int(spot.sum()), lit_duvet_Lab=[round(float(v), 1) for v in lit_lab], fold_band_before_Lab=[round(float(v), 1) for v in b_lab],
+                                 fold_band_after_Lab=[round(float(v), 1) for v in after], band_px=int(band.sum()),
+                                 grid=dict(peaks_notched=int(peaks.sum()), periods_px=[2.5, 14], kept_high_band=0.85, high_band="0.25 x itself + 0.75 x its 5 px median", low_band_sigma_px=2.5))
+    return srcs
+
+
 def main_all():
     ids, base, render, matched, g, env, rec = setup()
     src = matched
@@ -1130,7 +1275,6 @@ def main_all():
     edited = os.path.exists(EDIT_RAW) and "noedit" not in sys.argv
     if edited:                                            # 12.8: the one model edit, used only inside its two regions
         fg, srcs, foot_line = compose_edit(ids, src, fg, srcs, rec)
-        fringe_a = fg.pop("throw_fringe_alpha")
         a_bed = fg["bedding"]
     # the duvet closes up to the throw's lower edge (GrabCut left a seam there: the throw's shadow line), 12.8 4c
     comb = cv2.morphologyEx((fg["bedding"] | fg["throw"]).astype(np.uint8), cv2.MORPH_CLOSE, disk(6)).astype(bool)
@@ -1151,10 +1295,19 @@ def main_all():
     srcs["cushions"] = np.where(dil(cm, 2)[..., None], np.clip(from_lab(labc), 0, 1), srcs["cushions"])
     rec["cushion_tone"] = dict(before_Lab=[89.3, 0.3, 7.6], linear_x=0.758, da=1.5, db=1.5, sku_Lab=SKU_MID["cushions"],
                                note="the wall above the headboard reads L* 90.1 a* 0.3 b* 4.5")
+    if USE_R6 and os.path.exists(THROW_RAW):
+        fg, srcs, throw_r4 = compose_throw_r6(ids, fg, srcs, rec)
+        old["throw"] = throw_r4 | fg["throw"]
+        t_any = fg["throw"] | throw_r4
+        under_t = dil(t_any, 3) & fg["bedding"]
+        srcs["bedding"] = fill_under(srcs["bedding"], fg["bedding"] & ~dil(t_any, 2), under_t, 0)
+    elif os.path.exists(THROW_RAW):                       # measured and recorded, not used (it fails the contour)
+        compose_throw_r6(ids, {k: v.copy() for k, v in fg.items()}, dict(srcs), rec)
+        rec["throw_r6"]["used"] = False
+    fg, srcs = soft_front_fold(fg, srcs, rec)
+    srcs = duvet_fix(srcs, fg, rec)
     order = sorted(SLOTS, key=lambda k: SLOTS[k]["z"])
     alpha = {k: soft(fg[k]) for k in order}
-    if edited:                                            # the fringe strands keep their own soft (chroma) matte
-        alpha["throw"] = np.maximum(soft(fg["throw"] & ~(fringe_a > 0)), fringe_a)
     alpha["candle-holders"] = a_h
     srcs["candle-holders"] = np.where(a_h[..., None] > 0, rgb_h, src)
     fgb = {k: alpha[k] > 0.5 for k in order}

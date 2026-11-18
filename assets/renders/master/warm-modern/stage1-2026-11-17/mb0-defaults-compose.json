@@ -218,26 +218,9 @@
    "545": 1194.7
   }
  },
- "fringe_transfer": {
-  "span_x": [
-   560,
-   2160
-  ],
-  "fold_rows_p10_p50_p90": [
-   1038,
-   1042,
-   1051
-  ],
-  "tip_rows_p10_p50_p90": [
-   1090,
-   1094,
-   1103
-  ],
-  "note": "the edit's hem and strands in place below r4's middle fold; the drapes stay r4's (no strands there)"
- },
  "edit_r5_corners_drawn_out_px": {
-  "left": 41.9,
-  "right": 30.9
+  "left": 40.9,
+  "right": 29.9
  },
  "edit_r5": {
   "raw": "raw/defaults-r5-edit.jpg",
@@ -268,11 +251,11 @@
    1.515
   ],
   "used": [
-   "the throw's fringe strands only, hung under r4's Pecan (its fold, drop and contour kept)",
-   "the duvet's foot below row 1292 (blend 30 rows), crease at row 1405 waved 6 + 3 px"
+   "the foot only (round 5's fringe strip was rejected in 12.9)",
+   "the duvet's foot below row 1292 (the corners from 1200, smooth in x), a 60-row seam (low pass cross-faded, texture in patches), the crease at row 1405 redrawn as one roll"
   ],
-  "throw_px": 139046,
-  "foot_px": 522049
+  "throw_px": 139097,
+  "foot_px": 541011
  },
  "cushion_tone": {
   "before_Lab": [
@@ -290,11 +273,107 @@
   ],
   "note": "the wall above the headboard reads L* 90.1 a* 0.3 b* 4.5"
  },
+ "throw_r6": {
+  "raw": "raw/defaults-r6-throw-edit.png",
+  "input": "inputs/defaults-edit-r6-input.png",
+  "lock": {
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.9955,
+    "2": 0.9932,
+    "1": 0.988
+   },
+   "warp": [
+    [
+     1.000567,
+     -9e-06,
+     0.199609
+    ],
+    [
+     3.1e-05,
+     1.009047,
+     -5.945881
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.937,
+   0.983,
+   1.068
+  ],
+  "contour_vs_r4": {
+   "left drape": {
+    "new_to_old_p90": 13.2,
+    "new_to_old_max": 54.9,
+    "old_to_new_p90": 14.3,
+    "area_old": 5337,
+    "area_new": 7184
+   },
+   "band": {
+    "new_to_old_p90": 5.0,
+    "new_to_old_max": 10.0,
+    "old_to_new_p90": 53.8,
+    "area_old": 129066,
+    "area_new": 97777
+   },
+   "right drape": {
+    "new_to_old_p90": 21.0,
+    "new_to_old_max": 30.8,
+    "old_to_new_p90": 5.4,
+    "area_old": 4694,
+    "area_new": 7627
+   }
+  },
+  "rule": "12.9: the outer contour as today's +-3 px",
+  "used": false
+ },
+ "throw_front_fold": {
+  "span_x": [
+   560,
+   2160
+  ],
+  "outline_moved_px_p50_p90_max": [
+   0.0,
+   0.0,
+   2.0
+  ],
+  "rows_reshaded": 18,
+  "note": "knots out of the front edge (a fold has no fringe); the drapes are r4's"
+ },
+ "duvet_fix_12_9": {
+  "holes_filled_px": 635,
+  "lit_duvet_Lab": [
+   71.4,
+   2.1,
+   10.0
+  ],
+  "fold_band_before_Lab": [
+   92.0,
+   0.6,
+   8.1
+  ],
+  "fold_band_after_Lab": [
+   77.7,
+   2.0,
+   9.9
+  ],
+  "band_px": 56050,
+  "grid": {
+   "peaks_notched": 2,
+   "periods_px": [
+    2.5,
+    14
+   ],
+   "kept_high_band": 0.85,
+   "high_band": "0.25 x itself + 0.75 x its 5 px median",
+   "low_band_sigma_px": 2.5
+  }
+ },
  "tones_4d": {
   "bedding": {
    "albedo_Lab": [
     64.2,
-    2.5,
+    2.6,
     11.1
    ],
    "sku_Lab": [
@@ -307,10 +386,10 @@
     1.0,
     1.0
    ],
-   "dE00": 19.63,
+   "dE00": 19.64,
    "dL": -22.2,
    "dab": [
-    2.1,
+    2.2,
     13.2
    ]
   },
@@ -369,12 +448,12 @@
  },
  "light_solve": "screen solved on the stack (plate, shadows, products), from r4 with the removed objects inpainted; blur 4 px, minus 0.012; the lamps' windows feathered 30 px (no hard edge); continuous under the products, then x (1 - their alpha); the floor lamp's moved with the lamp's scaling",
  "rnd2": {
-  "region_px": 2260322,
+  "region_px": 2265776,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
  "black_point_L_p01_p001": [
-  18.8,
-  5.69
+  15.63,
+  2.29
  ]
 }

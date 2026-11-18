@@ -16765,9 +16765,9 @@
    "model": "code on r4 and plate.png + nano-banana-2 edit r5 inside its two regions (tools/compose_defaults.py)",
    "tokens": 400,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "PENDING QA (round 5, 12.8): code fixes + the r5 edit inside two regions; open: the duvet R5 reading (designer), Flax brown reads washed out at x2",
-   "sha256": "9d452f23b3500ce84d158de454fe62f60d39051ab07964987972f5b147cb84c5",
-   "bytes": 6597701,
+   "status": "PENDING QA (round 6, 12.9): duvet fold band, grid and foot fixed in code; throw front edge a soft fold; Pecan has no visible fringe (the r6 whole-throw edit failed the contour and is not used)",
+   "sha256": "c54b4c22b36459c561bcdc6634445266da57e8c477a77a5f918a67d0faaaf3cc",
+   "bytes": 6116991,
    "record": "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-defaults-compose.json"
   },
   {
@@ -16780,9 +16780,9 @@
    "model": "code on r4 and plate.png + nano-banana-2 edit r5 inside its two regions (tools/compose_defaults.py)",
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "PENDING QA (round 5, 12.8): code fixes + the r5 edit inside two regions; open: the duvet R5 reading (designer), Flax brown reads washed out at x2",
-   "sha256": "eae67766598d3ff13d472f53065c35dcb720cef887939bfed6f245c1df3535ce",
-   "bytes": 3264685
+   "status": "PENDING QA (round 6, 12.9): duvet fold band, grid and foot fixed in code; throw front edge a soft fold; Pecan has no visible fringe (the r6 whole-throw edit failed the contour and is not used)",
+   "sha256": "7d87d99be86da10fa39fa988002cae8c67b551ff4fa31259a25c94340d26a953",
+   "bytes": 3052674
   },
   {
    "id": "wm-master-mb0-layers-2026-11-18",
@@ -16794,8 +16794,8 @@
    "model": "code on r4 and plate.png + nano-banana-2 edit r5 inside its two regions (tools/compose_defaults.py)",
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "PENDING QA (round 5, 12.8): code fixes + the r5 edit inside two regions; open: the duvet R5 reading (designer), Flax brown reads washed out at x2",
-   "sha256": "9cde5137e12e68e36d7796effbc5dc32ec3072ee9cb71b81fb6cd1fa7c3142b4",
+   "status": "PENDING QA (round 6, 12.9): duvet fold band, grid and foot fixed in code; throw front edge a soft fold; Pecan has no visible fringe (the r6 whole-throw edit failed the contour and is not used)",
+   "sha256": "ce2f13c75c2049e64f09e306cff73c7d56796cf234c0675ff1fc0c0823a3693b",
    "bytes": 7978
   },
   {
@@ -16809,8 +16809,8 @@
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
    "status": "working sheet; not for the site",
-   "sha256": "8e06a1c6ae59572f88e7c8637567ecbf9b41349c85c18c6677f9a2b7cb477098",
-   "bytes": 572607
+   "sha256": "405ef778dff00c2e4fb58abee16430644f900d2bc906f3fe1eb711a62c86da15",
+   "bytes": 469889
   },
   {
    "id": "wm-master-mb0-defaults-r5-edit-2026-11-18",
@@ -16836,9 +16836,9 @@
    "model": "code (tools/throw_variants.py)",
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "REJECT-CANDIDATE at x2: highlights wash out; reported before any mask edit",
-   "sha256": "7bf652c61c181177fac48fbcfdf0d7e55b067a458dfb8bf731c3cd327a11cbf6",
-   "bytes": 6606525
+   "status": "REJECT-CANDIDATE at x2 (round 6): reads painted after two code methods; mask edit ~400 reported, not sent",
+   "sha256": "b7fa3e87bc8825e0adacc66eebf0b3a359a2fdd5ab59e5674ceecaa75a19fa83",
+   "bytes": 6045603
   },
   {
    "id": "wm-master-mb0-variant-throw-clay-2026-11-18",
@@ -16850,9 +16850,23 @@
    "model": "code (tools/throw_variants.py)",
    "tokens": 0,
    "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
-   "status": "PENDING QA",
-   "sha256": "36e2d6394029efe70666b14bb7ee2cdb1d2fb995c7be16800442b3a117179f9b",
-   "bytes": 6560279
+   "status": "PENDING QA (round 6): code recolour of Pecan, hue/C as the photo, dE00 36.6 vs duvet, 11.5 vs headboard",
+   "sha256": "a87a8c7cba569f06f727ae039bbc77d2daa76f8e125de75352838a0fa471ec8a",
+   "bytes": 6042168
+  },
+  {
+   "id": "wm-master-mb0-defaults-r6-throw-edit-2026-11-18",
+   "path": "assets/renders/master/warm-modern/stage1-2026-11-17/raw/defaults-r6-throw-edit.png",
+   "kind": "nano-banana-2 edit of the whole throw (12.9), as returned",
+   "room": "master",
+   "style": "warm-modern",
+   "created": "2026-11-18",
+   "model": "nano-banana-2 2K image-to-image",
+   "tokens": 400,
+   "prompt_record": "assets/prompts/warm-modern-master-2026-11-17/defaults.json",
+   "status": "REJECTED: fails the 12.9 contour check (+-3 px): band p90 54, drapes p90 13/21; not used",
+   "sha256": "34a20c1e9e53b18562dfb0c8fa04752789dc13871f580d304b1704daef312e39",
+   "bytes": 6316436
   }
  ]
 }

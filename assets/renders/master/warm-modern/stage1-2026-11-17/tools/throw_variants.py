@@ -54,6 +54,7 @@ def main():
     sel = (lab_p[:, 0] > np.percentile(lab_p[:, 0], 25)) & (lab_p[:, 0] < np.percentile(lab_p[:, 0], 75))
     duvet = C.to_lab(np.asarray(Image.open(os.path.join(ST, "mb0-defaults.png")))[1150:1300, 1300:1900].reshape(-1, 3).astype(float) / 255)
     duv = np.median(duvet, 0)
+    duv_p99 = float(np.percentile(duvet[:, 0], 99))
     head = np.median(C.to_lab(np.asarray(Image.open(os.path.join(ST, "plate.png")).convert("RGB"))[680:740, 1000:1700].reshape(-1, 3).astype(float) / 255), 0)
     rec = dict(method=__doc__.strip().splitlines()[1], pecan_mid_Lab=np.median(lab_p[sel], 0).round(1).tolist(), variants={})
     man["variants"] = [dict(slot="throw", product=tl["product"], default=True, layer=tl["layer"], shadow=tl["shadow"])]
@@ -62,7 +63,25 @@ def main():
         dl = (rt[k]["fab_lab"][0] - rt[k]["white_lab"][0]) - (rt["pecan"]["fab_lab"][0] - rt["pecan"]["white_lab"][0])
         tgt = np.array([pm[0] + dl, rt[k]["fab_lab"][1], rt[k]["fab_lab"][2]])
         r = C.lin(C.from_lab(tgt[None, None])[0, 0]) / np.maximum(C.lin(C.from_lab(pm[None, None])[0, 0]), 1e-6)
-        new = C.srgb(np.clip(C.lin(rgb) * r, 0, 1))
+        # 12.9: the ratio on the low band (sigma 3), Pecan's high band of L* back at x 1.0 (its weave and crinkle), and a soft shoulder
+        # on L* (knee 7 under the lit duvet's p99, ceiling 1 under it) so no highlight burns
+        # 12.9 retry: the albedo ratio on the luminance only (one number, so Pecan's shading and crinkle keep their ratios and its hue
+        # shifts are not amplified per channel), the SKU photo's chromaticity at every pixel (a* b* scaled with L* / L* mid), then the
+        # soft shoulder on L* (knee 7 under the lit duvet's p99, ceiling 1 under it)
+        labp = C.to_lab(rgb)
+        Yp = C.luma(C.lin(rgb))
+        Yt = ((tgt[0] + 16) / 116) ** 3
+        Ypm = ((pm[0] + 16) / 116) ** 3
+        Yn = Yp * (Yt / Ypm)
+        Lv = np.where(Yn > 216 / 24389, 116 * np.cbrt(Yn) - 16, 24389 / 27 * Yn)
+        kn, ce = duv_p99 - 7, duv_p99 - 1
+        Lv = np.where(Lv > kn, kn + (ce - kn) * np.tanh((Lv - kn) / (ce - kn)), Lv)
+        sc = np.clip(Lv / max(tgt[0], 1e-3), 0, 1.4)
+        Lv = np.interp(Lv, [0, 8.05, 30, 100], [0, 12.5, 30, 100])   # MP-I2: MB0's own toe, once, on the derived darks
+        Lv = np.interp(Lv, [0, 24, 100], [10, 24, 100])     # and a lift of the deepest folds, so the frame keeps WM-G1 (p0.5 11-14)
+        labv = np.stack([Lv, tgt[1] * sc, tgt[2] * sc], -1)
+        new = np.clip(C.from_lab(labv), 0, 1)
+        r = np.array([Yt / Ypm] * 3)
         out = np.dstack([C.q(new), a])
         out[..., :3][a == 0] = 0
         lp = os.path.join(ST, "layers", "throw", v["pid"] + ".png")
@@ -83,6 +102,7 @@ def main():
                                   hue_deg=round(h_v, 1), C=round(c_v, 1), sku_hue_deg=round(h_s, 1), sku_C=round(c_s, 1),
                                   d_hue=round(h_v - h_s, 1), d_C=round(c_v - c_s, 1), dE00_vs_duvet=round(C.de00(mid, duv), 1),
                                   dE00_vs_headboard=round(C.de00(mid, head), 1), alpha_identical=True,
+                                  p99_L=round(float(np.percentile(lab_v[:, 0], 99)), 1), duvet_p99_L=round(duv_p99, 1),
                                   changed_px_outside_throw_alpha=int((diff & (a == 0)).sum()))
         man["variants"].append(dict(slot="throw", product=v["pid"], default=False, layer=os.path.relpath(lp, ST), shadow=os.path.relpath(sp, ST),
                                     alpha="identical to the default's", frame=f"mb0-variant-throw-{k}.png"))
