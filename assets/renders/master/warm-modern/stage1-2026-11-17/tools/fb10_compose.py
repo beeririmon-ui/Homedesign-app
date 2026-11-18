@@ -27,7 +27,6 @@ import compose_defaults as C  # noqa: E402
 PICKS = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/picks/img/"
 H, W = C.H, C.W
 F_, CX_, HZ_ = 1710.0, 1360.0, 707.3
-PH = json.load(open(os.path.join(ST, "fb10", "placeholders.json")))
 LAYERS = {   # slot: pass, z, product id, sold
     "wall-shelf": ("p1-wall", 11, "wall-shelf-walnut-180x24-fixed-not-sold", False),
     "framed-art": ("p1-wall", 12, "framed-art-aliexpress-japandi-bare-branch-70x100-776445-50x70-walnut-float", True),
@@ -424,7 +423,6 @@ def render_pot(sk, rec):
     sh = val[..., 0]
     kind = np.round(val[..., 1]).astype(int)
     lin_base = C.lin(C.from_lab(base[None, None, :]))[0, 0]
-    Lw = C.luma(lin_base[None, :])[0]
     rgb_lin = np.zeros((h, w, 3))
     outer = kind == 0
     med = np.median(sh[outer & cov])
@@ -828,7 +826,6 @@ def main():
     synth = C.blur(synth, 6) * 0.20
     near_pot = C.dil(a_pot > 0.5, 60)
     dark_by["planter"] = np.maximum(np.where(near_pot, dark_by["planter"], 0), synth)
-    xd, yd = proj(-1.79, 17.95, 0.55)
     dish_dark = np.zeros((H, W))
     dd = C.dil(new["trinket-dish"], 3) & ~new["trinket-dish"]
     dish_dark[dd] = 0.22
