@@ -120,7 +120,8 @@ def cut_pass(p, rec):
         n_, lb_, st_, _ = cv2.connectedComponentsWithStats(fg.astype(np.uint8), connectivity=8)
         fg = lb_ == 1 + int(np.argmax(st_[1:, cv2.CC_STAT_AREA]))
         ns = np.isin(pl_ids, (24, 25, 26, 27)) & ~np.isin(ids, (51, 52, 53, 54))   # the nightstands where the clay's bedding does not reach
-        fg &= ~C.ero(ns, 1)                                 # the bedding stays behind them
+        ns[:, :1100] = False                                # the left one: the edit's duvet stands above its top (a crisp edge, the
+        fg &= ~C.ero(ns, 1)                                 # nightstand hidden behind the bed); the right one: the bedding stays behind it
     # a change of brightness only, on the wall, the floor or the skirting, away from the products' own places: light or shadow, not object
     lab_e0, lab_b0 = C.blur(C.to_lab(e), 1.5), C.blur(C.to_lab(base), 1.5)
     ce_, cb_ = np.hypot(lab_e0[..., 1], lab_e0[..., 2]), np.hypot(lab_b0[..., 1], lab_b0[..., 2])
@@ -138,6 +139,9 @@ def cut_pass(p, rec):
         ys_ = np.nonzero(lm.any(1))[0]
         lm[ys_.min() + int(0.32 * (ys_.max() - ys_.min())):] = False
         exempt |= lm
+    if p == "p1-bed":                                  # behind the left nightstand the duvet stands above the plate's wall: white on
+        lnb = C.box_mask([(820, 760, 1110, 860)])      # beige reads as 'the same colour, brighter'; 8 L* brighter there is the duvet
+        same &= ~(lnb & (lab_e0[..., 0] - lab_b0[..., 0] > 8))
     fg &= ~(same & surf & ~C.dil(exempt, 8))
     if p == "p2-right":                                # the clay crown's sphere is wall in the edit: the leaves are green, the trunk pale
         sph = np.isin(ids, (62,)) & ~C.dil(np.isin(ids, (61, 55)), 4)
@@ -158,6 +162,7 @@ def cut_pass(p, rec):
     prods = sorted({owner(k) for k in pids})
     dist = np.stack([cv2.distanceTransform((~np.isin(ids, [k] + [f for f, o in FILLERS.items() if o == k])).astype(np.uint8), cv2.DIST_L2, 5)
                      for k in prods])
+    drop = None
     if p == "p1-bed":
         lab_i = bed_labels(lab_e, ids, fg, prods)
     else:
@@ -167,6 +172,15 @@ def cut_pass(p, rec):
             lab_i[onb] = prods.index(65)
             fallx = C.box_mask([(35, 1005, 600, 1480)]) & ~C.dil(ids == 66, 25) & (lab_i == prods.index(67))
             lab_i[fallx & (dist[prods.index(65)] < 260) & ~C.ero(ids == 67, 3)] = prods.index(65)
+            # below the bench seat's front (row 1120) the throw is its drop only: the outline traced on the locked edit (DROP, canvas px),
+            # refined by GrabCut in an 8 px band. The throw and the rug come out of the edit at the same tone (L* 42 against 37), so
+            # colour cannot part them: every other change under row 1120 in the fall box is the rug (or the bench, which no layer takes)
+            drop = drop_mask(e)
+            below = C.box_mask([(35, 1120, 600, 1480)])
+            lab_i[below & (lab_i == prods.index(65)) & ~drop] = prods.index(67)
+            lab_i[drop] = prods.index(65)
+            fg |= drop
+            rp["throw_drop"] = dict(outline=DROP, refined_px=int(drop.sum()), rule="below row 1120: the drop's traced outline, GrabCut in an 8 px band")
         if p == "p2-right":
             lab_i, hold = right_labels(lab_e, fg, prods, lab_i, d)
             boxh = np.zeros((H, W), bool)
@@ -189,6 +203,9 @@ def cut_pass(p, rec):
             ys_, xs_ = np.nonzero(ids == 65)
             fall = C.box_mask([(int(xs_.min()) - 40, int(ys_.min()), int(xs_.max()) + 40, 1480)])
             m &= C.dil(ids == 65, 45) | fall
+            if drop is not None:
+                m |= drop
+            m &= ~(C.dil(~m, 2) & (pl_ids == 29))     # its edge on the bench top: the edit's sheen there, not the throw (2 px)
         if k == 66:
             m &= C.dil(ids == 66, 40)
         if k == 40:                                    # the sheer curtain stacks: low contrast on the plaster; closed solid in their place
@@ -196,6 +213,9 @@ def cut_pass(p, rec):
             m = fill_holes(m, 20000) & C.dil(ids == 40, 25)
             n2, lb2, st2, _ = cv2.connectedComponentsWithStats(m.astype(np.uint8), connectivity=8)
             m = np.isin(lb2, [j for j in range(1, n2) if st2[j, cv2.CC_STAT_AREA] >= 3000])
+        if k in TRACED.get(p, ()):                     # small products the heuristic cut tore: their outline, traced on this edit
+            m = traced(k, e, m, fg, lab_e, d)
+            rp.setdefault("traced", {})[P[k][0]] = TRACED[p][k]
         layers[k] = m
         rp[P[k][0] + (("-" + P[k][4]) if P[k][4] else "")] = dict(px=int(m.sum()), clay_px=int(np.isin(ids, [k]).sum()))
     # shadows: darkening round each product (band 40), the nearest product, never on any product
@@ -210,11 +230,14 @@ def cut_pass(p, rec):
     band = 45
     taper = np.clip(1 - du / band, 0, 1) ** 1.1
     shadows = {}
+    edge_in = allfg & ~C.ero(allfg, 2)
     shade_w = np.clip(C.blur(((dh_ < 15) & (np.abs(ce_ - cb_) < 10)).astype(np.float64), 4) * 1.4 - 0.2, 0, 1)   # a shadow or a glow changes the
     for i, k in enumerate(prods):                                                                                     # brightness, not the hue
-        env = (du <= band) & (near == i) & ~allfg
+        env = (du <= band) & (near == i) & ~allfg & (pl_ids != 0)         # never on the view through the window
         s = 1 - C.blur(dark * taper * env * shade_w, 1.0)
         s[~C.dil(env, 1) | allfg] = 1
+        s_min = cv2.erode(s.astype(np.float32), C.disk(2).astype(np.uint8)).astype(np.float64)
+        s = np.where(edge_in, np.minimum(s, s_min), s)     # under the layers' soft edges (2 px in) the shadow of the pixel beside them:
         shadows[k] = np.where(s > 0.996, 1.0, np.clip(s, 0, 1))
     # lights: the brightening outside every product, near the lit lamps, as screen
     light = None
@@ -231,6 +254,119 @@ def cut_pass(p, rec):
         rp["light_px"] = int((L8.max(2) > 0.003).sum())
     rec[p] = rp
     return e, layers, shadows, light, prods
+
+
+DROP = [(92, 1120), (300, 1120), (301, 1200), (303, 1300), (305, 1388), (280, 1388), (240, 1384), (206, 1378), (203, 1350),
+        (180, 1336), (150, 1323), (105, 1311), (63, 1306), (70, 1250), (80, 1200), (88, 1150)]     # p4-floor-r2's throw drop, canvas px
+
+
+# outlines traced on the locked edits (canvas px), each refined by GrabCut in a band round it; they replace the heuristic cut for:
+TRACED = {
+    "p2-right": {
+        61: "the pot (POT, band 6) and the trunk (TRUNK, band 4) traced; the crown: above the rim, what the edit changed (dE76 > 6) "
+            "that is leaf (green: h > 85, C* > 4; or dark: L* < 45), pieces of 60 px and more, holes under 80 px filled",
+        55: "the shade (SHADE, band 6), the pole (POLE, band 3), the base (BASE, band 6)",
+        49: "the two holders with their candles (CANDLE_L, CANDLE_R, band 4)",
+        64: "the pitcher's body (PITCHER, band 4) and its handle (HANDLE, band 2)"},
+    "p3-wall": {
+        40: "the right stack (CURTAIN_R, band 6); the left stack as cut",
+        46: "the vase body (VASE, band 4) and its stems (the cut's pixels within 2 px of STEMS)",
+        45: "TRAY as drawn (behind the duvet's edge)", 48: "DISH as drawn (behind the duvet's edge)",
+        43: "the cone (CONE_W, band 4), the arm (ARM_W, band 2), the back plate (DISC_W, band 4)",
+        41: "the vase (SILL, band 4) and its sprig (within 2 px of SPRIG: changed, dE76 > 4, and green or dark)"},
+}
+POT = [(2243, 1057), (2273, 1043), (2340, 1038), (2407, 1040), (2473, 1048), (2520, 1060), (2552, 1070), (2566, 1080), (2571, 1110),
+       (2572, 1177), (2566, 1210), (2557, 1243), (2543, 1277), (2523, 1303), (2497, 1322), (2467, 1328), (2420, 1332), (2373, 1328),
+       (2333, 1312), (2300, 1295), (2287, 1272), (2262, 1240), (2248, 1200), (2243, 1150), (2242, 1100)]
+TRUNK = [(2379, 540), (2398, 540), (2399, 810), (2403, 1065), (2383, 1065), (2381, 810)]
+SHADE = [(1920, 324), (1970, 317), (2040, 315), (2060, 317), (2128, 500), (2131, 506), (2100, 508), (2040, 513), (1990, 516), (1940, 516),
+         (1890, 514), (1860, 510), (1855, 507)]
+POLE = [(1981, 505), (1997, 505), (1996, 1250), (1981, 1250)]
+BASE = [(1956 + 57 * np.cos(t), 1269 + 34 * np.sin(t)) for t in np.linspace(0, 2 * np.pi, 48, endpoint=False)]
+CANDLE_L = [(1829, 805), (1856, 805), (1857, 842), (1859, 843), (1859, 851), (1855, 858), (1852, 877), (1857, 897), (1857, 907), (1828, 907),
+            (1828, 897), (1832, 877), (1829, 858), (1825, 851), (1825, 843), (1829, 842)]
+CANDLE_R = [(1881, 769), (1908, 769), (1908, 837), (1911, 838), (1911, 851), (1907, 860), (1909, 880), (1911, 900), (1911, 906), (1879, 906),
+            (1880, 900), (1882, 880), (1883, 860), (1878, 851), (1878, 838), (1881, 837)]
+PITCHER = [(1722, 756), (1772, 756), (1772, 766), (1771, 773), (1784, 785), (1790, 795), (1792, 810), (1792, 823), (1790, 850), (1787, 857),
+           (1782, 883), (1780, 902), (1730, 902), (1722, 880), (1715, 850), (1713, 813), (1718, 793), (1732, 773), (1730, 767)]
+HANDLE = [(1770, 757), (1797, 757), (1802, 763), (1802, 800), (1798, 812), (1790, 820), (1788, 813), (1793, 806), (1794, 775), (1792, 769),
+          (1772, 769)]
+CURTAIN_R = [(789, 0), (851, 0), (851, 832), (789, 832)]
+VASE = [(948, 725), (955, 725), (958, 740), (968, 753), (970, 760), (970, 823), (932, 823), (932, 760), (934, 753), (945, 740)]
+STEMS = [(929, 661), (941, 661), (953, 672), (956, 727), (947, 727), (930, 692)]
+TRAY = [(898, 819), (998, 819), (998, 828), (898, 828)]
+DISH = [(957, 813), (999, 813), (999, 825), (957, 825)]
+CONE_W = [(997, 544), (1014, 544), (1032, 598), (974, 598)]
+ARM_W = [(996, 534), (1030, 542), (1029, 550), (996, 543)]
+DISC_W = [(1031 + 22.5 * np.cos(t), 547.5 + 30.5 * np.sin(t)) for t in np.linspace(0, 2 * np.pi, 40, endpoint=False)]
+SILL = [(690, 654), (741, 654), (738, 690), (733, 720), (729, 728), (733, 737), (734, 753), (693, 753), (694, 737), (700, 728), (697, 720),
+        (692, 690)]
+SPRIG = [(700, 572), (760, 572), (760, 625), (722, 655), (712, 655), (700, 610)]
+
+
+def poly_mask(poly):
+    m = np.zeros((H, W), np.uint8)
+    cv2.fillPoly(m, [np.int32(np.round(np.array(poly, np.float64)))], 1)
+    return m.astype(bool)
+
+
+def gc_poly(e, poly, band):
+    dm = poly_mask(poly)
+    gc = C.gc_cut(e, C.ero(dm, band), dm, C.dil(dm, band), np.zeros((H, W), bool), iters=8)
+    return gc | C.ero(dm, max(2, band // 2 + 1))        # the outline's core always (GrabCut can lose a lit edge against a pale ground)
+
+
+def traced(k, e, m, fg, lab, d):
+    if k == 61:
+        pot, trunk = gc_poly(e, POT, 6), gc_poly(e, TRUNK, 4)
+        hh = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360
+        leaf = ((hh > 85) & (np.hypot(lab[..., 1], lab[..., 2]) > 4)) | (lab[..., 0] < 45)
+        box = C.box_mask([(2135, 100, W, 1045)])        # the crown: leaf the edit drew (changed on the base), wider than the clay's sphere
+        crown = leaf & box & (d > 6) & ~C.dil(pot, 2) & ~C.dil(trunk, 1)
+        crown = cv2.morphologyEx(crown.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool)
+        n, lb, st, _ = cv2.connectedComponentsWithStats(crown.astype(np.uint8), connectivity=8)
+        crown = np.isin(lb, [j for j in range(1, n) if st[j, cv2.CC_STAT_AREA] >= 60])
+        crown = fill_holes(crown, 80) & box
+        return pot | trunk | crown
+    if k == 55:
+        return gc_poly(e, SHADE, 6) | gc_poly(e, POLE, 3) | gc_poly(e, BASE, 6)
+    if k == 49:
+        return gc_poly(e, CANDLE_L, 4) | gc_poly(e, CANDLE_R, 4)
+    if k == 64:
+        return gc_poly(e, PITCHER, 4) | gc_poly(e, HANDLE, 2)
+    if k == 40:
+        keep = m.copy()
+        keep[:, 760:] = False
+        return keep | gc_poly(e, CURTAIN_R, 6)
+    if k == 46:
+        return gc_poly(e, VASE, 4) | (fg & C.dil(poly_mask(STEMS), 2))
+    if k == 43:
+        return gc_poly(e, CONE_W, 4) | gc_poly(e, ARM_W, 2) | gc_poly(e, DISC_W, 4)
+    if k == 41:
+        hh = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360
+        leafy = ((hh > 90) & (np.hypot(lab[..., 1], lab[..., 2]) > 4)) | (lab[..., 0] < 55)
+        sp = C.dil(poly_mask(SPRIG), 2) & ~poly_mask(SILL) & (d > 4) & leafy
+        n, lb, st, _ = cv2.connectedComponentsWithStats(sp.astype(np.uint8), connectivity=8)
+        return gc_poly(e, SILL, 4) | np.isin(lb, [j for j in range(1, n) if st[j, cv2.CC_STAT_AREA] >= 6])
+    if k == 45:
+        return poly_mask(TRAY)
+    if k == 48:
+        return poly_mask(DISH)
+    return m
+
+
+def drop_mask(e):
+    """the bench throw's drop in front of the bench (p4-floor-r2, locked): DROP filled, its edge refined by GrabCut in an 8 px band"""
+    dm = np.zeros((H, W), np.uint8)
+    cv2.fillPoly(dm, [np.int32(DROP)], 1)
+    dm = dm.astype(bool)
+    top = np.arange(H)[:, None] < 1135
+    zone = C.dil(dm, 8)
+    zone[:1125] = False
+    sure = C.ero(dm, 8) | (dm & top)
+    sure[:1125] = False
+    ref = C.gc_cut(e, sure, dm, zone, np.zeros((H, W), bool), iters=8)
+    return ref | (dm & (np.arange(H)[:, None] < 1130))
 
 
 def bed_labels(lab, ids, fg, prods):
@@ -380,6 +516,26 @@ def write_pass(p, e, layers, shadows, light, prods, man, rec):
     man["layers"].sort(key=lambda l: (l["z"], l["slot"]))
 
 
+def occlude(man, rec, front, behind):
+    """MB1's view only: the pitcher (z 46 by the slots) stands in front of the duvet's far corner (z 52) and a pillow's edge (z 50), as
+    the p2 edit drew it over the p1 bed. The binding z order stays; the bedding's MB1 layer gives up the pixels the pitcher covers: its alpha times
+    (1 - the pitcher's). Run right after p2 (p1 first): it edits the bedding layer in place"""
+    lf = [l for l in man["layers"] if l["slot"] == front][0]
+    lb = [l for l in man["layers"] if l["slot"] == behind][0]
+    af = np.asarray(Image.open(os.path.join(ST, lf["layer"])))[..., 3].astype(np.float64) / 255
+    pb = os.path.join(ST, lb["layer"])
+    rgba = np.asarray(Image.open(pb)).copy()
+    a0 = rgba[..., 3].astype(np.float64) / 255
+    a1 = a0 * (1 - af)
+    rgba[..., 3] = C.q(a1)
+    rgba[..., :3][rgba[..., 3] == 0] = 0
+    Image.fromarray(rgba, "RGBA").save(pb)
+    lb["alpha_px"] = int((rgba[..., 3] > 0).sum())
+    lb["occluded_by"] = f"{front} (MB1's view: tools/mb1_compose.py occlude)"
+    rec.setdefault("occlusion", {})[behind] = dict(by=front, px_given_up=int(((a0 > 0) & (af > 0.5)).sum()),
+                                                   rule="behind alpha x (1 - front alpha); the slots' z order kept")
+
+
 def compose(man, rec):
     plate8 = np.asarray(Image.open(os.path.join(ST, "plate.png")).convert("RGB"))
     out = plate8.astype(np.float64) / 255
@@ -420,6 +576,9 @@ def main(args):
             continue
         e, layers, shadows, light, prods = cut_pass(p, rec)
         write_pass(p, e, layers, shadows, light, prods, man, rec)
+        if p == "p2-right":
+            occlude(man, rec, "bedside-carafe", "bedding")
+            occlude(man, rec, "bedside-carafe", "pillowcases")
         np.save(os.path.join(M.SCR, f"{p}-locked.npy"), e.astype(np.float32))
     compose(man, rec)
     json.dump(man, open(mp, "w"), indent=1)

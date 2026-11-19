@@ -105,6 +105,32 @@ def main():
         count[k] = dict(frame_pct=round(100 * float(area), 3), height_pct=round(100 * float(hgt), 1),
                         passes=bool(area >= 0.005 or (area >= 0.0015 and hgt >= 0.06)))
     rep["v7q6_on_mb1"] = count
+    # the room count (the brief): each product once, in the frame where it is biggest (MB0's default layers against MB1's), V7Q6 there
+    def per_slot(man_, root):
+        out = {}
+        for l in man_["layers"]:
+            if not l.get("default", True):
+                continue
+            a = (np.asarray(Image.open(os.path.join(root, l["layer"])))[..., 3] > 127) & fr
+            out.setdefault(l["slot"], np.zeros_like(a))
+            out[l["slot"]] |= a
+        res = {}
+        for k, a in out.items():
+            if a.any():
+                ys_ = np.nonzero(a.any(1))[0]
+                area, hgt = a.sum() / fa, (ys_.max() - ys_.min() + 1) / (M.FRAME[3] - M.FRAME[1])
+                res[k] = (round(100 * float(area), 3), bool(area >= 0.005 or (area >= 0.0015 and hgt >= 0.06)))
+        return res
+    m0 = per_slot(json.load(open(os.path.join(M.MB0, "layers", "manifest.json"))), M.MB0)
+    m1 = per_slot(man, ST)
+    room = {}
+    for k in sorted((set(m0) | set(m1)) - {"wall-shelf", "bench"}):         # fixed furniture (plan B), not for sale here
+        f0, f1 = m0.get(k, (0.0, False)), m1.get(k, (0.0, False))
+        best = "MB1" if f1[0] > f0[0] else "MB0"
+        room[k] = dict(mb0_pct=f0[0], mb1_pct=f1[0], biggest_in=best, passes_there=(f1 if best == "MB1" else f0)[1])
+    rep["room_count"] = dict(products=len(room), pass_v7q6=sum(v["passes_there"] for v in room.values()),
+                             biggest_in_mb1=sorted(k for k, v in room.items() if v["biggest_in"] == "MB1"), per_product=room,
+                             note="per slot (the two sconces are one product); default layers only; the bench and the shelf are fixed, not counted")
     json.dump(rep, open(os.path.join(ST, "mb1-checks.json"), "w"), indent=1)
     print(json.dumps({k: v for k, v in rep.items() if k not in ("v7q6_on_mb1",)}, indent=0)[:4000])
     print({k: (v["frame_pct"], v["passes"]) for k, v in count.items()})

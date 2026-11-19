@@ -1,0 +1,79 @@
+{
+ "frame": "HDx2",
+ "room": "hall",
+ "style": "warm-modern",
+ "date": "2026-11-19",
+ "canvas": [
+  2496,
+  1664
+ ],
+ "frame_box": [
+  71.10847058823515,
+  169.99851470588226,
+  2424.891529411765,
+  1494.0014852941176
+ ],
+ "base": "../../hall-2026-11-18/hdx2.png (accepted 12.7.3; not edited)",
+ "compose": {
+  "order": [
+   "base",
+   "wall-sconce-shadow (z 13)",
+   "wall-sconce (z 14)",
+   "light (screen, z 90)"
+  ],
+  "formula": "as HT2's (../layers/manifest.json)"
+ },
+ "layers": [
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "card": "data/products/entrance/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.json",
+   "sku": "12000051976080270",
+   "z": 14,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "shadow": "shadows/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "alpha_px": 20755,
+   "shadow_px": 17912
+  }
+ ],
+ "light": [
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "z": 90,
+   "blend": "screen",
+   "file": "light/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "px": 277861
+  }
+ ],
+ "method": {
+  "stone": "exact (wall plane via the clay depth) -> HT2's gain",
+  "cylinder": "ray cast, turned -13.45 deg about its axis",
+  "block": "ray cast box; its +Y face from HT2's 5 px strip stretched to 27 px, shaded 0.85-1 toward the wall",
+  "exposure_r1": [
+   1.0375,
+   1.0269,
+   1.0601
+  ],
+  "hdx2_over_ht2_stone": 1.0007,
+  "samples_per_px": 9
+ },
+ "lamp_uv": {
+  "u": [
+   0.0951,
+   0.1342
+  ],
+  "v": [
+   0.0589,
+   0.2613
+  ],
+  "designer": "u 0.12-0.14, v 0.08-0.26 (4.3)"
+ },
+ "rnd2": {
+  "outside_every_alpha_shadow_light_max_diff_vs_hdx2": 0,
+  "recomposed_equals_written": true
+ },
+ "missing": "the right lamp (row 15): a known temporary asymmetry (8.4)"
+}

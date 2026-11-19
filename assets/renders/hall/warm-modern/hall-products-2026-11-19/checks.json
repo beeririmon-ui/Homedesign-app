@@ -1,0 +1,189 @@
+{
+ "frame": "HT2",
+ "positions": {
+  "wall-sconce": {
+   "u": [
+    0.6442,
+    0.6637
+   ],
+   "v": [
+    0.1972,
+    0.3247
+   ]
+  },
+  "wall-hooks": {
+   "u": [
+    0.4793,
+    0.5768
+   ],
+   "v": [
+    0.2783,
+    0.3157
+   ]
+  },
+  "basket": {
+   "u": [
+    0.5885,
+    0.6735
+   ],
+   "v": [
+    0.8742,
+    1.0301
+   ]
+  },
+  "bench-throw": {
+   "u": [
+    0.5324,
+    0.6571
+   ],
+   "v": [
+    0.7647,
+    0.9289
+   ]
+  },
+  "designer_4_4": {
+   "wall-sconce": "u 0.638-0.654, v 0.21-0.33 (stone-plane mapping; the cylinder stands 4.5 cm off the stone)",
+   "wall-hooks": "u 0.48-0.57, v 0.28-0.31",
+   "bench-throw": "u 0.555-0.652, v 0.77-0.88 (with the old 30x35 fold)",
+   "basket": "u 0.62-0.70, v 0.88-0.98 (centred at Y 7.10: the clay gives u 0.589-0.674)"
+  }
+ },
+ "colours": {
+  "scene_cast_deg": -13.3,
+  "lamp_travertine": {
+   "scene": {
+    "L": 75.0,
+    "C": 21.1,
+    "h": 77.1,
+    "C_over_L": 0.281,
+    "px": 7249
+   },
+   "photo": "A 28: L* 76.3, C* 19.0, h 74 (lit); card hex #D8C3A5 L* 80 C* 18 h 81"
+  },
+  "lamp_walnut_block": {
+   "scene": {
+    "L": 37.7,
+    "C": 25.1,
+    "h": 54.3,
+    "C_over_L": 0.665,
+    "px": 451
+   },
+   "photo": "L* 32.5, C* 38.4, h 61 (lit by its own lamp)"
+  },
+  "pegs": {
+   "scene": {
+    "L": 33.7,
+    "C": 23.3,
+    "h": 51.9,
+    "C_over_L": 0.689,
+    "px": 4049
+   },
+   "photo": "block L* 49.5 C* 13.7 h 50 (SKU); row of 4: L* 24.2 C* 20.7 h 48"
+  },
+  "throw": {
+   "scene": {
+    "L": 59.9,
+    "C": 9.6,
+    "h": 70.0,
+    "C_over_L": 0.16,
+    "px": 57908
+   },
+   "photo": "khaki: L* 64-75, C* 8-11, h 79-80 (SKU, real close-up, bed)"
+  },
+  "basket": {
+   "scene": {
+    "L": 55.2,
+    "C": 9.0,
+    "h": 71.9,
+    "C_over_L": 0.162,
+    "px": 31016
+   },
+   "photo": "cream: L* 82.8, C* 11.5, h 85 (shade side, real photo)"
+  },
+  "seat_top_ht2": {
+   "L": 51.7,
+   "C": 26.28,
+   "h": 57.2,
+   "C_over_L": 0.509,
+   "source": "ht2-lock.json seat_hue_vs_lining_12_7_2"
+  }
+ },
+ "throw": {
+  "front_canvas_px": 54.0,
+  "front_frame_pct": 3.74,
+  "front_cm": 7.5,
+  "target": "7-9 cm, 3.5-4.5 % of the frame height (8.1)",
+  "drop_canvas_px": 110.2,
+  "drop_cm": 15.3,
+  "drop_target": "about 15 cm",
+  "bare_walnut_cm": 39.0
+ },
+ "check_8_2_block_vs_seat": {
+  "dh_deg": -2.9,
+  "C_over_L_vs_seat_pct": 30.6,
+  "rule": "back to the designer if |dh| > 10 or C*/L* (or L*) more than 25 % above the seat's, at x1",
+  "passes": false
+ },
+ "black_point": {
+  "frame_p01_before": 14.69,
+  "frame_p01_after": 14.72,
+  "frame_p05_before": 19.07,
+  "frame_p05_after": 19.09,
+  "walnut_floor": 20.7,
+  "tone": {
+   "wall-hooks_tone": {
+    "p2_before": 17.53,
+    "floor": 20.7,
+    "A": 14.9,
+    "p2_after": 20.11,
+    "name": "pegs"
+   },
+   "wall-sconce_block_tone": {
+    "p2_before": 25.6,
+    "floor": 20.7,
+    "A": 0.0
+   }
+  }
+ },
+ "basket_hidden_by_panel_pct_in_frame": 35.0,
+ "hdx2": {
+  "lamp_uv": {
+   "u": [
+    0.0951,
+    0.1342
+   ],
+   "v": [
+    0.0589,
+    0.2613
+   ],
+   "designer": "u 0.12-0.14, v 0.08-0.26 (4.3)"
+  },
+  "method": {
+   "stone": "exact (wall plane via the clay depth) -> HT2's gain",
+   "cylinder": "ray cast, turned -13.45 deg about its axis",
+   "block": "ray cast box; its +Y face from HT2's 5 px strip stretched to 27 px, shaded 0.85-1 toward the wall",
+   "exposure_r1": [
+    1.0375,
+    1.0269,
+    1.0601
+   ],
+   "hdx2_over_ht2_stone": 1.0007,
+   "samples_per_px": 9
+  },
+  "rnd2": {
+   "outside_every_alpha_shadow_light_max_diff_vs_hdx2": 0,
+   "recomposed_equals_written": true
+  },
+  "lamp_scene": {
+   "L": 74.2,
+   "C": 20.8,
+   "h": 76.4,
+   "C_over_L": 0.281,
+   "px": 18936
+  }
+ },
+ "rnd2_ht2": {
+  "outside_every_alpha_shadow_light_max_diff_vs_ht2": 0,
+  "recomposed_equals_written": true
+ }
+}

@@ -34,7 +34,7 @@
    "clay_px": 24150
   },
   "bedding": {
-   "px": 431141,
+   "px": 432431,
    "clay_px": 281380
   },
   "cushions": {
@@ -46,7 +46,7 @@
    "clay_px": 77218
   }
  },
- "black_point_p05": 12.77,
+ "black_point_p05": 12.09,
  "p2-right": {
   "lock": {
    "method": "ECC affine on the gradient magnitude, masked",
@@ -81,16 +81,22 @@
    "px": 7056,
    "clay_px": 4898
   },
+  "traced": {
+   "candle-holders": "the two holders with their candles (CANDLE_L, CANDLE_R, band 4)",
+   "floor-lamp": "the shade (SHADE, band 6), the pole (POLE, band 3), the base (BASE, band 6)",
+   "planter": "the pot (POT, band 6) and the trunk (TRUNK, band 4) traced; the crown: above the rim, what the edit changed (dE76 > 6) that is leaf (green: h > 85, C* > 4; or dark: L* < 45), pieces of 60 px and more, holes under 80 px filled",
+   "bedside-carafe": "the pitcher's body (PITCHER, band 4) and its handle (HANDLE, band 2)"
+  },
   "candle-holders": {
-   "px": 8583,
+   "px": 6268,
    "clay_px": 2881
   },
   "floor-lamp": {
-   "px": 58964,
+   "px": 58050,
    "clay_px": 54731
   },
   "planter": {
-   "px": 215953,
+   "px": 232346,
    "clay_px": 67521
   },
   "magazine-holder": {
@@ -98,10 +104,10 @@
    "clay_px": 41303
   },
   "bedside-carafe": {
-   "px": 8652,
+   "px": 9850,
    "clay_px": 6203
   },
-  "light_px": 368240
+  "light_px": 368098
  },
  "p3-wall": {
   "lock": {
@@ -133,28 +139,36 @@
    0.84,
    3.04
   ],
+  "traced": {
+   "curtains": "the right stack (CURTAIN_R, band 6); the left stack as cut",
+   "sill-vase": "the vase (SILL, band 4) and its sprig (within 2 px of SPRIG: changed, dE76 > 4, and green or dark)",
+   "bedside-sconces": "the cone (CONE_W, band 4), the arm (ARM_W, band 2), the back plate (DISC_W, band 4)",
+   "nightstand-tray": "TRAY as drawn (behind the duvet's edge)",
+   "nightstand-vase": "the vase body (VASE, band 4) and its stems (the cut's pixels within 2 px of STEMS)",
+   "trinket-dish": "DISH as drawn (behind the duvet's edge)"
+  },
   "curtains": {
-   "px": 163515,
+   "px": 167965,
    "clay_px": 180045
   },
   "sill-vase": {
-   "px": 4834,
+   "px": 5657,
    "clay_px": 3115
   },
   "bedside-sconces-west": {
-   "px": 4820,
+   "px": 4061,
    "clay_px": 3011
   },
   "nightstand-tray": {
-   "px": 866,
+   "px": 1010,
    "clay_px": 619
   },
   "nightstand-vase": {
-   "px": 4753,
+   "px": 3630,
    "clay_px": 3085
   },
   "trinket-dish": {
-   "px": 438,
+   "px": 559,
    "clay_px": 485
   },
   "framed-art": {
@@ -166,14 +180,14 @@
    "clay_px": 23159
   },
   "shelf-vase-left": {
-   "px": 8652,
+   "px": 8656,
    "clay_px": 8940
   },
   "shelf-vase-right": {
-   "px": 10582,
+   "px": 11765,
    "clay_px": 9890
   },
-  "light_px": 104967
+  "light_px": 107058
  },
  "prints": {
   "framed-art": {
@@ -288,8 +302,78 @@
    0.87,
    3.41
   ],
+  "throw_drop": {
+   "outline": [
+    [
+     92,
+     1120
+    ],
+    [
+     300,
+     1120
+    ],
+    [
+     301,
+     1200
+    ],
+    [
+     303,
+     1300
+    ],
+    [
+     305,
+     1388
+    ],
+    [
+     280,
+     1388
+    ],
+    [
+     240,
+     1384
+    ],
+    [
+     206,
+     1378
+    ],
+    [
+     203,
+     1350
+    ],
+    [
+     180,
+     1336
+    ],
+    [
+     150,
+     1323
+    ],
+    [
+     105,
+     1311
+    ],
+    [
+     63,
+     1306
+    ],
+    [
+     70,
+     1250
+    ],
+    [
+     80,
+     1200
+    ],
+    [
+     88,
+     1150
+    ]
+   ],
+   "refined_px": 52363,
+   "rule": "below row 1120: the drop's traced outline, GrabCut in an 8 px band"
+  },
   "bench-throw": {
-   "px": 109449,
+   "px": 100999,
    "clay_px": 54255
   },
   "bench-basket": {
@@ -297,7 +381,7 @@
    "clay_px": 36343
   },
   "rug": {
-   "px": 283780,
+   "px": 276531,
    "clay_px": 291753
   }
  },
@@ -310,17 +394,17 @@
     10.6
    ],
    "mb1_pot_lit_before": [
-    76.0,
-    3.3,
+    79.5,
+    3.0,
     10.8
    ],
-   "luminance_gain": 1.2,
-   "chroma_scale": 0.969
+   "luminance_gain": 1.074,
+   "chroma_scale": 0.977
   },
   "bedside-carafe": {
    "rule": "a* b* to MB0's lit tone, L* kept",
    "before_ab": [
-    3.3,
+    2.7,
     6.0
    ],
    "to": [
@@ -331,13 +415,37 @@
   "candle-holders": {
    "rule": "a* b* to MB0's lit tone, L* kept",
    "before_ab": [
-    1.5,
-    8.4
+    1.6,
+    8.9
    ],
    "to": [
     2.4,
     11.7
    ]
+  },
+  "rug": {
+   "rule": "the living room's rug-to-oak ratio (3.95, luminance of the medians) and its C* (11.9), hue kept",
+   "oak_beside_L": 39.7,
+   "rug_before": [
+    43.1,
+    4.9,
+    14.5
+   ],
+   "target_median_L": 72.0,
+   "luminance_gain": 3.295,
+   "chroma_scale": 0.775
+  }
+ },
+ "occlusion": {
+  "bedding": {
+   "by": "bedside-carafe",
+   "px_given_up": 478,
+   "rule": "behind alpha x (1 - front alpha); the slots' z order kept"
+  },
+  "pillowcases": {
+   "by": "bedside-carafe",
+   "px_given_up": 58,
+   "rule": "behind alpha x (1 - front alpha); the slots' z order kept"
   }
  }
 }

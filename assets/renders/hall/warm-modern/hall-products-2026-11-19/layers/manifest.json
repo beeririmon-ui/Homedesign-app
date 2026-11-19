@@ -1,0 +1,112 @@
+{
+ "frame": "HT2",
+ "room": "hall",
+ "style": "warm-modern",
+ "date": "2026-11-19",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "base": "../hall-2026-11-18/ht2.png (accepted 12.7.2; not edited)",
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "grade": "ht2.png's own (no grade on the products beyond tone.py's WM-G1 toe in the walnut alphas, if needed: see tone)",
+ "compose": {
+  "order": [
+   "base",
+   "wall-sconce-shadow (z 13), wall-sconce (z 14)",
+   "wall-hooks-shadow (z 15), wall-hooks (z 16)",
+   "basket-shadow (z 19), basket (z 20)",
+   "bench-throw-shadow (z 21), bench-throw (z 22)",
+   "light (screen, z 90)"
+  ],
+  "formula": "per slot: out = round((below * shadow / 255) * (1 - a) + rgb * a), straight alpha, a = A / 255; then the light: out = 255 - round((255 - out) * (255 - L) / 255)"
+ },
+ "layers": [
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "card": "data/products/entrance/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.json",
+   "sku": "12000051976080270",
+   "z": 14,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "shadow": "shadows/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "alpha_px": 8778,
+   "shadow_px": 10719
+  },
+  {
+   "slot": "wall-hooks",
+   "product": "wall-hooks-cj-walnut-block-peg-set-of-4",
+   "card": "data/products/entrance/wall-hooks/wall-hooks-cj-walnut-block-peg-set-of-4.json",
+   "sku": "CJJJJTJT09286-Black",
+   "z": 16,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/wall-hooks/wall-hooks-cj-walnut-block-peg-set-of-4.png",
+   "shadow": "shadows/wall-hooks/wall-hooks-cj-walnut-block-peg-set-of-4.png",
+   "alpha_px": 5461,
+   "shadow_px": 3462
+  },
+  {
+   "slot": "basket",
+   "product": "basket-cj-jute-cotton-rope-cylinder-30-hall",
+   "card": "data/products/entrance/basket/basket-cj-jute-cotton-rope-cylinder-30-hall.json",
+   "sku": "CJYD195774302BY",
+   "z": 20,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/basket/basket-cj-jute-cotton-rope-cylinder-30-hall.png",
+   "shadow": "shadows/basket/basket-cj-jute-cotton-rope-cylinder-30-hall.png",
+   "alpha_px": 38671,
+   "shadow_px": 17134
+  },
+  {
+   "slot": "bench-throw",
+   "product": "bench-throw-cj-cotton-waffle-blanket-150x200",
+   "card": "data/products/entrance/bench-throw/bench-throw-cj-cotton-waffle-blanket-150x200.json",
+   "sku": "CJZW275832213MN",
+   "z": 22,
+   "shadow_z": 21,
+   "default": true,
+   "layer": "layers/bench-throw/bench-throw-cj-cotton-waffle-blanket-150x200.png",
+   "shadow": "shadows/bench-throw/bench-throw-cj-cotton-waffle-blanket-150x200.png",
+   "alpha_px": 62393,
+   "shadow_px": 6100
+  }
+ ],
+ "light": [
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "z": 90,
+   "blend": "screen",
+   "file": "light/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "px": 187215
+  }
+ ],
+ "rnd2": {
+  "outside_every_alpha_shadow_light_max_diff_vs_ht2": 0,
+  "recomposed_equals_written": true
+ },
+ "tone": {
+  "wall-hooks_tone": {
+   "p2_before": 17.53,
+   "floor": 20.7,
+   "A": 14.9,
+   "p2_after": 20.11,
+   "name": "pegs"
+  },
+  "wall-sconce_block_tone": {
+   "p2_before": 25.6,
+   "floor": 20.7,
+   "A": 0.0
+  }
+ },
+ "at_rest_only": "the layers appear only at rest on HT2 (focus mode, 6.6a.4) and lift before any move; the clips are unchanged"
+}

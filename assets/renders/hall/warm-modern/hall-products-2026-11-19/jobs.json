@@ -1,0 +1,247 @@
+{
+ "run": "render-agent 2026-11-19, briefs/wm-hall-ht2-products-2026-11-19.md",
+ "plan": "about 400-800",
+ "cap": 1200,
+ "spent": 960,
+ "left_under_cap": 240,
+ "jobs": [
+  {
+   "still": "HT2",
+   "id": "r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "4K",
+   "aspect_ratio": "16:9",
+   "why": "4K (450, 2K 400): the wall light is carried to HDx2 at 1.43x, so its source needs ~2x the canvas",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f04a1300-0141-40ac-97a9-f39e13fe034f.png",
+   "input_sha256_20": "205c1ad306c20ceff214",
+   "input_file": "sources/ht2p-r1-input-sent.jpg (JPEG copy; tools/prep.py rebuilds the PNG)",
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9ba11818-0cd3-480f-995a-ca07d56a43c2.png",
+     "what": "wall light 332886 A 28 (SKU ...270), the SKU photo",
+     "src": "6f6bcdf7_Sece391192f4345c69645ed4a6d570d86E.jpg",
+     "crop": [
+      60,
+      0,
+      500,
+      690
+     ],
+     "note": "the seller's 6.5CM arrow and label (x 340-470, y 555-640) inpainted (cv2 TELEA); the H28 arrow and the text outside the crop"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8fdb7bee-5a1c-4471-94a9-8f0cb6d9bfd0.png",
+     "what": "walnut peg, SKU photo (CJJJJTJT09286-Black)",
+     "src": "5e92e8c4_1535282539218.jpg",
+     "crop": [
+      120,
+      30,
+      700,
+      640
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/27be8f60-2b57-4265-ab6d-2ebf2d450d4b.png",
+     "what": "pegs in a row, real photo (gallery 4), two pegs without the towel",
+     "src": "f988b0c2_2758199120516.jpg",
+     "crop": [
+      560,
+      140,
+      800,
+      470
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1c952a43-f80d-4617-ab0e-cba3aaf74862.png",
+     "what": "waffle throw fold (SKU photo, recoloured per colour by the seller: shape and cells only)",
+     "src": "73261a0b_82142e8d-4033-4974-81eb-d3ebc5aa2ba1.jpg",
+     "crop": [
+      250,
+      600,
+      1700,
+      1520
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2898ed7e-e15e-4da6-aa62-eec2b6b69111.png",
+     "what": "khaki waffle, real close-up (gallery 3): the colour",
+     "src": "4c428206_acae407b-70d8-40d7-9c34-74aaaf5d19d2.jpg",
+     "crop": [
+      0,
+      0,
+      635,
+      635
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/50271ed7-7b56-43d7-96d8-992d8be651ed.png",
+     "what": "cream cotton rope basket, the SKU photo of CJYD195774302BY (not gallery 5-8)",
+     "src": "0731dad7_d1be02c0-7424-4ca9-b5e5-f30d97c45336.jpg",
+     "crop": [
+      300,
+      0,
+      800,
+      560
+     ],
+     "note": "its toy and cloth are props: the prompt says so"
+    }
+   ],
+   "prompt_file": "assets/prompts/warm-modern-hall-products-2026-11-19/ht2p.txt",
+   "idempotency_key": "wm-hall-ht2p-r1-nano-4k-2026-11-19",
+   "placeholder_id": "b1f173a3-8b0e-44ae-993f-1c61945b7fc6",
+   "task_id": "9423748cc3efb65e357c7db72c8ef05c",
+   "estimate": 450,
+   "tokens": 450,
+   "running_total": 450,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-9423748cc3efb65e357c7db72c8ef05c-0-1795126771614-86f52332.jpg",
+   "returned_px": [
+    5504,
+    3072
+   ],
+   "returned_format": "JPEG",
+   "kept_as": "sources/ht2p-r1-nano2-4k.jpg",
+   "shift_vs_input_px": "0.02 / -0.05 (global and per island, max 0.12)",
+   "verdict": "USED for the wall light, the pegs and the throw, each fixed in code: the lamp drawn 9.2 x 31 cm for 6.5 x 28 (refit sx 0.709, sy 0.892); the pegs 1.21-1.25 x wider and 1.50 x taller than 4 x 8 (refit box to box); the throw's stack about 13 cm and its panel 25 cm (remapped onto the clay: 7.5 / 15.3 cm). Its basket not used (12 % wide, 5 cm right of Y 7.10, its top hidden by the long panel)"
+  },
+  {
+   "still": "HT2",
+   "id": "fix1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "4K",
+   "aspect_ratio": "16:9",
+   "why": "the throw (thickness 8.1 / QA 7-9 cm) and the basket (size, Y 7.10, and the part r1's long panel hid) again, on clay proxies textured with r1's own waffle and rope",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/def27e0b-85c5-4ac6-a541-bcfd4774b453.png",
+   "input_sha256_20": "9d559480870b222ef9ac",
+   "input_file": "sources/ht2p-fix1-input-sent.jpg (tools/prep_fix1.py)",
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1c952a43-f80d-4617-ab0e-cba3aaf74862.png",
+     "what": "waffle throw fold (SKU photo, recoloured per colour by the seller: shape and cells only)",
+     "src": "73261a0b_82142e8d-4033-4974-81eb-d3ebc5aa2ba1.jpg",
+     "crop": [
+      250,
+      600,
+      1700,
+      1520
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2898ed7e-e15e-4da6-aa62-eec2b6b69111.png",
+     "what": "khaki waffle, real close-up (gallery 3): the colour",
+     "src": "4c428206_acae407b-70d8-40d7-9c34-74aaaf5d19d2.jpg",
+     "crop": [
+      0,
+      0,
+      635,
+      635
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/50271ed7-7b56-43d7-96d8-992d8be651ed.png",
+     "what": "cream cotton rope basket, the SKU photo of CJYD195774302BY (not gallery 5-8)",
+     "src": "0731dad7_d1be02c0-7424-4ca9-b5e5-f30d97c45336.jpg",
+     "crop": [
+      300,
+      0,
+      800,
+      560
+     ],
+     "note": "its toy and cloth are props: the prompt says so"
+    }
+   ],
+   "prompt_file": "assets/prompts/warm-modern-hall-products-2026-11-19/ht2p-fix1.txt",
+   "idempotency_key": "wm-hall-ht2p-fix1-nano-4k-2026-11-19",
+   "placeholder_id": "95f1367a-616c-4563-b766-8e674486185a",
+   "task_id": "9e57d474afcbd3979c71063ccb9cc078",
+   "estimate": 450,
+   "tokens": 450,
+   "running_total": 900,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-9e57d474afcbd3979c71063ccb9cc078-0-1795127667800-1f5dc402.jpg",
+   "returned_px": [
+    5504,
+    3072
+   ],
+   "returned_format": "JPEG",
+   "kept_as": "sources/ht2p-fix1-nano2-4k.jpg",
+   "shift_vs_input_px": "the picture warped: -3.9 px at the top, +4 at the bottom, and the bench redrawn 56 px higher and more frontal",
+   "verdict": "REJECTED as a picture (the bench moved: its throw sits on another bench; the stack again about 2 folds thick). Its basket alone is USED, registered by its own outline onto the clay (scale 0.787), hue and chroma to the SKU photo, the seat's shade added"
+  },
+  {
+   "still": "HT2 (crop x 1140-2508, y 761-1530)",
+   "id": "fix2",
+   "model": "flux-2-klein",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "why": "the 300 left under the 1,200 cap fits no nano edit (1K 350, lite 250 + no retry); klein at 60 on a 1:1 crop of the bench",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f6906dab-6a91-4165-aea7-ee87e431f971.png",
+   "input_sha256_20": "05bc9a0e9467638499ff",
+   "input_file": "rejected/ht2p-fix2-input-sent.jpg",
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1c952a43-f80d-4617-ab0e-cba3aaf74862.png",
+     "what": "waffle throw fold (SKU photo, recoloured per colour by the seller: shape and cells only)",
+     "src": "73261a0b_82142e8d-4033-4974-81eb-d3ebc5aa2ba1.jpg",
+     "crop": [
+      250,
+      600,
+      1700,
+      1520
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2898ed7e-e15e-4da6-aa62-eec2b6b69111.png",
+     "what": "khaki waffle, real close-up (gallery 3): the colour",
+     "src": "4c428206_acae407b-70d8-40d7-9c34-74aaaf5d19d2.jpg",
+     "crop": [
+      0,
+      0,
+      635,
+      635
+     ]
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/50271ed7-7b56-43d7-96d8-992d8be651ed.png",
+     "what": "cream cotton rope basket, the SKU photo of CJYD195774302BY (not gallery 5-8)",
+     "src": "0731dad7_d1be02c0-7424-4ca9-b5e5-f30d97c45336.jpg",
+     "crop": [
+      300,
+      0,
+      800,
+      560
+     ],
+     "note": "its toy and cloth are props: the prompt says so"
+    }
+   ],
+   "prompt_file": "assets/prompts/warm-modern-hall-products-2026-11-19/ht2p-fix2-klein.txt",
+   "idempotency_key": "wm-hall-ht2p-fix2-klein-2k-2026-11-19",
+   "placeholder_id": "1f31feb8-3249-4a37-acb2-ddf223e4795d",
+   "task_id": "b6804838-20e7-4abd-a345-a54b3d70953a",
+   "estimate": 60,
+   "tokens": 60,
+   "running_total": 960,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/fluxk-b6804838-20e7-4abd-a345-a54b3d70953a-0-1795128055958-4710e373.jpg",
+   "returned_px": [
+    2048,
+    1152
+   ],
+   "kept_as": "rejected/ht2p-fix2-klein-crop.jpg",
+   "verdict": "REJECTED: one draped panel, not a stack; pale cream, not khaki; the basket wider and right of Y 7.10; shifts up to 10 px"
+  }
+ ],
+ "free_calls": [
+  "var2_list_models (image)",
+  "var2_estimate_cost x 6 (nano-banana-2 2K/4K, the r1 send, the fix1 send, 1K/lite/pro/klein, the klein send): 0 tokens"
+ ],
+ "code_steps_0_tokens": [
+  "prep.py: the r1 input and the islands",
+  "compose.py r1: the wall light and the pegs refit, their gains; the pegs' shadow from their alpha",
+  "prep_fix1.py: the fix1 input",
+  "compose.py bench: the throw (r1 remapped, panel rectified, colour to the photo), the basket (fix1 registered, hue/chroma to the photo, the seat's shade)",
+  "compose.py write: the files, the composite from the files, RND2, the walnut floor (tone.py)",
+  "hdx2.py: the wall light carried to HDx2",
+  "checks.py: the measurements"
+ ],
+ "seed": "no seed is exposed by nano-banana-2 or flux-2-klein"
+}
