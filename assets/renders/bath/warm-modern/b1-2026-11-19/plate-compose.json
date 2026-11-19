@@ -1,0 +1,194 @@
+{
+ "raw": {
+  "materials": {
+   "plaster, window wall (2)": [
+    63.7,
+    1.4,
+    10.9
+   ],
+   "plaster, north wall (3)": [
+    71.1,
+    0.5,
+    4.5
+   ],
+   "plaster, vanity wall (1)": [
+    83.8,
+    0.7,
+    4.7
+   ],
+   "WC box (28)": [
+    51.8,
+    1.8,
+    11.4
+   ],
+   "stone, east cladding (12)": [
+    62.5,
+    3.8,
+    17.7
+   ],
+   "stone, south cladding (11)": [
+    71.7,
+    2.4,
+    12.8
+   ],
+   "stone, floor (9)": [
+    67.4,
+    2.2,
+    11.2
+   ],
+   "ledge slab (29)": [
+    56.2,
+    2.8,
+    15.8
+   ],
+   "walnut (20, 21)": [
+    32.0,
+    10.5,
+    13.3
+   ],
+   "bronze (15, 25, 27, 30)": [
+    39.4,
+    2.8,
+    7.5
+   ]
+  },
+  "shared_regions": {
+   "window wall strip X 4.95-5.15 (B2: the repaired strip)": [
+    67.1,
+    1.3,
+    10.8
+   ],
+   "vanity wall Y 11.25-11.6": [
+    82.8,
+    0.6,
+    4.9
+   ]
+  }
+ },
+ "step1_gain": {
+  "K": 1.04,
+  "sigma": 120,
+  "clamp": [
+   1.0,
+   2.4
+  ],
+  "p5_p50_p95": [
+   1.0,
+   1.959,
+   2.4
+  ]
+ },
+ "step2_plaster_ab": {
+  "target": [
+   0.8,
+   5.5
+  ],
+  "sigma": 40,
+  "ids": [
+   1,
+   2,
+   3,
+   4,
+   28,
+   32
+  ]
+ },
+ "final": {
+  "materials": {
+   "plaster, window wall (2)": [
+    86.0,
+    0.8,
+    5.5
+   ],
+   "plaster, north wall (3)": [
+    91.8,
+    0.3,
+    5.1
+   ],
+   "plaster, vanity wall (1)": [
+    90.7,
+    0.7,
+    5.2
+   ],
+   "WC box (28)": [
+    74.6,
+    0.9,
+    5.5
+   ],
+   "stone, east cladding (12)": [
+    86.4,
+    3.6,
+    17.6
+   ],
+   "stone, south cladding (11)": [
+    88.5,
+    2.0,
+    12.5
+   ],
+   "stone, floor (9)": [
+    84.7,
+    2.1,
+    11.2
+   ],
+   "ledge slab (29)": [
+    74.3,
+    2.7,
+    15.8
+   ],
+   "walnut (20, 21)": [
+    35.5,
+    10.5,
+    13.3
+   ],
+   "bronze (15, 25, 27, 30)": [
+    49.6,
+    2.9,
+    7.7
+   ]
+  },
+  "shared_regions": {
+   "window wall strip X 4.95-5.15 (B2: the repaired strip)": [
+    92.0,
+    0.8,
+    5.5
+   ],
+   "vanity wall Y 11.25-11.6": [
+    91.3,
+    0.6,
+    5.2
+   ]
+  },
+  "frame_p05_L": 41.31,
+  "frame_p01_L": 18.93,
+  "frame_min_L": 10.98
+ },
+ "b2_plate_same_regions": {
+  "window wall strip X 4.95-5.15 (B2: the repaired strip)": [
+   88.4,
+   1.0,
+   6.3
+  ],
+  "vanity wall Y 11.25-11.6": [
+   90.9,
+   0.5,
+   3.9
+  ]
+ },
+ "grade": {
+  "file": "plate-grade.json (B2's, unchanged)",
+  "note": "grade_plate.curve_apply, as grade_plate.py apply"
+ },
+ "lock_not_applied": {
+  "fit": {
+   "y_offset_px": -1.193,
+   "y_scale_about_row_707": 0.00536,
+   "x_offset_px": -6.019,
+   "used": {
+    "horizontal_lines": 5,
+    "vertical_lines": 2
+   }
+  },
+  "lines": {},
+  "why": "the verticals split both ways (window -8, NE corner -1, cladding end +5): no single warp improves them"
+ }
+}
