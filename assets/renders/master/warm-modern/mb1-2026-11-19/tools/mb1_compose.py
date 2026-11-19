@@ -83,6 +83,8 @@ def cut_pass(p, rec):
     for k in pids:
         zone |= C.dil(ids == k, ZONE_PAD.get(k, 22))
     pl_ids = M.ids("MB1-plate")
+    if p == "p4-floor":                               # the throw falls in front of the bench to the rug
+        zone |= C.box_mask([(35, 1005, 600, 1480)])
     if p == "p1-bed":                                 # the duvet falls over the bed frame to the floor: the frame and the mattress are in;
         zone |= C.dil(np.isin(pl_ids, (21, 22, 23)), 12)       # the pillows stand taller than the clay's: up the headboard to its top
         hb = pl_ids == 20
@@ -117,7 +119,8 @@ def cut_pass(p, rec):
         fg = fill_holes(fg, 10 ** 7) & zone
         n_, lb_, st_, _ = cv2.connectedComponentsWithStats(fg.astype(np.uint8), connectivity=8)
         fg = lb_ == 1 + int(np.argmax(st_[1:, cv2.CC_STAT_AREA]))
-        fg &= ~C.ero(np.isin(ids, (24, 25, 26, 27)), 1)     # where the clay sees a nightstand in front, the bedding stays behind it
+        ns = np.isin(pl_ids, (24, 25, 26, 27)) & ~np.isin(ids, (51, 52, 53, 54))   # the nightstands where the clay's bedding does not reach
+        fg &= ~C.ero(ns, 1)                                 # the bedding stays behind them
     # a change of brightness only, on the wall, the floor or the skirting, away from the products' own places: light or shadow, not object
     lab_e0, lab_b0 = C.blur(C.to_lab(e), 1.5), C.blur(C.to_lab(base), 1.5)
     ce_, cb_ = np.hypot(lab_e0[..., 1], lab_e0[..., 2]), np.hypot(lab_b0[..., 1], lab_b0[..., 2])
@@ -159,12 +162,18 @@ def cut_pass(p, rec):
         lab_i = bed_labels(lab_e, ids, fg, prods)
     else:
         lab_i = np.argmin(dist, 0)
+        if p == "p4-floor":                            # over the bench (plate ids 29, 30) a change is the throw, unless the basket's
+            onb = np.isin(pl_ids, (29, 30)) & ~C.dil(ids == 66, 25)
+            lab_i[onb] = prods.index(65)
+            fallx = C.box_mask([(35, 1005, 600, 1480)]) & ~C.dil(ids == 66, 25) & (lab_i == prods.index(67))
+            lab_i[fallx & (dist[prods.index(65)] < 260) & ~C.ero(ids == 67, 3)] = prods.index(65)
         if p == "p2-right":
             lab_i, hold = right_labels(lab_e, fg, prods, lab_i, d)
             boxh = np.zeros((H, W), bool)
             boxh[1100:1470, 1940:2340] = True
-            fg = (fg & ~(boxh & (lab_i == prods.index(63)) & ~hold)) | hold     # the holder: exactly its own colours
+            fg = (fg & ~(boxh & (lab_i == prods.index(63)) & ~hold)) | hold     # the holder and the pot: their hulls
             fg &= lab_i >= 0
+            fg |= hold
     layers = {}
     for i, k in enumerate(prods):
         m = fg & (lab_i == i)
@@ -174,6 +183,14 @@ def cut_pass(p, rec):
         m = np.isin(lb, keepc)
         if k in (41, 43, 44, 45, 46, 48, 49, 59, 60, 64):     # the small products sit where the clay has them: bounded to 20 px round it
             m &= C.dil(np.isin(ids, [k] + [f for f, o in FILLERS.items() if o == k]), 20)
+        if k == 67:                                    # the rug: where the clay sees it (never over the bench, the bed or the basket)
+            m &= C.dil(ids == 67, 6) & ~np.isin(pl_ids, (20, 21, 22, 23, 24, 25, 26, 27, 29, 30))
+        if k == 65:                                    # the throw: on the bench's left half and its fall in front, down to the rug
+            ys_, xs_ = np.nonzero(ids == 65)
+            fall = C.box_mask([(int(xs_.min()) - 40, int(ys_.min()), int(xs_.max()) + 40, 1480)])
+            m &= C.dil(ids == 65, 45) | fall
+        if k == 66:
+            m &= C.dil(ids == 66, 40)
         if k == 40:                                    # the sheer curtain stacks: low contrast on the plaster; closed solid in their place
             m = cv2.morphologyEx(m.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(7)).astype(bool)
             m = fill_holes(m, 20000) & C.dil(ids == 40, 25)
@@ -204,7 +221,8 @@ def cut_pass(p, rec):
     if lamps_lit:
         env = light_env(ids, p) & ~np.isin(pl_ids, (10, 11))          # the glow on the wall round the shade and the cones; not the floor
         L8 = np.clip(1 - (1 - e) / np.maximum(1 - base, 1e-3), 0, 0.45)
-        wgt = (env & ~C.dil(allfg, 2)).astype(np.float64) * shade_w        # a smooth glow: a normalised blur over the clean wall only
+        glow_ok = np.clip(C.blur(((dh_ < 30) & (ce_ - cb_ < 22)).astype(np.float64), 3) * 1.4 - 0.2, 0, 1)   # a warm glow may add chroma
+        wgt = (env & ~C.dil(allfg, 2)).astype(np.float64) * glow_ok        # a smooth glow: a normalised blur over the clean wall only
         Ls = np.stack([C.blur(L8[..., c] * wgt, 10) / np.maximum(C.blur(wgt, 10), 1e-3) for c in range(3)], -1)
         Ls[C.blur(wgt, 10) < 0.02] = 0
         soft_env = C.blur(env.astype(np.float64), 25)
@@ -256,6 +274,14 @@ def bed_labels(lab, ids, fg, prods):
     return out
 
 
+def hull(m):
+    pts = cv2.findNonZero(m.astype(np.uint8))
+    out = np.zeros((H, W), np.uint8)
+    if pts is not None:
+        cv2.fillConvexPoly(out, cv2.convexHull(pts), 1)
+    return out.astype(bool)
+
+
 def light_env(ids, p):
     """where a lamp's glow may be: round the floor lamp's shade (its upper part) and round each wall cone"""
     env = np.zeros((H, W), bool)
@@ -285,13 +311,24 @@ def right_labels(lab, fg, prods, lab_i, D):
     floorish = (Ch > 11) & (Ch < 26) & (hh < 67) & (Lh < 60) & (Lh > 20)        # the oak between the tubes and straps
     hold &= ~floorish
     pot = fg & (lab_i == prods.index(61)) & ~hold
+    n_, lb_, st_, _ = cv2.connectedComponentsWithStats(hold.astype(np.uint8), connectivity=8)
+    if n_ > 1:                                          # the holder is one object: its hull, so the floor seen through it is the edit's
+        big = [i for i in range(1, n_) if st_[i, cv2.CC_STAT_AREA] >= 0.05 * st_[1:, cv2.CC_STAT_AREA].max()]
+        hold = hull(np.isin(lb_, big))
+    # the pot: its greige body and its soil near the clay pot, as one hull (rows of the pot only)
+    near_pot = C.dil(M.ids("MB1") == 61, 60)
+    potc = near_pot & (D > 5) & ((((hh > 55) & (Ch < 24) & (Lh > 38)) | (Lh < 30)) & ~hold)
+    potc[:int(np.nonzero((M.ids("MB1") == 61).any(1))[0].min()) - 25] = False
+    n2, lb2, st2, _ = cv2.connectedComponentsWithStats(potc.astype(np.uint8), connectivity=8)
+    potm = hull(lb2 == 1 + int(np.argmax(st2[1:, cv2.CC_STAT_AREA]))) if n2 > 1 else potc
     out = lab_i.copy()
+    out[potm & ~hold] = prods.index(61)
     out[hold & ~(lab_i == prods.index(55))] = prods.index(63)
     floor = np.isin(M.ids("MB1-plate"), (10, 11))               # on the floor, the planter is only the pot's greige (h > 67, C* < 14) or soil
     notpot = floor & (out == prods.index(61)) & ~((((hh > 67) & (Ch < 14)) | ((Lh > 52) & (Ch < 22)) | (Lh < 25)) & C.dil(M.ids("MB1") == 61, 25))
     out[notpot] = -1
     out[(lab_i == prods.index(63)) & ~hold & ~box] = prods.index(61) if pot.any() else out[(lab_i == prods.index(63)) & ~hold & ~box]
-    return out, hold
+    return out, hold | potm
 
 
 def fill_holes(m, max_area):

@@ -1,0 +1,1561 @@
+{
+ "report": "qa/reports/2026-11-19-bath-b1/README.md",
+ "date": "2026-11-19",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-bath-b1-2026-11-19.md",
+ "files": "assets/renders/bath/warm-modern/b1-2026-11-19/ at 9226fabc",
+ "verdict": "fail: M1-M3 (medium, all in code, 0 tokens)",
+ "blocking": [
+  "M1",
+  "M2",
+  "M3"
+ ],
+ "status_line": "B1 שלב 1: נכשל QA על M1–M3 (בינוניים; הכול בקוד, 0 טוקנים; QA בודק שוב רק אותם).",
+ "status_after_fix": "עבר QA (B1 שלב 1; לבעלים; לא לאתר לפני רישום 1.3.9)",
+ "items": {
+  "1_fidelity": "fail (M1 planter, M2 jar); pass: mats Khaki and Beige, stand, bin, brush, candle, diffuser, lamp, curtain, niche set",
+  "2_rnd2_black_point": "pass",
+  "3_x1_x2_same_house": "fail (M1, M2, M3); same house: pass",
+  "4_count": "pass: 18 unique in the room; 7 V7Q6 in B1",
+  "5_deviations": "none visible; plate offsets matter for motion depth (MB1-I4)"
+ },
+ "rnd2": {
+  "recompose_vs_defaults_px": 0,
+  "recompose_vs_beige_px": 0,
+  "outside_px": 3465124,
+  "outside_diff_defaults": 0,
+  "outside_diff_beige": 0,
+  "mat_alpha_identical": true,
+  "mat_shadow_identical": true,
+  "swap_changed_px": 44443,
+  "swap_changed_outside_mat_alpha": 0,
+  "shadow_one_below": true,
+  "no_product_shares_z_with_a_shadow": true,
+  "light": {
+   "z": 90,
+   "blend": "screen"
+  },
+  "light_only_brightens": "by formula (screen)",
+  "same_z_overlaps": [
+   [
+    "candle",
+    "reed-diffuser",
+    156
+   ]
+  ],
+  "L_defaults": [
+   10.84,
+   11.33,
+   11.78,
+   13.97
+  ],
+  "L_beige": [
+   10.84,
+   11.33,
+   11.78,
+   13.97
+  ],
+  "L_plate": [
+   10.98,
+   11.36,
+   11.83,
+   18.91
+  ],
+  "frame_png": [
+   1080,
+   1920,
+   3
+  ]
+ },
+ "sizes": {
+  "bath-mat": {
+   "render_bbox": [
+    1313,
+    1334,
+    1697,
+    1527
+   ],
+   "clay_bbox": [
+    1315,
+    1334,
+    1697,
+    1526
+   ],
+   "render_w": 385,
+   "clay_w": 383,
+   "render_h": 194,
+   "clay_h": 193,
+   "w_ratio": 1.005,
+   "h_ratio": 1.005,
+   "dx": -1.0,
+   "dy": 0.5,
+   "bottom_dy": 1,
+   "render_px": 42740,
+   "clay_px": 42192
+  },
+  "toilet-paper-stand": {
+   "render_bbox": [
+    1075,
+    1002,
+    1203,
+    1347
+   ],
+   "clay_bbox": [
+    1083,
+    1000,
+    1206,
+    1348
+   ],
+   "render_w": 129,
+   "clay_w": 124,
+   "render_h": 346,
+   "clay_h": 349,
+   "w_ratio": 1.04,
+   "h_ratio": 0.991,
+   "dx": -5.5,
+   "dy": 0.5,
+   "bottom_dy": -1,
+   "render_px": 13810,
+   "clay_px": 11207
+  },
+  "bin": {
+   "render_bbox": [
+    1149,
+    1128,
+    1293,
+    1339
+   ],
+   "clay_bbox": [
+    1157,
+    1133,
+    1295,
+    1339
+   ],
+   "render_w": 145,
+   "clay_w": 139,
+   "render_h": 212,
+   "clay_h": 207,
+   "w_ratio": 1.043,
+   "h_ratio": 1.024,
+   "dx": -5.0,
+   "dy": -2.5,
+   "bottom_dy": 0,
+   "render_px": 24836,
+   "clay_px": 20054
+  },
+  "toilet-brush": {
+   "render_bbox": [
+    1227,
+    1127,
+    1294,
+    1366
+   ],
+   "clay_bbox": [
+    1238,
+    1130,
+    1299,
+    1368
+   ],
+   "render_w": 68,
+   "clay_w": 62,
+   "render_h": 240,
+   "clay_h": 239,
+   "w_ratio": 1.097,
+   "h_ratio": 1.004,
+   "dx": -8.0,
+   "dy": -2.5,
+   "bottom_dy": -2,
+   "render_px": 7235,
+   "clay_px": 7523
+  },
+  "candle": {
+   "render_bbox": [
+    805,
+    733,
+    871,
+    793
+   ],
+   "clay_bbox": [
+    811,
+    737,
+    865,
+    794
+   ],
+   "render_w": 67,
+   "clay_w": 55,
+   "render_h": 61,
+   "clay_h": 58,
+   "w_ratio": 1.218,
+   "h_ratio": 1.052,
+   "dx": 0.0,
+   "dy": -2.5,
+   "bottom_dy": -1,
+   "render_px": 3450,
+   "clay_px": 3185
+  },
+  "reed-diffuser": {
+   "render_bbox": [
+    870,
+    591,
+    923,
+    792
+   ],
+   "clay_bbox": [
+    880,
+    611,
+    924,
+    792
+   ],
+   "render_w": 54,
+   "clay_w": 45,
+   "render_h": 202,
+   "clay_h": 182,
+   "w_ratio": 1.2,
+   "h_ratio": 1.11,
+   "dx": -5.5,
+   "dy": -10.0,
+   "bottom_dy": 0,
+   "render_px": 4968,
+   "clay_px": 4072
+  },
+  "window-sill-vase": {
+   "render_bbox": [
+    544,
+    623,
+    648,
+    796
+   ],
+   "clay_bbox": [
+    556,
+    624,
+    646,
+    790
+   ],
+   "render_w": 105,
+   "clay_w": 91,
+   "render_h": 174,
+   "clay_h": 167,
+   "w_ratio": 1.154,
+   "h_ratio": 1.042,
+   "dx": -5.0,
+   "dy": 2.5,
+   "bottom_dy": 6,
+   "render_px": 15867,
+   "clay_px": 12713
+  },
+  "wall-sconce": {
+   "render_bbox": [
+    1196,
+    378,
+    1247,
+    467
+   ],
+   "clay_bbox": [
+    1197,
+    378,
+    1246,
+    467
+   ],
+   "render_w": 52,
+   "clay_w": 50,
+   "render_h": 90,
+   "clay_h": 90,
+   "w_ratio": 1.04,
+   "h_ratio": 1.0,
+   "dx": 0.0,
+   "dy": 0.0,
+   "bottom_dy": 0,
+   "render_px": 4483,
+   "clay_px": 4355
+  },
+  "floor-planter": {
+   "render_bbox": [
+    1341,
+    1103,
+    1557,
+    1339
+   ],
+   "clay_bbox": [
+    1298,
+    1163,
+    1462,
+    1338
+   ],
+   "render_w": 217,
+   "clay_w": 165,
+   "render_h": 237,
+   "clay_h": 176,
+   "w_ratio": 1.315,
+   "h_ratio": 1.347,
+   "dx": 69.0,
+   "dy": -29.5,
+   "bottom_dy": 1,
+   "render_px": 34801,
+   "clay_px": 23864
+  },
+  "shower-curtain": {
+   "render_bbox": [
+    1728,
+    0,
+    1984,
+    1529
+   ],
+   "clay_bbox": [
+    1768,
+    0,
+    1964,
+    1528
+   ],
+   "render_w": 257,
+   "clay_w": 197,
+   "render_h": 1530,
+   "clay_h": 1529,
+   "w_ratio": 1.305,
+   "h_ratio": 1.001,
+   "dx": -10.0,
+   "dy": 0.5,
+   "bottom_dy": 1,
+   "render_px": 358328,
+   "clay_px": 298605
+  },
+  "shower-dispensers": {
+   "render_bbox": [
+    2072,
+    678,
+    2200,
+    762
+   ],
+   "clay_bbox": [
+    2040,
+    673,
+    2168,
+    759
+   ],
+   "render_w": 129,
+   "clay_w": 129,
+   "render_h": 85,
+   "clay_h": 87,
+   "w_ratio": 1.0,
+   "h_ratio": 0.977,
+   "dx": 32.0,
+   "dy": 4.0,
+   "bottom_dy": 3,
+   "render_px": 8069,
+   "clay_px": 8854
+  }
+ },
+ "colour": {
+  "mat_khaki_vs_floor": {
+   "abs": [
+    85.5,
+    3.2,
+    11.2,
+    11.6,
+    74.1
+   ],
+   "alb": [
+    79.2,
+    2.8,
+    16.5,
+    16.7,
+    80.4
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 39450
+  },
+  "mat_khaki_vs_plaster": {
+   "abs": [
+    85.5,
+    3.2,
+    11.2,
+    11.6,
+    74.1
+   ],
+   "alb": [
+    95.8,
+    3.2,
+    12.1,
+    12.5,
+    75.1
+   ],
+   "white_abs": [
+    81.5,
+    0.5,
+    5.5,
+    5.5,
+    84.7
+   ],
+   "ring_px": 25,
+   "px": 39450
+  },
+  "mat_khaki_mid_vs_floor": {
+   "abs": [
+    82.7,
+    4.9,
+    14.3,
+    15.1,
+    71.0
+   ],
+   "alb": [
+    76.7,
+    4.7,
+    19.0,
+    19.5,
+    76.2
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 39450
+  },
+  "mat_khaki_left_vs_floor": {
+   "abs": [
+    84.8,
+    4.0,
+    12.7,
+    13.3,
+    72.5
+   ],
+   "alb": [
+    78.6,
+    3.7,
+    17.8,
+    18.1,
+    78.3
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 21238
+  },
+  "mat_khaki_right_vs_floor": {
+   "abs": [
+    85.7,
+    3.1,
+    10.0,
+    10.5,
+    73.0
+   ],
+   "alb": [
+    79.5,
+    2.6,
+    15.4,
+    15.6,
+    80.3
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 18212
+  },
+  "mat_beige_vs_floor": {
+   "abs": [
+    94.9,
+    0.2,
+    7.0,
+    7.0,
+    88.7
+   ],
+   "alb": [
+    88.0,
+    -0.3,
+    13.3,
+    13.3,
+    91.5
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 39450
+  },
+  "mat_beige_vs_plaster": {
+   "abs": [
+    94.9,
+    0.2,
+    7.0,
+    7.0,
+    88.7
+   ],
+   "alb": [
+    106.2,
+    -0.1,
+    7.4,
+    7.4,
+    91.0
+   ],
+   "white_abs": [
+    81.5,
+    0.5,
+    5.5,
+    5.5,
+    84.7
+   ],
+   "ring_px": 25,
+   "px": 39450
+  },
+  "mat_beige_mid_vs_floor": {
+   "abs": [
+    93.1,
+    0.3,
+    7.3,
+    7.3,
+    87.3
+   ],
+   "alb": [
+    86.3,
+    -0.1,
+    13.3,
+    13.3,
+    90.5
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 39450
+  },
+  "mat_beige_left_vs_floor": {
+   "abs": [
+    93.9,
+    0.5,
+    7.7,
+    7.7,
+    86.2
+   ],
+   "alb": [
+    87.1,
+    0.0,
+    13.8,
+    13.8,
+    90.0
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 21238
+  },
+  "mat_beige_right_vs_floor": {
+   "abs": [
+    95.0,
+    -0.0,
+    6.6,
+    6.6,
+    90.2
+   ],
+   "alb": [
+    88.1,
+    -0.5,
+    12.9,
+    12.9,
+    92.4
+   ],
+   "white_abs": [
+    87.8,
+    1.9,
+    10.2,
+    10.4,
+    79.7
+   ],
+   "ring_px": 19432,
+   "px": 18212
+  },
+  "planter_b1_vs_plaster": {
+   "abs": [
+    79.5,
+    2.5,
+    12.4,
+    12.6,
+    78.6
+   ],
+   "alb": [
+    83.8,
+    2.3,
+    13.5,
+    13.7,
+    80.5
+   ],
+   "white_abs": [
+    86.7,
+    0.8,
+    5.1,
+    5.2,
+    80.7
+   ],
+   "ring_px": 2608,
+   "px": 13494
+  },
+  "planter_b1_vs_floor": {
+   "abs": [
+    79.5,
+    2.5,
+    12.4,
+    12.6,
+    78.6
+   ],
+   "alb": [
+    84.6,
+    0.1,
+    8.3,
+    8.3,
+    89.0
+   ],
+   "white_abs": [
+    76.5,
+    4.3,
+    18.4,
+    18.9,
+    76.7
+   ],
+   "ring_px": 3090,
+   "px": 13494
+  },
+  "bin": {
+   "abs": [
+    31.1,
+    10.8,
+    18.1,
+    21.1,
+    59.3
+   ],
+   "alb": [
+    34.8,
+    11.4,
+    19.5,
+    22.6,
+    59.6
+   ],
+   "white_abs": [
+    83.6,
+    0.8,
+    5.4,
+    5.5,
+    81.2
+   ],
+   "ring_px": 8909,
+   "px": 19301
+  },
+  "toilet-paper-stand": {
+   "abs": [
+    88.9,
+    -0.7,
+    5.0,
+    5.1,
+    98.2
+   ],
+   "alb": [
+    99.6,
+    -1.1,
+    5.3,
+    5.4,
+    101.5
+   ],
+   "white_abs": [
+    81.2,
+    1.0,
+    5.7,
+    5.8,
+    80.1
+   ],
+   "ring_px": 16320,
+   "px": 10945
+  },
+  "toilet-brush": {
+   "abs": [
+    43.7,
+    21.9,
+    27.5,
+    35.1,
+    51.5
+   ],
+   "alb": [
+    47.6,
+    23.1,
+    29.5,
+    37.5,
+    51.9
+   ],
+   "white_abs": [
+    84.6,
+    0.8,
+    5.3,
+    5.4,
+    81.1
+   ],
+   "ring_px": 5111,
+   "px": 5500
+  },
+  "candle": {
+   "abs": [
+    92.1,
+    1.0,
+    7.5,
+    7.6,
+    82.3
+   ],
+   "alb": [
+    84.1,
+    2.4,
+    12.7,
+    12.9,
+    79.1
+   ],
+   "white_abs": [
+    99.9,
+    -0.7,
+    -0.2,
+    0.7,
+    200.3
+   ],
+   "ring_px": 1,
+   "px": 2764
+  },
+  "reed-diffuser": {
+   "abs": [
+    85.8,
+    3.1,
+    16.9,
+    17.2,
+    79.5
+   ],
+   "alb": [
+    78.8,
+    4.5,
+    17.1,
+    17.7,
+    75.2
+   ],
+   "white_abs": [
+    99.3,
+    -0.5,
+    4.5,
+    4.6,
+    96.8
+   ],
+   "ring_px": 488,
+   "px": 3248
+  },
+  "window-sill-vase": {
+   "abs": [
+    25.1,
+    1.0,
+    0.7,
+    1.2,
+    34.4
+   ],
+   "alb": [
+    92.8,
+    -15.3,
+    -8.2,
+    17.3,
+    208.1
+   ],
+   "white_abs": [
+    25.6,
+    2.5,
+    3.9,
+    4.7,
+    57.3
+   ],
+   "ring_px": 1687,
+   "px": 14358
+  },
+  "wall-sconce": {
+   "abs": [
+    90.5,
+    2.7,
+    26.4,
+    26.5,
+    84.1
+   ],
+   "alb": [
+    92.3,
+    2.6,
+    27.2,
+    27.3,
+    84.5
+   ],
+   "white_abs": [
+    89.3,
+    0.8,
+    5.5,
+    5.5,
+    81.2
+   ],
+   "ring_px": 16469,
+   "px": 3681
+  },
+  "shower-curtain": {
+   "abs": [
+    96.2,
+    1.6,
+    9.0,
+    9.1,
+    80.0
+   ],
+   "alb": [
+    NaN,
+    NaN,
+    NaN,
+    NaN,
+    NaN
+   ],
+   "white_abs": [
+    NaN,
+    NaN,
+    NaN,
+    NaN,
+    NaN
+   ],
+   "ring_px": 0,
+   "px": 348577
+  },
+  "toilet-brush_holder": {
+   "abs": [
+    44.4,
+    21.9,
+    28.0,
+    35.6,
+    52.0
+   ],
+   "alb": [
+    48.4,
+    23.2,
+    30.1,
+    38.0,
+    52.4
+   ],
+   "white_abs": [
+    84.6,
+    0.8,
+    5.3,
+    5.4,
+    81.1
+   ],
+   "ring_px": 5111,
+   "px": 3452
+  },
+  "jar_mid": {
+   "abs": [
+    18.2,
+    1.3,
+    1.6,
+    2.1,
+    50.4
+   ],
+   "alb": [
+    74.1,
+    -12.3,
+    -4.2,
+    12.9,
+    198.8
+   ],
+   "white_abs": [
+    25.6,
+    2.5,
+    3.9,
+    4.7,
+    57.3
+   ],
+   "ring_px": 1687,
+   "px": 14358
+  }
+ },
+ "halo": {
+  "shower-dispensers": {
+   "px": 3,
+   "clusters": []
+  },
+  "wall-sconce": {
+   "px": 0,
+   "clusters": []
+  },
+  "bath-mat": {
+   "px": 1,
+   "clusters": []
+  },
+  "shower-curtain": {
+   "px": 127,
+   "clusters": [
+    [
+     1732,
+     1281,
+     5,
+     43,
+     113
+    ]
+   ]
+  },
+  "floor-planter": {
+   "px": 35,
+   "clusters": []
+  },
+  "bin": {
+   "px": 19,
+   "clusters": [
+    [
+     1260,
+     1293,
+     5,
+     7,
+     16
+    ]
+   ]
+  },
+  "toilet-paper-stand": {
+   "px": 0,
+   "clusters": []
+  },
+  "candle": {
+   "px": 83,
+   "clusters": [
+    [
+     870,
+     758,
+     4,
+     28,
+     83
+    ]
+   ]
+  },
+  "reed-diffuser": {
+   "px": 42,
+   "clusters": []
+  },
+  "window-sill-vase": {
+   "px": 46,
+   "clusters": [
+    [
+     558,
+     774,
+     5,
+     17,
+     26
+    ],
+    [
+     633,
+     776,
+     6,
+     15,
+     20
+    ]
+   ]
+  },
+  "toilet-brush": {
+   "px": 0,
+   "clusters": []
+  }
+ },
+ "house": {
+  "plaster vanity wall": {
+   "B1": [
+    91.4,
+    0.7,
+    5.2,
+    5.2,
+    82.7
+   ],
+   "B2": [
+    85.4,
+    0.9,
+    5.7,
+    5.8,
+    80.9
+   ],
+   "px": [
+    352012,
+    918613
+   ],
+   "dE00": 3.85
+  },
+  "plaster window wall": {
+   "B1": [
+    85.4,
+    0.8,
+    5.4,
+    5.4,
+    81.1
+   ],
+   "B2": [
+    89.2,
+    1.2,
+    6.4,
+    6.5,
+    79.4
+   ],
+   "px": [
+    473288,
+    124443
+   ],
+   "dE00": 2.61
+  },
+  "plaster north wall": {
+   "B1": [
+    96.2,
+    0.2,
+    5.0,
+    5.0,
+    88.1
+   ],
+   "B2": null,
+   "px": [
+    388043,
+    0
+   ],
+   "dE00": null
+  },
+  "plaster west wall": {
+   "B1": null,
+   "B2": null,
+   "px": [
+    0,
+    0
+   ],
+   "dE00": null
+  },
+  "floor limestone": {
+   "B1": [
+    82.4,
+    2.5,
+    13.2,
+    13.5,
+    79.5
+   ],
+   "B2": [
+    86.5,
+    1.7,
+    8.3,
+    8.5,
+    78.3
+   ],
+   "px": [
+    190008,
+    126707
+   ],
+   "dE00": 4.31
+  },
+  "cladding south": {
+   "B1": [
+    91.5,
+    1.4,
+    7.8,
+    7.9,
+    79.9
+   ],
+   "B2": [
+    83.0,
+    2.2,
+    10.1,
+    10.4,
+    77.8
+   ],
+   "px": [
+    380734,
+    339045
+   ],
+   "dE00": 5.77
+  },
+  "cladding east": {
+   "B1": [
+    87.1,
+    3.4,
+    16.7,
+    17.1,
+    78.6
+   ],
+   "B2": [
+    66.6,
+    3.6,
+    17.2,
+    17.6,
+    78.3
+   ],
+   "px": [
+    309300,
+    379390
+   ],
+   "dE00": 14.68
+  },
+  "niche lining": {
+   "B1": [
+    86.9,
+    3.2,
+    19.2,
+    19.5,
+    80.6
+   ],
+   "B2": [
+    87.8,
+    3.4,
+    13.7,
+    14.2,
+    76.2
+   ],
+   "px": [
+    26662,
+    16062
+   ],
+   "dE00": 3.37
+  },
+  "vanity top": {
+   "B1": [
+    80.5,
+    1.7,
+    8.6,
+    8.8,
+    78.7
+   ],
+   "B2": [
+    82.6,
+    1.9,
+    9.6,
+    9.7,
+    78.8
+   ],
+   "px": [
+    9665,
+    43780
+   ],
+   "dE00": 1.61
+  },
+  "vanity walnut": {
+   "B1": [
+    11.9,
+    5.7,
+    6.9,
+    8.9,
+    50.5
+   ],
+   "B2": [
+    16.5,
+    8.2,
+    12.2,
+    14.7,
+    55.9
+   ],
+   "px": [
+    40053,
+    150226
+   ],
+   "dE00": 5.04
+  },
+  "drawer walnut": {
+   "B1": [
+    39.8,
+    14.0,
+    18.5,
+    23.2,
+    52.8
+   ],
+   "B2": [
+    35.2,
+    13.7,
+    19.8,
+    24.1,
+    55.4
+   ],
+   "px": [
+    42531,
+    201754
+   ],
+   "dE00": 4.03
+  },
+  "ledge slab + sill": {
+   "B1": [
+    74.0,
+    3.0,
+    16.5,
+    16.8,
+    79.8
+   ],
+   "B2": null,
+   "px": [
+    38922,
+    0
+   ],
+   "dE00": null
+  },
+  "WC ledge box plaster": {
+   "B1": [
+    74.7,
+    0.9,
+    5.7,
+    5.7,
+    81.1
+   ],
+   "B2": null,
+   "px": [
+    362264,
+    0
+   ],
+   "dE00": null
+  }
+ },
+ "count": {
+  "shower-dispensers": {
+   "sku": "CJYD301460604DW",
+   "area_pct": 0.218,
+   "height_pct": 5.9,
+   "visible_frac": 1.0,
+   "counted": false
+  },
+  "wall-sconce": {
+   "sku": "12000048654610384",
+   "area_pct": 0.121,
+   "height_pct": 6.2,
+   "visible_frac": 1.0,
+   "counted": false
+  },
+  "bath-mat": {
+   "sku": "CJYD289719807GT",
+   "area_pct": 1.011,
+   "height_pct": 10.6,
+   "visible_frac": 0.875,
+   "counted": true
+  },
+  "shower-curtain": {
+   "sku": "12000059196236303",
+   "area_pct": 9.191,
+   "height_pct": 100.0,
+   "visible_frac": 0.949,
+   "counted": true
+  },
+  "floor-planter": {
+   "sku": "CJJT154204208HS",
+   "area_pct": 0.94,
+   "height_pct": 16.4,
+   "visible_frac": 1.0,
+   "counted": true
+  },
+  "bin": {
+   "sku": "CJJT102413505EV",
+   "area_pct": 0.583,
+   "height_pct": 14.7,
+   "visible_frac": 0.869,
+   "counted": true
+  },
+  "toilet-paper-stand": {
+   "sku": "12000053061878471",
+   "area_pct": 0.373,
+   "height_pct": 24.0,
+   "visible_frac": 1.0,
+   "counted": true
+  },
+  "candle": {
+   "sku": "CJJT120250201AZ",
+   "area_pct": 0.092,
+   "height_pct": 4.2,
+   "visible_frac": 0.992,
+   "counted": false
+  },
+  "reed-diffuser": {
+   "sku": "milk-tea",
+   "area_pct": 0.134,
+   "height_pct": 14.0,
+   "visible_frac": 1.0,
+   "counted": false
+  },
+  "window-sill-vase": {
+   "sku": "CJJT198137605EV",
+   "area_pct": 0.429,
+   "height_pct": 12.1,
+   "visible_frac": 1.0,
+   "counted": true
+  },
+  "toilet-brush": {
+   "sku": "CJYD254508501AZ",
+   "area_pct": 0.195,
+   "height_pct": 16.6,
+   "visible_frac": 1.0,
+   "counted": true
+  },
+  "_room": {
+   "b2_unique": 4,
+   "b1_new": [
+    "12000048654610384",
+    "12000053061878471",
+    "12000059196236303",
+    "CJJT102413505EV",
+    "CJJT120250201AZ",
+    "CJJT154204208HS",
+    "CJJT198137605EV",
+    "CJYD254508501AZ",
+    "CJYD289719807GT",
+    "CJYD301460604DW",
+    "milk-tea"
+   ],
+   "room_unique": 15,
+   "b2_layers": [
+    [
+     "shower-dispensers",
+     null
+    ],
+    [
+     "vanity-sconces",
+     null
+    ],
+    [
+     "shower-curtain",
+     null
+    ],
+    [
+     "floor-planter",
+     null
+    ],
+    [
+     "soap-dispenser",
+     null
+    ],
+    [
+     "toothbrush-cup",
+     null
+    ],
+    [
+     "vanity-vase",
+     null
+    ],
+    [
+     "towel-ring",
+     null
+    ],
+    [
+     "hand-towel",
+     null
+    ],
+    [
+     "bath-towels",
+     "CJYD178122205EV"
+    ],
+    [
+     "storage-basket",
+     "CJYD180710801AZ"
+    ],
+    [
+     "vanity-tray",
+     "CJYD238979001AZ"
+    ]
+   ]
+  }
+ },
+ "extra": {
+  "mat_strips": "Khaki h 68-75, C* 14-16, 3-6 L* under the floor; Beige C* 6.6-7.7, h 84-90, 5-7 L* over the floor",
+  "planter": {
+   "lit_ribbed_abs": 87.6,
+   "plaster_abs": 86.7,
+   "floor_abs": 76.5,
+   "smooth_low_rel_plaster": [
+    83.8,
+    1.5,
+    9.4,
+    9.5,
+    80.8
+   ],
+   "smooth_low_rel_plaster_mid": [
+    70.9,
+    2.3,
+    11.0,
+    11.3,
+    78.1
+   ],
+   "sku": [
+    58.3,
+    null,
+    null,
+    4.1,
+    87.9
+   ],
+   "b2_after_m5": [
+    59.4,
+    null,
+    null,
+    4.1,
+    88.3
+   ],
+   "belly_width": [
+    161,
+    165
+   ]
+  },
+  "jar": {
+   "width_ratio_by_height": {
+    "0.03": 1.015,
+    "0.2": 1.262,
+    "0.3": 1.132,
+    "0.5": 1.256,
+    "0.7": 1.27,
+    "0.9": 1.258
+   },
+   "base_over_max": {
+    "render": 0.8,
+    "clay": 0.7,
+    "photo": 0.69
+   },
+   "h_over_w": {
+    "render": 1.69,
+    "clay": 1.84,
+    "photo": 1.84
+   },
+   "texture_hp_std": {
+    "render": 3.09,
+    "photo_same_scale": 1.34
+   },
+   "speckle_share_Cgt8": {
+    "render": 0.062,
+    "photo": 0.0
+   },
+   "L_p95": {
+    "render": 42.5,
+    "photo": 28.0
+   },
+   "colour_dark_median": [
+    17.7,
+    1.5,
+    2.0,
+    2.5
+   ],
+   "photo": [
+    17.9,
+    2.0,
+    -4.0,
+    4.5
+   ]
+  },
+  "curtain_hole": {
+   "box": [
+    1736,
+    1288,
+    1745,
+    1329
+   ],
+   "px": 380,
+   "bright_line_px": 113,
+   "plate_L": "77-81",
+   "curtain_L": "91-98"
+  },
+  "candle_strip": {
+   "box": [
+    862,
+    735,
+    870,
+    785
+   ],
+   "px": 298,
+   "L_strip": 55.8,
+   "L_body": 86.4,
+   "overlap_with_diffuser_px": 156
+  },
+  "plate_vs_clay": {
+   "window_left": [
+    490,
+    516
+   ],
+   "window_right": [
+    944,
+    960
+   ],
+   "niche_dx_about": 30,
+   "dispensers_dx": 32
+  }
+ },
+ "findings": [
+  {
+   "id": "M1",
+   "severity": "medium",
+   "what": "floor planter reads light cream; SKU and B2 are grey greige concrete",
+   "fix": "code: R5 like B2 M5 (rel plaster ~58-60, C* ~4, h ~88), keep ribs/speckle",
+   "owner": "render-agent"
+  },
+  {
+   "id": "M2",
+   "severity": "medium",
+   "what": "sill jar: barrel instead of taper (x1.26-1.27 at 50-90% height), pitted speckled texture (hp 3.09 vs 1.34; 6.2% C*>8), jagged contour",
+   "fix": "code: per-row warp to the clay profile, smooth contour, halve local contrast, desaturate speckle; a model edit is a question for the manager",
+   "owner": "render-agent"
+  },
+  {
+   "id": "M3",
+   "severity": "medium",
+   "what": "curtain alpha hole at x 1736-1745, y 1288-1329 (380 px) + 113 px bright line",
+   "fix": "code: close the hole, continue the selvage band",
+   "owner": "render-agent"
+  },
+  {
+   "id": "B1-L1",
+   "severity": "low",
+   "what": "candle alpha includes 298 px of the drawn window frame (x 862-870, y 735-785); 156 px same-z overlap with the diffuser",
+   "fix": "code: trim the candle alpha to x 861 in those rows",
+   "owner": "render-agent",
+   "backlog": "status/backlog-low.md"
+  },
+  {
+   "id": "MB1-I1",
+   "severity": "info",
+   "what": "B1 sconce glows through the pores like the SKU; the B2 pair does not"
+  },
+  {
+   "id": "MB1-I2",
+   "severity": "info",
+   "what": "brush holder a little more saturated than the photo (C*/L* 0.80 vs 0.33-0.44); same copper-rust at x1"
+  },
+  {
+   "id": "MB1-I3",
+   "severity": "info",
+   "owner": "sourcing-agent",
+   "what": "diffuser card has no dimensions; render 1.20/1.11 of the clay assumption"
+  },
+  {
+   "id": "MB1-I4",
+   "severity": "info",
+   "owner": "motion-agent",
+   "what": "plate not locked to the clay (window 16-26 px left, niche ~30 px right): build B1 depth from the plate"
+  },
+  {
+   "id": "MB1-I5",
+   "severity": "info",
+   "what": "curtain lighter than in B2 (87.2/C* 12.1 vs 77.3/14.0; 31% px > L* 95), weave visible; width x1.31 accepted"
+  }
+ ],
+ "evidence": [
+  "b1-m1-m3.jpg"
+ ],
+ "supplier_photos": "read in the scratchpad only; none copied",
+ "tools": "scratchpad qa-b1/ (deleted after the run, per the brief)",
+ "tokens": 0,
+ "var2": false,
+ "commits": false
+}
