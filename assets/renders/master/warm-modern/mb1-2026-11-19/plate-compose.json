@@ -1,0 +1,281 @@
+{
+ "source": "raw/plate-r2.png",
+ "out": "plate.png",
+ "steps": [
+  {
+   "step": 1,
+   "what": "lock: ECC affine onto inputs/plate-input.png, masked to the clay's architecture and fixed furniture",
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.8995,
+    "2": 0.8621,
+    "1": 0.8362
+   },
+   "warp": [
+    [
+     1.000595,
+     -0.000288,
+     0.584181
+    ],
+    [
+     1.8e-05,
+     1.008633,
+     -5.583358
+    ]
+   ]
+  },
+  {
+   "step": 2,
+   "what": "one house: per surface against MB0's plate.png (the same surface under the same window light)",
+   "before": {
+    "wall above the headboard": {
+     "mb1": [
+      87.6,
+      1.2,
+      4.8
+     ],
+     "mb0": [
+      90.0,
+      0.5,
+      5.1
+     ],
+     "dE00": 1.87
+    },
+    "headboard": {
+     "mb1": [
+      53.4,
+      10.8,
+      19.5
+     ],
+     "mb0": [
+      35.1,
+      11.6,
+      18.1
+     ],
+     "dE00": 17.19
+    },
+    "nightstand top": {
+     "mb1": [
+      46.7,
+      11.4,
+      19.1
+     ],
+     "mb0": [
+      43.9,
+      7.7,
+      15.9
+     ],
+     "dE00": 4.17
+    },
+    "nightstand fronts": {
+     "mb1": [
+      14.1,
+      7.6,
+      11.0
+     ],
+     "mb0": [
+      17.6,
+      8.4,
+      11.8
+     ],
+     "dE00": 2.45
+    },
+    "oak": {
+     "mb1": [
+      25.4,
+      7.4,
+      13.4
+     ],
+     "mb0": [
+      34.7,
+      5.9,
+      15.4
+     ],
+     "dE00": 7.67
+    },
+    "window wall": {
+     "mb1": [
+      61.0,
+      3.4,
+      11.9
+     ],
+     "mb0": [
+      61.4,
+      2.8,
+      13.7
+     ],
+     "dE00": 1.62
+    },
+    "bench top": {
+     "mb1": [
+      62.6,
+      3.9,
+      6.0
+     ]
+    },
+    "bench ends": {
+     "mb1": [
+      9.5,
+      7.3,
+      9.4
+     ]
+    },
+    "shelf": {
+     "mb1": [
+      44.5,
+      9.8,
+      17.6
+     ]
+    }
+   },
+   "fixes": {
+    "headboard": {
+     "gain_min_max": [
+      0.164,
+      1.078
+     ],
+     "method": "per-X luminance gain to MB0's column medians"
+    },
+    "bench top": {
+     "luminance_gain": 0.509,
+     "shift_ab": [
+      7.5,
+      13.0
+     ],
+     "to": "MB1's nightstand tops",
+     "note": "ab weighted by the light (L* 20-40 ramp): the top's dark front edge keeps its colour"
+    },
+    "oak": {
+     "luminance_gain": 1.845,
+     "from_L": 25.4,
+     "to_L": 34.7
+    }
+   },
+   "after": {
+    "wall above the headboard": {
+     "mb1": [
+      87.6,
+      1.2,
+      4.8
+     ],
+     "mb0": [
+      90.0,
+      0.5,
+      5.1
+     ],
+     "dE00": 1.87
+    },
+    "headboard": {
+     "mb1": [
+      32.6,
+      10.8,
+      19.2
+     ],
+     "mb0": [
+      35.1,
+      11.6,
+      18.1
+     ],
+     "dE00": 2.34
+    },
+    "nightstand top": {
+     "mb1": [
+      46.7,
+      11.4,
+      19.1
+     ],
+     "mb0": [
+      43.9,
+      7.7,
+      15.9
+     ],
+     "dE00": 4.17
+    },
+    "nightstand fronts": {
+     "mb1": [
+      14.1,
+      7.6,
+      11.0
+     ],
+     "mb0": [
+      17.6,
+      8.4,
+      11.8
+     ],
+     "dE00": 2.45
+    },
+    "oak": {
+     "mb1": [
+      34.7,
+      7.4,
+      13.4
+     ],
+     "mb0": [
+      34.7,
+      5.9,
+      15.4
+     ],
+     "dE00": 2.49
+    },
+    "window wall": {
+     "mb1": [
+      61.0,
+      3.4,
+      11.9
+     ],
+     "mb0": [
+      61.4,
+      2.8,
+      13.7
+     ],
+     "dE00": 1.62
+    },
+    "bench top": {
+     "mb1": [
+      46.7,
+      11.1,
+      18.8
+     ]
+    },
+    "bench ends": {
+     "mb1": [
+      9.5,
+      7.3,
+      9.4
+     ]
+    },
+    "shelf": {
+     "mb1": [
+      44.5,
+      9.8,
+      17.6
+     ]
+    }
+   }
+  },
+  {
+   "step": 3,
+   "what": "WM-G1 / MP-I2 toe on L*",
+   "applied": true,
+   "p05_before": 1.58,
+   "curve": "(0, 0) (1.58, 11.5) (12, 16) (30, 30) (100, 100)",
+   "xp": [
+    0,
+    1.577,
+    12,
+    30,
+    100
+   ],
+   "fp": [
+    0,
+    11.5,
+    16,
+    30,
+    100
+   ],
+   "why": "the model's contact shadows came near black (p0.5 1.6): MB0's one-knot toe from there lifts every dark under 30 and flattens the walnut; the second knot keeps the nightstand fronts at MB0's L* 17.6 and lifts only the deepest 0.5 %"
+  }
+ ],
+ "black_point_p05": 11.5,
+ "mandatory_for_derived": "step 3's curve (MP-I2)"
+}

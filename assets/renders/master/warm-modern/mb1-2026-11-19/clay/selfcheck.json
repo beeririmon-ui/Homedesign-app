@@ -1,0 +1,2852 @@
+{
+ "stage": "warm-modern master clay, MB1 (render-agent, 2026-11-19; briefs/wm-master-mb1-render-2026-11-19.md)",
+ "date": "2026-11-19",
+ "plan_version": "1.3.6 (2026-11-12): owner answers WM-T2 (warm-modern table group left, under the pendant; per-variant coordinates), WM-FL3 (floor-lamp exceptions as text), WM-C3 / SUP-C1 (curtains drop to the sold length) (owner_answers_1_3_6). Previous: 1.3.5 (2026-11-07): WMC10, warm-modern living skirting 15 in the wall colour, no floor shadow gap, floor line at Z 0 (r3_decisions_1_3_5); clay corrected in r4. Previous: 1.3.4 (2026-11-07): designer decision WMC9 on the warm-modern-r3 clay, warm-modern magazine holder (-0.47, 2.57) at the real size 35 x 19 x 27.5 (r3_decisions_1_3_4). Previous: 1.3.3 (2026-11-07): designer decisions WMC6-WMC8 on the warm-modern-r2 clay, two tangencies accepted (r2_decisions_1_3_3); 1.3.2 (2026-11-07): designer decisions WMC1-WMC5 on the warm-modern-r1 clay (style_shells_1_3_1.warm-modern.living.r1_decisions_1_3_2); 1.3.1 (2026-11-07): owner decisions ARC1 (openings and sills may change per style in the tool), ARC2 (no: tool light identical), TS1 (warm-modern living-room tool pilot); style_shells_1_3_1.warm-modern.living; 1.3 (2026-11-07): owner decisions CR3, CR3b, DIR2: the plan binds only the tool ('עצב בעצמך') and only the plan base; each style has its own architecture (style_architecture_1_3); story frames are not bound; 1.2.5 (2026-11-06): designer decision within M0S2 (a): magazine holder moved forward to (-0.54, 2.52) so it no longer covers the basket; 1.2.4 (2026-11-05): user decision M0S2 (a): magazine holder and basket back into M0, floor lamp and pouf on in the test only; 1.2.3 (2026-11-04):user decision V7Q9 (a), the pendant / art tangent in H0's door view accepted as an H0-only exception; 1.2.2 (2026-11-04):round-5 clay F3 decisions (pouf, armchair, rug, coffee table); 1.2.1 (2026-11-03):user decisions V7Q6 (a) counting rule, V7Q7 (b) pendant bottom 1.90, V7Q8 (b) pouf by the coffee table; 1.2 (2026-11-03):user decision V7Q1 (b), living-room camera one metre closer; 1.1.2 / 1.1 approved 2026-10-08;1.1.1 2026-10-13: QA round-2 consistency fixes (no design change) + user decision D1B (2026-10-11); 1.1.2 2026-10-13: follow-ups of the QA re-check (W0 sconce 1.1.x fix, D1B wording, labels)",
+ "camera": {
+  "id": "MB1",
+  "room": "master",
+  "loc": [
+   1.6,
+   21.2,
+   1.05
+  ],
+  "yaw": 33.7,
+  "u0": 0.5,
+  "v0": 0.418,
+  "status": "MB1 (render-agent clay; [MB-17] proposed: house-20 1.2, the motion check 5, the manager's ruling)",
+  "hero": "the bed wall as a sanctuary, dead centre: sconce pair (u 0.269 / 0.731), art, wainscot"
+ },
+ "canvas": {
+  "px": [
+   2720,
+   1530
+  ],
+  "frame_box": [
+   77.49,
+   43.59,
+   2642.51,
+   1486.41
+  ],
+  "K": 1.0604166666666666,
+  "note": "u / v in this file are FRAME fractions (the 16:9 frame), pixels are CANVAS pixels"
+ },
+ "render": "2720x1530, 16 samples, Cycles CPU, OIDN, AgX MHC; post: MB0's recorded post",
+ "build_notes": {
+  "H-B": [
+   "G-H4: reveal lining 2 cm on the hall half of the reveal (Y 6.27-6.35) + 10 cm casing on the hall face; assumed profile"
+  ],
+  "C-B": [
+   "G-C3: 4 cm oak lining Y 9.70-9.95 (lintel drops to 2.62) + 10 cm casing on the hall face; assumed profile"
+  ],
+  "W-A": [
+   "G-W1: built-in desk X -1.625..-0.025 x 0.60 deep, top 0.76; shelf at 1.62; art 60x50 between; chair at Y 7.30; door leaf folded on the south wall X 0.61-0.65 Y 9.00-9.90"
+  ],
+  "MB-A": [
+   "G-M3: tall planter (option 'tall planter or lounge chair') at (1.45, 18.15), crown to 1.75; basket and pendant of the plan kept"
+  ],
+  "boy": [
+   "G-K4: paint #A7B09A as a 1 mm layer 1 mm in front of the east (Y 10.25) and north (X -2.30) walls, Z 0.149-1.25 (under the window only to 0.724, below the sill board); skirting of those two walls in the paint colour",
+   "framed-prints: two 30x40 portrait frames (the slot format) do not fit the plan range X 0.45-0.95 (0.50 m); kept the format and centred the pair on X 0.70 with a 4 cm gap: X 0.38-0.68 / 0.72-1.02, Z 1.42-1.82 (top matches the est v 0.055)",
+   "skateboard: deck centred on X 0.22 so that, seen from K2, it sits over the desk's front-left leg (X 0.13-0.17): the rule 'covers the leg decisively' wins over the est u 0.60-0.63 (a deck at X 0.02-0.22 projects beside the leg, covering ~50%: tested)",
+   "boy: bed boards to 0.60, mattress top 0.42 (+ duvet to 0.50); kid chair seat 0.43 / back 0.72 (the est back_top_v 0.62 implies ~0.72); slot proxies each in their own warm grey, the paint is the only colour"
+  ],
+  "girl": [
+   "G-K4: paint #E8D5CC as a 1 mm layer 1 mm in front of the east (Y 13.88) and north (X -2.30) walls, Z 0.149-1.25 (under the window only to 0.724, below the sill board); skirting of those two walls in the paint colour",
+   "framed-prints: two 30x40 portrait frames (the slot format) do not fit the plan range X 0.45-0.95 (0.50 m); kept the format and centred the pair on X 0.70 with a 4 cm gap: X 0.38-0.68 / 0.72-1.02, Z 1.42-1.82 (top matches the est v 0.055)",
+   "girl: bed boards to 0.60, mattress top 0.42 (+ duvet to 0.50); kid chair seat 0.43 / back 0.72 (the est back_top_v 0.62 implies ~0.72); slot proxies each in their own warm grey, the paint is the only colour"
+  ],
+  "bath": [
+   "shower niche: boolean cut 0.12 deep into the south wall (X 6.25-6.37, Y 10.30-10.90, Z 1.05-1.40) on 1 wall solid(s); niche faces take the limestone material",
+   "bath ceiling light (S12 'flush light, product, seen only in transit') placed at the room centre (4.75, 11.80); not a B1/B2 slot, not counted",
+   "bath proxies: vase sprig kept below the mirror bottom (top 1.12 < 1.165) and the tooth-brushes at 1.07, so the vanity group cannot reflect; towel ladder rails 0.035 x 0.022, rungs at 0.38 / 0.74 / 1.10"
+  ],
+  "kitchen-dining": [
+   "kitchen: worktop top 0.90 (est counter v 0.48); hood X 6.75-7.25 x Y 2.15-3.05, Z 1.55-3.00; shelves X 7.00-7.25 Z 1.55-1.58; tall units Y 4.20-6.20 to Z 2.40 (plan height) with the niche lining 1.5 cm oak; upper wall units of the plan removed (shelves + hood replace them); plan west-wall tall run kept (X 3.95-6.63, Y 5.58-6.20): round 2 does not mention it, so the approved plan stands",
+   "kitchen proxies from the round-2 slot text; heights assumed (jug 24, plates 10+7, crock 18 + utensils, boards 46/38 leaning); D1 dining rug 2.60 x 2.40 (X 3.30-5.90, Y 0.45-2.85): size not given"
+  ],
+  "additions": [
+   "hall: sconce on the left wall at Y 6.95 (centre of the bench strip that H-B shows: the bench centre Y 7.15 is u 0.04, too close to the edge), Z 1.85-2.03 because the plan's hook bar sits at 1.65-1.72; umbrella stand (3.42, 6.88) by the right wall; planter (2.37, 6.58) between the portal casing and the console",
+   "work: pendant hook (-0.825, 6.82): over the desk front, 3 cm clear of the 1.62 shelf in plan, shade 1.50-1.72; sconce on the north wall at Y 6.75 (the only part of the wall 'by the window' that W-A shows: Y 6.35-7.15); bookends + books on the shelf X -1.03..-0.69; waste basket under the desk (-0.35, 6.70)",
+   "master: floor lamp at (0.95, 18.25), shade d 38 at 1.30-1.58, next to (in front of) the tall planter: at X 1.40 it would sit on the right frame edge (u ~1.0) like the planter; tray under the left nightstand vase"
+  ],
+  "round3": [
+   "189 placeholder meshes moved from the round-2 warm greys to the M0 palette (textile #D9D2C7, shade #E4DFD7, object #C3BCB1, decor #C8C2B9); hardware (#8E8A84) kept",
+   "kids' colour block (G-K4) on 12 meshes as neutral grey #CFCAC3 (a readable step below the wall), no hue",
+   "living slot proxies hidden by default (= M0 clay); the m0-v6 products (pendant 40, sun 30, travertine pair, triptych, sill jar, bowl + the v4 proxies of curtains, wall-sconce, floor-lamp, basket, rug, cushions, runner, candles) shown only where plan.json lists them",
+   "hall/table-lamp: proxy and both light sources removed (verdict 3.1)",
+   "hall/wall-sconce rebuilt as a 15 cm fabric cube (lit); hall/framed-art 45 x 55 centred on X 2.95",
+   "corridor/runner-rug narrowed to 60 (X 2.10-2.70) for the gallery stool (frame_fixes_1_1_x.C0)",
+   "work/pendant: d 28, h 18, bottom Z 1.58 (frame_fixes_1_1_x.W0; was d 34, bottom 1.50)",
+   "work/wall-sconce: plate Y 6.75 -> 6.65, arm sconce (projection 0.135 to the shade centre, shade d 13) per 1.1.2 N2",
+   "work/curtains: east stack Y 6.93-7.15 -> 7.03-7.25, rod Y 6.90 -> 7.00 (to 8.60), rod Z 2.82 (work.json 1.0.2)",
+   "kids: toy basket to (-0.62, 11.58) (+girl dy), desk chair to (0.66, 11.00), prints lowered 0.05, boy skateboard steeper (foot Y 10.95), girl pram rotated along Y (frame_fixes_1_1_x)",
+   "master: candle holders +0.08 X, nightstand vase to (-1.95, 17.84) (master.json 1.0.2)",
+   "bath: curtain gathered at (5.30, 11.15); floor group stand (4.50, 10.08), bin (4.64, 10.10), brush in front (4.70, 10.30)",
+   "kitchen-dining: rug 230 x 220 (X 3.45-5.75), runner 60 x 280 (X 6.00-6.60); pendant 50 x 36, runner 40 x 140, vase 26.5, candle plates + candles, bench pad 130 x 35 x 3, mills 15, bowl 21 x 6.4, plate stack 28, mugs 9, towel holder 13 x 31, canisters, tea towel 22 x 33",
+   "hall: vessel 26.5, cushion 110 x 35 x 3, throw 33 x 33 at the corner end, bucket 19 x 49 moved to X 3.47",
+   "corridor: gallery 3 x 40 x 40 at Z 1.25-1.65; lanterns 40 x 22, bottom 2.45, lit",
+   "master: art 2 x 50 x 50, sconces 24 x 20 (lit), pot cover 35 x 37, vase on the top, holders 7 x 11, lumbar 30 x 50; sill vase 8.5 x 24.7, dish 9.5 x 3 generic",
+   "kids: ledges 2 x 41.9 per tier, two 40 cushions (third removed), toy 28, basket 35 x 39 at (-0.62, 11.58), cars 9 x 5",
+   "bath: B1 lamp and vanity pair 13 x 16 (lit), mat 40 x 60, stand 65, candle 9 x 9.8, bottles 7.5 x 16.5, cup 8 x 11, bud vase 7.6 x 12.8, basket 43 x 33 x 19, hand towel 38 x 55; shower downlight at low power (4 W) for the lit set",
+   "work: rug 170 wide, basket 30, bin 25 x 30, felt bins 30 x 24.5 x 15, bookends 10.5 x 13; pen cup 8 x 11 generic on the desk",
+   "living window area light x1.0 (= 246 W)",
+   "hall roof-light emission x1.6 (opal0, own material copy)"
+  ],
+  "round4": [
+   "living/accent-sconces: two 12 cm cubes (was 8 x 16 blocks), lit (m0-v7.txt b)",
+   "living/floor-lamp: light sources removed (m0-v7.txt: no floor-lamp light); living/wall-decor not listed anywhere",
+   "kitchen-dining/dining-pendant: 50 x 30 flat lantern (ellipsoid), bottom 1.50 (d1-v7.txt clay line)",
+   "work/planter: D38 x H34 + plant to 1.30; work/bookends not listed (removed)"
+  ],
+  "wm_master": [
+   "removed 132 objects of the 1.1 master (G-M4 wainscot, cornice, planks 25, skirting, the 1.1 window frame, sashes, mullion, reveals and sill board, the rod, the 1.1 bed and nightstands) and every master product proxy; master lamps off",
+   "floor: 79 planks of 22 cm along Y from X -2.3 (strip edges every 0.22), staggered ends, 1.5 mm gaps, three tones of #8B6F55 (+-2 %)",
+   "W-master: frame X -2.65..-2.61 (the outer face; the reveal reads 0.31 deep of the 0.35 wall), sight lines 45 mm, mullion at Y 18.850, no transom; limestone slab Z 0.71-0.75, front at X -2.280 (2 cm proud of the plaster); no glass in the clay (the area light outside)",
+   "doors: the corridor leaf (1.1 G-M1, parked inside on X 2.90-2.94) in the wall colour; walnut linings in O-corridor-master and O-master-ensuite, no architrave; both outside MB0",
+   "products: 3.2 with 12.2 (pillowcases Caramel Pairs, cushion Milk Tea, throw Pecan); empty: framed-art, planter, bedside-carafe; rug, basket, pendant not built (no frame)"
+  ],
+  "mb1": [
+   "framed-art: X -1.244..-0.695, Z 1.5..2.243, blank canvas #D8C8AE",
+   "framed-art-2: X -0.639..-0.191, Z 1.5..1.838, blank canvas #D8C8AE"
+  ]
+ },
+ "ids": {
+  "0": "nothing / sky",
+  "1": "plaster, bed wall (Y 17.66)",
+  "2": "plaster, window wall (X -2.30)",
+  "3": "plaster, west wall (Y 21.66)",
+  "4": "plaster, south wall (X 3.10)",
+  "5": "plaster, rounded corner R 0.20",
+  "6": "ceiling",
+  "7": "ceiling shadow gap (1 cm)",
+  "8": "curtain slot in the ceiling",
+  "9": "skirting 15, wall colour",
+  "10": "floor, smoked oak planks 22",
+  "11": "floor joints (1.5 mm)",
+  "12": "window reveals, plaster",
+  "13": "window frame, bronze-espresso",
+  "14": "sill slab, limestone 4 cm",
+  "15": "outside (ground)",
+  "16": "door leaf / walnut linings (out of MB0)",
+  "20": "bed headboard, walnut",
+  "21": "bed frame, walnut",
+  "22": "bed plinth, dark",
+  "23": "mattress, bone",
+  "24": "nightstand carcass + drawer fronts, walnut",
+  "25": "nightstand top, walnut",
+  "26": "nightstand groove / finger recesses",
+  "27": "nightstand plinth, dark",
+  "40": "curtains (product)",
+  "41": "sill-vase (product)",
+  "42": "sill stem (filler)",
+  "43": "bedside-sconces, west (product)",
+  "44": "bedside-sconces, east (product)",
+  "45": "nightstand-tray (product)",
+  "46": "nightstand-vase (product)",
+  "47": "oat stems (filler)",
+  "48": "trinket-dish (product)",
+  "49": "candle-holders (product)",
+  "50": "candles (filler)",
+  "51": "pillowcases (product)",
+  "52": "bedding (product)",
+  "53": "cushions (product)",
+  "54": "throw (product)",
+  "55": "floor-lamp (product)",
+  "90": "other house geometry",
+  "99": "unknown",
+  "28": "wall shelf, walnut (fixed, plan B)",
+  "29": "bench top, walnut (fixed, plan B)",
+  "30": "bench end panels, walnut (fixed, plan B)",
+  "56": "framed-art (product)",
+  "57": "framed-art-2 (product)",
+  "58": "art canvases (blank)",
+  "59": "shelf-vase-left (product)",
+  "60": "shelf-vase-right (product)",
+  "61": "planter (product)",
+  "62": "ficus (filler)",
+  "63": "magazine-holder (product)",
+  "64": "bedside-carafe (product)",
+  "65": "bench-throw (product)",
+  "66": "bench-basket (product)",
+  "67": "rug (product)"
+ },
+ "frames": {
+  "MB1-plate": {
+   "frame": "MB1-plate",
+   "room": "master",
+   "round2_id": "MB-A",
+   "camera": {
+    "id": "MB1-plate",
+    "room": "master",
+    "loc": [
+     1.6,
+     21.2,
+     1.05
+    ],
+    "yaw": 33.7,
+    "u0": 0.5,
+    "v0": 0.418,
+    "status": "MB1 (render-agent clay; [MB-17] proposed: house-20 1.2, the motion check 5, the manager's ruling)",
+    "hero": "the bed wall as a sanctuary, dead centre: sconce pair (u 0.269 / 0.731), art, wainscot"
+   },
+   "image": "framing/round3/MB1-plate.png",
+   "resolution": [
+    2720,
+    1530
+   ],
+   "samples": 16,
+   "placeholders_shown": [],
+   "built_generic": [],
+   "missing": [],
+   "lamps_on": [],
+   "lamps_off": [
+    "master/bedside-sconces",
+    "master/floor-lamp",
+    "master/pendant"
+   ],
+   "mean_L": 213.3,
+   "mean_L_round2": 204.1,
+   "designer_notes": "warm-modern MB1-plate",
+   "est_vs_measured": [
+    {
+     "key": "window_visible_Y",
+     "est": [
+      18.1,
+      18.92
+     ],
+     "measured": [
+      18.1,
+      19.8242
+     ],
+     "dev": [
+      0.0,
+      0.9042
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "window_u",
+     "est": [
+      0.0,
+      0.138
+     ],
+     "measured": [
+      0.0,
+      0.2979
+     ],
+     "dev": [
+      0.0,
+      0.1599
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "window_cut_pct",
+     "est": 45,
+     "measured": -14.9,
+     "dev": -59.9,
+     "flag_gt_tol": true,
+     "tol": 2,
+     "note": ""
+    },
+    {
+     "key": "NE_corner_u (-2.30, 17.66)",
+     "est": 0.185,
+     "measured": 0.3424,
+     "dev": 0.1574,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_centre_u (-0.70, 17.66)",
+     "est": 0.5,
+     "measured": 0.5075,
+     "dev": 0.0075,
+     "flag_gt_tol": false,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "sconces_u (centres X -1.875 / 0.475)",
+     "est": [
+      0.269,
+      0.731
+     ],
+     "measured": [
+      0.3804,
+      0.6811
+     ],
+     "dev": [
+      0.1114,
+      -0.0499
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "door_jamb_X2.00_u (2.00, 17.66)",
+     "est": 1.031,
+     "measured": 1.0303,
+     "dev": -0.0007,
+     "flag_gt_tol": false,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_foot_u (corners at Y 19.66, Z 0.50)",
+     "est": [
+      0.07,
+      0.93
+     ],
+     "measured": [
+      0.1282,
+      0.4052
+     ],
+     "dev": [
+      0.0582,
+      -0.5248
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_foot_top_v (Y 19.66, Z 0.50)",
+     "est": 0.912,
+     "measured": 0.663,
+     "dev": -0.249,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_head_v (headboard top Z 1.15)",
+     "est": 0.645,
+     "measured": 0.3959,
+     "dev": -0.2491,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "top_edge_on_bed_wall_Z",
+     "est": 2.37,
+     "measured": 2.6464,
+     "dev": 0.2764,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "camera_to_bed_wall_m",
+     "est": 3.39,
+     "measured": 3.39,
+     "dev": 0.0,
+     "flag_gt_tol": false,
+     "tol": 0.02,
+     "note": ""
+    }
+   ],
+   "est_flags": [
+    "window_visible_Y",
+    "window_u",
+    "window_cut_pct",
+    "NE_corner_u (-2.30, 17.66)",
+    "sconces_u (centres X -1.875 / 0.475)",
+    "bed_foot_u (corners at Y 19.66, Z 0.50)",
+    "bed_foot_top_v (Y 19.66, Z 0.50)",
+    "bed_head_v (headboard top Z 1.15)",
+    "top_edge_on_bed_wall_Z"
+   ],
+   "items_visible": {
+    "mb_wm bed frame (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 3.14,
+     "visible_pct": 25.8,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm bed headboard (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 4.1,
+     "visible_pct": 50.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm mattress (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 7.66,
+     "visible_pct": 77.9,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm bed plinth (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.08,
+     "visible_pct": 1.1,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm bench ends (fixed, plan B)": {
+     "kind": "furniture",
+     "frame_area_pct": 3.6,
+     "visible_pct": 69.3,
+     "cut_by_edge_pct": 15.3
+    },
+    "mb_wm bench top (fixed, plan B)": {
+     "kind": "furniture",
+     "frame_area_pct": 2.72,
+     "visible_pct": 89.2,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm wall shelf (fixed, plan B)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.46,
+     "visible_pct": 88.8,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand carcass (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 1.63,
+     "visible_pct": 53.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand grooves (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.1,
+     "visible_pct": 75.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand plinth (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.13,
+     "visible_pct": 18.6,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand top (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.38,
+     "visible_pct": 88.8,
+     "cut_by_edge_pct": 0.0
+    }
+   },
+   "F3_tangents": {
+    "edge_tangents": [],
+    "object_object_tangents": [
+     {
+      "a": "mb_wm mattress (fixed)",
+      "b": "mb_wm bench ends (fixed, plan B)",
+      "kind": "overlap",
+      "overlap_thickness": 0.0195,
+      "cover_of_back": 0.009,
+      "behind": "mb_wm mattress (fixed)",
+      "dist3d_m": 0.105,
+      "rule": "overlap thinner than 0.03 and < 60% of the back item"
+     }
+    ],
+    "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+   },
+   "boxes": {
+    "mb_wm plaster bed wall": {
+     "kind": "architecture",
+     "box": [
+      0.3596,
+      1.0,
+      0.0,
+      0.7843
+     ],
+     "px": 1538839
+    },
+    "mb_wm plaster window wall": {
+     "kind": "architecture",
+     "box": [
+      0.0,
+      0.3232,
+      0.0,
+      0.7366
+     ],
+     "px": 380530
+    },
+    "mb_wm plaster corner R 0.20": {
+     "kind": "architecture",
+     "box": [
+      0.3232,
+      0.3596,
+      0.0,
+      0.5418
+     ],
+     "px": 81520
+    },
+    "mb_wm skirting 15 (wall colour)": {
+     "kind": "architecture",
+     "box": [
+      0.0,
+      1.0,
+      0.7144,
+      0.8464
+     ],
+     "px": 72142
+    },
+    "mb_wm floor smoked oak 22": {
+     "kind": "architecture",
+     "box": [
+      0.0,
+      1.0,
+      0.7392,
+      1.0
+     ],
+     "px": 615280
+    },
+    "mb_wm window reveals (plaster)": {
+     "kind": "architecture",
+     "box": [
+      0.0761,
+      0.2982,
+      0.0,
+      0.5183
+     ],
+     "px": 58615
+    },
+    "mb_wm window frame (bronze)": {
+     "kind": "architecture",
+     "box": [
+      0.0765,
+      0.2721,
+      0.0,
+      0.5118
+     ],
+     "px": 49906
+    },
+    "mb_wm sill slab (limestone)": {
+     "kind": "architecture",
+     "box": [
+      0.0761,
+      0.2996,
+      0.4908,
+      0.5314
+     ],
+     "px": 16020
+    },
+    "mb_wm bed headboard (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.4026,
+      0.6349,
+      0.3928,
+      0.5889
+     ],
+     "px": 170573
+    },
+    "mb_wm bed frame (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.1371,
+      0.618,
+      0.6641,
+      0.9562
+     ],
+     "px": 130540
+    },
+    "mb_wm bed plinth (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.1537,
+      0.618,
+      0.7379,
+      0.9634
+     ],
+     "px": 3486
+    },
+    "mb_wm mattress (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.1305,
+      0.618,
+      0.5556,
+      0.8327
+     ],
+     "px": 318775
+    },
+    "mb_wm nightstand carcass (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.3224,
+      0.7202,
+      0.5477,
+      0.7765
+     ],
+     "px": 67803
+    },
+    "mb_wm nightstand top (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.3224,
+      0.7202,
+      0.5346,
+      0.6124
+     ],
+     "px": 15947
+    },
+    "mb_wm nightstand grooves (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.3235,
+      0.6926,
+      0.551,
+      0.7
+     ],
+     "px": 3989
+    },
+    "mb_wm nightstand plinth (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.6257,
+      0.7136,
+      0.7549,
+      0.7935
+     ],
+     "px": 5259
+    },
+    "mb_wm wall shelf (fixed, plan B)": {
+     "kind": "furniture",
+     "box": [
+      0.3846,
+      0.6349,
+      0.2797,
+      0.3255
+     ],
+     "px": 19238
+    },
+    "mb_wm bench top (fixed, plan B)": {
+     "kind": "furniture",
+     "box": [
+      0.0298,
+      0.3276,
+      0.6595,
+      0.8294
+     ],
+     "px": 113100
+    },
+    "mb_wm bench ends (fixed, plan B)": {
+     "kind": "furniture",
+     "box": [
+      0.0301,
+      0.3276,
+      0.7144,
+      1.0
+     ],
+     "px": 149942
+    }
+   },
+   "density_F10": {
+    "result": "fail",
+    "counted": 0,
+    "minimum": 14,
+    "target": [
+     15,
+     18
+    ],
+    "info_counted_if_area_ge_0_2pct": 0,
+    "info_counted_any_area_ge_50pct_visible": 0,
+    "frame_kind": "full",
+    "in_target": false,
+    "categories": [],
+    "four_categories_ok": false,
+    "missing_categories": [
+     "textile",
+     "lighting",
+     "ceramics/tableware",
+     "storage/function"
+    ],
+    "slots": [],
+    "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+   },
+   "heroes_thirds": [
+    {
+     "hero": "bed centre",
+     "u": 0.5075,
+     "ok": false
+    }
+   ],
+   "lamps": [],
+   "wall_patches": {
+    "hero_wall_high": {
+     "u": 0.507544219493866,
+     "v": 0.07847195863723755,
+     "L_hsl": 99.0,
+     "Y_lin": 0.9825,
+     "stops_vs_mid": 2.45,
+     "xyz": [
+      -0.7,
+      17.66,
+      2.35
+     ]
+    },
+    "hero_wall_mid": {
+     "u": 0.507544219493866,
+     "v": 0.18437957763671875,
+     "L_hsl": 99.3,
+     "Y_lin": 0.9899,
+     "stops_vs_mid": 2.46,
+     "xyz": [
+      -0.7,
+      17.66,
+      1.95
+     ]
+    },
+    "ceiling": {
+     "u": 0.55,
+     "v": 0.04,
+     "L_hsl": 98.2,
+     "Y_lin": 0.9655,
+     "stops_vs_mid": 2.42
+    },
+    "floor_centre": {
+     "u": 0.5,
+     "v": 0.93,
+     "L_hsl": 58.5,
+     "Y_lin": 0.3277,
+     "stops_vs_mid": 0.86
+    }
+   },
+   "light_balance": {},
+   "camera_clearance_m": {
+    "min": 0.458,
+    "nearest": "mb_wm_pl_w"
+   },
+   "overlay": "framing/round3/overlays/MB1-plate.png",
+   "runtime_s": 199,
+   "id_px": {
+    "nothing / sky": 349905,
+    "plaster, bed wall (Y 17.66)": 1538839,
+    "plaster, window wall (X -2.30)": 380530,
+    "plaster, rounded corner R 0.20": 81520,
+    "skirting 15, wall colour": 72142,
+    "floor, smoked oak planks 22": 615280,
+    "floor joints (1.5 mm)": 183,
+    "window reveals, plaster": 58615,
+    "window frame, bronze-espresso": 49906,
+    "sill slab, limestone 4 cm": 16020,
+    "bed headboard, walnut": 170573,
+    "bed frame, walnut": 130540,
+    "bed plinth, dark": 3486,
+    "mattress, bone": 318775,
+    "nightstand carcass + drawer fronts, walnut": 67803,
+    "nightstand top, walnut": 15947,
+    "nightstand groove / finger recesses": 3989,
+    "nightstand plinth, dark": 5259,
+    "wall shelf, walnut (fixed, plan B)": 19238,
+    "bench top, walnut (fixed, plan B)": 113100,
+    "bench end panels, walnut (fixed, plan B)": 149942,
+    "other house geometry": 8
+   },
+   "pidx_to_id": {
+    "542": 52,
+    "543": 51,
+    "545": 54,
+    "544": 53,
+    "546": 43,
+    "558": 56,
+    "551": 46,
+    "548": 49,
+    "568": 67,
+    "562": 61,
+    "557": 55,
+    "550": 45,
+    "517": 1,
+    "518": 2,
+    "519": 3,
+    "520": 4,
+    "521": 5,
+    "522": 9,
+    "523": 7,
+    "524": 8,
+    "525": 10,
+    "526": 12,
+    "527": 13,
+    "528": 14,
+    "529": 15,
+    "530": 16,
+    "531": 20,
+    "532": 21,
+    "533": 22,
+    "534": 23,
+    "535": 24,
+    "536": 25,
+    "537": 26,
+    "538": 27,
+    "539": 28,
+    "540": 29,
+    "541": 30,
+    "547": 44,
+    "549": 50,
+    "552": 47,
+    "553": 48,
+    "554": 41,
+    "555": 42,
+    "556": 40,
+    "559": 57,
+    "560": 59,
+    "561": 60,
+    "563": 62,
+    "564": 63,
+    "565": 64,
+    "566": 65,
+    "567": 66,
+    "102": 6,
+    "101": 11
+   },
+   "boxes_frame": {
+    "window frame, bronze-espresso": {
+     "u": [
+      0.0509,
+      0.2583
+     ],
+     "v": [
+      -0.0302,
+      0.5125
+     ],
+     "px": 49906,
+     "frame_pct": 1.348
+    },
+    "sill slab, limestone 4 cm": {
+     "u": [
+      0.0505,
+      0.2875
+     ],
+     "v": [
+      0.4903,
+      0.5333
+     ],
+     "px": 16020,
+     "frame_pct": 0.433
+    },
+    "bed headboard, walnut": {
+     "u": [
+      0.3967,
+      0.6431
+     ],
+     "v": [
+      0.3863,
+      0.5943
+     ],
+     "px": 170573,
+     "frame_pct": 4.609
+    },
+    "bed frame, walnut": {
+     "u": [
+      0.1152,
+      0.6251
+     ],
+     "v": [
+      0.674,
+      0.9838
+     ],
+     "px": 130540,
+     "frame_pct": 3.527
+    },
+    "bed plinth, dark": {
+     "u": [
+      0.1328,
+      0.6251
+     ],
+     "v": [
+      0.7523,
+      0.9914
+     ],
+     "px": 3486,
+     "frame_pct": 0.094
+    },
+    "mattress, bone": {
+     "u": [
+      0.1082,
+      0.6251
+     ],
+     "v": [
+      0.5589,
+      0.8528
+     ],
+     "px": 318775,
+     "frame_pct": 8.613
+    },
+    "nightstand carcass + drawer fronts, walnut": {
+     "u": [
+      0.3117,
+      0.7335
+     ],
+     "v": [
+      0.5506,
+      0.7932
+     ],
+     "px": 67803,
+     "frame_pct": 1.832
+    },
+    "nightstand top, walnut": {
+     "u": [
+      0.3117,
+      0.7335
+     ],
+     "v": [
+      0.5367,
+      0.6192
+     ],
+     "px": 15947,
+     "frame_pct": 0.431
+    },
+    "nightstand groove / finger recesses": {
+     "u": [
+      0.3129,
+      0.7043
+     ],
+     "v": [
+      0.5541,
+      0.7121
+     ],
+     "px": 3989,
+     "frame_pct": 0.108
+    },
+    "nightstand plinth, dark": {
+     "u": [
+      0.6333,
+      0.7265
+     ],
+     "v": [
+      0.7703,
+      0.8112
+     ],
+     "px": 5259,
+     "frame_pct": 0.142
+    },
+    "wall shelf, walnut (fixed, plan B)": {
+     "u": [
+      0.3776,
+      0.6431
+     ],
+     "v": [
+      0.2664,
+      0.3149
+     ],
+     "px": 19238,
+     "frame_pct": 0.52
+    },
+    "bench top, walnut (fixed, plan B)": {
+     "u": [
+      0.0014,
+      0.3172
+     ],
+     "v": [
+      0.6691,
+      0.8493
+     ],
+     "px": 113100,
+     "frame_pct": 3.056
+    },
+    "bench end panels, walnut (fixed, plan B)": {
+     "u": [
+      0.0018,
+      0.3172
+     ],
+     "v": [
+      0.7273,
+      1.0302
+     ],
+     "px": 149942,
+     "frame_pct": 4.052
+    }
+   }
+  },
+  "MB1": {
+   "frame": "MB1",
+   "room": "master",
+   "round2_id": "MB-A",
+   "camera": {
+    "id": "MB1",
+    "room": "master",
+    "loc": [
+     1.6,
+     21.2,
+     1.05
+    ],
+    "yaw": 33.7,
+    "u0": 0.5,
+    "v0": 0.418,
+    "status": "MB1 (render-agent clay; [MB-17] proposed: house-20 1.2, the motion check 5, the manager's ruling)",
+    "hero": "the bed wall as a sanctuary, dead centre: sconce pair (u 0.269 / 0.731), art, wainscot"
+   },
+   "image": "framing/round3/MB1.png",
+   "resolution": [
+    2720,
+    1530
+   ],
+   "samples": 16,
+   "placeholders_shown": [
+    "master/bedding",
+    "master/bedside-carafe",
+    "master/bedside-sconces",
+    "master/bench-basket",
+    "master/bench-throw",
+    "master/candle-holders",
+    "master/candle-holders-filler",
+    "master/curtains",
+    "master/cushions",
+    "master/floor-lamp",
+    "master/framed-art",
+    "master/framed-art-2",
+    "master/magazine-holder",
+    "master/nightstand-tray",
+    "master/nightstand-vase",
+    "master/nightstand-vase-filler",
+    "master/pillowcases",
+    "master/planter",
+    "master/planter-filler",
+    "master/rug",
+    "master/shelf-vase-left",
+    "master/shelf-vase-right",
+    "master/sill-vase",
+    "master/sill-vase-filler",
+    "master/throw",
+    "master/trinket-dish"
+   ],
+   "built_generic": [],
+   "missing": [],
+   "lamps_on": [
+    "master/bedside-sconces",
+    "master/floor-lamp"
+   ],
+   "lamps_off": [
+    "master/pendant"
+   ],
+   "mean_L": 201.7,
+   "mean_L_round2": 204.1,
+   "designer_notes": "warm-modern MB1",
+   "est_vs_measured": [
+    {
+     "key": "window_visible_Y",
+     "est": [
+      18.1,
+      18.92
+     ],
+     "measured": [
+      18.1,
+      19.8242
+     ],
+     "dev": [
+      0.0,
+      0.9042
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "window_u",
+     "est": [
+      0.0,
+      0.138
+     ],
+     "measured": [
+      0.0,
+      0.2979
+     ],
+     "dev": [
+      0.0,
+      0.1599
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "window_cut_pct",
+     "est": 45,
+     "measured": -14.9,
+     "dev": -59.9,
+     "flag_gt_tol": true,
+     "tol": 2,
+     "note": ""
+    },
+    {
+     "key": "NE_corner_u (-2.30, 17.66)",
+     "est": 0.185,
+     "measured": 0.3424,
+     "dev": 0.1574,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_centre_u (-0.70, 17.66)",
+     "est": 0.5,
+     "measured": 0.5075,
+     "dev": 0.0075,
+     "flag_gt_tol": false,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "sconces_u (centres X -1.875 / 0.475)",
+     "est": [
+      0.269,
+      0.731
+     ],
+     "measured": [
+      0.3804,
+      0.6811
+     ],
+     "dev": [
+      0.1114,
+      -0.0499
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "door_jamb_X2.00_u (2.00, 17.66)",
+     "est": 1.031,
+     "measured": 1.0303,
+     "dev": -0.0007,
+     "flag_gt_tol": false,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_foot_u (corners at Y 19.66, Z 0.50)",
+     "est": [
+      0.07,
+      0.93
+     ],
+     "measured": [
+      0.1282,
+      0.4052
+     ],
+     "dev": [
+      0.0582,
+      -0.5248
+     ],
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_foot_top_v (Y 19.66, Z 0.50)",
+     "est": 0.912,
+     "measured": 0.663,
+     "dev": -0.249,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "bed_head_v (headboard top Z 1.15)",
+     "est": 0.645,
+     "measured": 0.3959,
+     "dev": -0.2491,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "top_edge_on_bed_wall_Z",
+     "est": 2.37,
+     "measured": 2.6464,
+     "dev": 0.2764,
+     "flag_gt_tol": true,
+     "tol": 0.02,
+     "note": ""
+    },
+    {
+     "key": "camera_to_bed_wall_m",
+     "est": 3.39,
+     "measured": 3.39,
+     "dev": 0.0,
+     "flag_gt_tol": false,
+     "tol": 0.02,
+     "note": ""
+    }
+   ],
+   "est_flags": [
+    "window_visible_Y",
+    "window_u",
+    "window_cut_pct",
+    "NE_corner_u (-2.30, 17.66)",
+    "sconces_u (centres X -1.875 / 0.475)",
+    "bed_foot_u (corners at Y 19.66, Z 0.50)",
+    "bed_foot_top_v (Y 19.66, Z 0.50)",
+    "bed_head_v (headboard top Z 1.15)",
+    "top_edge_on_bed_wall_Z"
+   ],
+   "items_visible": {
+    "mb_wm bed frame (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 3.08,
+     "visible_pct": 25.3,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm bed headboard (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 2.87,
+     "visible_pct": 35.3,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/nightstand-vase": {
+     "kind": "proxy",
+     "frame_area_pct": 0.07,
+     "visible_pct": 89.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/candle-holders": {
+     "kind": "proxy",
+     "frame_area_pct": 0.07,
+     "visible_pct": 84.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/candle-holders-filler": {
+     "kind": "proxy",
+     "frame_area_pct": 0.11,
+     "visible_pct": 93.9,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/curtains": {
+     "kind": "proxy",
+     "frame_area_pct": 4.33,
+     "visible_pct": 70.8,
+     "cut_by_edge_pct": 16.0
+    },
+    "master/cushions": {
+     "kind": "proxy",
+     "frame_area_pct": 0.64,
+     "visible_pct": 76.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/bedding": {
+     "kind": "proxy",
+     "frame_area_pct": 6.76,
+     "visible_pct": 62.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/floor-lamp": {
+     "kind": "proxy",
+     "frame_area_pct": 1.32,
+     "visible_pct": 78.7,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/bench-basket": {
+     "kind": "proxy",
+     "frame_area_pct": 0.87,
+     "visible_pct": 38.6,
+     "cut_by_edge_pct": 14.4
+    },
+    "mb_wm bench ends (fixed, plan B)": {
+     "kind": "furniture",
+     "frame_area_pct": 3.12,
+     "visible_pct": 59.8,
+     "cut_by_edge_pct": 15.3
+    },
+    "mb_wm bench top (fixed, plan B)": {
+     "kind": "furniture",
+     "frame_area_pct": 1.9,
+     "visible_pct": 62.3,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/bench-throw": {
+     "kind": "proxy",
+     "frame_area_pct": 1.3,
+     "visible_pct": 90.2,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/framed-art": {
+     "kind": "proxy",
+     "frame_area_pct": 1.24,
+     "visible_pct": 83.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/framed-art-2": {
+     "kind": "proxy",
+     "frame_area_pct": 0.56,
+     "visible_pct": 82.2,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/bedside-carafe": {
+     "kind": "proxy",
+     "frame_area_pct": 0.15,
+     "visible_pct": 86.3,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/planter-filler": {
+     "kind": "proxy",
+     "frame_area_pct": 4.43,
+     "visible_pct": 88.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/magazine-holder": {
+     "kind": "proxy",
+     "frame_area_pct": 0.99,
+     "visible_pct": 90.7,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/planter": {
+     "kind": "proxy",
+     "frame_area_pct": 1.62,
+     "visible_pct": 88.1,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/rug": {
+     "kind": "proxy",
+     "frame_area_pct": 7.01,
+     "visible_pct": 21.5,
+     "cut_by_edge_pct": 48.8
+    },
+    "mb_wm wall shelf (fixed, plan B)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.46,
+     "visible_pct": 88.8,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/shelf-vase-left": {
+     "kind": "proxy",
+     "frame_area_pct": 0.21,
+     "visible_pct": 82.4,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/shelf-vase-right": {
+     "kind": "proxy",
+     "frame_area_pct": 0.24,
+     "visible_pct": 87.7,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand carcass (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 1.54,
+     "visible_pct": 50.5,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand grooves (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.08,
+     "visible_pct": 65.3,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand plinth (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.13,
+     "visible_pct": 18.6,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm nightstand top (fixed)": {
+     "kind": "furniture",
+     "frame_area_pct": 0.23,
+     "visible_pct": 53.5,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/pillowcases": {
+     "kind": "proxy",
+     "frame_area_pct": 0.58,
+     "visible_pct": 38.8,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/bedside-sconces": {
+     "kind": "proxy",
+     "frame_area_pct": 0.07,
+     "visible_pct": 80.8,
+     "cut_by_edge_pct": 0.0
+    },
+    "mb_wm bedside-sconces east": {
+     "kind": "proxy",
+     "frame_area_pct": 0.12,
+     "visible_pct": 76.2,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/sill-vase": {
+     "kind": "proxy",
+     "frame_area_pct": 0.07,
+     "visible_pct": 100.0,
+     "cut_by_edge_pct": 0.0
+    },
+    "master/throw": {
+     "kind": "proxy",
+     "frame_area_pct": 1.86,
+     "visible_pct": 86.2,
+     "cut_by_edge_pct": 0.0
+    }
+   },
+   "F3_tangents": {
+    "edge_tangents": [],
+    "object_object_tangents": [
+     {
+      "a": "master/curtains",
+      "b": "master/bedding",
+      "kind": "overlap",
+      "overlap_thickness": 0.0273,
+      "cover_of_back": 0.047,
+      "behind": "master/curtains",
+      "dist3d_m": 0.595,
+      "rule": "overlap thinner than 0.03 and < 60% of the back item"
+     },
+     {
+      "a": "master/curtains",
+      "b": "mb_wm nightstand top (fixed)",
+      "kind": "gap",
+      "gap": 0.0117,
+      "dist3d_m": 0.11,
+      "rule": "silhouettes apart by < 0.02 (kissing contours)"
+     },
+     {
+      "a": "master/bedding",
+      "b": "mb_wm bench ends (fixed, plan B)",
+      "kind": "overlap",
+      "overlap_thickness": 0.0195,
+      "cover_of_back": 0.009,
+      "behind": "master/bedding",
+      "dist3d_m": 0.09,
+      "rule": "overlap thinner than 0.03 and < 60% of the back item"
+     },
+     {
+      "a": "master/bedding",
+      "b": "master/bench-throw",
+      "kind": "overlap",
+      "overlap_thickness": 0.0273,
+      "cover_of_back": 0.026,
+      "behind": "master/bedding",
+      "dist3d_m": 0.125,
+      "rule": "overlap thinner than 0.03 and < 60% of the back item"
+     },
+     {
+      "a": "master/bench-basket",
+      "b": "mb_wm bench top (fixed, plan B)",
+      "kind": "overlap",
+      "overlap_thickness": 0.0273,
+      "cover_of_back": 0.076,
+      "behind": "mb_wm bench top (fixed, plan B)",
+      "dist3d_m": 0.1,
+      "rule": "overlap thinner than 0.03 and < 60% of the back item"
+     },
+     {
+      "a": "master/framed-art",
+      "b": "master/framed-art-2",
+      "kind": "gap",
+      "gap": 0.0078,
+      "dist3d_m": 0.056,
+      "rule": "silhouettes apart by < 0.02 (kissing contours)"
+     },
+     {
+      "a": "master/framed-art",
+      "b": "master/shelf-vase-left",
+      "kind": "gap",
+      "gap": 0.0078,
+      "dist3d_m": 0.041,
+      "rule": "silhouettes apart by < 0.02 (kissing contours)"
+     },
+     {
+      "a": "master/framed-art-2",
+      "b": "master/shelf-vase-right",
+      "kind": "gap",
+      "gap": 0.0059,
+      "dist3d_m": 0.078,
+      "rule": "silhouettes apart by < 0.02 (kissing contours)"
+     },
+     {
+      "a": "master/magazine-holder",
+      "b": "mb_wm nightstand carcass (fixed)",
+      "kind": "gap",
+      "gap": 0.0078,
+      "dist3d_m": 0.313,
+      "rule": "silhouettes apart by < 0.02 (kissing contours)"
+     }
+    ],
+    "note": "edge: visible bbox margin 0 < m < 0.02; object-object as round 2 (ray-cast silhouettes, 512x288)"
+   },
+   "boxes": {
+    "master/bedding": {
+     "kind": "proxy",
+     "box": [
+      0.1235,
+      0.6195,
+      0.5405,
+      0.834
+     ],
+     "px": 281380
+    },
+    "master/pillowcases": {
+     "kind": "proxy",
+     "box": [
+      0.3669,
+      0.6125,
+      0.5183,
+      0.5941
+     ],
+     "px": 24150
+    },
+    "master/throw": {
+     "kind": "proxy",
+     "box": [
+      0.1309,
+      0.4842,
+      0.5654,
+      0.7124
+     ],
+     "px": 77218
+    },
+    "master/cushions": {
+     "kind": "proxy",
+     "box": [
+      0.411,
+      0.4941,
+      0.4758,
+      0.5627
+     ],
+     "px": 26453
+    },
+    "master/bedside-sconces": {
+     "kind": "proxy",
+     "box": [
+      0.3596,
+      0.3853,
+      0.3425,
+      0.3902
+     ],
+     "px": 3011
+    },
+    "master/framed-art": {
+     "kind": "proxy",
+     "box": [
+      0.4382,
+      0.5048,
+      0.1026,
+      0.3046
+     ],
+     "px": 51774
+    },
+    "master/nightstand-vase": {
+     "kind": "proxy",
+     "box": [
+      0.3426,
+      0.3577,
+      0.4784,
+      0.5379
+     ],
+     "px": 3085
+    },
+    "master/candle-holders": {
+     "kind": "proxy",
+     "box": [
+      0.6662,
+      0.7037,
+      0.5516,
+      0.5908
+     ],
+     "px": 2881
+    },
+    "master/rug": {
+     "kind": "proxy",
+     "box": [
+      0.0,
+      0.704,
+      0.7817,
+      1.0
+     ],
+     "px": 291753
+    },
+    "master/planter": {
+     "kind": "proxy",
+     "box": [
+      0.8272,
+      0.936,
+      0.6791,
+      0.8608
+     ],
+     "px": 67521
+    },
+    "master/floor-lamp": {
+     "kind": "proxy",
+     "box": [
+      0.6816,
+      0.7831,
+      0.2065,
+      0.8529
+     ],
+     "px": 54731
+    },
+    "master/nightstand-tray": {
+     "kind": "proxy",
+     "box": [
+      0.3298,
+      0.3669,
+      0.5353,
+      0.5444
+     ],
+     "px": 619
+    },
+    "mb_wm plaster bed wall": {
+     "kind": "architecture",
+     "box": [
+      0.3596,
+      1.0,
+      0.0,
+      0.7843
+     ],
+     "px": 1159784
+    },
+    "mb_wm plaster window wall": {
+     "kind": "architecture",
+     "box": [
+      0.0,
+      0.3232,
+      0.0,
+      0.7366
+     ],
+     "px": 249469
+    },
+    "mb_wm plaster corner R 0.20": {
+     "kind": "architecture",
+     "box": [
+      0.3232,
+      0.3596,
+      0.0,
+      0.5418
+     ],
+     "px": 77683
+    },
+    "mb_wm skirting 15 (wall colour)": {
+     "kind": "architecture",
+     "box": [
+      0.0,
+      1.0,
+      0.7144,
+      0.8464
+     ],
+     "px": 40044
+    },
+    "mb_wm floor smoked oak 22": {
+     "kind": "architecture",
+     "box": [
+      0.0,
+      1.0,
+      0.7392,
+      1.0
+     ],
+     "px": 241465
+    },
+    "mb_wm window reveals (plaster)": {
+     "kind": "architecture",
+     "box": [
+      0.1901,
+      0.2882,
+      0.0,
+      0.4922
+     ],
+     "px": 38730
+    },
+    "mb_wm window frame (bronze)": {
+     "kind": "architecture",
+     "box": [
+      0.1033,
+      0.2721,
+      0.0,
+      0.5085
+     ],
+     "px": 46860
+    },
+    "mb_wm sill slab (limestone)": {
+     "kind": "architecture",
+     "box": [
+      0.1033,
+      0.2882,
+      0.4908,
+      0.5281
+     ],
+     "px": 13108
+    },
+    "mb_wm bed headboard (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.4026,
+      0.6349,
+      0.3928,
+      0.5869
+     ],
+     "px": 119435
+    },
+    "mb_wm bed frame (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.1371,
+      0.618,
+      0.6686,
+      0.9562
+     ],
+     "px": 128128
+    },
+    "mb_wm bed plinth (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.4022,
+      0.618,
+      0.7379,
+      0.9575
+     ],
+     "px": 205
+    },
+    "mb_wm mattress (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.3279,
+      0.4018,
+      0.7967,
+      0.8327
+     ],
+     "px": 191
+    },
+    "mb_wm nightstand carcass (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.618,
+      0.7202,
+      0.5961,
+      0.7765
+     ],
+     "px": 64163
+    },
+    "mb_wm nightstand top (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.3224,
+      0.7202,
+      0.5405,
+      0.6124
+     ],
+     "px": 9515
+    },
+    "mb_wm nightstand grooves (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.6228,
+      0.6926,
+      0.6007,
+      0.7
+     ],
+     "px": 3440
+    },
+    "mb_wm nightstand plinth (fixed)": {
+     "kind": "furniture",
+     "box": [
+      0.6257,
+      0.7136,
+      0.7549,
+      0.7935
+     ],
+     "px": 5259
+    },
+    "mb_wm wall shelf (fixed, plan B)": {
+     "kind": "furniture",
+     "box": [
+      0.3846,
+      0.6349,
+      0.2797,
+      0.3255
+     ],
+     "px": 19238
+    },
+    "mb_wm bench top (fixed, plan B)": {
+     "kind": "furniture",
+     "box": [
+      0.1007,
+      0.3276,
+      0.6863,
+      0.8294
+     ],
+     "px": 79050
+    },
+    "mb_wm bench ends (fixed, plan B)": {
+     "kind": "furniture",
+     "box": [
+      0.0301,
+      0.3276,
+      0.7575,
+      1.0
+     ],
+     "px": 129749
+    },
+    "mb_wm bedside-sconces east": {
+     "kind": "proxy",
+     "box": [
+      0.6607,
+      0.6908,
+      0.3137,
+      0.3784
+     ],
+     "px": 4898
+    },
+    "master/candle-holders-filler": {
+     "kind": "proxy",
+     "box": [
+      0.6662,
+      0.7033,
+      0.502,
+      0.5536
+     ],
+     "px": 4745
+    },
+    "master/nightstand-vase-filler": {
+     "kind": "proxy",
+     "box": [
+      0.3419,
+      0.3511,
+      0.434,
+      0.4784
+     ],
+     "px": 578
+    },
+    "master/trinket-dish": {
+     "kind": "proxy",
+     "box": [
+      0.3522,
+      0.3676,
+      0.5314,
+      0.5405
+     ],
+     "px": 485
+    },
+    "master/sill-vase": {
+     "kind": "proxy",
+     "box": [
+      0.2562,
+      0.2687,
+      0.4353,
+      0.4954
+     ],
+     "px": 3115
+    },
+    "master/sill-vase-filler": {
+     "kind": "proxy",
+     "box": [
+      0.2544,
+      0.2647,
+      0.3863,
+      0.4353
+     ],
+     "px": 1190
+    },
+    "master/curtains": {
+     "kind": "proxy",
+     "box": [
+      0.0592,
+      0.3129,
+      0.0,
+      0.6778
+     ],
+     "px": 180045
+    },
+    "master/framed-art-2": {
+     "kind": "proxy",
+     "box": [
+      0.5096,
+      0.5728,
+      0.1961,
+      0.2948
+     ],
+     "px": 23159
+    },
+    "master/shelf-vase-left": {
+     "kind": "proxy",
+     "box": [
+      0.4015,
+      0.4324,
+      0.2281,
+      0.3085
+     ],
+     "px": 8940
+    },
+    "master/shelf-vase-right": {
+     "kind": "proxy",
+     "box": [
+      0.5761,
+      0.6147,
+      0.1876,
+      0.2843
+     ],
+     "px": 9890
+    },
+    "master/planter-filler": {
+     "kind": "proxy",
+     "box": [
+      0.7816,
+      0.9474,
+      0.1405,
+      0.6974
+     ],
+     "px": 184335
+    },
+    "master/magazine-holder": {
+     "kind": "proxy",
+     "box": [
+      0.7257,
+      0.7864,
+      0.7373,
+      0.9196
+     ],
+     "px": 41303
+    },
+    "master/bedside-carafe": {
+     "kind": "proxy",
+     "box": [
+      0.6338,
+      0.6566,
+      0.5052,
+      0.5843
+     ],
+     "px": 6203
+    },
+    "master/bench-throw": {
+     "kind": "proxy",
+     "box": [
+      0.0276,
+      0.1993,
+      0.6569,
+      0.817
+     ],
+     "px": 54255
+    },
+    "master/bench-basket": {
+     "kind": "proxy",
+     "box": [
+      0.1636,
+      0.211,
+      0.8059,
+      1.0
+     ],
+     "px": 36343
+    }
+   },
+   "density_F10": {
+    "result": "fail",
+    "counted": 11,
+    "minimum": 14,
+    "target": [
+     15,
+     18
+    ],
+    "info_counted_if_area_ge_0_2pct": 13,
+    "info_counted_any_area_ge_50pct_visible": 19,
+    "frame_kind": "full",
+    "in_target": false,
+    "categories": [
+     "ceramics/tableware",
+     "decor/play",
+     "lighting",
+     "other",
+     "storage/function",
+     "textile"
+    ],
+    "four_categories_ok": true,
+    "missing_categories": [],
+    "slots": [
+     {
+      "slot": "bedding",
+      "category": "textile",
+      "frame_area_pct": 6.76,
+      "visible_pct": 62.4,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "planter-filler",
+      "category": "other",
+      "frame_area_pct": 4.43,
+      "visible_pct": 88.4,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "curtains",
+      "category": "textile",
+      "frame_area_pct": 4.33,
+      "visible_pct": 70.8,
+      "cut_by_edge_pct": 16.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "throw",
+      "category": "textile",
+      "frame_area_pct": 1.86,
+      "visible_pct": 86.2,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "planter",
+      "category": "ceramics/tableware",
+      "frame_area_pct": 1.62,
+      "visible_pct": 88.1,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "floor-lamp",
+      "category": "lighting",
+      "frame_area_pct": 1.32,
+      "visible_pct": 78.7,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "bench-throw",
+      "category": "other",
+      "frame_area_pct": 1.3,
+      "visible_pct": 90.2,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "framed-art",
+      "category": "decor/play",
+      "frame_area_pct": 1.24,
+      "visible_pct": 83.4,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "magazine-holder",
+      "category": "storage/function",
+      "frame_area_pct": 0.99,
+      "visible_pct": 90.7,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "cushions",
+      "category": "textile",
+      "frame_area_pct": 0.64,
+      "visible_pct": 76.4,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "framed-art-2",
+      "category": "other",
+      "frame_area_pct": 0.56,
+      "visible_pct": 82.2,
+      "cut_by_edge_pct": 0.0,
+      "counted": true,
+      "why_not": null
+     },
+     {
+      "slot": "rug",
+      "category": "textile",
+      "frame_area_pct": 7.01,
+      "visible_pct": 21.5,
+      "cut_by_edge_pct": 48.8,
+      "counted": false,
+      "why_not": "visible < 50%"
+     },
+     {
+      "slot": "bench-basket",
+      "category": "other",
+      "frame_area_pct": 0.87,
+      "visible_pct": 38.6,
+      "cut_by_edge_pct": 14.4,
+      "counted": false,
+      "why_not": "visible < 50%"
+     },
+     {
+      "slot": "pillowcases",
+      "category": "textile",
+      "frame_area_pct": 0.58,
+      "visible_pct": 38.8,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "visible < 50%"
+     },
+     {
+      "slot": "shelf-vase-right",
+      "category": "other",
+      "frame_area_pct": 0.24,
+      "visible_pct": 87.7,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     },
+     {
+      "slot": "shelf-vase-left",
+      "category": "other",
+      "frame_area_pct": 0.21,
+      "visible_pct": 82.4,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     },
+     {
+      "slot": "bedside-carafe",
+      "category": "other",
+      "frame_area_pct": 0.15,
+      "visible_pct": 86.3,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     },
+     {
+      "slot": "candle-holders-filler",
+      "category": "other",
+      "frame_area_pct": 0.11,
+      "visible_pct": 93.9,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     },
+     {
+      "slot": "nightstand-vase",
+      "category": "ceramics/tableware",
+      "frame_area_pct": 0.07,
+      "visible_pct": 89.0,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     },
+     {
+      "slot": "candle-holders",
+      "category": "ceramics/tableware",
+      "frame_area_pct": 0.07,
+      "visible_pct": 84.0,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     },
+     {
+      "slot": "bedside-sconces",
+      "category": "lighting",
+      "frame_area_pct": 0.07,
+      "visible_pct": 80.8,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     },
+     {
+      "slot": "sill-vase",
+      "category": "other",
+      "frame_area_pct": 0.07,
+      "visible_pct": 100.0,
+      "cut_by_edge_pct": 0.0,
+      "counted": false,
+      "why_not": "area < 0.5%"
+     }
+    ],
+    "rule": "counted = own-room product proxy >= 50% visible (ray-cast silhouette incl. outside the frame) and >= 0.5% of the frame; sets once; fillers, shell, fixed furniture, neighbouring rooms not counted"
+   },
+   "heroes_thirds": [
+    {
+     "hero": "bed centre",
+     "u": 0.5075,
+     "ok": false
+    }
+   ],
+   "lamps": [
+    {
+     "lamp": "master/bedside-sconces",
+     "typology": "wall",
+     "shell": false,
+     "glow_px": 7909,
+     "visible": true
+    },
+    {
+     "lamp": "master/floor-lamp",
+     "typology": "floor",
+     "shell": false,
+     "glow_px": 54731,
+     "visible": true
+    }
+   ],
+   "wall_patches": {
+    "hero_wall_high": {
+     "u": 0.507544219493866,
+     "v": 0.07847195863723755,
+     "L_hsl": 97.3,
+     "Y_lin": 0.9448,
+     "stops_vs_mid": 2.39,
+     "xyz": [
+      -0.7,
+      17.66,
+      2.35
+     ]
+    },
+    "hero_wall_mid": {
+     "u": 0.507544219493866,
+     "v": 0.18437957763671875,
+     "L_hsl": 79.9,
+     "Y_lin": 0.6359,
+     "stops_vs_mid": 1.82,
+     "xyz": [
+      -0.7,
+      17.66,
+      1.95
+     ]
+    },
+    "ceiling": {
+     "u": 0.55,
+     "v": 0.04,
+     "L_hsl": 96.9,
+     "Y_lin": 0.9362,
+     "stops_vs_mid": 2.38
+    },
+    "floor_centre": {
+     "u": 0.5,
+     "v": 0.93,
+     "L_hsl": 79.5,
+     "Y_lin": 0.6133,
+     "stops_vs_mid": 1.77
+    }
+   },
+   "light_balance": {},
+   "camera_clearance_m": {
+    "min": 0.458,
+    "nearest": "mb_wm_pl_w"
+   },
+   "overlay": "framing/round3/overlays/MB1.png",
+   "runtime_s": 230,
+   "id_px": {
+    "nothing / sky": 291835,
+    "plaster, bed wall (Y 17.66)": 1159784,
+    "plaster, window wall (X -2.30)": 249469,
+    "plaster, rounded corner R 0.20": 77683,
+    "skirting 15, wall colour": 40044,
+    "floor, smoked oak planks 22": 241465,
+    "floor joints (1.5 mm)": 183,
+    "window reveals, plaster": 38730,
+    "window frame, bronze-espresso": 46860,
+    "sill slab, limestone 4 cm": 13108,
+    "bed headboard, walnut": 119435,
+    "bed frame, walnut": 128128,
+    "bed plinth, dark": 205,
+    "mattress, bone": 191,
+    "nightstand carcass + drawer fronts, walnut": 64163,
+    "nightstand top, walnut": 9515,
+    "nightstand groove / finger recesses": 3440,
+    "nightstand plinth, dark": 5259,
+    "wall shelf, walnut (fixed, plan B)": 19238,
+    "bench top, walnut (fixed, plan B)": 79050,
+    "bench end panels, walnut (fixed, plan B)": 129749,
+    "curtains (product)": 180045,
+    "sill-vase (product)": 3115,
+    "sill stem (filler)": 1190,
+    "bedside-sconces, west (product)": 3011,
+    "bedside-sconces, east (product)": 4898,
+    "nightstand-tray (product)": 619,
+    "nightstand-vase (product)": 3085,
+    "oat stems (filler)": 578,
+    "trinket-dish (product)": 485,
+    "candle-holders (product)": 2881,
+    "candles (filler)": 4745,
+    "pillowcases (product)": 24150,
+    "bedding (product)": 281380,
+    "cushions (product)": 26453,
+    "throw (product)": 77218,
+    "floor-lamp (product)": 54731,
+    "framed-art (product)": 51774,
+    "framed-art-2 (product)": 23159,
+    "shelf-vase-left (product)": 8940,
+    "shelf-vase-right (product)": 9890,
+    "planter (product)": 67521,
+    "ficus (filler)": 184335,
+    "magazine-holder (product)": 41303,
+    "bedside-carafe (product)": 6203,
+    "bench-throw (product)": 54255,
+    "bench-basket (product)": 36343,
+    "rug (product)": 291753,
+    "other house geometry": 6
+   },
+   "pidx_to_id": {
+    "542": 52,
+    "543": 51,
+    "545": 54,
+    "544": 53,
+    "546": 43,
+    "558": 56,
+    "551": 46,
+    "548": 49,
+    "568": 67,
+    "562": 61,
+    "557": 55,
+    "550": 45,
+    "517": 1,
+    "518": 2,
+    "519": 3,
+    "520": 4,
+    "521": 5,
+    "522": 9,
+    "523": 7,
+    "524": 8,
+    "525": 10,
+    "526": 12,
+    "527": 13,
+    "528": 14,
+    "529": 15,
+    "530": 16,
+    "531": 20,
+    "532": 21,
+    "533": 22,
+    "534": 23,
+    "535": 24,
+    "536": 25,
+    "537": 26,
+    "538": 27,
+    "539": 28,
+    "540": 29,
+    "541": 30,
+    "547": 44,
+    "549": 50,
+    "552": 47,
+    "553": 48,
+    "554": 41,
+    "555": 42,
+    "556": 40,
+    "559": 57,
+    "560": 59,
+    "561": 60,
+    "563": 62,
+    "564": 63,
+    "565": 64,
+    "566": 65,
+    "567": 66,
+    "102": 6,
+    "101": 11
+   },
+   "boxes_frame": {
+    "window frame, bronze-espresso": {
+     "u": [
+      0.0793,
+      0.2583
+     ],
+     "v": [
+      -0.0302,
+      0.509
+     ],
+     "px": 46860,
+     "frame_pct": 1.266
+    },
+    "sill slab, limestone 4 cm": {
+     "u": [
+      0.0793,
+      0.2754
+     ],
+     "v": [
+      0.4903,
+      0.5298
+     ],
+     "px": 13108,
+     "frame_pct": 0.354
+    },
+    "bed headboard, walnut": {
+     "u": [
+      0.3967,
+      0.6431
+     ],
+     "v": [
+      0.3863,
+      0.5922
+     ],
+     "px": 119435,
+     "frame_pct": 3.227
+    },
+    "bed frame, walnut": {
+     "u": [
+      0.1152,
+      0.6251
+     ],
+     "v": [
+      0.6788,
+      0.9838
+     ],
+     "px": 128128,
+     "frame_pct": 3.462
+    },
+    "bed plinth, dark": {
+     "u": [
+      0.3963,
+      0.6251
+     ],
+     "v": [
+      0.7523,
+      0.9852
+     ],
+     "px": 205,
+     "frame_pct": 0.006
+    },
+    "mattress, bone": {
+     "u": [
+      0.3175,
+      0.3959
+     ],
+     "v": [
+      0.8147,
+      0.8528
+     ],
+     "px": 191,
+     "frame_pct": 0.005
+    },
+    "nightstand carcass + drawer fronts, walnut": {
+     "u": [
+      0.6251,
+      0.7335
+     ],
+     "v": [
+      0.6019,
+      0.7932
+     ],
+     "px": 64163,
+     "frame_pct": 1.734
+    },
+    "nightstand top, walnut": {
+     "u": [
+      0.3117,
+      0.7335
+     ],
+     "v": [
+      0.543,
+      0.6192
+     ],
+     "px": 9515,
+     "frame_pct": 0.257
+    },
+    "nightstand groove / finger recesses": {
+     "u": [
+      0.6302,
+      0.7043
+     ],
+     "v": [
+      0.6067,
+      0.7121
+     ],
+     "px": 3440,
+     "frame_pct": 0.093
+    },
+    "nightstand plinth, dark": {
+     "u": [
+      0.6333,
+      0.7265
+     ],
+     "v": [
+      0.7703,
+      0.8112
+     ],
+     "px": 5259,
+     "frame_pct": 0.142
+    },
+    "wall shelf, walnut (fixed, plan B)": {
+     "u": [
+      0.3776,
+      0.6431
+     ],
+     "v": [
+      0.2664,
+      0.3149
+     ],
+     "px": 19238,
+     "frame_pct": 0.52
+    },
+    "bench top, walnut (fixed, plan B)": {
+     "u": [
+      0.0766,
+      0.3172
+     ],
+     "v": [
+      0.6975,
+      0.8493
+     ],
+     "px": 79050,
+     "frame_pct": 2.136
+    },
+    "bench end panels, walnut (fixed, plan B)": {
+     "u": [
+      0.0018,
+      0.3172
+     ],
+     "v": [
+      0.7731,
+      1.0302
+     ],
+     "px": 129749,
+     "frame_pct": 3.506
+    },
+    "curtains (product)": {
+     "u": [
+      0.0326,
+      0.3016
+     ],
+     "v": [
+      -0.0302,
+      0.6885
+     ],
+     "px": 180045,
+     "frame_pct": 4.865
+    },
+    "sill-vase (product)": {
+     "u": [
+      0.2415,
+      0.2548
+     ],
+     "v": [
+      0.4314,
+      0.4951
+     ],
+     "px": 3115,
+     "frame_pct": 0.084
+    },
+    "sill stem (filler)": {
+     "u": [
+      0.2396,
+      0.2505
+     ],
+     "v": [
+      0.3794,
+      0.4314
+     ],
+     "px": 1190,
+     "frame_pct": 0.032
+    },
+    "bedside-sconces, west (product)": {
+     "u": [
+      0.3511,
+      0.3784
+     ],
+     "v": [
+      0.333,
+      0.3836
+     ],
+     "px": 3011,
+     "frame_pct": 0.081
+    },
+    "bedside-sconces, east (product)": {
+     "u": [
+      0.6704,
+      0.7023
+     ],
+     "v": [
+      0.3025,
+      0.3711
+     ],
+     "px": 4898,
+     "frame_pct": 0.132
+    },
+    "nightstand-tray (product)": {
+     "u": [
+      0.3195,
+      0.3589
+     ],
+     "v": [
+      0.5374,
+      0.5471
+     ],
+     "px": 619,
+     "frame_pct": 0.017
+    },
+    "nightstand-vase (product)": {
+     "u": [
+      0.3331,
+      0.3491
+     ],
+     "v": [
+      0.4771,
+      0.5402
+     ],
+     "px": 3085,
+     "frame_pct": 0.083
+    },
+    "oat stems (filler)": {
+     "u": [
+      0.3324,
+      0.3421
+     ],
+     "v": [
+      0.43,
+      0.4771
+     ],
+     "px": 578,
+     "frame_pct": 0.016
+    },
+    "trinket-dish (product)": {
+     "u": [
+      0.3433,
+      0.3597
+     ],
+     "v": [
+      0.5333,
+      0.543
+     ],
+     "px": 485,
+     "frame_pct": 0.013
+    },
+    "candle-holders (product)": {
+     "u": [
+      0.6762,
+      0.716
+     ],
+     "v": [
+      0.5548,
+      0.5963
+     ],
+     "px": 2881,
+     "frame_pct": 0.078
+    },
+    "candles (filler)": {
+     "u": [
+      0.6762,
+      0.7156
+     ],
+     "v": [
+      0.5021,
+      0.5568
+     ],
+     "px": 4745,
+     "frame_pct": 0.128
+    },
+    "pillowcases (product)": {
+     "u": [
+      0.3589,
+      0.6193
+     ],
+     "v": [
+      0.5194,
+      0.5998
+     ],
+     "px": 24150,
+     "frame_pct": 0.653
+    },
+    "bedding (product)": {
+     "u": [
+      0.1008,
+      0.6267
+     ],
+     "v": [
+      0.543,
+      0.8542
+     ],
+     "px": 281380,
+     "frame_pct": 7.603
+    },
+    "cushions (product)": {
+     "u": [
+      0.4057,
+      0.4938
+     ],
+     "v": [
+      0.4744,
+      0.5665
+     ],
+     "px": 26453,
+     "frame_pct": 0.715
+    },
+    "throw (product)": {
+     "u": [
+      0.1086,
+      0.4832
+     ],
+     "v": [
+      0.5693,
+      0.7253
+     ],
+     "px": 77218,
+     "frame_pct": 2.086
+    },
+    "floor-lamp (product)": {
+     "u": [
+      0.6926,
+      0.8002
+     ],
+     "v": [
+      0.1888,
+      0.8743
+     ],
+     "px": 54731,
+     "frame_pct": 1.479
+    },
+    "framed-art (product)": {
+     "u": [
+      0.4345,
+      0.5051
+     ],
+     "v": [
+      0.0786,
+      0.2928
+     ],
+     "px": 51774,
+     "frame_pct": 1.399
+    },
+    "framed-art-2 (product)": {
+     "u": [
+      0.5101,
+      0.5772
+     ],
+     "v": [
+      0.1777,
+      0.2824
+     ],
+     "px": 23159,
+     "frame_pct": 0.626
+    },
+    "shelf-vase-left (product)": {
+     "u": [
+      0.3955,
+      0.4283
+     ],
+     "v": [
+      0.2117,
+      0.2969
+     ],
+     "px": 8940,
+     "frame_pct": 0.242
+    },
+    "shelf-vase-right (product)": {
+     "u": [
+      0.5807,
+      0.6216
+     ],
+     "v": [
+      0.1687,
+      0.2713
+     ],
+     "px": 9890,
+     "frame_pct": 0.267
+    },
+    "planter (product)": {
+     "u": [
+      0.847,
+      0.9624
+     ],
+     "v": [
+      0.6899,
+      0.8826
+     ],
+     "px": 67521,
+     "frame_pct": 1.824
+    },
+    "ficus (filler)": {
+     "u": [
+      0.7986,
+      0.9745
+     ],
+     "v": [
+      0.1188,
+      0.7093
+     ],
+     "px": 184335,
+     "frame_pct": 4.981
+    },
+    "magazine-holder (product)": {
+     "u": [
+      0.7394,
+      0.8037
+     ],
+     "v": [
+      0.7516,
+      0.945
+     ],
+     "px": 41303,
+     "frame_pct": 1.116
+    },
+    "bedside-carafe (product)": {
+     "u": [
+      0.6419,
+      0.6661
+     ],
+     "v": [
+      0.5055,
+      0.5894
+     ],
+     "px": 6203,
+     "frame_pct": 0.168
+    },
+    "bench-throw (product)": {
+     "u": [
+      -0.001,
+      0.1811
+     ],
+     "v": [
+      0.6663,
+      0.8361
+     ],
+     "px": 54255,
+     "frame_pct": 1.466
+    },
+    "bench-basket (product)": {
+     "u": [
+      0.1433,
+      0.1936
+     ],
+     "v": [
+      0.8244,
+      1.0302
+     ],
+     "px": 36343,
+     "frame_pct": 0.982
+    },
+    "rug (product)": {
+     "u": [
+      -0.0302,
+      0.7164
+     ],
+     "v": [
+      0.7987,
+      1.0302
+     ],
+     "px": 291753,
+     "frame_pct": 7.883
+    }
+   }
+  }
+ },
+ "post": {
+  "exposure": -0.929,
+  "wb_gains": [
+   0.933,
+   1.0,
+   1.0743
+  ],
+  "reference": {
+   "xyz": [
+    [
+     -0.7,
+     17.66,
+     1.85
+    ],
+    [
+     -0.4,
+     17.66,
+     2.05
+    ]
+   ],
+   "frame": "MB0-plate",
+   "target_Lstar": 87.5
+  },
+  "note": "gains make the bed-wall patch read #ECE5DA's chroma; one exposure and one balance for every frame (one camera point); target L* 87.5 = inside base.png's back wall (85.5 right .. 90 centre .. 91.4 left)",
+  "reused_for": [
+   "MB1-plate",
+   "MB1"
+  ]
+ },
+ "projection_check": {
+  "bed foot right corner (0.20, 19.66, 0.28)": [
+   1102.2,
+   1286.5
+  ],
+  "shelf right front top (0.20, 17.90, 1.50)": [
+   1683.5,
+   428.2
+  ],
+  "bench front left top (-1.35, 20.16, 0.45)": [
+   77.0,
+   1056.8
+  ]
+ },
+ "build_s": 461
+}

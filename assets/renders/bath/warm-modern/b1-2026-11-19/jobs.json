@@ -1,0 +1,70 @@
+{
+ "run": "render-agent, 2026-11-19: the warm-modern bath, B1, the second frame (briefs/wm-bath-b1-render-2026-11-19.md)",
+ "plan": 3300,
+ "stop_above": 4100,
+ "spent_confirmed": 1300,
+ "spent_worst_case": 2600,
+ "spent_note": "1,300 = two jobs of 650 (plate r1, defaults r2). The two failed submissions of defaults r1 (12 references) returned no task and 'credits_refunded: false'; var2 says failed generations are refunded, but this could not be checked: if both were billed, 2,600. Either way under the plan and the stop line.",
+ "estimates": "var2_estimate_cost before every send: plate (3 refs) 650, defaults (12 refs) 650, defaults (9 refs) 650",
+ "var2": {
+  "connected_during_sends": true,
+  "note": "after the sends the session reported that the var2 server needs re-authorisation; nothing further was sent and no code or token was asked for. Everything after the defaults render is code (0 tokens)."
+ },
+ "sent": [
+  {
+   "id": "plate-r1",
+   "output": 1,
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "image_refs": 3,
+   "estimate": 650,
+   "tokens": 650,
+   "placeholder_id": "81cd800a-a0e2-48a9-979f-27e25c41df8b",
+   "task_id": "07adc9c4569c28f383d40e1accd36f8c",
+   "prompt_record": "assets/prompts/warm-modern-bath-b1-2026-11-19/plate.json",
+   "raw": "assets/renders/bath/warm-modern/b1-2026-11-19/raw/plate-r1.png",
+   "final": "assets/renders/bath/warm-modern/b1-2026-11-19/plate.png",
+   "verdict": "accepted with code steps (tools/compose_b1_plate.py)"
+  },
+  {
+   "id": "defaults-r1",
+   "output": 2,
+   "model": "seedream-5-pro",
+   "image_refs": 12,
+   "estimate": 650,
+   "tokens": "0 or 650 x 2 (see spent_note)",
+   "result": "failed twice at create ('Something went wrong'), no task id",
+   "idempotency_key": "wm-bath-b1-defaults-r1-2026-11-19"
+  },
+  {
+   "id": "defaults-r2",
+   "output": 2,
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "image_refs": 9,
+   "estimate": 650,
+   "tokens": 650,
+   "placeholder_id": "968e3321-80e2-4e66-992e-1cd283f5b16b",
+   "task_id": "2bf2e91852104439b59832670775ba77",
+   "prompt_record": "assets/prompts/warm-modern-bath-b1-2026-11-19/defaults.json",
+   "raw": "assets/renders/bath/warm-modern/b1-2026-11-19/raw/defaults-r1.png",
+   "final": "assets/renders/bath/warm-modern/b1-2026-11-19/b1-defaults.png",
+   "verdict": "accepted for the layers with code steps (tools/compose_b1_defaults.py)"
+  }
+ ],
+ "in_code": {
+  "tokens": 0,
+  "steps": [
+   "the clay (Blender, framing_wm_bath_b1.py)",
+   "the plate's relight, plaster colour and grade (compose_b1_plate.py)",
+   "the defaults' cut into layers, shadows and light (compose_b1_defaults.py)",
+   "the Beige mat variant (variant_b1_mat.py)",
+   "the checks (checks_b1.py)"
+  ]
+ },
+ "not_sent": {
+  "third_mat_variant": "row 14 / 8.6 has no third mat card that passed the photo check (Line Camel failed): nothing to render"
+ }
+}

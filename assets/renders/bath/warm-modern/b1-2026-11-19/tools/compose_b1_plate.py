@@ -76,6 +76,29 @@ def materials(img, ids):
     return {n: [round(float(v), 1) for v in np.median(L[np.isin(ids, v)], 0)] for n, v in g.items() if np.isin(ids, v).sum() > 200}
 
 
+def relight(r, c, ids, K=K, sig=SIG, gmax=GMAX, gmin=1.0):
+    """step 1 on any B1 still: L* only, K x blur(clay Y) / blur(still Y), off the fluted glass; a*/b* stay the still's"""
+    glass = cv2.dilate((ids == 31).astype(np.uint8), np.ones((25, 25), np.uint8)) > 0
+    w = (~glass).astype(np.float32)
+    g = np.clip(K * nblur(lin(c) @ W3, w, sig) / np.maximum(nblur(lin(r) @ W3, w, sig), 1e-4), gmin, gmax)
+    fe = cv2.GaussianBlur(glass.astype(np.float32), (0, 0), 6)
+    g = g * (1 - fe) + fe
+    L = G.to_lab(srgb(lin(r) * g[..., None]))
+    L[..., 1:] = G.to_lab(r)[..., 1:]
+    return G.from_lab(L), g
+
+
+def plaster_ab(img, ids):
+    """step 2 on any B1 still: the plaster's smooth a*/b* to (0.8, 5.5), its own variation kept"""
+    glass = cv2.dilate((ids == 31).astype(np.uint8), np.ones((25, 25), np.uint8)) > 0
+    L = G.to_lab(img)
+    pm = np.isin(ids, PLASTER) & ~glass
+    for k, t in ((1, AB[0]), (2, AB[1])):
+        f = nblur(L[..., k], pm, SIG_AB)
+        L[..., k] = np.where(pm, L[..., k] + (t - f), L[..., k])
+    return G.from_lab(L)
+
+
 def main():
     r = np.asarray(Image.open(os.path.join(ST, "raw", "plate-r1.png")).convert("RGB")).astype(np.float64) / 255
     c = np.asarray(Image.open(CL + "B1-plate.png").convert("RGB")).astype(np.float64) / 255

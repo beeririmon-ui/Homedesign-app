@@ -1,0 +1,448 @@
+{
+ "date": "2026-11-19",
+ "frame": "B1",
+ "measured_on": "b1-defaults.png and b1-variant-mat-beige.png (2720 x 1530 canvas; the frame box [77.49, 43.43, 2642.51, 1486.57])",
+ "rnd2": {
+  "defaults": 0,
+  "beige": 0,
+  "beige_differs_from_defaults_outside_the_mat_alpha": 0,
+  "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+ },
+ "shadows": {
+  "all_one_below": true,
+  "pairs": {
+   "shower-dispensers": [
+    14,
+    13
+   ],
+   "wall-sconce": [
+    14,
+    13
+   ],
+   "bath-mat": [
+    18,
+    17
+   ],
+   "shower-curtain": [
+    26,
+    25
+   ],
+   "floor-planter": [
+    30,
+    29
+   ],
+   "bin": [
+    42,
+    41
+   ],
+   "toilet-paper-stand": [
+    44,
+    43
+   ],
+   "candle": [
+    46,
+    45
+   ],
+   "reed-diffuser": [
+    46,
+    45
+   ],
+   "window-sill-vase": [
+    46,
+    45
+   ],
+   "toilet-brush": [
+    48,
+    47
+   ]
+  },
+  "light_z": 90
+ },
+ "black_point": {
+  "rule": "WM-G1: black L* 11-14",
+  "defaults": {
+   "min": 10.84,
+   "p0_1": 11.33,
+   "p0_5": 11.78,
+   "p5": 35.46
+  },
+  "beige": {
+   "min": 10.84,
+   "p0_1": 11.33,
+   "p0_5": 11.78,
+   "p5": 35.48
+  },
+  "plate": {
+   "min": 10.98,
+   "p0_1": 11.36,
+   "p0_5": 11.83,
+   "p5": 41.31
+  },
+  "b2_defaults": {
+   "min": 7.65,
+   "p0_1": 11.28,
+   "p0_5": 11.63,
+   "p5": 18.52
+  },
+  "black_products": {
+   "window-sill-vase": {
+    "min": 11.05,
+    "p1": 12.66,
+    "p50": 18.19
+   },
+   "toilet-paper-stand": {
+    "min": 10.84,
+    "p1": 11.33,
+    "p50": 32.36
+   },
+   "toilet-brush": {
+    "min": 11.64,
+    "p1": 12.19,
+    "p50": 31.37
+   }
+  },
+  "ok": true
+ },
+ "same_house": {
+  "shared_regions_b1": {
+   "window wall strip X 4.95-5.15 (B2: the repaired strip)": [
+    92.0,
+    0.8,
+    5.5
+   ],
+   "vanity wall Y 11.25-11.6": [
+    91.3,
+    0.6,
+    5.2
+   ]
+  },
+  "shared_regions_b2": {
+   "window wall strip X 4.95-5.15 (B2: the repaired strip)": [
+    88.4,
+    1.0,
+    6.3
+   ],
+   "vanity wall Y 11.25-11.6": [
+    90.9,
+    0.5,
+    3.9
+   ]
+  },
+  "floor_median": {
+   "b1": [
+    81.7,
+    3.2,
+    14.5
+   ],
+   "b2": [
+    86.6,
+    1.8,
+    8.4
+   ],
+   "de00": 5.29
+  },
+  "plaster_median": {
+   "b1": [
+    89.8,
+    0.8,
+    5.2
+   ],
+   "b2": [
+    85.9,
+    0.7,
+    5.8
+   ],
+   "de00": 2.55
+  },
+  "note": "B1 looks at the window wall (lit), B2 at the vanity: the plaster matches within 1-2 L*; the floor in B1 is a little warmer (b* about 12 against 8) and nearer the bible's #D8C8AE (b* 15)"
+ },
+ "colour": {
+  "jar": {
+   "as_seen_mid_tone": [
+    18.1,
+    1.3,
+    1.6
+   ],
+   "chroma": 2.1,
+   "photo": [
+    17.9,
+    2.0,
+    -4.0
+   ],
+   "photo_chroma": 4.5,
+   "body_median": [
+    18.3,
+    1.1,
+    1.1
+   ],
+   "note": "neutral black, not warmed: as seen on the sill against the frosted glass; the photo's body reading for reference"
+  },
+  "mat": {
+   "khaki": {
+    "method": "R5 after the grade: mid-tone median of the mat's solid body over the light on it (intensity from the plate's floor ring 10-40 px, ids 9-10, over the stone #D8C8AE's luminance; colour from the plaster beside it); a per-channel linear gain on the whole mat, the render's shading kept",
+    "light_colour": [
+     1.0084,
+     0.9982,
+     0.9929
+    ],
+    "plaster_px": 37949,
+    "target_photo": [
+     77.6,
+     4.2,
+     13.6
+    ],
+    "ring_px": 18908,
+    "before": [
+     79.0,
+     4.0,
+     15.0
+    ],
+    "de00_before": 1.4,
+    "after": [
+     77.6,
+     4.2,
+     13.6
+    ],
+    "de00_after": 0.0,
+    "gain_linear": [
+     0.9524,
+     0.9546,
+     0.9835
+    ],
+    "clipped_px": 0
+   },
+   "beige": {
+    "reference": "R5 on the floor (compose_b1_defaults.mat_reading): intensity from the plate floor ring 10-40 px over the stone #D8C8AE luminance, light colour from the plaster beside it",
+    "ring_px": 18908,
+    "khaki": [
+     77.6,
+     4.3,
+     13.5
+    ],
+    "khaki_photo": [
+     77.6,
+     4.2,
+     13.6
+    ],
+    "de00_khaki": 0.15,
+    "beige": [
+     87.6,
+     -0.3,
+     6.9
+    ],
+    "beige_photo": [
+     87.5,
+     0.0,
+     6.6
+    ],
+    "de00_beige": 0.48
+   },
+   "light": {
+    "method": "the mat's large-scale colour and light (per channel, linear, sigma 30 px over its body) set to the photo's khaki in the light under it (intensity: the plate's bare floor there over the stone's luminance; colour: the plaster beside it, light_colour); the tufts, grooves and edges kept (finer than 30 px); level by R5 after",
+    "sigma_px": 30.0,
+    "light_p95_over_p5_render": 1.594,
+    "light_p95_over_p5_floor": 1.294,
+    "render_albedo_chroma_p5_p50_p95": [
+     6.7,
+     12.9,
+     20.0
+    ],
+    "gain_p1_p50_p99": [
+     [
+      0.791,
+      0.837,
+      1.137
+     ],
+     [
+      0.667,
+      0.815,
+      1.178
+     ],
+     [
+      0.582,
+      0.797,
+      1.194
+     ]
+    ]
+   }
+  }
+ },
+ "counts": {
+  "rule": "V7Q6 (03.11): >= 0.5 % of the frame, or >= 0.15 % and >= 6 % of its height; >= 50 % visible; a group of 3 or 5 = one item",
+  "frame_px": 3705304,
+  "per_product": {
+   "shower-dispensers": {
+    "product": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+    "area_pct": 0.218,
+    "height_pct": 5.89,
+    "visible_pct": 100.0,
+    "counts": false,
+    "items": 1
+   },
+   "wall-sconce": {
+    "product": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853",
+    "area_pct": 0.121,
+    "height_pct": 6.24,
+    "visible_pct": 100.0,
+    "counts": false,
+    "items": 1
+   },
+   "bath-mat": {
+    "product": "bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki",
+    "area_pct": 1.01,
+    "height_pct": 10.6,
+    "visible_pct": 87.5,
+    "counts": true,
+    "items": 1
+   },
+   "shower-curtain": {
+    "product": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+    "area_pct": 9.187,
+    "height_pct": 100.06,
+    "visible_pct": 95.0,
+    "counts": true,
+    "items": 1
+   },
+   "floor-planter": {
+    "product": "planter-cj-cement-ribbed-belly-beige-medium",
+    "area_pct": 0.939,
+    "height_pct": 16.42,
+    "visible_pct": 100.0,
+    "counts": true,
+    "items": 1
+   },
+   "bin": {
+    "product": "bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid",
+    "area_pct": 0.583,
+    "height_pct": 14.69,
+    "visible_pct": 86.9,
+    "counts": true,
+    "items": 1
+   },
+   "toilet-paper-stand": {
+    "product": "toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black",
+    "area_pct": 0.373,
+    "height_pct": 23.98,
+    "visible_pct": 100.0,
+    "counts": true,
+    "items": 1
+   },
+   "candle": {
+    "product": "candle-cj-ribbed-matte-ceramic-candle-cup-9-white",
+    "area_pct": 0.092,
+    "height_pct": 4.23,
+    "visible_pct": 99.2,
+    "counts": false,
+    "items": 1
+   },
+   "reed-diffuser": {
+    "product": "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+    "area_pct": 0.134,
+    "height_pct": 14.0,
+    "visible_pct": 100.0,
+    "counts": false,
+    "items": 1
+   },
+   "window-sill-vase": {
+    "product": "vase-cj-black-matte-stoneware-jar-30-style4",
+    "area_pct": 0.428,
+    "height_pct": 12.06,
+    "visible_pct": 100.0,
+    "counts": true,
+    "items": 1
+   },
+   "toilet-brush": {
+    "product": "toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color",
+    "area_pct": 0.195,
+    "height_pct": 16.63,
+    "visible_pct": 100.0,
+    "counts": true,
+    "items": 1
+   }
+  },
+  "in_b1_frame": 11,
+  "counting_in_b1": 7,
+  "not_counting_in_b1": [
+   "shower-dispensers",
+   "wall-sconce",
+   "candle",
+   "reed-diffuser"
+  ],
+  "new_unique_in_b1": [
+   "bath-mat",
+   "toilet-paper-stand",
+   "bin",
+   "toilet-brush",
+   "reed-diffuser",
+   "candle",
+   "window-sill-vase"
+  ],
+  "also_in_b2": [
+   "shower-dispensers",
+   "wall-sconce",
+   "shower-curtain",
+   "floor-planter"
+  ],
+  "room_unique": {
+   "b2": 11,
+   "b1_new": 7,
+   "total": 18,
+   "target": 20,
+   "gaps": [
+    "shower-stool",
+    "wall-art (the small print)",
+    "ledge-planter"
+   ]
+  }
+ },
+ "halos": {
+  "rule": "soft-edge pixels lighter than the plate under them and than the product's own edge by 6 L*",
+  "per_product": {
+   "shower-dispensers": {
+    "edge_px": 1836,
+    "light_fringe_px": 17
+   },
+   "wall-sconce": {
+    "edge_px": 570,
+    "light_fringe_px": 0
+   },
+   "bath-mat": {
+    "edge_px": 3163,
+    "light_fringe_px": 0
+   },
+   "shower-curtain": {
+    "edge_px": 9815,
+    "light_fringe_px": 0
+   },
+   "floor-planter": {
+    "edge_px": 4570,
+    "light_fringe_px": 140
+   },
+   "bin": {
+    "edge_px": 1847,
+    "light_fringe_px": 14
+   },
+   "toilet-paper-stand": {
+    "edge_px": 2895,
+    "light_fringe_px": 65
+   },
+   "candle": {
+    "edge_px": 735,
+    "light_fringe_px": 103
+   },
+   "reed-diffuser": {
+    "edge_px": 3056,
+    "light_fringe_px": 0
+   },
+   "window-sill-vase": {
+    "edge_px": 1550,
+    "light_fringe_px": 51
+   },
+   "toilet-brush": {
+    "edge_px": 1772,
+    "light_fringe_px": 0
+   }
+  },
+  "total_light_fringe_px": 390
+ }
+}
