@@ -4,13 +4,13 @@
  "agent": "qa-agent",
  "brief": "briefs/qa-bath-b1-2026-11-19.md",
  "files": "assets/renders/bath/warm-modern/b1-2026-11-19/ at 9226fabc",
- "verdict": "fail: M1-M3 (medium, all in code, 0 tokens)",
+ "verdict": "pass after the re-check (M1-M3 and B1-L1 fixed in code); first round: fail M1-M3",
  "blocking": [
   "M1",
   "M2",
   "M3"
  ],
- "status_line": "B1 שלב 1: נכשל QA על M1–M3 (בינוניים; הכול בקוד, 0 טוקנים; QA בודק שוב רק אותם).",
+ "status_line": "עבר QA (B1 שלב 1; לבעלים; לא לאתר לפני רישום 1.3.9)",
  "status_after_fix": "עבר QA (B1 שלב 1; לבעלים; לא לאתר לפני רישום 1.3.9)",
  "items": {
   "1_fidelity": "fail (M1 planter, M2 jar); pass: mats Khaki and Beige, stand, bin, brush, candle, diffuser, lamp, curtain, niche set",
@@ -1557,5 +1557,498 @@
  "tools": "scratchpad qa-b1/ (deleted after the run, per the brief)",
  "tokens": 0,
  "var2": false,
- "commits": false
+ "commits": false,
+ "recheck": {
+  "date": "2026-11-19",
+  "files_at": "4c531785",
+  "baseline": "9226fabc",
+  "verdict": "pass",
+  "blocking": [],
+  "status_line": "עבר QA (B1 שלב 1; לבעלים; לא לאתר לפני רישום 1.3.9)",
+  "rnd2": {
+   "recompose_defaults_px": 0,
+   "recompose_beige_px": 0,
+   "outside_diff": [
+    0,
+    0
+   ],
+   "swap_outside_mat": 0,
+   "shadow_one_below": true,
+   "black": [
+    10.84,
+    11.33,
+    11.78
+   ],
+   "changed_b1-defaults.png": [
+    40725,
+    0
+   ],
+   "changed_b1-variant-mat-beige.png": [
+    40725,
+    0
+   ]
+  },
+  "M1": {
+   "result": "pass",
+   "measure": {
+    "ring_px": 2608,
+    "ring_abs": [
+     86.7,
+     0.8,
+     5.1,
+     5.2,
+     80.7
+    ],
+    "smooth_low_lit_rel": [
+     65.9,
+     -0.2,
+     -0.1,
+     0.3,
+     195.1
+    ],
+    "smooth_low_lit_abs": [
+     56.5,
+     0.4,
+     3.7,
+     3.7,
+     84.4
+    ],
+    "smooth_low_lit_de00_vs_sku": 7.57,
+    "smooth_low_mid_rel": [
+     55.6,
+     -0.1,
+     -0.0,
+     0.1,
+     202.5
+    ],
+    "smooth_low_mid_abs": [
+     47.4,
+     0.4,
+     3.2,
+     3.3,
+     83.2
+    ],
+    "smooth_low_mid_de00_vs_sku": 4.52,
+    "ribbed_up_lit_rel": [
+     79.7,
+     -0.2,
+     -0.1,
+     0.2,
+     212.9
+    ],
+    "ribbed_up_lit_abs": [
+     68.7,
+     0.5,
+     4.2,
+     4.3,
+     83.0
+    ],
+    "ribbed_up_lit_de00_vs_sku": 17.2,
+    "ribbed_up_mid_rel": [
+     64.2,
+     -0.2,
+     -0.1,
+     0.2,
+     207.9
+    ],
+    "ribbed_up_mid_abs": [
+     54.9,
+     0.4,
+     3.7,
+     3.7,
+     84.1
+    ],
+    "ribbed_up_mid_de00_vs_sku": 6.41
+   },
+   "intensity_only_rel": {
+    "whole_pot_mid": [
+     59.7,
+     0.4,
+     3.7,
+     3.8,
+     83.7
+    ],
+    "de00_whole": 1.3,
+    "smooth_low_mid": [
+     55.5,
+     0.4,
+     3.7,
+     3.7,
+     83.2
+    ],
+    "de00_smooth": 2.62
+   },
+   "sku": [
+    58.3,
+    0.15,
+    4.1
+   ]
+  },
+  "M2": {
+   "result": "pass",
+   "measure": {
+    "render_rows": [
+     630,
+     796
+    ],
+    "clay_rows": [
+     624,
+     790
+    ],
+    "width_ratio": {
+     "0.03": 1.015,
+     "0.1": 1.071,
+     "0.2": 1.062,
+     "0.3": 1.0,
+     "0.4": 1.0,
+     "0.5": 1.012,
+     "0.6": 1.013,
+     "0.7": 1.014,
+     "0.8": 1.014,
+     "0.9": 1.015,
+     "0.97": 0.984
+    },
+    "render_w": {
+     "0.03": 67,
+     "0.1": 75,
+     "0.2": 85,
+     "0.3": 91,
+     "0.4": 87,
+     "0.5": 83,
+     "0.6": 79,
+     "0.7": 75,
+     "0.8": 71,
+     "0.9": 67,
+     "0.97": 63
+    },
+    "clay_w": {
+     "0.03": 66,
+     "0.1": 70,
+     "0.2": 80,
+     "0.3": 91,
+     "0.4": 87,
+     "0.5": 82,
+     "0.6": 78,
+     "0.7": 74,
+     "0.8": 70,
+     "0.9": 66,
+     "0.97": 64
+    },
+    "render_h_over_wmax": 1.84,
+    "clay_h_over_wmax": 1.84,
+    "render_base_over_max": 0.69,
+    "clay_base_over_max": 0.7,
+    "texture": {
+     "hp_std": 1.27,
+     "L_p5_p50_p95": [
+      14.1,
+      18.7,
+      39.0
+     ],
+     "speckle_share": 0.0,
+     "n": 5328,
+     "median": [
+      18.7,
+      1.4,
+      1.5,
+      2.1,
+      47.1
+     ]
+    },
+    "texture_round1_same_box_rule": 3.21,
+    "contour_roughness_left_right_mean_max": [
+     [
+      0.26,
+      0.44
+     ],
+     [
+      0.26,
+      0.44
+     ]
+    ],
+    "contour_roughness_round1": [
+     [
+      0.25,
+      1.78
+     ],
+     [
+      0.41,
+      2.89
+     ]
+    ],
+    "right_band": {
+     "px": 2910,
+     "D_minus_plate_median": 0.0,
+     "D_minus_plate_max": 27.38,
+     "px_brighter_than_plate_by_5": 10
+    },
+    "fringe_inside_edge_brighter_than_plate_8": 82,
+    "fringe_bbox": [
+     564,
+     763,
+     632,
+     790
+    ]
+   }
+  },
+  "jar_right_light": {
+   "result": "accepted as edge light (window and sill), info",
+   "outside_px_brighter_5": 10,
+   "inside_rows": [
+    760,
+    795
+   ],
+   "inside_L": [
+    67,
+    76
+   ]
+  },
+  "M3": {
+   "result": "pass",
+   "measure": {
+    "holes_ge4": [
+     [
+      1765,
+      40,
+      6,
+      2,
+      8
+     ]
+    ],
+    "hole_px_in_qa_box": 0,
+    "halo_px": 52,
+    "halo_bbox": [
+     1729,
+     1280,
+     1733,
+     1495
+    ],
+    "left_edge_rows": [
+     [
+      1250,
+      1733,
+      [
+       88,
+       97,
+       88,
+       87,
+       87,
+       90
+      ]
+     ],
+     [
+      1256,
+      1733,
+      [
+       88,
+       97,
+       91,
+       87,
+       89,
+       85
+      ]
+     ],
+     [
+      1262,
+      1733,
+      [
+       88,
+       95,
+       90,
+       89,
+       84,
+       90
+      ]
+     ],
+     [
+      1268,
+      1733,
+      [
+       89,
+       96,
+       92,
+       87,
+       86,
+       84
+      ]
+     ],
+     [
+      1274,
+      1733,
+      [
+       88,
+       94,
+       87,
+       88,
+       86,
+       88
+      ]
+     ],
+     [
+      1280,
+      1732,
+      [
+       86,
+       94,
+       91,
+       90,
+       87,
+       86
+      ]
+     ],
+     [
+      1286,
+      1732,
+      [
+       90,
+       98,
+       92,
+       87,
+       86,
+       87
+      ]
+     ],
+     [
+      1292,
+      1732,
+      [
+       91,
+       98,
+       92,
+       86,
+       86,
+       87
+      ]
+     ],
+     [
+      1298,
+      1732,
+      [
+       90,
+       98,
+       91,
+       85,
+       83,
+       82
+      ]
+     ],
+     [
+      1304,
+      1732,
+      [
+       92,
+       98,
+       90,
+       86,
+       87,
+       88
+      ]
+     ],
+     [
+      1310,
+      1732,
+      [
+       93,
+       97,
+       90,
+       82,
+       87,
+       87
+      ]
+     ],
+     [
+      1316,
+      1732,
+      [
+       93,
+       98,
+       91,
+       86,
+       86,
+       83
+      ]
+     ],
+     [
+      1322,
+      1732,
+      [
+       94,
+       97,
+       89,
+       88,
+       84,
+       85
+      ]
+     ],
+     [
+      1328,
+      1732,
+      [
+       94,
+       98,
+       92,
+       85,
+       90,
+       88
+      ]
+     ],
+     [
+      1334,
+      1732,
+      [
+       95,
+       97,
+       91,
+       88,
+       89,
+       83
+      ]
+     ],
+     [
+      1340,
+      1731,
+      [
+       96,
+       98,
+       93,
+       88,
+       90,
+       88
+      ]
+     ]
+    ],
+    "curtain_layer_changed_px": 766,
+    "changed_bbox": [
+     1730,
+     1281,
+     1747,
+     1335
+    ]
+   }
+  },
+  "B1_L1": {
+   "result": "closed",
+   "measure": {
+    "candle_alpha_right_of_861_gt0": 106,
+    "ge128": 0,
+    "max": 64,
+    "cols_with_alpha": [
+     862,
+     863
+    ],
+    "overlap_with_diffuser": 0,
+    "gap_D_minus_plate_rows_740_785_x_863_867": 6.35
+   }
+  },
+  "findings": [
+   {
+    "id": "B1-L2",
+    "severity": "low",
+    "what": "jar neck smoothed away: width rises 65->73 px over rows 632-644; clay has a 66 px collar for ~10 rows, the photo a short straight neck with a rim",
+    "fix": "code: keep the top ~10 rows at the clay collar width, then the shoulder step; consider a thin light rim line",
+    "owner": "render-agent",
+    "backlog": "status/backlog-low.md"
+   }
+  ]
+ }
 }

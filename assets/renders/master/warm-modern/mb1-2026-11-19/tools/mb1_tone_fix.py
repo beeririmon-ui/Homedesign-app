@@ -7,6 +7,7 @@ against MB0 / the SKU (mb1_checks.py), and only in the product's own pixels (eac
     plaster ring is reported by mb1_checks.py; in MB1 the ring is lit by the floor lamp's glow, so it is a reading, not the target);
   - the patina pitcher: the model drew it grey-blue (C* 3.5, h -15 off MB0's); a* b* moved to MB0's lit tone (2.4, 11.0), L* kept;
   - the travertine candle holders: grey (C* 5) against MB0's warm travertine (2.4, 11.7): a* b* moved the same way, L* kept.
+  - the rug: to the living room's rug (the same listing and photo) relative to the oak beside it, and its chroma.
 Run after the passes and the prints, then mb1_compose.py compose.
   python3 mb1_tone_fix.py
 """
@@ -96,6 +97,33 @@ def main():
         lab[..., 2] += (tb - cur[2]) * (a > 0)
         save_layer(p, np.clip(C.from_lab(lab), 0, 1), a)
         rec[slot] = dict(rule="a* b* to MB0's lit tone, L* kept", before_ab=[round(float(cur[1]), 1), round(float(cur[2]), 1)], to=[ta, tb])
+    # the rug: the same listing and photo as the living room's rug; there it reads 3.95 x the oak floor beside it (luminance, medians:
+    # rug L* 77.1 against oak 42.9, the r12 set-B graded frame) at C* 11.9; the edit drew it barely lighter than the oak (43 against 40)
+    # and more saturated. Its median set to 3.95 x the oak beside it (the plate's floor within 200 px, under no layer), C* to 11.9, hue
+    # kept; in linear light, so its braid and the bed's and bench's shade on it stay
+    p, im = load_layer(man, "rug")
+    rgb, a = im[..., :3], im[..., 3]
+    lab = C.to_lab(rgb)
+    rug = a > 0.99
+    anyA = np.zeros((H, W), bool)
+    for l in man["layers"]:
+        anyA |= np.asarray(Image.open(os.path.join(ST, l["layer"])))[..., 3] > 0
+    oak = np.isin(M.ids("MB1-plate"), (10,)) & ~anyA & M.frame_mask() & ~C.dil(rug, 10) & C.dil(rug, 200)
+    oakL = float(np.median(comp[oak][:, 0]))
+    tY = 3.95 * float(Y_of(np.array(oakL)))
+    tL = float(L_of(np.array(tY)))
+    cur = np.median(lab[rug], 0)
+    g = tY / float(Y_of(np.array(cur[0])))
+    kc = 11.9 / max(float(np.hypot(cur[1], cur[2])), 1e-3)
+    w = (a > 0).astype(np.float64)
+    lab2 = lab.copy()
+    lab2[..., 0] = L_of(Y_of(lab[..., 0]) * (1 + (g - 1) * w))
+    lab2[..., 1] = lab[..., 1] * (1 + (kc - 1) * w)
+    lab2[..., 2] = lab[..., 2] * (1 + (kc - 1) * w)
+    save_layer(p, np.clip(C.from_lab(lab2), 0, 1), a)
+    rec["rug"] = dict(rule="the living room's rug-to-oak ratio (3.95, luminance of the medians) and its C* (11.9), hue kept",
+                      oak_beside_L=round(oakL, 1), rug_before=[round(float(v), 1) for v in cur], target_median_L=round(tL, 1),
+                      luminance_gain=round(g, 3), chroma_scale=round(kc, 3))
     r = json.load(open(os.path.join(ST, "mb1-compose.json")))
     r["tone_fix"] = rec
     json.dump(r, open(os.path.join(ST, "mb1-compose.json"), "w"), indent=1)
