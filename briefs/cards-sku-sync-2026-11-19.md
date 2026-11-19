@@ -31,3 +31,10 @@ QA and the photo checks found cards whose `in_room` or `default_sku` points to a
 ## Fixed rules
 - Edit only those fields in existing cards, plus the new log file. No web access is needed. No binding documents, no slots, no commits, no keys.
 - Return a short Hebrew summary: how many cards changed, and anything left open.
+
+## The manager's rulings after round 1 (2026-11-19); they override the above
+1. **One `in_room` flag per card, as the schema says.** It goes on `default_sku`, the variant of the room where the product counts or shows biggest, by the manager's counting rule. Other rooms' variants are listed in a `notes` line, in the form "room_variants: <room>=<sku>; …". The tour and the store take the per-room variant from that line, or from the room's selections file once it exists. The schema stays as it is. Revert any card that now has more than one `in_room: true`.
+2. **Sync the card-level `supplier.sku` and `price.cost` to the new `default_sku`,** taking the values from the card's own per-SKU list (`options.skus`). This is not a price decision; it makes the card describe the variant it sells. Where shipping for that SKU isn't recorded, set the shipping note to "לא אומת ל-SKU הזה (צריך API)". Don't invent numbers.
+3. **The moon jar:** follow the chapters (G black, C white). Note the conflict with `colors` in `notes`, and leave `colors` alone.
+4. **The bedroom carafe:** verify the SKU against chapter 13 of `docs/proposals/wm-master-bedroom-render-2026-11-17.md` and the MB0 render README (`assets/renders/master/warm-modern/stage1-2026-11-17/README.md`, "C03D140"). Don't assume.
+5. **Finish the rest:** the kids' rooms (chapter ד), the kitchen (10.1) and the work room items listed as unchecked in section 4 of `data/leads/sku-sync-2026-11-19.md`.
