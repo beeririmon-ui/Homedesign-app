@@ -1,0 +1,272 @@
+{
+ "frame": "B1",
+ "room": "bath",
+ "style": "warm-modern",
+ "date": "2026-11-19",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "base": "plate.png",
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "grade": "plate-grade.json (B2's WM-G1 curve) on every file",
+ "compose": {
+  "order": [
+   "base",
+   "shower-dispensers-shadow, shower-dispensers",
+   "wall-sconce-shadow, wall-sconce",
+   "bath-mat-shadow, bath-mat",
+   "shower-curtain-shadow, shower-curtain",
+   "floor-planter-shadow, floor-planter",
+   "bin-shadow, bin",
+   "toilet-paper-stand-shadow, toilet-paper-stand",
+   "candle-shadow, candle",
+   "reed-diffuser-shadow, reed-diffuser",
+   "window-sill-vase-shadow, window-sill-vase",
+   "toilet-brush-shadow, toilet-brush",
+   "light (screen)"
+  ],
+  "formula": "out = round((below * shadow / 255) * (1 - a) + rgb * a), straight alpha; then the light: out = 255 - round((255 - out) * (255 - L) / 255)"
+ },
+ "layers": [
+  {
+   "slot": "shower-dispensers",
+   "product": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+   "card": "data/products/bath/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.json",
+   "sku": "CJYD301460604DW",
+   "z": 14,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow": "shadows/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "alpha_px": 11084,
+   "shadow_px": 6089
+  },
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853",
+   "card": "data/products/bath/wall-sconce/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.json",
+   "sku": "12000048654610384",
+   "z": 14,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/wall-sconce/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "shadow": "shadows/wall-sconce/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "alpha_px": 5733,
+   "shadow_px": 3614
+  },
+  {
+   "slot": "bath-mat",
+   "product": "bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki",
+   "card": "data/products/bath/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60.json",
+   "sku": "CJYD289719807GT",
+   "z": 18,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki.png",
+   "shadow": "shadows/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki.png",
+   "alpha_px": 46703,
+   "shadow_px": 10085
+  },
+  {
+   "slot": "shower-curtain",
+   "product": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+   "card": "data/products/bath/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.json",
+   "sku": "12000059196236303",
+   "z": 26,
+   "shadow_z": 25,
+   "default": true,
+   "layer": "layers/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "shadow": "shadows/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "alpha_px": 357073,
+   "shadow_px": 115235
+  },
+  {
+   "slot": "floor-planter",
+   "product": "planter-cj-cement-ribbed-belly-beige-medium",
+   "card": "data/products/planter/planter-cj-cement-ribbed-belly.json",
+   "sku": "CJJT154204208HS",
+   "z": 30,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "shadow": "shadows/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "alpha_px": 161455,
+   "shadow_px": 61303
+  },
+  {
+   "slot": "bin",
+   "product": "bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid",
+   "card": "data/products/bath/bin/bin-cj-bent-walnut-round-swing-lid.json",
+   "sku": "CJJT102413505EV",
+   "z": 42,
+   "shadow_z": 41,
+   "default": true,
+   "layer": "layers/bin/bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid.png",
+   "shadow": "shadows/bin/bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid.png",
+   "alpha_px": 23746,
+   "shadow_px": 10535
+  },
+  {
+   "slot": "toilet-paper-stand",
+   "product": "toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black",
+   "card": "data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with.json",
+   "sku": "12000053061878471",
+   "z": 44,
+   "shadow_z": 43,
+   "default": true,
+   "layer": "layers/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black.png",
+   "shadow": "shadows/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black.png",
+   "alpha_px": 20625,
+   "shadow_px": 23539
+  },
+  {
+   "slot": "candle",
+   "product": "candle-cj-ribbed-matte-ceramic-candle-cup-9-white",
+   "card": "data/products/bath/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9.json",
+   "sku": "CJJT120250201AZ",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9-white.png",
+   "shadow": "shadows/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9-white.png",
+   "alpha_px": 3937,
+   "shadow_px": 2683
+  },
+  {
+   "slot": "reed-diffuser",
+   "product": "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+   "card": "data/products/bath/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea.json",
+   "sku": "milk-tea",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea.png",
+   "shadow": "shadows/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea.png",
+   "alpha_px": 4625,
+   "shadow_px": 4137
+  },
+  {
+   "slot": "window-sill-vase",
+   "product": "vase-cj-black-matte-stoneware-jar-30-style4",
+   "card": "data/products/vase/vase-cj-black-matte-stoneware-jar-30.json",
+   "sku": "CJJT198137605EV",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/window-sill-vase/vase-cj-black-matte-stoneware-jar-30-style4.png",
+   "shadow": "shadows/window-sill-vase/vase-cj-black-matte-stoneware-jar-30-style4.png",
+   "alpha_px": 16940,
+   "shadow_px": 7659
+  },
+  {
+   "slot": "toilet-brush",
+   "product": "toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color",
+   "card": "data/products/bath/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle.json",
+   "sku": "CJYD254508501AZ",
+   "z": 48,
+   "shadow_z": 47,
+   "default": true,
+   "layer": "layers/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color.png",
+   "shadow": "shadows/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color.png",
+   "alpha_px": 8425,
+   "shadow_px": 4617
+  }
+ ],
+ "light": {
+  "product": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853",
+  "file": "light/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.png",
+  "z": 90,
+  "blend": "screen",
+  "px": 28501
+ },
+ "variants": [],
+ "rnd2": {
+  "region_px": 868626,
+  "outside_differing_px": 0,
+  "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+ },
+ "gaps_left_empty": [
+  "shower-stool",
+  "wall-art",
+  "ledge-planter"
+ ],
+ "record": {
+  "lock": {
+   "y_offset_px": 1.27,
+   "y_scale_about_row_707": -0.00729,
+   "x_offset_px": 2.345,
+   "used": {
+    "horizontal_lines": 5,
+    "vertical_lines": 2
+   }
+  },
+  "gain_p1_p50_p99": [
+   0.978,
+   1.25,
+   1.25
+  ],
+  "cut": {
+   "shower-dispensers": {
+    "clay_px": 8854,
+    "alpha_px": 10209,
+    "sure_px": 6439
+   },
+   "wall-sconce": {
+    "clay_px": 4355,
+    "alpha_px": 5115,
+    "sure_px": 3593
+   },
+   "bath-mat": {
+    "clay_px": 42192,
+    "alpha_px": 44798,
+    "sure_px": 33041
+   },
+   "shower-curtain": {
+    "clay_px": 298605,
+    "alpha_px": 350593,
+    "sure_px": 272247
+   },
+   "floor-planter": {
+    "clay_px": 124886,
+    "alpha_px": 157488,
+    "sure_px": 95923
+   },
+   "bin": {
+    "clay_px": 20054,
+    "alpha_px": 21905,
+    "sure_px": 17544
+   },
+   "toilet-paper-stand": {
+    "clay_px": 11207,
+    "alpha_px": 18752,
+    "sure_px": 7919
+   },
+   "candle": {
+    "clay_px": 3185,
+    "alpha_px": 3444,
+    "sure_px": 2512
+   },
+   "reed-diffuser": {
+    "clay_px": 4072,
+    "alpha_px": 4013,
+    "sure_px": 2503
+   },
+   "window-sill-vase": {
+    "clay_px": 12713,
+    "alpha_px": 15874,
+    "sure_px": 11303
+   },
+   "toilet-brush": {
+    "clay_px": 7523,
+    "alpha_px": 7266,
+    "sure_px": 5848
+   }
+  }
+ }
+}
