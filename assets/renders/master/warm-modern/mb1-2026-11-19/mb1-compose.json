@@ -90,7 +90,7 @@
    "clay_px": 54731
   },
   "planter": {
-   "px": 198680,
+   "px": 215963,
    "clay_px": 67521
   },
   "magazine-holder": {
@@ -299,6 +299,45 @@
   "rug": {
    "px": 283780,
    "clay_px": 291753
+  }
+ },
+ "tone_fix": {
+  "planter": {
+   "rule": "the pot's lit tone (L* p60-p90, pot pixels) to MB0's pot's (the 13.11 / R5 pot), read the same way",
+   "mb0_pot_lit": [
+    81.8,
+    2.8,
+    10.6
+   ],
+   "mb1_pot_lit_before": [
+    76.0,
+    3.3,
+    10.8
+   ],
+   "luminance_gain": 1.2,
+   "chroma_scale": 0.969
+  },
+  "bedside-carafe": {
+   "rule": "a* b* to MB0's lit tone, L* kept",
+   "before_ab": [
+    3.3,
+    6.0
+   ],
+   "to": [
+    2.4,
+    11.0
+   ]
+  },
+  "candle-holders": {
+   "rule": "a* b* to MB0's lit tone, L* kept",
+   "before_ab": [
+    1.5,
+    8.4
+   ],
+   "to": [
+    2.4,
+    11.7
+   ]
   }
  }
 }

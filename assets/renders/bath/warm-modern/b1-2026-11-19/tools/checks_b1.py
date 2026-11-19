@@ -150,7 +150,27 @@ def main():
         hal[k] = dict(edge_px=int(edge.sum()), light_fringe_px=int(light.sum()))
     out["halos"] = dict(rule="soft-edge pixels lighter than the plate under them and than the product's own edge by 6 L*", per_product=hal,
                         total_light_fringe_px=int(sum(v["light_fringe_px"] for v in hal.values())))
+    # QA round 1 (qa/reports/2026-11-19-bath-b1): M1-M3 and B1-L1, as fixed in compose_b1_defaults.py
+    r = man["record"]
+    cur = A["shower-curtain"]
+    jr = r["jar_refit"]
+    ja = A["window-sill-vase"] >= 128
+    jys = np.nonzero(ja.any(1))[0]
+    jxs = np.nonzero(ja.any(0))[0]
+    out["qa_round1"] = dict(
+        report="qa/reports/2026-11-19-bath-b1/README.md",
+        M1_planter=dict(r5_vs_plaster=r["planter_recolour"]["r5_lab_after"], sku_lch=r["planter_recolour"]["sku_lch"],
+                        de00=r["planter_recolour"]["de00_after"], b2_after_m5_lch=[59.4, 4.1, 88.3], rule="dE00 <= 4 vs the SKU; beside B2 at x1"),
+        M2_jar=dict(width_vs_clay_by_height=jr["width_vs_clay_by_height"], rule_width="within +-8 % of the clay at every height",
+                    h_over_w=round(float((jys.max() - jys.min() + 1) / (jxs.max() - jxs.min() + 1)), 2), h_over_w_clay_photo=1.84,
+                    hp_sigma2_before_after_this_tool=jr["hp_sigma2_before_after"], hp_rule="1.3-1.8 in QA's reading (QA read 3.09 where this tool reads 2.35)",
+                    speckle_share_C_gt_8=jr["speckle_share_C_gt_8_after"], median_lab=jr["median_lab_after"], light_fringe_px=hal["window-sill-vase"]["light_fringe_px"]),
+        M3_curtain=dict(hole_px_in_qa_box=int((cur[1288:1330, 1736:1746] == 0).sum()), box=[1736, 1288, 1745, 1329],
+                        stray_line_px_left_of_edge=int(((cur[1280:1340, 1728:1737] > 0) & (cur[1280:1340, 1737:1746] == 0)).sum())),
+        B1_L1_candle=dict(alpha_px_right_of_861_rows_735_785=int((A["candle"][735:786, 862:880] > 0).sum()),
+                          overlap_with_diffuser_px=int(((A["candle"] > 0) & (A["reed-diffuser"] > 0)).sum())))
     json.dump(out, open(os.path.join(ST, "b1-checks.json"), "w"), indent=1, ensure_ascii=False)
+    print(json.dumps(out["qa_round1"]))
     print(json.dumps(dict(rnd2=out["rnd2"], black=out["black_point"]["defaults"], black_ok=out["black_point"]["ok"], jar=out["colour"]["jar"]["as_seen_mid_tone"],
                           floor=out["same_house"]["floor_median"], plaster=out["same_house"]["plaster_median"], n_ok=n_ok,
                           notc=out["counts"]["not_counting_in_b1"], halos=out["halos"]["total_light_fringe_px"])))

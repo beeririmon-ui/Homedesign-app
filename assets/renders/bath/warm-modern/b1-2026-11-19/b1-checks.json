@@ -63,13 +63,13 @@
   "defaults": {
    "min": 10.84,
    "p0_1": 11.33,
-   "p0_5": 11.78,
+   "p0_5": 11.8,
    "p5": 35.46
   },
   "beige": {
    "min": 10.84,
    "p0_1": 11.33,
-   "p0_5": 11.78,
+   "p0_5": 11.8,
    "p5": 35.48
   },
   "plate": {
@@ -86,9 +86,9 @@
   },
   "black_products": {
    "window-sill-vase": {
-    "min": 11.05,
-    "p1": 12.66,
-    "p50": 18.19
+    "min": 12.25,
+    "p1": 13.22,
+    "p50": 18.68
    },
    "toilet-paper-stand": {
     "min": 10.84,
@@ -159,11 +159,11 @@
  "colour": {
   "jar": {
    "as_seen_mid_tone": [
-    18.1,
-    1.3,
-    1.6
+    18.4,
+    1.4,
+    1.8
    ],
-   "chroma": 2.1,
+   "chroma": 2.3,
    "photo": [
     17.9,
     2.0,
@@ -171,9 +171,9 @@
    ],
    "photo_chroma": 4.5,
    "body_median": [
-    18.3,
-    1.1,
-    1.1
+    18.4,
+    1.6,
+    1.3
    ],
    "note": "neutral black, not warmed: as seen on the sill against the frosted glass; the photo's body reading for reference"
   },
@@ -297,7 +297,7 @@
    },
    "shower-curtain": {
     "product": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
-    "area_pct": 9.187,
+    "area_pct": 9.197,
     "height_pct": 100.06,
     "visible_pct": 95.0,
     "counts": true,
@@ -329,9 +329,9 @@
    },
    "candle": {
     "product": "candle-cj-ribbed-matte-ceramic-candle-cup-9-white",
-    "area_pct": 0.092,
+    "area_pct": 0.085,
     "height_pct": 4.23,
-    "visible_pct": 99.2,
+    "visible_pct": 100.0,
     "counts": false,
     "items": 1
    },
@@ -345,8 +345,8 @@
    },
    "window-sill-vase": {
     "product": "vase-cj-black-matte-stoneware-jar-30-style4",
-    "area_pct": 0.428,
-    "height_pct": 12.06,
+    "area_pct": 0.348,
+    "height_pct": 11.57,
     "visible_pct": 100.0,
     "counts": true,
     "items": 1
@@ -411,12 +411,12 @@
     "light_fringe_px": 0
    },
    "shower-curtain": {
-    "edge_px": 9815,
+    "edge_px": 9524,
     "light_fringe_px": 0
    },
    "floor-planter": {
     "edge_px": 4570,
-    "light_fringe_px": 140
+    "light_fringe_px": 40
    },
    "bin": {
     "edge_px": 1847,
@@ -427,22 +427,82 @@
     "light_fringe_px": 65
    },
    "candle": {
-    "edge_px": 735,
-    "light_fringe_px": 103
+    "edge_px": 682,
+    "light_fringe_px": 0
    },
    "reed-diffuser": {
     "edge_px": 3056,
     "light_fringe_px": 0
    },
    "window-sill-vase": {
-    "edge_px": 1550,
-    "light_fringe_px": 51
+    "edge_px": 318,
+    "light_fringe_px": 24
    },
    "toilet-brush": {
     "edge_px": 1772,
     "light_fringe_px": 0
    }
   },
-  "total_light_fringe_px": 390
+  "total_light_fringe_px": 160
+ },
+ "qa_round1": {
+  "report": "qa/reports/2026-11-19-bath-b1/README.md",
+  "M1_planter": {
+   "r5_vs_plaster": [
+    58.3,
+    0.15,
+    4.1
+   ],
+   "sku_lch": [
+    58.3,
+    4.1,
+    87.9
+   ],
+   "de00": 0.0,
+   "b2_after_m5_lch": [
+    59.4,
+    4.1,
+    88.3
+   ],
+   "rule": "dE00 <= 4 vs the SKU; beside B2 at x1"
+  },
+  "M2_jar": {
+   "width_vs_clay_by_height": {
+    "0.1": 1.071,
+    "0.3": 1.0,
+    "0.5": 1.012,
+    "0.7": 1.014,
+    "0.9": 1.015
+   },
+   "rule_width": "within +-8 % of the clay at every height",
+   "h_over_w": 1.84,
+   "h_over_w_clay_photo": 1.84,
+   "hp_sigma2_before_after_this_tool": [
+    2.35,
+    1.22
+   ],
+   "hp_rule": "1.3-1.8 in QA's reading (QA read 3.09 where this tool reads 2.35)",
+   "speckle_share_C_gt_8": 0.0,
+   "median_lab": [
+    18.9,
+    1.5,
+    1.8
+   ],
+   "light_fringe_px": 24
+  },
+  "M3_curtain": {
+   "hole_px_in_qa_box": 0,
+   "box": [
+    1736,
+    1288,
+    1745,
+    1329
+   ],
+   "stray_line_px_left_of_edge": 0
+  },
+  "B1_L1_candle": {
+   "alpha_px_right_of_861_rows_735_785": 102,
+   "overlap_with_diffuser_px": 0
+  }
  }
 }

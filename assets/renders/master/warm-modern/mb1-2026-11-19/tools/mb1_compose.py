@@ -317,15 +317,20 @@ def right_labels(lab, fg, prods, lab_i, D):
         hold = hull(np.isin(lb_, big))
     # the pot: its greige body and its soil near the clay pot, as one hull (rows of the pot only)
     near_pot = C.dil(M.ids("MB1") == 61, 60)
-    potc = near_pot & (D > 5) & ((((hh > 55) & (Ch < 24) & (Lh > 38)) | (Lh < 30)) & ~hold)
-    potc[:int(np.nonzero((M.ids("MB1") == 61).any(1))[0].min()) - 25] = False
+    potc = near_pot & (D > 5) & ((((hh > 55) & (Ch < 24) & (Lh > 28)) | (Lh < 30)) & ~hold)
+    potc[:int(np.nonzero((M.ids("MB1") == 61).any(1))[0].min()) - 8] = False      # from the rim down (the trunk is the plant's)
+    potc = cv2.morphologyEx(potc.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(5)).astype(bool)
     n2, lb2, st2, _ = cv2.connectedComponentsWithStats(potc.astype(np.uint8), connectivity=8)
-    potm = hull(lb2 == 1 + int(np.argmax(st2[1:, cv2.CC_STAT_AREA]))) if n2 > 1 else potc
+    if n2 > 1:
+        big2 = [i for i in range(1, n2) if st2[i, cv2.CC_STAT_AREA] >= 0.08 * st2[1:, cv2.CC_STAT_AREA].max()]
+        potm = hull(np.isin(lb2, big2)) & C.dil(np.isin(lb2, big2), 6)     # the hull fills the gaps, never the wall beside it
+    else:
+        potm = potc
     out = lab_i.copy()
     out[potm & ~hold] = prods.index(61)
     out[hold & ~(lab_i == prods.index(55))] = prods.index(63)
     floor = np.isin(M.ids("MB1-plate"), (10, 11))               # on the floor, the planter is only the pot's greige (h > 67, C* < 14) or soil
-    notpot = floor & (out == prods.index(61)) & ~((((hh > 67) & (Ch < 14)) | ((Lh > 52) & (Ch < 22)) | (Lh < 25)) & C.dil(M.ids("MB1") == 61, 25))
+    notpot = floor & (out == prods.index(61)) & ~((((hh > 67) & (Ch < 14)) | ((Lh > 52) & (Ch < 22)) | (Lh < 25)) & C.dil(M.ids("MB1") == 61, 25)) & ~C.dil(potm, 3)
     out[notpot] = -1
     out[(lab_i == prods.index(63)) & ~hold & ~box] = prods.index(61) if pot.any() else out[(lab_i == prods.index(63)) & ~hold & ~box]
     return out, hold | potm
@@ -363,14 +368,13 @@ def write_pass(p, e, layers, shadows, light, prods, man, rec):
         man["layers"].append(dict(slot=slot, product=pid, z=z, shadow_z=z - 1, default=True, layer=os.path.relpath(lp, ST),
                                   shadow=os.path.relpath(sp, ST), alpha_px=int((a8 > 0).sum()), shadow_px=int((s8 < 255).sum()),
                                   bbox_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1] if xs.size else None,
-                                  sold=True, pass_=p, source=f"MB1 {p} (nano-banana-2 edit), cut in code (tools/mb1_compose.py)", **({"side": side} if side else {}),
-                                  pass_name=p))
+                                  sold=True, source=f"MB1 {p} (nano-banana-2 edit), cut in code (tools/mb1_compose.py)", **({"side": side} if side else {})))
         man["layers"][-1]["pass"] = p
     man["light"] = [li for li in man["light"] if li.get("pass") != p]
     if light is not None:
         lp = os.path.join(ST, "light", f"{p}-lamps.png")
         Image.fromarray(C.q(light)).save(lp)
-        man["light"].append(dict(file=os.path.relpath(lp, ST), z=90, blend="screen", pass_=p, pass_name=p,
+        man["light"].append(dict(file=os.path.relpath(lp, ST), z=90, blend="screen",
                                  lamps=[P[k][0] + ("-" + P[k][4] if P[k][4] else "") for k in LAMPS[p]]))
         man["light"][-1]["pass"] = p
     man["layers"].sort(key=lambda l: (l["z"], l["slot"]))

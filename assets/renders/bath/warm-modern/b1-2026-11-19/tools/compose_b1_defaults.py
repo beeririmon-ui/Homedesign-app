@@ -322,6 +322,155 @@ def pot_profile(H, W):
     return m
 
 
+POT_SPLIT = [(1300.0, 1256.0), (1395.0, 1256.0), (1560.0, 1182.0)]   # the drawn pot: ribs above this line, smooth concrete below (r1, 2x)
+PLANTER_REF_BOX = (1000, 1300, 1260, 1420)          # rows, cols: the plaster behind the pot, left of the stone
+
+
+def planter_recolour(src, f, plate8, ids, allfg, cv, H, W):
+    """QA M1 (B1), the same step as B2's M5: the pot (not the pothos, not the soil) keeps its own shading, its colour becomes
+    the SKU photo's grey concrete (58.3 / C* 4.1 / h 87.9) in the light of the plaster beside it (#ECE5DA), measured R5 on its
+    smooth lower part (below the ribs) and solved on the graded result (compose_defaults.recolour_r5)"""
+    lab = C.lab_of(src)
+    yy = np.arange(H)[:, None]
+    xx = np.arange(W)[None, :]
+    leafy = ((lab[..., 1] < -4) & (np.hypot(lab[..., 1], lab[..., 2]) > 6)) | (lab[..., 0] < 22)
+    pot = f & pot_profile(H, W) & ~C.dil(leafy, 1)
+    sx, sy = np.array(POT_SPLIT).T
+    line = np.interp(np.arange(W), sx, sy)[None, :]
+    smooth = C.ero(pot, 3) & (yy > line + 6) & (yy <= 1325)
+    y0, y1, x0, x1 = PLANTER_REF_BOX
+    box = np.zeros((H, W), bool)
+    box[y0:y1, x0:x1] = True
+    pg = plate8.astype(np.float64) / 255
+    lp = G.to_lab(pg)
+    pl = box & np.isin(ids, PLASTER) & ~C.dil(allfg, 8) & (np.hypot(lp[..., 1], lp[..., 2]) < 9)
+    Lp = lp[..., 0][pl]
+    lo, hi = np.percentile(Lp, [20, 80])
+    ref = np.median(C.lin(pg[pl][(Lp >= lo) & (Lp <= hi)]), 0)
+    out, r = C.recolour_r5(src, pot, smooth, ref, "plaster", C.R5_SKU["planter"], cv)
+    r.update(reference=f"the plate's plaster behind the pot (ids 1-4, rows {y0}-{y1}, cols {x0}-{x1}, off the products, C* < 9, mid-tone), #ECE5DA",
+             reference_px=int(pl.sum()), pot_px=int(pot.sum()), smooth_px=int(smooth.sum()), sku_lch=list(C.R5_SKU["planter"]))
+    return out, r
+
+
+JAR_ID = 59
+
+
+def jar_refit(rgb, a, sg, ids, H, W, keep=0.5, sig_tex=4.0):
+    """QA M2: the model drew the Style4 jar as a barrel (1.26-1.27x the clay's width at 50-90 % of its height); the clay is the
+    photo's taper. Each row of the drawn jar (its base kept on the drawn sill, row 796; its axis kept where drawn) is remapped
+    to the clay's half-width at the same relative height (the clay's profile smoothed over 1.5 rows; the height to the clay's,
+    166 rows), sampling only the drawn jar's solid interior (1.5 px in from its edge); the alpha is the profile's own
+    anti-aliased coverage (no stepped edge, no base-corner fringe); the shadow is scaled about the axis with the jar.
+    Then the texture: the pitted, spotted surface towards the photo's matte sand grain: the detail finer than sigma 4 px kept
+    at 0.5 of its contrast (L*), the speckle's chroma taken out (a*/b* to the jar's own median, 0.3 of the variation, C* <= 4);
+    L* floored at 11 (WM-G1)"""
+    am = a >= 0.5
+    cj = ids == JAR_ID
+    rows_d = np.nonzero(am[:, 400:800].any(1))[0]
+    rows_c = np.nonzero(cj.any(1))[0]
+    yd0, yd1 = int(rows_d.min()), int(rows_d.max())
+    yc0, yc1 = int(rows_c.min()), int(rows_c.max())
+    hc = yc1 - yc0
+    yo0, yo1 = yd1 - hc, yd1
+    # the clay's half-width and the drawn jar's centre and half-width, per row
+    cw = np.array([(np.nonzero(cj[y])[0].max() - np.nonzero(cj[y])[0].min() + 1) / 2 for y in range(yc0, yc1 + 1)], float)
+    kern = np.exp(-0.5 * (np.arange(-4, 5) / 1.5) ** 2)
+    cw = np.convolve(np.pad(cw, 4, mode="edge"), kern / kern.sum(), "valid")
+    # the clay's shoulder is a straight cone with a kink at each end; the photo's is a rounded curve: between the mouth's lip and
+    # the widest row the half-width follows 1 - (1 - s)^1.6 (convex, within 5 % of the cone)
+    i_m, i_x = 4, int(np.argmax(cw[: int(0.6 * len(cw))]))
+    s_ = np.clip((np.arange(len(cw)) - i_m) / max(i_x - i_m, 1), 0, 1)
+    sh_ = (np.arange(len(cw)) >= i_m) & (np.arange(len(cw)) <= i_x)
+    cw = np.where(sh_, cw[i_m] + (cw[i_x] - cw[i_m]) * (1 - (1 - s_) ** 1.6), cw)
+    dc, dw = {}, {}
+    for y in range(yd0, yd1 + 1):
+        r = np.nonzero(am[y, 400:800])[0] + 400
+        dc[y], dw[y] = (r.min() + r.max()) / 2, (r.max() - r.min() + 1) / 2
+    axis = float(np.median([dc[y] for y in range(yd0 + (yd1 - yd0) // 5, yd1 - (yd1 - yd0) // 10)]))
+    mapx = np.tile(np.arange(W, dtype=np.float32), (H, 1))
+    mapy = np.tile(np.arange(H, dtype=np.float32)[:, None], (1, W))
+    a_new = np.zeros((H, W))
+    xs = np.arange(W, dtype=np.float64)
+    ratio_rows = {}
+    for yo in range(yo0, yo1 + 1):
+        t = (yo - yo0) / max(hc, 1)
+        wc = float(np.interp(t * hc, np.arange(len(cw)), cw))
+        ys = yd0 + t * (yd1 - yd0)
+        yi = int(round(ys))
+        ws = max(dw[yi] - 1.5, 1.0)
+        mapy[yo] = ys
+        mapx[yo] = (dc[yi] + (xs - axis) * ws / max(wc, 0.5)).astype(np.float32)
+        a_new[yo] = np.clip(wc - np.abs(xs - axis) + 0.5, 0, 1)
+        ratio_rows[yo] = wc / dw[yi]
+    win = np.zeros((H, W), bool)
+    win[yo0:yo1 + 1, int(axis) - 120:int(axis) + 121] = True
+    rgb_w = cv2.remap(rgb.astype(np.float32), mapx, mapy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE).astype(np.float64)
+    out = np.where(win[..., None], rgb_w, rgb)
+    # the shadow: scaled about the axis with the jar (below the base, at the base's ratio), in a window round it
+    dark = 1 - sg
+    mx2 = np.tile(np.arange(W, dtype=np.float32), (H, 1))
+    my2 = np.tile(np.arange(H, dtype=np.float32)[:, None], (1, W))
+    for y in range(yo0 - 10, min(H, yo1 + 25)):
+        r_ = ratio_rows.get(min(max(y, yo0), yo1))
+        mx2[y] = (axis + (xs - axis) / r_).astype(np.float32)
+    dark_w = cv2.remap(dark.astype(np.float32), mx2, my2, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0).astype(np.float64)
+    swin = np.zeros((H, W), bool)
+    swin[max(0, yo0 - 10):min(H, yo1 + 25), int(axis) - 140:int(axis) + 141] = True
+    sg_new = np.where(swin, 1 - dark_w, sg)
+    # the jar stands ~10 cm in front of the frosted glass that lights it: no shadow on the glass or the frame, only on the sill
+    sill_top = yo1 - 10
+    sg_new[:sill_top, int(axis) - 140:int(axis) + 141] = np.where(swin[:sill_top, int(axis) - 140:int(axis) + 141], 1.0,
+                                                                  sg_new[:sill_top, int(axis) - 140:int(axis) + 141])
+    a_out = np.where(win, a_new, np.where(swin, 0, a))
+    a_out[(yd0 - 3 <= np.arange(H)[:, None]) & (np.arange(H)[:, None] < yo0) & win] = 0      # rows the shorter jar leaves
+    # the texture
+    m = a_out > 0
+    lab = G.to_lab(np.clip(out[m], 0, 1))
+    full = np.zeros((H, W, 3))
+    full[m] = lab
+    wgt = (a_out >= 0.999).astype(np.float64)
+    nb = np.maximum(C.blur(wgt, sig_tex), 1e-6)
+    baseL = C.blur(full[..., 0] * wgt, sig_tex) / nb
+    hp0 = jar_hp(full[..., 0], wgt)
+    L = baseL + keep * (full[..., 0] - baseL)
+    inner = a_out >= 0.999
+    ma, mb = float(np.median(full[..., 1][inner])), float(np.median(full[..., 2][inner]))
+    A = ma + 0.3 * (full[..., 1] - ma)
+    Bb = mb + 0.3 * (full[..., 2] - mb)
+    Cc = np.hypot(A, Bb)
+    f_ = np.minimum(1, 4.0 / np.maximum(Cc, 1e-6))
+    full2 = np.stack([np.maximum(L, 11.0), A * f_, Bb * f_], -1)
+    out2 = out.copy()
+    out2[m] = np.clip(G.from_lab(full2[m]), 0, 1)
+    hp1 = jar_hp(G.to_lab(np.clip(out2, 0, 1))[..., 0], wgt)
+    labi = G.to_lab(np.clip(out2[inner], 0, 1))
+    prof = {}
+    for fr in (0.1, 0.3, 0.5, 0.7, 0.9):
+        yo = int(round(yo0 + fr * hc))
+        yc = int(round(yc0 + fr * hc))
+        r1 = np.nonzero(a_out[yo] >= 0.5)[0]
+        r2 = np.nonzero(cj[yc])[0]
+        prof[str(fr)] = round(float((r1.max() - r1.min() + 1) / (r2.max() - r2.min() + 1)), 3)
+    rec = dict(method="per-row remap of the drawn jar to the clay's smoothed half-width profile at the same relative height, base kept on "
+                      "the drawn sill, axis kept where drawn; analytic anti-aliased alpha; shadow scaled about the axis and kept on the sill only; shoulder rounded (1 - (1 - s)^1.6); texture: detail finer "
+                      "than sigma 4 px at 0.5 contrast, speckle chroma out (C* <= 4), L* >= 11",
+               drawn_rows=[yd0, yd1], clay_rows=[yc0, yc1], out_rows=[yo0, yo1], axis_x=round(axis, 1),
+               width_vs_clay_by_height=prof, hp_sigma2_before_after=[round(hp0, 2), round(hp1, 2)],
+               speckle_share_C_gt_8_after=round(float((np.hypot(labi[:, 1], labi[:, 2]) > 8).mean()), 4),
+               L_p50_p95_after=[round(float(v), 1) for v in np.percentile(labi[:, 0], [50, 95])],
+               median_lab_after=[round(float(v), 1) for v in np.median(labi, 0)])
+    return out2, a_out, sg_new, rec
+
+
+def jar_hp(L, wgt, s=2.0):
+    """QA's texture measure: the std of L* minus its sigma-2 blur, over the jar's solid interior (eroded 3)"""
+    nb = np.maximum(C.blur(wgt, s), 1e-6)
+    hp = L - C.blur(L * wgt, s) / nb
+    inner = C.ero(wgt > 0.5, 3)
+    return float(np.std(hp[inner]))
+
+
 def keep_components(fg, seeds):
     n, lab = cv2.connectedComponents(fg.astype(np.uint8), connectivity=8)
     keep = set(np.unique(lab[seeds & fg])) - {0}
@@ -473,14 +622,21 @@ def main(rawp):
             b_, a_ = np.polyfit(yy, xl, 1)
             for y in range(1260, H):
                 x_line = int(round(a_ + b_ * y))
-                body = np.nonzero(f[y, x_line + 3:1990])[0]
-                if not len(body):
+                row = f[y, x_line:1990].astype(np.int8)
+                if not row.any():
                     continue
+                # QA M3: the first run right of the line can be the 3 px sliver of the sunlit edge; the body is the longest run
+                d_ = np.diff(np.concatenate([[0], row, [0]]))
+                st_, en_ = np.nonzero(d_ == 1)[0], np.nonzero(d_ == -1)[0]
+                body0 = st_[int(np.argmax(en_ - st_))]
                 f[y, 1650:x_line] = False
-                f[y, x_line:x_line + 3 + body[0]] = True
+                f[y, x_line:x_line + body0] = True
             rec["curtain_side"] = dict(fit_rows=[600, 1260], x_at_1260=round(float(a_ + b_ * 1260), 1), x_at_1486=round(float(a_ + b_ * 1486), 1),
                                        slope_px_per_row=round(float(b_), 4))
         fg[k] = keep_components(f, sure)
+        if k == "candle":                               # QA B1-L1: the drawn window frame right of the cup (x 862-870) is not the cup
+            fg[k][725:795, 862:] = False
+            rec["candle_trim"] = "alpha cut at x 861 in rows 725-794 (the drawn window frame, 298 px in QA's count)"
         if k == "bin":                                  # a cylinder: its outline is its cut's convex hull (the clay brush's rod,
             fg[k] = hull_of(fg[k])                      # 10 px right of the drawn one, had cracked it); behind the drawn brush
             behind = fg[k] & C.dil(brush_shape(H, W), 2)                 # the wood is filled in from round it
@@ -514,7 +670,9 @@ def main(rawp):
             oth = oth | fg["floor-planter"]             # bin's shadow (a grey blot above the lid): blocked where drawn too
         sh = C.shadow_of(src, base, fg[k], dict(band=s["band"], rim=s["rim"]), clay_shadow, C.dil(oth, 1))
         a = C.soft(fg[k])
-        rgb = cv(C.defringe(src_sh if k in SHOULDER else src_bin if k == "bin" else src, fg[k]))
+        if k == "floor-planter":                        # QA M1: the pot to the SKU's grey concrete, as B2's M5
+            src_pl, rec["planter_recolour"] = planter_recolour(src, fg[k], plate8, ids, allfg, cv, H, W)
+        rgb = cv(C.defringe(src_sh if k in SHOULDER else src_bin if k == "bin" else src_pl if k == "floor-planter" else src, fg[k]))
         sg = graded_shadow(sh, base, cv)
         if k in AFF:                                    # drawn oversize: scaled to the clay (the SKU's size), as B2's refits
             Mk = AFF[k][0]
@@ -530,6 +688,8 @@ def main(rawp):
             a[a < 0.02] = 0
             rec["mat_quad"].update(refit="homography, the drawn quad onto the clay's quad (layer, alpha and shadow)", clay_corners=MAT_CLAY,
                                    screen_h_ratio_drawn_vs_clay=round((1524.0 - 1349.0) / (1526.0 - 1334.0), 3))
+        if k == "window-sill-vase":                     # QA M2: the drawn barrel onto the clay's (the photo's) tapered profile
+            rgb, a, sg, rec["jar_refit"] = jar_refit(rgb, a, sg, ids, H, W)
         if k == "bath-mat":                             # the render's near-white pool on the right half: the floor's light instead
             rgb, rec["mat_light"] = mat_relight(rgb, a, plate8, ids)
         if k == "bath-mat":                             # R5 (as B2's M1 / T3): the render's own tuft shading, the photo's khaki
