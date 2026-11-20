@@ -58,13 +58,13 @@
    "default": true,
    "layer": "layers/D1/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
    "shadow": "shadows/D1/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
-   "alpha_px": 270559,
+   "alpha_px": 293102,
    "shadow_px": 0,
    "bbox_px": [
     338,
     0,
-    683,
-    1056
+    702,
+    1057
    ],
    "sold": true,
    "source": "D1 pass B-window-front (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
@@ -94,6 +94,7 @@
    "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
    "pass_": "E-left",
    "toned": true,
+   "print": "05, in code (tools/kd_print.py)",
    "projected_from": "D2"
   },
   {
@@ -180,7 +181,7 @@
    "default": true,
    "layer": "layers/D1/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
    "shadow": "shadows/D1/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
-   "alpha_px": 7792,
+   "alpha_px": 7791,
    "shadow_px": 6342,
    "bbox_px": [
     1733,
@@ -205,7 +206,7 @@
    "default": true,
    "layer": "layers/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
    "shadow": "shadows/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
-   "alpha_px": 3118,
+   "alpha_px": 3119,
    "shadow_px": 0,
    "bbox_px": [
     1668,
@@ -279,7 +280,7 @@
    "layer": "layers/D1/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
    "shadow": "shadows/D1/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
    "alpha_px": 4806,
-   "shadow_px": 8599,
+   "shadow_px": 8560,
    "bbox_px": [
     2673,
     618,
@@ -581,7 +582,8 @@
    "sold": true,
    "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
    "pass_": "E-left",
-   "toned": true
+   "toned": true,
+   "print": "05, in code (tools/kd_print.py)"
   },
   {
    "frame": "D2",
@@ -692,7 +694,7 @@
    "default": true,
    "layer": "layers/D2/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
    "shadow": "shadows/D2/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
-   "alpha_px": 9240,
+   "alpha_px": 9239,
    "shadow_px": 7438,
    "bbox_px": [
     638,
@@ -716,7 +718,7 @@
    "default": true,
    "layer": "layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
    "shadow": "shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
-   "alpha_px": 3941,
+   "alpha_px": 3943,
    "shadow_px": 0,
    "bbox_px": [
     560,
@@ -790,8 +792,8 @@
    "default": true,
    "layer": "layers/D2/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
    "shadow": "shadows/D2/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
-   "alpha_px": 4556,
-   "shadow_px": 10116,
+   "alpha_px": 4644,
+   "shadow_px": 10261,
    "bbox_px": [
     1454,
     628,
@@ -887,8 +889,8 @@
    "default": true,
    "layer": "layers/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
    "shadow": "shadows/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
-   "alpha_px": 17037,
-   "shadow_px": 10652,
+   "alpha_px": 16999,
+   "shadow_px": 10650,
    "bbox_px": [
     2085,
     546,
@@ -953,16 +955,6 @@
  ],
  "light": [
   {
-   "frame": "D2",
-   "file": "light/D2/Ec-sconce-board-lamps.png",
-   "z": 90,
-   "blend": "screen",
-   "lamps": [
-    "kitchen-sconce"
-   ],
-   "pass_": "Ec-sconce-board"
-  },
-  {
    "frame": "D1",
    "file": "light/D1/A-table-lamps.png",
    "z": 90,
@@ -971,6 +963,16 @@
     "dining-pendant"
    ],
    "pass_": "A-table"
+  },
+  {
+   "frame": "D2",
+   "file": "light/D2/Ec-sconce-board-lamps.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "kitchen-sconce"
+   ],
+   "pass_": "Ec-sconce-board"
   },
   {
    "frame": "D2",
@@ -994,5 +996,31 @@
    "pass_": "Ec-sconce-board",
    "projected_from": "D2"
   }
+ ],
+ "status": "for QA (stage one, before the owner's approval 3). Not for the site before QA.",
+ "updated": "2026-11-20 (resumed session)",
+ "frames_out": {
+  "D1-defaults": "D1-defaults.png / D1-defaults-frame.png",
+  "D2-defaults": "D2-defaults.png / D2-defaults-frame.png",
+  "D1-V2": "D1-V2.png / D1-V2-frame.png (pendant V2, code)",
+  "D1-V3": "D1-V3.png / D1-V3-frame.png (pendant V3)"
+ },
+ "sample_slot": {
+  "slot": "dining-pendant",
+  "V1": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light (default)",
+  "V2": "pendant-cj-silk-pumpkin-lantern-50cm-warm-light (code variant: V1's shade, the white wire)",
+  "V3": "pendant-cj-scalloped-pleated-bell-45 (crop edit V3-pendant)"
+ },
+ "jobs": "jobs.json",
+ "checks": "checks.json",
+ "compose_record": "compose.json",
+ "qa_sheet": "qa-sheet.jpg",
+ "readme": "README.md",
+ "rebuild": [
+  "python3 tools/kd_crop.py assemble Dc-right ; ... Ec-sconce-board ; ... Bc-corner ; ... V3-pendant  (the crop canvases, scratchpad)",
+  "python3 tools/kd_cut2.py cut A-table B-window-front Bc-corner Dc-right E-left Ec-sconce-board F-niche V3-pendant",
+  "python3.12 -I tools/kd_print.py   (print 05 into the frame's canvas; reads the listing file from the scratchpad)",
+  "python3 tools/kd_variants.py v2 && python3 tools/kd_variants.py register",
+  "python3 tools/compose_edits.py project && python3 tools/kd_variants.py frames && python3 tools/checks.py && python3 tools/kd_qa_sheet.py"
  ]
 }

@@ -123,19 +123,19 @@
  },
  "frames": {
   "D1-defaults": {
-   "region_px": 1010727,
+   "region_px": 1026184,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.49
   },
   "D2-defaults": {
-   "region_px": 332723,
+   "region_px": 332850,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
-   "black_point_p05": 11.45
+   "black_point_p05": 11.44
   },
   "D1-V2": {
-   "region_px": 1010665,
+   "region_px": 1026122,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.49,
@@ -143,7 +143,7 @@
    "rule_variant": "only the pendant changes: outside V1's and this variant's alphas the frame is D1-defaults"
   },
   "D1-V3": {
-   "region_px": 1013885,
+   "region_px": 1029342,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.49,
@@ -185,9 +185,9 @@
   "products": {
    "57": {
     "slot": "curtains",
-    "px": 270559,
+    "px": 293102,
     "clay_px": 102596,
-    "alpha_mean_edge": 0.387
+    "alpha_mean_edge": 0.379
    },
    "60": {
     "slot": "bench-pad",
@@ -198,7 +198,7 @@
   },
   "cut": "kd_cut2",
   "size_fix": {},
-  "curtain_not_sheer_px": 4770
+  "curtain_not_sheer_px": 638
  },
  "E-left": {
   "lock": {
@@ -333,15 +333,15 @@
    },
    "74": {
     "slot": "paper-towel-holder",
-    "px": 4564,
+    "px": 4651,
     "clay_px": 4648,
-    "alpha_mean_edge": 0.567
+    "alpha_mean_edge": 0.57
    },
    "77": {
     "slot": "tea-towel",
-    "px": 17058,
+    "px": 17021,
     "clay_px": 5930,
-    "alpha_mean_edge": 0.535
+    "alpha_mean_edge": 0.529
    }
   },
   "cut": "kd_cut2",
@@ -407,6 +407,21 @@
      0.0
     ],
     "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   }
+  },
+  "colour_fix": {
+   "76": {
+    "before": [
+     78.5,
+     1.2,
+     -174.5
+    ],
+    "after": [
+     78.5,
+     3.9,
+     95.5
+    ],
+    "why": "the edit's canisters read cool (b* -1.5, h -153) in a warm niche; warm white: a* +0.8, b* +4 (no pure white)"
    }
   }
  },
@@ -573,13 +588,13 @@
   "products": {
    "70": {
     "slot": "kitchen-sconce",
-    "px": 3943,
+    "px": 3945,
     "clay_px": 3051,
     "alpha_mean_edge": 0.549
    },
    "73": {
     "slot": "cutting-boards",
-    "px": 9249,
+    "px": 9248,
     "clay_px": 10470,
     "alpha_mean_edge": 0.546
    }
@@ -603,7 +618,22 @@
     "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
    }
   },
-  "light_px": 81594
+  "colour_fix": {
+   "73": {
+    "before": [
+     51.9,
+     42.6,
+     62.2
+    ],
+    "after": [
+     51.9,
+     32.0,
+     56.2
+    ],
+    "why": "photo L*39 C*25 h54 (new-rooms-photo-check); the edit read C*43 h62, orange: C* x0.75 to 32, h 56"
+   }
+  },
+  "light_px": 81593
  },
  "Bc-corner": {
   "lock": {
@@ -697,16 +727,16 @@
    "shadow_px": 6841
   },
   "cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l D2->D1": {
-   "alpha_px": 7792,
+   "alpha_px": 7791,
    "shadow_px": 6342
   },
   "wall-sconce-cj-travertine-dome-15-alt-warm-light D2->D1": {
-   "alpha_px": 3118,
+   "alpha_px": 3119,
    "shadow_px": 0
   },
   "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c D2->D1": {
    "alpha_px": 4806,
-   "shadow_px": 8599
+   "shadow_px": 8560
   },
   "key-tray-cj-black-walnut-tray-20x13 D2->D1": {
    "alpha_px": 877,
@@ -717,7 +747,7 @@
    "shadow_px": 1722
   },
   "light light/D2/Ec-sconce-board-lamps.png D2->D1": {
-   "px": 54403
+   "px": 54402
   }
  },
  "V3-pendant": {
@@ -789,5 +819,33 @@
    216
   ],
   "rule": "V1's shade, V2's white wire (SKU drawing)"
+ },
+ "print-05": {
+  "file": "5aff04c0 (listing file, scratchpad only)",
+  "file_px": [
+   732,
+   549
+  ],
+  "canvas_box_px": [
+   248,
+   348,
+   411,
+   458
+  ],
+  "canvas_px": [
+   163,
+   110
+  ],
+  "cover_scale": 0.2227,
+  "cropped_px": [
+   0.0,
+   12.2
+  ],
+  "canvas_light_p5_p50_p95": [
+   0.687,
+   0.798,
+   0.812
+  ],
+  "rule": "10.7: print 05 into the blank canvas in code, cover-fit, lit by the edit's canvas light; D1 gets it by the projection"
  }
 }

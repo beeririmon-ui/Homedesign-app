@@ -210,6 +210,36 @@ def canister_geom(lab_e, m):
     return out, info
 
 
+# colour against the SKU photo's reading (R5, relative to the room): (target h, target C*, dL, why)
+COLOUR = {73: (56.0, 32.0, 0.0, "photo L*39 C*25 h54 (new-rooms-photo-check); the edit read C*43 h62, orange: C* x0.75 to 32, h 56"),
+          76: (None, None, 0.0, "the edit's canisters read cool (b* -1.5, h -153) in a warm niche; warm white: a* +0.8, b* +4 (no pure white)")}
+
+
+def product_colour(k, a, col):
+    if k not in COLOUR:
+        return col, None
+    h_t, c_t, dL, why = COLOUR[k]
+    lab = C.to_lab(col)
+    m = a > 0.99
+    L0, A0, B0 = np.median(lab[m], 0)
+    if k == 76:
+        lab[..., 1] += 0.8
+        lab[..., 2] += 4.0
+    else:
+        h0, c0 = np.degrees(np.arctan2(B0, A0)), np.hypot(A0, B0)
+        dh = np.radians(h_t - h0)
+        kk = c_t / max(c0, 1e-3)
+        A1 = (lab[..., 1] * np.cos(dh) - lab[..., 2] * np.sin(dh)) * kk
+        B1 = (lab[..., 1] * np.sin(dh) + lab[..., 2] * np.cos(dh)) * kk
+        lab[..., 1], lab[..., 2] = A1, B1
+    lab[..., 0] += dL
+    out = np.clip(C.from_lab(lab), 0, 1)
+    l2 = C.to_lab(out)[m]
+    L2, A2, B2 = np.median(l2, 0)
+    return out, dict(before=[round(float(L0), 1), round(float(np.hypot(A0, B0)), 1), round(float(np.degrees(np.arctan2(B0, A0))), 1)],
+                     after=[round(float(L2), 1), round(float(np.hypot(A2, B2)), 1), round(float(np.degrees(np.arctan2(B2, A2))), 1)], why=why)
+
+
 def diff_matte(e, B, region, a_est=None):
     """the exact difference matte on a known background B: the least alpha that keeps the colour in range, or the estimate if higher;
     over B the layer gives the edit back"""

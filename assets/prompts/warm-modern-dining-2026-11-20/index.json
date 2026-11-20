@@ -1,0 +1,286 @@
+{
+ "id": "warm-modern-dining-2026-11-20",
+ "room": "kitchen-dining",
+ "style": "warm-modern",
+ "stage": "stage one (D1, D2)",
+ "seed": "not exposed by var2",
+ "jobs": [
+  {
+   "id": "plate-D1-r1",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "placeholder_id": "1f2ef87c-0d62-4485-927d-f41ba2ddd227",
+   "task_id": "5bce4a38c2fb4e89584a887ff2356800",
+   "input": "inputs/plate-D1-input.png",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/bb6e3a80-b9e0-4f1a-8db5-69c611fc8b75.png",
+   "refs": [
+    "inputs/ref1-living-base.jpg",
+    "inputs/ref2-hall-stone-walnut.jpg",
+    "inputs/ref3-hall-corridor.jpg"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/313ff3eb-4590-442a-b8a0-c71d403d9600.jpg",
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f3991624-9e02-4d80-9c70-b8da1a8ab57a.jpg",
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/3ed9a629-b379-4385-8c33-bd3775d802de.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/plate-D1.txt",
+   "idempotency_key": "kd-wm-plate-D1-r1-20261120",
+   "why": null,
+   "verdict": "kept (the plates as composed by the first session)",
+   "raw": "raw/plate-D1-r1.png"
+  },
+  {
+   "id": "plate-D1-splash-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "placeholder_id": "2c236914-7730-465c-8f5a-d0db7f64a485",
+   "task_id": "f876a6e0bf73b014adcbaff295bc7d57",
+   "input": "raw/plate-D1-r1.png (the seedream still, as hosted by var2)",
+   "input_url": null,
+   "refs": null,
+   "ref_urls": null,
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/plate-D1-splash-fix.txt",
+   "idempotency_key": "kd-wm-plate-D1-splash-r1-20261120",
+   "why": "seedream stopped the limestone splash at about Z 1.15; KD-8 wants it continuous to the shelves (Z 1.55); used only inside the clay's splash mask (id 33)",
+   "verdict": "kept (the plates as composed by the first session)",
+   "raw": "raw/plate-D1-splash-r1.png"
+  },
+  {
+   "id": "plate-D2-r1",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "placeholder_id": "3cf68c5a-c5a7-46ee-a5f7-5ec35bb7a192",
+   "task_id": "3d32aedd923e599ffeb8fc86e4c888a3",
+   "input": "inputs/plate-D2-input.png (the clay recoloured, the finished D1 plate warped in on the overlap)",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/caf3376b-aa29-4ed6-a89b-44948e251076.png",
+   "refs": [
+    "inputs/ref1-living-base.jpg",
+    "inputs/ref2-hall-stone-walnut.jpg",
+    "inputs/ref3-hall-corridor.jpg"
+   ],
+   "ref_urls": null,
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/plate-D2.txt",
+   "idempotency_key": "kd-wm-plate-D2-r1-20261120",
+   "why": null,
+   "verdict": "kept (the plates as composed by the first session)",
+   "raw": "raw/plate-D2-r1.png"
+  },
+  {
+   "id": "A-table-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "placeholder_id": "87c98d90-0a28-4db9-87ee-16db41e9a6f1",
+   "task_id": "1095839c10ae6802af46a1cbca958169",
+   "input": "inputs/A-table-input.png",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/d9bb0b12-9132-49ac-a1db-fe483dacf1ce.png",
+   "refs": [
+    "SKU board A-table (scratchpad only): pendant V1 CJYD304604003CX, runner caramel 12000044133070215, amphora Type C CJYD234431803CX, iron dishes 12000057351444960"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8fe13b00-6f4b-4cc2-b3b4-3abb68e4b367.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/A-table.txt",
+   "idempotency_key": "kd-wm-A-table-r1-20261120",
+   "why": null,
+   "verdict": "kept; the first cut was redone in code (kd_cut2.py): halos, chopped dish rims, the runner draped over the table ends",
+   "raw": "raw/A-table-r1.png"
+  },
+  {
+   "id": "B-window-front-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "placeholder_id": "a1f4ab86-b8cc-457a-81fa-e133cbc01bff",
+   "task_id": "808279f33ecea959ca958772366d03aa",
+   "input": "inputs/B-window-front-input.png",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5b24b043-5a57-4981-bbdc-5bb07df73002.png",
+   "refs": [
+    "SKU board B-window-front (scratchpad only)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2275ff41-c222-43d4-bf77-02e4a34a5f41.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/B-window-front.txt",
+   "idempotency_key": "kd-wm-B-window-front-r1-20261120",
+   "why": null,
+   "verdict": "kept for the curtain and the bench pad; the floor vase ~2x the card and the eucalyptus over Z 1.40 (retried as Bc-corner, crop)",
+   "raw": "raw/B-window-front-r1.png"
+  },
+  {
+   "id": "D-right-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "placeholder_id": "cbc388a2-16f3-4d9a-b1ba-97187870f8f4",
+   "task_id": "8d5ad5f2298b5e2f229ad6f31805fc06",
+   "input": "inputs/D-right-input.png",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f4ee6381-6a5a-4b8f-aeac-4eeb89bca6c8.png",
+   "refs": [
+    "SKU board D-right (scratchpad only)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5058544a-8fcb-4f30-9f5c-7790a325891b.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/D-right.txt",
+   "idempotency_key": "kd-wm-D-right-r1-20261120",
+   "why": null,
+   "verdict": "rejected: the plate stack drawn on the left shelf (pass E's slots) and missing from its slot; the mill pair split; the bowl ~1.6x the card's 21 cm; the mugs ~1.3x 9 cm. Retried as Dc-right (crop).",
+   "raw": "raw/D-right-r1.png"
+  },
+  {
+   "id": "E-left-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "placeholder_id": "0708fc08-5101-47bd-b7ce-bb5f51be1ac8",
+   "task_id": "6222131c6b6d3720e11567eb19e8c307",
+   "input": "inputs/E-left-input.png",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1cae0755-914a-4a0e-83de-940d380b2406.png",
+   "refs": [
+    "SKU board E-left (scratchpad only)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7ea86b3e-de63-44fe-9cc9-f83099682351.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/E-left.txt",
+   "idempotency_key": "kd-wm-E-left-r1-20261120",
+   "why": null,
+   "verdict": "kept for the frame, the moon jar, the tray and the dispenser; the sconce and the board were drawn in the wrong places (retried as Ec-sconce-board, crop)",
+   "raw": "raw/E-left-r1.png"
+  },
+  {
+   "id": "F-niche-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "placeholder_id": "66a1818d-d777-46cb-a9ad-373d944cb0bb",
+   "task_id": "a2040ca90506ed8b4a8692239bbccea8",
+   "input": "inputs/F-niche-input.png",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/58fd4138-f483-4f86-9abc-049e42adff54.png",
+   "refs": [
+    "SKU board F-niche (scratchpad only)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8395997b-5984-4245-af5c-dd09065fe044.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/F-niche.txt",
+   "idempotency_key": "kd-wm-F-niche-r1-20261120",
+   "why": null,
+   "verdict": "kept (all three products in place)",
+   "raw": "raw/F-niche-r1.png"
+  },
+  {
+   "id": "Dc-right-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "4:3",
+   "tokens": 400,
+   "placeholder_id": "cd7bce43-eb04-4bd1-b9b2-f4779d17a1cd",
+   "task_id": "07b7b479694fa9d1542c1740f6a6130a",
+   "input": "inputs/Dc-right-crop.png (a crop of inputs/Dc-right-input.png, inputs/Dc-right-prep.json)",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/25152a3e-7d90-4bda-ab79-df8767e17618.png",
+   "refs": [
+    "SKU board Dc-right (scratchpad only)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5058544a-8fcb-4f30-9f5c-7790a325891b.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/Dc-right.txt",
+   "idempotency_key": "kd-wm-Dc-right-r1-20261120",
+   "why": "retry of D-right r1 as a crop edit. D-right r1 rejected: the plate stack drawn on the LEFT shelf (pass E's slots) and missing from its own slot on the right shelf; the mill pair split (the short mill by the sink); the bowl about 1.6x the card's 21 cm; the mugs about 1.3x their 9 cm",
+   "verdict": "kept: all five in place; the mills 1.45x and the oil bottle 1.3x their cards, scaled in code (kd_fixes2.size_fix); the mugs moved 17 px onto their clay",
+   "raw": "raw/Dc-right-r1.jpg"
+  },
+  {
+   "id": "Ec-sconce-board-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "4:3",
+   "tokens": 400,
+   "placeholder_id": "ebe1d68e-2f5f-4780-8235-f5f395b325af",
+   "task_id": "1e77a1363b6d9b55bfa398be2977ed12",
+   "input": "inputs/Ec-sconce-board-crop.png (a crop of inputs/Ec-sconce-board-input.png, inputs/Ec-sconce-board-prep.json)",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7ee27448-586e-464a-8efe-f996b4e7005b.png",
+   "refs": [
+    "SKU board Ec-sconce-board (scratchpad only)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7827581d-5501-46b7-8582-3ad866a26bec.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/Ec-sconce-board.txt",
+   "idempotency_key": "kd-wm-Ec-sconce-board-r1-20261120",
+   "why": "retry of two products of E-left r1 as a crop edit. In E-left r1 the sconce was drawn right of the hood (its placeholder left unchanged) and the board at the far end of the worktop, in the paper-towel holder's place; the frame, the moon jar, the tray and the dispenser of r1 are kept",
+   "verdict": "kept: the sconce on its clay at its size; the board 1.4x its card, scaled in code",
+   "raw": "raw/Ec-sconce-board-r1.jpg"
+  },
+  {
+   "id": "Bc-corner-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "3:4",
+   "tokens": 400,
+   "placeholder_id": "d1d9ebf3-79cb-4df7-a9b2-634c59e5d572",
+   "task_id": "ddda2f0087ecad54ba773c70f6c200b1",
+   "input": "inputs/Bc-corner-crop.png (a crop of inputs/Bc-corner-input.png, inputs/Bc-corner-prep.json)",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e958954d-17af-457d-9285-377dd1fb5b07.png",
+   "refs": [
+    "SKU board Bc-corner (scratchpad only)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/36fd1156-1b08-40b0-ae23-2595fad3c0b7.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/Bc-corner.txt",
+   "idempotency_key": "kd-wm-Bc-corner-r1-20261120",
+   "why": "retry of the floor vase of B r1 as a crop edit. In B r1 the vase is about 2x the card's 45 x 28 (about 65 x 52) and the eucalyptus a dense bush about 1.2 m wide to Z 1.48 (7.5: 1.40 at most); the curtain and the bench pad of r1 are kept",
+   "verdict": "kept: the vase at its card's size behind the table end, a loose eucalyptus to about Z 1.30",
+   "raw": "raw/Bc-corner-r1.jpg"
+  },
+  {
+   "id": "V3-pendant-r1",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "4:3",
+   "tokens": 400,
+   "placeholder_id": "838315d2-2407-400d-9ab9-020b727bb1ae",
+   "task_id": "3de141a632132b35953348ada3c45405",
+   "input": "inputs/V3-pendant-crop.png (a crop of D1-defaults.png with V1 lit; inputs/V3-pendant-prep.json)",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7ca9d65a-45cd-409c-99b5-ab076e743521.png",
+   "refs": [
+    "SKU board V3-pendant (scratchpad only): CJ scalloped pleated bell"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7eead9e1-7462-4049-94a8-170a3d38c574.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-dining-2026-11-20/V3-pendant-crop.txt",
+   "idempotency_key": "kd-wm-V3-pendant-r1-20261120",
+   "why": "the sample slot's V3 (6.3 P-V3), as a crop round the pendant for detail; V2 is done in code (kd_variants.py v2), 0 tokens",
+   "verdict": "kept: the pleated bell, ball and satin collar as in the SKU photo; scaled in code to 45 cm at the hem, bottom on Z 1.50",
+   "raw": "raw/V3-pendant-r1.png"
+  }
+ ],
+ "note": "prompts as sent are the .txt files here; supplier SKU boards stay in the scratchpad (render-dining/boards), only their var2 URLs are recorded"
+}

@@ -137,11 +137,34 @@
   ],
   "curtain_stack": {
    "lead_x": 380,
-   "px": 171944,
-   "note": "the stack cut at its leading fold crest (u 0.12): the edit's panel over the glass (x 212-380) is not kept"
+   "px": 165754,
+   "note": "the stack cut at its leading fold crest (u 0.12): the edit's panel over the glass (x 212-380) is not kept",
+   "hem": [
+    [
+     370,
+     417,
+     1382
+    ],
+    [
+     417,
+     442,
+     1360
+    ],
+    [
+     442,
+     468,
+     1341
+    ],
+    [
+     468,
+     545,
+     1319
+    ]
+   ],
+   "cut_below_hem_px": 6190
   },
   "curtains": {
-   "px": 171944,
+   "px": 165754,
    "clay_px": 124556,
    "cut": "clay-seeded GrabCut"
   },
@@ -214,16 +237,23 @@
   },
   "planter_behind_curtain_px": 0,
   "shadow_overrides": {
+   "planter_gaps": {
+    "px": 30441,
+    "rule": "in the gaps between the fronds: the edit's own shading (luminance ratio), pixel by pixel"
+   },
    "planter": {
-    "rule": "smooth field, sigma 6, at most x0.65, full to 60 px, gone at 180; leaf-coloured pixels are not shadow",
-    "min": 0.65,
-    "px": 259891
+    "rule": "smooth field sampled outside the crown closed over its gaps (12 px), sigma 6 handing over to 24 and 96 where plaster is scarce, at most x0.65, full to 60 px, gone at 180; leaf-coloured pixels are not shadow",
+    "min": 0.45,
+    "px": 268044
    },
    "magazine-holder": {
     "rule": "the edit's darkening round the rack as drawn, relative to a ring 50-80 px out (ref), moved and scaled with it; full to 22 px, gone at 46",
     "ref": 0.929,
     "min": 0.5,
     "px": 23879
+   },
+   "curtains": {
+    "rule": "under the hem a contact fade only (gone 8 px below)"
    }
   },
   "light_px": 104169

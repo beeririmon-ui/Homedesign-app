@@ -294,6 +294,24 @@ def soft_ratio(e, base, valid, sig):
     return np.where(den > 0.02, num / np.maximum(den, 1e-6), 1.0)
 
 
+def soft_ratio2(e, base, valid, s1, s2, s3=96):
+    """(2026-11-20, QA W0 M2) soft_ratio at three scales: where a finer field has too few valid pixels near it (den < 0.25), it hands
+    over to the next wider one (s2, then s3). The gaps between the fronds are not sampled (see shadow_overrides), and the fine field
+    alone left them unshadowed: white specks in the crown. The widest scale reaches the middle of the crown"""
+    r = np.clip(C.luma(C.lin(e)) / np.maximum(C.luma(C.lin(base)), 1e-4), 0, 1.0)
+    w = valid.astype(np.float64)
+    out = None
+    for sg in (s3, s2, s1):
+        n, d = C.blur(r * w, sg), C.blur(w, sg)
+        rs = np.where(d > 1e-4, n / np.maximum(d, 1e-9), 1.0)
+        if out is None:
+            out = np.where(d > 1e-4, rs, 1.0)
+        else:
+            t = np.clip(d / 0.25, 0, 1)
+            out = t * rs + (1 - t) * out
+    return out
+
+
 def ramp(dist, d0, d1):
     """1 up to d0, a cosine fall to 0 at d1"""
     t = np.clip((dist - d0) / float(d1 - d0), 0, 1)
@@ -316,17 +334,35 @@ def shadow_overrides(p, e, base, layers, shadows, pl_ids, rp):
     if p == "pC-sides" and 49 in layers:
         leafish = green_or_dark(C.to_lab(e), C.to_lab(base))                                             # fronds the cut left out
         leafish[int(np.nonzero(M.ids('W0') == 49)[0].min()):] = False       # below the rim only canes: the corner's dark shade is shadow
-        valid = on & ~C.dil(allfg, 3) & ~C.dil(leafish & C.dil(layers[49], 40), 3)                       # are not shadow
-        r = soft_ratio(e, base, valid, 6)
+        # (QA W0 M2) the crown closed over the gaps between its fronds (12 px) before sampling: the edit's plaster there is lit (L* ~94)
+        # while the plaster round the plant is in its shade, so sampled as is the gaps stayed unshadowed and read as white specks
+        crown = layers[49].copy()
+        crown[int(np.nonzero(M.ids('W0') == 49)[0].min()):] = False
+        closed = cv2.morphologyEx(crown.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(12)).astype(bool)
+        valid = on & ~C.dil(allfg | closed, 3) & ~C.dil(leafish & C.dil(layers[49], 40), 3)                # are not shadow
+        r = soft_ratio2(e, base, valid, 6, 24)
         dk = cv2.distanceTransform((~layers[49]).astype(np.uint8), cv2.DIST_L2, 5)
         others = np.zeros((H, W))
         for k in (40, 45):
             if k in layers:
                 others = np.maximum(others, C.blur(layers[k].astype(np.float64), 1.0))
         s = 1 - (1 - np.maximum(r, 0.65)) * ramp(dk, 60, 180) * (1 - others) * C.blur(on.astype(np.float64), 1.0)
+        # (QA W0 M2) in the gaps between the fronds (the crown closed by 12 px, less the fronds) the edit's own shading, pixel by pixel
+        # (luminance ratio, 1.5 px normalised blur, at least x0.45): where the edit's plaster is in the fronds' shade the gap darkens as
+        # in the edit, where it is lit (the upper right, the cube's glow) it stays as lit as in the edit
+        # inside the crown's hull less 25 px, and never on leaf colour: along its edge, and wherever the edit has a frond the cut left
+        # out, the edit's own shading printed those fronds as ghost leaves
+        hull_in = C.ero(hull_of(crown), 25)
+        gaps = closed & ~layers[49] & hull_in & ~C.dil(leafish, 1)
+        rl = np.clip(C.luma(C.lin(e)) / np.maximum(C.luma(C.lin(base)), 1e-4), 0.45, 1.0)
+        gw = gaps.astype(np.float64)
+        rl = np.where(gaps, C.blur(rl * gw, 1.5) / np.maximum(C.blur(gw, 1.5), 1e-6), 1.0)
+        wg = C.blur(gw, 1.0) * gw
+        s = s * (1 - wg) + rl * wg
         s[layers[49]] = 1
         shadows[49] = np.where(s > 0.996, 1.0, np.clip(s, 0, 1))
-        out["planter"] = dict(rule="smooth field, sigma 6, at most x0.65, full to 60 px, gone at 180; leaf-coloured pixels are not shadow", min=round(float(shadows[49].min()), 3),
+        out["planter_gaps"] = dict(px=int(gaps.sum()), rule="in the gaps between the fronds: the edit's own shading (luminance ratio), pixel by pixel")
+        out["planter"] = dict(rule="smooth field sampled outside the crown closed over its gaps (12 px), sigma 6 handing over to 24 and 96 where plaster is scarce, at most x0.65, full to 60 px, gone at 180; leaf-coloured pixels are not shadow", min=round(float(shadows[49].min()), 3),
                               px=int((shadows[49] < 0.996).sum()))
     if p == "pC-sides" and 51 in layers and RACK_T:
         valid = on & ~C.dil(RACK_T["m_old"], 2)
@@ -342,6 +378,14 @@ def shadow_overrides(p, e, base, layers, shadows, pl_ids, rp):
         shadows[51] = np.where(s > 0.996, 1.0, np.clip(s, 0, 1))
         out["magazine-holder"] = dict(rule="the edit's darkening round the rack as drawn, relative to a ring 50-80 px out (ref), moved and scaled with it; full to 22 px, gone at 46", ref=round(ref, 3),
                                       min=round(float(shadows[51].min()), 3), px=int((shadows[51] < 0.996).sum()))
+    if p == "pC-sides" and 40 in shadows:                         # (QA W0 M1) under the hem only a contact fade, 8 px
+        below = hem_below()
+        dy = np.zeros((H, W))
+        for x0, x1, y in CURTAIN_HEM:
+            dy[:, x0:x1] = np.arange(H)[:, None] - y
+        s40 = shadows[40]
+        shadows[40] = np.where(below, 1 - (1 - s40) * ramp(dy, 0, 8), s40)
+        out["curtains"] = dict(rule="under the hem a contact fade only (gone 8 px below)")
     if out:
         rp["shadow_overrides"] = out
 
@@ -364,9 +408,25 @@ def curtain_stack(e, m, fg, lab_e, d, ids, pl_ids, base, rp):
     n, lb, st, _ = cv2.connectedComponentsWithStats(g.astype(np.uint8), 8)
     g = lb == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
     g = fill_holes(g, 50000) & zone
+    below = hem_below()
+    cut_px = int((g & below).sum())
+    g &= ~below
     rp["curtain_stack"] = dict(lead_x=CURTAIN_LEAD_X, px=int(g.sum()), note="the stack cut at its leading fold crest (u 0.12): the edit's panel "
-                               "over the glass (x 212-380) is not kept")
+                               "over the glass (x 212-380) is not kept", hem=CURTAIN_HEM, cut_below_hem_px=cut_px)
     return g
+
+
+# (2026-11-20, QA W0 M1) the hem: each fold of the stack cut at its own end (canvas px, as the edit drew them; they sit on the 12 cm hem
+# line in perspective, 1381 at x 400 to 1318 at x 490). Below them the cut had kept the edit's own skirting and floor, which do not
+# line up with the plate's: a block with straight edges under the folds. Below the hem the plate shows, with a contact shadow only
+CURTAIN_HEM = [(370, 417, 1382), (417, 442, 1360), (442, 468, 1341), (468, 545, 1319)]     # (x0, x1, last fabric row)
+
+
+def hem_below():
+    m = np.zeros((H, W), bool)
+    for x0, x1, y in CURTAIN_HEM:
+        m[y + 1:, x0:x1] = True
+    return m
 
 
 SPECIAL[("pC-sides", 40)] = curtain_stack
