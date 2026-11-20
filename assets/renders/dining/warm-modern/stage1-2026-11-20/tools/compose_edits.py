@@ -29,6 +29,7 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import kd_common as K  # noqa: E402
 from kd_passes import PASSES, PRODUCTS, FILLERS, VARIANTS, owner  # noqa: E402
+import kd_fixes as FX  # noqa: E402
 
 C = K.C
 H, W = K.H, K.W
@@ -84,7 +85,7 @@ def cut_pass(p, rec, J):
         for j in product_ids(k):
             z |= C.dil(ids == j, FILLER_PAD.get(j, PAD.get(k, 14)))
         if k == 50:                                   # the pendant: its whole box (the variants' shapes differ from the clay's)
-            z |= C.box_mask([J.get("pendant_box", (690, 0, 1100, 450))])
+            z |= C.box_mask([J.get("pendant_box", (640, 0, 1190, 480))])
         zones[k] = z
     zone = np.zeros((H, W), bool)
     for z in zones.values():
@@ -138,6 +139,16 @@ def cut_pass(p, rec, J):
         near = np.argmin(dist, 0)
         for i, k in enumerate(prods):
             layers[k] &= (near == i) | ~np.any([layers[j] for j in prods if j != k], axis=0)
+    pre_fix = np.zeros((H, W), bool)
+    for k in prods:
+        pre_fix |= layers[k]
+    # the code fixes (kd_fixes.py)
+    if 50 in prods:
+        e, layers[50] = FX.fix_pendant(e, layers[50], ids, rp)
+    if 52 in prods:
+        layers[52] = FX.fix_runner(layers[52], pl_ids)
+    if 53 in prods:
+        layers[53] = FX.sharp_filter(e, layers[53], ids, 54, rp)
     for k in prods:
         rp["products"][str(k)] = dict(slot=PRODUCTS[k][0], px=int(layers[k].sum()), clay_px=int(np.isin(ids, product_ids(k)).sum()))
     # shadows: darkening round each product (band 45), the nearest product, never on any product, never through the window
@@ -155,10 +166,14 @@ def cut_pass(p, rec, J):
     edge_in = allfg & ~C.ero(allfg, 2)
     shadows = {}
     for i, k in enumerate(prods):
-        env = (du <= band) & (near == i) & ~allfg & (pl_ids != 0) & (pl_ids != 15)
+        sup, bk = FX.support_env(k, pl_ids, band)
+        env = (du <= bk) & (near == i) & ~allfg & (pl_ids != 0) & (pl_ids != 15)
+        if sup is not None:
+            env &= sup                                # shadows only on the product's support surfaces (kd_fixes.SUPPORT)
         if k == 50 or variant:
             env &= False                              # the pendant casts no shadow (1.4)
-        s = 1 - C.blur(dark * taper * env * shade_w, 1.0)
+        tk = np.clip(1 - du / max(bk, 1), 0, 1) ** 1.1
+        s = 1 - C.blur(dark * tk * env * shade_w, 1.0)
         s[~C.dil(env, 1) | allfg] = 1
         s_min = cv2.erode(s.astype(np.float32), C.disk(2).astype(np.uint8)).astype(np.float64)
         s = np.where(edge_in, np.minimum(s, s_min), s)
@@ -168,7 +183,7 @@ def cut_pass(p, rec, J):
         env = light_env(ids, P["lamps"])
         L8 = np.clip(1 - (1 - e) / np.maximum(1 - base, 1e-3), 0, 0.5)
         glow_ok = np.clip(C.blur(((dh_ < 30) & (ce_ - cb_ < 22)).astype(np.float64), 3) * 1.4 - 0.2, 0, 1)
-        wgt = (env & ~C.dil(allfg, 2) & (pl_ids != 0) & (pl_ids != 15)).astype(np.float64) * glow_ok
+        wgt = (env & ~C.dil(allfg | pre_fix, 3) & (pl_ids != 0) & (pl_ids != 15)).astype(np.float64) * glow_ok   # never the edit's own product pixels
         Ls = np.stack([C.blur(L8[..., c] * wgt, 8) / np.maximum(C.blur(wgt, 8), 1e-3) for c in range(3)], -1)
         Ls[C.blur(wgt, 8) < 0.02] = 0
         soft_env = C.blur(env.astype(np.float64), 25)

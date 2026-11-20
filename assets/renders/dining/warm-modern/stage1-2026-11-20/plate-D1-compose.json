@@ -1,0 +1,276 @@
+{
+ "frame": "D1",
+ "source": "raw/plate-D1-r1.png",
+ "out": "plate-D1.png",
+ "steps": [
+  {
+   "step": 1,
+   "what": "lock: ECC affine onto inputs/plate-<fr>-input.png, masked to the clay's architecture, kitchen and fixed furniture",
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.7835,
+    "2": 0.772,
+    "1": 0.7434
+   },
+   "warp": [
+    [
+     0.993341,
+     -0.001578,
+     11.532085
+    ],
+    [
+     -0.000362,
+     0.996229,
+     2.844803
+    ]
+   ]
+  },
+  {
+   "step": "1b",
+   "what": "KD-8: the splashback continued to the shelves from the mask edit, inside the clay's splash mask only",
+   "source": "raw/plate-D1-splash-r1.png",
+   "mask_px": 354653,
+   "gain_p1_p50_p99": [
+    0.891,
+    0.99,
+    1.364
+   ],
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.9839,
+    "2": 0.9814,
+    "1": 0.9773
+   },
+   "warp": [
+    [
+     0.994058,
+     -0.001617,
+     11.590332
+    ],
+    [
+     -0.000389,
+     1.005243,
+     -2.990371
+    ]
+   ]
+  },
+  {
+   "step": "2a",
+   "what": "one house: the plaster's light (a luminance field on the plaster only)",
+   "plaster": {
+    "median_L_before": 67.7,
+    "median_L_after": 89.4,
+    "gain_p5_p50_p95": [
+     1.325,
+     2.039,
+     2.143
+    ]
+   },
+   "curve": {
+    "xp": [
+     0,
+     30,
+     45,
+     52,
+     61,
+     68,
+     81,
+     96,
+     100
+    ],
+    "fp": [
+     0,
+     40,
+     62,
+     72,
+     82,
+     90.5,
+     91.5,
+     97,
+     100
+    ]
+   },
+   "regions_after": {
+    "east wall by the window": 89.8,
+    "east wall at the corner": 83.5,
+    "rounded corner": 81.7,
+    "south wall above the shelves": 89.2,
+    "hood": 91.8
+   }
+  },
+  {
+   "step": 2,
+   "what": "one house: per material against the living room's base.png and the hall's ht2.png",
+   "readings": {
+    "plaster (walls)": {
+     "plate": [
+      88.9,
+      1.8,
+      9.7
+     ],
+     "house": [
+      90.0,
+      0.5,
+      4.0
+     ],
+     "dE00": 4.67,
+     "dE00_chroma_only": 4.61
+    },
+    "hood (plaster)": {
+     "plate": [
+      91.8,
+      0.5,
+      5.6
+     ],
+     "house": [
+      90.0,
+      0.5,
+      4.0
+     ],
+     "dE00": 1.71,
+     "dE00_chroma_only": 1.31
+    },
+    "oak floor": {
+     "plate": [
+      43.5,
+      5.2,
+      13.7
+     ],
+     "house": [
+      42.4,
+      7.6,
+      15.8
+     ],
+     "dE00": 2.71,
+     "dE00_chroma_only": 2.48
+    },
+    "walnut (table top)": {
+     "plate": [
+      53.8,
+      8.4,
+      16.5
+     ],
+     "house": [
+      49.6,
+      11.4,
+      19.5
+     ],
+     "dE00": 4.88,
+     "dE00_chroma_only": 2.64
+    },
+    "walnut (chairs, bench, shelves)": {
+     "plate": [
+      14.5,
+      7.2,
+      10.6
+     ]
+    },
+    "limestone (worktop, splash, sill)": {
+     "plate": [
+      81.7,
+      1.7,
+      14.0
+     ],
+     "house": [
+      72.5,
+      3.1,
+      15.7
+     ],
+     "dE00": 6.78,
+     "dE00_chroma_only": 1.85
+    },
+    "taupe lowers": {
+     "plate": [
+      54.8,
+      2.7,
+      9.0
+     ]
+    },
+    "bronze frame": {
+     "plate": [
+      28.4,
+      4.2,
+      8.2
+     ]
+    }
+   },
+   "fixes": {
+    "plaster (walls)": {
+     "shift_ab": [
+      -1.32,
+      -5.74
+     ],
+     "why": "chroma off the house by more than dE00 3"
+    }
+   },
+   "after": {
+    "plaster (walls)": [
+     88.9,
+     0.5,
+     4.0
+    ],
+    "hood (plaster)": [
+     91.8,
+     0.5,
+     5.6
+    ],
+    "oak floor": [
+     43.5,
+     5.2,
+     13.7
+    ],
+    "walnut (table top)": [
+     53.8,
+     8.4,
+     16.5
+    ],
+    "walnut (chairs, bench, shelves)": [
+     14.5,
+     7.2,
+     10.6
+    ],
+    "limestone (worktop, splash, sill)": [
+     81.7,
+     1.7,
+     14.0
+    ],
+    "taupe lowers": [
+     54.8,
+     2.7,
+     9.0
+    ],
+    "bronze frame": [
+     28.4,
+     4.2,
+     8.1
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "what": "WM-G1 / MP-I2 toe on L*",
+   "applied": true,
+   "p05_before": 4.24,
+   "xp": [
+    0,
+    4.241,
+    12,
+    30,
+    100
+   ],
+   "fp": [
+    0,
+    11.5,
+    16,
+    30,
+    100
+   ],
+   "curve": "(0, 0) (4.24, 11.5) (12, 16) (30, 30) (100, 100)"
+  }
+ ],
+ "black_point_p05": 11.5,
+ "lock_lines_after": {},
+ "mandatory_for_derived": "step 3's curve (MP-I2) on every layer cut from this plate"
+}

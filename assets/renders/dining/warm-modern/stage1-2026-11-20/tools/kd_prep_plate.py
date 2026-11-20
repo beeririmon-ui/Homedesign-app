@@ -19,8 +19,8 @@ own materials. Chroma per material (half of the clay's own variation kept); ligh
 For D2 (--overlap D1-plate.png): where D1 sees the same direction, the finished D1 plate warped by the rotation homography replaces the clay
 (a 60 px feather inside the overlap), so the model continues one house; recorded in the json.
 
-  python3 prep_plate.py D1
-  python3 prep_plate.py D2 --overlap plate-D1.png
+  python3 kd_prep_plate.py D1
+  python3 kd_prep_plate.py D2 --overlap plate-D1.png
 """
 import json
 import os

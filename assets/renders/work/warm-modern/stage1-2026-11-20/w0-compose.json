@@ -1,0 +1,206 @@
+{
+ "pA-wall": {
+  "lock": {
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.9961,
+    "2": 0.9947,
+    "1": 0.9921
+   },
+   "warp": [
+    [
+     1.000758,
+     -5e-05,
+     0.055128
+    ],
+    [
+     -3.8e-05,
+     1.009222,
+     -6.045427
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.886,
+   0.98,
+   1.101
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.96,
+   2.87
+  ],
+  "framed-art": {
+   "px": 71435,
+   "clay_px": 72816,
+   "cut": "clay-seeded GrabCut"
+  },
+  "bookends": {
+   "px": 23529,
+   "clay_px": 17946,
+   "cut": "clay-seeded GrabCut"
+  },
+  "shelf-vase": {
+   "px": 13965,
+   "clay_px": 13254,
+   "cut": "clay-seeded GrabCut"
+  },
+  "shelf-object": {
+   "px": 5485,
+   "clay_px": 4049,
+   "cut": "clay-seeded GrabCut"
+  },
+  "pendant": {
+   "px": 13813,
+   "clay_px": 13264,
+   "cut": "clay-seeded GrabCut"
+  },
+  "sizefix": {
+   "shelf-object": {
+    "why": "the bowl came 126 x 57 px against the clay's 118 x 46 (the card's 23 x 9): 24 % too tall",
+    "pieces": [
+     {
+      "anchor": [
+       1670.0,
+       413.0
+      ],
+      "scale": [
+       0.937,
+       0.807
+      ],
+      "px_before": 5485,
+      "px_after": 4127
+     }
+    ]
+   },
+   "bookends": {
+    "why": "the two arch bookends came about 15 cm tall against the card's 17 (75 px against 86): scaled 1.13 about their feet",
+    "pieces": [
+     {
+      "anchor": [
+       1207.0,
+       413.0
+      ],
+      "scale": [
+       1.13,
+       1.13
+      ],
+      "px_before": 3385,
+      "px_after": 4314
+     },
+     {
+      "anchor": [
+       1013.0,
+       413.0
+      ],
+      "scale": [
+       1.13,
+       1.13
+      ],
+      "px_before": 3012,
+      "px_after": 3885
+     }
+    ]
+   }
+  },
+  "light_px": 171742
+ },
+ "black_point_p05": 11.39,
+ "pC-sides": {
+  "lock": {
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.7849,
+    "2": 0.7649,
+    "1": 0.7397
+   },
+   "warp": [
+    [
+     1.003178,
+     3.2e-05,
+     -3.751987
+    ],
+    [
+     -0.000311,
+     1.009573,
+     -5.777226
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.711,
+   0.989,
+   1.348
+  ],
+  "dE_outside_zone_p50_p95": [
+   1.13,
+   9.19
+  ],
+  "curtain_stack": {
+   "lead_x": 380,
+   "px": 171944,
+   "note": "the stack cut at its leading fold crest (u 0.12): the edit's panel over the glass (x 212-380) is not kept"
+  },
+  "curtains": {
+   "px": 171944,
+   "clay_px": 124556,
+   "cut": "clay-seeded GrabCut"
+  },
+  "framed-art-2": {
+   "px": 69032,
+   "clay_px": 65854,
+   "cut": "clay-seeded GrabCut"
+  },
+  "wall-sconce": {
+   "px": 6083,
+   "clay_px": 5681,
+   "cut": "clay-seeded GrabCut"
+  },
+  "palm": {
+   "pot_px": 57378,
+   "crown_px": 144893,
+   "rule": "pot: clay-seeded GrabCut + hull; crown: changed leaf pixels (green or dark)"
+  },
+  "planter": {
+   "px": 202271,
+   "clay_px": 145414,
+   "cut": "clay-seeded GrabCut"
+  },
+  "rack_cut": {
+   "box": [
+    1830,
+    1060,
+    2165,
+    1335
+   ],
+   "px": 60435
+  },
+  "magazine-holder": {
+   "px": 60435,
+   "clay_px": 34638,
+   "cut": "clay-seeded GrabCut"
+  },
+  "sizefix": {
+   "magazine-holder": {
+    "why": "the rack came about 50 cm wide (the card's 35) and 0.10 m right of its place: scaled uniformly to the card's front (191 px at Y 6.71) about its foot, the foot moved to the clay's centre",
+    "scale": 0.579,
+    "foot_from": [
+     1997.5,
+     1332.0
+    ],
+    "foot_to": [
+     1929.0,
+     1332.0
+    ],
+    "px_before": 60435,
+    "px_after": 20289
+   },
+   "framed-art-2": {
+    "why": "the edit's frame 2 came about 23 % taller than 44 x 54 (bottom 70-90 px low)",
+    "method": "per-column remap of the frame's span onto the clay's projected span",
+    "px_before": 69032,
+    "px_after": 65668
+   }
+  },
+  "light_px": 103201
+ }
+}

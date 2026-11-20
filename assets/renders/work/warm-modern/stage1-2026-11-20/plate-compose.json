@@ -1,0 +1,376 @@
+{
+ "source": "raw/plate-r1.png",
+ "out": "plate.png",
+ "steps": [
+  {
+   "step": 1,
+   "what": "lock: ECC affine onto inputs/plate-input.png, masked to the clay's architecture and fixed furniture",
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.7708,
+    "2": 0.7118,
+    "1": 0.6797
+   },
+   "warp": [
+    [
+     0.998379,
+     0.001012,
+     2.363416
+    ],
+    [
+     -0.001023,
+     0.990296,
+     5.937669
+    ]
+   ]
+  },
+  {
+   "step": 2,
+   "what": "one house: per surface against MB0's plate.png (the same material under the same window light)",
+   "before": {
+    "plaster, desk wall": {
+     "w0": [
+      76.7,
+      0.9,
+      6.8
+     ],
+     "mb0": [
+      86.1,
+      0.8,
+      7.1
+     ],
+     "dE00": 6.41,
+     "dL": -9.4
+    },
+    "plaster, window wall": {
+     "w0": [
+      52.3,
+      2.2,
+      11.6
+     ],
+     "mb0": [
+      56.9,
+      2.9,
+      14.4
+     ],
+     "dE00": 4.72,
+     "dL": -4.6
+    },
+    "oak": {
+     "w0": [
+      33.2,
+      5.3,
+      13.4
+     ],
+     "mb0": [
+      34.7,
+      5.9,
+      15.4
+     ],
+     "dE00": 1.75,
+     "dL": -1.5
+    },
+    "walnut, vertical fronts (desk panels, drawer / nightstand fronts)": {
+     "w0": [
+      10.6,
+      6.4,
+      8.0
+     ],
+     "mb0": [
+      17.6,
+      8.4,
+      11.8
+     ],
+     "dE00": 5.4,
+     "dL": -7.0
+    },
+    "walnut, tops (desk / nightstands)": {
+     "w0": [
+      52.5,
+      8.5,
+      17.2
+     ],
+     "mb0": [
+      43.9,
+      7.7,
+      15.9
+     ],
+     "dE00": 8.56,
+     "dL": 8.6
+    },
+    "bronze": {
+     "w0": [
+      87.4,
+      1.5,
+      5.3
+     ],
+     "mb0": [
+      30.2,
+      5.2,
+      9.7
+     ],
+     "dE00": 51.51,
+     "dL": 57.3
+    },
+    "limestone slab": {
+     "w0": [
+      91.3,
+      1.7,
+      8.3
+     ],
+     "mb0": [
+      91.8,
+      0.8,
+      9.8
+     ],
+     "dE00": 1.72,
+     "dL": -0.5
+    },
+    "desk side panels": {
+     "w0": [
+      8.3,
+      5.2,
+      6.1
+     ]
+    },
+    "shelf": {
+     "w0": [
+      25.5,
+      9.0,
+      14.8
+     ]
+    },
+    "chair": {
+     "w0": [
+      17.3,
+      9.5,
+      12.5
+     ]
+    },
+    "niche back wall": {
+     "w0": [
+      80.2,
+      1.0,
+      6.4
+     ]
+    },
+    "niche jambs and soffit": {
+     "w0": [
+      57.9,
+      2.1,
+      11.2
+     ]
+    }
+   },
+   "fixes": {
+    "plaster, desk wall": {
+     "applied": true,
+     "method": "smooth light field on the desk-wall plaster (wall_field)",
+     "shoulder": "L* above 88.0 eased toward 95.0",
+     "fit_coef": [
+      -1.8824,
+      2.892,
+      -2.9694,
+      2.6222,
+      -6.4728,
+      3.0284
+     ],
+     "log_target": -0.3261,
+     "keep": 0.25,
+     "max_gain": 1.516,
+     "gain_p50_p99_on_face": [
+      1.516,
+      1.516
+     ],
+     "face_median_after": 85.5
+    },
+    "plaster, window wall": {
+     "applied": true,
+     "ab_shift": [
+      0.67,
+      2.54
+     ],
+     "note": "a* b* only: it is the backlit wall, its L* is the light"
+    },
+    "walnut, tops (desk / nightstands)": {
+     "dE00_before": 8.56,
+     "applied": true,
+     "luminance_gain": 0.669,
+     "ab_shift": [
+      -0.38,
+      -0.67
+     ]
+    },
+    "walnut, vertical fronts": {
+     "applied": false,
+     "note": "not comparable: the reading is mostly the side panels' inner faces in the desk's own shade; MB0's are lit nightstand fronts"
+    },
+    "oak": {
+     "applied": false,
+     "note": "within dE00 3 as it came"
+    }
+   },
+   "after": {
+    "plaster, desk wall": {
+     "w0": [
+      85.5,
+      0.9,
+      6.9
+     ],
+     "mb0": [
+      86.1,
+      0.8,
+      7.1
+     ],
+     "dE00": 0.43,
+     "dL": -0.6
+    },
+    "plaster, window wall": {
+     "w0": [
+      54.3,
+      2.9,
+      14.4
+     ],
+     "mb0": [
+      56.9,
+      2.9,
+      14.4
+     ],
+     "dE00": 2.39,
+     "dL": -2.5
+    },
+    "oak": {
+     "w0": [
+      33.2,
+      5.3,
+      13.4
+     ],
+     "mb0": [
+      34.7,
+      5.9,
+      15.4
+     ],
+     "dE00": 1.75,
+     "dL": -1.5
+    },
+    "walnut, vertical fronts (desk panels, drawer / nightstand fronts)": {
+     "w0": [
+      10.6,
+      6.4,
+      8.0
+     ],
+     "mb0": [
+      17.6,
+      8.4,
+      11.8
+     ],
+     "dE00": 5.4,
+     "dL": -7.0
+    },
+    "walnut, tops (desk / nightstands)": {
+     "w0": [
+      43.9,
+      8.1,
+      16.5
+     ],
+     "mb0": [
+      43.9,
+      7.7,
+      15.9
+     ],
+     "dE00": 0.45,
+     "dL": 0.0
+    },
+    "bronze": {
+     "w0": [
+      87.4,
+      1.5,
+      5.3
+     ],
+     "mb0": [
+      30.2,
+      5.2,
+      9.7
+     ],
+     "dE00": 51.51,
+     "dL": 57.3
+    },
+    "limestone slab": {
+     "w0": [
+      91.3,
+      1.7,
+      8.3
+     ],
+     "mb0": [
+      91.8,
+      0.8,
+      9.8
+     ],
+     "dE00": 1.72,
+     "dL": -0.5
+    },
+    "desk side panels": {
+     "w0": [
+      8.3,
+      5.2,
+      6.1
+     ]
+    },
+    "shelf": {
+     "w0": [
+      25.5,
+      9.0,
+      14.8
+     ]
+    },
+    "chair": {
+     "w0": [
+      17.3,
+      9.5,
+      12.5
+     ]
+    },
+    "niche back wall": {
+     "w0": [
+      87.3,
+      1.0,
+      6.5
+     ]
+    },
+    "niche jambs and soffit": {
+     "w0": [
+      68.6,
+      2.1,
+      11.3
+     ]
+    }
+   }
+  },
+  {
+   "step": 3,
+   "what": "WM-G1 / MP-I2 toe on L*",
+   "applied": true,
+   "p05_before": 3.78,
+   "xp": [
+    0,
+    3.779,
+    12,
+    30,
+    100
+   ],
+   "fp": [
+    0,
+    11.5,
+    16,
+    30,
+    100
+   ],
+   "curve": "(0.00, 0) (3.78, 11.5) (12.00, 16) (30.00, 30) (100.00, 100)",
+   "why": "WM-G1: the frame's p0.5 brought to 11-14"
+  }
+ ],
+ "black_point_p05": 11.5,
+ "window_p99": 99.0,
+ "rest_p99": 96.7,
+ "mandatory_for_derived": "step 3's curve (MP-I2), when applied; MP-I1: each pass's gain field against this plate outside its zone"
+}
