@@ -32,17 +32,20 @@
     "height": null
   },
   "colors": {
-    "dominant_hex": null,
-    "secondary_hex": [],
-    "temperature": null
+    "dominant_hex": "#D8C6A8",
+    "secondary_hex": [
+      "#F8E6B9",
+      "#B29A81"
+    ],
+    "temperature": "warm"
   },
   "materials": [
     "Wood",
     "Wood"
   ],
-  "texture": null,
-  "finish": null,
-  "visual_weight": null,
+  "texture": "wood arm and plate, fabric/pleated or wood shade",
+  "finish": "matte",
+  "visual_weight": "light",
   "lighting": null,
   "images": {
     "urls": [
@@ -62,33 +65,177 @@
   },
   "style_scores": {},
   "options": {
-      "axes": [
-        {"id": "color", "name_he": "צבע", "values": [
-          {"id": "a-brown", "label_he": "חום (A)", "label_src": "A Brown", "hex": "#7A5A40"},
-          {"id": "a-yellow", "label_he": "צהוב (A)", "label_src": "A Yellow", "hex": "#E3C34F"},
-          {"id": "b-brown", "label_he": "חום (B)", "label_src": "B Brown", "hex": "#7A5A40"},
-          {"id": "b-yellow", "label_he": "צהוב (B)", "label_src": "B Yellow", "hex": "#E3C34F"}
-        ]},
-        {"id": "other", "name_he": "גוון אור", "values": [
-          {"id": "3-light-colors", "label_he": "3 light colors"},
-          {"id": "warm-white-2700-3500k", "label_he": "לבן חם 3500K", "label_src": "Warm White (2700-3500K)"}
-        ]}
-      ],
-      "skus": [
-        {"id": "12000044617655035", "values": {"color": "a-brown", "other": "3-light-colors"}, "price": {"amount": 21.45, "currency": "USD"}, "stock": 177, "image": "https://ae01.alicdn.com/kf/Secbab802ebbb43d08ca5397e87b38f70s.jpg", "in_room": false},
-        {"id": "12000044617655036", "values": {"color": "a-brown", "other": "warm-white-2700-3500k"}, "price": {"amount": 19.49, "currency": "USD"}, "shipping_il": {"amount": 11.0, "currency": "USD", "days": "9-19"}, "stock": 117, "image": "https://ae01.alicdn.com/kf/Secbab802ebbb43d08ca5397e87b38f70s.jpg", "in_room": true},
-        {"id": "12000044617655037", "values": {"color": "a-yellow", "other": "3-light-colors"}, "price": {"amount": 21.45, "currency": "USD"}, "stock": 190, "image": "https://ae01.alicdn.com/kf/Sc7897c4f78fb46dea968f87cc00f39f1W.jpg", "in_room": false},
-        {"id": "12000044617655038", "values": {"color": "a-yellow", "other": "warm-white-2700-3500k"}, "price": {"amount": 19.49, "currency": "USD"}, "stock": 136, "image": "https://ae01.alicdn.com/kf/Sc7897c4f78fb46dea968f87cc00f39f1W.jpg", "in_room": false},
-        {"id": "12000057935841795", "values": {"color": "b-brown", "other": "3-light-colors"}, "price": {"amount": 26.29, "currency": "USD"}, "stock": 200, "image": "https://ae01.alicdn.com/kf/S538b7cfd2c9648bd80a57ec05cc4ab64R.jpg", "in_room": false},
-        {"id": "12000057935841796", "values": {"color": "b-brown", "other": "warm-white-2700-3500k"}, "price": {"amount": 24.39, "currency": "USD"}, "stock": 191, "image": "https://ae01.alicdn.com/kf/S538b7cfd2c9648bd80a57ec05cc4ab64R.jpg", "in_room": false},
-        {"id": "12000057935841797", "values": {"color": "b-yellow", "other": "3-light-colors"}, "price": {"amount": 26.29, "currency": "USD"}, "stock": 197, "image": "https://ae01.alicdn.com/kf/Sf74fa34efb514832858ef9aa7efc30f4e.jpg", "in_room": false},
-        {"id": "12000057935841798", "values": {"color": "b-yellow", "other": "warm-white-2700-3500k"}, "price": {"amount": 24.39, "currency": "USD"}, "stock": 193, "image": "https://ae01.alicdn.com/kf/Sf74fa34efb514832858ef9aa7efc30f4e.jpg", "in_room": false}
-      ],
-      "default_sku": "12000044617655036",
-      "source": "api"
-    },
+    "axes": [
+      {
+        "id": "color",
+        "name_he": "צבע",
+        "values": [
+          {
+            "id": "a-brown",
+            "label_he": "חום (A)",
+            "label_src": "A Brown",
+            "hex": "#7A5A40"
+          },
+          {
+            "id": "a-yellow",
+            "label_he": "צהוב (A)",
+            "label_src": "A Yellow",
+            "hex": "#E3C34F"
+          },
+          {
+            "id": "b-brown",
+            "label_he": "חום (B)",
+            "label_src": "B Brown",
+            "hex": "#7A5A40"
+          },
+          {
+            "id": "b-yellow",
+            "label_he": "צהוב (B)",
+            "label_src": "B Yellow",
+            "hex": "#E3C34F"
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "name_he": "גוון אור",
+        "values": [
+          {
+            "id": "3-light-colors",
+            "label_he": "3 light colors"
+          },
+          {
+            "id": "warm-white-2700-3500k",
+            "label_he": "לבן חם 3500K",
+            "label_src": "Warm White (2700-3500K)"
+          }
+        ]
+      }
+    ],
+    "skus": [
+      {
+        "id": "12000044617655035",
+        "values": {
+          "color": "a-brown",
+          "other": "3-light-colors"
+        },
+        "price": {
+          "amount": 21.45,
+          "currency": "USD"
+        },
+        "stock": 177,
+        "image": "https://ae01.alicdn.com/kf/Secbab802ebbb43d08ca5397e87b38f70s.jpg",
+        "in_room": false
+      },
+      {
+        "id": "12000044617655036",
+        "values": {
+          "color": "a-brown",
+          "other": "warm-white-2700-3500k"
+        },
+        "price": {
+          "amount": 19.49,
+          "currency": "USD"
+        },
+        "shipping_il": {
+          "amount": 11.0,
+          "currency": "USD",
+          "days": "9-19"
+        },
+        "stock": 117,
+        "image": "https://ae01.alicdn.com/kf/Secbab802ebbb43d08ca5397e87b38f70s.jpg",
+        "in_room": true
+      },
+      {
+        "id": "12000044617655037",
+        "values": {
+          "color": "a-yellow",
+          "other": "3-light-colors"
+        },
+        "price": {
+          "amount": 21.45,
+          "currency": "USD"
+        },
+        "stock": 190,
+        "image": "https://ae01.alicdn.com/kf/Sc7897c4f78fb46dea968f87cc00f39f1W.jpg",
+        "in_room": false
+      },
+      {
+        "id": "12000044617655038",
+        "values": {
+          "color": "a-yellow",
+          "other": "warm-white-2700-3500k"
+        },
+        "price": {
+          "amount": 19.49,
+          "currency": "USD"
+        },
+        "stock": 136,
+        "image": "https://ae01.alicdn.com/kf/Sc7897c4f78fb46dea968f87cc00f39f1W.jpg",
+        "in_room": false
+      },
+      {
+        "id": "12000057935841795",
+        "values": {
+          "color": "b-brown",
+          "other": "3-light-colors"
+        },
+        "price": {
+          "amount": 26.29,
+          "currency": "USD"
+        },
+        "stock": 200,
+        "image": "https://ae01.alicdn.com/kf/S538b7cfd2c9648bd80a57ec05cc4ab64R.jpg",
+        "in_room": false
+      },
+      {
+        "id": "12000057935841796",
+        "values": {
+          "color": "b-brown",
+          "other": "warm-white-2700-3500k"
+        },
+        "price": {
+          "amount": 24.39,
+          "currency": "USD"
+        },
+        "stock": 191,
+        "image": "https://ae01.alicdn.com/kf/S538b7cfd2c9648bd80a57ec05cc4ab64R.jpg",
+        "in_room": false
+      },
+      {
+        "id": "12000057935841797",
+        "values": {
+          "color": "b-yellow",
+          "other": "3-light-colors"
+        },
+        "price": {
+          "amount": 26.29,
+          "currency": "USD"
+        },
+        "stock": 197,
+        "image": "https://ae01.alicdn.com/kf/Sf74fa34efb514832858ef9aa7efc30f4e.jpg",
+        "in_room": false
+      },
+      {
+        "id": "12000057935841798",
+        "values": {
+          "color": "b-yellow",
+          "other": "warm-white-2700-3500k"
+        },
+        "price": {
+          "amount": 24.39,
+          "currency": "USD"
+        },
+        "stock": 193,
+        "image": "https://ae01.alicdn.com/kf/Sf74fa34efb514832858ef9aa7efc30f4e.jpg",
+        "in_room": false
+      }
+    ],
+    "default_sku": "12000044617655036",
+    "source": "api"
+  },
   "status": "candidate",
-  "notes": "DRAFT from AliExpress DS API (2026-11-20, ae-round-1120): colors (HEX), visual_weight, product dimensions and texture are NOT filled; fill them from the photos before QA (sourcing-agent). SKU 12000044617655036 (Lampshade Color: A Brown, Color Temperature: Warm White (2700-3500K)), stock 117, list price 30.94 USD. Package (not product): 30 x 30 x 15 cm, gross 0.700 kg. Shipping to IL: cheapest 11.0 USD AliExpress standard shipping, 9-19 days (CAINIAO_STANDARD). Store: Banmeng Lighting Store Store (id 910438242, CN); ratings described 4.7 / communication 4.8 / shipping 4.7; product 4.8 stars, 17 reviews, 121 sold; AE category 39050510.",
+  "notes": "DRAFT from AliExpress DS API (2026-11-20, ae-round-1120): Filled 2026-11-20 by the sourcing session: colours measured from the in-room SKU photo (median-cut, studio background removed; QA re-reads under the scene light), dimensions from the not stated in listing (verify against the supplier's size chart), texture and visual weight from the reviewer's look at the photos. SKU 12000044617655036 (Lampshade Color: A Brown, Color Temperature: Warm White (2700-3500K)), stock 117, list price 30.94 USD. Package (not product): 30 x 30 x 15 cm, gross 0.700 kg. Shipping to IL: cheapest 11.0 USD AliExpress standard shipping, 9-19 days (CAINIAO_STANDARD). Store: Banmeng Lighting Store Store (id 910438242, CN); ratings described 4.7 / communication 4.8 / shipping 4.7; product 4.8 stars, 17 reviews, 121 sold; AE category 39050510. Fit vs spec: work row 7 / kids ג1: arm in walnut or bronze, pleated/linen shade 10-13 (work) or 12-16 (kids), arm 18-20 (work) or 30-45 (kids), wired to a wall point, CE. Plug-in cable and CE not declared in these listings: lighting from abroad stays research only (ג.3), and the kids room needs CE before sale (ד.7.3).",
   "safety": {
     "ce": null,
     "ip_rating": null,
