@@ -83,7 +83,7 @@ DESK = dict(x=(-1.625, -0.025), y=(6.35, 6.95), top=(0.72, 0.76), side_t=0.04, d
 SHELF = dict(y=(6.35, 6.60), z=(1.62, 1.66), inset=0.006)
 CHAIR = dict(c=(-0.825, 7.30), seat=(0.43, 0.46), back=(0.62, 0.85), back_r=0.235, back_t=0.025, leg_r=0.020)
 SCONCE = dict(c=(-1.92, 6.50, 1.65), s=0.12)                     # 10.3: the travertine cube on the built-out face
-PENDANT = dict(c=(-0.825, 6.82), d=0.30, z=(1.58, 1.77))          # 10.1 row 19: silk ribbed pumpkin 30 (height not published: 19)
+PENDANT = dict(c=(-0.825, 6.82), d=0.30, z=(1.58, 1.73), rod=0.30)   # 10.1 row 19: silk ribbed pumpkin 30; the SKU drawing: shade 30 x 15, rod 30
 LIGHT = dict(window=6.0, pend_area_w=26.0, pend_glow=4.0, sconce_spot_w=14.0, sconce_glow=3.0, plate_target_Lstar=87.5)
 
 IDS = {0: "nothing / sky", 1: "plaster, built-out desk wall (Y 6.50) and the arch spandrels", 2: "plaster, window wall (X -2.30)",
@@ -498,7 +498,8 @@ def wm_products(R):
     be = []
     for i, x in enumerate((-1.48, -1.175)):
         be += [bx(f"bkend_steel{i}", x, x + 0.025, 6.40, 6.505, stop, stop + 0.004, C["steel"]),
-               prism(f"wk_wm_bkend{i}", [(6.40, stop)] + [(6.46 + 0.06 * math.cos(math.radians(a)), stop + 0.11 + 0.06 * math.sin(math.radians(a))) for a in range(0, 181, 15)] + [(6.52, stop)],
+               prism(f"wk_wm_bkend{i}", [(6.40, stop), (6.52, stop)] + [(6.46 + 0.06 * math.cos(math.radians(a)), stop + 0.11 + 0.06 * math.sin(math.radians(a)))
+                                                                       for a in range(0, 181, 15)],
                      "x", x, x + 0.025, C["beech"])]
     reg_prod(R, "bookends", be, 53, "10.1 row 10: arch bookends Black walnut (SKU 9), 12 x 10.5 x 17, the pair at X -1.48 and -1.175")
     books, x = [], -1.452
@@ -510,9 +511,9 @@ def wm_products(R):
     reg_prod(R, "shelf-vase", [cyl("svase_body", (-0.48, 6.47), 0.095, stop, stop + 0.24, C["sand"], 48),
                                cone("svase_neck", (-0.48, 6.47), 0.095, 0.05, stop + 0.24, stop + 0.30, C["sand"], 48)], 55,
              "10.1 row 11: coarse sand white Tall 19 x 30 (mouth 10) at (-0.48, 6.47)")
-    reg_prod(R, "shelf-object", [cyl("bowl_foot", (-0.19, 6.47), 0.045, stop, stop + 0.03, C["burnt"], 40),
-                                 cone("bowl_body", (-0.19, 6.47), 0.06, 0.115, stop + 0.03, stop + 0.09, C["burnt"], 48)], 56,
-             "10.1 row 12: burnt paulownia footed bowl 23 x 9, Fire Color, at (-0.19, 6.47)")
+    reg_prod(R, "shelf-object", [cyl("bowl_foot", (-0.20, 6.47), 0.045, stop, stop + 0.03, C["burnt"], 40),
+                                 cone("bowl_body", (-0.20, 6.47), 0.06, 0.115, stop + 0.03, stop + 0.09, C["burnt"], 48)], 56,
+             "10.1 row 12: burnt paulownia footed bowl 23 x 9, Fire Color, at (-0.20, 6.47): 2 cm from the arch at the rim (3.2's -0.19 gives 1 cm)")
     # the desk, left: tray (with the pen cup) and the faceted vase in the back-left corner
     tray = [prism("wk_wm_tray", rrect_xy(-1.375, -1.135, 6.585, 6.755, 0.05), "z", top, top + 0.018, C["trav"])]
     reg_prod(R, "desk-tray", tray, 57, "10.1 row 13: travertine organic tray 24 x 17 x 1.8 at X -1.375..-1.135, Y 6.585-6.755")
@@ -534,9 +535,11 @@ def wm_products(R):
     pz0, pz1 = PENDANT["z"]
     pc_ = PENDANT["c"]
     shade = r3.ell("wk_wm_pendant", pc_, PENDANT["d"] / 2, pz0, pz1, C["shade"])
-    cord = cyl("pend_cord", pc_, 0.004, pz1, ROOM["h"], C["steel"], 12)
-    reg_prod(R, "pendant", [shade, cord], 63, f"10.1 row 19: silk ribbed pumpkin 30 (warm), Z {pz0}-{pz1} (height not published: 19, the "
-             "kitchen lantern's ratio), cord to the ceiling")
+    rod = cyl("pend_rod", pc_, 0.005, pz1, pz1 + PENDANT["rod"], C["steel"], 12)
+    cord = cyl("pend_cord", pc_, 0.0025, pz1 + PENDANT["rod"], ROOM["h"], C["steel"], 12)
+    canopy = cyl("pend_canopy", pc_, 0.05, ROOM["h"] - 0.02, ROOM["h"], C["steel"], 24)
+    reg_prod(R, "pendant", [shade, rod, cord, canopy], 63, f"10.1 row 19: silk ribbed pumpkin 30 (warm), shade Z {pz0}-{pz1} (the SKU drawing: "
+             "D30 x H15), a 30 cm black rod, the line and a 10 cm canopy to the ceiling")
     pl_ = [r2.mk_light("wk_wm_pend_area", "AREA", (pc_[0], pc_[1], pz0 - 0.005), LIGHT["pend_area_w"], size=0.18)]
     r2.lamp("work/pendant", "work", "ceiling", [(shade, LIGHT["pend_glow"])], pl_, "silk ribbed pumpkin 30 (10.1)")
     # chair-throw: folded lengthwise to 45, hung over the chair back toward the camera, Z 0.45-0.88
@@ -704,15 +707,27 @@ def checks_w0(fid, cam, ids, items=None):
     C["sconce_vs_jamb"] = dict(rule=">= 0.047 (10.3)", value=r4_(UVf(cam, NICHE["x"][0], YB, 1.65)[0] - (bbox_f(ids, {45}) or {"u": [0, 0]})["u"][1]))
     C["sconce_over_plant"] = dict(rule=">= 0.27 m in plan (10.3)", value_m=round(SCONCE["c"][2] - SCONCE["s"] / 2 - 1.30, 3))
     C["planter_vs_built_out_face"] = dict(rule="3 cm (3.2)", value_m=round(6.74 - 0.21 - YB, 3))
-    C["magazine_holder_vs_right_jamb"] = dict(gap_u=gap_u(ids, {18, 1}, {51, 52}), plan_m=round(0.05 - NICHE["x"][1], 3))
+    hb = bbox_f(ids, {51, 52})
+    C["magazine_holder_vs_right_jamb"] = dict(gap_u=r4_(hb["u"][0] - UVf(cam, NICHE["x"][1], YB, 0.2)[0]) if hb else None,
+                                              plan_m=round(0.05 - NICHE["x"][1], 3))
     tl, tr = UVf(cam, ROOM["x"][1] - SKIN, 7.03, 1.69), UVf(cam, ROOM["x"][1] - SKIN, 7.47, 1.69)
     bl, br = UVf(cam, ROOM["x"][1] - SKIN, 7.03, 1.15), UVf(cam, ROOM["x"][1] - SKIN, 7.47, 1.15)
     C["framed_art_2_trapezoid"] = dict(target="u 0.85-0.91, v 0.17-0.44", corners_uv=dict(tl=[r4_(v) for v in tl], tr=[r4_(v) for v in tr],
                                                                                           bl=[r4_(v) for v in bl], br=[r4_(v) for v in br]))
-    C["candle_vs_art"] = dict(rule=">= 0.02 or a clear 0.03 overlap (D-HC3)", gap_u=gap_u(ids, {41, 42}, {61}), gap_v=gap_v(ids, {41, 42}, {61}))
+    ab, cb = bbox_f(ids, {41, 42}), bbox_f(ids, {61})
+    C["candle_vs_art"] = dict(rule=">= 0.02 or a clear 0.03 overlap (D-HC3)", art=ab, candle=cb,
+                              gap_u=r4_(cb["u"][0] - ab["u"][1]) if ab and cb else None, gap_v=r4_(cb["v"][0] - ab["v"][1]) if ab and cb else None)
     C["desk_vase_vs_left_panel_m"] = round((-1.48 - 0.0925) - (NICHE["x"][0] + DESK["side_t"]), 4)
-    C["bowl_vs_arch_m"] = round(arch_half(SHELF["z"][1] + 0.09) - abs(-0.19 + 0.115 - NICHE["c"][0]), 4)
+    C["bowl_vs_arch_m"] = round(arch_half(SHELF["z"][1] + 0.09) - abs(-0.20 + 0.115 - NICHE["c"][0]), 4)
     return C
+
+
+QUADS = {}
+
+
+def quad_px(cam, pts):
+    P = [px(cam, *p_) for p_ in pts]
+    return 0.5 * abs(sum(P[i][0] * P[(i + 1) % 4][1] - P[(i + 1) % 4][0] * P[i][1] for i in range(4)))
 
 
 def count_v7q6(ids, items):
@@ -726,6 +741,8 @@ def count_v7q6(ids, items):
         if b is None:
             rows[slot] = dict(counted=False, why="not in frame")
             continue
+        if slot in QUADS:                          # frame + canvas are two registered parts: visible px / the analytic quad
+            vis = round(100 * b["px"] / QUADS[slot], 1)
         hpct = round(100 * (b["v"][1] - b["v"][0]), 2)
         wpct = round(100 * (b["u"][1] - b["u"][0]) * 16 / 9, 2)
         big = max(hpct, wpct)
@@ -943,6 +960,9 @@ def main(argv):
         Rr["pidx_to_id"] = pid
         Rr["checks"] = checks_w0(fid, cam, ids, Rr.get("items_visible"))
         if fid == "W0":
+            xr = ROOM["x"][1] - SKIN
+            QUADS["framed-art"] = quad_px(cam, [(-1.125, 6.38, 0.98), (-0.525, 6.38, 0.98), (-0.525, 6.38, 1.48), (-1.125, 6.38, 1.48)])
+            QUADS["framed-art-2"] = quad_px(cam, [(xr - 0.03, 7.03, 1.15), (xr - 0.03, 7.47, 1.15), (xr - 0.03, 7.47, 1.69), (xr - 0.03, 7.03, 1.69)])
             Rr["V7Q6"] = count_v7q6(ids, Rr.get("items_visible") or {})
         if fid == "W0-plate" or (fid == "W0" and "lock_target" not in rep):
             rep["lock_target"] = "lock-target.json"
