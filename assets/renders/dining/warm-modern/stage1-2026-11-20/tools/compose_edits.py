@@ -43,8 +43,11 @@ OUT_LAYERS = os.path.join(ST, "layers")
 
 
 def toe(fr):
-    s = json.load(open(os.path.join(ST, f"plate-{fr}-compose.json")))["steps"][2]
-    return (s["xp"], s["fp"]) if s.get("applied") else None
+    """the plate's WM-G1 toe (MP-I2): the step numbered 3 (resumed session: it was read by position, steps[2], which is step 2a,
+    so no layer got the toe before 2026-11-20 12:30)"""
+    steps = json.load(open(os.path.join(ST, f"plate-{fr}-compose.json")))["steps"]
+    s = [st for st in steps if st.get("step") == 3]
+    return (s[0]["xp"], s[0]["fp"]) if s and s[0].get("applied") else None
 
 
 def fill_holes(m, max_area):

@@ -438,7 +438,8 @@ def write2(p, e, out, shadows, light, keys, man):
                                   layer=os.path.relpath(lp, ST), shadow=os.path.relpath(sp, ST), alpha_px=int((a8 > 0).sum()),
                                   shadow_px=int((s8 < 255).sum()),
                                   bbox_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1] if xs.size else None,
-                                  sold=True, source=f"{fr} pass {p} (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)", pass_=p))
+                                  sold=True, source=f"{fr} pass {p} (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)", pass_=p,
+                                  toned=bool(tc)))
     if light is not None:
         lp = os.path.join(ST, "light", fr, f"{p}-lamps.png")
         os.makedirs(os.path.dirname(lp), exist_ok=True)
@@ -448,11 +449,37 @@ def write2(p, e, out, shadows, light, keys, man):
     man["layers"].sort(key=lambda l: (l["frame"], l["z"], l.get("sub", 0), l["slot"]))
 
 
+def retone(man):
+    """once, for the layers cut before the toe was read right: the toe and the floor on their colour (write2 does it on a new cut)"""
+    n = 0
+    for l in man["layers"]:
+        if l.get("projected_from") or l.get("toned"):
+            continue
+        tc = CE.toe(l["frame"])
+        if not tc:
+            continue
+        lp = os.path.join(ST, l["layer"])
+        rgba = np.asarray(Image.open(lp)).copy()
+        m = rgba[..., 3] > 0
+        lab = C.to_lab(rgba[..., :3][m][None].astype(np.float64) / 255)
+        lab[..., 0] = np.interp(lab[..., 0], tc[0], tc[1])
+        lab[..., 0] = np.interp(lab[..., 0], BP_FLOOR[0], BP_FLOOR[1])
+        rgba[..., :3][m] = C.q(np.clip(C.from_lab(lab), 0, 1))[0]
+        Image.fromarray(rgba, "RGBA").save(lp, optimize=True)
+        l["toned"] = True
+        n += 1
+    return n
+
+
 def main(args):
     man = CE.load_man()
     rp = os.path.join(ST, "compose.json")
     rec = json.load(open(rp)) if os.path.exists(rp) else {}
     J = json.load(open(os.path.join(ST, "passes.json")))
+    if args[0] == "retone":
+        print("retoned", retone(man))
+        json.dump(man, open(os.path.join(ST, "manifest.json"), "w"), indent=1)
+        return
     for p in args[1:]:
         e, out, shadows, light, keys = cut2(p, rec, J[p])
         write2(p, e, out, shadows, light, keys, man)
