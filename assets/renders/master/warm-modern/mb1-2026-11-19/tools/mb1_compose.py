@@ -492,7 +492,7 @@ def bed_layer(k, e, layers, prods, rec):
       - the mask's steps smoothed (a 1.5 px blur, > 0.5; the pillowcases' notched rim 3 px);
       - a layer runs on 6 px under every layer above it in the pass (z), opaque, in its own colour carried out from its interior
         (normalised blur, sigma 3, then 8): the upper layer's soft edge then mixes two fabrics, never the plate;
-      - its edge pixels facing the plate in its colour carried out from its interior (normalised blur, sigma 8 then 3): the
+      - its edge pixels facing the plate (no other bed layer within 3 px) in its colour carried out from its interior (normalised blur, sigma 8 then 3): the
         edit's cut-line pixels there made double outlines;
       - pin holes under 400 px that no other layer covers, filled (the plate showed through);
       - dark specks the model drew on the pillowcases (L* 10 under the local median, under 40 px) and the dark cord with a knot on the
@@ -519,8 +519,8 @@ def bed_layer(k, e, layers, prods, rec):
         carried[ok] = v[ok]
     band = mk & ~C.ero(m, 2)
     rgb = np.where(band[..., None], carried, e)
-    rgb = np.where((ext | (C.dil(upper, 3) & mk))[..., None], e, rgb)   # under an upper layer's soft edge: the edit's own pixel
-                                                       # (its crease shade), its own edge band included
+    rgb = np.where((ext | (C.dil(others, 3) & mk))[..., None], e, rgb)  # where it meets another bed layer (above or below): the
+                                                       # edit's own pixels (the crease shade); the soft alphas then mix edit with edit
     a = C.soft(mk)
     a = np.where(ext, np.maximum(a, C.blur(ext.astype(np.float64), 0.8)), a)
     lab = C.to_lab(rgb)
@@ -531,7 +531,7 @@ def bed_layer(k, e, layers, prods, rec):
         n, lb, st, _ = cv2.connectedComponentsWithStats(sp.astype(np.uint8), connectivity=8)
         fix = np.isin(lb, [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] < 40])
     if P[k][0] == "throw":
-        cord = (lab[..., 0] < Lm - 6) & C.box_mask([(560, 845, 700, 885)]) & m
+        cord = (lab[..., 0] < Lm - 6) & C.box_mask([(560, 845, 700, 885)]) & C.ero(m, 4)    # not the hem's own crease
         fix = cv2.morphologyEx(cord.astype(np.uint8), cv2.MORPH_OPEN, np.ones((1, 3), np.uint8)).astype(bool)
     if fix.any():
         fix = C.dil(fix, 1)
