@@ -3,50 +3,125 @@
   "lock": {
    "method": "ECC affine on the gradient magnitude, masked",
    "ecc": {
-    "4": 0.9853,
-    "2": 0.9855,
-    "1": 0.9874
+    "4": 0.985,
+    "2": 0.9857,
+    "1": 0.9876
    },
    "warp": [
     [
-     1.000738,
-     0.000156,
-     -0.172078
+     1.000736,
+     0.000155,
+     -0.170771
     ],
     [
-     -2.7e-05,
+     -2.2e-05,
      1.009083,
-     -5.914344
+     -5.915661
     ]
    ]
   },
   "gain_p1_p50_p99": [
    0.739,
-   0.984,
+   0.985,
    1.629
   ],
+  "throw_end": {
+   "raw": "raw/p5-throw-end.png",
+   "try_used": "r1 (r2 lengthened the throw, twisted tassels)",
+   "lock": {
+    "method": "ECC affine on the gradient magnitude, masked",
+    "ecc": {
+     "4": 0.9959,
+     "2": 0.9948,
+     "1": 0.9935
+    },
+    "warp": [
+     [
+      1.000708,
+      0.000162,
+      -0.16023
+     ],
+     [
+      -2.6e-05,
+      1.009091,
+      -5.922314
+     ]
+    ]
+   },
+   "gain_ring_px": 100684,
+   "fold_slope": 0.4,
+   "fill": "reflected up along the folds about the zone's bottom edge; contact shade 14 % over 6 px; 10 px side cross-fade",
+   "hem_samples": [
+    [
+     1316,
+     1090.7
+    ],
+    [
+     1356,
+     1077.2
+    ],
+    [
+     1396,
+     1063.7
+    ],
+    [
+     1436,
+     1050.2
+    ],
+    [
+     1476,
+     1036.7
+    ]
+   ],
+   "fringe_kept_px": 14,
+   "fringe_zone_px": 13510,
+   "patch_px": 68381,
+   "rule": "the p1 edit inside the box replaced by r1 where r1 changed its input or the placeholder was (3 px feather inside the box)"
+  },
   "dE_outside_zone_p50_p95": [
    0.73,
-   2.89
+   2.87
   ],
   "pillowcases": {
-   "px": 54327,
+   "px": 60838,
    "clay_px": 24150
   },
   "bedding": {
-   "px": 432431,
+   "px": 452901,
    "clay_px": 281380
   },
   "cushions": {
-   "px": 30422,
+   "px": 30418,
    "clay_px": 26453
   },
   "throw": {
-   "px": 98439,
+   "px": 77449,
    "clay_px": 77218
+  },
+  "m2": {
+   "pillowcases": {
+    "under_upper_px": 5789,
+    "edge_band_px": 9464,
+    "inpainted_px": 253
+   },
+   "bedding": {
+    "under_upper_px": 12998,
+    "edge_band_px": 23577,
+    "inpainted_px": 0
+   },
+   "cushions": {
+    "under_upper_px": 0,
+    "edge_band_px": 1547,
+    "inpainted_px": 0
+   },
+   "throw": {
+    "under_upper_px": 0,
+    "edge_band_px": 4440,
+    "inpainted_px": 1416
+   }
   }
  },
- "black_point_p05": 12.09,
+ "black_point_p05": 12.11,
  "p2-right": {
   "lock": {
    "method": "ECC affine on the gradient magnitude, masked",
@@ -394,18 +469,18 @@
     10.6
    ],
    "mb1_pot_lit_before": [
-    79.5,
-    3.0,
-    10.8
+    80.5,
+    3.1,
+    10.7
    ],
-   "luminance_gain": 1.074,
-   "chroma_scale": 0.977
+   "luminance_gain": 1.04,
+   "chroma_scale": 0.979
   },
   "bedside-carafe": {
    "rule": "a* b* to MB0's lit tone, L* kept",
    "before_ab": [
-    2.7,
-    6.0
+    2.3,
+    11.1
    ],
    "to": [
     2.4,
@@ -439,12 +514,12 @@
  "occlusion": {
   "bedding": {
    "by": "bedside-carafe",
-   "px_given_up": 478,
+   "px_given_up": 464,
    "rule": "behind alpha x (1 - front alpha); the slots' z order kept"
   },
   "pillowcases": {
    "by": "bedside-carafe",
-   "px_given_up": 58,
+   "px_given_up": 64,
    "rule": "behind alpha x (1 - front alpha); the slots' z order kept"
   }
  }

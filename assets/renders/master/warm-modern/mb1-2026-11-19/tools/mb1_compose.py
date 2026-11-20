@@ -24,6 +24,7 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mb1_common as M  # noqa: E402
+import mb1_throw_end as TE  # noqa: E402
 
 C = M.C
 H, W = M.H, M.W
@@ -91,7 +92,7 @@ def cut_pass(p, rec):
         up = np.zeros((H, W), bool)
         for x in np.nonzero(np.isin(ids, (51, 53)).any(0))[0]:
             col = np.nonzero(np.isin(ids[:, x], (51, 53)))[0]
-            up[max(0, col.min() - 140):col.min(), x] = True
+            up[max(0, col.min() - 175):col.min(), x] = True        # M2: 140 cut the right pillow's top rim (row 677 at x 1500)
         zone |= up & C.dil(hb, 2)
         zone &= ~C.dil(np.isin(pl_ids, (29, 30)), 2)   # never the bench (in front)
     stable = C.ero(np.isin(pl_ids, ARCH), 3) & ~C.dil(zone, 40)
@@ -102,9 +103,12 @@ def cut_pass(p, rec):
     keep &= ~lampenv                                   # the lamps' glow is light, not exposure: out of the gain field
     g = C.gain_field(e, base, keep)
     e = C.srgb(np.clip(C.lin(e) * g, 0, 1))
+    if p == "p1-bed":                                  # M1: the Pecan's near-right end from the approved mask edit (tools/mb1_throw_end.py)
+        e = TE.patch(e, rp_pre := {})
     d = np.linalg.norm(C.blur(C.to_lab(e), 1.0) - C.blur(C.to_lab(base), 1.0), axis=-1)
     out_d = d[keep & M.frame_mask()]
     rp = dict(lock=rl, gain_p1_p50_p99=[round(float(v), 3) for v in np.percentile(g, [1, 50, 99])],
+              **(rp_pre if p == "p1-bed" else {}),
               dE_outside_zone_p50_p95=[round(float(v), 2) for v in np.percentile(out_d, [50, 95])])
     # the cut
     fg = (d > 7) & zone
@@ -383,6 +387,8 @@ def bed_labels(lab, ids, fg, prods):
     near = C.dil(ids == 54, 160)
     keep = [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] > 3000 and (near & (lb == i)).any()]
     rust = np.isin(lb, keep)
+    far = C.box_mask([(480, 830, 760, 905)])          # M2: the throw's far end, lit lighter (L* over 66, C* 10-15): its upper fold
+    rust |= far & fg & (Ch > 10) & (hh > 35) & (hh < 62) & C.dil(rust, 25)      # went to the duvet, a seam at x 640
     pil = fg & head & (Ch > 16) & (hh > 40) & (hh < 66)
     pil = fill_holes(cv2.morphologyEx(pil.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool), 3000) & fg
     tex = np.sqrt(np.maximum(C.blur(Lh * Lh, 2) - C.blur(Lh, 2) ** 2, 0))          # the boucle's texture (the duvet fold reads 0.6)
@@ -479,13 +485,71 @@ def fill_holes(m, max_area):
     return m | np.isin(lb, [i for i in range(1, n) if i not in border and st[i, cv2.CC_STAT_AREA] < max_area])
 
 
+def bed_layer(k, e, layers, prods, rec):
+    """M2 (QA 2026-11-19): the bed textiles come from one edit and abut each other; with each cut soft on its own, both alphas fell off
+    at a shared edge and the plate (the mattress, the headboard) showed through: light and grey lines along the cushion, the Pecan, the
+    pillow's rim, dark specks on it. Here:
+      - the mask's steps smoothed (a 1.5 px blur, > 0.5; the pillowcases' notched rim 3 px);
+      - a layer runs on 6 px under every layer above it in the pass (z), opaque, in its own colour carried out from its interior
+        (normalised blur, sigma 3, then 8): the upper layer's soft edge then mixes two fabrics, never the plate;
+      - its edge pixels in that same carried colour (the edit's cut-line pixels: double outlines);
+      - pin holes under 400 px that no other layer covers, filled (the plate showed through);
+      - dark specks the model drew on the pillowcases (L* 10 under the local median, under 40 px) and the dark cord with a knot on the
+        Pecan's far end (x 560-700, y 850-885) inpainted from the fabric round them."""
+    z = P[k][2]
+    m = C.blur(layers[k].astype(np.float64), 3.0 if P[k][0] == "pillowcases" else 1.5) > 0.5     # the pillow's rim: 3 px
+    upper = np.zeros((H, W), bool)
+    others = np.zeros((H, W), bool)
+    for j in prods:
+        if P[j][2] > z:
+            upper |= C.blur(layers[j].astype(np.float64), 1.5) > 0.5
+        if j != k:
+            others |= layers[j]
+    holes = fill_holes(m, 400) & ~m & ~C.dil(others, 1)  # pin holes no other layer covers: the plate showed through (a grey dot)
+    m |= holes
+    ext = C.dil(upper, 2) & C.dil(m, 6) & ~m
+    mk = m | ext
+    inner = C.ero(m, 2).astype(np.float64)
+    carried = e.copy()
+    for sg in (8, 3):
+        w = C.blur(inner, sg)
+        v = np.stack([C.blur(e[..., c] * inner, sg) for c in range(3)], -1) / np.maximum(w, 1e-6)[..., None]
+        ok = w > 0.02
+        carried[ok] = v[ok]
+    band = mk & ~C.ero(m, 2)
+    rgb = np.where(band[..., None], carried, e)
+    rgb = np.where(ext[..., None], e, rgb)              # under an upper layer's soft edge: the edit's own pixel (its crease shade)
+    a = C.soft(mk)
+    a = np.where(ext, np.maximum(a, C.blur(ext.astype(np.float64), 0.8)), a)
+    lab = C.to_lab(rgb)
+    Lm = cv2.medianBlur(np.clip(lab[..., 0], 0, 100).astype(np.uint8), 11).astype(np.float64)
+    fix = np.zeros((H, W), bool)
+    if P[k][0] == "pillowcases":
+        sp = (lab[..., 0] < Lm - 10) & C.ero(m, 3)
+        n, lb, st, _ = cv2.connectedComponentsWithStats(sp.astype(np.uint8), connectivity=8)
+        fix = np.isin(lb, [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] < 40])
+    if P[k][0] == "throw":
+        cord = (lab[..., 0] < Lm - 6) & C.box_mask([(560, 845, 700, 885)]) & m
+        fix = cv2.morphologyEx(cord.astype(np.uint8), cv2.MORPH_OPEN, np.ones((1, 3), np.uint8)).astype(bool)
+    if fix.any():
+        fix = C.dil(fix, 1)
+        rgb8 = cv2.inpaint(C.q(rgb), fix.astype(np.uint8), 4, cv2.INPAINT_TELEA)
+        rgb = np.where(fix[..., None], rgb8.astype(np.float64) / 255, rgb)
+    rec.setdefault("p1-bed", {}).setdefault("m2", {})[P[k][0]] = dict(under_upper_px=int(ext.sum()), edge_band_px=int(band.sum()), holes_filled_px=int(holes.sum()),
+                                                                       inpainted_px=int(fix.sum()))
+    return a, rgb
+
+
 def write_pass(p, e, layers, shadows, light, prods, man, rec):
     tc = toe_curve()
     man["layers"] = [l for l in man["layers"] if l.get("pass") != p]
     for k in prods:
         slot, pid, z, _, side = P[k]
-        a = C.soft(layers[k])
-        rgb = C.defringe(e, layers[k])
+        if p == "p1-bed":
+            a, rgb = bed_layer(k, e, layers, prods, rec)
+        else:
+            a = C.soft(layers[k])
+            rgb = C.defringe(e, layers[k])
         if tc:
             lab = C.to_lab(rgb)
             lab[..., 0] = np.interp(lab[..., 0], tc[0], tc[1])

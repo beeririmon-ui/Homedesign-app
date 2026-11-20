@@ -16,18 +16,20 @@ import sys
 
 import cv2
 import numpy as np
+from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mb1_common as M  # noqa: E402
-import mb1_throw_end_prep as TP  # noqa: E402
 
 C = M.C
 H, W = M.H, M.W
 ST = M.ST
 RAW = "raw/p5-throw-end.png"
 INP = "inputs/p5-throw-end-input.png"
+MASK = "inputs/p5-throw-end-mask.png"                    # the placeholder, as sent (the throw layer of the time)
 BOX = (1262, 935, 1600, 1280)
 KEEP = 14
+FOLD = 0.4                                               # the folds' slope on the side drop (x per y down, r1: down and to the right)
 ZH = 70                                                  # the fringe zone's height (to the tips, hem + 84)
 HEM_R1 = ((1330, 1086), (1490, 1032))                 # r1's hem (canvas px, after the lock)
 ARCH = (1, 2, 5, 9, 10, 12, 13, 14, 20, 21, 23, 24, 25, 28, 29, 30)
@@ -46,77 +48,50 @@ def patch(e, rec):
     lab = C.to_lab(e5)
     Ch = np.hypot(lab[..., 1], lab[..., 2])
     hh = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360
-    rust = (Ch > 10) & (hh > 30) & (hh < 65) & (lab[..., 0] < 62) & box
     # the hem: where the woven body ends and the fringe starts, traced on r1 locked (the fringe's threads are as dense as the body
     # under any colour rule): a straight line HEM_R1, the threads hang from it
     (hx0, hy0), (hx1, hy1) = HEM_R1
-    xs = np.arange(hx0 - 12, hx1 + 8)
+    xs = np.arange(hx0 - 14, 1513)
     yb = np.full(W, -1.0)
     yb[xs] = hy0 + (xs - hx0) * (hy1 - hy0) / (hx1 - hx0)
     rows = np.arange(H)[:, None]
-    # the fringe zone: from KEEP px below the hem to its tips (hem + 84), over the fringe's columns. It is refilled with the duvet drop
-    # right below it, moved up by the zone's height (the side drop's folds run down the bed, so they stay continuous), its low
-    # frequencies (sigma 8) set to r1's own duvet light between the threads and round the zone, feathered 3 px; then a soft contact shadow under the kept 2.3 cm
-    zx = np.arange(1320, 1507)
+    # the fringe zone: from KEEP px below the hem to its tips (hem + 84), over the fringe's columns
+    zx = np.arange(1320, 1513)
     top = np.full(W, H + 1.0)
     top[zx] = yb[zx] + KEEP
     zone = np.zeros((H, W), bool)
     zone[:, zx] = (rows >= top[zx][None, :]) & (rows < top[zx][None, :] + ZH)
-    src = np.zeros_like(e5)
-    src[:H - ZH] = e5[ZH:]
-    clone = np.where(zone[..., None], src, e5)
-    hh_ = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360
-    rust_any = (Ch > 10) & (hh_ > 30) & (hh_ < 65) & (lab[..., 0] < 62)
-    # the light: a harmonic fill (Laplace, Jacobi in the box) from the duvet round the zone; the kept fringe and the throw above it
-    # take no part (no flux), so no rust bleeds down. The weave: the clone's fine detail (its ratio to its own 2 px blur)
-    U = C.dil(zone, 3)
-    known = ~U & ~C.dil(rust_any, 2)
-    x0, y0, x1, y1 = BOX
-    sl = (slice(y0, y1), slice(x0, x1))
-    u, kn = U[sl], known[sl]
-    v = C.lin(e5)[sl].copy()
+    # the fill: the duvet just below the zone, reflected up about the zone's bottom edge along the side drop's folds (they run down
+    # and to the right, FOLD px per px): a zone pixel d px above that edge takes the pixel 2d px further down the same fold, so the folds
+    # run on through the edge without a seam and without a chevron; at the zone's left and right edges a 10 px cross-fade into r1
+    bot = np.full(W, -1.0)
+    bot[zx] = top[zx] + ZH
+    yy = np.arange(H, dtype=np.float32)[:, None] * np.ones((1, W), np.float32)
+    dd = np.clip(bot[None, :].astype(np.float32) - yy, 0, None)
+    my = yy + 2 * dd
+    mx = np.arange(W, dtype=np.float32)[None, :] + np.float32(FOLD) * 2 * dd
+    refl = cv2.remap(e5.astype(np.float32), mx.astype(np.float32), my.astype(np.float32), cv2.INTER_LINEAR,
+                     borderMode=cv2.BORDER_REFLECT).astype(np.float64)
     xx = np.arange(W)
-    hem_all = hy0 + (xx - hx0) * (hy1 - hy0) / (hx1 - hx0)
-    lring = C.dil(zone, 24) & ~C.dil(zone, 1) & ~C.dil(rust_any, 5) & (rows > hem_all[None, :] + KEEP + 6) & box
-    def nb(img, w, sg):
-        num = np.stack([C.blur(img[..., c] * w, sg) for c in range(3)], -1)
-        return num / np.maximum(C.blur(w.astype(np.float64), sg), 1e-4)[..., None]
-    v[u] = nb(C.lin(e5), lring.astype(np.float64), 18)[sl][u]
-    part = (u | kn).astype(np.float64)
-    for _ in range(1500):
-        acc = np.zeros_like(v)
-        cnt = np.zeros(u.shape)
-        for dy_, dx_ in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-            vs = np.roll(v, (dy_, dx_), (0, 1))
-            ps = np.roll(part, (dy_, dx_), (0, 1))
-            acc += vs * ps[..., None]
-            cnt += ps
-        nv = acc / np.maximum(cnt, 1e-6)[..., None]
-        v[u] = nv[u]
-    harm = C.lin(e5).copy()
-    harm[sl] = v
-    lc = C.lin(clone)
-    hf = lc / np.maximum(np.stack([C.blur(lc[..., c], 2) for c in range(3)], -1), 1e-4)
-    hf = 1 + np.clip(hf - 1, -0.12, 0.12)
-    fill = C.srgb(np.clip(harm * hf, 0, 1))
-    lfring_px = lring.sum()
+    side = np.minimum(np.abs(xx[None, :] - zx[0]), np.abs(xx[None, :] - zx[-1])).astype(np.float64)
+    fill = np.where(zone[..., None], refl, e5)
     dy = (rows - top[None, :]).astype(np.float64)
-    shade = 1 - 0.10 * np.exp(-np.clip(dy, 0, None) / 5.0)
+    shade = np.where(zone, 1 - 0.14 * np.exp(-np.clip(dy, 0, None) / 6.0), 1.0)     # only in the zone, under the kept fringe
     fill = C.srgb(np.clip(C.lin(fill) * shade[..., None], 0, 1))
-    wz = np.clip(C.blur(C.dil(zone, 2).astype(np.float64), 3.0) * 1.15, 0, 1) * C.dil(zone, 8)
+    wz = np.clip(C.blur(C.dil(zone, 3).astype(np.float64), 3.0) * 1.2, 0, 1) * C.dil(zone, 8)
+    wz = wz * np.clip((side + 2) / 10.0, 0, 1) ** 0.7
     e5 = e5 * (1 - wz[..., None]) + fill * wz[..., None]
     threads = zone
-    lfring_px = lring.sum()
     inp = C.load(os.path.join(ST, INP))
     d = np.linalg.norm(C.blur(C.to_lab(e5), 1.0) - C.blur(C.to_lab(inp), 1.0), axis=-1)
-    take = (C.dil((d > 4) & box, 6) | C.dil(TP.placeholder_mask(), 6)) & C.ero(box, 6)
+    take = (C.dil((d > 4) & box, 6) | C.dil(np.asarray(Image.open(os.path.join(ST, MASK))) > 127, 6)) & C.ero(box, 6)
     take = cv2.morphologyEx(take.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(6)).astype(bool)
-    w = C.blur(take.astype(np.float64), 2.0) * C.ero(box, 2)
+    w = C.blur((take & C.ero(box, 10)).astype(np.float64), 3.0)          # feathered inside the box: no hard edge at its sides
     out = e * (1 - w[..., None]) + e5 * w[..., None]
     hem = [(int(x), round(float(yb[x]), 1)) for x in xs[::40]]
-    rec["throw_end"] = dict(raw=RAW, try_used="r1 (r2 lengthened the throw, twisted tassels)", lock=rl, gain_ring_px=ring_px, lf_ring_px=int(lfring_px),
+    rec["throw_end"] = dict(raw=RAW, try_used="r1 (r2 lengthened the throw, twisted tassels)", lock=rl, gain_ring_px=ring_px, fold_slope=FOLD, fill="reflected up along the folds about the zone's bottom edge; contact shade 14 % over 6 px; 10 px side cross-fade",
                             hem_samples=hem, fringe_kept_px=KEEP, fringe_zone_px=int(threads.sum()), patch_px=int((w > 0.5).sum()),
-                            rule="the p1 edit inside the box replaced by r1 where r1 changed its input or the placeholder was (4 px feather)")
+                            rule="the p1 edit inside the box replaced by r1 where r1 changed its input or the placeholder was (3 px feather inside the box)")
     return out
 
 
@@ -125,7 +100,6 @@ if __name__ == "__main__":
     rec = {}
     out = patch(e, rec)
     print(json.dumps({k: v for k, v in rec["throw_end"].items() if k != "lock"}))
-    from PIL import Image
     S = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/render-master/mb1/crops/"
     a = Image.fromarray(C.q(out[880:1300, 1180:1640])).resize((644, 588), Image.LANCZOS)
     a.save(S + "p5-patched.png")
