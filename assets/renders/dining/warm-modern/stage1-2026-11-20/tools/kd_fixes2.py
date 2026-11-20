@@ -238,6 +238,12 @@ def _rows(m, min_w=40):
 def pendant(e, m, ids, card, diff_base):
     spec = CARD[card]
     ey0, ey1 = _rows(m)
+    if spec["uniform"]:                                       # V3: the ceramic ball and the collar go with the shade; the cord is
+        w_ = m.sum(1)                                         # the rows no wider than 12 px above them
+        y = ey0
+        while y > 0 and w_[y - 1] > 12:
+            y -= 1
+        ey0 = y
     sh = m.copy()
     sh[:ey0] = False
     sh = _hull(sh) & C.dil(sh, 1)
@@ -262,6 +268,8 @@ def pendant(e, m, ids, card, diff_base):
     # the suspension: the edit's rod (its columns over the 40 rows above its shade), then the line
     rod = m.copy()
     rod[ey0 - 2:] = False
+    if spec["uniform"]:
+        rod &= (m.sum(1) <= 12)[:, None]
     rows = np.nonzero(rod.any(1))[0]
     info = dict(card=card, scale_x=round(float(s), 4), scale_y=round(float(sy), 4), edit_shade_px=[int(ex0), int(ey0), int(ex1), int(ey1)],
                 new_shade_top_row=int(new_top), centre_x=round(float(tcx), 1))

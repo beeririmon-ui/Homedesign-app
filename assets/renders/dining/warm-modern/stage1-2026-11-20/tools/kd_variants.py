@@ -33,6 +33,14 @@ def v2(man, rec):
     top = rec["A-table"]["pendant"]["new_shade_top_row"]
     cx = rec["A-table"]["pendant"]["centre_x"]
     rgba[: top - 1] = 0                                           # V1's rod and line off
+    rod = rec["A-table"]["pendant"]
+    rw = rod.get("rod_width_px", 9)
+    for y in range(top - 1, top + 3):                             # the rod's foot inside the shade's top rows: the shade below it
+        for x in range(int(cx - rw / 2) - 2, int(cx + rw / 2) + 3):
+            if rgba[top + 4, x, 3] > 200:
+                rgba[y, x] = rgba[top + 4, x]
+            else:
+                rgba[y, x] = 0
     wire = np.array([228, 224, 216], np.uint8)                    # a thin white wire (the drawing), in the room's warm light
     x0 = int(np.floor(cx - 1))
     for y in range(0, top + 3):

@@ -316,9 +316,15 @@ def cut2(p, rec, J):
             col = C.defringe(e, fg, r=2)
         elif k == 57:                                # a sheer: the exact difference matte on the plate (the window shows through)
             near_furn = C.dil(np.isin(pl_ids, (20, 21, 22, 23, 24)), 80)
-            not_sheer = near_furn & (S["lab_e"][..., 0] < 55)            # the edit's own chair back and its shade are not curtain
+            ch_e = np.hypot(S["lab_e"][..., 1], S["lab_e"][..., 2])
+            not_sheer = near_furn & (S["lab_e"][..., 0] < 60) & (ch_e > 16)   # the edit's own walnut chair back is not curtain
             not_sheer = C.dil(cv2.morphologyEx(not_sheer.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool), 2)
-            a, col = FX2.diff_matte(e, base, (C.dil(fg, 1) & ~not_sheer).astype(np.float64))
+            fgc = CE.fill_holes(fg, 60000)                                # no hole in a sheer panel
+            reg = C.dil(fgc, 3) & ~C.dil(np.isin(pl_ids, (20, 21, 22, 23, 24)), 1) & ~not_sheer
+            a, col = FX2.diff_matte(e, base, reg.astype(np.float64))
+            a_open = cv2.morphologyEx(a.astype(np.float32), cv2.MORPH_OPEN, C.disk(3)).astype(np.float64)
+            a = np.where(near_furn, np.minimum(a, a_open), a)               # no flecks of sheer along the chair backs
+            a = np.where(a < 0.05, 0.0, a)
             rp["curtain_not_sheer_px"] = int((not_sheer & C.dil(fg, 1)).sum())
         else:                                        # a solid product: a smoothed outline, anti-aliased, its colour pulled in from inside
             fg_s = cv2.morphologyEx(fg.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(2))
@@ -380,6 +386,9 @@ def cut2(p, rec, J):
         env = (du <= bk) & (near == i) & (pl_ids != 0) & (pl_ids != 15)
         if sup is not None:
             env &= sup | (C.dil(out[STACK[k]][0] > 0, 1) if k in STACK and STACK[k] in out else False)
+        if k == 57:                                  # a sheer: no shadow layer (it would show through the panel); the diff matte
+            shadows[k] = np.ones((H, W))              # already gives the edit's own shading over the plate
+            continue
         if k == 50 or k == 70 or variant:
             env &= False
         if k in COLOUR_CUT:                          # synthetic contact: a soft band under each canister on the niche floor

@@ -241,6 +241,10 @@ def project(man, rec):
     """every default layer cut in one frame, into the other frame where that frame's clay sees the product (depth test)"""
     man["layers"] = [l for l in man["layers"] if not l.get("projected_from")]
     man["light"] = [li for li in man["light"] if not li.get("projected_from")]
+    # resumed session: only the cut layers are projected. The loop used to read the growing list, so a layer projected D1 -> D2 was
+    # projected back D2 -> D1 onto its own file (cropped to what D2 sees), and a light came back as a second copy
+    originals = [l for l in man["layers"] if l["default"]]
+    original_lights = list(man["light"])
     rp = {}
     for src, dst in (("D1", "D2"), ("D2", "D1")):
         maps = K.map_between(src, dst)
@@ -255,7 +259,7 @@ def project(man, rec):
         ds = cv2.remap(np.where(np.isfinite(dep_src), dep_src, 50).astype(np.float32), mx, my, cv2.INTER_NEAREST)
         d_in_dst = ds / np.maximum(k_, 1e-6)
         dd = np.where(np.isfinite(dep_dst), dep_dst, 50)
-        for l in [l for l in man["layers"] if l["frame"] == src and l["default"]]:
+        for l in [l for l in originals if l["frame"] == src]:
             k = l["clay_id"]
             if not np.isin(ids_dst, product_ids(k)).any():
                 continue
@@ -291,7 +295,7 @@ def project(man, rec):
                       projected_from=src, source=l["source"] + f"; projected {src} -> {dst} by the rotation homography about PD (depth test on the {dst} clay)")
             man["layers"].append(nl)
             rp[f"{l['product']} {src}->{dst}"] = dict(alpha_px=nl["alpha_px"], shadow_px=nl["shadow_px"])
-        for li in [li for li in man["light"] if li["frame"] == src]:
+        for li in [li for li in original_lights if li["frame"] == src]:
             L8 = np.asarray(Image.open(os.path.join(ST, li["file"]))).astype(np.float32)
             wl = cv2.remap(L8, mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
             wl[~ok] = 0
