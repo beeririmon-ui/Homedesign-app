@@ -492,7 +492,8 @@ def bed_layer(k, e, layers, prods, rec):
       - the mask's steps smoothed (a 1.5 px blur, > 0.5; the pillowcases' notched rim 3 px);
       - a layer runs on 6 px under every layer above it in the pass (z), opaque, in its own colour carried out from its interior
         (normalised blur, sigma 3, then 8): the upper layer's soft edge then mixes two fabrics, never the plate;
-      - its edge pixels in that same carried colour (the edit's cut-line pixels: double outlines);
+      - its edge pixels facing the plate in its colour carried out from its interior (normalised blur, sigma 8 then 3): the
+        edit's cut-line pixels there made double outlines;
       - pin holes under 400 px that no other layer covers, filled (the plate showed through);
       - dark specks the model drew on the pillowcases (L* 10 under the local median, under 40 px) and the dark cord with a knot on the
         Pecan's far end (x 560-700, y 850-885) inpainted from the fabric round them."""
@@ -518,7 +519,8 @@ def bed_layer(k, e, layers, prods, rec):
         carried[ok] = v[ok]
     band = mk & ~C.ero(m, 2)
     rgb = np.where(band[..., None], carried, e)
-    rgb = np.where(ext[..., None], e, rgb)              # under an upper layer's soft edge: the edit's own pixel (its crease shade)
+    rgb = np.where((ext | (C.dil(upper, 3) & mk))[..., None], e, rgb)   # under an upper layer's soft edge: the edit's own pixel
+                                                       # (its crease shade), its own edge band included
     a = C.soft(mk)
     a = np.where(ext, np.maximum(a, C.blur(ext.astype(np.float64), 0.8)), a)
     lab = C.to_lab(rgb)

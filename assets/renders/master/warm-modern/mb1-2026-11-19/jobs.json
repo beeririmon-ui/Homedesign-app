@@ -1,7 +1,7 @@
 {
  "run": "render-agent, 2026-11-19: MB1, the bedroom's second frame (briefs/wm-master-mb1-render-2026-11-19.md; 13.6-13.11, wm-house-20 ch. 1, 8, 6.6a; docs/proposals/wm-mb1-forward-check-2026-11-19.md). Camera (1.60, 21.20), yaw 33.7, 24 mm, Z 1.05 (U14), tilt 0, v0 0.418.",
  "cap": "about 3,050 expected; stop and report above 4,100",
- "spent": 3450,
+ "spent": 4250,
  "estimate_before_every_send": true,
  "var2": {
   "connected": true,
@@ -12,7 +12,8 @@
   "p1-bed": 800,
   "p2-right": 400,
   "p3-wall": 400,
-  "p4-floor": 800
+  "p4-floor": 800,
+  "p5-throw-end (M1 after QA)": 800
  },
  "sent": [
   {
@@ -211,14 +212,63 @@
    "seed": null,
    "raw_sha256": "716addfbce93f990a67b8b8a434c82fed1b2bf3bcc07bd919525965d60e870a1",
    "image_sha256": "9ffec6405ef5f8a6de3b978a469a3fd2031684d78792154105053cbab224e4a7"
+  },
+  {
+   "id": "p5-throw-end",
+   "output": "M1 (QA 2026-11-19, the manager's ruling): the Pecan's near-right end: about 10 cm drop, a 2-3 cm loose fringe, the duvet drop below",
+   "model": "nano-banana-2",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/53bbe679-e94c-4627-9289-0af4b8bb0d13.png",
+   "image_local": "assets/renders/master/warm-modern/mb1-2026-11-19/inputs/p5-throw-end-input.png",
+   "image_refs": [],
+   "idempotency_key": "wm-master-mb1-p5-throw-end-2026-11-19",
+   "estimate": 400,
+   "tokens": 400,
+   "placeholder_id": "a0705da6-ea24-4ff0-9b77-dbbfd476e762",
+   "task_id": "4f0cdf1c7057092025c8bba13aac0093",
+   "prompt": "assets/prompts/warm-modern-master-mb1-2026-11-19/p5-throw-end.txt",
+   "raw": "assets/renders/master/warm-modern/mb1-2026-11-19/raw/p5-throw-end.png",
+   "verdict": "used (M1): the throw ends about 13 cm down the bed's side and the duvet drop shows below; its 12-15 cm loose fringe trimmed in code to 2.3 cm (tools/mb1_throw_end.py)",
+   "type": "image-to-image",
+   "seed": null,
+   "raw_sha256": "5efae26943ac6aada4553575626b883a56105a46a9be66d45b2ae0c0f0ef5d9e",
+   "image_sha256": "62a6cfef92f9b12f282e7385e3af4efc77cd40fc83618326f5e328c76d285c4e",
+   "input_made_by": "assets/renders/master/warm-modern/mb1-2026-11-19/tools/mb1_throw_end_prep.py (the p1 edit, locked; the throw's drop below the new hem line replaced by the duvet beside it); the mask as sent: inputs/p5-throw-end-mask.png"
+  },
+  {
+   "id": "p5-throw-end-r2",
+   "output": "M1 (QA 2026-11-19, the manager's ruling): the Pecan's near-right end: about 10 cm drop, a 2-3 cm loose fringe, the duvet drop below",
+   "model": "nano-banana-2",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/53bbe679-e94c-4627-9289-0af4b8bb0d13.png",
+   "image_local": "assets/renders/master/warm-modern/mb1-2026-11-19/inputs/p5-throw-end-input.png",
+   "image_refs": [],
+   "idempotency_key": "wm-master-mb1-p5-throw-end-r2-2026-11-19",
+   "estimate": 400,
+   "tokens": 400,
+   "placeholder_id": "78aab066-33e9-4e27-bc30-0a99526883d6",
+   "task_id": "a757e4fc45e450f16b1b1b41d4ffcf20",
+   "prompt": "assets/prompts/warm-modern-master-mb1-2026-11-19/p5-throw-end-r2.txt",
+   "raw": "assets/renders/master/warm-modern/mb1-2026-11-19/raw/p5-throw-end-r2.png",
+   "verdict": "not used: the model lengthened the throw again (about 23 cm) with twisted tassels",
+   "type": "image-to-image",
+   "seed": null,
+   "raw_sha256": "0f672f140b8e030a8eecf4a1762012b5a51b6f68092cb8802ad3e8cf0936ae60",
+   "image_sha256": "62a6cfef92f9b12f282e7385e3af4efc77cd40fc83618326f5e328c76d285c4e",
+   "input_made_by": "assets/renders/master/warm-modern/mb1-2026-11-19/tools/mb1_throw_end_prep.py (the p1 edit, locked; the throw's drop below the new hem line replaced by the duvet beside it); the mask as sent: inputs/p5-throw-end-mask.png"
   }
  ],
  "code_steps_0_tokens": [
   "tools/compose_plate_mb1.py",
-  "tools/mb1_compose.py (p1-p4, occlusion, compose)",
-  "tools/mb1_prints.py",
-  "tools/mb1_tone_fix.py",
   "tools/mb1_checks.py",
+  "tools/mb1_compose.py (p1-p4, occlusion, compose)",
+  "tools/mb1_compose.py bed_layer (M2)",
+  "tools/mb1_prints.py",
+  "tools/mb1_throw_end.py (M1)",
+  "tools/mb1_tone_fix.py",
   "tools/run_all.sh (the whole chain)"
- ]
+ ],
+ "cap_m1": "manager after QA: one mask edit approved, up to 2 tries (800); var2_estimate_cost before each"
 }
