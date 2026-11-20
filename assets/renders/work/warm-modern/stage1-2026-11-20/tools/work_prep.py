@@ -22,7 +22,9 @@ PASSES = {
     "pB-desk": dict(ids=(47, 48, 57, 58, 59, 60, 61, 62)),
     "pC-sides": dict(ids=(40, 43, 44, 45, 49, 50, 51, 52)),
     "pD-front": dict(ids=(46, 64)),
+    "pD-throw": dict(ids=(64,)),          # (after the restart) the throw's retry, on the composite with the rug of pD-front r1
 }
+BOARD_OF = {"pD-throw": "pD-front"}
 CANVAS_IDS = (42, 44)
 SAND = np.array([216, 200, 174]) / 255.0
 
@@ -47,7 +49,7 @@ def main(p, base_path=None):
     ip = os.path.join(M.ST, "inputs", f"{p}-input.png")
     M.save(ip, inp)
     boards = json.load(open(os.path.join(M.SCR, "sku", "boards.json")))
-    b = boards[p]
+    b = boards[BOARD_OF.get(p, p)]
     rec = dict(pass_=p, base=os.path.relpath(bp, M.ST), placeholder_ids=list(P["ids"]), placeholder_px=int(m.sum()),
                input=os.path.relpath(ip, M.ST), input_sha256=M.sha(ip),
                refs=[dict(file=b["file"] + " (scratchpad only)", tiles_left_to_right=b["order"], sha256=b["sha256"], size=b["size"])])

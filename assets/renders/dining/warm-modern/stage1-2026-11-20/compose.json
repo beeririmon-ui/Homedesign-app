@@ -31,28 +31,44 @@
    3.58
   ],
   "products": {
-   "50": {
-    "slot": "dining-pendant",
-    "px": 39622,
-    "clay_px": 36155
-   },
    "52": {
     "slot": "table-runner",
-    "px": 33832,
-    "clay_px": 29446
+    "px": 33977,
+    "clay_px": 29446,
+    "alpha_mean_edge": 0.348
    },
    "53": {
     "slot": "centerpiece-vase",
-    "px": 27553,
-    "clay_px": 23687
+    "px": 24244,
+    "clay_px": 23687,
+    "alpha_mean_edge": 0.545
    },
    "55": {
     "slot": "candle-holders",
-    "px": 12868,
-    "clay_px": 12364
+    "px": 15195,
+    "clay_px": 12364,
+    "alpha_mean_edge": 0.52
+   },
+   "50": {
+    "slot": "dining-pendant",
+    "px": 38915,
+    "clay_px": 36155,
+    "alpha_mean_edge": 0.421
    }
   },
-  "pendant_fix": {
+  "cut": "kd_cut2",
+  "grown_px": {
+   "55": 12767
+  },
+  "runner": {
+   "rule": "the clay's footprint, X 3.90-5.30 x 40 (the card), straight hems, never draped",
+   "px": 29356,
+   "edit_px_outside": 4386,
+   "edit_px_inside": 26940
+  },
+  "olive_blur_dropped_px": 1253,
+  "pendant": {
+   "card": "V1",
    "scale_x": 0.844,
    "scale_y": 0.6802,
    "edit_shade_px": [
@@ -61,30 +77,662 @@
     1114,
     459
    ],
-   "clay_shade_px": [
-    750,
-    280,
-    1079,
-    413
-   ],
    "new_shade_top_row": 280,
-   "rule": "scaled to the clay's 50 x 19 shade (the SKU drawing), bottom on the clay's (Z 1.50), centred; the rod rebuilt from the edit's rod columns"
+   "centre_x": 914.5,
+   "rod_px": [
+    82,
+    280
+   ],
+   "rod_width_px": 9,
+   "line": {
+    "rows": [
+     0,
+     82
+    ],
+    "width_px": 2,
+    "rule": "the SKU drawing: rod 30 cm, then a thin suspension line"
+   }
   },
-  "olive_blur_dropped_px": 1253,
+  "size_fix": {},
+  "runner_colour": {
+   "before": {
+    "L": 80.1,
+    "C": 29.0,
+    "h": 66.4
+   },
+   "after": {
+    "L": 76.1,
+    "C": 35.0,
+    "h": 54.4
+   },
+   "rule": "photo L*59 C*49 h52 (new-rooms-photo-check); target h 55, C* 35, L* -4 (a deeper caramel: at C* 40 and the edit's L* it read orange at x1)"
+  },
+  "olive_scale": {
+   "top_px_before": 583,
+   "scale": 0.873,
+   "top_px_after": 600,
+   "rule": "7.5: no sprig above Z 1.20; the sprigs scaled about the vase mouth (a filler, not a product)"
+  },
+  "thin_fillers": {
+   "54": {
+    "px": 14176,
+    "leaf_px": 7727
+   }
+  },
   "light_px": 382229
  },
  "frames": {
   "D1-defaults": {
-   "region_px": 500053,
+   "region_px": 916526,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
-   "black_point_p05": 11.23
+   "black_point_p05": 10.65
   },
   "D2-defaults": {
-   "region_px": 0,
+   "region_px": 332858,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
-   "black_point_p05": 11.46
+   "black_point_p05": 10.45
+  }
+ },
+ "B-window-front": {
+  "lock": {
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.7952,
+    "2": 0.8299,
+    "1": 0.8406
+   },
+   "warp": [
+    [
+     1.000686,
+     -3e-06,
+     0.101294
+    ],
+    [
+     -2e-06,
+     1.009142,
+     -6.015078
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.925,
+   1.011,
+   2.072
+  ],
+  "dE_outside_zone_p50_p95": [
+   1.13,
+   4.71
+  ],
+  "products": {
+   "57": {
+    "slot": "curtains",
+    "px": 266950,
+    "clay_px": 102596,
+    "alpha_mean_edge": 0.394
+   },
+   "60": {
+    "slot": "bench-pad",
+    "px": 118653,
+    "clay_px": 112513,
+    "alpha_mean_edge": 0.506
+   }
+  },
+  "cut": "kd_cut2",
+  "size_fix": {},
+  "curtain_not_sheer_px": 5703
+ },
+ "E-left": {
+  "lock": {
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.9448,
+    "2": 0.9523,
+    "1": 0.9533
+   },
+   "warp": [
+    [
+     1.000709,
+     -0.000158,
+     0.248363
+    ],
+    [
+     2e-06,
+     1.009076,
+     -5.926336
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.933,
+   0.989,
+   1.243
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.95,
+   3.26
+  ],
+  "products": {
+   "67": {
+    "slot": "framed-art",
+    "px": 23829,
+    "clay_px": 22238,
+    "alpha_mean_edge": 0.555
+   },
+   "69": {
+    "slot": "open-shelf-ceramics",
+    "px": 9110,
+    "clay_px": 7696,
+    "alpha_mean_edge": 0.526
+   },
+   "71": {
+    "slot": "sink-set",
+    "px": 1072,
+    "clay_px": 795,
+    "alpha_mean_edge": 0.52
+   },
+   "72": {
+    "slot": "sink-set",
+    "px": 1301,
+    "clay_px": 1912,
+    "alpha_mean_edge": 0.559
+   }
+  },
+  "cut": "kd_cut2",
+  "grown_px": {
+   "67": 19475,
+   "69": 1030,
+   "71": 5081,
+   "72": 3239
+  },
+  "sink_cut": {
+   "box": [
+    480,
+    590,
+    690,
+    756
+   ],
+   "group_px": 6321,
+   "tray_top_row": 729,
+   "bottom_row": 748,
+   "tray_px": 2772,
+   "dispenser_px": 3549
+  },
+  "size_fix": {
+   "71,72": {
+    "ref": 71,
+    "dim": "w",
+    "edit_px": 176,
+    "clay_px": 104,
+    "scale": 0.591,
+    "applied": true,
+    "moved_px": [
+     -21.2,
+     0.0
+    ],
+    "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   }
+  }
+ },
+ "F-niche": {
+  "lock": {
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.9864,
+    "2": 0.9868,
+    "1": 0.9842
+   },
+   "warp": [
+    [
+     1.00081,
+     -0.000103,
+     0.088066
+    ],
+    [
+     2.4e-05,
+     1.009128,
+     -5.956762
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.796,
+   0.986,
+   1.029
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.9,
+   2.78
+  ],
+  "products": {
+   "76": {
+    "slot": "canisters",
+    "px": 7273,
+    "clay_px": 8327,
+    "alpha_mean_edge": 0.791
+   },
+   "74": {
+    "slot": "paper-towel-holder",
+    "px": 4651,
+    "clay_px": 4648,
+    "alpha_mean_edge": 0.57
+   },
+   "77": {
+    "slot": "tea-towel",
+    "px": 17021,
+    "clay_px": 5930,
+    "alpha_mean_edge": 0.529
+   }
+  },
+  "cut": "kd_cut2",
+  "grown_px": {
+   "74": 6149,
+   "77": 15353
+  },
+  "canister_geom": [
+   {
+    "x": [
+     1745,
+     1795
+    ],
+    "y": [
+     651,
+     742
+    ]
+   },
+   {
+    "x": [
+     1810,
+     1869
+    ],
+    "y": [
+     671,
+     743
+    ]
+   },
+   {
+    "x": [
+     1884,
+     1934
+    ],
+    "y": [
+     691,
+     743
+    ]
+   }
+  ],
+  "size_fix": {
+   "74": {
+    "ref": 74,
+    "dim": "h",
+    "edit_px": 158,
+    "clay_px": 124,
+    "scale": 0.785,
+    "applied": true,
+    "moved_px": [
+     0.0,
+     0.0
+    ],
+    "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   },
+   "76": {
+    "ref": 76,
+    "dim": "h",
+    "edit_px": 93,
+    "clay_px": 73,
+    "scale": 0.785,
+    "applied": true,
+    "moved_px": [
+     0.0,
+     0.0
+    ],
+    "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   }
+  }
+ },
+ "Dc-right": {
+  "lock": {
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.9999,
+    "2": 0.9999,
+    "1": 0.9998
+   },
+   "warp": [
+    [
+     0.999999,
+     1e-06,
+     -0.0005
+    ],
+    [
+     0.0,
+     0.999999,
+     0.000366
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.957,
+   1.0,
+   1.003
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.0,
+   0.36
+  ],
+  "products": {
+   "65": {
+    "slot": "tableware-set",
+    "px": 3920,
+    "clay_px": 3655,
+    "alpha_mean_edge": 0.533
+   },
+   "66": {
+    "slot": "mug-set",
+    "px": 6452,
+    "clay_px": 5070,
+    "alpha_mean_edge": 0.527
+   },
+   "61": {
+    "slot": "condiment-set",
+    "px": 2023,
+    "clay_px": 2654,
+    "alpha_mean_edge": 0.511
+   },
+   "62": {
+    "slot": "condiment-set",
+    "px": 2357,
+    "clay_px": 2386,
+    "alpha_mean_edge": 0.534
+   },
+   "63": {
+    "slot": "bowl",
+    "px": 6027,
+    "clay_px": 4711,
+    "alpha_mean_edge": 0.49
+   }
+  },
+  "cut": "kd_cut2",
+  "grown_px": {
+   "61": 2322,
+   "62": 5284,
+   "63": 2687,
+   "65": 2624,
+   "66": 5085
+  },
+  "size_fix": {
+   "61": {
+    "ref": 61,
+    "dim": "h",
+    "edit_px": 97,
+    "clay_px": 67,
+    "scale": 0.691,
+    "applied": true,
+    "moved_px": [
+     0.0,
+     0.0
+    ],
+    "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   },
+   "62": {
+    "ref": 62,
+    "dim": "h",
+    "edit_px": 103,
+    "clay_px": 79,
+    "scale": 0.767,
+    "applied": true,
+    "moved_px": [
+     0.0,
+     0.0
+    ],
+    "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   },
+   "63": {
+    "ref": 63,
+    "dim": "w",
+    "edit_px": 122,
+    "clay_px": 114,
+    "scale": 0.934,
+    "applied": false
+   },
+   "65": {
+    "ref": 65,
+    "dim": "w",
+    "edit_px": 129,
+    "clay_px": 133,
+    "scale": 1.031,
+    "applied": false
+   },
+   "66": {
+    "ref": 66,
+    "dim": "h",
+    "edit_px": 51,
+    "clay_px": 47,
+    "scale": 1.0,
+    "applied": true,
+    "moved_px": [
+     -17.0,
+     0.0
+    ],
+    "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   }
+  }
+ },
+ "Ec-sconce-board": {
+  "lock": {
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.9958,
+    "2": 0.9967,
+    "1": 0.997
+   },
+   "warp": [
+    [
+     1.000022,
+     2.5e-05,
+     -0.064039
+    ],
+    [
+     -3e-06,
+     1.000005,
+     0.004946
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.968,
+   1.0,
+   1.027
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.01,
+   0.64
+  ],
+  "products": {
+   "70": {
+    "slot": "kitchen-sconce",
+    "px": 3945,
+    "clay_px": 3051,
+    "alpha_mean_edge": 0.549
+   },
+   "73": {
+    "slot": "cutting-boards",
+    "px": 9248,
+    "clay_px": 10470,
+    "alpha_mean_edge": 0.546
+   }
+  },
+  "cut": "kd_cut2",
+  "grown_px": {
+   "73": 18972
+  },
+  "size_fix": {
+   "73": {
+    "ref": 73,
+    "dim": "h",
+    "edit_px": 182,
+    "clay_px": 129,
+    "scale": 0.709,
+    "applied": true,
+    "moved_px": [
+     -16.0,
+     0.0
+    ],
+    "rule": "scaled uniformly about the group's bottom centre (its contact stays), moved along the support onto its clay when off by more than 12 px"
+   }
+  },
+  "light_px": 81593
+ },
+ "Bc-corner": {
+  "lock": {
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 1.0,
+    "2": 1.0,
+    "1": 1.0
+   },
+   "warp": [
+    [
+     1.0,
+     0.0,
+     -6.8e-05
+    ],
+    [
+     0.0,
+     1.0,
+     -0.000148
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.983,
+   1.0,
+   1.002
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.0,
+   0.1
+  ],
+  "products": {
+   "58": {
+    "slot": "floor-vase",
+    "px": 19535,
+    "clay_px": 28867,
+    "alpha_mean_edge": 0.35
+   }
+  },
+  "cut": "kd_cut2",
+  "grown_px": {
+   "58": 6605
+  },
+  "size_fix": {},
+  "thin_fillers": {
+   "59": {
+    "px": 31013,
+    "leaf_px": 6164
+   }
+  }
+ },
+ "projection": {
+  "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown D1->D2": {
+   "alpha_px": 4144,
+   "shadow_px": 4087
+  },
+  "tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525 D1->D2": {
+   "alpha_px": 2922,
+   "shadow_px": 2805
+  },
+  "condiment-set-cj-rubberwood-mill-pair-6in D1->D2": {
+   "alpha_px": 1689,
+   "shadow_px": 2285
+  },
+  "condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white D1->D2": {
+   "alpha_px": 1844,
+   "shadow_px": 3412
+  },
+  "bowl-cj-glutinous-white-belly-bowl-21 D1->D2": {
+   "alpha_px": 3987,
+   "shadow_px": 9302
+  },
+  "table-runner-aliexpress-french-linen-stonewash-40x140-caramel D1->D2": {
+   "alpha_px": 376,
+   "shadow_px": 447
+  },
+  "bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki D1->D2": {
+   "alpha_px": 92756,
+   "shadow_px": 88004
+  },
+  "light light/D1/A-table-lamps.png D1->D2": {
+   "px": 22928
+  },
+  "framed-art-aliexpress-misty-landscape-386242-work-05-30x40 D2->D1": {
+   "alpha_px": 14677,
+   "shadow_px": 12231
+  },
+  "vase-cj-matte-moon-jar-white-styleg D2->D1": {
+   "alpha_px": 6449,
+   "shadow_px": 6853
+  },
+  "cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l D2->D1": {
+   "alpha_px": 7791,
+   "shadow_px": 6342
+  },
+  "wall-sconce-cj-travertine-dome-15-alt-warm-light D2->D1": {
+   "alpha_px": 3119,
+   "shadow_px": 0
+  },
+  "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c D2->D1": {
+   "alpha_px": 4806,
+   "shadow_px": 8562
+  },
+  "key-tray-cj-black-walnut-tray-20x13 D2->D1": {
+   "alpha_px": 877,
+   "shadow_px": 2501
+  },
+  "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped D2->D1": {
+   "alpha_px": 1035,
+   "shadow_px": 1722
+  },
+  "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown D2->D1": {
+   "alpha_px": 6902,
+   "shadow_px": 6655
+  },
+  "tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525 D2->D1": {
+   "alpha_px": 4263,
+   "shadow_px": 4004
+  },
+  "condiment-set-cj-rubberwood-mill-pair-6in D2->D1": {
+   "alpha_px": 2275,
+   "shadow_px": 2992
+  },
+  "condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white D2->D1": {
+   "alpha_px": 2617,
+   "shadow_px": 4683
+  },
+  "bowl-cj-glutinous-white-belly-bowl-21 D2->D1": {
+   "alpha_px": 6447,
+   "shadow_px": 14497
+  },
+  "table-runner-aliexpress-french-linen-stonewash-40x140-caramel D2->D1": {
+   "alpha_px": 190,
+   "shadow_px": 212
+  },
+  "bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki D2->D1": {
+   "alpha_px": 52705,
+   "shadow_px": 49612
+  },
+  "light light/D2/Ec-sconce-board-lamps.png D2->D1": {
+   "px": 54402
+  },
+  "light light/D2/A-table-lamps-from-D1.png D2->D1": {
+   "px": 10796
   }
  }
 }

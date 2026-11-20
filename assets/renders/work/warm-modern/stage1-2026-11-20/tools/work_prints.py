@@ -42,10 +42,17 @@ CARD = "framed-art-aliexpress-misty-landscape-386242-work"
 def canvas_mask(rgb, a):
     lab = C.to_lab(rgb)
     opaque = a > 0.99
-    cand = opaque & (np.linalg.norm(lab - C.to_lab(CANVAS_ALBEDO[None, None, :])[0, 0][None, None, :], axis=-1) < 22)
+    # (2026-11-20, after the restart) 9, not 22: the bone mat reads about 18 from #D8C8AE and the canvas about 4, so at 22 the mat (the
+    # larger area) pulled the median between the two and the mask took the mat too
+    cand = opaque & (np.linalg.norm(lab - C.to_lab(CANVAS_ALBEDO[None, None, :])[0, 0][None, None, :], axis=-1) < 9)
     med = np.median(lab[cand], 0)
-    cv = opaque & (np.linalg.norm(lab - med[None, None, :], axis=-1) < 10)
+    cv = opaque & (np.linalg.norm(lab - med[None, None, :], axis=-1) < 8)
     cv = cv2.morphologyEx(cv.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool)
+    n, lb, st, _ = cv2.connectedComponentsWithStats(cv.astype(np.uint8), connectivity=8)
+    cv = lb == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
+    # (2026-11-20, after the restart) open by 4 px and keep the largest piece again: a few stray mat pixels joined to the canvas by
+    # thin bridges set the bounds at the mat's outer edge (1226-1497 for a canvas at 1262-1454), so the print would have covered the mat
+    cv = cv2.morphologyEx(cv.astype(np.uint8), cv2.MORPH_OPEN, C.disk(4)).astype(bool)
     n, lb, st, _ = cv2.connectedComponentsWithStats(cv.astype(np.uint8), connectivity=8)
     cv = lb == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
     return C.ero(cv, 1), med

@@ -230,7 +230,7 @@ def write_pass(p, e, layers, shadows, light, prods, man, rec):
         Image.fromarray(C.q(light)).save(lp, optimize=True)
         man["light"] = [li for li in man["light"] if not (li.get("pass_") == p and li["frame"] == fr)]
         man["light"].append(dict(frame=fr, file=os.path.relpath(lp, ST), z=90, blend="screen", lamps=[PRODUCTS[k][0] for k in P["lamps"]], pass_=p))
-    man["layers"].sort(key=lambda l: (l["frame"], l["z"], l["slot"]))
+    man["layers"].sort(key=lambda l: (l["frame"], l["z"], l.get("sub", 0), l["slot"]))
 
 
 # ---------------------------------------------------------------------------------------------------------------- projection
@@ -299,7 +299,7 @@ def project(man, rec):
             Image.fromarray(np.clip(np.rint(wl), 0, 255).astype(np.uint8)).save(lp, optimize=True)
             man["light"].append(dict(li, frame=dst, file=os.path.relpath(lp, ST), projected_from=src))
             rp[f"light {li['file']} {src}->{dst}"] = dict(px=int((wl.max(2) > 1).sum()))
-    man["layers"].sort(key=lambda l: (l["frame"], l["z"], l["slot"]))
+    man["layers"].sort(key=lambda l: (l["frame"], l["z"], l.get("sub", 0), l["slot"]))
     rec["projection"] = rp
 
 
@@ -313,7 +313,7 @@ def compose(man, rec, fr, swap=None, out_name=None):
     ls = [l for l in man["layers"] if l["frame"] == fr and l["default"]]
     if swap:
         ls = [l for l in ls if l["slot"] not in swap] + list(swap.values())
-    ls.sort(key=lambda l: (l["z"], l["slot"]))
+    ls.sort(key=lambda l: (l["z"], l.get("sub", 0), l["slot"]))
     for l in ls:
         rgba = np.asarray(Image.open(os.path.join(ST, l["layer"])))
         s8 = np.asarray(Image.open(os.path.join(ST, l["shadow"])))

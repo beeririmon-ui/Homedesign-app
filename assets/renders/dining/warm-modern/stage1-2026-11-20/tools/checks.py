@@ -90,6 +90,35 @@ def counts(man):
                      "proxy (alpha_vs_clay), the model's product may be a little smaller or larger than the clay box")
 
 
+COLOUR_TARGETS = {
+    "table-runner": "10.2: h 51-69, C* up to 55 (target h 52 +-4 relative to the photo, L*59 C*49 h52)",
+    "tea-towel": "10.1 / 6.5-6: the caramel box; photo L*37 C*38 h50",
+    "cutting-boards": "10.4: the second caramel carrier in D1; photo L*39 C*25 h54",
+    "paper-towel-holder": "10.4: the second caramel carrier in D2; photo Style C L*50 C*41 h62",
+    "canisters": "6.5-5: L* up to 92 on the lit side (no pure white)",
+    "floor-vase": "6.5-5: L* up to 92",
+    "open-shelf-ceramics": "10.4: the espresso carrier, L* 15-35 (photo L*20)",
+    "candle-holders": "10.4: the espresso carrier in D1 (iron, photo L*24)",
+}
+
+
+def colours(man):
+    out = {}
+    for l in man["layers"]:
+        if not l["default"] or l.get("projected_from") or l["slot"] not in COLOUR_TARGETS:
+            continue
+        rgba = np.asarray(Image.open(os.path.join(ST, l["layer"]))).astype(np.float64) / 255
+        m = C.ero(rgba[..., 3] > 0.99, 2)
+        if m.sum() < 30:
+            continue
+        lab = C.to_lab(rgba[..., :3])[m]
+        L, A, B = np.median(lab, 0)
+        out[l["product"]] = dict(frame=l["frame"], L_p50=round(float(L), 1), C_p50=round(float(np.hypot(A, B)), 1),
+                                 h_p50=round(float(np.degrees(np.arctan2(B, A))), 1), L_p95=round(float(np.percentile(lab[:, 0], 95)), 1),
+                                 L_p05=round(float(np.percentile(lab[:, 0], 5)), 1), target=COLOUR_TARGETS[l["slot"]])
+    return out
+
+
 def main():
     man = json.load(open(os.path.join(ST, "manifest.json")))
     rec = json.load(open(os.path.join(ST, "compose.json")))
@@ -106,6 +135,7 @@ def main():
             out["black_point_p05"][f] = bp(os.path.join(ST, f))
     out["black_point_ok"] = all(11.0 <= v <= 14.0 for v in out["black_point_p05"].values())
     out["count"] = counts(man)
+    out["colours"] = colours(man)
     if os.path.exists(os.path.join(ST, "plate-D2.png")):
         out["one_house_D1_D2"] = one_house()
     json.dump(out, open(os.path.join(ST, "checks.json"), "w"), indent=1)

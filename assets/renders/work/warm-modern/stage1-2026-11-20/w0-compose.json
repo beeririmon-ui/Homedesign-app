@@ -104,7 +104,7 @@
   },
   "light_px": 171742
  },
- "black_point_p05": 11.39,
+ "black_point_p05": 11.44,
  "pC-sides": {
   "lock": {
    "method": "ECC affine on the gradient magnitude, masked",
@@ -145,8 +145,13 @@
    "clay_px": 124556,
    "cut": "clay-seeded GrabCut"
   },
+  "frame2_cut": {
+   "px": 81007,
+   "bottom_row": 764,
+   "clay_bottom_row": 676
+  },
   "framed-art-2": {
-   "px": 69032,
+   "px": 81007,
    "clay_px": 65854,
    "cut": "clay-seeded GrabCut"
   },
@@ -156,12 +161,12 @@
    "cut": "clay-seeded GrabCut"
   },
   "palm": {
-   "pot_px": 57378,
-   "crown_px": 144893,
-   "rule": "pot: clay-seeded GrabCut + hull; crown: changed leaf pixels (green or dark)"
+   "pot_px": 57356,
+   "crown_px": 85375,
+   "rule": "pot: clay-seeded GrabCut + hull; crown: changed leaf pixels (green or dark), only the pieces joined to the plant (12 px)"
   },
   "planter": {
-   "px": 202271,
+   "px": 142731,
    "clay_px": 145414,
    "cut": "clay-seeded GrabCut"
   },
@@ -172,35 +177,507 @@
     2165,
     1335
    ],
-   "px": 60435
+   "floor_line": 1290,
+   "foot_y": 1342,
+   "px": 51696,
+   "straps_px": 15025,
+   "magazines_px": 34410,
+   "legs_columns": 55,
+   "rule": "parts, not a box: straps by colour, magazines traced, tubes dark-neutral above the floor line, legs below it"
   },
   "magazine-holder": {
-   "px": 60435,
+   "px": 51696,
    "clay_px": 34638,
    "cut": "clay-seeded GrabCut"
   },
   "sizefix": {
    "magazine-holder": {
-    "why": "the rack came about 50 cm wide (the card's 35) and 0.10 m right of its place: scaled uniformly to the card's front (191 px at Y 6.71) about its foot, the foot moved to the clay's centre",
-    "scale": 0.579,
+    "why": "the rack came about 48 cm wide (the card's 35): scaled uniformly to the card's front (191 px at Y 6.71) about its foot; the foot set at X 0.32 (0.095 right of 3.2's place) for a 0.022 gap to the desk panel",
+    "scale": 0.657,
     "foot_from": [
-     1997.5,
-     1332.0
+     1980.0,
+     1342.0
     ],
     "foot_to": [
-     1929.0,
-     1332.0
+     1983.6,
+     1342.0
     ],
-    "px_before": 60435,
-    "px_after": 20289
+    "px_before": 51696,
+    "px_after": 22325
    },
    "framed-art-2": {
     "why": "the edit's frame 2 came about 23 % taller than 44 x 54 (bottom 70-90 px low)",
     "method": "per-column remap of the frame's span onto the clay's projected span",
-    "px_before": 69032,
-    "px_after": 65668
+    "px_before": 81007,
+    "px_after": 65282
    }
   },
-  "light_px": 103201
+  "planter_behind_curtain_px": 0,
+  "shadow_overrides": {
+   "planter": {
+    "rule": "smooth field, sigma 6, at most x0.65, full to 60 px, gone at 180; leaf-coloured pixels are not shadow",
+    "min": 0.65,
+    "px": 259891
+   },
+   "magazine-holder": {
+    "rule": "the edit's darkening round the rack as drawn, relative to a ring 50-80 px out (ref), moved and scaled with it; full to 22 px, gone at 46",
+    "ref": 0.929,
+    "min": 0.5,
+    "px": 23879
+   }
+  },
+  "light_px": 104169
+ },
+ "pB-desk": {
+  "lock": {
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.9953,
+    "2": 0.9921,
+    "1": 0.9867
+   },
+   "warp": [
+    [
+     1.000741,
+     -1.5e-05,
+     0.017173
+    ],
+    [
+     -1.5e-05,
+     1.009069,
+     -5.894266
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.918,
+   0.982,
+   1.064
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.94,
+   3.22
+  ],
+  "basket": {
+   "px": 32003,
+   "clay_px": 29587,
+   "cut": "clay-seeded GrabCut"
+  },
+  "waste-basket": {
+   "px": 28260,
+   "clay_px": 26997,
+   "cut": "clay-seeded GrabCut"
+  },
+  "tray_cut": {
+   "px": 4163,
+   "visible_px": 2100,
+   "inpainted_px": 2063,
+   "rule": "pale changed pixels on the desk top (y > 875), less the vase and the cup; the hull, its hidden part inpainted"
+  },
+  "desk-tray": {
+   "px": 4163,
+   "clay_px": 2194,
+   "cut": "clay-seeded GrabCut"
+  },
+  "pencup_cut": {
+   "cup_px": 3624,
+   "pencils_px": 1292,
+   "rule": "cup: clay GrabCut + hull; pencils: wood or graphite changed above the cup"
+  },
+  "desk-organizer": {
+   "px": 4601,
+   "clay_px": 3382,
+   "cut": "clay-seeded GrabCut"
+  },
+  "vase_base": {
+   "removed_px": 113
+  },
+  "desk-vase": {
+   "px": 14127,
+   "clay_px": 13778,
+   "cut": "clay-seeded GrabCut"
+  },
+  "candle_cut": {
+   "px": 8252,
+   "box": [
+    1608,
+    812,
+    1764,
+    895
+   ]
+  },
+  "desk-candle": {
+   "px": 8252,
+   "clay_px": 4063,
+   "cut": "clay-seeded GrabCut"
+  },
+  "dish_cut": {
+   "px": 2200,
+   "box": [
+    1536,
+    864,
+    1632,
+    906
+   ]
+  },
+  "desk-dish": {
+   "px": 2200,
+   "clay_px": 854,
+   "cut": "clay-seeded GrabCut"
+  },
+  "sizefix": {
+   "desk-organizer": {
+    "why": "the pen cup came 53 px wide against the clay's 43 (the card's 8 cm): x0.81, with its pencils",
+    "scale": 0.811,
+    "measured_w": 53.0,
+    "target_w": 43,
+    "foot_from": [
+     1128.5,
+     884.0
+    ],
+    "foot_to": [
+     1126.0,
+     882.0
+    ],
+    "px_before": 4601,
+    "px_after": 3017
+   },
+   "desk-candle": {
+    "why": "the Hiba bowl came 136 px wide against the clay's 95 (the card's 18 cm) and 20 px left: x0.70, onto the clay",
+    "scale": 0.699,
+    "measured_w": 136.0,
+    "target_w": 95,
+    "foot_from": [
+     1684.0,
+     892.0
+    ],
+    "foot_to": [
+     1704.0,
+     888.0
+    ],
+    "px_before": 8252,
+    "px_after": 4011
+   },
+   "desk-dish": {
+    "why": "the dish came 77 px wide against the clay's 48 (the card's 8.5 cm): x0.62, onto the clay",
+    "scale": 0.623,
+    "measured_w": 77.0,
+    "target_w": 48,
+    "foot_from": [
+     1583.5,
+     903.0
+    ],
+    "foot_to": [
+     1568.5,
+     899.0
+    ],
+    "px_before": 2200,
+    "px_after": 858
+   },
+   "desk-tray": {
+    "why": "the tray came 207 px long against the clay's 133 (the card's 24 cm): x0.64, onto the clay",
+    "scale": 0.643,
+    "measured_w": 207.0,
+    "target_w": 133,
+    "foot_from": [
+     1093.5,
+     909.0
+    ],
+    "foot_to": [
+     1127.0,
+     895.0
+    ],
+    "px_before": 4163,
+    "px_after": 1746
+   }
+  },
+  "fit_shadows": {
+   "desk-organizer": {
+    "ref": 0.949,
+    "min": 0.55,
+    "px": 6747
+   },
+   "desk-candle": {
+    "ref": 0.993,
+    "min": 0.55,
+    "px": 3045
+   },
+   "desk-dish": {
+    "ref": 0.98,
+    "min": 0.55,
+    "px": 2211
+   },
+   "desk-tray": {
+    "ref": 0.938,
+    "min": 0.55,
+    "px": 5198
+   }
+  },
+  "colourfix": {
+   "waste-basket": {
+    "why": "the bin came C* 29.6 (h 67): orange kraft, the photo's is taupe-kraft",
+    "photo": "w-bin-brown: L*58, C*19.3, h66",
+    "C_before": 29.5,
+    "C_after": 19.3,
+    "ab_scale": 0.653
+   },
+   "desk-dish": {
+    "why": "the dish came C* 35.5 (h 58.6): a saturated orange, not the muted caramel of the photo",
+    "photo": "w-dish: the wall L*48, C*21, h58",
+    "C_before": 35.3,
+    "C_after": 21.0,
+    "ab_scale": 0.596
+   }
+  }
+ },
+ "prints": {
+  "framed-art": {
+   "canvas_px": 28179,
+   "canvas_Lab_in_edit": [
+    84.5,
+    1.7,
+    14.8
+   ],
+   "quad": [
+    [
+     1262.0,
+     570.0
+    ],
+    [
+     1458.0,
+     570.0
+    ],
+    [
+     1458.0,
+     718.0
+    ],
+    [
+     1262.0,
+     718.0
+    ]
+   ],
+   "analytic_bounds": [
+    1261.7,
+    569.7,
+    1458.3,
+    717.1
+   ],
+   "blank_bounds": [
+    1262,
+    570,
+    1458,
+    718
+   ],
+   "scale": [
+    0.9972,
+    1.004
+   ],
+   "08": {
+    "file": "e1cd7118 (listing file, scratchpad only)",
+    "print_px": [
+     728,
+     543
+    ],
+    "window_px": [
+     724.0,
+     543.0
+    ],
+    "canvas_light_p5_p50_p95": [
+     1.08,
+     1.106,
+     1.122
+    ]
+   },
+   "01": {
+    "file": "861b3959 (listing file, scratchpad only)",
+    "print_px": [
+     728,
+     543
+    ],
+    "window_px": [
+     724.0,
+     543.0
+    ],
+    "canvas_light_p5_p50_p95": [
+     1.08,
+     1.106,
+     1.122
+    ]
+   },
+   "02": {
+    "file": "3c7ae46f (listing file, scratchpad only)",
+    "print_px": [
+     728,
+     543
+    ],
+    "window_px": [
+     724.0,
+     543.0
+    ],
+    "canvas_light_p5_p50_p95": [
+     1.08,
+     1.106,
+     1.122
+    ]
+   }
+  },
+  "framed-art-2": {
+   "canvas_px": 31382,
+   "canvas_Lab_in_edit": [
+    81.7,
+    1.4,
+    14.5
+   ],
+   "quad": [
+    [
+     2262.0,
+     377.0
+    ],
+    [
+     2376.0,
+     335.0
+    ],
+    [
+     2376.0,
+     631.3
+    ],
+    [
+     2262.0,
+     641.0
+    ]
+   ],
+   "analytic_bounds": [
+    2264.1,
+    344.3,
+    2374.8,
+    632.7
+   ],
+   "blank_bounds": [
+    2262,
+    335,
+    2376,
+    641
+   ],
+   "scale": [
+    1.0297,
+    1.0613
+   ],
+   "03": {
+    "file": "a8f677a3 (listing file, scratchpad only)",
+    "print_px": [
+     546,
+     728
+    ],
+    "window_px": [
+     546.0,
+     728.0
+    ],
+    "canvas_light_p5_p50_p95": [
+     0.996,
+     1.012,
+     1.2
+    ]
+   }
+  }
+ },
+ "pD-front": {
+  "lock": {
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.9858,
+    "2": 0.9795,
+    "1": 0.9702
+   },
+   "warp": [
+    [
+     1.000331,
+     0.000272,
+     -0.198352
+    ],
+    [
+     -8e-06,
+     0.99999,
+     0.036984
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.5,
+   0.988,
+   1.062
+  ],
+  "dE_outside_zone_p50_p95": [
+   1.12,
+   5.58
+  ],
+  "rug": {
+   "px": 185300,
+   "clay_px": 187262,
+   "cut": "clay-seeded GrabCut"
+  }
+ },
+ "pD-throw": {
+  "lock": {
+   "method": "ECC affine on the gradient magnitude, masked",
+   "ecc": {
+    "4": 0.9948,
+    "2": 0.9907,
+    "1": 0.9838
+   },
+   "warp": [
+    [
+     1.00072,
+     4e-06,
+     0.033003
+    ],
+    [
+     1.8e-05,
+     1.009081,
+     -5.939353
+    ]
+   ]
+  },
+  "gain_p1_p50_p99": [
+   0.931,
+   0.983,
+   1.029
+  ],
+  "dE_outside_zone_p50_p95": [
+   0.97,
+   3.99
+  ],
+  "chair-throw": {
+   "px": 112337,
+   "clay_px": 106518,
+   "cut": "clay-seeded GrabCut"
+  }
+ },
+ "variants": {
+  "01": {
+   "frame": "w0-variant-art-01.png",
+   "frame_1920": "w0-variant-art-01-frame.png",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-01-30x40",
+   "rnd2_vs_plate": {
+    "region_px": 1534323,
+    "outside_differing_px": 0,
+    "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+   },
+   "black_point_p05": 11.44,
+   "differs_from_defaults_px": 28179,
+   "differs_outside_the_frame_layer_px": 0
+  },
+  "02": {
+   "frame": "w0-variant-art-02.png",
+   "frame_1920": "w0-variant-art-02-frame.png",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-02-30x40",
+   "rnd2_vs_plate": {
+    "region_px": 1534323,
+    "outside_differing_px": 0,
+    "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+   },
+   "black_point_p05": 11.44,
+   "differs_from_defaults_px": 28178,
+   "differs_outside_the_frame_layer_px": 0
+  }
  }
 }
