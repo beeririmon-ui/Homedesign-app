@@ -67,17 +67,39 @@ def patch(e, rec):
     clone = np.where(zone[..., None], src, e5)
     hh_ = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360
     rust_any = (Ch > 10) & (hh_ > 30) & (hh_ < 65) & (lab[..., 0] < 62)
+    # the light: a harmonic fill (Laplace, Jacobi in the box) from the duvet round the zone; the kept fringe and the throw above it
+    # take no part (no flux), so no rust bleeds down. The weave: the clone's fine detail (its ratio to its own 2 px blur)
+    U = C.dil(zone, 3)
+    known = ~U & ~C.dil(rust_any, 2)
+    x0, y0, x1, y1 = BOX
+    sl = (slice(y0, y1), slice(x0, x1))
+    u, kn = U[sl], known[sl]
+    v = C.lin(e5)[sl].copy()
     xx = np.arange(W)
-    hem_all = hy0 + (xx - hx0) * (hy1 - hy0) / (hx1 - hx0)              # the hem line extended: the duvet is below it
+    hem_all = hy0 + (xx - hx0) * (hy1 - hy0) / (hx1 - hx0)
     lring = C.dil(zone, 24) & ~C.dil(zone, 1) & ~C.dil(rust_any, 5) & (rows > hem_all[None, :] + KEEP + 6) & box
-
-    def nb(img, w, sg=18):
+    def nb(img, w, sg):
         num = np.stack([C.blur(img[..., c] * w, sg) for c in range(3)], -1)
         return num / np.maximum(C.blur(w.astype(np.float64), sg), 1e-4)[..., None]
-    between = zone & ~C.dil(rust_any, 2)                    # the duvet r1 shows between the threads: its light (the throw's soft cast
-    lf_t = nb(C.lin(e5), (between | lring).astype(np.float64), 8)      # shadow included) is kept; the clone gives only the weave
-    lf_c = nb(C.lin(clone), zone.astype(np.float64), 8)
-    fill = C.srgb(np.clip(C.lin(clone) * lf_t / np.maximum(lf_c, 1e-4), 0, 1))
+    v[u] = nb(C.lin(e5), lring.astype(np.float64), 18)[sl][u]
+    part = (u | kn).astype(np.float64)
+    for _ in range(1500):
+        acc = np.zeros_like(v)
+        cnt = np.zeros(u.shape)
+        for dy_, dx_ in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            vs = np.roll(v, (dy_, dx_), (0, 1))
+            ps = np.roll(part, (dy_, dx_), (0, 1))
+            acc += vs * ps[..., None]
+            cnt += ps
+        nv = acc / np.maximum(cnt, 1e-6)[..., None]
+        v[u] = nv[u]
+    harm = C.lin(e5).copy()
+    harm[sl] = v
+    lc = C.lin(clone)
+    hf = lc / np.maximum(np.stack([C.blur(lc[..., c], 2) for c in range(3)], -1), 1e-4)
+    hf = 1 + np.clip(hf - 1, -0.12, 0.12)
+    fill = C.srgb(np.clip(harm * hf, 0, 1))
+    lfring_px = lring.sum()
     dy = (rows - top[None, :]).astype(np.float64)
     shade = 1 - 0.10 * np.exp(-np.clip(dy, 0, None) / 5.0)
     fill = C.srgb(np.clip(C.lin(fill) * shade[..., None], 0, 1))
