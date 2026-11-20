@@ -257,7 +257,7 @@ def first_masks(p, J, rec):
                     win_k = dist[k] <= dist[j]
                 layers[k] &= ~(both & ~win_k)
                 layers[j] &= ~(both & win_k)
-    return dict(P=P, fr=fr, ids=ids, pl_ids=pl_ids, base=base, e=e, d=d, same=same, prods=prods, layers=layers, rp=rp, variant=variant,
+    return dict(P=P, fr=fr, ids=ids, pl_ids=pl_ids, base=base, e=e, d=d, same=same, prods=prods, layers=layers, rp=rp, variant=variant, zones=zones,
                 lab_e=lab_e, lab_b=lab_b, dh=dh_, ce=ce_, cb=cb_, diff_base=diff_base)
 
 
@@ -320,7 +320,11 @@ def cut2(p, rec, J):
             not_sheer = near_furn & (S["lab_e"][..., 0] < 60) & (ch_e > 16)   # the edit's own walnut chair back is not curtain
             not_sheer = C.dil(cv2.morphologyEx(not_sheer.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool), 2)
             fgc = CE.fill_holes(fg, 60000)                                # no hole in a sheer panel
-            reg = C.dil(fgc, 3) & ~C.dil(np.isin(pl_ids, (20, 21, 22, 23, 24)), 1) & ~not_sheer
+            chg = (S["d"] > 3) & S["zones"][57]                           # plus every pixel of the panel's box the edit changed
+            chg = cv2.morphologyEx(chg.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool)
+            n_, lb_, st_, _ = cv2.connectedComponentsWithStats(chg.astype(np.uint8), connectivity=8)
+            chg = np.isin(lb_, [i for i in range(1, n_) if st_[i, cv2.CC_STAT_AREA] >= 500])
+            reg = (C.dil(fgc, 3) | C.dil(chg, 2)) & ~C.dil(np.isin(pl_ids, (20, 21, 22, 23, 24)), 1) & ~not_sheer
             a, col = FX2.diff_matte(e, base, reg.astype(np.float64))
             a_open = cv2.morphologyEx(a.astype(np.float32), cv2.MORPH_OPEN, C.disk(3)).astype(np.float64)
             a = np.where(near_furn, np.minimum(a, a_open), a)               # no flecks of sheer along the chair backs
