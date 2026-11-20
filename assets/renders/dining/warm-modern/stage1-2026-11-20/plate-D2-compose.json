@@ -1,0 +1,290 @@
+{
+ "frame": "D2",
+ "source": "raw/plate-D2-r1.png",
+ "out": "plate-D2.png",
+ "steps": [
+  {
+   "step": 1,
+   "what": "lock: ECC affine onto inputs/plate-<fr>-input.png, masked to the clay's architecture, kitchen and fixed furniture",
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.9228,
+    "2": 0.9284,
+    "1": 0.9235
+   },
+   "warp": [
+    [
+     0.996986,
+     0.000266,
+     3.269429
+    ],
+    [
+     -0.000167,
+     0.995133,
+     4.229291
+    ]
+   ]
+  },
+  {
+   "step": "2a",
+   "what": "one house: the plaster's light (a luminance field on the plaster only)",
+   "plaster": {
+    "median_L_before": 81.5,
+    "median_L_after": 90.3,
+    "gain_p5_p50_p95": [
+     1.139,
+     1.35,
+     1.924
+    ]
+   },
+   "bone talls": {
+    "median_L_before": 82.8,
+    "median_L_after": 88.0,
+    "gain_p5_p50_p95": [
+     1.05,
+     1.156,
+     1.291
+    ]
+   },
+   "curve": {
+    "xp": [
+     0.0,
+     48.39,
+     58.92,
+     73.97,
+     77.05,
+     78.91,
+     80.85,
+     81.79,
+     82.9,
+     84.0,
+     85.01,
+     86.6,
+     87.49,
+     88.94,
+     100.0
+    ],
+    "fp": [
+     0.0,
+     64.33,
+     76.9,
+     85.57,
+     87.57,
+     89.42,
+     90.44,
+     90.74,
+     90.96,
+     91.22,
+     91.5,
+     91.81,
+     92.24,
+     92.92,
+     100.0
+    ]
+   },
+   "regions_after": {
+    "south wall above the shelves": 89.5,
+    "hood": 92.2
+   }
+  },
+  {
+   "step": "2c",
+   "what": "D2: the walnut shelves matched to D1 on the overlap; the oven front to espresso",
+   "walnut shelves": {
+    "ids": [
+     38
+    ],
+    "L_before": 24.6,
+    "L_after": 31.1,
+    "gain": 1.566,
+    "ab_after": [
+     12.4,
+     17.1
+    ],
+    "dL_to_D1": 6.54
+   },
+   "oven front": {
+    "ids": [
+     43
+    ],
+    "L_before": 10.4,
+    "L_after": 17.0,
+    "gain": 1.95,
+    "ab_after": [
+     1.9,
+     3.6
+    ]
+   }
+  },
+  {
+   "step": 2,
+   "what": "one house: per material against the living room's base.png and the hall's ht2.png",
+   "readings": {
+    "plaster (walls)": {
+     "plate": [
+      89.5,
+      0.6,
+      4.5
+     ],
+     "house": [
+      90.0,
+      0.5,
+      4.0
+     ],
+     "dE00": 0.56,
+     "dE00_chroma_only": 0.45
+    },
+    "hood (plaster)": {
+     "plate": [
+      92.2,
+      0.0,
+      2.2
+     ],
+     "house": [
+      90.0,
+      0.5,
+      4.0
+     ],
+     "dE00": 2.14,
+     "dE00_chroma_only": 1.68
+    },
+    "oak floor": {
+     "plate": [
+      47.8,
+      6.5,
+      15.8
+     ],
+     "house": [
+      42.4,
+      7.6,
+      15.8
+     ],
+     "dE00": 5.35,
+     "dE00_chroma_only": 1.22
+    },
+    "walnut (chairs, bench, shelves)": {
+     "plate": [
+      18.1,
+      7.5,
+      12.3
+     ]
+    },
+    "limestone (worktop, splash, sill)": {
+     "plate": [
+      82.3,
+      2.3,
+      13.8
+     ],
+     "house": [
+      72.5,
+      3.1,
+      15.7
+     ],
+     "dE00": 7.09,
+     "dE00_chroma_only": 1.39
+    },
+    "taupe lowers": {
+     "plate": [
+      52.9,
+      3.0,
+      9.5
+     ]
+    },
+    "bone talls": {
+     "plate": [
+      88.0,
+      0.8,
+      6.2
+     ]
+    },
+    "espresso oven": {
+     "plate": [
+      17.1,
+      2.0,
+      3.6
+     ]
+    },
+    "walnut niche": {
+     "plate": [
+      22.5,
+      14.4,
+      18.8
+     ]
+    }
+   },
+   "fixes": {},
+   "after": {
+    "plaster (walls)": [
+     89.5,
+     0.6,
+     4.5
+    ],
+    "hood (plaster)": [
+     92.2,
+     0.0,
+     2.2
+    ],
+    "oak floor": [
+     47.8,
+     6.5,
+     15.8
+    ],
+    "walnut (chairs, bench, shelves)": [
+     18.1,
+     7.5,
+     12.3
+    ],
+    "limestone (worktop, splash, sill)": [
+     82.3,
+     2.3,
+     13.8
+    ],
+    "taupe lowers": [
+     52.9,
+     3.0,
+     9.5
+    ],
+    "bone talls": [
+     88.0,
+     0.8,
+     6.2
+    ],
+    "espresso oven": [
+     17.1,
+     2.0,
+     3.6
+    ],
+    "walnut niche": [
+     22.5,
+     14.4,
+     18.8
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "what": "WM-G1 / MP-I2 toe on L*",
+   "applied": true,
+   "p05_before": 5.98,
+   "xp": [
+    0,
+    5.981,
+    12,
+    30,
+    100
+   ],
+   "fp": [
+    0,
+    11.5,
+    16,
+    30,
+    100
+   ],
+   "curve": "(0, 0) (5.98, 11.5) (12, 16) (30, 30) (100, 100)"
+  }
+ ],
+ "black_point_p05": 11.5,
+ "lock_lines_after": {},
+ "mandatory_for_derived": "step 3's curve (MP-I2) on every layer cut from this plate"
+}
