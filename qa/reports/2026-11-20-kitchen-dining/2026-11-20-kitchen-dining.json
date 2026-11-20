@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-20",
+  "scope": "kitchen-dining warm-modern D1/D2 stage one",
+  "brief": "briefs/qa-kitchen-dining-2026-11-20.md",
+  "checked": "assets/renders/dining/warm-modern/stage1-2026-11-20/ @ 7263c26d",
+  "status": "pass",
+  "status_line": "עבר QA (המטבח ופינת האוכל שלב 1; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
+  "medium_or_higher": [],
+  "checks": {
+    "fidelity": {
+      "result": "pass",
+      "rescaled_vs_clay_w_h": {
+        "tray": [1.0, null], "tray_D2": [0.99, null],
+        "dispenser": [1.0, 0.95], "dispenser_offset_px": "+17..21 on tray",
+        "oil": ["1.03-1.05", 1.0], "board": [1.0, 1.0],
+        "paper_stand_h": 1.0, "canisters": [0.93, 1.0],
+        "mills": ["0.80-0.83 (pair gap)", "0.99-1.00"]
+      },
+      "runner": {"albedo_via_walnut_L_C_h": "62-66 / 35-42 / 56-58", "photo_rel_wall": "~66 / 48 / 54", "in_qa_box": true, "clay_w_h": [0.99, 1.07]},
+      "pendants": {
+        "V1": {"clay_w_h": [1.0, 1.0], "rod_30cm_and_line": true, "result": "pass"},
+        "V2": {"faithful": true, "reads_as_variant": false, "note": "same 50x19 silk pumpkin + thin wire; designer gap 13", "finding": "KD-L3"},
+        "V3": {"clay_w_h": [0.91, 1.04], "note": "satin collar vs shiny in photo; minor", "result": "pass"}
+      },
+      "moon_jar": "black StyleG, L* 15.9 / C* 0.5, per chapter 10"
+    },
+    "rejection_list": {"result": "pass", "food": "3 pears only", "eucalyptus_S_median_p90": [6.1, 9.7], "limit_S": 18, "lows": ["KD-L1", "KD-L2"]},
+    "rnd2": {
+      "result": "pass",
+      "rebuild_run": false,
+      "method": "independent recompose per compose_edits.compose and manifest order (rebuild writes into render-agent folder)",
+      "recompose_diff_px": {"D1-defaults": 0, "D2-defaults": 0, "D1-V2": 0, "D1-V3": 0},
+      "frame_png_diff_px": 0,
+      "outside_masks_px": 0,
+      "variants_outside_pendant_alpha": {"V2_px": 82, "V3_px": 69, "max_diff_255": 3, "inside_pendant_bbox": true, "accepted": true, "reason": "light-layer rounding, dE00 < 1 (EFF1.3)"},
+      "shadows_one_z_below": true,
+      "product_shares_z_with_shadow": false,
+      "light_layers": {"count": 4, "blend": "screen", "z": 90},
+      "black_point_Lstar_p05": {"D1": 11.49, "D2": 11.44, "D1-V2": 11.49, "D1-V3": 11.49, "range": [11, 14]}
+    },
+    "x1_x2_same_house": {
+      "result": "pass",
+      "regions_pass": 10,
+      "D1_vs_D2_dE00": "0.88-2.96 (render-agent)",
+      "plaster_L_C": {"D1": [90.0, 3.5], "D2": [90.5, 4.0], "MB0": [87.6, 6.7]},
+      "oak_floor_L_C_h": {"D1": [49.2, 14.9, 69.5], "D2": [51.2, 17.7, 68], "MB0": [33, 16, 61], "W0": [41, 16, 69]},
+      "taupe_fronts_L_C_h": "55-56 / 9.3-9.6 / 72-74"
+    },
+    "count": {
+      "result": "pass",
+      "cards_rendered": 21, "cards_planned": 21,
+      "products_by_largest_frame": {"D1": 12, "D2": 9},
+      "v7q6": {
+        "D1": 10, "D2": 5, "room_unique": 11,
+        "D1_items": ["bench-pad 3.18", "curtains 1.97", "pendant 1.03", "runner 0.80", "amphora 0.59", "floor-vase 0.41 (h 27.7)", "candle-holders 0.40", "framed-art 0.39", "boards 0.21 (h 8.5)", "moon-jar 0.17 (h 6.3)"],
+        "D2_items": ["bench-pad 2.0", "framed-art 0.64", "tea-towel 0.46", "boards 0.25", "moon-jar 0.24"],
+        "group_clause": {"D1_right_worktop_trio": "mills+oil+bowl 0.27%, h 6.2%", "D1_with_group": 11, "room_with_group": 12},
+        "below_threshold_D2": {"paper_stand": "0.12%, h 8.6%", "canisters": "0.20%, h 5.1%"}
+      },
+      "cross_room_repeats": {
+        "acknowledged": ["framed-art 05 (= master bedroom B)", "soap dispenser (= bath)"],
+        "not_acknowledged": [
+          "curtains-aliexpress-linen-blend-s-fold-180502 (master MB0/MB1, work W0)",
+          "tea-towel-aliexpress-pure-linen-towel-38x55 (= bath hand towel, listing 1005012882139719, caramel)",
+          "pendant-cj-silk-ribbed-pumpkin-40 (V1 = work-room pendant)"
+        ],
+        "unique_to_house": 16
+      }
+    }
+  },
+  "d2_fb9": {
+    "verdict": "reads empty",
+    "products_pct": 4.4,
+    "n_ge_1pct": 1, "n_ge_05pct": 2, "median_product_pct": 0.105,
+    "largest": {"bench-pad": 2.0, "framed-art": 0.64, "tea-towel": 0.46},
+    "blank_tall_fronts_pct": 29.1, "floor_pct": 18.8, "right_half_products_pct": 1.57,
+    "other_frames_products_pct": {"MB0": 47.2, "MB1": 43.1, "W0": 23.1, "B2": 18.2, "B1": 13.2, "D1": 9.8},
+    "tighter_crop_products_pct": {"75%": 6.1, "65%": 6.2, "55%": 7.9},
+    "fix": [
+      "crop alone insufficient",
+      "KD-z close-ups (shelf, sink, niche) carry count and sale (6.6a(1))",
+      "1-2 larger products in D2: large board/pair leaning on splash, tall vessel or branch by hood, larger art on left shelf, wider niche styling",
+      "camera change that drops part of the tall fronts (designer, 1.3.9)",
+      "keep D2 as the context frame"
+    ],
+    "evidence": "d2-density.jpg"
+  },
+  "findings": [
+    {"id": "KD-L1", "severity": "low", "what": "curtain ~66 cm wide vs 25 cm clay stack (KD-5: 20), shifted 141 px to the opening, 1.8% over glass, hem behind chair", "fix": "designer: accept as styling or narrow by mask edit", "owner": "master-designer"},
+    {"id": "KD-L2", "severity": "low", "what": "LED profile reads as a glowing line under shelf front edges in D1 and D2 (rejection 2: visible strip)", "fix": "accept as profile, or darken line to shelf underside in code, keep the wash", "owner": "master-designer; render-agent"},
+    {"id": "KD-L3", "severity": "low", "what": "V2 faithful but identical to V1 in the wheel except a thin wire", "fix": "drop V2 from the wheel or replace with a different-shaped lantern (gap 13)", "owner": "master-designer"},
+    {"id": "KD-L4", "severity": "low", "what": "oak floor lighter than rest of house (kitchen L* 49-51 vs MB0 33, W0 41)", "fix": "check living-room floor at the opening; gain on floor in plate if needed", "owner": "master-designer; render-agent"},
+    {"id": "KD-I1", "severity": "info", "what": "tea towel hung open (x2.17 w, x1.52 h of folded proxy), within 38x55"},
+    {"id": "KD-I2", "severity": "info", "what": "x4-only residues: ghosts by pears, light slab under bowl, faint halo on black jar, dark arc on jar edge in D2"}
+  ],
+  "not_done": ["0 tokens", "no var2", "no commit", "rebuild chain not run", "no git state changes"]
+}
