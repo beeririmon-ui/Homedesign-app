@@ -294,6 +294,9 @@ def soft_ratio(e, base, valid, sig):
     return np.where(den > 0.02, num / np.maximum(den, 1e-6), 1.0)
 
 
+CROWN_LEAFY_Y = 940          # (QA W0 M2) below it the palm is canes and a few low fronds, not a crown with gaps
+
+
 def soft_ratio2(e, base, valid, s1, s2, s3=96):
     """(2026-11-20, QA W0 M2) soft_ratio at three scales: where a finer field has too few valid pixels near it (den < 0.25), it hands
     over to the next wider one (s2, then s3). The gaps between the fronds are not sampled (see shadow_overrides), and the fine field
@@ -339,6 +342,7 @@ def shadow_overrides(p, e, base, layers, shadows, pl_ids, rp):
         crown = layers[49].copy()
         crown[int(np.nonzero(M.ids('W0') == 49)[0].min()):] = False
         closed = cv2.morphologyEx(crown.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(12)).astype(bool)
+        closed[CROWN_LEAFY_Y:] = False        # the canes' zone keeps its own local samples (closing merged the canes into a block)
         valid = on & ~C.dil(allfg | closed, 3) & ~C.dil(leafish & C.dil(layers[49], 40), 3)                # are not shadow
         r = soft_ratio2(e, base, valid, 6, 24)
         dk = cv2.distanceTransform((~layers[49]).astype(np.uint8), cv2.DIST_L2, 5)

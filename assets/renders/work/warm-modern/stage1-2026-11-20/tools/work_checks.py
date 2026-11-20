@@ -29,6 +29,9 @@ GROUPS = {"shelf (bookends, shelf vase, burnt bowl)": ("bookends", "shelf-vase",
           "desk right (lamp, candle, dish)": ("desk-lamp", "desk-candle", "desk-dish")}
 CUT_FRONTS = ("curtains", "rug")        # planned cut by the frame (3.2): their visible share of the whole product is the clay's
 TEMPORARY = ("planter", "magazine-holder", "rug")
+# (2026-11-20, the manager) works 08 and 03 are one card (386242): products are counted by card, not by slot
+CARD_OF = {"framed-art": "386242", "framed-art-2": "386242"}
+HOUSE_REPEATS = ("planter", "magazine-holder", "rug", "basket", "curtains", "386242")    # products of other rooms too
 PENDING = {"desk-lamp": "Lenni (Fox Home), conditional (10.2): plug, mark and base width unchecked; not rendered in this round"}
 
 
@@ -132,16 +135,18 @@ def main():
             items.append(dict(item=s_, members=[s_], counted=r["counted"]))
     v7 = sum(1 for i in items if i["counted"])
     sold = [s_ for s_ in rows]
+    cards = sorted({CARD_OF.get(s_, s_) for s_ in sold})
     out["count"] = dict(
-        managers_way=dict(rendered=len(sold), of_planned=20, rendered_products=sold, pending=PENDING,
-                          temporary_repeats=[s_ for s_ in sold if s_ in TEMPORARY], without_repeats=len([s_ for s_ in sold if s_ not in TEMPORARY]),
-                          note="each sold product once in the room (W0 is the room's only frame); framed-art (08) and framed-art-2 (03) are two SKUs of one card"),
+        managers_way=dict(rendered=len(cards), with_pending=len(cards) + len(PENDING), rendered_products=cards, slots=sold, pending=PENDING,
+                          temporary_repeats=[c for c in cards if c in TEMPORARY], without_temporary_repeats=len([c for c in cards if c not in TEMPORARY]),
+                          repeats_of_other_rooms=[c for c in cards if c in HOUSE_REPEATS],
+                          note="each sold product once in the room, by card (W0 is the room's only frame): works 08 and 03 are one card, 386242"),
         v7q6=dict(counted=v7, items=items, rows=rows, rule="house-plan F10 / V7Q6: 0.5 % of the frame, or 0.15 % and 6 % of its height, at 50 % visible; "
                                                        "a group of 3 or 5 on one surface is one item; a planned cut front counts from 25 % visible"))
     json.dump(out, open(os.path.join(ST, "w0-checks.json"), "w"), indent=1, ensure_ascii=False)
     print(json.dumps(dict(rnd2=out["rnd2"]["ok"], variants={t: (v["differs_outside_frame_layers_px"], v["rnd2_vs_plate_outside_px"]) for t, v in var.items()},
                           shadows=out["shadows"]["all_one_below"], light=out["light"]["all_screen"],
-                          black_point=out["black_point_WM_G1"], count=(len(sold), v7))))
+                          black_point=out["black_point_WM_G1"], count=(len(cards), v7))))
 
 
 if __name__ == "__main__":
