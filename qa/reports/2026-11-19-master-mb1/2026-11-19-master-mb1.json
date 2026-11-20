@@ -4,12 +4,12 @@
  "agent": "qa-agent",
  "brief": "briefs/qa-master-mb1-2026-11-19.md",
  "files_at": "c404056c",
- "verdict": "fail: M1-M2 (medium; code, 0 tokens; the Pecan drop length vs MB0 is a question for the manager)",
+ "verdict": "pass after the re-check (M1, M2 fixed); first round: fail M1-M2",
  "blocking": [
   "M1",
   "M2"
  ],
- "status_line": "MB1 שלב 1: נכשל QA על M1–M2 (בינוניים; בקוד, 0 טוקנים; הנפילה של Pecan מול MB0: שאלה למנהל; QA בודק שוב רק אותם).",
+ "status_line": "עבר QA (MB1 שלב 1; לבעלים; לא לאתר לפני רישום 1.3.9)",
  "status_after_fix": "עבר QA (MB1 שלב 1; לבעלים; לא לאתר לפני רישום 1.3.9)",
  "items": {
   "1_fidelity": "fail (M1); 7 of the 8 biggest pass; shifts vs MB0 read as the same products",
@@ -1968,5 +1968,294 @@
  "tools": "scratchpad qa-mb1/ (deleted after the run)",
  "tokens": 0,
  "var2": false,
- "commits": false
+ "commits": false,
+ "recheck": {
+  "date": "2026-11-20",
+  "files_at": "12cd9137",
+  "baseline": "c404056c",
+  "verdict": "pass",
+  "blocking": [],
+  "status_line": "עבר QA (MB1 שלב 1; לבעלים; לא לאתר לפני רישום 1.3.9)",
+  "rnd2": {
+   "recompose_px_diff": 0,
+   "outside_diff_vs_plate": 0,
+   "shadow_one_below": true,
+   "black_p05": 12.06,
+   "frame_png_diff": 0,
+   "changed_px": 182853,
+   "changed_outside_bed_layers": 0,
+   "changed_bbox": [
+    333,
+    616,
+    1778,
+    1511
+   ],
+   "manifest_other_layers": 19
+  },
+  "tone": {
+   "throw_lit": {
+    "mb1": [
+     59.4,
+     14.3,
+     21.8,
+     26.1,
+     56.8
+    ],
+    "mb0": [
+     61.4,
+     16.5,
+     23.7,
+     28.9,
+     55.1
+    ],
+    "de00": 2.27,
+    "n": [
+     71076,
+     126470
+    ]
+   },
+   "throw_mid": {
+    "mb1": [
+     41.5,
+     15.4,
+     21.4,
+     26.4,
+     54.2
+    ],
+    "mb0": [
+     46.2,
+     17.7,
+     23.2,
+     29.1,
+     52.7
+    ],
+    "de00": 4.61,
+    "n": [
+     71076,
+     126470
+    ]
+   },
+   "bedding_lit": {
+    "mb1": [
+     67.1,
+     2.9,
+     10.9,
+     11.3,
+     75.3
+    ],
+    "mb0": [
+     75.2,
+     1.9,
+     9.6,
+     9.8,
+     78.6
+    ],
+    "de00": 6.35,
+    "n": [
+     433163,
+     945456
+    ]
+   },
+   "bedding_mid": {
+    "mb1": [
+     51.8,
+     4.3,
+     14.5,
+     15.1,
+     73.6
+    ],
+    "mb0": [
+     59.9,
+     2.8,
+     11.2,
+     11.6,
+     76.0
+    ],
+    "de00": 7.97,
+    "n": [
+     433163,
+     945456
+    ]
+   },
+   "pillowcases_lit": {
+    "mb1": [
+     63.3,
+     14.1,
+     28.1,
+     31.5,
+     63.3
+    ],
+    "mb0": [
+     59.4,
+     17.1,
+     29.4,
+     34.0,
+     59.9
+    ],
+    "de00": 3.87,
+    "n": [
+     53125,
+     86712
+    ]
+   },
+   "pillowcases_mid": {
+    "mb1": [
+     51.2,
+     17.3,
+     29.6,
+     34.3,
+     59.7
+    ],
+    "mb0": [
+     53.0,
+     18.0,
+     30.3,
+     35.2,
+     59.3
+    ],
+    "de00": 1.83,
+    "n": [
+     53125,
+     86712
+    ]
+   },
+   "cushions_lit": {
+    "mb1": [
+     87.3,
+     1.4,
+     7.5,
+     7.6,
+     79.4
+    ],
+    "mb0": [
+     84.6,
+     1.1,
+     7.6,
+     7.6,
+     81.6
+    ],
+    "de00": 1.81,
+    "n": [
+     28139,
+     34988
+    ]
+   },
+   "cushions_mid": {
+    "mb1": [
+     82.0,
+     1.9,
+     8.9,
+     9.1,
+     77.8
+    ],
+    "mb0": [
+     80.0,
+     1.8,
+     8.6,
+     8.8,
+     78.4
+    ],
+    "de00": 1.39,
+    "n": [
+     28139,
+     34988
+    ]
+   }
+  },
+  "edges": {
+   "before": {
+    "bedding": [
+     2001,
+     4396
+    ],
+    "cushions": [
+     822,
+     141
+    ],
+    "pillowcases": [
+     2137,
+     216
+    ],
+    "throw": [
+     1562,
+     1230
+    ]
+   },
+   "after": {
+    "bedding": [
+     1487,
+     2823
+    ],
+    "cushions": [
+     1171,
+     304
+    ],
+    "pillowcases": [
+     3294,
+     27
+    ],
+    "throw": [
+     466,
+     2282
+    ]
+   },
+   "holes": 78
+  },
+  "M1": {
+   "result": "pass",
+   "fringe_px": 14,
+   "fringe_cm": "~2.2-2.3",
+   "drop_cm_mb1_mb0": [
+    13,
+    10
+   ],
+   "throw_bbox_bottom": [
+    1246,
+    1095
+   ],
+   "duvet_under_hem_L": [
+    40,
+    52
+   ],
+   "duvet_beside_L": [
+    35,
+    55
+   ],
+   "lit_tone": {
+    "mb1": [
+     59.4,
+     14.3,
+     21.8,
+     26.1,
+     56.8
+    ],
+    "mb0": [
+     61.4,
+     16.5,
+     23.7,
+     28.9,
+     55.1
+    ],
+    "de00": 2.27,
+    "round1_de00": 7.47
+   },
+   "method_61_4": "lit tone: median Lab of the px between the L* p60 and p90 of a clean mask (alpha 255 eroded 2 px, minus higher-z alpha and the light layer), absolute, on the defaults composites, no white normalisation"
+  },
+  "M2": {
+   "result": "pass",
+   "checked": "same crops before/after at x3-x4: cushion bottom outline gone, dashed duvet line gone, cord/knot and seam gone, pillowcase specks gone and top rim whole",
+   "note": "the round-1 edge scan is no longer comparable (layers now run 6 px under the layer above); judged by eye on the same crops",
+   "holes_px": 78
+  },
+  "findings": [
+   {
+    "id": "MB1-L7",
+    "severity": "low",
+    "owner": "render-agent",
+    "what": "Pecan far end top edge uneven (x ~500-760, y ~830-870): 5-15 px lumps, a thin dark sliver, small holes; reads cut at x2",
+    "fix": "code: open + feather the top contour, close the holes, soften the sliver",
+    "backlog": "status/backlog-low.md"
+   }
+  ]
+ }
 }
