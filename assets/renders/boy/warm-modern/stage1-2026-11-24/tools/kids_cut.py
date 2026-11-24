@@ -412,27 +412,31 @@ def _clean_blind(masks, ctx):
 
 
 def _bed_masks(masks, ctx):
-    """PB1 / GB1: the throw is cut by its own colour, not by its clay box (the edit drapes it differently from the clay's two boxes, and
-    the football's clay outline overlaps its hang): its reference colour is the median of the darker half of its clay core in the edit;
-    the throw is every pixel within dE76 14 of it, near its clay region, in one piece with its core, holes filled; the other products of
-    the pass lose those pixels, and changed pixels left between the throw and its neighbours go to the throw only if they match it"""
-    e_lab = C.blur(ctx["lab_e"], 3.0)                    # the waffle's cells and grid averaged into the cloth's mean tone
+    """PB1 / GB1: the throw by its own tone, not by its clay box (the edit drapes it differently from the clay's two boxes, and the
+    football's clay outline overlaps its hang). On a 3 px blur (the waffle's cells and grid averaged) the throw is darker than the duvet
+    and the pillows around it: its threshold is the midpoint between its own clay core's 70th percentile of L* and the duvet's 20th;
+    the throw is the changed pixels near its clay region under that L*, in one piece with its core, closed and filled; the throw's
+    earlier pixels above it go to the duvet; the other products lose the throw's pixels"""
+    e_lab = C.blur(ctx["lab_e"], 3.0)
+    L = e_lab[..., 0]
     reg = ctx["region"]["bedspread"]
     core = C.ero(reg, 4)
-    Lc = e_lab[..., 0][core]
-    dark = core & (e_lab[..., 0] <= np.percentile(Lc, 60))
-    ref = np.median(e_lab[dark], 0)
+    duv = C.ero(ctx["region"]["bedding"], 4) & ~C.dil(reg, 20)
+    thr = 0.5 * (np.percentile(L[core], 70) + np.percentile(L[duv], 20))
     near = C.dil(reg, 90)
-    t = near & (np.linalg.norm(e_lab - ref, axis=-1) < 16) & (ctx["d"] > 6)
+    t = near & (L < thr) & (ctx["d"] > 6)
     t = cv2.morphologyEx(t.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(4)).astype(bool)
     t = keep_touching(t, core)
-    t = fill_holes(t, 4000)
+    t = fill_holes(t, 6000)
     t = cv2.morphologyEx(t.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool)
+    old = masks["bedspread"]
     for k in masks:
         if k != "bedspread":
             masks[k] = masks[k] & ~t
+    if "bedding" in masks:
+        masks["bedding"] |= old & ~t
     masks["bedspread"] = t
-    ctx.setdefault("notes", {})["throw_ref_Lab"] = [round(float(v), 1) for v in ref]
+    ctx.setdefault("notes", {})["throw_L_threshold"] = round(float(thr), 1)
     return masks
 
 
