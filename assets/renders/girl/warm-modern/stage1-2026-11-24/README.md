@@ -1,6 +1,6 @@
 # K-girl, warm modern, stage one (2026-11-24)
 
-render-agent. Brief: `briefs/wm-kids-stage1-render-2026-11-24.md`. Spec: `docs/proposals/wm-kids-rooms-render-2026-11-19.md` (ב.6, ch. ד). Status: **for QA again** after the fixes of `qa/reports/2026-11-24-kids-stage1` (K-G1 to K-G4, all in code; the section "QA fixes" below). Before the owner's approval 3. Not for the site before QA.
+render-agent. Brief: `briefs/wm-kids-stage1-render-2026-11-24.md`. Spec: `docs/proposals/wm-kids-rooms-render-2026-11-19.md` (ב.6, ch. ד). Status: **for QA again** after the recheck of `qa/reports/2026-11-24-kids-stage1` (after commit c4b811c0: K-G3 and K-G4, plus K-L7 and K-L1; all in code, 0 tokens; the section "Recheck fixes" below). K-G1 and K-G2 closed. Before the owner's approval 3. Not for the site before QA.
 
 ## Contents
 - **The plate** (`plate.png`, `plate-frame.png`): made in code from the boy's plate (`tools/girl_plate.py`).
@@ -55,6 +55,27 @@ Measured in `checks.json` → `K_fixes_2026_11_24` and `plate-compose.json` → 
 - **K-L2, the smudges under the sill (`tools/kids_qa_fixes.py islands girl`):** the pillow layer's and the bedding layer's pieces cut off from their body are let go (11 + 2 pieces, 1,045 px), and the pillow's shade under them is filled.
 - **K-L5:** the ruffled pillowcases are set 5 L* lower (`L_shift` in the GB1 cut).
 - **Not touched:** K-L4 (the bunny's size, the designer's).
+
+## Recheck fixes (2026-11-24, after c4b811c0; 0 tokens)
+Before (c4b811c0) and after at x2: `kids-fixes-2.jpg` in this folder. Measured in `checks.json` → `K_fixes_2026_11_24` → `recheck`.
+- **K-G3, the pen cup** (`tools/girl_from_boy.py pen-cup`, `recolour_cup2`). The colour held, but the cup read as a flat, glowing peach block. It is now built as follows:
+  - **The pencils:** keyed against the boy's plate, which is the band they were drawn on (dE76 over 20 is pencil, under 6 is band). Their edges take the pencil's own colour, so they are clean and solid.
+  - **The band between the pencils** is let go. The cup's shade, which the boy's layer carried there, goes into the cup's shadow layer.
+  - **The shading** is the walnut's light in linear Y, not its figure. The front face is a line fitted to the walnut, flat here, because the walnut's brightening to the right is its satin. The right side face is at the walnut's ratio to the power 0.75. The lip has its own row profile.
+  - **The grain** is the walnut's fine structure, scaled to the photo's: L* minus its 3 px blur, std 2.9 on the frame (3.07 on the layer), against the photo's 3.28 (it was 0.62).
+  - **The faces:** on the frame, the thirds read L* 76.6 / 76.6 / 57.6 (they were 75.1 / 75.4), with the side face in the right third.
+  - **No ring:** the outline keeps the cut's alpha, and the shadow is filled where the outline thinned. The wall left of the cup reads 53.8 at 0–4 px, 50.2 at 4–8 and 57.4 at 8–14 (it was 82 against 68).
+  - **The colour:** lit half 78.2 / 11.9 / 29.5, dE00 0.02 against the photo.
+- **K-G4, the throw's top end at the foot board** (`tools/kids_variants.py`): the hue weighting, which keeps the duvet between the fringe strands, now covers only the hanging end (the lower 45 % of the throw's rows). The lying top end (x 1260–1335) had been read as fringe. The patch against the throw beside it, in L*: V1 +10.9 → +0.4, V2 +17.7 → +0.5, V3 +4.8 → +0.7. The straight seam at x 1260 is gone. dE00 against the photos: V1 4.49, V2 4.28, V3 4.46.
+- **K-L7** (`tools/kids_qa_fixes.py girl_edges girl`):
+  - **The right cushion's right edge** is taken from the GB2 edit's corduroy: a median of 7 rows and a Gaussian of 2. The notch is filled, the grey wedge at its foot is cut, and the cushion's shadow is filled where the edge was cut back.
+  - **The duvet's back edge** under the pair is smoothed (a median of 9 columns and a Gaussian of 2.5; notches inpainted, spikes cut).
+- **K-L1, the window in the pillowcase layer** (`window_px girl`): 1,247 px within dE76 8 of the plate, over the window's clay ids, are let go. The pillow's shadow there is 1, so only the plate's own window shows. 506 px on those ids are left: small dark pieces of the head board and frame, joined to the pillow. The boy's standing pillow was not changed: there its shadow is not 1 under the window pixels, so the passed frame would have changed by up to dE 34; it was tried and restored.
+
+## Regions for QA after the recheck (canvas px)
+1. The pen cup (2230–2470, 740–920), at x1 and x2.
+2. The throw's top end at the foot board in V1, V2 and V3 (1150–1390, 910–1060).
+3. The right cushion's right edge and the duvet's back edge under the pair (960–1200, 700–950).
 
 ## Regions for QA after the fixes (canvas px)
 1. The band near the bed and the pillows (880–1500, 560–900): no halo; the pillow's shade.

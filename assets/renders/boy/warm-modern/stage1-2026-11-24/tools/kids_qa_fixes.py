@@ -589,6 +589,42 @@ def metrics(kid):
         out["K-L2"] = {nm: int((box & (np.abs(C.to_lab(im)[..., 0] - C.to_lab(pl)[..., 0]) > 4) & ~np.isin(ids, (12,))).sum())
                        for nm, im in (("before_px_off_plate_4L", was), ("after_px_off_plate_4L", now))}
         out["K-L2"]["islands"] = {k: v for k, v in cf.get("K-L2 islands", {}).items() if k != "method"}
+        # the recheck (QA after c4b811c0)
+        rc = {}
+        lpc = _layer(man, "pen-cup")
+        ca = np.asarray(Image.open(os.path.join(st, lpc["layer"])))[..., 3]
+        ids_ = K.ids("K-girl")
+        Yv, Xv = np.arange(H)[:, None], np.arange(W)[None, :]
+        body = (ca >= 250) & C.dil(np.isin(ids_, (48, 49)), 3) & (Yv > 822) & (Yv < 898)
+        labn = C.to_lab(now)
+        Ln = labn[..., 0]
+        hp = Ln - C.blur(Ln * body, 3) / np.maximum(C.blur(body.astype(np.float64), 3), 1e-4)
+        xs_ = np.nonzero(body.any(0))[0]
+        th = np.array_split(np.arange(xs_.min(), xs_.max() + 1), 3)
+        d_ = cv2.distanceTransform((ca == 0).astype(np.uint8), cv2.DIST_L2, 5)
+        roi = (Yv > 830) & (Yv < 900) & (Xv < 2330) & (Xv > 2260)
+        rc["K-G3"] = dict(cup=cf.get("from the boy", {}).get("pen-cup", {}).get("lit_half_Lab"), dE00=cf.get("from the boy", {}).get("pen-cup", {}).get("dE00_lit_half"),
+                          grain_std_L_minus_blur3=round(float(np.std(hp[C.ero(body, 2)])), 2), photo_grain=3.28,
+                          thirds_L=[round(float(np.median(Ln[body & np.isin(Xv, t3)])), 1) for t3 in th],
+                          wall_left_L_at_0_4_4_8_8_14_px=[round(float(np.median(Ln[roi & (d_ > lo) & (d_ <= hi)])), 1) for lo, hi in ((0.5, 4), (4, 8), (8, 14))])
+        g4 = {}
+        for vn, fn in (("V1", "defaults"), ("V2", "V2"), ("V3", "V3")):
+            im = C.load(os.path.join(st, f"K-{kid}-{fn}.png"))
+            Lv = C.to_lab(im)[..., 0]
+            was_ = C.to_lab(C.load(os.path.join(K.SCR, f"c4b-K-{kid}-{fn}.png")))[..., 0]
+            lb_ = _layer(man, "bedspread")
+            ta = np.asarray(Image.open(os.path.join(st, lb_["layer"])))[..., 3] >= 250
+            patch = ta & (Yv >= 945) & (Yv <= 985) & (Xv >= 1262) & (Xv <= 1325)
+            nb = ta & (Yv >= 945) & (Yv <= 985) & (Xv >= 1195) & (Xv <= 1255)
+            seam = lambda LL: float(np.median(np.abs(LL[945:985, 1261] - LL[945:985, 1258])))   # noqa: E731
+            g4[vn] = dict(patch_minus_neighbour_L_before=round(float(np.median(was_[patch]) - np.median(was_[nb])), 1),
+                          after=round(float(np.median(Lv[patch]) - np.median(Lv[nb])), 1),
+                          seam_step_L_x1258_1261_before_after=[round(seam(was_), 1), round(seam(Lv), 1)])
+        g4["dE00_vs_photo"] = {v: d["dE00_lit_half_vs_photo"] for v, d in cf.get("sample slot variants", {}).get("variants", {}).items()}
+        rc["K-G4"] = g4
+        rc["K-L7"] = {k: v for k, v in cf.get("K-L7 edges", {}).items() if k != "method"}
+        rc["K-L1_window"] = {k: v for k, v in cf.get("K-L1 window px", {}).items() if k != "method"}
+        out["recheck"] = rc
     else:
         out["K-B1"] = {k: v for k, v in cf.get("K-B1 cars", {}).items() if k != "method"}
         out["K-B2"] = {k: v for k, v in cf.get("K-B2 stripes", {}).items() if k != "method"}
@@ -624,6 +660,155 @@ def metrics(kid):
     print(json.dumps(out)[:2500])
 
 
+def girl_edges(kid="girl"):
+    """K-L7 (QA recheck 2026-11-24): the right cushion's right edge (cut too deep by the GB2 wall trim, a notch at its top and a grey
+    wedge at its foot) and the duvet's back edge under the pair (jagged on the band). The cushion's edge is taken from the GB2 edit itself:
+    - the cushion: per row (715-897), the rightmost pixel of the edit's corduroy (C* > 14, L* < 70 on a 1 px blur, its ribs' local
+      std over 1.5: its shade on the wall is smooth, C* 8-12) joined to the layer, a median of 7
+      rows and a Gaussian of 2; the layer filled to that edge with the edit's corduroy (pockets inpainted from the cushion) and cut beyond it (the wedge
+      goes), 1 px soft;
+    - the duvet: per column (1010-1175), its own top edge, a median of 9 columns and a Gaussian of 2.5: notches filled (inpainted
+      from the duvet), spikes cut, 1 px soft (the GB2 edit's duvet up to the cushions is lighter than GB1's: not used)"""
+    st = K.ST[kid]
+    man = KC.load_man(kid)
+    S = KC.edit_canvas("GB2-nest")
+    e = S["e"]
+    lab = C.to_lab(e)
+    hh = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360
+    cc = np.hypot(lab[..., 1], lab[..., 2])
+    rec = {}
+    # the cushion's right edge
+    lc = _layer(man, "cushions-pair")
+    src = os.path.join(K.SCR, f"{kid}-cushions-pre-L7.png")            # the layer before this step (kept once): re-runnable
+    if not os.path.exists(src):
+        Image.open(os.path.join(st, lc["layer"])).save(src)
+    cu = np.asarray(Image.open(src)).astype(np.float64) / 255
+    A = cu[..., 3] > 0
+    Lh = lab[..., 0] - C.blur(lab[..., 0], 2)
+    sd = np.sqrt(C.blur(Lh ** 2, 2))
+    lb1 = C.to_lab(C.blur(e, 1.0))
+    like = (np.hypot(lb1[..., 1], lb1[..., 2]) > 14) & (lb1[..., 0] < 70) & (sd > 1.5) & S["box"]     # the corduroy, not its shade
+    like = cv2.morphologyEx(like.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8)) > 0
+    n, lbl, stt, _ = cv2.connectedComponentsWithStats((like | A).astype(np.uint8), 8)
+    body = lbl == lbl[np.nonzero(C.ero(A, 6))][0] if C.ero(A, 6).any() else A
+    body &= like | A
+    rows = np.arange(715, 898)
+    r = np.array([np.nonzero(body[y, 1040:1130] & like[y, 1040:1130])[0].max() + 1040 if (body[y, 1040:1130] & like[y, 1040:1130]).any() else np.nan for y in rows])
+    ok = ~np.isnan(r)
+    r = np.interp(rows, rows[ok], r[ok])
+    rm = np.array([np.median(r[max(0, i - 3):i + 4]) for i in range(len(r))], np.float32)
+    env = cv2.GaussianBlur(rm[:, None], (1, 0), sigmaX=0.1, sigmaY=2, borderType=cv2.BORDER_REPLICATE)[:, 0].astype(np.float64)
+    xs = np.arange(W)[None, :]
+    newA = A.copy()
+    cov = np.zeros((H, W))
+    band = np.zeros((H, W), bool)
+    for i, y in enumerate(rows):
+        lft = int(np.nonzero(A[y])[0].min()) if A[y].any() else 1040
+        band[y, max(lft, 1040):1135] = True
+        cov[y] = np.clip(env[i] + 0.5 - xs[0], 0, 1)
+    fill = band & (cov > 0) & ~A & C.dil(like, 1)
+    for i, y in enumerate(rows):                                  # pockets open to the right: from the edge in to the first solid run
+        xe = int(np.floor(env[i]))
+        seg = A[y, xe - 30:xe + 1][::-1]
+        if seg.size > 3:
+            r3 = np.nonzero(seg[:-2] & seg[1:-1] & seg[2:])[0]
+            if r3.size and r3[0] > 0:
+                fill[y, xe - r3[0] + 1:xe + 1] |= cov[y, xe - r3[0] + 1:xe + 1] > 0
+    cut = band & (cov < 1) & A
+    a_new = np.where(band, np.minimum(np.where(A | fill, np.where(A, cu[..., 3], 1.0), 0.0), cov), cu[..., 3])
+    a_new = np.where(fill, np.maximum(a_new, np.minimum(cov, 1.0)), a_new)
+    rgb = np.where((fill & like)[..., None], e, cu[..., :3])
+    pocket = fill & ~like
+    if pocket.any():
+        yy_, xx_ = np.nonzero(fill | A)
+        y0_, y1_, x0_, x1_ = yy_.min() - 4, yy_.max() + 5, xx_.min() - 4, xx_.max() + 5
+        unk = (pocket | ~A)[y0_:y1_, x0_:x1_]
+        sub = cv2.inpaint(C.q(rgb[y0_:y1_, x0_:x1_]), unk.astype(np.uint8) * 255, 4, cv2.INPAINT_TELEA).astype(np.float64) / 255
+        rgb[y0_:y1_, x0_:x1_] = np.where(pocket[y0_:y1_, x0_:x1_, None], sub, rgb[y0_:y1_, x0_:x1_])
+    inner = KC.KC.spread(cu[..., :3], (C.ero(A, 3) & band).astype(np.float64), (2.0, 4.0))
+    lab_c = C.to_lab(cu[..., :3])
+    edge = band & A & ~C.ero(A, 2) & (np.linalg.norm(lab_c - C.to_lab(inner), axis=-1) > 6)
+    rgb = np.where(edge[..., None], inner, rgb)
+    out = np.dstack([C.q(rgb), C.q(a_new)])
+    out[..., :3][out[..., 3] == 0] = 0
+    Image.fromarray(out, "RGBA").save(os.path.join(st, lc["layer"]), optimize=True)
+    # its shadow was 1 under its old alpha: where the edge was cut back the band showed unshaded (a light line): filled from outside
+    shp = os.path.join(st, lc["shadow"])
+    sh = np.asarray(Image.open(shp)).astype(np.float64) / 255
+    hole = C.dil(A & (a_new < 0.98) & band, 1)
+    known = ~C.dil(A, 1) & C.dil(hole, 12)
+    fv = C.blur((1 - sh) * known, 3) / np.maximum(C.blur(known.astype(np.float64), 3), 1e-4)
+    sh2 = np.where(hole, np.minimum(sh, 1 - fv), sh)
+    Image.fromarray(C.q(np.where(sh2 > 0.995, 1.0, sh2))).save(shp, optimize=True)
+    rec["cushion_shadow_filled_px"] = int((hole & (sh2 < sh - 0.005)).sum())
+    rec["cushion_right_edge"] = dict(rows=[715, 897], px_filled=int(fill.sum()), px_cut=int((cut & (a_new == 0)).sum()), edge_px_decontaminated=int(edge.sum()),
+                                     edge_x_min_max=[round(float(env.min()), 1), round(float(env.max()), 1)])
+    # the duvet's back edge under the pair
+    cuA = out[..., 3] > 0
+    lb = _layer(man, "bedding")
+    srcb = os.path.join(K.SCR, f"{kid}-bedding-pre-L7.png")
+    if not os.path.exists(srcb):
+        Image.open(os.path.join(st, lb["layer"])).save(srcb)
+    bd = np.asarray(Image.open(srcb)).astype(np.float64) / 255
+    B = bd[..., 3] > 0
+    cols = np.arange(1010, 1176)
+    tops = np.array([np.nonzero(B[:, x])[0].min() if B[:, x].any() else np.nan for x in cols], np.float64)
+    ok = ~np.isnan(tops)
+    tops = np.interp(cols, cols[ok], tops[ok])
+    tm = np.array([np.median(tops[max(0, i - 4):i + 5]) for i in range(len(tops))], np.float32)
+    tenv = cv2.GaussianBlur(tm[None, :], (0, 1), sigmaX=2.5, sigmaY=0.1, borderType=cv2.BORDER_REPLICATE)[0].astype(np.float64)
+    ys = np.arange(H)
+    ab = bd[..., 3].copy()
+    fillb = np.zeros((H, W), bool)
+    for i, x in enumerate(cols):
+        cv_ = np.clip(ys - tenv[i] + 0.5, 0, 1)
+        zone = (ys >= tenv[i] - 3) & (ys <= tenv[i] + 12)
+        fillb[:, x] = zone & (cv_ > 0) & ~B[:, x]
+        ab[:, x] = np.where(zone, np.where(B[:, x] | fillb[:, x], cv_, 0.0) * np.where(B[:, x], np.maximum(bd[:, x, 3], cv_), 1.0), ab[:, x])
+    rgbb = bd[..., :3].copy()
+    if fillb.any():
+        yy_, xx_ = np.nonzero(fillb)
+        y0_, y1_, x0_, x1_ = yy_.min() - 6, yy_.max() + 7, xx_.min() - 6, xx_.max() + 7
+        unk = (fillb | ~B)[y0_:y1_, x0_:x1_]
+        sub = cv2.inpaint(C.q(rgbb[y0_:y1_, x0_:x1_]), unk.astype(np.uint8) * 255, 4, cv2.INPAINT_TELEA).astype(np.float64) / 255
+        rgbb[y0_:y1_, x0_:x1_] = np.where(fillb[y0_:y1_, x0_:x1_, None], sub, rgbb[y0_:y1_, x0_:x1_])
+    outb = np.dstack([C.q(rgbb), C.q(ab)])
+    outb[..., :3][outb[..., 3] == 0] = 0
+    Image.fromarray(outb, "RGBA").save(os.path.join(st, lb["layer"]), optimize=True)
+    rec["duvet_back_edge"] = dict(cols=[1010, 1175], px_filled=int(fillb.sum()), px_cut=int((B & (outb[..., 3] == 0)).sum()))
+    man.setdefault("code_fixes", {})["K-L7 edges"] = dict(rec, method=girl_edges.__doc__.strip())
+    KC.save_man(kid, man)
+    print(json.dumps(rec))
+
+
+def window_px(kid="girl", key="pillowcase", win_ids=(0, 12, 13, 14, 20), thr=8.0):
+    """K-L1 (QA recheck): the girl's pillowcase layer carried the window (the GB1 edit's copy of it, 1,390 px by QA): over the window's
+    clay ids, the layer's pixels within dE76 8 of the plate let go (alpha 0). They are the plate's own colour, so the frame does not
+    change; the layer holds only the pillows"""
+    st = K.ST[kid]
+    man = KC.load_man(kid)
+    l = _layer(man, key)
+    rgba = np.asarray(Image.open(os.path.join(st, l["layer"]))).copy()
+    ids = K.ids(f"K-{kid}")
+    pl = C.load(os.path.join(st, "plate.png"))
+    d = np.linalg.norm(C.to_lab(rgba[..., :3].astype(np.float64) / 255) - C.to_lab(pl), axis=-1)
+    A = rgba[..., 3] > 0
+    drop = A & np.isin(ids, win_ids) & (d < thr)
+    rgba[..., 3][drop] = 0
+    rgba[..., :3][drop] = 0
+    Image.fromarray(rgba, "RGBA").save(os.path.join(st, l["layer"]), optimize=True)
+    ys, xs = np.nonzero(rgba[..., 3])
+    rec = dict(px=int(drop.sum()), left_on_window_ids=int((np.isin(ids, win_ids) & (rgba[..., 3] > 0)).sum()), layer_x=[int(xs.min()), int(xs.max())],
+               method=window_px.__doc__.strip())
+    for e in man["layers"]:
+        if e["key"] == key and e.get("default", True):
+            e["bbox_px"] = [int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1]
+            e["alpha_px"] = int(xs.size)
+    man.setdefault("code_fixes", {})["K-L1 window px"] = rec
+    KC.save_man(kid, man)
+    print(json.dumps({k: v for k, v in rec.items() if k != "method"}))
+
+
 FIX_CROPS = [   # finding, room, frame (before: the QA commit 1b062a0e, kept in the scratchpad), canvas box (240 x 150), what to look at
     ("K-G1", "girl", "defaults", (1080, 560, 1320, 710), "band right of the pillows: the white halo"),
     ("K-G2", "girl", "defaults", (1680, 900, 1920, 1050), "desk and chair legs on the band: olive strips"),
@@ -637,12 +822,24 @@ FIX_CROPS = [   # finding, room, frame (before: the QA commit 1b062a0e, kept in 
 ]
 
 
-def board():
-    """kids-fixes.jpg (the boy's folder): before and after at x2 per finding, side by side; before is the QA commit's frame"""
+FIX_CROPS_2 = [  # the recheck (QA after c4b811c0): before is c4b811c0's frame
+    ("K-G3", "girl", "defaults", (2230, 740, 2470, 920), "pen cup: grain, the shade of its side, no ring, clean pencils"),
+    ("K-G4", "girl", "defaults", (1150, 910, 1390, 1060), "throw V1 at the foot board: the pale patch and its seam"),
+    ("K-G4", "girl", "V2", (1150, 910, 1390, 1060), "throw V2 at the foot board"),
+    ("K-G4", "girl", "V3", (1150, 910, 1390, 1060), "throw V3 at the foot board"),
+    ("K-L7", "girl", "defaults", (960, 700, 1200, 950), "the right cushion's right edge, the duvet's back edge"),
+]
+
+
+def board(crops=None, before_fmt=None, out_path=None):
+    """kids-fixes.jpg (the boy's folder): before and after at x2 per finding, side by side; before is the QA commit's frame.
+    board2: kids-fixes-2.jpg (the girl's folder), the recheck's findings, before = c4b811c0"""
     from PIL import ImageDraw
+    crops = crops or FIX_CROPS
+    before_fmt = before_fmt or "before-K-{kid}-{fr}.png"
     rows = []
-    for fid, kid, fr, box, what in FIX_CROPS:
-        before = Image.open(os.path.join(K.SCR, f"before-K-{kid}-{fr}.png")).convert("RGB").crop(box)
+    for fid, kid, fr, box, what in crops:
+        before = Image.open(os.path.join(K.SCR, before_fmt.format(kid=kid, fr=fr))).convert("RGB").crop(box)
         after = Image.open(os.path.join(K.ST[kid], f"K-{kid}-{fr}.png")).convert("RGB").crop(box)
         w, h = (box[2] - box[0]) * 2, (box[3] - box[1]) * 2
         row = Image.new("RGB", (2 * w + 12, h + 26), (250, 250, 248))
@@ -658,7 +855,7 @@ def board():
     for r in rows:
         out.paste(r, (0, y))
         y += r.size[1] + 10
-    path = os.path.join(K.ST["boy"], "kids-fixes.jpg")
+    path = out_path or os.path.join(K.ST["boy"], "kids-fixes.jpg")
     out.save(path, quality=84, optimize=True)
     print(path, out.size, os.path.getsize(path))
 
@@ -674,4 +871,7 @@ if __name__ == "__main__":
     if a[0] == "board":
         board()
         sys.exit()
-    {"nest": nest, "stripes": stripes, "restripe": restripe, "cars": cars, "bear": bear, "cushion_edge": cushion_edge, "chain": chain, "islands": islands, "metrics": metrics}[a[0]](a[1])
+    if a[0] == "board2":
+        board(FIX_CROPS_2, "c4b-K-{kid}-{fr}.png", os.path.join(K.ST["girl"], "kids-fixes-2.jpg"))
+        sys.exit()
+    {"nest": nest, "stripes": stripes, "restripe": restripe, "cars": cars, "bear": bear, "cushion_edge": cushion_edge, "chain": chain, "islands": islands, "metrics": metrics, "girl_edges": girl_edges, "window_px": window_px}[a[0]](a[1])

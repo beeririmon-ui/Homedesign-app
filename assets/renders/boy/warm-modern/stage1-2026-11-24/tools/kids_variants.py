@@ -98,7 +98,12 @@ def main_girl(kid="girl"):
     m_ = a > 0
     below = np.zeros_like(m_)
     below[:-30] = m_[30:]
-    w = np.where(m_ & ~below, w, 1.0)
+    # K-G4 recheck (QA 2026-11-24): the hue test only on the fringe, the hanging end (the lower 45 % of the throw's rows). The lying
+    # top end at the foot board (x 1260-1335) ends within 30 px of its own bottom, so it was read as fringe, kept its old lightness
+    # (11 / 18 / 5 L* over the throw in V1 / V2 / V3) with a straight seam at x 1260
+    ysm = np.nonzero(m_)[0]
+    hang = np.arange(m_.shape[0])[:, None] >= ysm.min() + 0.55 * (ysm.max() - ysm.min())
+    w = np.where(m_ & ~below & hang, w, 1.0)
     w = C.blur(w, 0.7) * (a > 0)
     lit0 = lit_half(lab, a)
     tg, trec = girl_targets(kid)
