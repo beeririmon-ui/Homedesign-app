@@ -198,13 +198,13 @@
    "default": true,
    "layer": "layers/bedding/bedding-cj-muslin-cotton-duvet-dune-229x173.png",
    "shadow": "shadows/bedding/bedding-cj-muslin-cotton-duvet-dune-229x173.png",
-   "alpha_px": 254082,
-   "shadow_px": 17601,
+   "alpha_px": 253883,
+   "shadow_px": 18168,
    "bbox_px": [
-    463,
+    464,
     815,
-    1415,
-    1445
+    1414,
+    1444
    ],
    "sold": true,
    "sku": "CJCS281437509IR (open: real-unit photo)",
@@ -228,8 +228,8 @@
    "default": true,
    "layer": "layers/pillowcase/pillowcases-cj-washed-linen-double-ruffle-48x74-primary-color.png",
    "shadow": "shadows/pillowcase/pillowcases-cj-washed-linen-double-ruffle-48x74-primary-color.png",
-   "alpha_px": 83701,
-   "shadow_px": 18438,
+   "alpha_px": 68708,
+   "shadow_px": 16164,
    "bbox_px": [
     445,
     677,
@@ -296,7 +296,7 @@
    ],
    "sold": true,
    "sku": "CJZW264585012LO",
-   "source": "code variant of V1 (tools/kids_variants.py): colour only, the photo's Lab of spread-chestnut",
+   "source": "code variant of the cut throw (tools/kids_variants.py): the photo's Lab of spread-chestnut at the lit-half target",
    "pass_": "variants",
    "variant": "V2"
   },
@@ -323,7 +323,7 @@
    ],
    "sold": true,
    "sku": "CJZW264585020TG",
-   "source": "code variant of V1 (tools/kids_variants.py): colour only, the photo's Lab of spread-pink",
+   "source": "code variant of the cut throw (tools/kids_variants.py): the photo's Lab of spread-pink at the lit-half target",
    "pass_": "variants",
    "variant": "V3"
   },
@@ -340,13 +340,13 @@
    "default": true,
    "layer": "layers/cushions/cushions-cj-dusty-pink-corduroy-patchwork-45.png",
    "shadow": "shadows/cushions/cushions-cj-dusty-pink-corduroy-patchwork-45.png",
-   "alpha_px": 46274,
-   "shadow_px": 6792,
+   "alpha_px": 44581,
+   "shadow_px": 7287,
    "bbox_px": [
-    826,
+    827,
     703,
-    1134,
-    905
+    1109,
+    904
    ],
    "sold": true,
    "sku": "CJKD172412101AZ",
@@ -369,13 +369,13 @@
    "default": true,
    "layer": "layers/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-girl-35.png",
    "shadow": "shadows/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-girl-35.png",
-   "alpha_px": 21250,
-   "shadow_px": 120,
+   "alpha_px": 22376,
+   "shadow_px": 456,
    "bbox_px": [
-    636,
-    711,
-    803,
-    953
+    629,
+    712,
+    809,
+    954
    ],
    "sold": true,
    "sku": "12000046795670253",
@@ -462,17 +462,25 @@
  "code_fixes": {
   "from the boy": {
    "pen-cup": {
-    "cup_px": 5390,
-    "walnut_rendered_Lab": [
-     30.0,
-     11.3,
-     14.5
+    "cup_px": 6566,
+    "olive_background_removed_px": 947,
+    "inside_px": 1496,
+    "lit_half_Lab": [
+     78.3,
+     11.8,
+     29.5
     ],
-    "beech_Lab": [
-     58.8,
-     8.2,
-     20.8
-    ]
+    "photo_Lab": [
+     78.2,
+     11.9,
+     29.5
+    ],
+    "dE00_lit_half": 0.13,
+    "method": "the Beech cup built from the walnut cup's light, not its grain. The walnut's shading on a 4 px normalised\n    blur (no grain, no gloss), its contrast compressed to 0.6 round the lit half, and 15 % of the fine grain kept; the lit half's median\n    set to the Beech photo (L*78.2 C*31.8 h68), the chroma following L* (C*/L* of the photo), one hue: matte, even, light wood"
+   },
+   "olive edge cleaned px": {
+    "pen-cup": 0,
+    "bookends": 1132
    },
    "carried": [
     "roman-blind",
@@ -571,73 +579,77 @@
    "how": "tools/kids_art.py place: the set's three panels from the SKU photo, warped into the blank canvases the edit drew, lit by the canvas"
   },
   "sample slot variants": {
-   "rule": "of the throw's layer, in Lab:\n  - L*: in linear light, Y x (Y_photo(Vn) / Y_photo(V1)): the same shading and texture, the photo's step in lightness;\n  - a* b*: the rendered V1's own a* b* minus its median, plus the photo's a* b* of Vn scaled by s = (rendered V1 median L*) / (photo V1\n    L*): the hue is the photo's, the chroma follows the light the throw is in.\nV1 itself is checked the same way against its photo (hue and chroma at the scale s) and moved when it is off by more than dE00 3.\nThe shadow of every variant is V1's (the same geometry).",
-   "duvet_between_strands_kept_px": 7659,
-   "v1_rendered_Lab": [
-    70.6,
-    4.1,
-    14.0
+   "rule": "the girl's three variants from the throw as cut (scratchpad copy), each to its lit-half target (girl_targets): L* in linear light\n    (Y x a factor, the shading and the waffle kept), a* b* moved by the lit half's offset, weighted off the duvet between the strands K-G4 (QA 2026-11-24): the girl's throw was drawn 12-25 L* lighter than its photos; the same SKU (Deep Chestnut) read 13.6 L*\n    lighter than on the boy's bed under a light only 9 % brighter. The targets of the lit half (R5) per variant: Deep Chestnut at the\n    boy's own lit-half L* carried by the ratio of the two rooms' light on the throw (the plates' luminance there), then 3 L* down (the\n    allowed band) to keep all three within dE00 7 of their photos; Linen Brown and Pink by the photos' Y ratios to Deep Chestnut; a* b*\n    the photos'",
+   "cut_lit_half_Lab": [
+    81.8,
+    4.6,
+    7.6
    ],
-   "v1_rendered_LCh": [
-    70.6,
-    14.6,
-    73.7
-   ],
-   "chroma_scale_s": 1.23,
+   "boy_chestnut_lit_L": 51.9,
+   "light_ratio_girl_over_boy": 1.075,
+   "girl_chestnut_lit_L": 50.5,
    "variants": {
+    "V1": {
+     "product": "bedspread-cj-waffle-gauze-fringe-150x200-linen-brown",
+     "sku": "CJZW264585004DW",
+     "target_lit_half": [
+      62.5,
+      3.7,
+      12.0
+     ],
+     "chroma_ease": 1.0,
+     "lit_half_Lab": [
+      63.3,
+      3.7,
+      11.8
+     ],
+     "dE00_lit_half_vs_photo": 5.13
+    },
     "V2": {
      "product": "bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown",
      "sku": "CJZW264585012LO",
-     "photo_LCh": [
-      46.2,
-      8.8,
-      51
+     "target_lit_half": [
+      50.5,
+      5.5,
+      6.8
      ],
-     "rendered_Lab": [
-      57.4,
-      6.8,
-      8.4
+     "chroma_ease": 1.0,
+     "lit_half_Lab": [
+      51.3,
+      5.5,
+      6.9
      ],
-     "rendered_LCh": [
-      57.4,
-      10.8,
-      51.0
-     ],
+     "dE00_lit_half_vs_photo": 5.08,
      "frame": {
-      "region_px": 1237657,
+      "region_px": 1219088,
       "outside_differing_px": 0,
       "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel",
-      "black_point_p05": 12.34
+      "black_point_p05": 12.42
      }
     },
     "V3": {
      "product": "bedspread-cj-waffle-gauze-fringe-150x200-pink",
      "sku": "CJZW264585020TG",
-     "photo_LCh": [
-      67.8,
-      13.2,
-      48
+     "target_lit_half": [
+      73.6,
+      8.8,
+      9.8
      ],
-     "rendered_Lab": [
-      82.8,
-      10.3,
-      11.5
+     "chroma_ease": 1.0,
+     "lit_half_Lab": [
+      74.1,
+      8.8,
+      9.7
      ],
-     "rendered_LCh": [
-      82.8,
-      15.5,
-      48.0
-     ],
+     "dE00_lit_half_vs_photo": 4.81,
      "frame": {
-      "region_px": 1237657,
+      "region_px": 1219088,
       "outside_differing_px": 0,
       "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel",
-      "black_point_p05": 12.35
+      "black_point_p05": 12.46
      }
     }
-   },
-   "v1_vs_photo_dE00_hue_chroma": 0.6,
-   "v3_pink_chroma_eased": 0.96
+   }
   }
  },
  "cut_records": {
@@ -654,14 +666,14 @@
    ],
    "products": {
     "bedding": {
-     "px": 254082,
+     "px": 253883,
      "clay_px": 132905,
      "ratio_to_clay": 1.227
     },
     "pillowcase": {
-     "px": 83701,
+     "px": 68708,
      "clay_px": 93881,
-     "ratio_to_clay": 0.868
+     "ratio_to_clay": 0.705
     },
     "bedspread": {
      "px": 54129,
@@ -711,6 +723,16 @@
      "hue_sign": -1.0,
      "L_thr": 100.0
     }
+   },
+   "wall_trim_px": {
+    "pillowcase": 15301
+   },
+   "L_shift": {
+    "pillowcase": {
+     "L_median_before": 72.6,
+     "step": -5.0,
+     "Y_factor": 0.8401
+    }
    }
   },
   "GB2-nest": {
@@ -726,14 +748,14 @@
    ],
    "products": {
     "cushions-pair": {
-     "px": 46274,
+     "px": 44581,
      "clay_px": 38109,
-     "ratio_to_clay": 1.183
+     "ratio_to_clay": 1.137
     },
     "soft-toy": {
-     "px": 21250,
+     "px": 22376,
      "clay_px": 9966,
-     "ratio_to_clay": 2.027
+     "ratio_to_clay": 2.133
     }
    },
    "slivers_px": 11,
@@ -742,10 +764,10 @@
      "cushion_hue": 32.2,
      "cushion_C": 15.6,
      "toy_bbox": [
-      637,
+      630,
       712,
-      801,
-      951
+      807,
+      952
      ],
      "toy_clay_bbox": [
       660,
@@ -754,10 +776,14 @@
       883
      ],
      "toy_moved_px": [
-      9,
-      51
+      10,
+      56
      ]
     }
+   },
+   "wall_trim_px": {
+    "soft-toy": 689,
+    "cushions-pair": 282
    }
   }
  }

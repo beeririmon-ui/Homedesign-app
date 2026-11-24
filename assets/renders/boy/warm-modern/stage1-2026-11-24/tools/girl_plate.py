@@ -76,7 +76,7 @@ def main():
     below = yy >= (line[None, :] - 2)
     oliv = (hue > 85) & (hue < 140) & (chroma > 5) & (lab_b[..., 0] > 8)
     walnut = (hue > 35) & (hue < 78) & (chroma > 7) & (lab_b[..., 0] < 50)
-    cand = (C.dil(np.isin(ids, (5, 8, 19)), 30) | np.isin(ids, (12, 14, 20, 21, 22, 23, 24, 25))) & ~np.isin(ids, (0, 13, 15, 16))
+    cand = (C.dil(np.isin(ids, (5, 8, 19)), 30) | np.isin(ids, (12, 14, 20, 23, 24, 25))) & ~np.isin(ids, (0, 13, 15, 16, 21, 22))
     band = (np.isin(ids, (5, 8, 19)) & ~walnut) | (cand & below & oliv)
     band = cv2.morphologyEx(band.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(1)).astype(bool) & ~np.isin(ids, (0, 13, 15, 16))
     out = lin * np.where(band[..., None], 1.0, rs)              # off the band: the boy's plate x the band's bounce
@@ -87,12 +87,13 @@ def main():
     Ypl = float(lum(C.lin(np.array([0xEC, 0xE5, 0xDA]) / 255.0)))
     east = xs_[None, :] >= np.argmax(np.isin(ids, (5,)).any(0))
     wall_of = np.where(east, 1, 0) * np.ones((H, 1))
-    Fmap = np.zeros((H, W))
-    Smax = np.zeros((H, W))
+    Fmap = np.zeros((H, W, 3))                             # per channel: the light's own colour, read on the plaster over the line
+    Smax = np.zeros((H, W, 3))
+    pl_lin = C.lin(np.array([0xEC, 0xE5, 0xDA]) / 255.0)
     ks = {}
     for wi, (wall, wd) in enumerate((("north", CP.WALLS["north"]), ("east", CP.WALLS["east"]))):
-        F = np.full(W, np.nan)
-        P = np.full(W, np.nan)
+        F = np.full((W, 3), np.nan)
+        P = np.full((W, 3), np.nan)
         for x in range(W):
             col = ids[:, x]
             yb = np.nonzero(col == wd["band"])[0]
@@ -100,34 +101,35 @@ def main():
             if len(yb) < 30 or len(yp) < 30 or abs(yp.max() - yb.min()) > 3:
                 continue
             yl = yb.min()
-            pg = float(np.median(Yg[yl - 26:yl - 6, x]))
+            pg = np.median(out[yl - 26:yl - 6, x], 0)
             bt = float(np.median(Yb[yl + 6:yl + 26, x]))
             if bt > 1e-4:
-                F[x] = (pg / Ypl) / bt
-                P[x] = pg
-        ok = np.isfinite(F)
+                F[x] = (pg / pl_lin) / bt
+                P[x] = pg / pl_lin
+        ok = np.isfinite(F[:, 0])
         if ok.sum() < 10:
             continue
         xo = np.nonzero(ok)[0]
-        Fm = np.array([np.median(F[xo][max(0, i - 15):i + 16]) for i in range(len(xo))])
-        Pm = np.array([np.median(P[xo][max(0, i - 15):i + 16]) for i in range(len(xo))])
-        Fx = cv2.GaussianBlur(np.interp(xs_, xo, Fm).astype(np.float32).reshape(1, -1), (0, 0), 8).ravel()
-        Px = cv2.GaussianBlur(np.interp(xs_, xo, Pm).astype(np.float32).reshape(1, -1), (0, 0), 8).ravel()
-        sel = (wall_of == wi)
-        Fmap = np.where(sel, Fx[None, :], Fmap)
-        Smax = np.where(sel, (Px / Ypl)[None, :] * 1.03, Smax)
-        ks[wall] = dict(columns=int(ok.sum()), F_p5_p50_p95=[round(float(v), 4) for v in np.percentile(Fm, [5, 50, 95])])
-    light = Fmap * Yb
-    knee = 0.8 * Smax
-    light = np.where(light > knee, knee + (Smax - knee) * np.tanh((light - knee) / np.maximum(Smax - knee, 1e-6)), light)
-    paint = alb_girl[None, None, :] * light[..., None]
-    k_, c_ = 0.70, 0.90
+        sel = (wall_of == wi)[..., None]
+        for c in range(3):
+            Fm = np.array([np.median(F[xo, c][max(0, i - 4):i + 5]) for i in range(len(xo))])
+            Pm = np.array([np.median(P[xo, c][max(0, i - 4):i + 5]) for i in range(len(xo))])
+            Fx = cv2.GaussianBlur(np.interp(xs_, xo, Fm).astype(np.float32).reshape(1, -1), (0, 0), 7).ravel()     # no column streaks
+            Px = cv2.GaussianBlur(np.interp(xs_, xo, Pm).astype(np.float32).reshape(1, -1), (0, 0), 7).ravel()
+            Fmap[..., c] = np.where(sel[..., 0], Fx[None, :], Fmap[..., c])
+            Smax[..., c] = np.where(sel[..., 0], Px[None, :], Smax[..., c])
+        ks[wall] = dict(columns=int(ok.sum()), F_p5_p50_p95=[round(float(v), 4) for v in np.percentile(F[ok, 1], [5, 50, 95])])
+    light = Fmap * Yb[..., None]
+    knee, cap = Smax * 1.0, Smax * 1.06                     # above the plaster's own level in the column only, softly
+    light = np.where(light > knee, knee + (cap - knee) * np.tanh((light - knee) / np.maximum(cap - knee, 1e-6)), light)
+    paint = alb_girl[None, None, :] * light
+    k_, c_ = 0.86, 0.915                                   # 0.915 linear = sRGB 245
     paint = np.where(paint > k_, k_ + (c_ - k_) * np.tanh((paint - k_) / (c_ - k_)), paint)
     soft = C.blur(band.astype(np.float64), 0.7)
-    soft = np.where(C.ero(band, 1), 1.0, np.where(C.dil(band, 1), soft, 0.0))[..., None]
+    soft = np.where(band, 1.0, np.where(C.dil(band, 1), soft, 0.0))[..., None]     # the whole band painted; a 1 px ring outside it blends
     out = out * (1 - soft) + paint * soft
     k = dict(ks, method="per column: (girl plaster over the line / #ECE5DA) / (boy band under the line), times the boy band's luminance, "
-                        "times #E8D5CC; soft shoulder at the plaster x 1.03 and 0.90 linear", band_px=int(band.sum()),
+                        "times #E8D5CC; soft shoulder from the plaster's level to x 1.06, and from 0.86 to 0.915 linear", band_px=int(band.sum()),
              band_by_colour_outside_ids=int((band & ~np.isin(ids, (5, 8, 19))).sum()))
     rgb = C.srgb(np.clip(out, 0, 1))
     labk = C.to_lab(rgb)

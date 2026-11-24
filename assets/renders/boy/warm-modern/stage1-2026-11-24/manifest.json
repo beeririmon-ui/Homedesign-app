@@ -193,20 +193,21 @@
    "default": true,
    "layer": "layers/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833-car.png",
    "shadow": "shadows/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833-car.png",
-   "alpha_px": 6700,
-   "shadow_px": 5069,
+   "alpha_px": 5906,
+   "shadow_px": 2254,
    "bbox_px": [
     1812,
     833,
-    1989,
-    891
+    1988,
+    894
    ],
    "sold": true,
    "sku": "12000058783707673",
-   "source": "pass PB5-desk (nano-banana-2 crop edit), cut in code (tools/kids_cut.py)",
-   "pass_": "PB5-desk",
+   "source": "pass PB5b-cars (nano-banana-2 crop edit), cut in code (tools/kids_cut.py)",
+   "pass_": "PB5b-cars",
    "passes": [
-    "PB5-desk"
+    "PB5-desk",
+    "PB5b-cars"
    ]
   },
   {
@@ -364,13 +365,13 @@
    "default": true,
    "layer": "layers/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
    "shadow": "shadows/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
-   "alpha_px": 37857,
-   "shadow_px": 8925,
+   "alpha_px": 36393,
+   "shadow_px": 11842,
    "bbox_px": [
-    830,
-    713,
-    1094,
-    904
+    730,
+    714,
+    985,
+    903
    ],
    "sold": true,
    "sku": "CJZT189401911KP",
@@ -393,13 +394,13 @@
    "default": true,
    "layer": "layers/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-bear.png",
    "shadow": "shadows/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-bear.png",
-   "alpha_px": 21649,
-   "shadow_px": 1134,
+   "alpha_px": 13832,
+   "shadow_px": 1400,
    "bbox_px": [
     742,
-    719,
-    966,
-    959
+    777,
+    938,
+    937
    ],
    "sold": true,
    "sku": "12000050510684712",
@@ -666,14 +667,14 @@
    ],
    "products": {
     "cushions-pair": {
-     "px": 37857,
+     "px": 36393,
      "clay_px": 38110,
-     "ratio_to_clay": 0.946
+     "ratio_to_clay": 0.927
     },
     "soft-toy": {
-     "px": 21649,
+     "px": 13832,
      "clay_px": 8472,
-     "ratio_to_clay": 2.417
+     "ratio_to_clay": 1.521
     }
    },
    "slivers_px": 5,
@@ -683,9 +684,9 @@
      "cushion_C": 34.7,
      "toy_bbox": [
       743,
-      720,
-      964,
-      957
+      778,
+      936,
+      935
      ],
      "toy_clay_bbox": [
       663,
@@ -694,11 +695,35 @@
       882
      ],
      "toy_moved_px": [
-      130,
-      44
+      114,
+      53
      ]
     }
+   },
+   "wall_trim_px": {
+    "soft-toy": 0,
+    "cushions-pair": 0
    }
+  },
+  "PB5b-cars": {
+   "pass_": "PB5b-cars",
+   "gain_p1_p50_p99": [
+    0.908,
+    0.974,
+    1.023
+   ],
+   "dE_outside_zone_p50_p95": [
+    0.61,
+    1.54
+   ],
+   "products": {
+    "toy-cars": {
+     "px": 5906,
+     "clay_px": 4065,
+     "ratio_to_clay": 1.357
+    }
+   },
+   "slivers_px": 3
   }
  },
  "code_fixes": {
@@ -881,6 +906,34 @@
     }
    },
    "v1_vs_photo_dE00_hue_chroma": 0.22
+  },
+  "K-B2 stripes": {
+   "drawn_p5_p95": [
+    -12.7,
+    10.6
+   ],
+   "after_p5_p95": [
+    -9.7,
+    8.3
+   ],
+   "photo_p5_p95": [
+    -10.5,
+    7.5
+   ],
+   "blur_sigma_px": 2.2,
+   "gain": 0.961,
+   "method": "the bedding layer's fine structure (L* minus its 12 px blur) is the stripes: blurred across (sigma 2.2 px) they widen to a soft\n    band about half the ~24 px period, then scaled so its p5-p95 is the photo's (-10.5 ... +7.5 against -19.6 ... +11.4 drawn)",
+   "why": "K-B2: the set's stripes are wide and soft (melange jersey), about as wide as the gap; drawn thin, sharp and paired"
+  },
+  "K-B3 nest": {
+   "gap_before_px_p95": 56,
+   "moved_px": -108,
+   "overlap_after_px_min_p50": [
+    -39,
+    65
+   ],
+   "need_px": 52,
+   "why": "K-B3: the strip between the standing pillow and the pair (ד.8, Bible 1.1 'the nest'); ד.2 asks an overlap of at least 0.02"
   }
  }
 }

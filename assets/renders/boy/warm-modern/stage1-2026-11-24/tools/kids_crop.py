@@ -42,7 +42,7 @@ def prep(p, base_path):
             if dark.any():
                 lab[dark] = med
                 clay = np.where(dark[..., None], np.clip(C.from_lab(lab), 0, 1), clay)
-    m = np.isin(ids, pid)
+    m = np.isin(ids, pid) & (not P.get("no_placeholder"))
     inp = base.copy()
     inp[m] = clay[m]
     if P.get("base_pass"):

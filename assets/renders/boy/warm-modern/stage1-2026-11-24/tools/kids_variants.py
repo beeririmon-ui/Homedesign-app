@@ -39,7 +39,120 @@ def Lof(y):
     return np.where(y > 216 / 24389, 116 * np.cbrt(y) - 16, 903.3 * y)
 
 
+def lit_half(lab, a, upper=0.4):
+    """QA's R5 on the throw: the median of the lit half (L* over its median) of the pixels at alpha 250 and over, on the throw's lit
+    upper part (the top 40 % of its rows: the part lying on the mattress; the hanging fold is in shade). It reads the boy's V1 at 52.0,
+    as QA did"""
+    m = a >= 250 / 255
+    ys = np.nonzero(m)[0]
+    m &= np.arange(m.shape[0])[:, None] <= np.percentile(ys, upper * 100)
+    L = lab[..., 0][m]
+    return np.median(lab[m][L >= np.median(L)], 0)
+
+
+def girl_targets(kid):
+    """K-G4 (QA 2026-11-24): the girl's throw was drawn 12-25 L* lighter than its photos; the same SKU (Deep Chestnut) read 13.6 L*
+    lighter than on the boy's bed under a light only 9 % brighter. The targets of the lit half (R5) per variant: Deep Chestnut at the
+    boy's own lit-half L* carried by the ratio of the two rooms' light on the throw (the plates' luminance there), then 3 L* down (the
+    allowed band) to keep all three within dE00 7 of their photos; Linen Brown and Pink by the photos' Y ratios to Deep Chestnut; a* b*
+    the photos'"""
+    stb = K.ST["boy"]
+    mb = KC.load_man("boy")
+    lb_ = [l for l in mb["layers"] if l["key"] == "bedspread" and l.get("default", True)][0]
+    rb = np.asarray(Image.open(os.path.join(stb, lb_["layer"]))).astype(np.float64) / 255
+    Lb = float(lit_half(C.to_lab(rb[..., :3]), rb[..., 3])[0])
+    st = K.ST[kid]
+    mg = KC.load_man(kid)
+    lg_ = [l for l in mg["layers"] if l["key"] == "bedspread" and l.get("default", True)][0]
+    ag = np.asarray(Image.open(os.path.join(st, lg_["layer"])))[..., 3] > 200
+    lum = lambda v: v[..., 0] * 0.2126 + v[..., 1] * 0.7152 + v[..., 2] * 0.0722   # noqa: E731
+    pb, pg = lum(C.lin(C.load(os.path.join(stb, "plate.png")))), lum(C.lin(C.load(os.path.join(st, "plate.png"))))
+    ratio = float(np.median(pg[ag]) / max(np.median(pb[ag]), 1e-6))
+    Lc = float(Lof(Y(np.array(Lb)) * ratio)) - 3.0
+    out = {}
+    for vn, (pid, pk) in VARIANTS[kid].items():
+        Lp, Cp, hp = PHOTO[pk]
+        Lt = float(Lof(Y(np.array(Lc)) * Y(np.array(Lp)) / Y(np.array(PHOTO["spread-chestnut"][0]))))
+        t = K.from_lch(Lt, Cp, hp)
+        out[vn] = (Lt, float(t[1]), float(t[2]))
+    return out, dict(boy_chestnut_lit_L=round(Lb, 1), light_ratio_girl_over_boy=round(ratio, 3), girl_chestnut_lit_L=round(Lc, 1))
+
+
+def main_girl(kid="girl"):
+    """the girl's three variants from the throw as cut (scratchpad copy), each to its lit-half target (girl_targets): L* in linear light
+    (Y x a factor, the shading and the waffle kept), a* b* moved by the lit half's offset, weighted off the duvet between the strands"""
+    st = K.ST[kid]
+    man = KC.load_man(kid)
+    v1 = [l for l in man["layers"] if l["key"] == "bedspread" and l.get("default", True)][0]
+    src = os.path.join(K.SCR, f"{kid}-bedspread-cut.png")
+    rgba = np.asarray(Image.open(src if os.path.exists(src) else os.path.join(st, v1["layer"]))).astype(np.float64) / 255
+    a = rgba[..., 3]
+    lab = C.to_lab(rgba[..., :3])
+    tr = man.get("cut_records", {}).get("GB1-bed", {}).get("mask_edit", {}).get("throw", {})
+    hh, cc = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])), np.hypot(lab[..., 1], lab[..., 2])
+    if tr.get("hue_thr") is not None:
+        u = (hh - tr["hue_thr"]) * tr["hue_sign"]
+        w = np.where(cc > 5, np.clip((u + 6) / 12, 0, 1), np.clip((60 - lab[..., 0]) / 15, 0, 1))
+    else:
+        w = np.ones(a.shape)
+    m_ = a > 0
+    below = np.zeros_like(m_)
+    below[:-30] = m_[30:]
+    w = np.where(m_ & ~below, w, 1.0)
+    w = C.blur(w, 0.7) * (a > 0)
+    lit0 = lit_half(lab, a)
+    tg, trec = girl_targets(kid)
+    rec = dict(rule=main_girl.__doc__.strip() + " " + girl_targets.__doc__.strip(), cut_lit_half_Lab=[round(float(v), 1) for v in lit0], **trec,
+               variants={})
+    import colorsys
+    for vn, (pid, pk) in VARIANTS[kid].items():
+        Lt, at, bt = tg[vn]
+        f = float(Y(np.array(Lt)) / Y(np.array(lit0[0])))
+        ease = 1.0
+        for _ in range(10):
+            labn = lab.copy()
+            labn[..., 0] = lab[..., 0] + w * (Lof(Y(lab[..., 0]) * f) - lab[..., 0])
+            labn[..., 1] = lab[..., 1] + w * (at * ease - lit0[1])
+            labn[..., 2] = lab[..., 2] + w * (bt * ease - lit0[2])
+            rgb = KC.floor_lab(np.clip(C.from_lab(labn), 0, 1), a > 0)
+            if vn != "V3":
+                break
+            mk = (a > 200 / 255) & K.frame_mask()
+            md = np.median(C.to_lab(rgb)[mk], 0)
+            hh_, ll_, ss_ = colorsys.rgb_to_hls(*np.clip(C.from_lab(md[None, None])[0, 0], 0, 1))
+            if ss_ * 100 <= 39.5:
+                break
+            ease *= 0.96                                 # ב.4: the girl's pink at HSL S <= 40
+        out = np.dstack([C.q(rgb), C.q(a)])
+        out[..., :3][out[..., 3] == 0] = 0
+        lp = os.path.join(st, "layers", v1["slot"], pid + ".png")
+        Image.fromarray(out, "RGBA").save(lp, optimize=True)
+        lh = lit_half(C.to_lab(rgb), a)
+        pL, pC, ph = PHOTO[pk]
+        rec["variants"][vn] = dict(product=pid, sku=VARIANT_SKU[pk], target_lit_half=[round(Lt, 1), round(at, 1), round(bt, 1)], chroma_ease=round(ease, 3),
+                                   lit_half_Lab=[round(float(v), 1) for v in lh],
+                                   dE00_lit_half_vs_photo=round(float(C.de00(tuple(lh), tuple(K.from_lch(pL, pC, ph)))), 2))
+        if vn != "V1":
+            man["layers"] = [l for l in man["layers"] if not (l["product"] == pid and not l.get("default", True))]
+            entry = dict(v1, product=pid, default=False, variant=vn, layer=os.path.relpath(lp, st), sku=VARIANT_SKU[pk],
+                         source=f"code variant of the cut throw (tools/kids_variants.py): the photo's Lab of {pk} at the lit-half target", pass_="variants")
+            entry.pop("passes", None)
+            man["layers"].append(entry)
+    man.setdefault("code_fixes", {})["sample slot variants"] = rec
+    KC.save_man(kid, man)
+    for vn in ("V2", "V3"):
+        e = [l for l in man["layers"] if l.get("variant") == vn and l["key"] == "bedspread"][0]
+        o8, r = KC.compose(kid, f"K-{kid}-{vn}", swap={e["slot"]: e})
+        rec["variants"][vn]["frame"] = r
+    man = KC.load_man(kid)
+    man["code_fixes"]["sample slot variants"] = rec
+    KC.save_man(kid, man)
+    print(json.dumps({k: v for k, v in rec.items() if k != "rule"}, indent=1)[:2500])
+
+
 def main(kid):
+    if kid == "girl":
+        return main_girl(kid)
     st = K.ST[kid]
     man = KC.load_man(kid)
     v1 = [l for l in man["layers"] if l["key"] == "bedspread" and l.get("default", True)][0]

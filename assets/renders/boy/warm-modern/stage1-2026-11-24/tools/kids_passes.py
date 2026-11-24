@@ -73,6 +73,11 @@ PASSES = {
                     lamps=[], board="GB1-bed.jpg", clay="K-girl-bed", canvas_from="GB1b-basket",
                     throw_L_frac=None),     # Linen Brown on Dune: the lit top of the throw is as light as the shaded duvet; the hue alone parts them
     "GB2-nest": dict(kid="girl", products=["cushions-pair", "soft-toy"], box=(400, 560, 1180, 1080), aspect="3:2", lamps=[], board="GB2-nest.jpg"),
+    # after QA (2026-11-24): K-B1, the cars redrawn on the boy's canvas without them; K-B2, the set's stripes redrawn on the boy's
+    # canvas as it is (no placeholder: only the pattern changes, the bedding layer keeps its alpha and takes the new pixels)
+    "PB5b-cars": dict(kid="boy", products=["toy-cars"], box=(1740, 720, 2060, 1040), aspect="1:1", lamps=[], board="PB5b-cars.jpg"),
+    "PB1b-stripes": dict(kid="boy", products=["bedding"], box=(300, 597, 1544, 1530), aspect="4:3", lamps=[], board="PB1b-stripes.jpg",
+                         no_placeholder=True),
     # the girl's basket again, on GB1's own edit (2026-11-24, later): GB1 drew a squat basket (about 40 x 22 cm, side cut-out handles)
     # where the card and its photo are a tall 40 x 45 cylinder with two long rope loop handles; the clay's basket is pasted over GB1's
     # edit (it covers the squat one) and only the basket is redrawn; GB1 is then cut from this canvas

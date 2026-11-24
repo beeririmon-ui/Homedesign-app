@@ -30,23 +30,65 @@ C = K.C
 
 
 def recolour_cup(rgba, ids):
+    """K-G3 (QA 2026-11-24): the Beech cup built from the walnut cup's light, not its grain. The walnut's shading on a 4 px normalised
+    blur (no grain, no gloss), its contrast compressed to 0.6 round the lit half, and 15 % of the fine grain kept; the lit half's median
+    set to the Beech photo (L*78.2 C*31.8 h68), the chroma following L* (C*/L* of the photo), one hue: matte, even, light wood"""
     a = rgba[..., 3].astype(np.float64) / 255
     lab = C.to_lab(rgba[..., :3].astype(np.float64) / 255)
-    cup = C.dil(ids == 48, 3) & ~C.dil(ids == 49, 1) & (a > 0)
-    med = np.median(lab[cup & (a > 0.6)], 0)
-    s = med[0] / 41.9
-    tgt = K.from_lch(0, 31.8 * s, 68)
-    Yr = ((78.2 + 16) / 116) ** 3 / (((41.9 + 16) / 116) ** 3)
-    Y = np.where(lab[..., 0] > 8, ((lab[..., 0] + 16) / 116) ** 3, lab[..., 0] / 903.3) * Yr
-    L = np.where(Y > 216 / 24389, 116 * np.cbrt(np.minimum(Y, 1.0)) - 16, 903.3 * Y)
-    lab[..., 0] = np.where(cup, L, lab[..., 0])
-    lab[..., 1] = np.where(cup, lab[..., 1] - med[1] + tgt[1], lab[..., 1])
-    lab[..., 2] = np.where(cup, lab[..., 2] - med[2] + tgt[2], lab[..., 2])
+    L = lab[..., 0]
+    hh = np.degrees(np.arctan2(lab[..., 2], lab[..., 1]))
+    cc = np.hypot(lab[..., 1], lab[..., 2])
+    # the boy's olive band seen between the pencils was cut into the layer: it goes (the girl's band shows through)
+    bg = (a > 0) & (hh > 90) & (hh < 140) & (cc > 4)
+    a = np.where(bg, 0.0, a)
+    # the cup: the clay's cup, and the dark walnut inside its opening (under the pencils), which is the cup's inside, not a pencil
+    inside = C.dil(ids == 49, 1) & (L < 45) & (hh > 35) & (hh < 75) & (a > 0)
+    cup = ((C.dil(ids == 48, 3) & ~C.dil(ids == 49, 1)) | inside) & (a > 0)
+    w = cup.astype(np.float64)
+    Ls = C.blur(L * w, 4) / np.maximum(C.blur(w, 4), 1e-4)
+    core = cup & (a > 0.98)
+    lit = core & (Ls >= np.median(Ls[core]))
+    m_lit = float(np.median(Ls[lit]))
+    Lt, Ct, ht = 78.2, 31.8, 68.0
+    Ln = np.clip(Lt + 0.6 * (Ls - m_lit) + 0.15 * (L - Ls), 30, 92)
+    t = K.from_lch(100.0, Ct / Lt * 100.0, ht)
+    an, bn = t[1] * Ln / 100.0, t[2] * Ln / 100.0
+    lab[..., 0] = np.where(cup, Ln, lab[..., 0])
+    lab[..., 1] = np.where(cup, an, lab[..., 1])
+    lab[..., 2] = np.where(cup, bn, lab[..., 2])
     rgb = KC.floor_lab(np.clip(C.from_lab(lab), 0, 1), a > 0)
-    out = np.dstack([C.q(rgb), rgba[..., 3]])
+    # the walnut's soft edge was unmixed against the olive band: as light beech it reads as a pale rim, so the cup's edge is pulled in 1 px
+    rim = cup & ~C.ero(cup & (a > 0.98), 1)
+    a = np.where(rim, a * 0.45, a)
+    out = np.dstack([C.q(rgb), C.q(a)])
     out[..., :3][out[..., 3] == 0] = 0
-    return out, dict(cup_px=int(cup.sum()), walnut_rendered_Lab=[round(float(v), 1) for v in med],
-                     beech_Lab=[round(float(v), 1) for v in np.median(C.to_lab(rgb)[cup & (a > 0.6)], 0)])
+    lab2 = C.to_lab(rgb)
+    lit2 = core & (lab2[..., 0] >= np.median(lab2[..., 0][core]))
+    med = np.median(lab2[lit2], 0)
+    return out, dict(cup_px=int(cup.sum()), olive_background_removed_px=int(bg.sum()), inside_px=int(inside.sum()), lit_half_Lab=[round(float(v), 1) for v in med],
+                     photo_Lab=[round(float(v), 1) for v in K.from_lch(Lt, Ct, ht)],
+                     dE00_lit_half=round(float(C.de00(tuple(med), tuple(K.from_lch(Lt, Ct, ht)))), 2),
+                     method=recolour_cup.__doc__.split("K-G3 (QA 2026-11-24): ")[1].strip())
+
+
+def clean_olive_edge(rgba):
+    """K-G2 (QA 2026-11-24): the boy's layers were cut on his olive band; at their edge (alpha under 1, and 2 px inside it) an olive
+    tint (h 90-140, C* over 4) takes the product's own colour spread from inside"""
+    a = rgba[..., 3] > 0
+    solid = rgba[..., 3] >= 250
+    edge = a & ~C.ero(solid, 2)
+    rgb = rgba[..., :3].astype(np.float64) / 255
+    lab = C.to_lab(rgb)
+    h = np.degrees(np.arctan2(lab[..., 2], lab[..., 1]))
+    cc = np.hypot(lab[..., 1], lab[..., 2])
+    ol = edge & (h > 90) & (h < 140) & (cc > 4)
+    if ol.any():
+        fill = KC.KC.spread(rgb, (C.ero(solid, 2) & ~ol).astype(np.float64), (2.0, 5.0, 12.0))
+        rgb = np.where(ol[..., None], fill, rgb)
+    out = rgba.copy()
+    out[..., :3] = C.q(rgb)
+    out[..., :3][out[..., 3] == 0] = 0
+    return out, int(ol.sum())
 
 
 def main():
@@ -68,6 +110,9 @@ def main():
         rgba = np.asarray(Image.open(src)).copy()
         if key == "pen-cup":
             rgba, rec["pen-cup"] = recolour_cup(rgba, ids)
+        if key in ("pen-cup", "bookends"):
+            rgba, n_ = clean_olive_edge(rgba)
+            rec.setdefault("olive edge cleaned px", {})[key] = n_
         Image.fromarray(rgba, "RGBA").save(lp, optimize=True)
         shutil.copy(os.path.join(sb, lb["shadow"]), sp)
         mg["layers"] = [l for l in mg["layers"] if not (l["key"] == key and l.get("default", True))]

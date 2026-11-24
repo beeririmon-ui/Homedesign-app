@@ -233,6 +233,31 @@ def cut(p, opts=None):
         masks = opts["mask_edit"](masks, mctx)
         if mctx.get("notes"):
             rp["mask_edit"] = mctx["notes"]
+    if opts.get("wall_trim"):
+        # K-L1 / K-B3 / K-L2 (QA 2026-11-24): a product's mask holds no wall: a pixel over the plate's walls, sill or reveal whose colour in
+        # the edit is still the base's (a* within 3.5, b* within 4.5, L* within 8, on a 1.5 px blur) is the wall the edit kept or shaded,
+        # not the product; the product keeps its pieces that touch its own core
+        pids = K.ids(f"K-{kid}-plate")
+        plate_lab = C.to_lab(C.load(os.path.join(st, "plate.png")))
+        on_plate = np.linalg.norm(C.to_lab(base) - plate_lab, axis=-1) < 4      # the base shows the bare wall there (no earlier product)
+        wallp = np.isin(pids, (1, 2, 5, 8, 12, 14, 19)) & (on_plate | np.isin(pids, (12, 14)))
+        le_, lb_ = C.blur(lab_e, 1.5), C.blur(lab_b, 1.5)
+        chroma_kept = wallp & (np.abs(le_[..., 1] - lb_[..., 1]) < 3.5) & (np.abs(le_[..., 2] - lb_[..., 2]) < 4.5)
+        tr = {}
+        wt = opts["wall_trim"] if isinstance(opts["wall_trim"], dict) else {k_: "L" for k_ in opts["wall_trim"]}
+        for pr, mode in wt.items():
+            # "L": the wall's chroma and lightness kept (a pale product on a pale wall keeps what got lighter or darker);
+            # "chroma": the wall's chroma kept, at any lightness (a coloured product: the wall in its shade goes too)
+            kept = chroma_kept & (np.abs(le_[..., 0] - lb_[..., 0]) < 8) if mode == "L" else chroma_kept
+            kept = cv2.morphologyEx(kept.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool)
+            if pr in masks and masks[pr].any():
+                m0 = masks[pr]
+                core_ = C.ero(m0 & ~kept, 3)
+                m1 = keep_touching(m0 & ~kept, core_ if core_.any() else m0 & ~kept)
+                m1 = fill_holes(m1, 800)
+                tr[pr] = int((m0 & ~m1).sum())
+                masks[pr] = m1
+        rp["wall_trim_px"] = tr
     allfg = np.zeros((H, W), bool)
     for m in masks.values():
         allfg |= m
@@ -278,6 +303,15 @@ def cut(p, opts=None):
             a = np.where(under, 1.0, a)
         a = np.where(a < 0.04, 0.0, a)
         col = floor_lab(col, a > 0)
+        if pr in opts.get("L_shift", {}):
+            # K-L5 (QA 2026-11-24): a product the edit drew lighter than its photo, darkened in linear light by a fixed step of L*
+            labc = C.to_lab(col)
+            Yc = ((labc[..., 0] + 16) / 116) ** 3
+            L0 = float(np.median(labc[..., 0][a > 0.98]))
+            f_ = (((L0 + opts["L_shift"][pr] + 16) / 116) ** 3) / (((L0 + 16) / 116) ** 3)
+            labc[..., 0] = np.where(a > 0, 116 * np.cbrt(Yc * f_) - 16, labc[..., 0])
+            col = np.clip(C.from_lab(labc), 0, 1)
+            rp.setdefault("L_shift", {})[pr] = dict(L_median_before=round(L0, 1), step=opts["L_shift"][pr], Y_factor=round(f_, 4))
         out[pr] = (a, col)
         rp["products"][pr] = dict(px=int((a > 0).sum()), clay_px=int(region[pr].sum()), ratio_to_clay=round(float((m.sum() + 1) / (region[pr].sum() + 1)), 3))
     if opts.get("post"):
@@ -327,6 +361,11 @@ def cut(p, opts=None):
         light[~box] = 0
         rp["light_max"] = round(float(light.max()), 3)
     write(p, kid, prods, out, sh, light, man, rp)
+    if "bedspread" in prods and out.get("bedspread") is not None:
+        # the throw as cut, kept in the scratchpad: kids_variants.py builds V1-V3 from it (idempotent: never from its own output)
+        slot, pid = PRODUCTS[kid]["bedspread"][0], PRODUCTS[kid]["bedspread"][1]
+        import shutil
+        shutil.copy(os.path.join(K.ST[kid], "layers", slot, pid + ".png"), os.path.join(K.SCR, f"{kid}-bedspread-cut.png"))
     return rp
 
 
@@ -734,29 +773,47 @@ def _nest_masks(masks, ctx):
     cc = C.ero(reg["cushions-pair"], 6) & changed
     hc, Cm = float(np.median(hue[cc])), float(np.median(Cc[cc]))
     col = (np.abs(hue - hc) < 14) & (Cc > 0.5 * Cm)
+    # corduroy is ribbed (a 5 x 5 L* deviation of 10-12); the wall in the cushions' shade is smooth (1.4-1.6): the cushions are textured
+    L_ = ctx["lab_e"][..., 0].astype(np.float32)
+    mu_ = cv2.blur(L_, (5, 5))
+    sd_ = np.sqrt(np.maximum(cv2.blur(L_ * L_, (5, 5)) - mu_ * mu_, 0))
     cu = cv2.morphologyEx((changed & col).astype(np.uint8), cv2.MORPH_CLOSE, C.disk(4)).astype(bool)
     cu = fill_holes(keep_touching(cu, cc), 20000)
     cu = C.gc_cut(e, C.ero(cu, 5), cu, C.dil(cu, 6), np.zeros_like(cu), iters=5) | C.ero(cu, 5)
     cu = fill_holes(cu, 20000)
+    # the wall in the cushions' shade is smooth where the corduroy is ribbed: smooth wall pixels at the cushions' edge are not cushion
+    smooth_wall = np.isin(K.ids(f"K-{ctx['kid']}-plate"), (1, 2, 5, 8, 12, 14, 19)) & (sd_ < 2.5)
+    smooth_wall = cv2.morphologyEx(smooth_wall.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+    cu2 = cu & ~(smooth_wall & ~C.ero(cu, 12))
+    cu = fill_holes(keep_touching(cu2, cc), 20000)
     near = C.dil(reg["soft-toy"], 200)
-    ty = changed & ~C.dil(cu, 2) & near & (lb[..., 0] > 55) & (lb[..., 1] > -3)      # a pale toy, not the wall's shade between pillow and cushions
+    # a pale toy, not the wall's shade between pillow and cushions (the wall keeps its chroma there, the toy does not)
+    le_, lbb_ = C.blur(ctx["lab_e"], 1.5), C.blur(ctx["lab_b"], 1.5)
+    on_plate = np.linalg.norm(ctx["lab_b"] - C.to_lab(C.load(os.path.join(K.ST[ctx["kid"]], "plate.png"))), axis=-1) < 4
+    wall_shade = (np.abs(le_[..., 1] - lbb_[..., 1]) < 3.5) & (np.abs(le_[..., 2] - lbb_[..., 2]) < 4.5) & on_plate & \
+        np.isin(K.ids(f"K-{ctx['kid']}-plate"), (1, 2, 5, 8, 12, 14, 19))
+    ty = changed & ~C.dil(cu, 2) & near & (lb[..., 0] > 55) & (lb[..., 1] > -3) & ~wall_shade
     ty = cv2.morphologyEx(ty.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
     n, lab_, st_, _ = cv2.connectedComponentsWithStats(ty.astype(np.uint8), connectivity=8)
     if n > 1:
-        big = 1 + int(np.argmax(st_[1:, cv2.CC_STAT_AREA]))
+        # the piece over the clay's toy box (the toy may sit a little aside), else the largest
+        ov = [(int((lab_ == i)[C.dil(reg["soft-toy"], 40)].sum()), i) for i in range(1, n)]
+        big = max(ov)[1] if max(ov)[0] > 50 else 1 + int(np.argmax(st_[1:, cv2.CC_STAT_AREA]))
         near_big = C.dil(lab_ == big, 40)
         keep_ = [i for i in range(1, n) if i == big or (st_[i, cv2.CC_STAT_AREA] > 150 and (near_big & (lab_ == i)).any())]
         ty = np.isin(lab_, keep_)                    # the toy's head beyond a darker collar is its own piece
     ty = fill_holes(cv2.morphologyEx(ty.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool), 5000)
     # the limbs on the pale pillow change little at 2 px: grown by GrabCut from that core over the pale pixels changed at 0.8 px
     d1 = np.linalg.norm(C.blur(ctx["lab_e"], 0.8) - C.blur(ctx["lab_b"], 0.8), axis=-1)
-    zone = C.dil(ty, 90) & ~C.dil(cu, 2) & box
-    prob = zone & (d1 > 5) & (C.blur(ctx["lab_e"], 1.0)[..., 0] > 55)
+    # K-B3 / K-L1 (QA 2026-11-24): the toy's growth stays pale and off the wall's shade (the dark gap between the pillows, the stripes)
+    Lp_ = C.blur(ctx["lab_e"], 1.0)[..., 0]
+    zone = C.dil(ty, 45) & ~C.dil(cu, 2) & box & ~wall_shade
+    prob = zone & (d1 > 5) & (Lp_ > 60)
     prob = keep_touching(cv2.morphologyEx(prob.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool), ty)
-    ty = C.gc_cut(e, C.ero(ty, 3), prob | C.dil(ty, 2), zone, C.dil(cu, 1), iters=6) | C.ero(ty, 3)
+    ty = C.gc_cut(e, C.ero(ty, 3), prob | C.dil(ty, 2), zone, C.dil(cu, 1) | (zone & (Lp_ < 50)), iters=6) | C.ero(ty, 3)
     # thin parts on a wall of nearly their own colour (the bunny's ears on the blush band): their outline changed, their inside barely;
-    # the outline in one piece with the toy, closed, and the inside filled
-    rim_ = keep_touching((d1 > 8) & C.dil(ty, 60) & ~C.dil(cu, 2) & box, ty)
+    # the outline in one piece with the toy, closed, and the inside filled; only pale outline pixels off the wall's shade
+    rim_ = keep_touching((d1 > 8) & C.dil(ty, 40) & ~C.dil(cu, 2) & box & ~wall_shade & (Lp_ > 55), ty)
     ty = fill_holes(cv2.morphologyEx((ty | rim_).astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool), 4000)
     ty = fill_holes(ty, 5000) & ~cu
     masks["cushions-pair"], masks["soft-toy"] = cu, ty
@@ -903,9 +960,10 @@ def _bed_masks_fixed(masks, ctx):
 
 
 _BED = dict(edit_fix=_bed_fix, mask_edit=_bed_masks_fixed, under_px={"bedding": 40, "pillowcase": 12})
-_NEST = dict(mask_edit=_nest_masks, solid=("soft-toy", "cushions-pair"))
+_NEST = dict(mask_edit=_nest_masks, solid=("soft-toy", "cushions-pair"), wall_trim={"soft-toy": "L", "cushions-pair": "chroma"})
 # the girl's standing pillow is propped in the corner: its shade on the two walls reaches about 90 px (the boy's sits on the head board)
-_BED_G = dict(_BED, shadow={"pillowcase": dict(band=90, rim=6)}, shadow_assign="strongest")
+_BED_G = dict(_BED, shadow={"pillowcase": dict(band=90, rim=6)}, shadow_assign="strongest", wall_trim={"pillowcase": "L"},
+              L_shift={"pillowcase": -5.0}, solid=("bedding",))   # the duvet's back edge was matted on the haloed band: a clean edge
 OPTS = {"PB3-window": dict(mask_edit=_clean_blind), "PB1-bed": _BED, "GB1-bed": _BED_G, "PB2-nest": _NEST, "GB2-nest": _NEST}
 
 
