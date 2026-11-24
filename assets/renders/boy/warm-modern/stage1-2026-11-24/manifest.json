@@ -193,17 +193,17 @@
    "default": true,
    "layer": "layers/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833-car.png",
    "shadow": "shadows/toy-cars/toy-cars-aliexpress-4pc-wooden-baby-car-754833-car.png",
-   "alpha_px": 5906,
-   "shadow_px": 2254,
+   "alpha_px": 3300,
+   "shadow_px": 1008,
    "bbox_px": [
-    1812,
-    833,
-    1988,
-    894
+    1844,
+    861,
+    1984,
+    900
    ],
    "sold": true,
    "sku": "12000058783707673",
-   "source": "pass PB5b-cars (nano-banana-2 crop edit), cut in code (tools/kids_cut.py)",
+   "source": "pass PB5b-cars (nano-banana-2 crop edit, the SKU photo as reference), cut and scaled to the card in code (tools/kids_qa_fixes.py cars)",
    "pass_": "PB5b-cars",
    "passes": [
     "PB5-desk",
@@ -366,7 +366,7 @@
    "layer": "layers/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
    "shadow": "shadows/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
    "alpha_px": 36393,
-   "shadow_px": 11842,
+   "shadow_px": 12004,
    "bbox_px": [
     730,
     714,
@@ -394,13 +394,13 @@
    "default": true,
    "layer": "layers/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-bear.png",
    "shadow": "shadows/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-bear.png",
-   "alpha_px": 13832,
+   "alpha_px": 11970,
    "shadow_px": 1400,
    "bbox_px": [
     742,
     777,
-    938,
-    937
+    886,
+    935
    ],
    "sold": true,
    "sku": "12000050510684712",
@@ -908,22 +908,22 @@
    "v1_vs_photo_dE00_hue_chroma": 0.22
   },
   "K-B2 stripes": {
-   "drawn_p5_p95": [
-    -12.7,
-    10.6
+   "px_taken": 204816,
+   "wall_px_let_go": 334,
+   "stripes_L_p5_p95_before": [
+    -14.7,
+    11.8
    ],
-   "after_p5_p95": [
-    -9.7,
-    8.3
+   "after": [
+    -14.2,
+    12.2
    ],
-   "photo_p5_p95": [
+   "photo": [
     -10.5,
     7.5
    ],
-   "blur_sigma_px": 2.2,
-   "gain": 0.961,
-   "method": "the bedding layer's fine structure (L* minus its 12 px blur) is the stripes: blurred across (sigma 2.2 px) they widen to a soft\n    band about half the ~24 px period, then scaled so its p5-p95 is the photo's (-10.5 ... +7.5 against -19.6 ... +11.4 drawn)",
-   "why": "K-B2: the set's stripes are wide and soft (melange jersey), about as wide as the gap; drawn thin, sharp and paired"
+   "method": "K-B2 by the PB1b edit: the bedding layer keeps its alpha (the geometry QA passed) and takes the edit's pixels, matched to its base\n    by the gain field (kids_cut.edit_canvas), wherever it is solid (alpha 250+) and no product above it is solid (the throw, the\n    pillows, the basket, the cushions, the toy: under their soft edges it takes the edit too, which drew them in the same place, so\n    no edge mixes with the old stripes); under them and at its own soft edge it keeps its earlier colours",
+   "why": "K-B2: the set's stripes are wide and soft (melange jersey); the code attempt (a blur across, then the photo's contrast) read out of focus at x2, so one edit (400) redrew the pattern only"
   },
   "K-B3 nest": {
    "gap_before_px_p95": 56,
@@ -934,6 +934,78 @@
    ],
    "need_px": 52,
    "why": "K-B3: the strip between the standing pillow and the pair (ד.8, Bible 1.1 'the nest'); ד.2 asks an overlap of at least 0.02"
+  },
+  "K-B1 cars": {
+   "edit_cars_px_LxH": [
+    [
+     87,
+     56
+    ],
+    [
+     76,
+     52
+    ],
+    [
+     68,
+     54
+    ]
+   ],
+   "scale": 0.608,
+   "anchor_px": [
+    1913.5,
+    900.0
+   ],
+   "after_cm_LxH": [
+    [
+     7.8,
+     5.0
+    ],
+    [
+     6.9,
+     4.6
+    ],
+    [
+     6.3,
+     4.8
+    ]
+   ],
+   "card_cm": [
+    8.5,
+    4.3
+   ],
+   "cm_per_px": 0.15,
+   "lit_lab": [
+    69.4,
+    13.1,
+    20.2
+   ],
+   "lit_lch": [
+    69.4,
+    24.1,
+    57.1
+   ],
+   "method": "K-B1: the cars from the PB5b edit (the SKU photo its reference), their size the card's.\n    1. the cars: what the edit changed against the empty plate (dE76 > 12), beech (L* > 42, C* > 12, h 40-90), the wheels' dark\n       undersides grown in (changed by 14+, not a shade: a shade keeps the plate's hue and is darker), small holes filled, the round\n       hole of each body left open (the plate's wall shows through it);\n    2. one uniform scale s for the group, the geometric mean of the card's length and height over the cars' (the two side-on cars'\n       bounding boxes), so each is within about 10 % of 8.5 x 4.3 cm; about the group's contact point (centre x, lowest contact y),\n       premultiplied, INTER_AREA;\n    3. the contact shade: the edit's darkening of the plate round the cars (kids_cut.shadow_soft, band 12, rim 3), scaled the same\n       way, kept on the desk top only",
+   "why": "K-B1: the cars were roadsters 1.6-2x the card; the edit drew the SKU's beetle"
+  },
+  "K-L1 bear alpha": {
+   "px_dropped": 1862,
+   "alpha_px_before_after": [
+    13832,
+    11970
+   ],
+   "rim_px_defringed": 1127,
+   "method": "the soft toy's alpha, the bear only. In its lower half (below 880, the top of the arms) the PB2 cut carried the duvet round\n    the feet (the edit's white and grey, b* about 5 against the bear's 15): GrabCut on the composite the PB1b edit saw (5 rounds),\n    the outside of the alpha the background, the alpha above 880 and its cream core (6 px in, b* > 12) the bear, the rest of the\n    lower alpha probable bear where b* > 10, probable duvet where not; the bear's piece kept (small islands let go), the cut edge\n    softened 0.7 px; nothing above 880 changes but the white fringe of the outline (edge pixels lighter than the bear 3 px inside\n    take its colour). Run before restripe, which then draws the duvet where the alpha let go",
+   "why": "K-B3 / K-L1: the bear's alpha carried the duvet round its feet; with the new stripes (K-B2) it read as a white patch"
+  },
+  "K-B3 nest edge": {
+   "px_filled": 1302,
+   "grey_px_inpainted": 107,
+   "max_fill_px": 14,
+   "shade_band_max_before_after": [
+    0.325,
+    0.25
+   ],
+   "method": "K-B3 follow-up: the pair's left edge, cut against the wall in PB2 (wall_trim \"chroma\"), lies on the standing pillow since the\n    move and reads torn (notches up to about 12 px, grey bits of the old strip in them). Row by row its outline (the leftmost alpha)\n    is filled out to a smooth outer envelope (the rolling min over 41 rows, a Gaussian of 6 rows, at most 14 px out); the filled\n    pixels and the not-cushion bits at the left edge (C* < 18 within 4 px) are inpainted (Telea, 5 px) from the cushion only, a 1 px\n    soft edge. Never cuts (under the cut the pillow layer carries the old strip's grey). Its shade left of the edge (cast on the\n    old strip, ragged, down to 0.67) blurred 4 px and held to 0.25 at most: on the pillow it touches. Re-run after nest"
   }
  }
 }
