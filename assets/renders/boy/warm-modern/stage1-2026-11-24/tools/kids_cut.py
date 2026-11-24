@@ -153,6 +153,7 @@ def shadow_soft(e, base, fg, sp, block, cap=0.65):
 def cut(p, opts=None):
     opts = opts or {}
     S = edit_canvas(p, opts)
+    fix_rec = opts["edit_fix"](S) if opts.get("edit_fix") else None      # a code fix of the edit itself, before the cut (PB1: the fringe)
     P, kid, st, rec, base, e, ids, box = S["P"], S["kid"], S["st"], S["rec"], S["base"], S["e"], S["ids"], S["box"]
     region, zone, env, keep, g = S["region"], S["zone"], S["env"], S["keep"], S["g"]
     prods = P["products"]
@@ -166,6 +167,8 @@ def cut(p, opts=None):
     glow = same & (le[..., 0] > lb[..., 0] + 1.5) if P["lamps"] else np.zeros((H, W), bool)
     rp = dict(pass_=p, gain_p1_p50_p99=[round(float(v), 3) for v in np.percentile(g[box], [1, 50, 99])],
               dE_outside_zone_p50_p95=[round(float(v), 2) for v in np.percentile(d[keep], [50, 95])] if keep.any() else None, products={})
+    if fix_rec:
+        rp["edit_fix"] = fix_rec
     # 2. what changed, per product zone
     U = np.zeros((H, W), bool)
     core_all = np.zeros((H, W), bool)
@@ -225,7 +228,10 @@ def cut(p, opts=None):
             masks[pr] |= left & close & (near_i == i)
         rp["slivers_px"] = int((left & close).sum())
     if opts.get("mask_edit"):
-        masks = opts["mask_edit"](masks, dict(e=e, base=base, ids=ids, d=d, region=region, zone=zone, lab_e=lab_e, lab_b=lab_b))
+        mctx = dict(e=e, base=base, ids=ids, d=d, region=region, zone=zone, lab_e=lab_e, lab_b=lab_b, kid=kid, box=box, S=S)
+        masks = opts["mask_edit"](masks, mctx)
+        if mctx.get("notes"):
+            rp["mask_edit"] = mctx["notes"]
     allfg = np.zeros((H, W), bool)
     for m in masks.values():
         allfg |= m
@@ -253,8 +259,13 @@ def cut(p, opts=None):
         near_lower = lower_touch & ~C.ero(m, 2)
         a = np.where(near_lower, sb, a)
         col = np.where(near_lower[..., None], C.defringe(e, m), col)
+        # its own edge where an upper product of the pass covers it: opaque, in its own colour (never the plate through two soft edges)
+        near_upper = C.dil(upper, 3) & m & ~C.ero(m, 3)
+        if near_upper.any():
+            a = np.where(near_upper, 1.0, a)
+            col = np.where(near_upper[..., None], C.defringe(e, m), col)
         # filled under the upper products by 8 px, from its own pixels
-        under = C.dil(m, 8) & upper & ~m
+        under = C.dil(m, opts.get("under_px", {}).get(pr, 8)) & upper & ~m
         if under.any():
             fill = KC.spread(e, C.ero(m, 1).astype(np.float64), (2.0, 5.0, 12.0))
             col = np.where(under[..., None], fill, col)
@@ -263,6 +274,13 @@ def cut(p, opts=None):
         col = floor_lab(col, a > 0)
         out[pr] = (a, col)
         rp["products"][pr] = dict(px=int((a > 0).sum()), clay_px=int(region[pr].sum()), ratio_to_clay=round(float((m.sum() + 1) / (region[pr].sum() + 1)), 3))
+    if opts.get("post"):
+        pr_ = opts["post"](out, masks, dict(e=e, ids=ids, S=S, kid=kid, rp=rp, box=box))
+        if pr_:
+            rp["post"] = pr_
+            for pr in prods:
+                if out[pr] is not None:
+                    rp["products"][pr]["px"] = int((out[pr][0] > 0).sum())
     # 5. shadows, each pixel to the nearest product
     prev_alpha = np.zeros((H, W), bool)
     man = load_man(kid)
@@ -411,36 +429,316 @@ def _clean_blind(masks, ctx):
     return masks
 
 
-def _bed_masks(masks, ctx):
-    """PB1 / GB1: the throw by its own tone, not by its clay box (the edit drapes it differently from the clay's two boxes, and the
-    football's clay outline overlaps its hang). On a 3 px blur (the waffle's cells and grid averaged) the throw is darker than the duvet
-    and the pillows around it: its threshold is the midpoint between its own clay core's 70th percentile of L* and the duvet's 20th;
-    the throw is the changed pixels near its clay region under that L*, in one piece with its core, closed and filled; the throw's
-    earlier pixels above it go to the duvet; the other products lose the throw's pixels"""
-    e_lab = C.blur(ctx["lab_e"], 3.0)
-    L = e_lab[..., 0]
-    reg = ctx["region"]["bedspread"]
-    core = C.ero(reg, 4)
-    duv = C.ero(ctx["region"]["bedding"], 4) & ~C.dil(reg, 20)
-    thr = 0.5 * (np.percentile(L[core], 70) + np.percentile(L[duv], 20))
-    near = C.dil(reg, 90)
-    t = near & (L < thr) & (ctx["d"] > 6)
-    t = cv2.morphologyEx(t.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(4)).astype(bool)
+# the bed passes (PB1 / GB1): the basket's geometry as the clay builds it (framing_wm_kids.py row 17)
+BASKET = {"boy": dict(c=(-0.62, 11.58), r=0.175, h=0.39, filler="ball"), "girl": dict(c=(-0.62, 15.21), r=0.20, h=0.45, filler="balls")}
+
+
+def _hue(lab):
+    return np.degrees(np.arctan2(lab[..., 2], lab[..., 1])), np.hypot(lab[..., 1], lab[..., 2])
+
+
+def _gm(e, sig=1.2):
+    L = cv2.GaussianBlur(C.to_lab(e)[..., 0].astype(np.float32), (0, 0), sig)
+    return np.hypot(cv2.Sobel(L, cv2.CV_32F, 1, 0, ksize=3), cv2.Sobel(L, cv2.CV_32F, 0, 1, ksize=3))
+
+
+def _xf(mask, f):
+    s, tx, ty, cx, cy = f
+    M = np.float32([[s, 0, cx - s * cx + tx], [0, s, cy - s * cy + ty]])
+    return cv2.warpAffine(mask.astype(np.uint8), M, (W, H), flags=cv2.INTER_NEAREST).astype(bool)
+
+
+def _poly(pts):
+    m = np.zeros((H, W), np.uint8)
+    cv2.fillPoly(m, [np.rint(cv2.convexHull(np.asarray(pts, np.float32))).astype(np.int32)], 1)
+    return m.astype(bool)
+
+
+def _basket(e, ids, kid):
+    """the drawn basket (0 tokens). The clay stands the card's basket where the plan puts it; the edit may stand it nearer, so the clay
+    region is not the product. (1) The clay's own outline (body and handles, id 59) moved and scaled onto the edit's edges (a
+    similarity fit; the card's size is kept when the scale is about 1); (2) the body: GrabCut seeded with the fitted body below the rim;
+    (3) the handles: the jute pixels (C* > 17) of the fitted outline above the rim, as rope (the loop's opening stays open); (4) the
+    boy's ball: a circle on the edit's edges, seeded by the bright pixels in the lower half of the opening, kept above the front rim"""
+    gm = _gm(e)
+    R = (ids == 59).astype(np.uint8)
+    cnt, _ = cv2.findContours(R, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    pts = max(cnt, key=cv2.contourArea)[:, 0, :].astype(np.float64)
+    pts = pts[pts[:, 1] < H - 15]
+    ys, xs = np.nonzero(R)
+    cx, cy = float(xs.mean()), float(ys.max())
+
+    def score(s, tx, ty):
+        q = np.c_[cx + s * (pts[:, 0] - cx) + tx, cy + s * (pts[:, 1] - cy) + ty]
+        q = q[(q[:, 0] >= 0) & (q[:, 0] < W - 1) & (q[:, 1] >= 0) & (q[:, 1] < H - 1)].astype(np.float32)
+        return float(cv2.remap(gm, q[:, 0:1], q[:, 1:2], cv2.INTER_LINEAR).mean())
+    best = (score(1.0, 0, 0), (1.0, 0, 0))
+    ident = best[0]
+    for s in np.arange(0.95, 1.35, 0.02):
+        for tx in range(-60, 61, 6):
+            for ty in range(-40, 161, 6):
+                v = score(s, tx, ty)
+                if v > best[0]:
+                    best = (v, (s, tx, ty))
+    s0, tx0, ty0 = best[1]
+    for s in np.arange(s0 - 0.03, s0 + 0.031, 0.005):
+        for tx in range(tx0 - 6, tx0 + 7):
+            for ty in range(ty0 - 6, ty0 + 7):
+                v = score(s, tx, ty)
+                if v > best[0]:
+                    best = (v, (s, tx, ty))
+    f = (best[1][0], best[1][1], best[1][2], cx, cy)
+    T59 = _xf(R, f)
+    g = BASKET[kid]
+    th = np.linspace(0, 2 * np.pi, 96)
+    top = np.array([K.proj(kid, g["c"][0] + g["r"] * np.cos(a), g["c"][1] + g["r"] * np.sin(a), g["h"]) for a in th])
+    top = np.c_[cx + f[0] * (top[:, 0] - cx) + f[1], cy + f[0] * (top[:, 1] - cy) + f[2]]
+    ry0, ry1 = float(top[:, 1].min()), float(top[:, 1].max())
+    yy = np.arange(H)[:, None]
+    lb = C.blur(C.to_lab(e), 1.0)
+    hue, Cc = _hue(lb)
+    # (2) the body
+    zone = C.dil(T59, 30) & (yy > ry0 - 120)
+    body = C.gc_cut(e, C.ero(T59, 8) & (yy > ry1 + 15), T59 & (yy > ry0), zone, zone & (yy < ry0 - 75), iters=8)
+    body &= yy > ry0 + 0.5 * (ry1 - ry0)                 # above the rim's middle only the handles and the filler are basket
+    # (3) the handles
+    jute = T59 & (yy < ry1) & (Cc > 17) & (hue > 52) & (hue < 78) & (lb[..., 0] < 82)
+    jute = cv2.morphologyEx(jute.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(2)).astype(bool)
+    handles = keep_touching(jute, C.dil(body, 3))
+    basket = body | handles
+    # (4) the ball
+    ball_rec = None
+    if g["filler"] == "ball":
+        hull = _poly(np.c_[np.nonzero(T59)[1], np.nonzero(T59)[0]])
+        seed = C.ero(hull, 10) & (yy > ry0 + 0.6 * (ry1 - ry0)) & (yy < ry1 + 10) & (lb[..., 0] > 70) & (Cc < 15)
+        seed = cv2.morphologyEx(seed.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+        if seed.sum() > 200:
+            sy, sx = np.nonzero(seed)
+            mx, hw, by = 0.5 * (sx.min() + sx.max()), 0.5 * (sx.max() - sx.min()), sy.max()
+            thc = np.linspace(0, 2 * np.pi, 240)
+            fb = (0.0, None)
+            for r in np.arange(hw - 12, hw + 13, 1.5):
+                for ccx in np.arange(mx - 12, mx + 13, 1.5):
+                    for ccy in np.arange(by - r, by + 40, 1.5):
+                        qi = np.rint(np.c_[ccx + r * np.cos(thc), ccy + r * np.sin(thc)]).astype(int)
+                        qi = qi[(qi[:, 1] < ry1 + 20) & (qi[:, 0] >= 0) & (qi[:, 0] < W) & (qi[:, 1] >= 0)]
+                        if len(qi) < 60:
+                            continue
+                        v = float(gm[qi[:, 1], qi[:, 0]].mean())
+                        if v > fb[0]:
+                            fb = (v, (float(ccx), float(ccy), float(r)))
+            ccx, ccy, r = fb[1]
+            xx = np.arange(W)[None, :]
+            ball = ((xx - ccx) ** 2 + (yy - ccy) ** 2 <= r * r) & ~C.dil(handles, 1)
+            ball &= ~(C.dil(body, 2) & ~ball) | (yy < ry1)
+            by_, bx_ = np.nonzero(body)
+            basket |= ball & ((yy < ry1 + 0.25 * (ry1 - ry0)) | _poly(np.c_[bx_, by_]))
+            ball_rec = [round(v, 1) for v in fb[1]]
+    basket = fill_holes(basket, 300)
+    rec = dict(fit=dict(scale=round(float(f[0]), 3), shift_px=[int(f[1]), int(f[2])], edge_score=round(best[0], 2), edge_score_clay=round(ident, 2)),
+               rim_y=[round(ry0, 1), round(ry1, 1)], handles_px=int(handles.sum()), ball_circle=ball_rec, px=int(basket.sum()),
+               clay_px=int((np.isin(ids, (59, 60))).sum()))
+    return basket, rec
+
+
+def _throw_mask(lab_e, d, reg, bed_reg, ids, block):
+    """the throw by its own tone and hue on a 3 px blur (the waffle's cells averaged): darker than the duvet, and on the other side of the
+    midpoint hue between the throw's clay core and the duvet when the two differ by more than 10 degrees; in one piece with its core;
+    the walnut boards and the basket are not throw"""
+    lb = C.blur(lab_e, 3.0)
+    L = lb[..., 0]
+    h, Cc = _hue(lb)
+    core = C.ero(reg, 4) & ~block
+    duv = C.ero(bed_reg, 4) & ~C.dil(reg, 20) & (d > 6) & ~block
+    hc, hd = float(np.median(h[core])), float(np.median(h[duv]))
+    Lc90, Ld50 = float(np.percentile(L[core], 90)), float(np.percentile(L[duv], 50))
+    L_thr = Lc90 + 0.55 * (Ld50 - Lc90)
+    board = C.dil(np.isin(ids, K.FIXED), 1)
+    t = C.dil(reg, 140) & (d > 6) & ~board & ~block
+    if abs(hd - hc) > 10:
+        h_thr = 0.5 * (hc + hd)
+        t &= ((L < L_thr) & ((h - h_thr) * np.sign(hc - hd) > 0) & (Cc > 5)) | (L < 28)
+    else:
+        h_thr = None
+        t &= L < L_thr
+    t = cv2.morphologyEx(t.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool)
     t = keep_touching(t, core)
     t = fill_holes(t, 6000)
-    t = cv2.morphologyEx(t.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool)
-    old = masks["bedspread"]
+    t = cv2.morphologyEx(t.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+    t = keep_touching(t, core) & ~block
+    return t, dict(hue_throw=round(hc, 1), hue_duvet=round(hd, 1), hue_thr=None if h_thr is None else round(h_thr, 1), hue_sign=float(np.sign(hc - hd)),
+                   L_thr=round(L_thr, 1))
+
+
+def _bed_masks(masks, ctx):
+    """PB1 / GB1: the basket by its fitted outline (_basket), the throw by its tone and hue (_throw_mask), not by their clay boxes (the
+    edit drapes the throw over the whole foot of the bed and stands the basket nearer than the clay). The basket is the top of the pass:
+    it keeps its pixels; the throw loses them; the duvet and the pillows lose both; the duvet takes what the throw's old mask held"""
+    e, ids, kid = ctx["e"], ctx["ids"], ctx["kid"]
+    bk = ctx.get("basket")
+    if bk is None:
+        bk, brec = _basket(e, ids, kid)
+    else:
+        bk, brec = bk
+    bk &= ctx["box"]
+    t, trec = _throw_mask(ctx["lab_e"], ctx["d"], ctx["region"]["bedspread"], ctx["region"]["bedding"], ids, bk)
+    old_t, old_b = masks["bedspread"], masks["toy-basket"]
     for k in masks:
-        if k != "bedspread":
-            masks[k] = masks[k] & ~t
-    if "bedding" in masks:
-        masks["bedding"] |= old & ~t
+        if k not in ("bedspread", "toy-basket"):
+            masks[k] = masks[k] & ~t & ~bk
+    le, lb_ = C.blur(ctx["lab_e"], 1.5), C.blur(ctx["lab_b"], 1.5)
+    same = (np.abs(le[..., 1] - lb_[..., 1]) < 3.5) & (np.abs(le[..., 2] - lb_[..., 2]) < 4.5)
+    taken = t | bk
+    for k in masks:
+        if k not in ("bedspread", "toy-basket", "bedding"):
+            taken |= masks[k]
+    cand = (ctx["d"] > 6) & ~same & ctx["box"] & ~taken & C.dil(masks["bedding"] | old_t | old_b, 80)
+    cand = cv2.morphologyEx(cand.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool)
+    # the throw's clay box lies on the bed: what the drawn throw does not cover there is duvet (pale on the pale mattress, so no d test);
+    # the basket's clay box reaches the floor and the walnut: only its changed, re-coloured pixels
+    masks["bedding"] = keep_touching(masks["bedding"] | (old_t & ~taken) | (old_b & ~taken & (ctx["d"] > 6) & ~same) | cand,
+                                     C.ero(ctx["region"]["bedding"], 3))
     masks["bedspread"] = t
-    ctx.setdefault("notes", {})["throw_L_threshold"] = round(float(thr), 1)
+    masks["toy-basket"] = bk
+    ctx.setdefault("notes", {}).update(basket=brec, throw=trec)
     return masks
 
 
-OPTS = {"PB3-window": dict(mask_edit=_clean_blind), "PB1-bed": dict(mask_edit=_bed_masks), "GB1-bed": dict(mask_edit=_bed_masks)}
+FRINGE_CM = 2.75          # the card: 2-3 cm
+
+
+def _fringe_rows(e, t, bk, ids, thr, dep):
+    """per column of the throw's free-hanging hem: the lowest strand (the throw's tone and hue on a 0.7 px blur) and the fringe's length
+    (from the woven edge, where the gradient turns vertical: a run of anisotropy over 0.4 ending at the tip); px per cm from the clay's
+    depth at the hang"""
+    lb = C.blur(C.to_lab(e), 0.7)
+    L = lb[..., 0]
+    hue, Cc = _hue(lb)
+    strand = (L < thr["L_thr"]) & (Cc > 5)
+    if thr.get("hue_thr") is not None:
+        strand &= (hue - thr["hue_thr"]) * thr["hue_sign"] > 0
+    strand |= L < 28
+    Lp = C.to_lab(e)[..., 0].astype(np.float32)
+    gx, gy = cv2.Sobel(Lp, cv2.CV_32F, 1, 0, ksize=3), cv2.Sobel(Lp, cv2.CV_32F, 0, 1, ksize=3)
+    Ax, Ay = cv2.GaussianBlur(gx * gx, (0, 0), 1.5), cv2.GaussianBlur(gy * gy, (0, 0), 1.5)
+    an = cv2.blur((Ax - Ay) / (Ax + Ay + 1e-3), (15, 1))
+    hidden = C.dil(bk, 2) | C.dil(np.isin(ids, K.FIXED), 2)
+    td = C.dil(t, 3)
+    rows = {}
+    for x in np.nonzero(t.any(0))[0]:
+        c = np.nonzero(strand[:, x] & td[:, x])[0]
+        if c.size < 20:
+            continue
+        Ts = int(c.max())
+        if Ts + 4 >= H or Ts < 60 or hidden[Ts + 1:Ts + 5, x].any():
+            continue
+        hi = an[Ts - 50:Ts + 1, x] > 0.4
+        runs, st_ = [], None
+        for i, v in enumerate(hi):
+            if v and st_ is None:
+                st_ = i
+            if (not v or i == len(hi) - 1) and st_ is not None:
+                runs.append((st_, i if v else i - 1))
+                st_ = None
+        ok = [(a, b) for a, b in runs if b >= len(hi) - 13 and b - a >= 7]
+        z = dep[max(Ts - 40, 0):Ts + 1, x]
+        z = z[np.isfinite(z)]
+        if z.size == 0:
+            continue
+        free = 0                                     # the duvet below the tip, down to whatever hides it (basket, walnut), at most 60
+        while free < 60 and Ts + 1 + free < H and not hidden[Ts + 1 + free, x]:
+            free += 1
+        rows[int(x)] = dict(Ts=Ts, F=(50 - max(ok, key=lambda r: r[1] - r[0])[0]) if ok else None, pxcm=float(K.F_ / np.median(z) / 100), free=free)
+    return rows
+
+
+def _bed_fix(S):
+    """PB1 / GB1, the edit fixed before the cut (0 tokens):
+    1. white specks the edit left at the throw's edge on the duvet (a pixel 7 L* over its 7 x 7 median, above L* 85) inpainted;
+    2. the fringe: the edit drew it about 4 cm (measured per column, _fringe_rows); the card says 2-3 cm. Along the free-hanging hem the
+       strands are cut at 2.75 cm from the woven edge: the strand pixels below that line are inpainted from the duvet between and below
+       them (the edit's own duvet and the throw's shade on it stay where they are); the cut line is smooth along the hem and tapers to
+       the drawn length at its ends. The basket and the walnut are never touched.
+    The basket's fit is made here once and kept for the masks."""
+    e, base, ids, kid = S["e"], S["base"], S["ids"], S["kid"]
+    lab_e, lab_b = C.to_lab(e), C.to_lab(base)
+    d = np.linalg.norm(C.blur(lab_e, 2.0) - C.blur(lab_b, 2.0), axis=-1)
+    bk, brec = _basket(e, ids, kid)
+    bk &= S["box"]
+    t, trec = _throw_mask(lab_e, d, S["region"]["bedspread"], S["region"]["bedding"], ids, bk)
+    S["basket_fit"] = (bk, brec)
+    L = lab_e[..., 0].astype(np.float32)
+    med = cv2.medianBlur(np.clip(L * 2.55, 0, 255).astype(np.uint8), 7).astype(np.float32) / 2.55
+    band = C.dil(t, 4) & ~C.ero(t, 2) & ~C.dil(bk, 2)
+    specks = C.dil(band & (L - med > 7) & (L > 85), 1) & band
+    e2 = KC.inpaint(e, specks, radius=3) if specks.any() else e.copy()
+    out = dict(specks_px=int(specks.sum()))
+    dep = K.depth(S["P"].get("clay", f"K-{kid}"))
+    rows = _fringe_rows(e2, t, bk, ids, trec, dep)
+    if len(rows) < 30:
+        S["e"] = e2
+        return dict(out, fringe="no free-hanging hem found")
+    xs = np.array(sorted(rows))
+    Ts = np.array([rows[x]["Ts"] for x in xs], float)
+    Fm = np.array([np.nan if rows[x]["F"] is None else rows[x]["F"] for x in xs], float)
+    px = np.array([rows[x]["pxcm"] for x in xs])
+    free = np.array([rows[x]["free"] for x in xs], float)
+    n = len(xs)
+    win = lambda a, i, k: a[max(0, i - k):i + k + 1]      # noqa: E731
+    Ts_s = np.array([np.percentile(win(Ts, i, 8), 75) for i in range(n)])
+    Ts_s = np.array([np.median(win(Ts_s, i, 8)) for i in range(n)])
+    Fs = np.array([np.nanmedian(win(Fm, i, 15)) if np.isfinite(win(Fm, i, 15)).any() else np.nan for i in range(n)])
+    Fs = np.clip(np.where(np.isnan(Fs), np.nanmedian(Fm), Fs), 10, 45)
+    tg = FRINGE_CM * px
+    lift = np.clip(Fs - tg, 0, None)
+    lift = np.where(free >= 4, lift, 0.0)                        # a tip with no duvet below it (basket, walnut) stays
+    # contiguous runs of the hem; taper over 15 columns at each end; smooth along the hem
+    seg = np.r_[0, np.cumsum(np.diff(xs) > 3)]
+    for sg in np.unique(seg):
+        idx = np.nonzero(seg == sg)[0]
+        k = np.arange(len(idx))
+        lift[idx] *= np.clip(np.minimum(k, len(idx) - 1 - k) / 15.0, 0, 1)
+    lift = cv2.GaussianBlur(lift.astype(np.float32).reshape(1, -1), (0, 0), 4).ravel()
+    # the strands below the new tip line removed: a strand pixel (darker than the brightest of its 5 x 5, by 10 L*, on the throw's side
+    # of the hue line, or 25 L* darker) inpainted from the duvet between and below the strands (Telea, 2 px)
+    Lr = C.to_lab(e2)
+    L0 = Lr[..., 0].astype(np.float32)
+    h0, C0 = _hue(Lr)
+    mx = cv2.dilate(L0, np.ones((5, 5), np.uint8))
+    st_ = (L0 < mx - 10) & (C0 > 4)
+    if trec.get("hue_thr") is not None:
+        st_ &= (h0 - trec["hue_thr"]) * trec["hue_sign"] > -4
+    st_ |= L0 < mx - 25
+    cut = np.zeros((H, W), bool)
+    hidden = C.dil(bk, 2) | C.dil(np.isin(ids, K.FIXED), 2)
+    td = C.dil(t, 3)
+    yy = np.arange(H)[:, None]
+    for x, T_, D_ in zip(xs, Ts_s, lift):
+        if D_ < 1.0:
+            continue
+        lo = int(np.ceil(T_ - D_))
+        cut[lo:int(Ts[xs == x][0]) + 4, x] = True
+    rm = C.dil(st_ & cut & td, 1) & cut & ~hidden
+    e3 = KC.inpaint(e2, rm, radius=2) if rm.any() else e2
+    S["e"] = np.clip(e3, 0, 1)
+    cm = Fm / px
+    out.update(fringe=dict(columns=int(n), measured=int(np.isfinite(Fm).sum()),
+                           drawn_cm_p10_p50_p90=[round(float(v), 2) for v in np.nanpercentile(cm, [10, 50, 90])],
+                           target_cm=FRINGE_CM, lift_px_p50_max=[round(float(np.median(lift[lift > 1])), 1) if (lift > 1).any() else 0, round(float(lift.max()), 1)],
+                           after_cm_p50=round(float(np.median(((Fs - lift) / px)[lift > 1])), 2) if (lift > 1).any() else None,
+                           columns_lifted=int((lift > 1).sum()), strand_px_removed=int(rm.sum())))
+    return out
+
+
+def _bed_masks_fixed(masks, ctx):
+    bf = ctx["S"].get("basket_fit")
+    if bf is not None:
+        ctx["basket"] = bf
+    return _bed_masks(masks, ctx)
+
+
+_BED = dict(edit_fix=_bed_fix, mask_edit=_bed_masks_fixed, under_px={"bedding": 40, "pillowcase": 12})
+OPTS = {"PB3-window": dict(mask_edit=_clean_blind), "PB1-bed": _BED, "GB1-bed": _BED}
 
 
 if __name__ == "__main__":

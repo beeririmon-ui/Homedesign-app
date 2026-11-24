@@ -223,13 +223,13 @@
    "default": true,
    "layer": "layers/bedding/bedding-cj-stripe-cotton-single-set-light-brown-xs.png",
    "shadow": "shadows/bedding/bedding-cj-stripe-cotton-single-set-light-brown-xs.png",
-   "alpha_px": 226789,
-   "shadow_px": 33098,
+   "alpha_px": 299061,
+   "shadow_px": 31569,
    "bbox_px": [
     470,
-    851,
+    816,
     1444,
-    1390
+    1430
    ],
    "sold": true,
    "sku": "CJJJJFCS00695-Light Brown-XS-Bed sheet",
@@ -237,8 +237,7 @@
    "pass_": "PB1-bed",
    "passes": [
     "PB1-bed"
-   ],
-   "stage_note": "PB1 cut not finished (stopped on var2 re-auth): the throw's top, lying on the mattress, still sits in the bedding layer; a dotted pale line at that seam on the canvas; the fringe reads about 4 cm against the card's 2-3 cm. Not for QA yet."
+   ]
   },
   {
    "slot": "pillowcase",
@@ -253,11 +252,11 @@
    "default": true,
    "layer": "layers/pillowcase/pillowcases-cj-pure-linen-envelope-pair-48x74-rain-and-dew-hemp.png",
    "shadow": "shadows/pillowcase/pillowcases-cj-pure-linen-envelope-pair-48x74-rain-and-dew-hemp.png",
-   "alpha_px": 64176,
-   "shadow_px": 6489,
+   "alpha_px": 66437,
+   "shadow_px": 5655,
    "bbox_px": [
-    450,
-    682,
+    446,
+    681,
     846,
     960
    ],
@@ -267,8 +266,7 @@
    "pass_": "PB1-bed",
    "passes": [
     "PB1-bed"
-   ],
-   "stage_note": "PB1 cut not finished (stopped on var2 re-auth): the throw's top, lying on the mattress, still sits in the bedding layer; a dotted pale line at that seam on the canvas; the fringe reads about 4 cm against the card's 2-3 cm. Not for QA yet."
+   ]
   },
   {
    "slot": "bedspread",
@@ -283,13 +281,13 @@
    "default": true,
    "layer": "layers/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.png",
    "shadow": "shadows/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.png",
-   "alpha_px": 69859,
-   "shadow_px": 0,
+   "alpha_px": 82636,
+   "shadow_px": 3,
    "bbox_px": [
-    902,
-    923,
-    1404,
-    1269
+    905,
+    922,
+    1403,
+    1259
    ],
    "sold": true,
    "sku": "CJZW264585012LO",
@@ -297,8 +295,7 @@
    "pass_": "PB1-bed",
    "passes": [
     "PB1-bed"
-   ],
-   "stage_note": "PB1 cut not finished (stopped on var2 re-auth): the throw's top, lying on the mattress, still sits in the bedding layer; a dotted pale line at that seam on the canvas; the fringe reads about 4 cm against the card's 2-3 cm. Not for QA yet."
+   ]
   },
   {
    "slot": "toy-basket",
@@ -314,12 +311,12 @@
    "default": true,
    "layer": "layers/toy-basket/basket-cj-jute-rope-cylinder-large.png",
    "shadow": "shadows/toy-basket/basket-cj-jute-rope-cylinder-large.png",
-   "alpha_px": 116259,
-   "shadow_px": 8406,
+   "alpha_px": 87794,
+   "shadow_px": 7222,
    "bbox_px": [
-    716,
-    1068,
-    1024,
+    723,
+    1193,
+    1022,
     1530
    ],
    "sold": true,
@@ -328,8 +325,7 @@
    "pass_": "PB1-bed",
    "passes": [
     "PB1-bed"
-   ],
-   "stage_note": "PB1 cut not finished (stopped on var2 re-auth): the throw's top, lying on the mattress, still sits in the bedding layer; a dotted pale line at that seam on the canvas; the fringe reads about 4 cm against the card's 2-3 cm. Not for QA yet."
+   ]
   },
   {
    "slot": "pendant",
@@ -470,27 +466,79 @@
    ],
    "products": {
     "bedding": {
-     "px": 226789,
+     "px": 299061,
      "clay_px": 177373,
-     "ratio_to_clay": 1.157
+     "ratio_to_clay": 1.219
     },
     "pillowcase": {
-     "px": 64176,
+     "px": 66437,
      "clay_px": 63583,
-     "ratio_to_clay": 0.988
+     "ratio_to_clay": 1.021
     },
     "bedspread": {
-     "px": 69859,
+     "px": 82636,
      "clay_px": 65676,
-     "ratio_to_clay": 0.985
+     "ratio_to_clay": 1.229
     },
     "toy-basket": {
-     "px": 116259,
+     "px": 87794,
      "clay_px": 124738,
-     "ratio_to_clay": 0.921
+     "ratio_to_clay": 0.694
     }
    },
-   "slivers_px": 35
+   "edit_fix": {
+    "specks_px": 91,
+    "fringe": {
+     "columns": 305,
+     "measured": 250,
+     "drawn_cm_p10_p50_p90": [
+      2.27,
+      4.09,
+      5.16
+     ],
+     "target_cm": 2.75,
+     "lift_px_p50_max": [
+      10.1,
+      24.1
+     ],
+     "after_cm_p50": 2.77,
+     "columns_lifted": 266,
+     "strand_px_removed": 2357
+    }
+   },
+   "slivers_px": 31,
+   "mask_edit": {
+    "basket": {
+     "fit": {
+      "scale": 0.99,
+      "shift_px": [
+       2,
+       67
+      ],
+      "edge_score": 33.35,
+      "edge_score_clay": 22.23
+     },
+     "rim_y": [
+      1202.4,
+      1282.8
+     ],
+     "handles_px": 5008,
+     "ball_circle": [
+      882.0,
+      1327.5,
+      110.0
+     ],
+     "px": 86551,
+     "clay_px": 124738
+    },
+    "throw": {
+     "hue_throw": 52.3,
+     "hue_duvet": 83.5,
+     "hue_thr": 67.9,
+     "hue_sign": -1.0,
+     "L_thr": 60.5
+    }
+   }
   }
  },
  "code_fixes": {
