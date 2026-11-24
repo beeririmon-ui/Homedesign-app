@@ -212,7 +212,9 @@ def canister_geom(lab_e, m):
 
 # colour against the SKU photo's reading (R5, relative to the room): (target h, target C*, dL, why)
 COLOUR = {73: (56.0, 32.0, 0.0, "photo L*39 C*25 h54 (new-rooms-photo-check); the edit read C*43 h62, orange: C* x0.75 to 32, h 56"),
-          76: (None, None, 0.0, "the edit's canisters read cool (b* -1.5, h -153) in a warm niche; warm white: a* +0.8, b* +4 (no pure white)")}
+          76: (None, None, 0.0, "the edit's canisters read cool (b* -1.5, h -153) in a warm niche; warm white: a* +0.8, b* +4 (no pure white)"),
+          77: (55.0, 36.0, -4.0, "10.9 G r1: the two towels read L*44.6 C*36 h58.5, yellower and lighter than the photo (L*37 C*38 h50) and than "
+                                 "stage one's towel (37.0 / 31.0 / 55.1); to h 55 and L* -4, C* kept")}
 
 
 def product_colour(k, a, col):

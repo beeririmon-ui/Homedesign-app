@@ -73,8 +73,9 @@ def frames(man, rec):
     base = np.asarray(Image.open(os.path.join(ST, "D1-defaults.png")).convert("RGB")).astype(int)
     a1 = np.asarray(Image.open(os.path.join(ST, [l for l in man["layers"] if l["frame"] == "D1" and l["product"] == V1][0]["layer"])))[..., 3]
     for v, pid in (("V2", V2), ("V3", V3)):
-        ls = [l for l in man["layers"] if l["frame"] == "D1" and l["product"] == pid]
-        if not ls:
+        ls = [l for l in man["layers"] if l["frame"] == "D1" and l["product"] == pid and not l.get("retired")]
+        if not ls:                                    # 10.9.6 KD-L3: V2 left the wheel (retired); its frame is removed
+            rec.get("frames", {}).pop(f"D1-{v}", None)
             continue
         o8 = CE.compose(man, rec, "D1", swap={"dining-pendant": ls[0]}, out_name=f"D1-{v}")
         av = np.asarray(Image.open(os.path.join(ST, ls[0]["layer"])))[..., 3]

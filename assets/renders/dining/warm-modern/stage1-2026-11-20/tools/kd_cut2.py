@@ -41,7 +41,7 @@ H, W = K.H, K.W
 ST = K.ST
 STACK = {55: 52, 53: 52, 72: 71}          # child: parent
 SUB = {72: 1}                              # within one slot and z, the child is composed after the parent
-THIN = {54: 53, 59: 58}                    # thin fillers: filler id -> owner
+THIN = {54: 53, 59: 58, 80: 78}            # thin fillers: filler id -> owner (10.9: the beech branches)
 NO_GROW = {50, 52, 57, 60, 53, 76, 70}             # their geometry comes from the clay or a fix (pendant, runner, curtain box, bench pad, vase)
 GROW = {71: 70, 72: 70, 74: 50, 73: 50}
 # a colour cut where the edit relit the ground under the product (the niche's walnut came back lighter): the pale canisters and their
@@ -121,6 +121,14 @@ def first_masks(p, J, rec):
     P = PASSES[p]
     fr = P["frame"]
     ids = K.ids(fr)
+    if p == "Hb-boards":                              # 10.9: the boards' whole outline (the clay has them behind the 280363 board)
+        import kd_d2stage as D2S
+        ids = ids.copy()
+        q = D2S.board_quads()
+        m_ = np.zeros((H, W), np.uint8)
+        for k_ in ("F", "B"):
+            cv2.fillConvexPoly(m_, np.rint(q[k_]).astype(np.int32), 1)
+        ids[m_ > 0] = 79
     pl_ids = K.ids(f"{fr}-plate")
     base = C.load(os.path.join(ST, J["base"]))
     variant = P.get("variant", False)

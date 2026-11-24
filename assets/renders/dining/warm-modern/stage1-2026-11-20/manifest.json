@@ -18,8 +18,9 @@
   1486.5699
  ],
  "bases": {
-  "D1": "plate-D1.png",
-  "D2": "plate-D2.png"
+  "D1": "plate-D1.png (KD-L4 graded; plate-D1-ungraded.png is the cut base of D1's stage-one passes)",
+  "D2": "plate-D2.png (yaw -86: plate-D2o + plate-D1-ungraded by the rotation, the N-niche edit, KD-L4)",
+  "D2o": "plate-D2o.png (stage one's D2, yaw -91: the source; its passes E-left, Ec, F-niche were cut there)"
  },
  "cameras": {
   "D1": {
@@ -39,10 +40,22 @@
     3.8,
     1.1
    ],
-   "yaw": -91.0,
+   "yaw": -86.0,
    "lens_mm": 24,
    "u0": 0.52,
    "v0": 0.43
+  },
+  "D2o": {
+   "loc": [
+    2.8,
+    3.8,
+    1.1
+   ],
+   "yaw": -91.0,
+   "lens_mm": 24,
+   "u0": 0.52,
+   "v0": 0.43,
+   "role": "stage one's D2: the source the D2 plate and its layers are composed from"
   }
  },
  "compose": "plate-<frame>.png; per layer of that frame in z order: shadow (multiply), then the layer (straight alpha); lights (screen, z 90) times (1 - every alpha)",
@@ -74,25 +87,25 @@
   {
    "frame": "D1",
    "slot": "framed-art",
-   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-30x40",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-40x50",
    "clay_id": 67,
    "z": 12,
    "sub": 0,
    "shadow_z": 11,
    "default": true,
-   "layer": "layers/D1/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
-   "shadow": "shadows/D1/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
-   "alpha_px": 14675,
-   "shadow_px": 12230,
+   "layer": "layers/D1/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "shadow": "shadows/D1/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "alpha_px": 29916,
+   "shadow_px": 22747,
    "bbox_px": [
-    1425,
-    380,
-    1567,
-    499
+    1400,
+    325,
+    1596,
+    500
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
-   "pass_": "E-left",
+   "source": "D2 pass H-islands (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "H-islands",
    "toned": true,
    "print": "05, in code (tools/kd_print.py)",
    "projected_from": "D2"
@@ -132,18 +145,20 @@
    "default": true,
    "layer": "layers/D1/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
    "shadow": "shadows/D1/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
-   "alpha_px": 6449,
-   "shadow_px": 6841,
+   "alpha_px": 7111,
+   "shadow_px": 7474,
    "bbox_px": [
-    1561,
-    396,
-    1651,
-    489
+    1618,
+    390,
+    1713,
+    486
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
-   "pass_": "E-left",
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); 10.9: warped D2o -> D2 and moved on the shelf from Y 1.55 to 1.735 in code (tools/kd_d2stage.py jar); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "jar-move",
    "toned": true,
+   "retired": null,
+   "derived_from": "D2o",
    "projected_from": "D2"
   },
   {
@@ -168,7 +183,44 @@
    "sold": true,
    "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
    "pass_": "Dc-right",
-   "toned": true
+   "toned": true,
+   "retired": "10.9 row 2: the set moves from the right shelf into the niche (G-niche-fill)"
+  },
+  {
+   "frame": "D1",
+   "slot": "serving-boards",
+   "product": "cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19",
+   "clay_id": 79,
+   "z": 15,
+   "sub": 0,
+   "shadow_z": 14,
+   "default": true,
+   "layer": "layers/D1/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "shadow": "shadows/D1/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "alpha_px": 14859,
+   "shadow_px": 7487,
+   "bbox_px": [
+    1710,
+    587,
+    1827,
+    743
+   ],
+   "sold": true,
+   "source": "D2 pass Hb-boards (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "Hb-boards",
+   "toned": true,
+   "size_fix": {
+    "board": "B",
+    "scale": 0.78,
+    "anchor_px": [
+     842.0,
+     741.0
+    ],
+    "F_filled_px": 234,
+    "pale_removed_px": 159,
+    "rule": "Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is\n    scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm\n    against 39, width 17.4 against 18.5)"
+   },
+   "projected_from": "D2"
   },
   {
    "frame": "D1",
@@ -190,10 +242,10 @@
     742
    ],
    "sold": true,
-   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
    "pass_": "Ec-sconce-board",
    "toned": true,
-   "projected_from": "D2"
+   "projected_from": "D2o"
   },
   {
    "frame": "D1",
@@ -215,10 +267,10 @@
     361
    ],
    "sold": true,
-   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
    "pass_": "Ec-sconce-board",
    "toned": true,
-   "projected_from": "D2"
+   "projected_from": "D2o"
   },
   {
    "frame": "D1",
@@ -270,6 +322,37 @@
   },
   {
    "frame": "D1",
+   "slot": "counter-vessel",
+   "product": "vase-cj-white-textured-jar-medium-bottle",
+   "clay_id": 78,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D1/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "shadow": "shadows/D1/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "alpha_px": 39475,
+   "shadow_px": 1326,
+   "bbox_px": [
+    2560,
+    256,
+    2720,
+    777
+   ],
+   "sold": true,
+   "source": "D2 pass Hv-vessel (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "Hv-vessel",
+   "toned": true,
+   "cut_fix": {
+    "body_px": 7779,
+    "branch_seed_px": 8259,
+    "branch_alpha_px": 12791,
+    "rule": "tools/kd_d2stage.py vessel_fix: the jar opaque, the branches by the exact difference matte on their base"
+   },
+   "projected_from": "D2"
+  },
+  {
+   "frame": "D1",
    "slot": "paper-towel-holder",
    "product": "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c",
    "clay_id": 74,
@@ -279,19 +362,19 @@
    "default": true,
    "layer": "layers/D1/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
    "shadow": "shadows/D1/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
-   "alpha_px": 4806,
-   "shadow_px": 8560,
+   "alpha_px": 4592,
+   "shadow_px": 7542,
    "bbox_px": [
     2673,
-    618,
+    631,
     2720,
     775
    ],
    "sold": true,
-   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
    "pass_": "F-niche",
    "toned": true,
-   "projected_from": "D2"
+   "projected_from": "D2o"
   },
   {
    "frame": "D1",
@@ -313,10 +396,10 @@
     742
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
    "pass_": "E-left",
    "toned": true,
-   "projected_from": "D2"
+   "projected_from": "D2o"
   },
   {
    "frame": "D1",
@@ -338,10 +421,10 @@
     736
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
    "pass_": "E-left",
    "toned": true,
-   "projected_from": "D2"
+   "projected_from": "D2o"
   },
   {
    "frame": "D1",
@@ -558,30 +641,31 @@
    ],
    "sold": true,
    "source": "code variant (tools/kd_variants.py v2), 0 tokens: V1's rendered shade (the two SKU drawings show the same 50 cm flat ribbed silk pumpkin with a bottom ring), V2's suspension: a thin white wire, no rod",
-   "pass_": "V2-code"
+   "pass_": "V2-code",
+   "retired": "10.9.6 KD-L3: V2 leaves the wheel (V1 + V3)"
   },
   {
    "frame": "D2",
    "slot": "framed-art",
-   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-30x40",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-40x50",
    "clay_id": 67,
    "z": 12,
    "sub": 0,
    "shadow_z": 11,
    "default": true,
-   "layer": "layers/D2/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
-   "shadow": "shadows/D2/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
-   "alpha_px": 23813,
-   "shadow_px": 19654,
+   "layer": "layers/D2/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "shadow": "shadows/D2/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "alpha_px": 41861,
+   "shadow_px": 31281,
    "bbox_px": [
-    235,
-    338,
-    431,
-    464
+    409,
+    296,
+    655,
+    474
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
-   "pass_": "E-left",
+   "source": "D2 pass H-islands (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "H-islands",
    "toned": true,
    "print": "05, in code (tools/kd_print.py)"
   },
@@ -596,18 +680,19 @@
    "default": true,
    "layer": "layers/D2/canisters/zendrop-2814530-white.png",
    "shadow": "shadows/D2/canisters/zendrop-2814530-white.png",
-   "alpha_px": 7273,
-   "shadow_px": 1897,
+   "alpha_px": 8107,
+   "shadow_px": 2216,
    "bbox_px": [
-    1765,
+    1923,
     671,
-    1915,
-    744
+    2082,
+    747
    ],
    "sold": true,
-   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "F-niche",
-   "toned": true
+   "toned": true,
+   "projected_from": "D2o"
   },
   {
    "frame": "D2",
@@ -620,13 +705,13 @@
    "default": true,
    "layer": "layers/D2/mug-set/mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown.png",
    "shadow": "shadows/D2/mug-set/mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown.png",
-   "alpha_px": 4144,
-   "shadow_px": 4086,
+   "alpha_px": 4124,
+   "shadow_px": 4047,
    "bbox_px": [
-    1244,
+    1394,
     428,
-    1370,
-    465
+    1520,
+    466
    ],
    "sold": true,
    "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
@@ -645,18 +730,20 @@
    "default": true,
    "layer": "layers/D2/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
    "shadow": "shadows/D2/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
-   "alpha_px": 9105,
-   "shadow_px": 9614,
+   "alpha_px": 8394,
+   "shadow_px": 8814,
    "bbox_px": [
-    425,
-    363,
-    539,
-    464
+    682,
+    374,
+    789,
+    473
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
-   "pass_": "E-left",
-   "toned": true
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); 10.9: warped D2o -> D2 and moved on the shelf from Y 1.55 to 1.735 in code (tools/kd_d2stage.py jar)",
+   "pass_": "jar-move",
+   "toned": true,
+   "retired": null,
+   "derived_from": "D2o"
   },
   {
    "frame": "D2",
@@ -669,19 +756,53 @@
    "default": true,
    "layer": "layers/D2/tableware-set/tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525.png",
    "shadow": "shadows/D2/tableware-set/tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525.png",
-   "alpha_px": 2922,
-   "shadow_px": 2805,
+   "alpha_px": 16453,
+   "shadow_px": 13090,
    "bbox_px": [
-    1131,
-    419,
-    1235,
-    466
+    1834,
+    381,
+    2042,
+    485
    ],
    "sold": true,
-   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
-   "pass_": "Dc-right",
+   "source": "D2 pass G-niche-fill (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "G-niche-fill",
+   "toned": true
+  },
+  {
+   "frame": "D2",
+   "slot": "serving-boards",
+   "product": "cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19",
+   "clay_id": 79,
+   "z": 15,
+   "sub": 0,
+   "shadow_z": 14,
+   "default": true,
+   "layer": "layers/D2/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "shadow": "shadows/D2/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "alpha_px": 16039,
+   "shadow_px": 7845,
+   "bbox_px": [
+    786,
+    586,
+    910,
+    744
+   ],
+   "sold": true,
+   "source": "D2 pass Hb-boards (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Hb-boards",
    "toned": true,
-   "projected_from": "D1"
+   "size_fix": {
+    "board": "B",
+    "scale": 0.78,
+    "anchor_px": [
+     842.0,
+     741.0
+    ],
+    "F_filled_px": 234,
+    "pale_removed_px": 159,
+    "rule": "Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is\n    scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm\n    against 39, width 17.4 against 18.5)"
+   }
   },
   {
    "frame": "D2",
@@ -694,18 +815,19 @@
    "default": true,
    "layer": "layers/D2/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
    "shadow": "shadows/D2/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
-   "alpha_px": 9239,
-   "shadow_px": 7438,
+   "alpha_px": 8562,
+   "shadow_px": 6813,
    "bbox_px": [
-    638,
-    617,
-    720,
-    746
+    811,
+    618,
+    889,
+    744
    ],
    "sold": true,
-   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "Ec-sconce-board",
-   "toned": true
+   "toned": true,
+   "projected_from": "D2o"
   },
   {
    "frame": "D2",
@@ -718,18 +840,19 @@
    "default": true,
    "layer": "layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
    "shadow": "shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
-   "alpha_px": 3943,
+   "alpha_px": 3661,
    "shadow_px": 0,
    "bbox_px": [
-    560,
-    262,
-    630,
-    332
+    738,
+    276,
+    804,
+    345
    ],
    "sold": true,
-   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "Ec-sconce-board",
-   "toned": true
+   "toned": true,
+   "projected_from": "D2o"
   },
   {
    "frame": "D2",
@@ -742,13 +865,13 @@
    "default": true,
    "layer": "layers/D2/condiment-set/condiment-set-cj-rubberwood-mill-pair-6in.png",
    "shadow": "shadows/D2/condiment-set/condiment-set-cj-rubberwood-mill-pair-6in.png",
-   "alpha_px": 1689,
-   "shadow_px": 2285,
+   "alpha_px": 1584,
+   "shadow_px": 2191,
    "bbox_px": [
-    1087,
-    687,
-    1121,
-    749
+    1240,
+    686,
+    1273,
+    748
    ],
    "sold": true,
    "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
@@ -767,12 +890,12 @@
    "default": true,
    "layer": "layers/D2/condiment-set/condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white.png",
    "shadow": "shadows/D2/condiment-set/condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white.png",
-   "alpha_px": 1844,
-   "shadow_px": 3412,
+   "alpha_px": 1771,
+   "shadow_px": 3324,
    "bbox_px": [
-    1132,
+    1284,
     675,
-    1168,
+    1319,
     748
    ],
    "sold": true,
@@ -780,6 +903,36 @@
    "pass_": "Dc-right",
    "toned": true,
    "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "slot": "counter-vessel",
+   "product": "vase-cj-white-textured-jar-medium-bottle",
+   "clay_id": 78,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "shadow": "shadows/D2/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "alpha_px": 20706,
+   "shadow_px": 639,
+   "bbox_px": [
+    1528,
+    338,
+    1718,
+    756
+   ],
+   "sold": true,
+   "source": "D2 pass Hv-vessel (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Hv-vessel",
+   "toned": true,
+   "cut_fix": {
+    "body_px": 7779,
+    "branch_seed_px": 8259,
+    "branch_alpha_px": 12791,
+    "rule": "tools/kd_d2stage.py vessel_fix: the jar opaque, the branches by the exact difference matte on their base"
+   }
   },
   {
    "frame": "D2",
@@ -792,18 +945,19 @@
    "default": true,
    "layer": "layers/D2/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
    "shadow": "shadows/D2/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
-   "alpha_px": 4644,
-   "shadow_px": 10261,
+   "alpha_px": 4712,
+   "shadow_px": 10106,
    "bbox_px": [
-    1454,
-    628,
-    1516,
-    752
+    1604,
+    629,
+    1667,
+    753
    ],
    "sold": true,
-   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "F-niche",
-   "toned": true
+   "toned": true,
+   "projected_from": "D2o"
   },
   {
    "frame": "D2",
@@ -816,18 +970,19 @@
    "default": true,
    "layer": "layers/D2/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
    "shadow": "shadows/D2/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
-   "alpha_px": 1062,
-   "shadow_px": 3303,
+   "alpha_px": 1005,
+   "shadow_px": 3012,
    "bbox_px": [
-    513,
-    737,
-    617,
-    749
+    695,
+    734,
+    792,
+    746
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "E-left",
-   "toned": true
+   "toned": true,
+   "projected_from": "D2o"
   },
   {
    "frame": "D2",
@@ -840,18 +995,19 @@
    "default": true,
    "layer": "layers/D2/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
    "shadow": "shadows/D2/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
-   "alpha_px": 1299,
-   "shadow_px": 2231,
+   "alpha_px": 1257,
+   "shadow_px": 2042,
    "bbox_px": [
-    552,
-    679,
-    585,
-    742
+    731,
+    678,
+    763,
+    740
    ],
    "sold": true,
-   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "E-left",
-   "toned": true
+   "toned": true,
+   "projected_from": "D2o"
   },
   {
    "frame": "D2",
@@ -864,12 +1020,12 @@
    "default": true,
    "layer": "layers/D2/bowl/bowl-cj-glutinous-white-belly-bowl-21.png",
    "shadow": "shadows/D2/bowl/bowl-cj-glutinous-white-belly-bowl-21.png",
-   "alpha_px": 3988,
-   "shadow_px": 9296,
+   "alpha_px": 3960,
+   "shadow_px": 9229,
    "bbox_px": [
-    1236,
+    1386,
     687,
-    1327,
+    1477,
     753
    ],
    "sold": true,
@@ -881,26 +1037,51 @@
   {
    "frame": "D2",
    "slot": "tea-towel",
-   "product": "tea-towel-aliexpress-pure-linen-towel-38x55-caramel",
+   "product": "tea-towel-aliexpress-pure-linen-towel-38x55-caramel-2pc",
    "clay_id": 77,
    "z": 22,
    "sub": 0,
    "shadow_z": 21,
    "default": true,
-   "layer": "layers/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
-   "shadow": "shadows/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
-   "alpha_px": 16999,
-   "shadow_px": 10650,
+   "layer": "layers/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel-2pc.png",
+   "shadow": "shadows/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel-2pc.png",
+   "alpha_px": 18199,
+   "shadow_px": 6090,
    "bbox_px": [
-    2085,
-    546,
-    2190,
-    737
+    2249,
+    543,
+    2374,
+    700
    ],
    "sold": true,
-   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
-   "pass_": "F-niche",
+   "source": "D2 pass G-niche-fill (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "G-niche-fill",
    "toned": true
+  },
+  {
+   "frame": "D2",
+   "slot": "floor-vase",
+   "product": "pool-cj-wabi-sabi-floor-vase-white",
+   "clay_id": 58,
+   "z": 30,
+   "sub": 0,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/D2/floor-vase/pool-cj-wabi-sabi-floor-vase-white.png",
+   "shadow": "shadows/D2/floor-vase/pool-cj-wabi-sabi-floor-vase-white.png",
+   "alpha_px": 42833,
+   "shadow_px": 51797,
+   "bbox_px": [
+    0,
+    598,
+    271,
+    1106
+   ],
+   "sold": true,
+   "source": "D1 pass Bc-corner (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Bc-corner",
+   "toned": true,
+   "projected_from": "D1"
   },
   {
    "frame": "D2",
@@ -913,13 +1094,13 @@
    "default": true,
    "layer": "layers/D2/table-runner/table-runner-aliexpress-french-linen-stonewash-40x140-caramel.png",
    "shadow": "shadows/D2/table-runner/table-runner-aliexpress-french-linen-stonewash-40x140-caramel.png",
-   "alpha_px": 376,
-   "shadow_px": 447,
+   "alpha_px": 9725,
+   "shadow_px": 710,
    "bbox_px": [
     0,
-    897,
-    25,
-    915
+    879,
+    256,
+    943
    ],
    "sold": true,
    "source": "D1 pass A-table (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
@@ -938,19 +1119,239 @@
    "default": true,
    "layer": "layers/D2/bench-pad/bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki.png",
    "shadow": "shadows/D2/bench-pad/bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki.png",
-   "alpha_px": 92756,
-   "shadow_px": 87821,
+   "alpha_px": 133373,
+   "shadow_px": 120792,
    "bbox_px": [
     0,
-    1081,
-    570,
-    1443
+    1062,
+    749,
+    1525
    ],
    "sold": true,
    "source": "D1 pass B-window-front (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "B-window-front",
    "toned": true,
    "projected_from": "D1"
+  },
+  {
+   "frame": "D2o",
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-30x40",
+   "clay_id": 67,
+   "z": 12,
+   "sub": 0,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/D2o/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
+   "shadow": "shadows/D2o/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
+   "alpha_px": 23813,
+   "shadow_px": 19654,
+   "bbox_px": [
+    235,
+    338,
+    431,
+    464
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true,
+   "print": "05, in code (tools/kd_print.py)",
+   "retired": "10.9 row 3: the 64 x 49 frame (H-islands) replaces the 44 x 34"
+  },
+  {
+   "frame": "D2o",
+   "slot": "canisters",
+   "product": "zendrop-2814530-white",
+   "clay_id": 76,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2o/canisters/zendrop-2814530-white.png",
+   "shadow": "shadows/D2o/canisters/zendrop-2814530-white.png",
+   "alpha_px": 7273,
+   "shadow_px": 1897,
+   "bbox_px": [
+    1765,
+    671,
+    1915,
+    744
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "F-niche",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "open-shelf-ceramics",
+   "product": "vase-cj-matte-moon-jar-white-styleg",
+   "clay_id": 69,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2o/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "shadow": "shadows/D2o/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "alpha_px": 9105,
+   "shadow_px": 9614,
+   "bbox_px": [
+    425,
+    363,
+    539,
+    464
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true,
+   "retired": "10.9 row 3: the moon jar moves to Y 1.735 (tools/kd_d2stage.py jar)"
+  },
+  {
+   "frame": "D2o",
+   "slot": "cutting-boards",
+   "product": "cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l",
+   "clay_id": 73,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D2o/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "shadow": "shadows/D2o/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "alpha_px": 9239,
+   "shadow_px": 7438,
+   "bbox_px": [
+    638,
+    617,
+    720,
+    746
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Ec-sconce-board",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "kitchen-sconce",
+   "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+   "clay_id": 70,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D2o/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "shadow": "shadows/D2o/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "alpha_px": 3943,
+   "shadow_px": 0,
+   "bbox_px": [
+    560,
+    262,
+    630,
+    332
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Ec-sconce-board",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "paper-towel-holder",
+   "product": "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c",
+   "clay_id": 74,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2o/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "shadow": "shadows/D2o/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "alpha_px": 4644,
+   "shadow_px": 10261,
+   "bbox_px": [
+    1454,
+    628,
+    1516,
+    752
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "F-niche",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "sink-set",
+   "product": "key-tray-cj-black-walnut-tray-20x13",
+   "clay_id": 71,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2o/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "shadow": "shadows/D2o/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "alpha_px": 1062,
+   "shadow_px": 3303,
+   "bbox_px": [
+    513,
+    737,
+    617,
+    749
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "sink-set",
+   "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped",
+   "clay_id": 72,
+   "z": 18,
+   "sub": 1,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2o/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "shadow": "shadows/D2o/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "alpha_px": 1299,
+   "shadow_px": 2231,
+   "bbox_px": [
+    552,
+    679,
+    585,
+    742
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "tea-towel",
+   "product": "tea-towel-aliexpress-pure-linen-towel-38x55-caramel",
+   "clay_id": 77,
+   "z": 22,
+   "sub": 0,
+   "shadow_z": 21,
+   "default": true,
+   "layer": "layers/D2o/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "shadow": "shadows/D2o/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "alpha_px": 16999,
+   "shadow_px": 10650,
+   "bbox_px": [
+    2085,
+    546,
+    2190,
+    737
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "F-niche",
+   "toned": true,
+   "retired": "10.9 row 6: the set of 2 on the oven handle (G-niche-fill)"
   }
  ],
  "light": [
@@ -965,8 +1366,8 @@
    "pass_": "A-table"
   },
   {
-   "frame": "D2",
-   "file": "light/D2/Ec-sconce-board-lamps.png",
+   "frame": "D2o",
+   "file": "light/D2o/Ec-sconce-board-lamps.png",
    "z": 90,
    "blend": "screen",
    "lamps": [
@@ -986,29 +1387,43 @@
    "projected_from": "D1"
   },
   {
-   "frame": "D1",
-   "file": "light/D1/Ec-sconce-board-lamps-from-D2.png",
+   "frame": "D2",
+   "file": "light/D2/Ec-sconce-board-lamps-from-D2o.png",
    "z": 90,
    "blend": "screen",
    "lamps": [
     "kitchen-sconce"
    ],
    "pass_": "Ec-sconce-board",
-   "projected_from": "D2"
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D1",
+   "file": "light/D1/Ec-sconce-board-lamps-from-D2o.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "kitchen-sconce"
+   ],
+   "pass_": "Ec-sconce-board",
+   "projected_from": "D2o"
   }
  ],
- "status": "for QA (stage one, before the owner's approval 3). Not for the site before QA.",
- "updated": "2026-11-20 (resumed session)",
+ "status": "for QA: 10.9 'D2 takes the stage' (2026-11-24), only what changed; then the owner's approval 3. Not for the site before QA.",
+ "updated": "2026-11-24 (10.9)",
  "frames_out": {
-  "D1-defaults": "D1-defaults.png / D1-defaults-frame.png",
-  "D2-defaults": "D2-defaults.png / D2-defaults-frame.png",
-  "D1-V2": "D1-V2.png / D1-V2-frame.png (pendant V2, code)",
+  "D1-defaults": "D1-defaults.png / D1-defaults-frame.png (plate graded, KD-L4; the D2 changes projected)",
+  "D2-defaults": "D2-defaults.png / D2-defaults-frame.png (yaw -86, KD-15)",
   "D1-V3": "D1-V3.png / D1-V3-frame.png (pendant V3)"
  },
  "sample_slot": {
   "slot": "dining-pendant",
+  "wheel": [
+   "V1",
+   "V3"
+  ],
   "V1": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light (default)",
-  "V2": "pendant-cj-silk-pumpkin-lantern-50cm-warm-light (code variant: V1's shade, the white wire)",
+  "V2": "retired (10.9.6 KD-L3: the same shade as V1); the new V2 (the AE silk dome 337877) is not rendered (no CE)",
   "V3": "pendant-cj-scalloped-pleated-bell-45 (crop edit V3-pendant)"
  },
  "jobs": "jobs.json",
@@ -1017,10 +1432,32 @@
  "qa_sheet": "qa-sheet.jpg",
  "readme": "README.md",
  "rebuild": [
-  "python3 tools/kd_crop.py assemble Dc-right ; ... Ec-sconce-board ; ... Bc-corner ; ... V3-pendant  (the crop canvases, scratchpad)",
-  "python3 tools/kd_cut2.py cut A-table B-window-front Bc-corner Dc-right E-left Ec-sconce-board F-niche V3-pendant",
-  "python3.12 -I tools/kd_print.py   (print 05 into the frame's canvas; reads the listing file from the scratchpad)",
-  "python3 tools/kd_variants.py v2 && python3 tools/kd_variants.py register",
+  "stage one's sources, unchanged: plate-D2o.png, plate-D1-ungraded.png and the layers cut on them (the stage-one rebuild with D2 read as D2o)",
+  "python3 tools/kd_d2stage.py plate            (KD-15: the -86 plate from the two plates; scratchpad intermediate)",
+  "python3 tools/kd_crop.py assemble N-niche && python3 tools/kd_d2stage.py niche-apply   (KD-16)",
+  "python3 tools/kd_d2stage.py grade            (KD-L4: plate-D1.png, plate-D2.png)",
+  "python3 tools/kd_d2stage.py jar && python3 tools/kd_d2stage.py retire",
+  "python3 tools/compose_edits.py project        (the bases of the next edits need the projected layers)",
+  "python3 tools/kd_crop.py assemble G-niche-fill ; ... H-islands ; ... Hv-vessel ; ... Hb-boards   (crop canvases, scratchpad)",
+  "python3 tools/kd_cut2.py cut G-niche-fill H-islands Hv-vessel Hb-boards",
+  "python3.12 -I tools/kd_print.py   (print 05, the 40x50 SKU, into the frame's canvas; reads the listing file from the scratchpad)",
+  "python3 tools/kd_d2stage.py vessel-fix && python3 tools/kd_d2stage.py boards-fix",
   "python3 tools/compose_edits.py project && python3 tools/kd_variants.py frames && python3 tools/checks.py && python3 tools/kd_qa_sheet.py"
- ]
+ ],
+ "source_frames": [
+  "D2o"
+ ],
+ "stage_10_9": {
+  "spec": "docs/proposals/wm-kitchen-dining-render-2026-11-19.md 10.9, with the manager's rulings of 2026-11-24",
+  "record": "d2stage.json",
+  "clay": "assets/blockout/house/framing/wm-dining-2026-11-24/ (D2-plate, D2, D1 at the 10.9 products)",
+  "passes": [
+   "N-niche (the niche, architecture)",
+   "G-niche-fill (tableware, towels)",
+   "H-islands (the frame; its boards and vessel rejected)",
+   "Hv-vessel",
+   "Hb-boards"
+  ],
+  "prompts": "assets/prompts/warm-modern-dining-2026-11-24/"
+ }
 }

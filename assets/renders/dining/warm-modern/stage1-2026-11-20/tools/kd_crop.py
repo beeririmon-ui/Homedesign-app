@@ -30,7 +30,7 @@ ST = K.ST
 
 def prep(p, fr, x0, y0, x1, y1, ids_):
     base = C.load(os.path.join(ST, f"plate-{fr}.png"))
-    clay = C.load(os.path.join(K.CLAY, f"{fr}.png"))
+    clay = C.load(K.clay_file(fr, ".png"))
     ids = K.ids(fr)
     m = np.isin(ids, ids_)
     inp = base.copy()

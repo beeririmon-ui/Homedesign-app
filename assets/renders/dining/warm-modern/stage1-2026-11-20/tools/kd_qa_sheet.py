@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""kd_qa_sheet.py: the QA sheet of stage one (render-agent, 2026-11-20; 0 tokens): both frames at x0.5 with the regions boxed and
+"""kd_qa_sheet.py: the QA sheet of stage one (10.9: the regions that changed) (render-agent, 2026-11-20; 0 tokens): both frames at x0.5 with the regions boxed and
 numbered, then each region at x2 of the 1920 frame (canvas x1.5), and the pendant's three variants side by side.
   python3 kd_qa_sheet.py   ->  qa-sheet.jpg"""
 import os
@@ -11,15 +11,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import kd_common as K  # noqa: E402
 
 ST = K.ST
-REG = [("D1", 1, "table group: pendant V1, runner, amphora + olive, iron dishes", (300, 0, 1330, 1000)),
-       ("D1", 2, "curtain (wider than the clay's stack; seam flecks at the chair tops)", (77, 0, 720, 1110)),
-       ("D1", 3, "right worktop and shelf: mills, oil, bowl + pears, plates, mugs (crop edit Dc)", (2120, 330, 2642, 780)),
-       ("D1", 4, "corner: floor vase + eucalyptus (crop edit Bc)", (1080, 560, 1420, 1060)),
-       ("D1", 5, "left shelf seen from D1: art (blank canvas), moon jar, sconce, board, sink set (projected from D2)", (1380, 260, 1980, 780)),
-       ("D1", 6, "bench pad", (760, 960, 1720, 1420)),
-       ("D2", 7, "left shelf, sconce, sink set, board (E r1 + crop edit Ec)", (100, 230, 760, 760)),
-       ("D2", 8, "paper towel holder, canisters in the niche, tea towel", (1380, 450, 2200, 800)),
-       ("D2", 9, "right shelf and worktop seen from D2 (projected from D1)", (1050, 380, 1560, 770))]
+# 10.9 (2026-11-24): only what changed (EFF1.3); stage one's regions passed QA on 2026-11-20
+REG = [("D2", 1, "KD-15 seam: D1's 5 deg (matched) | D2o, the 2 deg cross-fade at x 304-364; floor, bench, table end", (77, 760, 760, 1486)),
+       ("D2", 2, "KD-16 niche (walnut matched to stage one), its LEDs; plates standing, bowls; canisters (D2o); two towels", (1700, 200, 2420, 800)),
+       ("D2", 3, "frame 64 x 49 with print 05 (40x50 SKU, cover-fit: see README), the moon jar at Y 1.735, the sconce", (380, 240, 900, 520)),
+       ("D2", 4, "serving boards behind the 280363 board (Hb; B scaled 0.78, F's hidden corner mirrored), sink set", (640, 520, 1000, 780)),
+       ("D2", 5, "counter vessel + beech branches (Hv, re-cut in code), mugs, paper towel holder", (1380, 250, 1760, 790)),
+       ("D1", 6, "KD-L4: the graded oak and plaster by the opening (bottom-left)", (77, 900, 1000, 1486)),
+       ("D1", 7, "left shelf from D2: the bigger frame, the jar moved, the serving boards", (1380, 260, 1980, 780)),
+       ("D1", 8, "right end: the shelf without the tableware (moved to the niche); the vessel at the edge (0.43 % in frame)", (2160, 150, 2642, 800))]
 
 
 def main():
@@ -45,11 +45,11 @@ def main():
         t.paste(c, (0, 50))
         ImageDraw.Draw(t).text((8, 8), f"{n} ({g}, x2): {cap}", fill=(0, 0, 0), font_size=26)
         tiles.append(t)
-    vs = [Image.open(os.path.join(ST, f"{v}.png")).convert("RGB").crop((620, 0, 1220, 500)) for v in ("D1-defaults", "D1-V2", "D1-V3")]
-    vt = Image.new("RGB", (1810, 550), "white")
+    vs = [Image.open(os.path.join(ST, f"{v}.png")).convert("RGB").crop((620, 0, 1220, 500)) for v in ("D1-defaults", "D1-V3")]
+    vt = Image.new("RGB", (1210, 550), "white")
     for i, v in enumerate(vs):
         vt.paste(v, (i * 605, 50))
-    ImageDraw.Draw(vt).text((8, 8), "10: the sample slot, pendant V1 (default) / V2 (code: V1's shade, the white wire) / V3 (crop edit)", fill=(0, 0, 0), font_size=26)
+    ImageDraw.Draw(vt).text((8, 8), "9: the sample slot on the graded plate: V1 (default) / V3 (KD-L3: V2 left the wheel)", fill=(0, 0, 0), font_size=26)
     tiles.append(vt)
     Wd = 2730
     rows, row, w = [], [], 0

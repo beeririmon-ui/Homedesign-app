@@ -25,7 +25,8 @@ ST = K.ST
 H, W = K.H, K.W
 PRINT = os.path.join(K.PICKS, "img", "5aff04c0_Sffd2120da3974d409909687f874b51d0k.jpg")   # design 05, the bedroom's framed-art-2 file
 CANVAS_ALBEDO = np.array([216, 200, 174]) / 255
-PID = "framed-art-aliexpress-misty-landscape-386242-work-05-30x40"
+PID = "framed-art-aliexpress-misty-landscape-386242-work-05-40x50"     # 10.9: the 40x50 SKU (was -05-30x40)
+SELLER_CROP = 5 / 4     # 10.9 row 3: the 50 x 40 landscape print is the seller's central crop of the 4:3 design (about 3% off each side)
 
 
 def main():
@@ -47,6 +48,9 @@ def main():
     nonw = pr.min(2) < 0.86
     py, px = np.nonzero(nonw)
     pr = pr[py.min() + 4:py.max() - 3, px.min() + 4:px.max() - 3]
+    side = int(round((pr.shape[1] - SELLER_CROP * pr.shape[0]) / 2))     # 4:3 -> 5:4, centred
+    if side > 0:
+        pr = pr[:, side:pr.shape[1] - side]
     cw, ch = x1 - x0, y1 - y0
     k = max(cw / pr.shape[1], ch / pr.shape[0])
     sw, sh = pr.shape[1] * k, pr.shape[0] * k
@@ -63,10 +67,12 @@ def main():
     rec = json.load(open(rp))
     li = C.luma(light[box])
     rec["print-05"] = dict(file=os.path.basename(PRINT).split("_")[0] + " (listing file, scratchpad only)", file_px=list(pr.shape[1::-1]),
+                           seller_crop="5:4, %d px off each side of the 4:3 design (10.9 row 3)" % side,
                            canvas_box_px=[int(x0), int(y0), int(x1), int(y1)], canvas_px=[int(cw), int(ch)], cover_scale=round(float(k), 4),
                            cropped_px=[round(float(sw - cw), 1), round(float(sh - ch), 1)],
                            canvas_light_p5_p50_p95=[round(float(v), 3) for v in np.percentile(li, [5, 50, 95])],
-                           rule="10.7: print 05 into the blank canvas in code, cover-fit, lit by the edit's canvas light; D1 gets it by the projection")
+                           rule="10.7 / 10.9: print 05 (the 40x50 SKU: the 4:3 design's central 5:4 crop) into the blank canvas in code, cover-fit, "
+                                "lit by the edit's canvas light; D1 gets it by the projection")
     l["print"] = "05, in code (tools/kd_print.py)"
     json.dump(rec, open(rp, "w"), indent=1, default=str)
     json.dump(man, open(os.path.join(ST, "manifest.json"), "w"), indent=1)

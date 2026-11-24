@@ -1,0 +1,268 @@
+{
+ "migrated": {
+  "date": "2026-11-24",
+  "rule": "stage one's D2 is D2o (yaw -91); its cut layers and plate are the sources of the new D2 (yaw -86)"
+ },
+ "plate": {
+  "out": "plate-D2-composed.png",
+  "feather_px": 59.7,
+  "seam_x_px": [
+   304,
+   1499
+  ],
+  "from_D1_px": 452175,
+  "D1_gain_per_material": {
+   "floor": [
+    1.002,
+    0.978,
+    0.966
+   ],
+   "plaster": [
+    1.028,
+    0.993,
+    0.962
+   ],
+   "bench": [
+    1.043,
+    1.064,
+    1.122
+   ],
+   "lower units": [
+    0.879,
+    0.862,
+    0.85
+   ],
+   "worktop / splash": [
+    0.97,
+    0.943,
+    0.961
+   ],
+   "hood": [
+    0.974,
+    1.013,
+    1.074
+   ],
+   "other": [
+    1.017,
+    1.011,
+    1.015
+   ]
+  },
+  "outside_both_px": 0,
+  "seam": {
+   "floor": {
+    "D2o": [
+     25.6,
+     4.7,
+     12.0
+    ],
+    "D1": [
+     29.8,
+     4.8,
+     12.8
+    ],
+    "D1_matched": [
+     28.1,
+     4.9,
+     12.1
+    ],
+    "dE00_before": 3.21,
+    "dE00": 1.85,
+    "px": 22036
+   },
+   "plaster": {
+    "D2o": [
+     87.9,
+     0.8,
+     5.5
+    ],
+    "D1": [
+     87.4,
+     0.1,
+     3.8
+    ],
+    "D1_matched": [
+     87.6,
+     0.9,
+     5.4
+    ],
+    "dE00_before": 1.74,
+    "dE00": 0.23,
+    "px": 45144
+   },
+   "bench": {
+    "D2o": [
+     28.5,
+     8.1,
+     13.8
+    ],
+    "D1": [
+     32.7,
+     8.5,
+     15.3
+    ],
+    "D1_matched": [
+     30.8,
+     8.1,
+     14.3
+    ],
+    "dE00_before": 3.44,
+    "dE00": 1.85,
+    "px": 10575
+   },
+   "all": {
+    "D2o": [
+     56.0,
+     2.0,
+     7.3
+    ],
+    "D1": [
+     56.6,
+     1.7,
+     6.8
+    ],
+    "D1_matched": [
+     54.8,
+     2.2,
+     7.4
+    ],
+    "dE00_before": 0.72,
+    "dE00": 1.18,
+    "px": 103620
+   }
+  },
+  "rule": "each pixel of D2 (-86) is a ray from PD: plate-D2o where D2o's canvas sees it, plate-D1-ungraded on the left 5 deg (matched to D2o per material on the overlap next to the seam, linear light), a 2 deg cross-fade along D2o's left edge"
+ },
+ "jar": {
+  "from_y": 1.55,
+  "to_y": 1.735,
+  "shift_px": [
+   68.7,
+   -0.5
+  ],
+  "scale": 1.0029
+ },
+ "niche": {
+  "lock": {
+   "method": "ECC on the gradient magnitude, masked",
+   "motion": 2,
+   "ecc": {
+    "4": 0.9981,
+    "2": 0.9979,
+    "1": 0.9975
+   },
+   "warp": [
+    [
+     0.999615,
+     2.3e-05,
+     0.668912
+    ],
+    [
+     3.1e-05,
+     1.000001,
+     -0.068581
+    ]
+   ]
+  },
+  "mask_px": 224111,
+  "gain_p1_p50_p99": [
+   0.949,
+   0.993,
+   1.003
+  ],
+  "walnut_gain_rgb_linear": [
+   0.477,
+   0.385,
+   0.4
+  ],
+  "walnut_lit_panel_new": [
+   30.9,
+   17.6,
+   23.2
+  ],
+  "walnut_lit_panel_old": [
+   31.0,
+   17.3,
+   23.5
+  ],
+  "dE00_walnut": 0.38,
+  "walnut_all_new": [
+   24.2,
+   16.1,
+   20.4
+  ],
+  "walnut_all_old": [
+   24.4,
+   14.2,
+   18.7
+  ],
+  "rule": "the edit's niche inside the new clay's niche (ids 42 / 39) + 3 px, feathered, its walnut matched to the stage-one niche (the lit back panel under the top LED, one linear gain per channel, the LED lines kept); the rest is plate-D2-composed"
+ },
+ "grade": {
+  "rule": "KD-L4: one world-space gain on the oak (Y, linear light): g0 by the window and the opening, g0 (1 - k_far) at Y 6.2; a* b* kept (h and C* unchanged); WM-G1's toe on the graded oak (wmg1_toe: nothing under L* 11); the plaster (walls, ceiling, hood) C* +2.5 toward h 85",
+  "g0": 0.4186,
+  "k_far": 0.0,
+  "D1_by_opening_before": [
+   [
+    62.2,
+    3.0,
+    7.0
+   ],
+   93064
+  ],
+  "D1_by_opening_after": [
+   [
+    42.5,
+    3.0,
+    7.0
+   ],
+   93064
+  ],
+  "target_by_opening": [
+   41.0,
+   44.0
+  ],
+  "D1_by_window_before": 51.9,
+  "D2_floor_median_before": 46.8,
+  "D1_by_window_after": 34.8,
+  "D2_floor_median_after": 31.0,
+  "D2_minus_D1_window": -3.8,
+  "plaster_after_D1": [
+   88.6,
+   0.7,
+   6.7
+  ],
+  "plaster_after_D2": [
+   87.7,
+   1.2,
+   7.9
+  ],
+  "boxes": {
+   "opening": [
+    77,
+    1270,
+    718,
+    1486
+   ],
+   "window": "D1 floor at world Y < 1.0"
+  },
+  "note": "M0 does not see the dining opening (house plan: HC7), so the fallback L* 41-44"
+ },
+ "boards_fix": {
+  "board": "B",
+  "scale": 0.78,
+  "anchor_px": [
+   842.0,
+   741.0
+  ],
+  "F_filled_px": 234,
+  "pale_removed_px": 159,
+  "rule": "Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is\n    scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm\n    against 39, width 17.4 against 18.5)"
+ },
+ "vessel_fix": {
+  "body_px": 7779,
+  "branch_seed_px": 8259,
+  "branch_alpha_px": 12791,
+  "rule": "tools/kd_d2stage.py vessel_fix: the jar opaque, the branches by the exact difference matte on their base"
+ }
+}

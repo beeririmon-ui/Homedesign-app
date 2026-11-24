@@ -35,10 +35,10 @@ C = K.C
 H, W = K.H, K.W
 ST = K.ST
 ARCH = (1, 2, 3, 4, 5, 9, 10, 12, 13, 14, 20, 21, 22, 23, 24, 30, 31, 32, 33, 36, 37, 38, 40, 41, 42, 43)
-PALE = {53, 57, 58, 62, 63, 65, 76, 50, 70}          # bone / cream / white products on pale grounds: a lower change threshold
+PALE = {53, 57, 58, 62, 63, 65, 76, 50, 70, 78}          # bone / cream / white products on pale grounds: a lower change threshold
 PAD = {50: 30, 52: 14, 53: 26, 55: 14, 57: 40, 58: 40, 60: 24, 61: 10, 62: 10, 63: 14, 65: 12, 66: 10, 67: 12, 69: 14, 70: 16,
-       71: 8, 72: 10, 73: 12, 74: 12, 76: 12, 77: 14}
-FILLER_PAD = {54: 40, 56: 10, 59: 70, 64: 8, 68: 4, 51: 6, 75: 8}
+       71: 8, 72: 10, 73: 12, 74: 12, 76: 12, 77: 14, 78: 14, 79: 12}
+FILLER_PAD = {54: 40, 56: 10, 59: 70, 64: 8, 68: 4, 51: 6, 75: 8, 80: 40}
 OUT_LAYERS = os.path.join(ST, "layers")
 
 
@@ -243,15 +243,21 @@ def project(man, rec):
     man["light"] = [li for li in man["light"] if not li.get("projected_from")]
     # resumed session: only the cut layers are projected. The loop used to read the growing list, so a layer projected D1 -> D2 was
     # projected back D2 -> D1 onto its own file (cropped to what D2 sees), and a light came back as a second copy
-    originals = [l for l in man["layers"] if l["default"]]
-    original_lights = list(man["light"])
+    # 10.9 (2026-11-24): three source frames. D2o is stage one's D2 (yaw -91), where E-left, Ec and F-niche were cut; the new D2 (yaw -86)
+    # has its own cuts (G-niche-fill, H-islands, the moved jar). A product a frame has cut itself is never projected into it; otherwise
+    # the first source in SOURCES that has it. Retired layers are neither composed nor projected. The depth test into D1 uses the D1
+    # clay of 2026-11-24 (the new products, the tableware gone from the right shelf) when it exists.
+    originals = [l for l in man["layers"] if l["default"] and not l.get("retired")]
+    original_lights = [li for li in man["light"] if not li.get("retired")]
     rp = {}
-    for src, dst in (("D1", "D2"), ("D2", "D1")):
+    have = {fr: {l["product"] for l in originals if l["frame"] == fr} for fr in ("D1", "D2", "D2o")}
+    SOURCES = (("D2", "D1"), ("D2", "D2o"), ("D1", "D2"), ("D1", "D2o"))         # (dst, src) in priority order
+    for dst, src in SOURCES:
         maps = K.map_between(src, dst)
         mx, my, ok = maps
-        ids_dst = K.ids(dst)
+        ids_dst = K.ids(dst, new=True)
         dep_src = K.depth(src)
-        dep_dst = K.depth(dst)
+        dep_dst = K.depth(dst, new=True)
         yy, xx = np.mgrid[0:H, 0:W].astype(np.float64)
         f_src, _, _ = K.axes(src)
         rb = K.rays(dst, xx + 0.5, yy + 0.5)
@@ -259,10 +265,8 @@ def project(man, rec):
         ds = cv2.remap(np.where(np.isfinite(dep_src), dep_src, 50).astype(np.float32), mx, my, cv2.INTER_NEAREST)
         d_in_dst = ds / np.maximum(k_, 1e-6)
         dd = np.where(np.isfinite(dep_dst), dep_dst, 50)
-        for l in [l for l in originals if l["frame"] == src]:
+        for l in [l for l in originals if l["frame"] == src and l["product"] not in have[dst]]:
             k = l["clay_id"]
-            if not np.isin(ids_dst, product_ids(k)).any():
-                continue
             rgba = np.asarray(Image.open(os.path.join(ST, l["layer"]))).astype(np.float32)
             s8 = np.asarray(Image.open(os.path.join(ST, l["shadow"]))).astype(np.float32)
             wr = cv2.remap(rgba, mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
@@ -294,6 +298,7 @@ def project(man, rec):
                       shadow_px=int((s8o < 255).sum()), bbox_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1],
                       projected_from=src, source=l["source"] + f"; projected {src} -> {dst} by the rotation homography about PD (depth test on the {dst} clay)")
             man["layers"].append(nl)
+            have[dst].add(l["product"])
             rp[f"{l['product']} {src}->{dst}"] = dict(alpha_px=nl["alpha_px"], shadow_px=nl["shadow_px"])
         for li in [li for li in original_lights if li["frame"] == src]:
             L8 = np.asarray(Image.open(os.path.join(ST, li["file"]))).astype(np.float32)
@@ -304,6 +309,8 @@ def project(man, rec):
             lp = os.path.join(ST, "light", dst, os.path.basename(li["file"]).replace(".png", f"-from-{src}.png"))
             os.makedirs(os.path.dirname(lp), exist_ok=True)
             Image.fromarray(np.clip(np.rint(wl), 0, 255).astype(np.uint8)).save(lp, optimize=True)
+            if any(x["frame"] == dst and x.get("pass_") == li.get("pass_") for x in man["light"]):
+                continue
             man["light"].append(dict(li, frame=dst, file=os.path.relpath(lp, ST), projected_from=src))
             rp[f"light {li['file']} {src}->{dst}"] = dict(px=int((wl.max(2) > 1).sum()))
     man["layers"].sort(key=lambda l: (l["frame"], l["z"], l.get("sub", 0), l["slot"]))
@@ -317,7 +324,7 @@ def compose(man, rec, fr, swap=None, out_name=None):
     out = plate8.astype(np.float64) / 255
     region = np.zeros((H, W), bool)
     a_all = np.zeros((H, W))
-    ls = [l for l in man["layers"] if l["frame"] == fr and l["default"]]
+    ls = [l for l in man["layers"] if l["frame"] == fr and l["default"] and not l.get("retired")]
     if swap:
         ls = [l for l in ls if l["slot"] not in swap] + list(swap.values())
     ls.sort(key=lambda l: (l["z"], l.get("sub", 0), l["slot"]))
@@ -327,7 +334,7 @@ def compose(man, rec, fr, swap=None, out_name=None):
         out = C.compose_one(out, rgba, s8)
         region |= (rgba[..., 3] > 0) | (s8 < 255)
         a_all = 1 - (1 - a_all) * (1 - rgba[..., 3] / 255)
-    for li in [li for li in man["light"] if li["frame"] == fr]:
+    for li in [li for li in man["light"] if li["frame"] == fr and not li.get("retired")]:
         L8 = np.asarray(Image.open(os.path.join(ST, li["file"]))).astype(np.float64)
         L8 = np.clip(np.rint(L8 * (1 - a_all)[..., None]), 0, 255).astype(np.uint8)
         out = C.light_one(out, L8)

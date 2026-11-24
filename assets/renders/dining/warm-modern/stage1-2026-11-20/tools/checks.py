@@ -63,12 +63,14 @@ def counts(man):
     farea = fm.sum()
     x0, y0, x1, y1 = (int(round(v)) for v in K.FRAME)
     rows = {}
+    union = {"D1": np.zeros((H, W), bool), "D2": np.zeros((H, W), bool)}
     for l in man["layers"]:
-        if not l["default"]:
+        if not l["default"] or l.get("retired") or l["frame"] not in ("D1", "D2"):       # D2o is a source frame, not shipped
             continue
         a = np.asarray(Image.open(os.path.join(ST, l["layer"])))[..., 3] > 127
         a &= fm
-        clay = np.isin(K.ids(l["frame"]), [l["clay_id"]] + [f for f, o in FILLERS.items() if o == l["clay_id"]]) & fm
+        union[l["frame"]] |= a
+        clay = np.isin(K.ids(l["frame"], new=True), [l["clay_id"]] + [f for f, o in FILLERS.items() if o == l["clay_id"]]) & fm
         if a.sum() == 0:
             continue
         ys = np.nonzero(a.any(1))[0]
@@ -83,7 +85,10 @@ def counts(man):
         best = max(fr, key=lambda f: fr[f]["frame_pct"])
         manager[best].append(pid)
     v7 = {f: sorted(pid for pid, fr in rows.items() if f in fr and fr[f]["v7q6"]) for f in ("D1", "D2")}
+    over1 = {f: sorted((pid, fr[f]["frame_pct"]) for pid, fr in rows.items() if f in fr and fr[f]["frame_pct"] >= 1.0) for f in ("D1", "D2")}
     return dict(per_product=rows, manager_way={f: dict(n=len(v), products=sorted(v)) for f, v in manager.items()},
+                coverage_pct={f: round(100 * float(u.sum()) / farea, 2) for f, u in union.items()},
+                over_1pct={f: dict(n=len(v), products=v) for f, v in over1.items()},
                 manager_total=sum(len(v) for v in manager.values()),
                 v7q6={f: dict(n=len(v), products=v) for f, v in v7.items()},
                 note="a set (the three mugs, the three canisters, the mill pair) is one product here; V7Q6 'visible 50 %' is the alpha against the clay "
@@ -99,13 +104,16 @@ COLOUR_TARGETS = {
     "floor-vase": "6.5-5: L* up to 92",
     "open-shelf-ceramics": "10.4: the espresso carrier, L* 15-35 (photo L*20)",
     "candle-holders": "10.4: the espresso carrier in D1 (iron, photo L*24)",
+    "counter-vessel": "10.9 row 4: the white textured jar, photo warm white L*71 (work-room sheet); no pure white",
+    "serving-boards": "10.9 / ch. 7: dark on purpose (the 'dark walnut boards' rejection applies to cutting-boards only)",
+    "tableware-set": "the cream plates with the honey-amber rim (photo)",
 }
 
 
 def colours(man):
     out = {}
     for l in man["layers"]:
-        if not l["default"] or l.get("projected_from") or l["slot"] not in COLOUR_TARGETS:
+        if not l["default"] or l.get("projected_from") or l.get("retired") or l["slot"] not in COLOUR_TARGETS:
             continue
         rgba = np.asarray(Image.open(os.path.join(ST, l["layer"]))).astype(np.float64) / 255
         m = C.ero(rgba[..., 3] > 0.99, 2)
@@ -116,6 +124,71 @@ def colours(man):
         out[l["product"]] = dict(frame=l["frame"], L_p50=round(float(L), 1), C_p50=round(float(np.hypot(A, B)), 1),
                                  h_p50=round(float(np.degrees(np.arctan2(B, A))), 1), L_p95=round(float(np.percentile(lab[:, 0], 95)), 1),
                                  L_p05=round(float(np.percentile(lab[:, 0], 5)), 1), target=COLOUR_TARGETS[l["slot"]])
+    return out
+
+
+def lock_residuals(rgb, fr):
+    """per lock line of the clay (D2 at -86: the clay of 2026-11-24): the strongest gradient across the line near its analytic position
+    (+-12 px), its median offset (kd_plate.py's measure)"""
+    import cv2
+    J = json.load(open(K.clay_file(fr, "-lock-target.json")))
+    y = cv2.GaussianBlur(C.luma(rgb).astype(np.float32), (0, 0), 1.0)
+    gx, gy = cv2.Sobel(y, cv2.CV_32F, 1, 0), cv2.Sobel(y, cv2.CV_32F, 0, 1)
+    out = {}
+    for name, L in J["lines"].items():
+        (x0, y0), (x1, y1) = L["px_ends"]
+        d = np.array([x1 - x0, y1 - y0], float)
+        n = np.array([-d[1], d[0]]) / max(np.hypot(*d), 1e-6)
+        offs = []
+        for x, yy, seen in L["samples"]:
+            if not seen:
+                continue
+            best, bo = 0, None
+            for o in np.arange(-12, 12.5, 0.5):
+                px, py = x + n[0] * o, yy + n[1] * o
+                if 1 <= px < W - 1 and 1 <= py < H - 1:
+                    g = abs(gx[int(py), int(px)] * n[0] + gy[int(py), int(px)] * n[1])
+                    if g > best:
+                        best, bo = g, o
+            if bo is not None and best > 4:
+                offs.append(bo)
+        if len(offs) >= 5:
+            out[name] = dict(median_px=round(float(np.median(offs)), 1), n=len(offs))
+    return out
+
+
+def checks_10_9(man):
+    """10.9's QA list (only what changed): the seam, the homography, the niche, the branches, the D1 grade"""
+    d2s = json.load(open(os.path.join(ST, "d2stage.json")))
+    fx0, fy0, fx1, fy1 = K.FRAME
+    out = dict(seam=d2s["plate"]["seam"], seam_rule="dE00 up to 2 on the floor, the bench and the plaster along the seam (D1-ungraded matched "
+                                                     "to D2o against D2o, medians on the 2 deg cross-fade band)")
+    out["homography"] = dict(camera_vs_clay_lock_lines_px=K.check_camera(),
+                             plate_D2_lock_lines_px=lock_residuals(C.load(os.path.join(ST, "plate-D2.png")) * 255, "D2"),
+                             plate_D2o_lock_lines_px=lock_residuals(C.load(os.path.join(ST, "plate-D2o.png")) * 255, "D2o"),
+                             note="the composed plate's lines are D2o's within 1-2 px (the rotation adds no error); the hood's right vertical "
+                                  "(-10 / -12) and the niche's top edge (the LED under it is the strongest edge) are the approved plates' own",
+                             rule="the analytic camera against Blender's own projection of the lock lines; then the composed plate's edges against "
+                                  "the -86 clay's lock lines (median offset per line, up to 2 px)")
+    out["niche"] = {k: v for k, v in d2s["niche"].items() if k != "lock"}
+    ves = [l for l in man["layers"] if l["frame"] == "D2" and l["slot"] == "counter-vessel" and not l.get("projected_from")][0]
+    a = np.asarray(Image.open(os.path.join(ST, ves["layer"])))[..., 3] > 127
+    ys, xs = np.nonzero(a)
+    u = ((xs.min() - fx0) / (fx1 - fx0), (xs.max() - fx0) / (fx1 - fx0))
+    v = ((ys.min() - fy0) / (fy1 - fy0), (ys.max() - fy0) / (fy1 - fy0))
+    mug = [l for l in man["layers"] if l["frame"] == "D2" and l["slot"] == "mug-set"][0]
+    am = np.asarray(Image.open(os.path.join(ST, mug["layer"])))[..., 3] > 0
+    d1v = [l for l in man["layers"] if l["frame"] == "D1" and l["slot"] == "counter-vessel"]
+    d1_in = 0
+    if d1v:
+        a1 = np.asarray(Image.open(os.path.join(ST, d1v[0]["layer"])))[..., 3] > 127
+        d1_in = int((a1 & K.frame_mask()).sum())
+    out["branches"] = dict(u=[round(float(x), 3) for x in u], v=[round(float(x), 3) for x in v], target_u=[0.565, 0.63], target_v=[0.17, 0.48],
+                           over_mugs_px=int((a & am).sum()), over_niche=bool(u[1] >= 0.65), in_D1_frame_px=d1_in,
+                           in_D1_frame_pct=round(100 * d1_in / K.frame_mask().sum(), 2),
+                           note="the vessel is at (6.95, 3.88), not 10.9's (7.00, 4.00): that place collides with the paper towel holder (7.12, 4.05); "
+                                "every place out of D1's frame (Y 4.0 and up) stands in front of the holder in D2")
+    out["grade_KD_L4"] = d2s["grade"]
     return out
 
 
@@ -138,6 +211,7 @@ def main():
     out["colours"] = colours(man)
     if os.path.exists(os.path.join(ST, "plate-D2.png")):
         out["one_house_D1_D2"] = one_house()
+    out["stage_10_9"] = checks_10_9(man)
     json.dump(out, open(os.path.join(ST, "checks.json"), "w"), indent=1)
     print(json.dumps({k: v for k, v in out.items() if k != "count"}, indent=0)[:3000])
     print(json.dumps(out["count"]["manager_way"]), json.dumps(out["count"]["v7q6"]))

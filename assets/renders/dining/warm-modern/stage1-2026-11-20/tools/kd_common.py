@@ -28,7 +28,19 @@ FRAME = (77.4882, 43.4301, 2642.5118, 1486.5699)
 FW = FRAME[2] - FRAME[0]
 FH = FRAME[3] - FRAME[1]
 LOC = (2.80, 3.80, 1.10)
-YAW = {"D1": -56.0, "D2": -91.0}
+# 10.9 [KD-15] (2026-11-24): D2 is now yaw -86. The stage-one D2 (yaw -91) is kept as "D2o": its plate and the layers cut in it are the
+# sources the new D2 is composed from (a pure rotation about PD). The clay of the new D2 is CLAY2 (the 10.9 niche and products).
+YAW = {"D1": -56.0, "D2o": -91.0, "D2": -86.0}
+CLAY2 = "/home/user/homedesign-app/assets/blockout/house/framing/wm-dining-2026-11-24"
+
+
+def clay_file(frame, kind):
+    """frame: D1, D1-plate, D1-shell, D2o(-plate), D2(-plate); kind: '.png', '-id.png', '-depth.png', '-lock-target.json'"""
+    if frame.startswith("D2o"):
+        return os.path.join(CLAY, frame.replace("D2o", "D2") + kind)
+    if frame.startswith("D2"):
+        return os.path.join(CLAY2, frame + kind)
+    return os.path.join(CLAY, frame + kind)
 U0, V0 = 0.52, 0.43
 F_ = FW * 24.0 / 36.0
 CX_ = FRAME[0] + U0 * FW
@@ -91,12 +103,18 @@ def warp(img, src, dst, interp=cv2.INTER_LANCZOS4, maps=None):
     return out
 
 
-def ids(frame):
-    return np.asarray(Image.open(os.path.join(CLAY, f"{frame}-id.png")))
+def _new(frame, kind, new):
+    """new=True: D1 from the clay of 2026-11-24 (10.9's products) when it exists; for the depth test of the projection into D1"""
+    p = os.path.join(CLAY2, frame + kind)
+    return p if (new and frame.startswith("D1") and os.path.exists(p)) else clay_file(frame, kind)
 
 
-def depth(frame):
-    d = np.asarray(Image.open(os.path.join(CLAY, f"{frame}-depth.png"))).astype(np.float64)
+def ids(frame, new=False):
+    return np.asarray(Image.open(_new(frame, "-id.png", new)))
+
+
+def depth(frame, new=False):
+    d = np.asarray(Image.open(_new(frame, "-depth.png", new))).astype(np.float64)
     return np.where(d >= 65535, np.inf, d / 5000.0)
 
 
@@ -115,8 +133,10 @@ def frame_crop(rgb8):
 def check_camera():
     """the analytic projection here against the clay's lock lines (Blender's own projection), in canvas px"""
     out = {}
-    for fr in ("D1", "D2"):
-        J = json.load(open(os.path.join(CLAY, f"{fr}-lock-target.json")))
+    for fr in ("D1", "D2o", "D2"):
+        if not os.path.exists(clay_file(fr, "-lock-target.json")):
+            continue
+        J = json.load(open(clay_file(fr, "-lock-target.json")))
         errs = []
         for name, L in J["lines"].items():
             for (a, b) in zip(L["xyz"], L["px_ends"]):
