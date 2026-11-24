@@ -1,0 +1,754 @@
+{
+ "id": "2026-11-24-kitchen-d2-stage",
+ "date": "2026-11-24",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-kitchen-d2-stage-2026-11-24.md",
+ "scope": "changed-only (EFF1.2): 10.9 'D2 takes the stage' in assets/renders/dining/warm-modern/stage1-2026-11-20/",
+ "status": "עבר QA (המטבח ופינת האוכל שלב 1 כולל 10.9; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
+ "blocking": [],
+ "checks": {
+  "1_fidelity": {
+   "result": "pass",
+   "findings": [
+    "KD-L5",
+    "KD-L6"
+   ],
+   "print_05_40x50": {
+    "ncc_central_5x4": 0.9536,
+    "ncc_whole_4x3": 0.9409,
+    "ncc_crop5_top_bottom": 0.9315,
+    "ncc_crop8_all": 0.9213,
+    "print_box_px": [
+     198,
+     156
+    ],
+    "aspect": 1.27,
+    "frame_vs_clay": [
+     1.02,
+     1.01
+    ],
+    "print_vs_clay_canvas": [
+     1.04,
+     1.05
+    ],
+    "side_gap_px": [
+     9,
+     15
+    ],
+    "note": "KD-I3"
+   },
+   "moon_jar": {
+    "centre_x_layer": 735,
+    "centre_x_clay": 735,
+    "size_vs_clay_wh": [
+     1.11,
+     1.04
+    ],
+    "LCh": [
+     15.8,
+     0.5,
+     null
+    ],
+    "note": "KD-L5 grey wedges read as lugs at x2"
+   },
+   "counter_vessel": {
+    "height_cm": 30.0,
+    "height_ratio": 1.07,
+    "width_cm": 17.4,
+    "width_ratio": 1.09,
+    "px_per_cm": 4.14,
+    "LCh": [
+     76.7,
+     4.5,
+     69.3
+    ],
+    "photo_LCh": [
+     70.8,
+     4.6,
+     63
+    ],
+    "L_p90": 88.8,
+    "branches_u": [
+     0.565,
+     0.638
+    ],
+    "branches_v": [
+     0.204,
+     0.49
+    ],
+    "over_mugs_px": 0,
+    "mugs_u_max": 0.562,
+    "over_niche_px": 0,
+    "leaves_L_med": 32.9,
+    "leaves_h_med": 50.0,
+    "note": "KD-I4"
+   },
+   "serving_boards": {
+    "LCh": [
+     27.2,
+     19.9,
+     38.4
+    ],
+    "photo_LCh": [
+     26.4,
+     19.6,
+     38
+    ],
+    "px_per_cm_splash": 3.75,
+    "B_height_cm": 41.3,
+    "B_height_ratio": 1.06,
+    "B_width_ratio": 0.97,
+    "F_visible_width_cm": 15.7,
+    "F_width_ratio": 0.81,
+    "F_height_ratio": 1.1,
+    "F_corner_break": "fixed",
+    "F_shape": "asymmetric top, clipped top-right corner at x 846, hole at 2/3 width (KD-L6)"
+   },
+   "tea_towel_2pc": {
+    "LCh": [
+     40.8,
+     36.0,
+     55.0
+    ],
+    "photo_LCh": [
+     37.2,
+     37.7,
+     50
+    ],
+    "vs_clay_box_wh": [
+     1.09,
+     1.19
+    ],
+    "note": "draped within 38x55, as KD-I1"
+   },
+   "niche_tableware": {
+    "bbox_vs_clay": [
+     1.0,
+     1.02
+    ],
+    "LCh": [
+     78.7,
+     17.0,
+     84.6
+    ],
+    "photo_body_LCh": [
+     82.8,
+     10.6,
+     76
+    ],
+    "photo_rim_LCh": [
+     62.9,
+     15.4,
+     77
+    ]
+   },
+   "niche_canisters": {
+    "LCh": [
+     78.3,
+     3.9,
+     95.6
+    ],
+    "L_p95": 88.4,
+    "unchanged_layer": true,
+    "sit_in_new_light_x2": true
+   }
+  },
+  "2_geometry": {
+   "result": "pass",
+   "seam_column_step_L": {
+    "floor": {
+     "in_band_max": 0.43,
+     "outside_p95": 0.42
+    },
+    "bench": {
+     "in_band_max": 0.57,
+     "outside_p95": 0.76
+    },
+    "plaster": {
+     "in_band_max": 0.25,
+     "outside_p95": 0.27
+    },
+    "lower units": {
+     "in_band_max": 0.37,
+     "outside_p95": 0.38
+    }
+   },
+   "seam_strip_dE00_30px_each_side": {
+    "floor": 0.33,
+    "bench": 3.19,
+    "plaster": 2.06,
+    "lower units": 0.95,
+    "table": null
+   },
+   "render_agent_seam_dE00": {
+    "floor": 1.85,
+    "bench": 1.85,
+    "plaster": 0.23
+   },
+   "clay_lines_median_px": {
+    "worktop_front": 0,
+    "shelf_top": 0,
+    "hood_left": -1,
+    "niche_bottom": 1,
+    "niche_right": 3,
+    "bench_top": -1,
+    "inherited_from_approved_plates": {
+     "hood_right": -12,
+     "niche_top_led": 8.5,
+     "tall_units_top": 5
+    }
+   },
+   "niche_walnut_dE00": 0.63,
+   "niche_walnut_new_LCh": [
+    35.1,
+    29.6,
+    53.3
+   ],
+   "niche_walnut_old_LCh": [
+    35.5,
+    30.4,
+    54.2
+   ],
+   "render_agent_niche_dE00": 0.38
+  },
+  "3_layers": {
+   "result": "pass",
+   "recompose": {
+    "D1-defaults": {
+     "recompose_diff_px": 0,
+     "recompose_max": 0,
+     "region_px": 1077237,
+     "outside_region_differing_px": 0,
+     "black_point_p05": 11.49,
+     "frame_png": [
+      1080,
+      1920,
+      3
+     ],
+     "frame_vs_crop_mean": 0.0,
+     "frame_vs_crop_p99": 0.0
+    },
+    "D2-defaults": {
+     "recompose_diff_px": 0,
+     "recompose_max": 0,
+     "region_px": 606581,
+     "outside_region_differing_px": 0,
+     "black_point_p05": 11.27,
+     "frame_png": [
+      1080,
+      1920,
+      3
+     ],
+     "frame_vs_crop_mean": 0.0,
+     "frame_vs_crop_p99": 0.0
+    },
+    "D1-V3": {
+     "recompose_diff_px": 0,
+     "recompose_max": 0,
+     "region_px": 1080395,
+     "outside_region_differing_px": 0,
+     "black_point_p05": 11.49,
+     "frame_png": [
+      1080,
+      1920,
+      3
+     ],
+     "frame_vs_crop_mean": 0.0,
+     "frame_vs_crop_p99": 0.0,
+     "vs_defaults_outside_pendants_px": 0,
+     "vs_defaults_outside_max": 0,
+     "outside_bbox": null
+    }
+   },
+   "shadows_not_one_below": [],
+   "z_shared": "z 14/15: only overlap is the 280363 board's shadow on the serving boards behind it (D1 4805 px, D2 5133 px): physically right",
+   "lights": [
+    [
+     "D1",
+     90,
+     "screen",
+     "light/D1/A-table-lamps.png"
+    ],
+    [
+     "D2o",
+     90,
+     "screen",
+     "light/D2o/Ec-sconce-board-lamps.png"
+    ],
+    [
+     "D2",
+     90,
+     "screen",
+     "light/D2/A-table-lamps-from-D1.png"
+    ],
+    [
+     "D2",
+     90,
+     "screen",
+     "light/D2/Ec-sconce-board-lamps-from-D2o.png"
+    ],
+    [
+     "D1",
+     90,
+     "screen",
+     "light/D1/Ec-sconce-board-lamps-from-D2o.png"
+    ]
+   ],
+   "grade_KD_L4": {
+    "D1_by_opening_L": 42.5,
+    "target": [
+     41,
+     44
+    ],
+    "D1_floor_median_L": 28.4,
+    "D2_floor_median_L": 30.9,
+    "MB0_floor_L": 33,
+    "W0_floor_L": 41,
+    "plaster_C_D1": 6.9,
+    "plaster_C_D2": 8.2,
+    "MB0_plaster_C": 6.7,
+    "mask_edges_x3": "clean"
+   },
+   "one_house_dE00": {
+    "oak floor": 2.8,
+    "south wall plaster": 1.68,
+    "hood plaster": 2.51,
+    "limestone worktop+splash": 0.82,
+    "taupe lowers": 2.15,
+    "walnut shelves": 1.96,
+    "walnut table/bench": 1.67
+   }
+  },
+  "4_regions_x1_x2": {
+   "result": "pass",
+   "regions": {
+    "1": "pass",
+    "2": "pass (KD-I6)",
+    "3": "pass (KD-L5, KD-I3)",
+    "4": "pass (KD-L6)",
+    "5": "pass",
+    "6": "pass",
+    "7": "pass (KD-L5)",
+    "8": "pass",
+    "9": "pass"
+   },
+   "FB9": {
+    "coverage_pct": 7.8,
+    "stage1_coverage_pct": 4.4,
+    "over_1pct": [
+     [
+      "bench-pad",
+      3.039
+     ],
+     [
+      "framed-art",
+      1.129
+     ]
+    ],
+    "over_0_5pct": 3,
+    "median_product_pct": 0.203,
+    "blank_tall_fronts_pct": 20.8,
+    "stage1_blank_tall_fronts_pct": 29.1,
+    "floor_pct": 18.7,
+    "lit_niche_pct": 5.2,
+    "reads_empty": false,
+    "takes_the_stage": "not fully: lightest frame in the house (D1 10.75, B1 13.2, W0 23.1, MB0 47.2); next lever the kitchen runner (gap 3, about +1.7%) and KD-z after approval 3; the owner decides at approval 3",
+    "same_house_magazine_lived_in": true
+   }
+  },
+  "5_count": {
+   "result": "pass",
+   "room_products": 23,
+   "by_frame": {
+    "D1": 11,
+    "D2": 12
+   },
+   "v7q6_area_rule": {
+    "D1": 12,
+    "D2": 9
+   },
+   "v7q6_strict_50pct_visible": {
+    "D1": "11, 12 with the group clause",
+    "D2": 8
+   },
+   "v7q6_unique_room": "about 14, 15 with the group",
+   "wheel": [
+    "V1",
+    "V3"
+   ],
+   "D1_V2_png": "deleted",
+   "D1_V2_in_frames_out": false,
+   "D1_rows": [
+    {
+     "slot": "bench-pad",
+     "product": "bench-pad-aliexpress-linen-look-box-cushion-130x",
+     "vis_pct": 3.177,
+     "own_pct": 3.177,
+     "h_pct": 23.3,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "curtains",
+     "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "vis_pct": 1.967,
+     "own_pct": 1.967,
+     "h_pct": 70.2,
+     "vis_share": 0.96
+    },
+    {
+     "slot": "dining-pendant",
+     "product": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-ligh",
+     "vis_pct": 1.03,
+     "own_pct": 1.03,
+     "h_pct": 25.7,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "framed-art",
+     "product": "framed-art-aliexpress-misty-landscape-386242-wor",
+     "vis_pct": 0.798,
+     "own_pct": 0.798,
+     "h_pct": 12.0,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "table-runner",
+     "product": "table-runner-aliexpress-french-linen-stonewash-4",
+     "vis_pct": 0.797,
+     "own_pct": 0.867,
+     "h_pct": 9.2,
+     "vis_share": 0.92
+    },
+    {
+     "slot": "centerpiece-vase",
+     "product": "nightstand-vase-cj-unglazed-white-amphora-26-typ",
+     "vis_pct": 0.594,
+     "own_pct": 0.594,
+     "h_pct": 20.0,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "counter-vessel",
+     "product": "vase-cj-white-textured-jar-medium-bottle",
+     "vis_pct": 0.435,
+     "own_pct": 0.435,
+     "h_pct": 30.7,
+     "vis_share": 0.64
+    },
+    {
+     "slot": "floor-vase",
+     "product": "pool-cj-wabi-sabi-floor-vase-white",
+     "vis_pct": 0.412,
+     "own_pct": 0.412,
+     "h_pct": 27.7,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "candle-holders",
+     "product": "candle-holders-aliexpress-matte-black-iron-pilla",
+     "vis_pct": 0.403,
+     "own_pct": 0.403,
+     "h_pct": 9.5,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "cutting-boards",
+     "product": "cutting-boards-aliexpress-2pcs-1pc-wooden-cuttin",
+     "vis_pct": 0.205,
+     "own_pct": 0.205,
+     "h_pct": 8.4,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "serving-boards",
+     "product": "cutting-boards-cj-black-walnut-paddle-pair-39-34",
+     "vis_pct": 0.184,
+     "own_pct": 0.383,
+     "h_pct": 10.7,
+     "vis_share": 0.48
+    },
+    {
+     "slot": "open-shelf-ceramics",
+     "product": "vase-cj-matte-moon-jar-white-styleg",
+     "vis_pct": 0.178,
+     "own_pct": 0.178,
+     "h_pct": 6.5,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "mug-set",
+     "product": "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-l",
+     "vis_pct": 0.17,
+     "own_pct": 0.17,
+     "h_pct": 3.5,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "bowl",
+     "product": "bowl-cj-glutinous-white-belly-bowl-21",
+     "vis_pct": 0.158,
+     "own_pct": 0.158,
+     "h_pct": 5.2,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "kitchen-sconce",
+     "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+     "vis_pct": 0.08,
+     "own_pct": 0.08,
+     "h_pct": 4.6,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "condiment-set",
+     "product": "condiment-set-cj-kiln-stoneware-oil-cruet-trio-k",
+     "vis_pct": 0.061,
+     "own_pct": 0.061,
+     "h_pct": 5.5,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "condiment-set",
+     "product": "condiment-set-cj-rubberwood-mill-pair-6in",
+     "vis_pct": 0.053,
+     "own_pct": 0.053,
+     "h_pct": 4.6,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "sink-set",
+     "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottl",
+     "vis_pct": 0.025,
+     "own_pct": 0.025,
+     "h_pct": 3.9,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "sink-set",
+     "product": "key-tray-cj-black-walnut-tray-20x13",
+     "vis_pct": 0.019,
+     "own_pct": 0.02,
+     "h_pct": 0.8,
+     "vis_share": 0.96
+    },
+    {
+     "slot": "paper-towel-holder",
+     "product": "paper-towel-holder-aliexpress-solid-wood-slotted",
+     "vis_pct": 0.0,
+     "own_pct": 0.0,
+     "h_pct": 0,
+     "vis_share": 0.0
+    }
+   ],
+   "D2_rows": [
+    {
+     "slot": "bench-pad",
+     "product": "bench-pad-aliexpress-linen-look-box-cushion-130x",
+     "vis_pct": 3.039,
+     "own_pct": 3.039,
+     "h_pct": 28.9,
+     "vis_share": 0.86
+    },
+    {
+     "slot": "framed-art",
+     "product": "framed-art-aliexpress-misty-landscape-386242-wor",
+     "vis_pct": 1.129,
+     "own_pct": 1.129,
+     "h_pct": 12.3,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "floor-vase",
+     "product": "pool-cj-wabi-sabi-floor-vase-white",
+     "vis_pct": 0.746,
+     "own_pct": 0.746,
+     "h_pct": 34.3,
+     "vis_share": 0.97
+    },
+    {
+     "slot": "tea-towel",
+     "product": "tea-towel-aliexpress-pure-linen-towel-38x55-cara",
+     "vis_pct": 0.488,
+     "own_pct": 0.488,
+     "h_pct": 10.9,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "tableware-set",
+     "product": "tableware-set-aliexpress-kiln-corrugated-stonewa",
+     "vis_pct": 0.438,
+     "own_pct": 0.438,
+     "h_pct": 7.2,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "counter-vessel",
+     "product": "vase-cj-white-textured-jar-medium-bottle",
+     "vis_pct": 0.416,
+     "own_pct": 0.416,
+     "h_pct": 28.9,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "cutting-boards",
+     "product": "cutting-boards-aliexpress-2pcs-1pc-wooden-cuttin",
+     "vis_pct": 0.223,
+     "own_pct": 0.223,
+     "h_pct": 8.6,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "open-shelf-ceramics",
+     "product": "vase-cj-matte-moon-jar-white-styleg",
+     "vis_pct": 0.214,
+     "own_pct": 0.214,
+     "h_pct": 6.8,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "canisters",
+     "product": "zendrop-2814530-white",
+     "vis_pct": 0.211,
+     "own_pct": 0.211,
+     "h_pct": 5.2,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "serving-boards",
+     "product": "cutting-boards-cj-black-walnut-paddle-pair-39-34",
+     "vis_pct": 0.203,
+     "own_pct": 0.42,
+     "h_pct": 10.8,
+     "vis_share": 0.48
+    },
+    {
+     "slot": "table-runner",
+     "product": "table-runner-aliexpress-french-linen-stonewash-4",
+     "vis_pct": 0.127,
+     "own_pct": 0.127,
+     "h_pct": 3.0,
+     "vis_share": 0.55
+    },
+    {
+     "slot": "paper-towel-holder",
+     "product": "paper-towel-holder-aliexpress-solid-wood-slotted",
+     "vis_pct": 0.124,
+     "own_pct": 0.124,
+     "h_pct": 8.4,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "mug-set",
+     "product": "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-l",
+     "vis_pct": 0.106,
+     "own_pct": 0.106,
+     "h_pct": 2.6,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "bowl",
+     "product": "bowl-cj-glutinous-white-belly-bowl-21",
+     "vis_pct": 0.101,
+     "own_pct": 0.101,
+     "h_pct": 4.4,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "kitchen-sconce",
+     "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+     "vis_pct": 0.093,
+     "own_pct": 0.093,
+     "h_pct": 4.6,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "condiment-set",
+     "product": "condiment-set-cj-kiln-stoneware-oil-cruet-trio-k",
+     "vis_pct": 0.044,
+     "own_pct": 0.044,
+     "h_pct": 4.9,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "condiment-set",
+     "product": "condiment-set-cj-rubberwood-mill-pair-6in",
+     "vis_pct": 0.041,
+     "own_pct": 0.041,
+     "h_pct": 4.2,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "sink-set",
+     "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottl",
+     "vis_pct": 0.029,
+     "own_pct": 0.029,
+     "h_pct": 4.2,
+     "vis_share": 1.0
+    },
+    {
+     "slot": "sink-set",
+     "product": "key-tray-cj-black-walnut-tray-20x13",
+     "vis_pct": 0.024,
+     "own_pct": 0.025,
+     "h_pct": 0.8,
+     "vis_share": 0.96
+    }
+   ]
+  }
+ },
+ "findings": [
+  {
+   "id": "KD-L5",
+   "severity": "low",
+   "what": "moon jar: two grey wedges at its sides (left mid-height ~8x20 px, right foot ~6x18 px) read as small lugs at x2; carry-over of stage one's KD-I2 halo, now in D2 and D1",
+   "fix": "0 tokens: trim the alpha to the jar's convex contour, refill plaster from the plate, in D2 and its D1 projection",
+   "owner": "render-agent",
+   "code_fixable": true
+  },
+  {
+   "id": "KD-L6",
+   "severity": "low",
+   "what": "walnut board F: corner break fixed, but its top is asymmetric (slanted left shoulder, clipped square right corner at x 846 with a small tab), visible width 15.7 cm (x0.81), hole at 2/3 width; the SKU F is a symmetric rounded rectangle 34x19.5 with a centred hole; mostly hidden, visible at x2 only",
+   "fix": "0 tokens: extend F's top to x ~858-860 with the left corner's radius, F's own walnut; the hole then sits centred",
+   "owner": "render-agent",
+   "code_fixable": true
+  },
+  {
+   "id": "KD-L7",
+   "severity": "low",
+   "what": "cards not synced to 10.9: print 386242 kitchen variant noted as ...935 (05 30x40), rendered ...944 (05 40x50); tea towel in_room 1pc ...005, rendered 2pc 12000059652536006; F SKU CJJJCFCJ01542-Section F-34x19.5 in_room false",
+   "fix": "update the cards in the 1.3.9 registration ([KD-17]); data/ not touched",
+   "owner": "sourcing-agent via the manager",
+   "code_fixable": "data only"
+  },
+  {
+   "id": "KD-I3",
+   "severity": "info",
+   "what": "the print fills the frame opening's height (1.04-1.05 of the clay canvas); side float gap 9-15 px, none top/bottom; per the manager's ruling"
+  },
+  {
+   "id": "KD-I4",
+   "severity": "info",
+   "what": "branch leaves L* med 33 (p10-p90 21-55), h med 50 (44-58) vs 10.9.2's 35-55 / 50-65; filler, no further edit per the manager"
+  },
+  {
+   "id": "KD-I5",
+   "severity": "info",
+   "what": "V7Q6 at the 50%-visible threshold: serving boards 48% visible, the vessel in D1 cut by the frame edge; strict count D1 12 (with the group), D2 8"
+  },
+  {
+   "id": "KD-I6",
+   "severity": "info",
+   "what": "x4-only: dark speck ~10x8 px at the big plate's foot in the niche; clay-line offsets inherited from the approved plates; docs still mention D1-V2 (kd_variants.py docstring, README stage-one section)"
+  }
+ ],
+ "closed": {
+  "KD-L3": "V2 out of the wheel (sample_slot.wheel V1, V3; D1-V2.png deleted)",
+  "KD-L4": "floor graded: D1 by the opening 42.5 (41-44), D2 30.9, MB0 33; plaster C* 6.9 / 8.2"
+ },
+ "not_done": [
+  "0 tokens, no var2, no commits, no keys",
+  "the rebuild chain was not run (it writes into render-agent's folder): its steps were checked to exist and the frames were recomposed independently",
+  "kids' rooms, data/ and assets/manifest.json untouched"
+ ]
+}
