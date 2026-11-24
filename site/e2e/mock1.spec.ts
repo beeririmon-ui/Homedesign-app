@@ -129,8 +129,8 @@ test.describe('MOCK1: the wow-tour mock-up', () => {
     await page.locator('#tour-living').focus();
     await page.keyboard.press('Enter');
     await atRest(page);
-    // MOCK4: the bedroom and the bathroom are built; the dining corner is still "בקרוב"
-    await expect(page.locator('.tour-rooms button[aria-disabled="true"]')).toHaveCount(1);
+    // MOCK4: the bedroom and the bathroom are built; MOCK5: every room the owner approved is, none is "בקרוב"
+    await expect(page.locator('.tour-rooms button[aria-disabled="true"]')).toHaveCount(0);
   });
 
   test('after each reveal (A, B, C) settles, the frame is the plain composition, pixel for pixel', async ({ page }) => {

@@ -108,8 +108,9 @@ declare global {
       zoomed: boolean;
       more: boolean;
       lay: 'portrait' | 'rails' | 'desk';
-      /** MOCK4: the room the visitor is in, and the frame of the arrival's walk on screen (60 fps, 1-based) */
-      room: 'living-room' | 'master' | 'bath';
+      /** MOCK4: the room the visitor is in, and the frame of the arrival's walk on screen (60 fps, 1-based); MOCK5: the
+       *  frame of the room (web/src/tour/data.ts RoomId) */
+      room: 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work';
       walk: number;
     };
     __hdTourFx?: {

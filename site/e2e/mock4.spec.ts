@@ -37,7 +37,8 @@ type Arrival = { labels: { id: string; u: [number, number] }[]; videos: Record<'
 const arrival = read<Arrival>(resolve(SITE, '.generated/arrival.json'));
 type Room = {
   slots: { id: string; fixed?: boolean; options: { position: number }[] }[];
-  avoid: [number, number, number, number] | null;
+  /** MOCK5: one box a ×1-only print (the bedroom's 776445 first, then 386242) */
+  avoid: [number, number, number, number][];
   for_sale: number;
   sample: string;
 };
@@ -198,9 +199,11 @@ test.describe('MOCK4: the house as it stands', () => {
     expect(await hashes(page)).toEqual(want);
   });
 
-  for (const [id, count] of [
-    ['master', 19],
-    ['bath', 12],
+  // MOCK5: a mark per product of the frame (MB0 19, B2 12); the owner's line counts the room, every frame of it, a
+  // product once (the bedroom 22 with MB1, the bath 18 with B1: e2e/mock5.spec.ts)
+  for (const [id, count, room] of [
+    ['master', 19, 22],
+    ['bath', 12, 18],
   ] as const) {
     test(`the ${id === 'master' ? 'bedroom' : 'bathroom'}: from the panel; the plain composition at rest; a mark per product for sale; the owner's line`, async ({
       page,
@@ -219,7 +222,7 @@ test.describe('MOCK4: the house as it stands', () => {
       expect(await hashes(page), 'the room rests on the plain composition of its layers').toEqual(want);
       await expect(page.locator('.tour-spot')).toHaveCount(count);
       for (const s of r.slots.filter((x) => x.fixed)) await expect(page.locator(`.tour-spot[data-slot="${s.id}"]`)).toHaveCount(0);
-      await expect(page.locator('.tour-sale')).toHaveText(`${count} מוצרים למכירה בחדר`);
+      await expect(page.locator('.tour-sale')).toHaveText(`${room} מוצרים למכירה בחדר`);
       await expect(page.locator('#tour-title')).toHaveText(new RegExp(id === 'master' ? '^חדר שינה' : '^חדר רחצה'));
       // the sample slot's wheel: three options, and the room swaps the product
       await page.locator(`.tour-spot[data-slot="${r.sample}"]`).click({ force: true });
@@ -236,7 +239,8 @@ test.describe('MOCK4: the house as it stands', () => {
 
   test('the art 776445 is ×1 only: no zoom in the bedroom, its mark opens its card where it is, a neighbour’s close-up leaves it out', async ({ browser }) => {
     const r = roomData('master');
-    const a = r.avoid!;
+    const boxes = r.avoid;
+    expect(boxes.length, 'MOCK5: both prints of MB0 are ×1 only (776445 and 386242)').toBe(2);
     const ctx = await browser.newContext({ locale: 'he-IL', viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, hasTouch: true, isMobile: true });
     const page = await ctx.newPage();
     await page.goto('/tour/?skip=1&room=master');
@@ -260,14 +264,14 @@ test.describe('MOCK4: the house as it stands', () => {
       const v = await view();
       seen[slot] = v;
       const zoomed = v.z > v.rest * 1.001;
-      const showsArt = v.u[0]! < a[1] && v.u[1]! > a[0] && v.v[0]! < a[3] && v.v[1]! > a[2];
+      const showsArt = boxes.some((a) => v.u[0]! < a[1] && v.u[1]! > a[0] && v.v[0]! < a[3] && v.v[1]! > a[2]);
       expect(!(zoomed && showsArt), `${slot}: a zoomed view never shows the art`).toBe(true);
       if (slot.startsWith('framed-art')) expect(zoomed, `${slot}: no close-up next to the art`).toBe(false);
       await page.getByRole('button', { name: 'סגירת התקריב' }).click();
       await expect(page.getByRole('dialog')).toBeHidden();
       await atRest(page);
     }
-    note('art-x1.json', { avoid: a, seen });
+    note('art-x1.json', { avoid: boxes, seen });
     // the throw does get its close-up, below the art
     expect((seen['throw'] as { z: number; rest: number }).z).toBeGreaterThan((seen['throw'] as { rest: number }).rest * 1.2);
     await ctx.close();

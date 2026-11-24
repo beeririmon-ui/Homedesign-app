@@ -640,7 +640,8 @@
 }
 .tour-rooms > div {
   display: grid;
-  grid-template-columns: repeat(4, minmax(64px, 1fr));
+  /* MOCK5: the door and five rooms, two rows of three */
+  grid-template-columns: repeat(3, minmax(64px, 1fr));
   gap: var(--s-2);
 }
 .tour-rooms button {
@@ -1019,9 +1020,12 @@
   .tour-sale {
     margin: 0;
   }
-  /* MOCK5: the frames of the room take a line of their own under the name */
+  /* MOCK5: the frames of the room take a line of their own under the name; a finger's target is 44 px */
   .tour-frames.segmented {
     margin: var(--s-1) 0 0;
+  }
+  .tour-frames.segmented button {
+    min-height: 44px;
   }
   .tour-t h1,
   .tour-t .h,
@@ -1387,6 +1391,7 @@
     border-radius: 14px;
   }
   .tour-frames.segmented button {
+    min-height: 44px;
     padding: 6px 8px;
     white-space: normal;
     line-height: 1.2;

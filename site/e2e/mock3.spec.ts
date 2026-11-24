@@ -455,8 +455,8 @@ test.describe('MOCK3: the whole frame first, and the folded control', () => {
     const order = await panel.evaluate((el) => Array.from(el.children).map((c) => c.className.split(' ')[0]));
     expect(order).toEqual(['tour-more-head', 'tour-rooms', 'tour-style', 'tour-links', 'tour-panel']);
     expect(await page.locator('.tour-panel').evaluate((d) => (d as HTMLDetailsElement).open)).toBe(false);
-    // MOCK4: the bedroom and the bathroom are built; the dining corner is still "בקרוב"
-    await expect(page.locator('.tour-rooms button')).toHaveText([/כניסה/, /סלון/, /חדר שינה/, /חדר רחצה/, /פינת אוכל.*בקרוב/]);
+    // MOCK4: the bedroom and the bathroom are built; MOCK5: and the kitchen and the work room (none "בקרוב")
+    await expect(page.locator('.tour-rooms button')).toHaveText([/כניסה/, /סלון/, /חדר שינה/, /חדר רחצה/, /^מטבח$/, /חדר עבודה/]);
     await expect(page.locator('#tour-living')).toHaveAttribute('aria-current', 'true');
     await expect(page.locator('#tour-copy')).toHaveCount(1);
     await audit(page, 'the panel open');
