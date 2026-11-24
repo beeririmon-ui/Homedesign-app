@@ -224,8 +224,9 @@ export class TourEngine {
   }
   private keys(s: TourSlot, pos: number, r: TourData = tour): [Draw, Draw] {
     const w = this.gl.width;
-    // MOCK4: a product of the bedroom or the bathroom that never changes is a place on its room's atlas pages
-    const a = s.atlas?.[String(w)];
+    // MOCK4: a product of the bedroom or the bathroom that never changes is a place on its room's atlas pages; MOCK5:
+    // and the sample's options, a place each on the room's sample pages (the wheel swaps the place)
+    const a = s.atlas?.[String(w)] ?? s.atlas_opts?.[String(w)]?.[pos - 1];
     if (a)
       return [
         {

@@ -401,7 +401,12 @@ const countKey = (card: string | null): string | null => {
   if (!card) return null;
   const root = rootOf(card);
   const url = cardJson(root)?.supplier?.product_url;
-  const key = url ? url.replace(/[?#].*$/, '').replace(/\/+$/, '').toLowerCase() : root;
+  const key = url
+    ? url
+        .replace(/[?#].*$/, '')
+        .replace(/\/+$/, '')
+        .toLowerCase()
+    : root;
   return createHash('sha256').update(key).digest('hex').slice(0, 12);
 };
 const deepFind = (x: unknown, key: string): unknown => {
@@ -548,19 +553,30 @@ const stamp = createHash('sha256')
   .slice(0, 16);
 const STAMP = join(OUT, 'stamp.json');
 type AtlasRef = [number, number, number, number, number];
+type Px4 = [number, number, number, number];
 type Built = {
   rects: Record<string, Px>;
   alpha: Record<string, Px>;
   area: Record<string, number>;
   lights: Px[];
-  atlas: Record<number, { product: AtlasRef[]; shadow: AtlasRef[]; light: AtlasRef[]; pages: { product: [number, number][]; shadow: [number, number][] } }>;
+  atlas: Record<
+    number,
+    {
+      product: AtlasRef[];
+      shadow: AtlasRef[];
+      light: AtlasRef[];
+      pages: { product: [number, number][]; shadow: [number, number][] };
+      /** MOCK5: the sample slot's options on a page of their own (one for the products, one for their shadows) */
+      sample?: { product: Px4[]; shadow: Px4[]; pages: { product: [number, number]; shadow: [number, number] } };
+    }
+  >;
   cards: { at: Record<string, [number, number, number, number]>; sheet: [number, number] };
   shadowOf: number[];
 };
 let built: Built;
 const others = order.filter((id) => id !== c.sample);
 const cached = existsSync(STAMP) ? read<{ stamp: string; built: Built }>(STAMP) : null;
-if (cached?.stamp === stamp && cached.built.area) built = cached.built;
+if (cached?.stamp === stamp && cached.built.area && (!c.sample || cached.built.atlas[WIDTHS.lo]?.sample)) built = cached.built;
 else {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
@@ -616,19 +632,31 @@ else {
       }),
       pages,
     };
-    // the sample's options, a file each (the wheel swaps them)
-    for (const [n, o] of sampleOpts.entries()) {
-      const r = rects[c.sample!]!;
-      const t = tierRect(r, Wt);
-      const size = { width: t.x1 - t.x0, height: t.y1 - t.y0 };
-      const lay = sharp(join(dir, o.layer)).ensureAlpha().extract(cut(r));
-      mkdirSync(join(OUT, `slots/${c.sample}`), { recursive: true });
-      await (Wt === W ? lay : lay.resize(size))
-        .webp({ nearLossless: true, quality: 60, effort: 5 })
-        .toFile(join(OUT, `slots/${c.sample}/${n + 1}.product.${Wt}.webp`));
-      if (shadowOf[n] !== n + 1) continue;
-      const sh = sharp(join(dir, o.shadow)).removeAlpha().toColourspace('srgb').extract(cut(r));
-      await (Wt === W ? sh : sh.resize(size)).webp({ lossless: true, effort: 5 }).toFile(join(OUT, `slots/${c.sample}/${n + 1}.shadow.${Wt}.webp`));
+    // the sample's options (the wheel swaps them). MOCK4 wrote a file each; MOCK5 puts them on a page of their own, one
+    // for the products and one for their shadows (an option that shares its shadow to the byte shares its place): the
+    // wheel swaps them by their place on the page, and seven frames stay inside the Artifact's 255 files
+    if (c.sample) {
+      const r = rects[c.sample]!;
+      const sp = await Promise.all(sampleOpts.map((o) => piece(o.layer, 'product', r, Wt)));
+      const own = sampleOpts.flatMap((_, n) => (shadowOf[n] === n + 1 ? [n] : []));
+      const ss = await Promise.all(own.map((n) => piece(sampleOpts[n]!.shadow, 'shadow', r, Wt)));
+      const spa = pack(sp, Wt);
+      const ssa = pack(ss, Wt);
+      if (spa.some((a) => a.page) || ssa.some((a) => a.page)) fail(`the sample slot ${c.sample}'s options do not fit one page at ${Wt}`);
+      const ps = await sheet(sp, spa, 0, 4);
+      const pm = await ps.metadata();
+      await ps.webp({ nearLossless: true, quality: 60, effort: 5 }).toFile(join(OUT, `sample.product.${Wt}.webp`));
+      const shs = await sheet(ss, ssa, 0, 3);
+      const sm = await shs.metadata();
+      await shs.webp({ lossless: true, effort: 5 }).toFile(join(OUT, `sample.shadow.${Wt}.webp`));
+      atlas[Wt]!.sample = {
+        product: sp.map((p, i): Px4 => [spa[i]!.x, spa[i]!.y, p.w, p.h]),
+        shadow: sampleOpts.map((_, n): Px4 => {
+          const k = own.indexOf(shadowOf[n]! - 1);
+          return [ssa[k]!.x, ssa[k]!.y, ss[k]!.w, ss[k]!.h];
+        }),
+        pages: { product: [pm.width!, pm.height!], shadow: [sm.width!, sm.height!] },
+      };
     }
   }
   // the base: the plate, byte for byte (the folder's own), at both widths
@@ -763,8 +791,19 @@ const slots = await Promise.all(
       // the owner's count: the key a product is counted by in its room, and its area here (counted where it is biggest)
       count_key: cfg.fixed ? null : countKey(cfg.card),
       area_px: built.area[id] ?? 0,
-      // the atlas: [page, x, y, w, h] of this product and of its shadow, per width (absent: a file per option)
+      // the atlas: [page, x, y, w, h] of this product and of its shadow, per width
       atlas: sample ? undefined : Object.fromEntries(Object.values(WIDTHS).map((Wt) => [Wt, { product: at(Wt).product[k]!, shadow: at(Wt).shadow[k]! }])),
+      // MOCK5: the sample's options, on the room's last two pages (the sample's own), per width and option
+      atlas_opts: sample
+        ? Object.fromEntries(
+            Object.values(WIDTHS).map((Wt) => {
+              const sa = at(Wt).sample!;
+              const P = at(Wt).pages.product.length + 1;
+              const S = at(Wt).pages.shadow.length + 1;
+              return [Wt, sampleOpts.map((_, n) => ({ product: [P, ...sa.product[n]!] as AtlasRef, shadow: [S, ...sa.shadow[n]!] as AtlasRef }))];
+            }),
+          )
+        : undefined,
       // a fixed piece of furniture is composed like any layer and has no option to show: one, with no card
       options: cfg.fixed
         ? [
@@ -816,8 +855,14 @@ const data = {
     Object.values(WIDTHS).map((Wt) => [
       Wt,
       {
-        product: at(Wt).pages.product.map(([w, h], i) => ({ src: `${REL}/atlas.product.${i + 1}`, w, h })),
-        shadow: at(Wt).pages.shadow.map(([w, h], i) => ({ src: `${REL}/atlas.shadow.${i + 1}`, w, h })),
+        product: [
+          ...at(Wt).pages.product.map(([w, h], i) => ({ src: `${REL}/atlas.product.${i + 1}`, w, h })),
+          ...(at(Wt).sample ? [{ src: `${REL}/sample.product`, w: at(Wt).sample!.pages.product[0], h: at(Wt).sample!.pages.product[1] }] : []),
+        ],
+        shadow: [
+          ...at(Wt).pages.shadow.map(([w, h], i) => ({ src: `${REL}/atlas.shadow.${i + 1}`, w, h })),
+          ...(at(Wt).sample ? [{ src: `${REL}/sample.shadow`, w: at(Wt).sample!.pages.shadow[0], h: at(Wt).sample!.pages.shadow[1] }] : []),
+        ],
       },
     ]),
   ),
@@ -842,7 +887,6 @@ const loFiles = [
   `base.${lo}.webp`,
   ...data.atlas[lo]!.product.map((p) => `${basename(p.src)}.${lo}.webp`),
   ...data.atlas[lo]!.shadow.map((p) => `${basename(p.src)}.${lo}.webp`),
-  ...(c.sample ? [`slots/${c.sample}/1.product.${lo}.webp`, `slots/${c.sample}/1.shadow.${lo}.webp`] : []),
   `cards.${CARD}.webp`,
 ];
 const unsold = slots.filter((s) => !s.fixed).flatMap((s) => s.options.filter((o) => !o.product_id).map((o) => `${s.id} ${o.position}`));

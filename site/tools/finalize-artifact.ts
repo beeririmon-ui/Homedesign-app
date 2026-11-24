@@ -77,7 +77,7 @@ type Room = {
   widths: { lo: number };
   base: { src: string };
   atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
-  slots: { src: string; atlas?: unknown; shadows?: number[]; options: { position: number; card: { src: string } }[] }[];
+  slots: { src: string; atlas?: unknown; atlas_opts?: unknown; shadows?: number[]; options: { position: number; card: { src: string } }[] }[];
 };
 // MOCK5: every frame of every room built from a render folder (tools/tour/frames.json)
 const tourFrames = (JSON.parse(readFileSync(sitePath('tools/tour/frames.json'), 'utf8')) as { rooms: { frames: string[] }[] }).rooms.flatMap((x) => x.frames);
@@ -89,7 +89,8 @@ for (const id of tourFrames) {
   for (const s of r.slots) {
     for (const o of s.options) {
       files.add(`${o.card.src}.webp`);
-      if (s.atlas) continue;
+      // on the atlas pages (MOCK5: the sample's options too, on the sample pages), which are listed above
+      if (s.atlas || s.atlas_opts) continue;
       files.add(`${s.src}/${o.position}.product.${lo}.webp`);
       files.add(`${s.src}/${s.shadows?.[o.position - 1] ?? o.position}.shadow.${lo}.webp`);
     }

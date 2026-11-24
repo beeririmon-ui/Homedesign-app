@@ -1099,9 +1099,7 @@ export function TourPage() {
         place();
         ui.count(items().length, true);
         atRest(e);
-        announce(
-          inRoom && tour.frame_he ? `${ROOM_HE[id]}, ${tour.frame_he}` : `${ROOM_HE[id]}, ${roomCount(groupOf(id)).total} מוצרים למכירה בחדר`,
-        );
+        announce(inRoom && tour.frame_he ? `${ROOM_HE[id]}, ${tour.frame_he}` : `${ROOM_HE[id]}, ${roomCount(groupOf(id)).total} מוצרים למכירה בחדר`);
         // the frame control keeps the focus where it was (the visitor may switch back); a room's button gives it to the title
         if (!inRoom) title.current?.focus({ preventScroll: true });
       },
@@ -1499,8 +1497,7 @@ export function TourPage() {
   // the kitchen and the work room; a room's button lands on its rest frame (FRAMES[room][0])
   const group = groupOf(room);
   const here = (g: GroupId) => inRoom && group === g;
-  const toRoomBtn = (g: GroupId) => () =>
-    void (here(g) ? setMore(false) : phase === 'door' && g === 'living-room' ? goIn() : goRoom(FRAMES[g][0]!));
+  const toRoomBtn = (g: GroupId) => () => void (here(g) ? setMore(false) : phase === 'door' && g === 'living-room' ? goIn() : goRoom(FRAMES[g][0]!));
   const rooms: { id?: string; name: string; at: At; here?: boolean; go?: () => void }[] = [
     // the room the visitor is in: its button only closes the panel
     { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void (phase === 'door' ? setMore(false) : goOut()) },

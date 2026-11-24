@@ -139,7 +139,16 @@ test.describe('MOCK5: every approved room', () => {
       expect(best.size, `${r.id}: the owner's count`).toBe(COUNT[r.id]);
     }
     note('room-counts.json', out);
-    console.log(Object.entries(out).map(([k, v]) => `${k} ${v.total} (${Object.entries(v.by).map(([f, n]) => `${f} ${n}`).join(' + ')})`).join(', '));
+    console.log(
+      Object.entries(out)
+        .map(
+          ([k, v]) =>
+            `${k} ${v.total} (${Object.entries(v.by)
+              .map(([f, n]) => `${f} ${n}`)
+              .join(' + ')})`,
+        )
+        .join(', '),
+    );
     // registration 1.3.9 ch. 6.1: the warm-modern cameras are the style shell's
     for (const r of index.rooms) for (const f of r.frames) expect(frame(f).camera_from, f).toMatch(/^style_shells_1_3_1\.warm-modern\./);
     expect(frame('dining-d2').camera.yaw_deg_left).toBe(-86);
@@ -150,7 +159,16 @@ test.describe('MOCK5: every approved room', () => {
     note('rights.json', hit);
     for (const h of hit) expect(h.usage_rights === 'confirmed' || frame(h.frame).x1.includes(h.slot), `${h.frame} ${h.slot}`).toBe(true);
     expect(hit.map((h) => `${h.frame}/${h.slot}`).sort()).toEqual(
-      ['dining-d2/framed-art', 'dining/framed-art', 'master-mb1/framed-art', 'master-mb1/framed-art-2', 'master/framed-art', 'master/framed-art-2', 'work/framed-art', 'work/framed-art-2'].sort(),
+      [
+        'dining-d2/framed-art',
+        'dining/framed-art',
+        'master-mb1/framed-art',
+        'master-mb1/framed-art-2',
+        'master/framed-art',
+        'master/framed-art-2',
+        'work/framed-art',
+        'work/framed-art-2',
+      ].sort(),
     );
   });
 
@@ -287,7 +305,11 @@ test.describe('MOCK5: every approved room', () => {
   test('the encoding gate on the new frames: the defaults and the wheels’ variants against the folders’ composites', async ({ page }) => {
     const out: Record<string, Measure & { pass: boolean; identical: number }> = {};
     const bad: string[] = [];
-    const variants: Record<string, string[]> = { dining: ['D1-V3.png'], work: ['w0-variant-art-01.png', 'w0-variant-art-02.png'], 'bath-b1': ['b1-variant-mat-beige.png'] };
+    const variants: Record<string, string[]> = {
+      dining: ['D1-V3.png'],
+      work: ['w0-variant-art-01.png', 'w0-variant-art-02.png'],
+      'bath-b1': ['b1-variant-mat-beige.png'],
+    };
     for (const id of ['master-mb1', 'bath-b1', 'dining', 'dining-d2', 'work']) {
       type Cfg = { layers: string; manifest: string; truth: string; sample: string | null; frame_id?: string };
       const cfg = read<Cfg>(resolve(SITE, `tools/tour/${id}.warm-modern.json`));

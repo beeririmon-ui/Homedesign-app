@@ -76,6 +76,8 @@ export type TourSlot = {
   shadows?: number[];
   /** MOCK4: the product and its shadow in the room's atlas pages, per composition width (absent: files of its own) */
   atlas?: Record<string, { product: AtlasRef; shadow: AtlasRef }>;
+  /** MOCK5: the sample slot's options, each one's product and shadow on the room's sample pages, per width */
+  atlas_opts?: Record<string, { product: AtlasRef; shadow: AtlasRef }[]>;
   /** MOCK5: the key the owner's count counts the product by in its room (its card's original listing), and its area
    *  in this frame (a product is counted once in its room, in the frame where it is biggest) */
   count_key?: string | null;
@@ -167,7 +169,8 @@ export const forSale = (r: TourData): number => r.for_sale ?? r.slots.reduce((n,
  */
 export function roomCount(group: GroupId): { total: number; by: Partial<Record<RoomId, number>> } {
   const frames = FRAMES[group];
-  if (frames.length === 1 && !ROOMS[frames[0]!].slots.some((s) => s.count_key)) return { total: forSale(ROOMS[frames[0]!]), by: { [frames[0]!]: forSale(ROOMS[frames[0]!]) } };
+  if (frames.length === 1 && !ROOMS[frames[0]!].slots.some((s) => s.count_key))
+    return { total: forSale(ROOMS[frames[0]!]), by: { [frames[0]!]: forSale(ROOMS[frames[0]!]) } };
   const best = new Map<string, { f: RoomId; a: number }>();
   for (const f of frames)
     for (const s of ROOMS[f].slots) {

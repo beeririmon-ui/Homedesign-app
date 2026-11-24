@@ -207,10 +207,11 @@ if (existsSync(tourPage) && existsSync(tourData)) {
       frame?: string;
       room_he?: string;
       atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
-      slots: { id: string; src: string; shadows?: number[]; options: { card: { src: string } }[] }[];
+      slots: { id: string; src: string; shadows?: number[]; atlas_opts?: unknown; options: { card: { src: string } }[] }[];
     };
     const lo = r.widths.lo;
-    const s0 = r.slots.find((x) => x.id === r.sample);
+    // MOCK5: the sample's options are on the room's sample pages (in the atlas list); a file of their own before
+    const s0 = r.slots.find((x) => x.id === r.sample && !x.atlas_opts);
     const media =
       file(r.base.src, lo, ['webp']) +
       [...r.atlas[String(lo)]!.product, ...r.atlas[String(lo)]!.shadow].reduce((n, p) => n + file(p.src, lo, ['webp']), 0) +
