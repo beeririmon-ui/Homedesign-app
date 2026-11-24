@@ -8,6 +8,8 @@ room's compose_plate_work.py:
    median Lab of the clay-id masks (the middle half of L*); a material whose chroma is off by more than dE00 3 gets an a* b* shift in its
    mask (L* is the light and stays the model's). The band is read against the plaster just above it (the same light): its implied albedo
    (band / plaster x #ECE5DA, per channel in linear light) against #A8A88E; a* b* moved toward the target when off by more than dE00 3.
+   (2026-11-24, later: each wall's band read on its own wall, east and north; a band off by more than dE00 3 is multiplied per channel
+   in linear light by #A8A88E / its implied albedo, the paint's hue and lightness, the light kept.)
 3. WM-G1 / MP-I2: a toe on L* only, (0, 0) (p0.5, 11.5) (12, 16) (30, 30) (100, 100) when the 16:9 frame's p0.5 is under 11; above 14 the
    knots pull it to 12.5; a* b* kept; nothing above L* 30 changes. Recorded as 'mandatory_for_derived'.
   python3 compose_plate_kids.py raw/plate-K-boy-r1.png
@@ -42,14 +44,18 @@ def rd(lab, ids, g, ero=4, pct=(25, 75)):
     return np.median(v[(v[:, 0] >= lo) & (v[:, 0] <= hi)], 0), m
 
 
-def band_reading(rgb, ids):
-    """the band's implied albedo: just below / just above the line Z 1.25 on the east wall, column by column (the same light)"""
+WALLS = {"east": dict(band=5, plaster=1, xr=(900, 2500, 4), ids=(5, 19)), "north": dict(band=8, plaster=2, xr=(100, 900, 3), ids=(8,))}
+
+
+def band_reading(rgb, ids, wall="east", target="#A8A88E"):
+    """the band's implied albedo: just below / just above the line Z 1.25 on one wall, column by column (the same light)"""
+    wd = WALLS[wall]
     lin = C.lin(rgb)
     below, above = [], []
-    for x in range(900, 2500, 4):
+    for x in range(*wd["xr"]):
         col = ids[:, x]
-        ys5 = np.nonzero(col == 5)[0]
-        ys1 = np.nonzero(col == 1)[0]
+        ys5 = np.nonzero(col == wd["band"])[0]
+        ys1 = np.nonzero(col == wd["plaster"])[0]
         if len(ys5) < 30 or len(ys1) < 30:
             continue
         yl = ys5.min()
@@ -57,15 +63,15 @@ def band_reading(rgb, ids):
             continue
         below.append(lin[yl + 6:yl + 26, x].mean(0))
         above.append(lin[yl - 26:yl - 6, x].mean(0))
-    if len(below) < 20:
+    if len(below) < (20 if wall == "east" else 12):
         return None
     b, a = np.median(below, 0), np.median(above, 0)
     pl = C.lin(np.array([0xEC, 0xE5, 0xDA]) / 255.0)
     alb = np.clip(b / a * pl, 0, 1)
     lab = C.to_lab(C.srgb(alb)[None, None])[0, 0]
-    return dict(implied_albedo_srgb=[int(round(v)) for v in C.srgb(alb) * 255], implied_Lab=[round(float(v), 1) for v in lab],
-                target="#A8A88E", target_Lab=[round(float(v), 1) for v in K.lab_hex("#A8A88E")],
-                dE00=round(float(C.de00(tuple(lab), tuple(K.lab_hex("#A8A88E")))), 2), columns=len(below))
+    return dict(wall=wall, implied_albedo_srgb=[int(round(v)) for v in C.srgb(alb) * 255], implied_Lab=[round(float(v), 1) for v in lab],
+                target=target, target_Lab=[round(float(v), 1) for v in K.lab_hex(target)],
+                dE00=round(float(C.de00(tuple(lab), tuple(K.lab_hex(target)))), 2), columns=len(below))
 
 
 def main(raw):
@@ -99,22 +105,27 @@ def main(raw):
             fixes[name] = dict(ab_shift=[round(float(t[1] - a[1]), 2), round(float(t[2] - a[2]), 2)],
                                why="the material (hue, C*/L*) off MB0 by more than dE00 3 at its own L*")
     e2 = np.clip(C.from_lab(lab), 0, 1)
-    band0 = band_reading(e2, ids)
-    if band0 and band0["dE00"] > 3.0:
-        tgt = K.lab_hex("#A8A88E")
-        cur = np.array(band0["implied_Lab"])
-        sm = C.blur(C.dil(np.isin(ids, K.BAND), 1).astype(np.float64), 1.5)
-        lab[..., 1] += sm * (tgt[1] - cur[1])
-        lab[..., 2] += sm * (tgt[2] - cur[2])
-        fixes["band"] = dict(ab_shift=[round(float(tgt[1] - cur[1]), 2), round(float(tgt[2] - cur[2]), 2)], why="the band's implied albedo off #A8A88E by more than dE00 3")
-    e2 = np.clip(C.from_lab(lab), 0, 1)
+    band0 = {}
+    lin2 = C.lin(e2)
+    for wall, wd in WALLS.items():          # each wall's band against the plaster above it on the same wall (the north wall is in its own light)
+        b0 = band_reading(e2, ids, wall)
+        band0[wall] = b0
+        if b0 and b0["dE00"] > 3.0:
+            # the paint, not the light: per channel in linear light, x (#A8A88E / the implied albedo); the trowel texture and the light stay
+            k = C.lin(np.array([0xA8, 0xA8, 0x8E]) / 255.0) / np.maximum(C.lin(np.array(b0["implied_albedo_srgb"]) / 255.0), 1e-4)
+            sm = C.blur(C.dil(np.isin(ids, wd["ids"]), 1).astype(np.float64), 1.5)
+            lin2 = lin2 * (1 + (k - 1) * sm[..., None])
+            fixes[f"band, {wall} wall"] = dict(k_linear=[round(float(v), 4) for v in k],
+                                               why=f"the {wall} band's implied albedo off #A8A88E by more than dE00 3 (the paint: hue and lightness)")
+    e2 = np.clip(C.srgb(np.clip(lin2, 0, 1)), 0, 1)
+    lab = C.to_lab(e2)
     after = {}
     for name, (g, g0) in SURF.items():
         a, _ = rd(lab, ids, g)
         if a is not None:
             after[name] = [round(float(v), 1) for v in a]
     steps.append(dict(step=2, what="one house: per surface against MB0's plate.png; the band against the plaster above it", before=before,
-                      band_before=band0, fixes=fixes, after=after, band_after=band_reading(e2, ids)))
+                      band_before=band0, fixes=fixes, after=after, band_after={w: band_reading(e2, ids, w) for w in WALLS}))
     lab[..., 0] = np.clip(lab[..., 0], 0, 100)
     fr = K.frame_mask()
     p05 = float(np.percentile(lab[..., 0][fr], 0.5))

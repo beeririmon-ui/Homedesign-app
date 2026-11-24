@@ -192,24 +192,48 @@
     }
    },
    "band_before": {
-    "implied_albedo_srgb": [
-     181,
-     175,
-     151
-    ],
-    "implied_Lab": [
-     71.4,
-     -2.1,
-     13.2
-    ],
-    "target": "#A8A88E",
-    "target_Lab": [
-     68.2,
-     -4.6,
-     13.5
-    ],
-    "dE00": 3.79,
-    "columns": 400
+    "east": {
+     "wall": "east",
+     "implied_albedo_srgb": [
+      181,
+      175,
+      151
+     ],
+     "implied_Lab": [
+      71.4,
+      -2.1,
+      13.2
+     ],
+     "target": "#A8A88E",
+     "target_Lab": [
+      68.2,
+      -4.6,
+      13.5
+     ],
+     "dE00": 3.79,
+     "columns": 400
+    },
+    "north": {
+     "wall": "north",
+     "implied_albedo_srgb": [
+      141,
+      140,
+      111
+     ],
+     "implied_Lab": [
+      57.6,
+      -4.8,
+      15.7
+     ],
+     "target": "#A8A88E",
+     "target_Lab": [
+      68.2,
+      -4.6,
+      13.5
+     ],
+     "dE00": 9.07,
+     "columns": 62
+    }
    },
    "fixes": {
     "oak": {
@@ -226,12 +250,19 @@
      ],
      "why": "the material (hue, C*/L*) off MB0 by more than dE00 3 at its own L*"
     },
-    "band": {
+    "band, east wall": {
      "ab_shift": [
       -2.46,
       0.26
      ],
-     "why": "the band's implied albedo off #A8A88E by more than dE00 3"
+     "why": "the east band's implied albedo off #A8A88E by more than dE00 3"
+    },
+    "band, north wall": {
+     "ab_shift": [
+      0.24,
+      -2.24
+     ],
+     "why": "the north band's implied albedo off #A8A88E by more than dE00 3"
     }
    },
    "after": {
@@ -267,24 +298,48 @@
     ]
    },
    "band_after": {
-    "implied_albedo_srgb": [
-     177,
-     177,
-     150
-    ],
-    "implied_Lab": [
-     71.4,
-     -4.6,
-     13.5
-    ],
-    "target": "#A8A88E",
-    "target_Lab": [
-     68.2,
-     -4.6,
-     13.5
-    ],
-    "dE00": 2.49,
-    "columns": 400
+    "east": {
+     "wall": "east",
+     "implied_albedo_srgb": [
+      177,
+      177,
+      150
+     ],
+     "implied_Lab": [
+      71.4,
+      -4.6,
+      13.5
+     ],
+     "target": "#A8A88E",
+     "target_Lab": [
+      68.2,
+      -4.6,
+      13.5
+     ],
+     "dE00": 2.49,
+     "columns": 400
+    },
+    "north": {
+     "wall": "north",
+     "implied_albedo_srgb": [
+      140,
+      140,
+      116
+     ],
+     "implied_Lab": [
+      57.6,
+      -4.4,
+      12.8
+     ],
+     "target": "#A8A88E",
+     "target_Lab": [
+      68.2,
+      -4.6,
+      13.5
+     ],
+     "dE00": 8.95,
+     "columns": 62
+    }
    }
   },
   {

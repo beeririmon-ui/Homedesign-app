@@ -46,19 +46,30 @@ def main(kid):
     rgba = np.asarray(Image.open(os.path.join(st, v1["layer"]))).astype(np.float64) / 255
     a = rgba[..., 3]
     lab = C.to_lab(rgba[..., :3])
-    core = a > 0.6
+    # the duvet seen between the fringe's strands sits inside the throw's layer (the fringe is one piece there): it keeps its colour.
+    # Weight w: 1 on the throw's side of the cut's hue line (6 degrees in), 0 six degrees past it; below C* 5, by L*
+    tr = man.get("cut_records", {}).get("PB1-bed" if kid == "boy" else "GB1-bed", {}).get("mask_edit", {}).get("throw", {})
+    hh, cc = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])), np.hypot(lab[..., 1], lab[..., 2])
+    if tr.get("hue_thr") is not None:
+        u = (hh - tr["hue_thr"]) * tr["hue_sign"]
+        w = np.where(cc > 5, np.clip((u + 6) / 12, 0, 1), np.clip((60 - lab[..., 0]) / 15, 0, 1))
+    else:
+        w = np.ones(a.shape)
+    w = C.blur(w, 0.7) * (a > 0)
+    core = (a > 0.6) & (w > 0.9)
     med = np.median(lab[core], 0)
     p1 = VARIANTS[kid]["V1"][1]
     L1p, C1p, h1p = PHOTO[p1]
     s = med[0] / L1p
-    rec = dict(rule=__doc__.split("Per pixel")[1].split("Writes")[0].strip(), v1_rendered_Lab=[round(float(v), 1) for v in med],
+    rec = dict(rule=__doc__.split("Per pixel")[1].split("Writes")[0].strip(), duvet_between_strands_kept_px=int(((a > 0) & (w < 0.1)).sum()),
+               v1_rendered_Lab=[round(float(v), 1) for v in med],
                v1_rendered_LCh=[round(v, 1) for v in K.lch(med)], chroma_scale_s=round(float(s), 3), variants={})
     tgt1 = K.from_lch(med[0], C1p * s, h1p)
     de1 = float(C.de00(tuple(med), (med[0], tgt1[1], tgt1[2])))
     rec["v1_vs_photo_dE00_hue_chroma"] = round(de1, 2)
     if de1 > 3.0:
-        lab[..., 1] += np.where(a > 0, tgt1[1] - med[1], 0)
-        lab[..., 2] += np.where(a > 0, tgt1[2] - med[2], 0)
+        lab[..., 1] += w * (tgt1[1] - med[1])
+        lab[..., 2] += w * (tgt1[2] - med[2])
         rgb1 = KC.floor_lab(np.clip(C.from_lab(lab), 0, 1), a > 0)
         out = np.dstack([C.q(rgb1), C.q(a)])
         out[..., :3][out[..., 3] == 0] = 0
@@ -73,9 +84,9 @@ def main(kid):
         tgt = K.from_lch(0, Cp * s, hp)
         lab_n = lab.copy()
         y = Y(lab[..., 0]) * (Y(np.array(Lp)) / Y(np.array(L1p)))
-        lab_n[..., 0] = np.where(a > 0, Lof(y), lab[..., 0])
-        lab_n[..., 1] = np.where(a > 0, lab[..., 1] - med[1] + tgt[1], lab[..., 1])
-        lab_n[..., 2] = np.where(a > 0, lab[..., 2] - med[2] + tgt[2], lab[..., 2])
+        lab_n[..., 0] = lab[..., 0] + w * (Lof(y) - lab[..., 0])
+        lab_n[..., 1] = lab[..., 1] + w * (tgt[1] - med[1])
+        lab_n[..., 2] = lab[..., 2] + w * (tgt[2] - med[2])
         rgb = KC.floor_lab(np.clip(C.from_lab(lab_n), 0, 1), a > 0)
         out = np.dstack([C.q(rgb), C.q(a)])
         out[..., :3][out[..., 3] == 0] = 0

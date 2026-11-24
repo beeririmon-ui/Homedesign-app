@@ -1,0 +1,188 @@
+{
+ "source": "../../../boy/warm-modern/stage1-2026-11-24/plate.png (the boy's composed plate)",
+ "ids_identical_frac": 1.0,
+ "method": "- off the band: girl = boy plate x the clays' ratio, smoothed (normalised convolution, sigma 10 px, the band itself excluded; the\n    ratio is clamped 0.85-1.25 and set to 1 where the clays differ by less than 0.5 %);\n  - on the band (ids 5, 8, 19): the boy plate's band, per channel in linear light, x (#E8D5CC / the boy band's implied albedo), where the\n    implied albedo is the band over the plaster just above the line x #ECE5DA (compose_plate_kids.band_reading): the girl's band gets\n    #E8D5CC against her plaster whatever the model did to the olive, and keeps its trowel texture;\n  - the frame's black point is then read again (WM-G1).\n  python3 girl_plate.py            (reads ../plate.png of the boy and the clay EXRs in the scratchpad)",
+ "k_per_channel": [
+  1.8354,
+  1.5134,
+  1.9798
+ ],
+ "bounce": {
+  "mattress": [
+   1.078,
+   1.0483,
+   1.0524
+  ],
+  "floor": [
+   1.0558,
+   1.016,
+   1.0295
+  ],
+  "walnut": [
+   1.1561,
+   1.1085,
+   1.1589
+  ],
+  "plaster above the band": [
+   1.0451,
+   1.0264,
+   1.0271
+  ]
+ },
+ "band_boy": {
+  "implied_albedo_srgb": [
+   177,
+   177,
+   150
+  ],
+  "implied_Lab": [
+   71.4,
+   -4.5,
+   13.4
+  ],
+  "target": "#A8A88E",
+  "target_Lab": [
+   68.2,
+   -4.6,
+   13.5
+  ],
+  "dE00": 2.47,
+  "columns": 400
+ },
+ "band_girl": {
+  "implied_albedo_srgb": [
+   227,
+   210,
+   202
+  ],
+  "implied_Lab": [
+   85.3,
+   4.6,
+   6.1
+  ],
+  "target": "#E8D5CC",
+  "target_Lab": [
+   86.6,
+   5.1,
+   6.8
+  ],
+  "dE00": 1.08,
+  "columns": 400
+ },
+ "plaster_above_band": {
+  "boy": [
+   84.7,
+   0.7,
+   5.1
+  ],
+  "girl": [
+   85.6,
+   1.2,
+   5.3
+  ],
+  "rule": "\u05d1.1: the wall above the band stays bone (H 32-40); no pink bleeds up",
+  "girl_HSL": [
+   31.8,
+   20.0,
+   83.3
+  ]
+ },
+ "black_point_p05": 12.33,
+ "one_house": {
+  "rule": "per surface: girl vs the boy's plate, and the material (hue, C*/L* at its own L*) vs MB0 as compose_plate_kids.py; off the band only the band's bounce differs",
+  "surfaces": {
+   "plaster": {
+    "girl": [
+     85.6,
+     1.3,
+     5.4
+    ],
+    "boy": [
+     84.7,
+     0.7,
+     5.2
+    ],
+    "dE00_vs_boy": 1.11,
+    "dE00_material_vs_MB0": 2.07
+   },
+   "oak": {
+    "girl": [
+     38.0,
+     7.1,
+     16.9
+    ],
+    "boy": [
+     37.3,
+     6.3,
+     16.6
+    ],
+    "dE00_vs_boy": 0.97,
+    "dE00_material_vs_MB0": 0.67
+   },
+   "walnut, boards and frame": {
+    "girl": [
+     17.3,
+     4.8,
+     6.7
+    ],
+    "boy": [
+     15.7,
+     4.0,
+     6.8
+    ],
+    "dE00_vs_boy": 1.46,
+    "dE00_material_vs_MB0": 1.87
+   },
+   "walnut, desk and chair": {
+    "girl": [
+     22.2,
+     9.7,
+     12.7
+    ],
+    "boy": [
+     21.5,
+     8.9,
+     12.5
+    ],
+    "dE00_vs_boy": 0.9,
+    "dE00_material_vs_MB0": 2.19
+   },
+   "bronze": {
+    "girl": [
+     25.1,
+     2.4,
+     5.0
+    ],
+    "boy": [
+     24.7,
+     2.1,
+     5.0
+    ],
+    "dE00_vs_boy": 0.45,
+    "dE00_material_vs_MB0": 3.05
+   },
+   "limestone slab": {
+    "girl": [
+     60.8,
+     2.3,
+     10.8
+    ],
+    "boy": [
+     58.6,
+     1.0,
+     10.8
+    ],
+    "dE00_vs_boy": 2.55,
+    "dE00_material_vs_MB0": 1.66
+   }
+  }
+ },
+ "WM_G1": {
+  "black_point_p05": 12.33,
+  "range": [
+   11,
+   14
+  ],
+  "ok": true
+ }
+}

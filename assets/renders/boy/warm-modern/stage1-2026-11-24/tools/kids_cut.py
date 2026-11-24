@@ -593,10 +593,15 @@ def _bed_masks(masks, ctx):
         if k not in ("bedspread", "toy-basket", "bedding"):
             taken |= masks[k]
     cand = (ctx["d"] > 6) & ~same & ctx["box"] & ~taken & C.dil(masks["bedding"] | old_t | old_b, 80)
-    cand = cv2.morphologyEx(cand.astype(np.uint8), cv2.MORPH_OPEN, C.disk(1)).astype(bool)
+    pids = K.ids(f"K-{kid}-plate")
+    cand &= C.dil(np.isin(pids, (20, 21, 22)) | np.isin(ids, (53, 54, 55, 56, 59, 60)), 12)     # on the bed, never the wall
+    cand = cv2.morphologyEx(cand.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
     # the throw's clay box lies on the bed: what the drawn throw does not cover there is duvet (pale on the pale mattress, so no d test);
     # the basket's clay box reaches the floor and the walnut: only its changed, re-coloured pixels
-    masks["bedding"] = keep_touching(masks["bedding"] | (old_t & ~taken) | (old_b & ~taken & (ctx["d"] > 6) & ~same) | cand,
+    # the plate's bare mattress (clay id 22) is all under the set in the edit (a made bed): whatever the other products leave of it is
+    # duvet or sheet, even where the pale duvet differs little from the pale mattress
+    mattress = (pids == 22) & ctx["box"] & ~taken
+    masks["bedding"] = keep_touching(masks["bedding"] | (old_t & ~taken) | (old_b & ~taken & (ctx["d"] > 6) & ~same) | cand | mattress,
                                      C.ero(ctx["region"]["bedding"], 3))
     masks["bedspread"] = t
     masks["toy-basket"] = bk
