@@ -1,0 +1,461 @@
+{
+ "report": "qa/reports/2026-11-24-kids-stage1/README.md",
+ "date": "2026-11-24",
+ "agent": "qa-agent",
+ "brief": "briefs/qa-kids-stage1-2026-11-24.md",
+ "scope": [
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/",
+  "assets/renders/girl/warm-modern/stage1-2026-11-24/",
+  "assets/blockout/house/framing/wm-kids-2026-11-24/"
+ ],
+ "status": {
+  "boy": "נכשל QA (חדר הילד שלב 1): K-B1 המכוניות (קוד או 400), K-B2 דוגמת הפסים של הציפה (קוד, ואם לא 400), K-B3 רצועה בין הכרית העומדת לזוג (קוד, 0)",
+  "girl": "נכשל QA (חדר הילדה שלב 1): K-G1 הילה לבנה על הפס (קוד, 0), K-G2 שאריות זית מהגזירה מהבן (קוד, 0), K-G3 כלי העפרונות בבוק נקרא פליז (קוד, ואם לא 400), K-G4 השמיכה בהירה מדי ב-V1–V3 (קוד, 0)"
+ },
+ "checks": {
+  "boy": {
+   "1_fidelity": "fail (K-B1, K-B2)",
+   "2_rejection_bible": "fail (K-B3)",
+   "3_layers_rnd2": "pass (K-L1)",
+   "4_x1_x2": "fail (K-B1, K-B3)",
+   "5_count": "pass"
+  },
+  "girl": {
+   "1_fidelity": "fail (K-G3, K-G4)",
+   "2_rejection_bible": "fail (K-G1, K-G2)",
+   "3_layers_rnd2": "pass (K-L1)",
+   "4_x1_x2": "fail (K-G1, K-G2)",
+   "5_count": "pass"
+  }
+ },
+ "rnd2": {
+  "boy": {
+   "rebuild_vs_files_px": [
+    0,
+    0,
+    0
+   ],
+   "outside_region_px": [
+    0,
+    0,
+    0
+   ],
+   "V2_V3_outside_throw_px": [
+    0,
+    0
+   ],
+   "V2_V3_alpha_equal_V1": true,
+   "frame_png_vs_lanczos_maxdiff": 0,
+   "shadows_one_below": "15/15",
+   "light": "screen z90",
+   "black_point_p05": [
+    11.58,
+    11.58,
+    11.58
+   ]
+  },
+  "girl": {
+   "rebuild_vs_files_px": [
+    0,
+    0,
+    0
+   ],
+   "outside_region_px": [
+    0,
+    0,
+    0
+   ],
+   "V2_V3_outside_throw_px": [
+    0,
+    0
+   ],
+   "V2_V3_alpha_equal_V1": true,
+   "frame_png_vs_lanczos_maxdiff": 0,
+   "shadows_one_below": "14/14",
+   "light": "screen z90 (identical file to the boy's)",
+   "black_point_p05": [
+    12.35,
+    12.34,
+    12.35
+   ]
+  }
+ },
+ "manager_observations_girl": {
+  "a_bloom": {
+   "verdict": "plate defect (code), not plausible light",
+   "band_near_white_px_frame": 136244,
+   "pct_of_frame": 3.68,
+   "pure_white_px": 75613,
+   "band_px_any_channel_ge253_plate": 235961,
+   "frame_extent_p5_p95": {
+    "x": [
+     750,
+     1087
+    ],
+    "y": [
+     411,
+     647
+    ]
+   },
+   "bloom_box_band_LCh": [
+    97.4,
+    3.9,
+    356
+   ],
+   "same_box_boy_LCh": [
+    77.4,
+    11.2,
+    113
+   ],
+   "plaster_above_L_by_column": "86.6-95",
+   "target_E8D5CC_L": 86.6,
+   "dE00_vs_target": 9.06,
+   "cause": "girl band = boy band x k (2.06, 1.70, 2.23) in linear light; boy band near the bed is lit to implied L* 76-78.5 (target 68.2) -> >1 -> clipped",
+   "renderagent_0_21_is_400_column_median": true
+  },
+  "b_pier_strip": {
+   "verdict": "remnant of the boy's olive (code)",
+   "where_canvas": "reveal id 12, x 586-667, y 565-791",
+   "below_line_LCh": [
+    92.5,
+    4.4,
+    90.5
+   ],
+   "above_line_LCh": [
+    95.9,
+    1.7,
+    85.2
+   ],
+   "dE00": 3.15,
+   "identical_to_boy_plate": true
+  },
+  "c_desk_leg_line": {
+   "verdict": "remnant of the boy's olive (code)",
+   "where_canvas": "x 1804-1823, y 918-1229 (frame 1292-1307, 655-887)",
+   "strip_LCh": [
+    34.6,
+    9.7,
+    92
+   ],
+   "band_left_LCh": [
+    27.3,
+    5.4,
+    65.4
+   ],
+   "dE00": 7.82,
+   "identical_to_boy_plate": true,
+   "cause": "band recoloured by clay ids 5/8/19; the drawn leg is ~20-22 px wide vs the clay's 33, so band pixels inside id 24 kept the olive",
+   "more_strips_frame": [
+    "x 1203-1233, y 632-912 (back-left leg)",
+    "x 1337-1357, y 657-858 (chair)",
+    "x 1030-1133, y 651-762 (foot board edge)",
+    "x 0-164, y 550-579 (under the sill)"
+   ]
+  }
+ },
+ "fidelity_R5_lit": {
+  "boy": {
+   "blind": "pass (cream-beige, no cord)",
+   "pendant": "pass (144 px = clay = 30 cm; shade 63 px; no ring)",
+   "prints_C": "pass (3 panels of the SKU)",
+   "shelf": "low K-L3 (lip L* ~85 vs wall 92; photo 70.4/25.4/68)",
+   "pen_cup_walnut": {
+    "lit": [
+     37.1,
+     22.8,
+     55.6
+    ],
+    "photo": [
+     41.9,
+     20.6,
+     48
+    ],
+    "dE00": 5.0
+   },
+   "bookends_L": "pass (in shade)",
+   "cars": "fail K-B1",
+   "stripe_set": "fail K-B2",
+   "pillowcase_linen": "pass",
+   "throw_V1_V2_V3_lit_top_dE00": [
+    6.3,
+    6.7,
+    6.2
+   ],
+   "cushions_reindeer": {
+    "lit": [
+     61.7,
+     34.8,
+     69
+    ],
+    "photo": [
+     57.7,
+     33.8,
+     66
+    ],
+    "dE00": 3.8
+   },
+   "bear": {
+    "lit": [
+     80.3,
+     8.7,
+     81
+    ],
+    "photo": [
+     85.9,
+     7.9,
+     70
+    ],
+    "dE00": 4.3
+   },
+   "basket_jute": {
+    "lit": [
+     55.9,
+     21.9,
+     73
+    ],
+    "photo": [
+     54.4,
+     23.3,
+     69
+    ],
+    "dE00": 2.3,
+    "width_cm": 34.5
+   }
+  },
+  "girl": {
+   "pen_cup_beech": {
+    "lit": [
+     68.0,
+     24.5,
+     69
+    ],
+    "photo": [
+     78.2,
+     31.8,
+     68
+    ],
+    "dE00": 8.3,
+    "verdict": "fail K-G3"
+   },
+   "throw_V1_V2_V3_lit_top": {
+    "rendered": [
+     [
+      81.7,
+      11.7,
+      79
+     ],
+     [
+      67.8,
+      7.7,
+      53
+     ],
+     [
+      94.3,
+      9.4,
+      59
+     ]
+    ],
+    "photo": [
+     [
+      57.4,
+      12.6,
+      73
+     ],
+     [
+      46.2,
+      8.8,
+      51
+     ],
+     [
+      67.8,
+      13.2,
+      48
+     ]
+    ],
+    "dE00": [
+     19.0,
+     19.9,
+     18.6
+    ],
+    "same_sku_chestnut_lit_top_boy_vs_girl": [
+     52.0,
+     67.8
+    ],
+    "verdict": "fail K-G4"
+   },
+   "cushions_dusty_pink": {
+    "lit": [
+     72.0,
+     14.4,
+     32
+    ],
+    "photo": [
+     66.1,
+     15.1,
+     32
+    ],
+    "dE00": 4.6
+   },
+   "bunny": "pass (dress, collar, ears, small red nose as SKU)",
+   "basket_GB1b": {
+    "width_cm": 40.6,
+    "handles": "two long rope loops",
+    "verdict": "pass"
+   },
+   "dune": "pass (visual; lit 89 vs 77.6 scene)",
+   "ruffle_pillowcases": "low K-L5"
+  }
+ },
+ "count": {
+  "boy": {
+   "manager": 13,
+   "v7q6": 11,
+   "v7q6_strict_cars_each": 10,
+   "gaps_to_20": [
+    "ג1 wall-sconce",
+    "ג3 rug",
+    "ג4 skateboard",
+    "ג5 desk-chair",
+    "ג6 floor-cushion",
+    "ג7 night-light",
+    "ג16 desk-bin"
+   ]
+  },
+  "girl": {
+   "manager": 12,
+   "v7q6": 9,
+   "gaps_to_20": [
+    "ג1 wall-sconce",
+    "ג14 rug",
+    "ג13 doll",
+    "ג12 doll-pram",
+    "ג5 desk-chair",
+    "ג15 floor-cushion",
+    "ג7 night-light",
+    "ג16 desk-bin"
+   ]
+  }
+ },
+ "findings": [
+  {
+   "id": "K-G1",
+   "room": "girl",
+   "severity": "medium",
+   "code_fix": true,
+   "owner": "render-agent"
+  },
+  {
+   "id": "K-G2",
+   "room": "girl",
+   "severity": "medium",
+   "code_fix": true,
+   "owner": "render-agent"
+  },
+  {
+   "id": "K-G3",
+   "room": "girl",
+   "severity": "medium",
+   "code_fix": "try code, else 400",
+   "owner": "render-agent"
+  },
+  {
+   "id": "K-G4",
+   "room": "girl",
+   "severity": "medium",
+   "code_fix": true,
+   "owner": "render-agent"
+  },
+  {
+   "id": "K-B1",
+   "room": "boy",
+   "severity": "medium",
+   "code_fix": "code paste or 400",
+   "owner": "render-agent"
+  },
+  {
+   "id": "K-B2",
+   "room": "boy",
+   "severity": "medium",
+   "code_fix": "try code, else 400",
+   "owner": "render-agent"
+  },
+  {
+   "id": "K-B3",
+   "room": "boy",
+   "severity": "medium",
+   "code_fix": true,
+   "owner": "render-agent"
+  },
+  {
+   "id": "K-L1",
+   "room": "both",
+   "severity": "low"
+  },
+  {
+   "id": "K-L2",
+   "room": "girl",
+   "severity": "low"
+  },
+  {
+   "id": "K-L3",
+   "room": "both",
+   "severity": "low"
+  },
+  {
+   "id": "K-L4",
+   "room": "both",
+   "severity": "low",
+   "owner": "master-designer"
+  },
+  {
+   "id": "K-L5",
+   "room": "girl",
+   "severity": "low"
+  },
+  {
+   "id": "K-L6",
+   "room": "boy",
+   "severity": "low"
+  },
+  {
+   "id": "K-I1",
+   "severity": "info",
+   "what": "girl plaster above band H 28.4 near the line / 31.5 render-agent; dE00 1.42 vs boy plaster; accepted as bounce"
+  },
+  {
+   "id": "K-I2",
+   "severity": "info",
+   "what": "boy band implied albedo L* 64.5-78.5 across the east wall"
+  },
+  {
+   "id": "K-I3",
+   "severity": "info",
+   "what": "V7Q6 boy 11 (10 strict), girl 9"
+  },
+  {
+   "id": "K-I4",
+   "severity": "info",
+   "what": "girl nest overlap 5 px (0.002) vs >=0.02, no strip"
+  },
+  {
+   "id": "K-I5",
+   "severity": "info",
+   "what": "boy README regions 1 and 3: x3 only"
+  },
+  {
+   "id": "K-I6",
+   "severity": "info",
+   "what": "desk front legs drawn ~3.3-3.6 cm projected vs clay 5.3"
+  },
+  {
+   "id": "K-I7",
+   "severity": "info",
+   "what": "safety for the site dots: blind blocked; pendant CE open; bear, bunny, cars EN 71; shelf screws; textiles OEKO-TEX"
+  }
+ ],
+ "not_done": [
+  "0 tokens, no var2, no commits, no keys",
+  "no edits to data/, binding docs or render-agent files",
+  "supplier photos read only in the scratchpad with python3.12 -I; none copied to the repo"
+ ]
+}
