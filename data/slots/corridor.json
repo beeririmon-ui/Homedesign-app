@@ -2,7 +2,8 @@
   "room": "corridor",
   "house_room_id": "corridor",
   "views": ["C0"],
-  "version": "1.0.2",
+  "version": "1.1.0",
+  "update_1_1_0": "2026-11-24: house plan 1.3.9, owner decision AP3-KW (registration), with ENT20 (the hall and the corridor are one station, 'הכניסה'). Added by_style.warm-modern: the corridor's warm-modern frame is HC (from the hall's point HX, yaw 180), which passed QA empty; every corridor slot is a gap at 1.3.9 (no product rendered), picture-lights not used in warm modern. Not registered (not rendered): the gallery-art move to Y 10.4-12.0, the gallery-stool move, the ceiling-lights envelope Z 2.30-2.70 of the paper lantern. No new slot; every Nordic value unchanged. Reasons: docs/proposals/wm-registration-1-3-9-2026-11-24.md.",
   "approved": "Frame C0 (C-B: roof-light slot, gallery Y 14.0-15.6, oak portal) with the S11/S12 additions approved 2026-10-08 (verbatim: \"סבב 2 נראה מעולה\", on assets/blockout/house/framing/round2/all-round2.jpg, tile C-B-lit), with the density decision (verbatim: \"כתוב מינימום מוצרים..לדעתי כמה שיותר שהמעצב יחליט שזה לא גורע. ו3 וואריציות מתאימות לנורדי לכל מוצר\"). Designer addition under that decision, not in the clay: gallery-stool (runner narrowed to 60 so that it clears the stool; approved 2026-10-09: docs/studio-rules.md ג.0). The optional picture-ledge of plan 1.0 is dropped. Rules: docs/design-bible/nordic.md 1.6 (rooms: corridor); geometry: docs/house-plan.md/json 1.1 (6.4). 1.0.1 (2026-10-13, QA round-2 consistency fixes, no design change; assets/qa/round2-binding-docs-qa.md): category per slot (Q8), tie-break rule (Q10), electrician install on the ceiling and picture lights (Q14), bridge notes (Q18); density rule per user decision D1B (2026-10-11). 1.0.2 (2026-10-17, user decision AU5, docs/studio-rules.md ז 'מוצרים שנחסמו בגלל מידה'; review data/leads/final-2026-10-13/round5/designer-audit-5d.md): gallery-art h_each 40-50 (was 45-50), so a series of three 40 x 40 squares counts; no other change.",
   "notes": "Structure as living-room.json. category = Bible controlled vocabulary (textile, lighting, ceramics-tableware, storage-function, art-decor-toys). placement uses the product-card enum. z = layer order bottom to top; shadow at z-1 unless has_shadow_layer is false. Tie-break: product layers that share a z never overlap by design (if they do, the one nearer the camera goes on top); shadow layers are multiply and order-independent; no product shares its z with a shadow layer. plan_m in house coordinates, Z from the floor. envelope_cm = max envelope per variant; 3 variants within +-15%. frames = master frames where the product is visible by design. The hall and living products seen at the end of the enfilade are neighbouring-room products (rendered with their defaults, U9), not counted here. hotspot and zoom_frame after the shell render.",
   "variants_required": 3,
@@ -15,6 +16,28 @@
     "unique_slots": 5,
     "removed": ["picture-ledge (optional in plan 1.0): the only calm right-wall run lies between two doors and in steep perspective"],
     "source": "assets/blockout/house/framing/round2/selfcheck.json (C-B F10) + estimate for the stool"
+  },
+  "by_style": {
+    "rule": "by_style.<style>.slots.<slot> overrides only the fields it lists; everything else comes from the slot's base entry below. 'frames' here are that style's frames; frames [] = no frame yet in that style.",
+    "warm-modern": {
+      "source": "docs/house-plan.json 1.3.9 style_shells_1_3_1.warm-modern.entrance (cameras.HC, corridor); docs/proposals/wm-house-20-2026-11-19.md 5 and 8.3; assets/renders/hall/warm-modern/hall-2026-11-18/ (hc.png, hc-lock.json); qa/reports/2026-11-18-arrival-v2",
+      "station": "ENT20: 'הכניסה' = data/slots/hall.json and this file, one station, target 14-16 sold products",
+      "views": ["HC"],
+      "cameras": {
+        "HC": {"loc": [2.462, 8.15, 1.20], "yaw_deg_left": 180, "lens_mm": 24, "u0": 0.50, "v0": 0.50, "tilt": 0, "canvas": "2496 x 1664 (3:2), 16:9 frame [71.11, 170.0, 2424.89, 1494.0]", "role": "the junction's rest frame toward the corridor, from the hall's point HX: the walnut portal, the roof-slot line and the lit master door at the end (u 0.470-0.536); room labels anchored to the measured places (hc-lock.json label_anchors)", "source": "docs/house-plan.json style_shells_1_3_1.warm-modern.entrance.cameras.HC"},
+        "C0": "not a warm-modern station (a key frame on the way back, no products; house-20 5.1); its Nordic entry above unchanged"
+      },
+      "shell": "style_shells_1_3_1.warm-modern.entrance.corridor: limewash #ECE5DA, 2.70 with a shadow gap, smoked oak along Y without thresholds, RL-corridor as one bright line, walnut-lined door reveals without architraves, the laundry as a walnut-lined opening",
+      "slots": {
+        "runner-rug": {"frames": [], "note": "a gap (sourcing row 25; an AU2 dead slot)"},
+        "gallery-art": {"frames": [], "note": "a gap (row 26); the proposed move to Y 10.4-12.0 on X 1.70 (house-20 5.3) registers with its render"},
+        "gallery-stool": {"frames": [], "note": "a gap (row 27; the AE stool 875719 passed the photo check, not rendered); the proposed move to X 1.72-2.02, Y 10.95-11.25 registers with its render"},
+        "ceiling-lights": {"frames": [], "note": "not rendered; the default is the paper rice lantern 40 x 22, a pair (house-20 8.3: the silk cocoon rejected), shade only, with a certified E27 kit, dim in HC, never brighter than the master door; its warm-modern envelope Z 2.30-2.70 registers with its render"},
+        "picture-lights": {"frames": [], "not_used": true, "note": "not used in warm modern (house-20 5.3): lit they would be the brightest points and break the lit door at the end, off they read as dark bars; the roof slot is the gallery's light"}
+      },
+      "density": {"rule": "ENT20 (with hall.json)", "rendered_sold": 0, "note": "HC passed QA empty by design; the full version is 4 products, 6 with a gallery of three artists (house-20 5.4)"},
+      "light_layers": {"active": {"HC": []}, "note": "the roof slot only; no lamp lit in HC"}
+    }
   },
   "base_layers": [
     { "id": "shell", "z": 0, "description": "מעטפת: קירות #F4F1EC, תקרה מונמכת 2.70 עם חריץ צל, פרקט אלון מולבן. חריץ אור חלבי RL-corridor לאורך הקיר השמאלי (X 1.70–2.00, Y 10.00–17.20). פורטל אלון בפתח לכניסה (G-C3). דלתות פתוחות לילד, לילדה ולמקלחת; דלת הכביסה סגורה ושטוחה. נקודות חשמל: 2 בתקרה (Y 11.70, 15.10) ו-3 מעל ההדפסים. בקצה: הכניסה והסלון בברירות המחדל (U9)" }
