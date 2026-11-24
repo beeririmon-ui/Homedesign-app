@@ -55,6 +55,12 @@ def main(kid):
         w = np.where(cc > 5, np.clip((u + 6) / 12, 0, 1), np.clip((60 - lab[..., 0]) / 15, 0, 1))
     else:
         w = np.ones(a.shape)
+    # the hue test only where duvet can show between strands: the bottom 30 px of the throw (the fringe); elsewhere the layer is throw
+    m_ = a > 0
+    below = np.zeros_like(m_)
+    below[:-30] = m_[30:]
+    fringe_band = m_ & ~below
+    w = np.where(fringe_band, w, 1.0)
     w = C.blur(w, 0.7) * (a > 0)
     core = (a > 0.6) & (w > 0.9)
     med = np.median(lab[core], 0)
@@ -82,6 +88,23 @@ def main(kid):
         pid, pk = VARIANTS[kid][vn]
         Lp, Cp, hp = PHOTO[pk]
         tgt = K.from_lch(0, Cp * s, hp)
+        if kid == "girl" and vn == "V3":
+            # ב.4: the girl's pink at HSL S <= 40 (read on the layer's median, as kids_checks.py): the chroma eased until it is
+            import colorsys
+            f_ = 1.0
+            for _ in range(8):
+                y_ = Y(lab[..., 0]) * (Y(np.array(Lp)) / Y(np.array(L1p)))
+                mk_ = (a > 200 / 255) & K.frame_mask()           # the set kids_checks.py reads
+                Ln_ = lab[..., 0] + w * (Lof(y_) - lab[..., 0])
+                an_ = lab[..., 1] + w * (tgt[1] * f_ - med[1])
+                bn_ = lab[..., 2] + w * (tgt[2] * f_ - med[2])
+                med_n = np.median(np.stack([Ln_[mk_], an_[mk_], bn_[mk_]], -1), 0)
+                hh_, ll_, ss_ = colorsys.rgb_to_hls(*np.clip(C.from_lab(med_n[None, None])[0, 0], 0, 1))
+                if ss_ * 100 <= 39.5:
+                    break
+                f_ *= 0.96
+            tgt = (tgt[0], tgt[1] * f_, tgt[2] * f_)
+            rec.setdefault("v3_pink_chroma_eased", round(float(f_), 3))
         lab_n = lab.copy()
         y = Y(lab[..., 0]) * (Y(np.array(Lp)) / Y(np.array(L1p)))
         lab_n[..., 0] = lab[..., 0] + w * (Lof(y) - lab[..., 0])

@@ -2,11 +2,43 @@
  "source": "../../../boy/warm-modern/stage1-2026-11-24/plate.png (the boy's composed plate)",
  "ids_identical_frac": 1.0,
  "method": "- off the band: girl = boy plate x the clays' ratio, smoothed (normalised convolution, sigma 10 px, the band itself excluded; the\n    ratio is clamped 0.85-1.25 and set to 1 where the clays differ by less than 0.5 %);\n  - on the band (ids 5, 8, 19): the boy plate's band, per channel in linear light, x (#E8D5CC / the boy band's implied albedo), where the\n    implied albedo is the band over the plaster just above the line x #ECE5DA (compose_plate_kids.band_reading): the girl's band gets\n    #E8D5CC against her plaster whatever the model did to the olive, and keeps its trowel texture;\n  - the frame's black point is then read again (WM-G1).\n  python3 girl_plate.py            (reads ../plate.png of the boy and the clay EXRs in the scratchpad)",
- "k_per_channel": [
-  1.8354,
-  1.5134,
-  1.9798
- ],
+ "k_per_channel_per_wall": {
+  "east": [
+   2.0608,
+   1.6993,
+   2.2323
+  ],
+  "north": [
+   2.0608,
+   1.6993,
+   2.2323
+  ],
+  "east_second_pass": [
+   1.0401,
+   1.0215,
+   1.0224
+  ],
+  "north_second_pass": [
+   1.1751,
+   1.1142,
+   1.159
+  ],
+  "skirting": {
+   "before": [
+    22.4,
+    -1.3,
+    3.8
+   ],
+   "target_at_own_L": [
+    22.4,
+    1.3,
+    1.8
+   ],
+   "dE00": 4.27,
+   "applied": true,
+   "why": "the skirting is the band's paint (id 19); the model drew it greener and more saturated"
+  }
+ },
  "bounce": {
   "mattress": [
    1.078,
@@ -29,46 +61,6 @@
    1.0271
   ]
  },
- "band_boy": {
-  "implied_albedo_srgb": [
-   177,
-   177,
-   150
-  ],
-  "implied_Lab": [
-   71.4,
-   -4.5,
-   13.4
-  ],
-  "target": "#A8A88E",
-  "target_Lab": [
-   68.2,
-   -4.6,
-   13.5
-  ],
-  "dE00": 2.47,
-  "columns": 400
- },
- "band_girl": {
-  "implied_albedo_srgb": [
-   227,
-   210,
-   202
-  ],
-  "implied_Lab": [
-   85.3,
-   4.6,
-   6.1
-  ],
-  "target": "#E8D5CC",
-  "target_Lab": [
-   86.6,
-   5.1,
-   6.8
-  ],
-  "dE00": 1.08,
-  "columns": 400
- },
  "plaster_above_band": {
   "boy": [
    84.7,
@@ -82,14 +74,14 @@
   ],
   "rule": "\u05d1.1: the wall above the band stays bone (H 32-40); no pink bleeds up",
   "girl_HSL": [
-   31.8,
-   20.0,
+   31.5,
+   20.5,
    83.3
   ]
  },
- "black_point_p05": 12.33,
+ "black_point_p05": 12.2,
  "one_house": {
-  "rule": "per surface: girl vs the boy's plate, and the material (hue, C*/L* at its own L*) vs MB0 as compose_plate_kids.py; off the band only the band's bounce differs",
+  "rule": "per surface: the girl's plate against the boy's, and the material (hue, C*/L* at its own L*) against MB0 as compose_plate_kids.py; off the band only the band's bounce differs",
   "surfaces": {
    "plaster": {
     "girl": [
@@ -102,8 +94,8 @@
      0.7,
      5.2
     ],
-    "dE00_vs_boy": 1.11,
-    "dE00_material_vs_MB0": 2.07
+    "dE00_vs_boy": 1.07,
+    "dE00_material_vs_MB0": 2.05
    },
    "oak": {
     "girl": [
@@ -130,13 +122,13 @@
      4.0,
      6.8
     ],
-    "dE00_vs_boy": 1.46,
-    "dE00_material_vs_MB0": 1.87
+    "dE00_vs_boy": 1.45,
+    "dE00_material_vs_MB0": 1.89
    },
    "walnut, desk and chair": {
     "girl": [
      22.2,
-     9.7,
+     9.8,
      12.7
     ],
     "boy": [
@@ -151,15 +143,15 @@
     "girl": [
      25.1,
      2.4,
-     5.0
+     5.1
     ],
     "boy": [
      24.7,
      2.1,
      5.0
     ],
-    "dE00_vs_boy": 0.45,
-    "dE00_material_vs_MB0": 3.05
+    "dE00_vs_boy": 0.46,
+    "dE00_material_vs_MB0": 3.04
    },
    "limestone slab": {
     "girl": [
@@ -172,13 +164,101 @@
      1.0,
      10.8
     ],
-    "dE00_vs_boy": 2.55,
-    "dE00_material_vs_MB0": 1.66
+    "dE00_vs_boy": 2.56,
+    "dE00_material_vs_MB0": 1.67
    }
   }
  },
+ "band_girl": {
+  "east": {
+   "wall": "east",
+   "implied_albedo_srgb": [
+    232,
+    213,
+    204
+   ],
+   "implied_Lab": [
+    86.5,
+    5.0,
+    6.9
+   ],
+   "target": "#E8D5CC",
+   "target_Lab": [
+    86.6,
+    5.1,
+    6.8
+   ],
+   "dE00": 0.21,
+   "columns": 400
+  },
+  "north": {
+   "wall": "north",
+   "implied_albedo_srgb": [
+    232,
+    213,
+    204
+   ],
+   "implied_Lab": [
+    86.5,
+    5.2,
+    6.7
+   ],
+   "target": "#E8D5CC",
+   "target_Lab": [
+    86.6,
+    5.1,
+    6.8
+   ],
+   "dE00": 0.18,
+   "columns": 62
+  }
+ },
+ "band_boy": {
+  "east": {
+   "wall": "east",
+   "implied_albedo_srgb": [
+    168,
+    168,
+    142
+   ],
+   "implied_Lab": [
+    68.3,
+    -4.7,
+    13.5
+   ],
+   "target": "#A8A88E",
+   "target_Lab": [
+    68.2,
+    -4.6,
+    13.5
+   ],
+   "dE00": 0.13,
+   "columns": 400
+  },
+  "north": {
+   "wall": "north",
+   "implied_albedo_srgb": [
+    168,
+    168,
+    142
+   ],
+   "implied_Lab": [
+    68.2,
+    -4.6,
+    13.5
+   ],
+   "target": "#A8A88E",
+   "target_Lab": [
+    68.2,
+    -4.6,
+    13.5
+   ],
+   "dE00": 0.08,
+   "columns": 62
+  }
+ },
  "WM_G1": {
-  "black_point_p05": 12.33,
+  "black_point_p05": 12.2,
   "range": [
    11,
    14

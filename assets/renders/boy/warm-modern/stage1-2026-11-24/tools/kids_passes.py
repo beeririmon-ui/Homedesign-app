@@ -70,8 +70,14 @@ PASSES = {
     "PB5-desk": dict(kid="boy", products=["framed-prints", "bookends", "toy-cars", "pen-cup"], box=(1690, 50, 2580, 940), aspect="1:1",
                      lamps=[], board="PB5-desk.jpg", only_ids=(42, 43, 48, 49, 50, 51, 52)),
     "GB1-bed": dict(kid="girl", products=["bedding", "pillowcase", "bedspread", "toy-basket"], box=(300, 597, 1544, 1530), aspect="4:3",
-                    lamps=[], board="GB1-bed.jpg", clay="K-girl-bed"),
+                    lamps=[], board="GB1-bed.jpg", clay="K-girl-bed", canvas_from="GB1b-basket",
+                    throw_L_frac=None),     # Linen Brown on Dune: the lit top of the throw is as light as the shaded duvet; the hue alone parts them
     "GB2-nest": dict(kid="girl", products=["cushions-pair", "soft-toy"], box=(400, 560, 1180, 1080), aspect="3:2", lamps=[], board="GB2-nest.jpg"),
+    # the girl's basket again, on GB1's own edit (2026-11-24, later): GB1 drew a squat basket (about 40 x 22 cm, side cut-out handles)
+    # where the card and its photo are a tall 40 x 45 cylinder with two long rope loop handles; the clay's basket is pasted over GB1's
+    # edit (it covers the squat one) and only the basket is redrawn; GB1 is then cut from this canvas
+    "GB1b-basket": dict(kid="girl", products=["toy-basket"], box=(550, 890, 1190, 1530), aspect="1:1", lamps=[], board="GB1b-basket.jpg",
+                        clay="K-girl-bed", base_pass="GB1-bed"),
 }
 # the girl's layers made by code from the boy's (ב.6): above the band and on the desk
 GIRL_FROM_BOY = ["roman-blind", "pendant", "framed-prints", "bookshelf", "pen-cup", "bookends"]

@@ -53,6 +53,15 @@ def main(a):
             if e["id"] == a[2]:
                 e.update(json.loads(a[3]))
         print(a[1], "spent", save(a[1], J))
+    elif a[0] == "pending":                      # a send prepared and priced, not yet sent (the manager's 2026-11-24 list)
+        J = load(a[1])
+        e = json.loads(a[2])
+        J["pending"] = [x for x in J.get("pending", []) if x["id"] != e["id"]] + [e]
+        print(a[1], "pending", len(J["pending"]), "spent", save(a[1], J))
+    elif a[0] == "unpend":
+        J = load(a[1])
+        J["pending"] = [x for x in J.get("pending", []) if x["id"] != a[2]]
+        print(a[1], "pending", len(J["pending"]), "spent", save(a[1], J))
     elif a[0] == "sum":
         tot = 0
         for k in ("boy", "girl"):

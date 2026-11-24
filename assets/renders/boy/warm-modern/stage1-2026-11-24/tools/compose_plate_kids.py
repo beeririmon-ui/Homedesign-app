@@ -44,7 +44,30 @@ def rd(lab, ids, g, ero=4, pct=(25, 75)):
     return np.median(v[(v[:, 0] >= lo) & (v[:, 0] <= hi)], 0), m
 
 
-WALLS = {"east": dict(band=5, plaster=1, xr=(900, 2500, 4), ids=(5, 19)), "north": dict(band=8, plaster=2, xr=(100, 900, 3), ids=(8,))}
+WALLS = {"east": dict(band=5, plaster=1, xr=(900, 2500, 4), ids=(5,)), "north": dict(band=8, plaster=2, xr=(100, 900, 3), ids=(8,))}
+
+
+def skirting_fix(lab, ids, target):
+    """the skirting in the band's paint (clay id 19): at its own L* (the light), the target's hue and C*/L*, when off by more than
+    dE00 3 (read on the middle half of its L*)"""
+    m = C.ero(ids == 19, 1) & K.frame_mask()
+    if m.sum() < 200:
+        return None
+    a_, _ = rd(lab, ids, (19,), ero=1)
+    Lt, Ct, ht = K.lch(K.lab_hex(target))
+    t = K.from_lch(a_[0], Ct / Lt * a_[0], ht)
+    de = float(C.de00(tuple(a_), tuple(t)))
+    if de <= 3.0:
+        return dict(dE00=round(de, 2), applied=False)
+    sm = C.blur(C.dil(ids == 19, 1).astype(np.float64), 1.0)
+    Lp = lab[..., 0]
+    tt = np.stack([K.from_lch(v, Ct / Lt * v, ht) for v in (0.0, 100.0)])     # a*, b* are linear in L* at a fixed hue and C*/L*
+    ta = tt[0, 1] + (tt[1, 1] - tt[0, 1]) * Lp / 100
+    tb = tt[0, 2] + (tt[1, 2] - tt[0, 2]) * Lp / 100
+    lab[..., 1] = lab[..., 1] + sm * (ta - lab[..., 1])
+    lab[..., 2] = lab[..., 2] + sm * (tb - lab[..., 2])
+    return dict(before=[round(float(v), 1) for v in a_], target_at_own_L=[round(float(v), 1) for v in t], dE00=round(de, 2), applied=True,
+                why="the skirting is the band's paint (id 19); the model drew it greener and more saturated")
 
 
 def band_reading(rgb, ids, wall="east", target="#A8A88E"):
@@ -119,6 +142,10 @@ def main(raw):
                                                why=f"the {wall} band's implied albedo off #A8A88E by more than dE00 3 (the paint: hue and lightness)")
     e2 = np.clip(C.srgb(np.clip(lin2, 0, 1)), 0, 1)
     lab = C.to_lab(e2)
+    sk = skirting_fix(lab, ids, "#A8A88E")
+    if sk and sk.get("applied"):
+        fixes["skirting"] = sk
+    e2 = np.clip(C.from_lab(lab), 0, 1)
     after = {}
     for name, (g, g0) in SURF.items():
         a, _ = rd(lab, ids, g)

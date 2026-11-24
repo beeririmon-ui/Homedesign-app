@@ -108,7 +108,8 @@ def edit_canvas(p, opts=None):
     rec = json.load(open(os.path.join(st, "inputs", f"{p}-prep.json")))
     x0, y0, x1, y1 = rec["crop_box"]
     base = C.load(os.path.join(K.REPO, rec["base"]))
-    e = C.load(os.path.join(K.SCR, f"{p}-canvas.png"))
+    cf = P.get("canvas_from")                         # a pass whose edit was corrected by a later pass on top of it (GB1 <- GB1b)
+    e = C.load(os.path.join(K.SCR, f"{cf}-canvas.png" if cf and os.path.exists(os.path.join(K.SCR, f"{cf}-canvas.png")) else f"{p}-canvas.png"))
     ids = K.ids(P.get("clay", f"K-{kid}"))          # the clay the pass was prepared from (the bed passes: the bed-only clay)
     pid = set(pass_ids(p))
     box = np.zeros((H, W), bool)
@@ -127,7 +128,7 @@ def edit_canvas(p, opts=None):
     g[~box] = 1.0
     e = C.srgb(np.clip(C.lin(e) * g, 0, 1))
     e[~box] = base[~box]
-    return dict(P=P, kid=kid, st=st, rec=rec, base=base, e=e, ids=ids, box=box, region=region, zone=zone, env=env, keep=keep, g=g)
+    return dict(P=P, p=p, kid=kid, st=st, rec=rec, base=base, e=e, ids=ids, box=box, region=region, zone=zone, env=env, keep=keep, g=g)
 
 
 def shadow_soft(e, base, fg, sp, block, cap=0.65):
@@ -252,8 +253,13 @@ def cut(p, opts=None):
         for q in prods:
             if q != pr and zs[q] < zs[pr]:
                 lower_touch |= C.dil(masks[q], 2)
-        a, col = KC.matte(e, m, Bk)
-        col = np.where((a < 0.5)[..., None], C.defringe(e, m), col)      # no over-bright unmixing at a weak edge
+        if pr in opts.get("solid", ()):
+            # an opaque object on a background of its own colour (a cream toy on a cream pillow): a known-background matte cannot tell
+            # them apart, so a soft binary edge and the object's own colour
+            a, col = C.soft(m), C.defringe(e, m)
+        else:
+            a, col = KC.matte(e, m, Bk)
+            col = np.where((a < 0.5)[..., None], C.defringe(e, m), col)      # no over-bright unmixing at a weak edge
         # the edge against a lower product of the pass: soft binary alpha, the colour from the product itself
         sb = C.soft(m)
         near_lower = lower_touch & ~C.ero(m, 2)
@@ -296,11 +302,14 @@ def cut(p, opts=None):
         if out[pr] is None or SHADOW.get(pr) is None:
             sh[pr] = np.ones((H, W))
             continue
-        sh[pr] = shadow_soft(e, base, masks[pr], SHADOW[pr], block & ~masks[pr], cap=0.65)
+        sh[pr] = shadow_soft(e, base, masks[pr], opts.get("shadow", {}).get(pr, SHADOW[pr]), block & ~masks[pr], cap=0.65)
     valid = [pr for pr in prods if out[pr] is not None]
     if valid:
         dd = np.stack([cv2.distanceTransform((~masks[pr]).astype(np.uint8), cv2.DIST_L2, 5) for pr in valid], 0)
         near = np.argmin(dd, 0)
+        if opts.get("shadow_assign") == "strongest":
+            # each pixel to the product whose shade there is deepest (no seam where two products' shades meet on the wall)
+            near = np.argmin(np.stack([C.blur(sh[pr], 3) for pr in valid], 0), 0)
         for i, pr in enumerate(valid):
             sh[pr] = np.where(near == i, sh[pr], 1.0)
             sh[pr] = np.where(block, 1.0, sh[pr])
@@ -541,7 +550,37 @@ def _basket(e, ids, kid):
     return basket, rec
 
 
-def _throw_mask(lab_e, d, reg, bed_reg, ids, block):
+def _basket_redraw(S):
+    """the basket of a redraw pass (GB1 <- GB1b): the model filled the clay's placeholder, so the body is the clay's own cylinder (the
+    card's 40 x 45 projected); the handles and the balls above its rim are what the redraw changed against the first edit, in one piece
+    with the body; the edge refined by GrabCut in a 6 px band"""
+    e, ids, kid = S["e"], S["ids"], S["kid"]
+    prev = C.load(os.path.join(K.SCR, f"{S['p']}-canvas.png"))
+    g = BASKET[kid]
+    th = np.linspace(0, 2 * np.pi, 96)
+    ring = lambda z: np.array([K.proj(kid, g["c"][0] + g["r"] * np.cos(a), g["c"][1] + g["r"] * np.sin(a), z) for a in th])  # noqa: E731
+    cyl = _poly(np.r_[ring(0.0), ring(g["h"])])
+    dprev = np.linalg.norm(C.blur(C.to_lab(e), 1.5) - C.blur(C.to_lab(prev), 1.5), axis=-1)
+    ch = dprev > 8
+    extra = ch & C.dil(cyl, 70) & ~cyl & S["box"]
+    extra = cv2.morphologyEx(extra.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+    extra = keep_touching(extra, C.dil(cyl, 2))
+    basket = fill_holes(cyl | extra, 3000) & S["box"]
+    try:
+        sure = C.ero(cyl, 6) | (extra & (dprev > 15))       # the handles over the throw changed strongly: sure, not trimmed away
+        prob = C.dil(cyl, 10) | extra
+        gc = C.gc_cut(e, sure, prob, C.dil(prob, 4) & S["box"], np.zeros((H, W), bool), iters=5)
+        basket = fill_holes(gc | sure, 3000)
+    except Exception:                                   # noqa: BLE001
+        pass
+    return basket & S["box"], dict(method="the clay's cylinder (the redraw filled the placeholder) + the handles and balls the redraw changed",
+                                   cylinder_px=int(cyl.sum()), above_rim_px=int(extra.sum()), px=int(basket.sum()))
+
+
+e_rgb_for_throw = []
+
+
+def _throw_mask(lab_e, d, reg, bed_reg, ids, block, L_frac=0.55):
     """the throw by its own tone and hue on a 3 px blur (the waffle's cells averaged): darker than the duvet, and on the other side of the
     midpoint hue between the throw's clay core and the duvet when the two differ by more than 10 degrees; in one piece with its core;
     the walnut boards and the basket are not throw"""
@@ -552,7 +591,7 @@ def _throw_mask(lab_e, d, reg, bed_reg, ids, block):
     duv = C.ero(bed_reg, 4) & ~C.dil(reg, 20) & (d > 6) & ~block
     hc, hd = float(np.median(h[core])), float(np.median(h[duv]))
     Lc90, Ld50 = float(np.percentile(L[core], 90)), float(np.percentile(L[duv], 50))
-    L_thr = Lc90 + 0.55 * (Ld50 - Lc90)
+    L_thr = Lc90 + L_frac * (Ld50 - Lc90) if L_frac is not None else 100.0     # None: the hue alone parts throw and duvet
     board = C.dil(np.isin(ids, K.FIXED), 1)
     t = C.dil(reg, 140) & (d > 6) & ~board & ~block
     if abs(hd - hc) > 10:
@@ -566,8 +605,27 @@ def _throw_mask(lab_e, d, reg, bed_reg, ids, block):
     t = fill_holes(t, 6000)
     t = cv2.morphologyEx(t.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
     t = keep_touching(t, core) & ~block
+    if L_frac is None:
+        # the hue alone misses the throw's lit top (as warm as the duvet there): the waffle is textured and darker than the lit duvet;
+        # pixels near the cut with a 7 px L* deviation over 3.2 and L* under 85, in one piece with it
+        L0 = lab_e[..., 0].astype(np.float32)
+        mu = cv2.blur(L0, (7, 7))
+        sd = np.sqrt(np.maximum(cv2.blur(L0 * L0, (7, 7)) - mu * mu, 0))
+        real_board = board & (d < 6)                     # the clay's board is a little taller than the drawn one: the board the edit kept
+        ext = (sd > 3.2) & (C.blur(lab_e, 2.0)[..., 0] < 85) & (C.dil(t, 110) | C.dil(reg, 20)) & ~block & ~real_board & (d > 6)
+        ext = cv2.morphologyEx(ext.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool)
+        ext = cv2.morphologyEx(ext.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+        bottom = np.where(t.any(0), H - 1 - np.argmax(t[::-1], 0), -1)          # nothing below the throw's own lowest pixel (the duvet's folds)
+        bottom = cv2.dilate(bottom.astype(np.float32).reshape(1, -1), np.ones((1, 121), np.uint8)).ravel()   # columns past its end: their neighbours'
+        ext &= np.arange(H)[:, None] <= bottom[None, :]
+        t = fill_holes(keep_touching(t | ext, core), 6000) & ~block & ~real_board
     return t, dict(hue_throw=round(hc, 1), hue_duvet=round(hd, 1), hue_thr=None if h_thr is None else round(h_thr, 1), hue_sign=float(np.sign(hc - hd)),
                    L_thr=round(L_thr, 1))
+
+
+def wall_shade(le2, lb2, wall):
+    """the wall in a shade or re-lit: it keeps its a* (within 3.5) and only its L* moves"""
+    return wall & (np.abs(le2[..., 1] - lb2[..., 1]) < 3.5) & (np.abs(le2[..., 2] - lb2[..., 2]) < 4.5)
 
 
 def _bed_masks(masks, ctx):
@@ -581,7 +639,9 @@ def _bed_masks(masks, ctx):
     else:
         bk, brec = bk
     bk &= ctx["box"]
-    t, trec = _throw_mask(ctx["lab_e"], ctx["d"], ctx["region"]["bedspread"], ctx["region"]["bedding"], ids, bk)
+    e_rgb_for_throw[:] = [e]
+    t, trec = _throw_mask(ctx["lab_e"], ctx["d"], ctx["region"]["bedspread"], ctx["region"]["bedding"], ids, bk,
+                          ctx["S"]["P"].get("throw_L_frac", 0.55))
     old_t, old_b = masks["bedspread"], masks["toy-basket"]
     for k in masks:
         if k not in ("bedspread", "toy-basket"):
@@ -603,9 +663,108 @@ def _bed_masks(masks, ctx):
     mattress = (pids == 22) & ctx["box"] & ~taken
     masks["bedding"] = keep_touching(masks["bedding"] | (old_t & ~taken) | (old_b & ~taken & (ctx["d"] > 6) & ~same) | cand | mattress,
                                      C.ero(ctx["region"]["bedding"], 3))
+    # the duvet seen through the basket's handle loops: enclosed by the basket, so not in one piece with the rest
+    loops = fill_holes(bk, 5000) & ~bk & (ctx["d"] > 6)
+    masks["bedding"] |= loops
+    # changed pixels right at the basket's edge that no product kept (a handle's tip over the throw): the basket's
+    anym = np.zeros((H, W), bool)
+    for k in masks:
+        anym |= masks[k]
+    tips = (ctx["d"] > 6) & C.dil(bk, 4) & ~anym & ctx["box"]
+    masks["toy-basket"] = masks["toy-basket"] | tips
     masks["bedspread"] = t
     masks["toy-basket"] = bk
+    if "pillowcase" in masks:
+        wall = np.isin(K.ids(f"K-{kid}-plate"), (1, 2, 5, 8, 19))
+        le2, lb2 = C.blur(ctx["lab_e"], 2.0), C.blur(ctx["lab_b"], 2.0)
+        kept = (np.abs(le2[..., 1] - lb2[..., 1]) < 3.5) & (np.abs(le2[..., 2] - lb2[..., 2]) < 4.5) & (np.abs(le2[..., 0] - lb2[..., 0]) < 6)
+        drop = masks["pillowcase"] & wall & kept
+        drop = cv2.morphologyEx(drop.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+        masks["pillowcase"] = keep_touching(masks["pillowcase"] & ~drop, C.ero(ctx["region"]["pillowcase"], 6) & ~drop)
+        ctx.setdefault("notes", {})["pillow_wall_dropped_px"] = int(drop.sum())
+        # above the mattress's back edge (the plate's mattress top, column by column) a changed pixel near the pillows is pillow: the
+        # model may prop the standing pillow further along the wall than its clay box (GB1 drew it about 100 px towards the corner)
+        mat = pids == 22
+        top = np.where(mat.any(0), np.argmax(mat, 0), H)
+        above = np.arange(H)[:, None] < (top[None, :] - 30)     # clear of the duvet's puff over the mattress's back edge
+        extra = (ctx["d"] > 10) & above & C.dil(ctx["region"]["pillowcase"] | masks["pillowcase"], 160) & ctx["box"] & ~t & ~bk
+        extra = cv2.morphologyEx(extra.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+        extra = keep_touching(extra, masks["pillowcase"])
+        for k in masks:
+            if k != "pillowcase":
+                masks[k] = masks[k] & ~extra
+        pm = fill_holes(masks["pillowcase"] | extra, 3000) & ~t & ~bk
+        # the wall the edit re-lit or shaded round the pillows (a weak edge, a small change) against the pillows on the wall (a strong
+        # change, pale linen on the band): GrabCut, seeded with the strong change, the unchanged wall as background
+        # linen on the band is less pink than the band (a* down by over 3.5) or much lighter (L* up by over 12); the wall in a shade or
+        # re-lit keeps its a* and only gets darker
+        dLa, daa = le2[..., 0] - lb2[..., 0], le2[..., 1] - lb2[..., 1]
+        evid = (daa < -3.5) | (dLa > 12)
+        sure = C.ero(pm & evid, 2)
+        hardbg = wall & ~C.dil(evid, 3) & (((dLa < 0) & (np.abs(daa) < 3.5)) | (ctx["d"] < 6))
+        try:
+            gc = C.gc_cut(ctx["e"], sure, pm, C.dil(pm, 4) & ctx["box"], hardbg, iters=6)
+            pm = fill_holes(gc & ~t & ~bk, 3000) if gc.sum() > 0.5 * pm.sum() else pm
+        except Exception:                                   # noqa: BLE001
+            pass
+        smudge = wall & ~C.dil(evid, 2) & (dLa < -4)        # the wall darkened by the edit round the pillows (not a pillow)
+        pm = keep_touching(pm & ~smudge, sure) if sure.any() else pm & ~smudge
+        for k in masks:
+            if k != "pillowcase":
+                masks[k] = masks[k] & ~pm
+        lost = (masks["pillowcase"] | extra) & ~pm & (~above | (ctx["d"] > 10)) & ~wall_shade(le2, lb2, wall) & ~smudge
+        # what the pillows lost on the bed goes back to the duvet; the duvet never rises 35 px over the mattress's back edge
+        duvet_zone = (np.arange(H)[:, None] >= (top[None, :] - 35)) | C.dil(np.isin(pids, (20, 21, 22)), 4)
+        masks["bedding"] = (masks["bedding"] | (lost & ~t & ~bk)) & (duvet_zone | ~wall)
+        masks["pillowcase"] = pm
+        ctx["notes"]["pillow_above_mattress_added_px"] = int(extra.sum())
     ctx.setdefault("notes", {}).update(basket=brec, throw=trec)
+    return masks
+
+
+def _nest_masks(masks, ctx):
+    """PB2 / GB2: the cushions and the soft toy by what the edit drew, not by their clay boxes (the model may seat the toy a little to
+    one side on the lying pillow; the clay's box then holds only the redrawn pillow). The cushions: the changed pixels of the cushions'
+    colour (their clay core's median hue, C* over half of it), in one piece with that core, closed and filled, GrabCut on the edge. The
+    toy: the changed pixels that are not cushion, within 200 px of its clay box, its largest piece, filled, GrabCut on the edge."""
+    e, d, reg, box = ctx["e"], ctx["d"], ctx["region"], ctx["box"]
+    lb = C.blur(ctx["lab_e"], 1.5)
+    hue, Cc = _hue(lb)
+    changed = (d > 8) & box
+    cc = C.ero(reg["cushions-pair"], 6) & changed
+    hc, Cm = float(np.median(hue[cc])), float(np.median(Cc[cc]))
+    col = (np.abs(hue - hc) < 14) & (Cc > 0.5 * Cm)
+    cu = cv2.morphologyEx((changed & col).astype(np.uint8), cv2.MORPH_CLOSE, C.disk(4)).astype(bool)
+    cu = fill_holes(keep_touching(cu, cc), 20000)
+    cu = C.gc_cut(e, C.ero(cu, 5), cu, C.dil(cu, 6), np.zeros_like(cu), iters=5) | C.ero(cu, 5)
+    cu = fill_holes(cu, 20000)
+    near = C.dil(reg["soft-toy"], 200)
+    ty = changed & ~C.dil(cu, 2) & near & (lb[..., 0] > 55) & (lb[..., 1] > -3)      # a pale toy, not the wall's shade between pillow and cushions
+    ty = cv2.morphologyEx(ty.astype(np.uint8), cv2.MORPH_OPEN, C.disk(2)).astype(bool)
+    n, lab_, st_, _ = cv2.connectedComponentsWithStats(ty.astype(np.uint8), connectivity=8)
+    if n > 1:
+        big = 1 + int(np.argmax(st_[1:, cv2.CC_STAT_AREA]))
+        near_big = C.dil(lab_ == big, 40)
+        keep_ = [i for i in range(1, n) if i == big or (st_[i, cv2.CC_STAT_AREA] > 150 and (near_big & (lab_ == i)).any())]
+        ty = np.isin(lab_, keep_)                    # the toy's head beyond a darker collar is its own piece
+    ty = fill_holes(cv2.morphologyEx(ty.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool), 5000)
+    # the limbs on the pale pillow change little at 2 px: grown by GrabCut from that core over the pale pixels changed at 0.8 px
+    d1 = np.linalg.norm(C.blur(ctx["lab_e"], 0.8) - C.blur(ctx["lab_b"], 0.8), axis=-1)
+    zone = C.dil(ty, 90) & ~C.dil(cu, 2) & box
+    prob = zone & (d1 > 5) & (C.blur(ctx["lab_e"], 1.0)[..., 0] > 55)
+    prob = keep_touching(cv2.morphologyEx(prob.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool), ty)
+    ty = C.gc_cut(e, C.ero(ty, 3), prob | C.dil(ty, 2), zone, C.dil(cu, 1), iters=6) | C.ero(ty, 3)
+    # thin parts on a wall of nearly their own colour (the bunny's ears on the blush band): their outline changed, their inside barely;
+    # the outline in one piece with the toy, closed, and the inside filled
+    rim_ = keep_touching((d1 > 8) & C.dil(ty, 60) & ~C.dil(cu, 2) & box, ty)
+    ty = fill_holes(cv2.morphologyEx((ty | rim_).astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool), 4000)
+    ty = fill_holes(ty, 5000) & ~cu
+    masks["cushions-pair"], masks["soft-toy"] = cu, ty
+    ys, xs = np.nonzero(ty)
+    cy, cx = np.nonzero(reg["soft-toy"])
+    ctx.setdefault("notes", {})["nest"] = dict(cushion_hue=round(hc, 1), cushion_C=round(Cm, 1), toy_bbox=[int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())],
+                                              toy_clay_bbox=[int(cx.min()), int(cy.min()), int(cx.max()), int(cy.max())],
+                                              toy_moved_px=[int(round(xs.mean() - cx.mean())), int(round(ys.mean() - cy.mean()))])
     return masks
 
 
@@ -668,9 +827,10 @@ def _bed_fix(S):
     e, base, ids, kid = S["e"], S["base"], S["ids"], S["kid"]
     lab_e, lab_b = C.to_lab(e), C.to_lab(base)
     d = np.linalg.norm(C.blur(lab_e, 2.0) - C.blur(lab_b, 2.0), axis=-1)
-    bk, brec = _basket(e, ids, kid)
+    bk, brec = _basket_redraw(S) if S["P"].get("canvas_from") else _basket(e, ids, kid)
     bk &= S["box"]
-    t, trec = _throw_mask(lab_e, d, S["region"]["bedspread"], S["region"]["bedding"], ids, bk)
+    e_rgb_for_throw[:] = [e]
+    t, trec = _throw_mask(lab_e, d, S["region"]["bedspread"], S["region"]["bedding"], ids, bk, S["P"].get("throw_L_frac", 0.55))
     S["basket_fit"] = (bk, brec)
     L = lab_e[..., 0].astype(np.float32)
     med = cv2.medianBlur(np.clip(L * 2.55, 0, 255).astype(np.uint8), 7).astype(np.float32) / 2.55
@@ -743,7 +903,10 @@ def _bed_masks_fixed(masks, ctx):
 
 
 _BED = dict(edit_fix=_bed_fix, mask_edit=_bed_masks_fixed, under_px={"bedding": 40, "pillowcase": 12})
-OPTS = {"PB3-window": dict(mask_edit=_clean_blind), "PB1-bed": _BED, "GB1-bed": _BED}
+_NEST = dict(mask_edit=_nest_masks, solid=("soft-toy", "cushions-pair"))
+# the girl's standing pillow is propped in the corner: its shade on the two walls reaches about 90 px (the boy's sits on the head board)
+_BED_G = dict(_BED, shadow={"pillowcase": dict(band=90, rim=6)}, shadow_assign="strongest")
+OPTS = {"PB3-window": dict(mask_edit=_clean_blind), "PB1-bed": _BED, "GB1-bed": _BED_G, "PB2-nest": _NEST, "GB2-nest": _NEST}
 
 
 if __name__ == "__main__":

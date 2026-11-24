@@ -251,18 +251,35 @@
      "why": "the material (hue, C*/L*) off MB0 by more than dE00 3 at its own L*"
     },
     "band, east wall": {
-     "ab_shift": [
-      -2.46,
-      0.26
+     "k_linear": [
+      0.8474,
+      0.9134,
+      0.8741
      ],
-     "why": "the east band's implied albedo off #A8A88E by more than dE00 3"
+     "why": "the east band's implied albedo off #A8A88E by more than dE00 3 (the paint: hue and lightness)"
     },
     "band, north wall": {
-     "ab_shift": [
-      0.24,
-      -2.24
+     "k_linear": [
+      1.4701,
+      1.4931,
+      1.7017
      ],
-     "why": "the north band's implied albedo off #A8A88E by more than dE00 3"
+     "why": "the north band's implied albedo off #A8A88E by more than dE00 3 (the paint: hue and lightness)"
+    },
+    "skirting": {
+     "before": [
+      20.0,
+      -1.9,
+      9.0
+     ],
+     "target_at_own_L": [
+      20.0,
+      -1.3,
+      3.9
+     ],
+     "dE00": 3.91,
+     "applied": true,
+     "why": "the skirting is the band's paint (id 19); the model drew it greener and more saturated"
     }
    },
    "after": {
@@ -301,14 +318,14 @@
     "east": {
      "wall": "east",
      "implied_albedo_srgb": [
-      177,
-      177,
-      150
+      168,
+      168,
+      142
      ],
      "implied_Lab": [
-      71.4,
-      -4.6,
-      13.5
+      68.3,
+      -4.7,
+      13.6
      ],
      "target": "#A8A88E",
      "target_Lab": [
@@ -316,20 +333,20 @@
       -4.6,
       13.5
      ],
-     "dE00": 2.49,
+     "dE00": 0.18,
      "columns": 400
     },
     "north": {
      "wall": "north",
      "implied_albedo_srgb": [
-      140,
-      140,
-      116
+      168,
+      168,
+      142
      ],
      "implied_Lab": [
-      57.6,
-      -4.4,
-      12.8
+      68.2,
+      -4.7,
+      13.6
      ],
      "target": "#A8A88E",
      "target_Lab": [
@@ -337,7 +354,7 @@
       -4.6,
       13.5
      ],
-     "dE00": 8.95,
+     "dE00": 0.14,
      "columns": 62
     }
    }
@@ -346,10 +363,10 @@
    "step": 3,
    "what": "WM-G1 / MP-I2 toe on L*",
    "applied": true,
-   "p05_before": 3.35,
+   "p05_before": 3.34,
    "xp": [
     0,
-    3.35,
+    3.336,
     12,
     30,
     100

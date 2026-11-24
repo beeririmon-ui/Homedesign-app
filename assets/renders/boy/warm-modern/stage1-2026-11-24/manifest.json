@@ -223,11 +223,11 @@
    "default": true,
    "layer": "layers/bedding/bedding-cj-stripe-cotton-single-set-light-brown-xs.png",
    "shadow": "shadows/bedding/bedding-cj-stripe-cotton-single-set-light-brown-xs.png",
-   "alpha_px": 301266,
-   "shadow_px": 29200,
+   "alpha_px": 300807,
+   "shadow_px": 20628,
    "bbox_px": [
     470,
-    816,
+    824,
     1444,
     1416
    ],
@@ -252,8 +252,8 @@
    "default": true,
    "layer": "layers/pillowcase/pillowcases-cj-pure-linen-envelope-pair-48x74-rain-and-dew-hemp.png",
    "shadow": "shadows/pillowcase/pillowcases-cj-pure-linen-envelope-pair-48x74-rain-and-dew-hemp.png",
-   "alpha_px": 66437,
-   "shadow_px": 5655,
+   "alpha_px": 63462,
+   "shadow_px": 4676,
    "bbox_px": [
     446,
     681,
@@ -352,6 +352,64 @@
    "variant": "V3"
   },
   {
+   "slot": "cushions",
+   "product": "cushions-cj-corduroy-patchwork-reindeer-brown-45",
+   "key": "cushions-pair",
+   "clay_ids": [
+    57
+   ],
+   "z": 55,
+   "sub": 0,
+   "shadow_z": 54,
+   "default": true,
+   "layer": "layers/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
+   "shadow": "shadows/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
+   "alpha_px": 37857,
+   "shadow_px": 8925,
+   "bbox_px": [
+    830,
+    713,
+    1094,
+    904
+   ],
+   "sold": true,
+   "sku": "CJZT189401911KP",
+   "source": "pass PB2-nest (nano-banana-2 crop edit), cut in code (tools/kids_cut.py)",
+   "pass_": "PB2-nest",
+   "passes": [
+    "PB2-nest"
+   ]
+  },
+  {
+   "slot": "soft-toy",
+   "product": "soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-bear",
+   "key": "soft-toy",
+   "clay_ids": [
+    58
+   ],
+   "z": 57,
+   "sub": 0,
+   "shadow_z": 56,
+   "default": true,
+   "layer": "layers/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-bear.png",
+   "shadow": "shadows/soft-toy/soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285-bear.png",
+   "alpha_px": 21649,
+   "shadow_px": 1134,
+   "bbox_px": [
+    742,
+    719,
+    966,
+    959
+   ],
+   "sold": true,
+   "sku": "12000050510684712",
+   "source": "pass PB2-nest (nano-banana-2 crop edit), cut in code (tools/kids_cut.py)",
+   "pass_": "PB2-nest",
+   "passes": [
+    "PB2-nest"
+   ]
+  },
+  {
    "slot": "toy-basket",
    "product": "basket-cj-jute-rope-cylinder-large",
    "key": "toy-basket",
@@ -422,7 +480,7 @@
    "pass_": "PB3-window"
   }
  ],
- "status": "stage one incomplete: stopped on var2 re-auth. Ready for QA: the plate and the PB3 / PB4 / PB5 layers. PB1 in progress; PB2 not sent; variants and checks not run. Not for the site before QA and the owner's approval 3.",
+ "status": "for QA (stage one, before the owner's approval 3). Not for the site before QA.",
  "cut_records": {
   "PB3-window": {
    "pass_": "PB3-window",
@@ -520,14 +578,14 @@
    ],
    "products": {
     "bedding": {
-     "px": 301266,
+     "px": 300807,
      "clay_px": 177373,
      "ratio_to_clay": 1.245
     },
     "pillowcase": {
-     "px": 66437,
+     "px": 63462,
      "clay_px": 63583,
-     "ratio_to_clay": 1.021
+     "ratio_to_clay": 0.976
     },
     "bedspread": {
      "px": 82636,
@@ -562,6 +620,7 @@
    },
    "slivers_px": 31,
    "mask_edit": {
+    "pillow_wall_dropped_px": 2836,
     "basket": {
      "fit": {
       "scale": 0.99,
@@ -591,6 +650,53 @@
      "hue_thr": 67.9,
      "hue_sign": -1.0,
      "L_thr": 60.5
+    }
+   }
+  },
+  "PB2-nest": {
+   "pass_": "PB2-nest",
+   "gain_p1_p50_p99": [
+    0.904,
+    0.994,
+    1.359
+   ],
+   "dE_outside_zone_p50_p95": [
+    0.8,
+    2.93
+   ],
+   "products": {
+    "cushions-pair": {
+     "px": 37857,
+     "clay_px": 38110,
+     "ratio_to_clay": 0.946
+    },
+    "soft-toy": {
+     "px": 21649,
+     "clay_px": 8472,
+     "ratio_to_clay": 2.417
+    }
+   },
+   "slivers_px": 5,
+   "mask_edit": {
+    "nest": {
+     "cushion_hue": 65.7,
+     "cushion_C": 34.7,
+     "toy_bbox": [
+      743,
+      720,
+      964,
+      957
+     ],
+     "toy_clay_bbox": [
+      663,
+      744,
+      741,
+      882
+     ],
+     "toy_moved_px": [
+      130,
+      44
+     ]
     }
    }
   }
@@ -712,16 +818,16 @@
    "rule": "of the throw's layer, in Lab:\n  - L*: in linear light, Y x (Y_photo(Vn) / Y_photo(V1)): the same shading and texture, the photo's step in lightness;\n  - a* b*: the rendered V1's own a* b* minus its median, plus the photo's a* b* of Vn scaled by s = (rendered V1 median L*) / (photo V1\n    L*): the hue is the photo's, the chroma follows the light the throw is in.\nV1 itself is checked the same way against its photo (hue and chroma at the scale s) and moved when it is off by more than dE00 3.\nThe shadow of every variant is V1's (the same geometry).",
    "duvet_between_strands_kept_px": 21,
    "v1_rendered_Lab": [
-    21.7,
+    26.6,
     3.4,
-    3.5
+    4.0
    ],
    "v1_rendered_LCh": [
-    21.7,
-    4.9,
-    45.5
+    26.6,
+    5.2,
+    50.2
    ],
-   "chroma_scale_s": 0.47,
+   "chroma_scale_s": 0.576,
    "variants": {
     "V2": {
      "product": "bedspread-cj-waffle-gauze-fringe-150x200-coffee",
@@ -732,17 +838,17 @@
       74
      ],
      "rendered_Lab": [
-      27.8,
-      2.6,
-      8.9
+      33.5,
+      3.1,
+      10.9
      ],
      "rendered_LCh": [
-      27.8,
-      9.2,
-      73.8
+      33.5,
+      11.3,
+      74.0
      ],
      "frame": {
-      "region_px": 1204008,
+      "region_px": 1239301,
       "outside_differing_px": 0,
       "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel",
       "black_point_p05": 11.58
@@ -757,24 +863,24 @@
       110
      ],
      "rendered_Lab": [
-      15.7,
-      -2.9,
-      8.1
+      19.6,
+      -3.6,
+      10.0
      ],
      "rendered_LCh": [
-      15.7,
-      8.6,
-      109.5
+      19.6,
+      10.6,
+      110.0
      ],
      "frame": {
-      "region_px": 1204008,
+      "region_px": 1239301,
       "outside_differing_px": 0,
       "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel",
       "black_point_p05": 11.58
      }
     }
    },
-   "v1_vs_photo_dE00_hue_chroma": 1.07
+   "v1_vs_photo_dE00_hue_chroma": 0.22
   }
  }
 }
