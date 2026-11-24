@@ -74,6 +74,8 @@ async function plain(page: Page, room: string) {
 }
 
 async function audit(page: Page, label: string) {
+  // MOCK5: axe reads the page once every transition has ended (the counter fades in as the room rests)
+  await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== 'running'), undefined, { timeout: 10_000 });
   const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0])
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();

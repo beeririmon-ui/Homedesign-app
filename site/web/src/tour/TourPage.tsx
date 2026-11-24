@@ -1197,13 +1197,13 @@ export function TourPage() {
       const v = view(c);
       return boxes.some((a) => v[0] < a[1] + m && v[1] > a[0] - m && v[2] < a[3] + m && v[3] > a[2] - m);
     };
-    // the product stays as whole as the close-up had it (a pendant's box runs up its cord to the ceiling, which the
-    // close-up itself may leave out)
+    // the product stays in the view about as whole as the close-up had it: 85% of what it showed (the bedroom's throw,
+    // pushed under the prints, keeps 95%; a pendant's box runs up its cord to the ceiling, which no close-up shows whole)
     const seen = (c: Cam) => {
       const v = view(c);
       return Math.max(0, Math.min(v[1], b[1]) - Math.max(v[0], b[0])) * Math.max(0, Math.min(v[3], b[3]) - Math.max(v[2], b[2]));
     };
-    const want = seen(cam) * 0.97;
+    const want = seen(cam) * 0.85;
     const keeps = (c: Cam) => seen(c) >= want;
     if (!hits(cam)) return cam;
     // pushed a little further than the test, so the view's edge is clearly past the box
