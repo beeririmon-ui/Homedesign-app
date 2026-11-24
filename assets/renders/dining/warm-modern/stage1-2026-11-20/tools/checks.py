@@ -187,8 +187,13 @@ def checks_10_9(man):
                            over_mugs_px=int((a & am).sum()), over_niche=bool(u[1] >= 0.65), in_D1_frame_px=d1_in,
                            in_D1_frame_pct=round(100 * d1_in / K.frame_mask().sum(), 2),
                            note="the vessel is at (6.95, 3.88), not 10.9's (7.00, 4.00): that place collides with the paper towel holder (7.12, 4.05); "
-                                "every place out of D1's frame (Y 4.0 and up) stands in front of the holder in D2")
+                                "every place out of D1's frame (Y 4.0 and up) stands in front of the holder in D2",
+                           decision="the manager, 2026-11-24: accepted as it is; physical consistency between D1 and D2 comes first. QA check 4 is "
+                                    "updated: the vessel in D1 is the intended projection from D2, not a new object; the holder is not moved and the "
+                                    "vessel is not hidden in D1")
     out["grade_KD_L4"] = d2s["grade"]
+    rec = json.load(open(os.path.join(ST, "compose.json")))
+    out["print_05"] = rec.get("print-05")
     return out
 
 

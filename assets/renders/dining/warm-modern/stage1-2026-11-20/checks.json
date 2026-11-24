@@ -1,19 +1,19 @@
 {
  "rnd2": {
   "D1-defaults": {
-   "region_px": 1077248,
+   "region_px": 1077237,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.49
   },
   "D2-defaults": {
-   "region_px": 606585,
+   "region_px": 606581,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.27
   },
   "D1-V3": {
-   "region_px": 1080406,
+   "region_px": 1080395,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.49,
@@ -53,14 +53,14 @@
    "framed-art-aliexpress-misty-landscape-386242-work-05-40x50": {
     "D1": {
      "slot": "framed-art",
-     "frame_pct": 0.797,
+     "frame_pct": 0.798,
      "height_pct": 12.05,
      "v7q6": true,
      "alpha_vs_clay": 1.0
     },
     "D2": {
      "slot": "framed-art",
-     "frame_pct": 1.127,
+     "frame_pct": 1.129,
      "height_pct": 12.33,
      "v7q6": true,
      "alpha_vs_clay": 1.0
@@ -101,14 +101,14 @@
    "cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19": {
     "D1": {
      "slot": "serving-boards",
-     "frame_pct": 0.389,
+     "frame_pct": 0.383,
      "height_pct": 10.66,
      "v7q6": true,
      "alpha_vs_clay": 1.0
     },
     "D2": {
      "slot": "serving-boards",
-     "frame_pct": 0.425,
+     "frame_pct": 0.42,
      "height_pct": 10.8,
      "v7q6": true,
      "alpha_vs_clay": 1.0
@@ -420,7 +420,7 @@
      ],
      [
       "framed-art-aliexpress-misty-landscape-386242-work-05-40x50",
-      1.127
+      1.129
      ]
     ]
    }
@@ -509,9 +509,9 @@
   },
   "cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19": {
    "frame": "D2",
-   "L_p50": 27.1,
+   "L_p50": 27.2,
    "C_p50": 19.9,
-   "h_p50": 38.5,
+   "h_p50": 38.4,
    "L_p95": 32.0,
    "L_p05": 22.6,
    "target": "10.9 / ch. 7: dark on purpose (the 'dark walnut boards' rejection applies to cutting-boards only)"
@@ -956,7 +956,8 @@
    "over_niche": false,
    "in_D1_frame_px": 16109,
    "in_D1_frame_pct": 0.43,
-   "note": "the vessel is at (6.95, 3.88), not 10.9's (7.00, 4.00): that place collides with the paper towel holder (7.12, 4.05); every place out of D1's frame (Y 4.0 and up) stands in front of the holder in D2"
+   "note": "the vessel is at (6.95, 3.88), not 10.9's (7.00, 4.00): that place collides with the paper towel holder (7.12, 4.05); every place out of D1's frame (Y 4.0 and up) stands in front of the holder in D2",
+   "decision": "the manager, 2026-11-24: accepted as it is; physical consistency between D1 and D2 comes first. QA check 4 is updated: the vessel in D1 is the intended projection from D2, not a new object; the holder is not moved and the vessel is not hidden in D1"
   },
   "grade_KD_L4": {
    "rule": "KD-L4: one world-space gain on the oak (Y, linear light): g0 by the window and the opening, g0 (1 - k_far) at Y 6.2; a* b* kept (h and C* unchanged); WM-G1's toe on the graded oak (wmg1_toe: nothing under L* 11); the plaster (walls, ceiling, hood) C* +2.5 toward h 85",
@@ -1007,6 +1008,53 @@
     "window": "D1 floor at world Y < 1.0"
    },
    "note": "M0 does not see the dining opening (house plan: HC7), so the fallback L* 41-44"
+  },
+  "print_05": {
+   "file": "5aff04c0 (listing file, scratchpad only)",
+   "file_px": [
+    686,
+    549
+   ],
+   "seller_crop": "5:4, 23 px off each side of the 4:3 design (10.9 row 3)",
+   "canvas_box_px": [
+    420,
+    308,
+    639,
+    464
+   ],
+   "canvas_px": [
+    219,
+    156
+   ],
+   "print_box_px": [
+    431,
+    308,
+    629,
+    464
+   ],
+   "print_px": [
+    197,
+    156
+   ],
+   "scale_xy": [
+    0.288,
+    0.2842
+   ],
+   "projection_stretch": 1.0133,
+   "cropped_px": [
+    0,
+    0
+   ],
+   "side_gap_px": [
+    9,
+    15
+   ],
+   "canvas_light_p5_p50_p95": [
+    0.873,
+    0.888,
+    0.895
+   ],
+   "rule": "10.7 / 10.9: print 05 (the 40x50 SKU: the 4:3 design's central 5:4 crop), whole (the manager, 2026-11-24: no height lost), contained by height in the edit's canvas at the clay canvas's projected aspect; the sides are the float gap (the edit's gap profile stretched); lit by the edit's canvas light; D1 gets it by the projection"
   }
  }
 }

@@ -568,7 +568,7 @@ if __name__ == "__main__" and sys.argv[1] == "base-boards":
 def boards_fix(s=0.78):
     """Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is
     scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm
-    against 39, width 17.4 against 18.5). Where B no longer covers F, F's hidden top-right corner is its own top-left corner mirrored. The pale
+    against 39, width 17.4 against 18.5). Where B no longer covers F, F's right edge below its own drawn corner is continued from F. The pale
     flecks of splash the cut took between the boards go (the boards are walnut, L* under 55)."""
     man = CE.load_man()
     l = [x for x in man["layers"] if x["frame"] == "D2" and x["slot"] == "serving-boards" and not x.get("projected_from")][0]
@@ -591,14 +591,33 @@ def boards_fix(s=0.78):
     Fm = (a > 0) & ~Bm
     aF = a * Fm
     rgbF = rgb.copy()
-    # F behind the old B: F is a symmetric rounded rectangle (x 786-860, the clay's right edge), so its hidden top-right corner is its
-    # own top-left corner mirrored about its centre line (the hanging hole, near the left, is not in the mirrored band)
-    need = Bm & ~(aB > 0.5) & (xx <= 860)
+    # F behind the old B: the edit drew F's own rounded top-right corner just left of B (x about 846), so F ends there; what B no
+    # longer covers is F's right edge below that corner: the outline is F's top edge (a line fitted on x 800-830) to x 846.5 with a
+    # rounded corner of r 6 px (the edit's), anti-aliased at 4x; the walnut from 40 px to the left on the same row (clear of the hole)
+    cols = np.arange(800, 831)
+    tops = np.array([np.argmax(a0[:, x] * Fm[:, x] > 0.5) for x in cols], float)
+    okc = tops > 0
+    m_, c_ = np.polyfit(cols[okc], tops[okc], 1)
+    r_ = 6.0
+    ss = 4
+    yy4, xx4 = np.mgrid[0:H * 0 + 160 * ss, 0:40 * ss].astype(np.float64)
+    Y4 = 590 + (yy4 + 0.5) / ss
+    X4 = 832 + (xx4 + 0.5) / ss
+    xr4 = np.full_like(Y4, 846.5)
+    yt4 = m_ * X4 + c_
+    inside = (Y4 >= yt4) & (X4 <= xr4) & (Y4 <= 741.0)
+    cx4, cy4 = xr4 - r_, m_ * (xr4 - r_) + c_ + r_
+    corner = (X4 > cx4) & (Y4 < cy4) & ((X4 - cx4) ** 2 + (Y4 - cy4) ** 2 > r_ ** 2)
+    shape = (inside & ~corner).astype(np.float64)
+    cov = shape.reshape(160, ss, 40, ss).mean((1, 3))
+    Fext = np.zeros((H, W))
+    Fext[590:750, 832:872] = cov
+    need = (Fext > 0) & ~(aB > 0.99) & ~(Fm & (a0 > 0.99)) & (xx >= 836)
     src_y, src_x = np.nonzero(need)
-    sx = np.clip(2 * 823 - src_x, 0, W - 1)
-    ok = Fm[src_y, sx] & (a[src_y, sx] > 0.5)
+    sx = np.clip(src_x - 40, 0, W - 1)
+    ok = Fm[src_y, sx] & (a0[src_y, sx] > 0.5)
     rgbF[src_y[ok], src_x[ok]] = rgb[src_y[ok], sx[ok]]
-    aF[src_y[ok], src_x[ok]] = a0[src_y[ok], sx[ok]]
+    aF[src_y[ok], src_x[ok]] = np.maximum(aF[src_y[ok], src_x[ok]], Fext[src_y[ok], src_x[ok]])
     out_a = aB + aF * (1 - aB)
     out_rgb = (preB + rgbF * aF[..., None] * (1 - aB[..., None])) / np.maximum(out_a[..., None], 1e-4)
     # the shadow: B's part scaled with it
