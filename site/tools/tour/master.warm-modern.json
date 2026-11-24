@@ -1,6 +1,8 @@
 {
-  "note": "MOCK4 (2026-11-18): the warm-modern bedroom in the tour (MB0 stage one with FB10, QA qa/reports/2026-11-18-master-mb0 and 2026-11-18-master-fb10; temporary, for the owner). Read by tools/make-tour-room.ts. The layers are the render folder's own (never changed here), composed in z order exactly as layers/manifest.json says (checked against mb0-defaults.png at build). `card` names the product card each layer shows (the layer's product id is the card id and its option; the carafe's card has another name). A slot's name is data/slots/master.json's, or the one here for the FB10 slots that are not in it yet (a working name, never public). `fixed`: furniture of the room that is not sold (no mark, not counted). The sample slot carries the wheel's three variants. `avoid`: the large framed art 776445 has unclear usage rights: it is ×1 only (a mark and a product page are fine; no close-up and no zoom shows it). Behind HD_PUBLIC=0.",
+  "note": "MOCK4 (2026-11-18): the warm-modern bedroom in the tour (MB0 stage one with FB10, QA qa/reports/2026-11-18-master-mb0 and 2026-11-18-master-fb10; temporary, for the owner). Read by tools/make-tour-room.ts. The layers are the render folder's own (never changed here), composed in z order exactly as layers/manifest.json says (checked against mb0-defaults.png at build). `card` names the product card each layer shows (the layer's product id is the card id and its option; the carafe's card has another name). A slot's name is data/slots/master.json's, or the one here for the FB10 slots that are not in it yet (a working name, never public). `fixed`: furniture of the room that is not sold (no mark, not counted). The sample slot carries the wheel's three variants. `prints`: the frame's prints; each one's card is read for its rights (MOCK5): 776445 and 386242 are \"unclear\", so both are ×1 only (a mark and a product page are fine; no close-up and no zoom shows them). Behind HD_PUBLIC=0. MOCK5 (2026-11-24): the frame is MB0 of the bedroom (`group` master); the FB10 slots take their own cards of registration 1.3.9 (`mirror_of` copies: framed-art-2, the shelf vases, the magazine holder).",
   "room": "master",
+  "group": "master",
+  "frame_he": "קיר המיטה",
   "style": "warm-modern",
   "name_he": "חדר שינה",
   "layers": "assets/renders/master/warm-modern/stage1-2026-11-17",
@@ -11,35 +13,163 @@
   "room_plan": "master",
   "slots_file": "data/slots/master.json",
   "sample": "throw",
-  "avoid": "framed-art",
+  "prints": [
+    "framed-art",
+    "framed-art-2"
+  ],
   "zoom": false,
   "slots": {
-    "curtains": { "card": "curtains-aliexpress-linen-blend-s-fold-180502", "kind": "wall", "anchors": [[0.5, 0.42]] },
-    "wall-shelf": { "card": null, "fixed": true, "kind": "wall", "name_he": "מדף אגוז מעל המיטה", "depth_m": 3.4 },
-    "framed-art": { "card": "framed-art-aliexpress-japandi-bare-branch-70x100-776445", "kind": "wall", "closeup": false, "depth_m": 3.37 },
-    "framed-art-2": { "card": "framed-art-aliexpress-misty-landscape-386242-work", "kind": "wall", "name_he": "תמונה קטנה במדף", "depth_m": 3.36 },
+    "curtains": {
+      "card": "curtains-aliexpress-linen-blend-s-fold-180502",
+      "kind": "wall",
+      "anchors": [
+        [
+          0.5,
+          0.42
+        ]
+      ]
+    },
+    "wall-shelf": {
+      "card": null,
+      "fixed": true,
+      "kind": "wall",
+      "name_he": "מדף אגוז מעל המיטה",
+      "depth_m": 3.4
+    },
+    "framed-art": {
+      "card": "framed-art-aliexpress-japandi-bare-branch-70x100-776445",
+      "kind": "wall",
+      "closeup": false,
+      "depth_m": 3.37
+    },
+    "framed-art-2": {
+      "card": "framed-art-2-aliexpress-misty-landscape-386242-master",
+      "kind": "wall",
+      "name_he": "תמונה קטנה במדף",
+      "depth_m": 3.36
+    },
     "bedside-sconces": {
       "card": "wall-sconce-cj-travertine-cone-walnut",
       "kind": "wall",
       "anchors": [
-        [0.06, 0.5],
-        [0.94, 0.5]
+        [
+          0.06,
+          0.5
+        ],
+        [
+          0.94,
+          0.5
+        ]
       ]
     },
-    "sill-vase": { "card": "sill-vase-cj-cream-fluted-column-25", "kind": "surface" },
-    "shelf-vase-left": { "card": "vase-cj-charcoal-carved", "kind": "surface", "name_he": "אגרטל כהה במדף", "depth_m": 3.33 },
-    "shelf-vase-right": { "card": "vase-cj-white-plum-hand-thrown", "kind": "surface", "name_he": "אגרטל לבן במדף", "depth_m": 3.32 },
-    "planter": { "card": "planter-cj-cement-ribbed-belly", "kind": "floor", "anchors": [[0.5, 0.75]] },
-    "floor-lamp": { "card": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master", "kind": "floor", "anchors": [[0.5, 0.2]] },
-    "magazine-holder": { "card": "magazine-holder-cj-gunmetal-leather-strap", "kind": "floor", "name_he": "מחזיק עיתונים", "depth_m": 2.6 },
-    "nightstand-tray": { "card": "nightstand-tray-cj-black-walnut-rect-tray", "kind": "surface", "anchors": [[0.2, 0.6]] },
-    "nightstand-vase": { "card": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862", "kind": "surface", "anchors": [[0.5, 0.65]] },
-    "candle-holders": { "card": "candle-holders-cj-travertine-pedestal", "kind": "surface" },
-    "bedside-carafe": { "card": "open-shelf-ceramics-cj-patina-clay-pitcher-and-jar", "kind": "surface" },
-    "trinket-dish": { "card": "trinket-dish-cj-travertine-rough-edge-10x10", "kind": "surface" },
-    "pillowcases": { "card": "pillowcases-cj-pure-linen-envelope-pair-48x74", "kind": "surface", "anchors": [[0.28, 0.45]] },
-    "bedding": { "card": "bedding-cj-washed-linen-natural-set", "kind": "surface", "anchors": [[0.5, 0.42]] },
-    "cushions": { "card": "cushions-cj-boucle-teddy", "kind": "surface" },
-    "throw": { "card": "sofa-cover-cj-cotton-muslin-fringe", "kind": "surface", "anchors": [[0.62, 0.5]], "hero": true }
+    "sill-vase": {
+      "card": "sill-vase-cj-cream-fluted-column-25",
+      "kind": "surface"
+    },
+    "shelf-vase-left": {
+      "card": "shelf-vase-left-cj-charcoal-carved",
+      "kind": "surface",
+      "name_he": "אגרטל כהה במדף",
+      "depth_m": 3.33
+    },
+    "shelf-vase-right": {
+      "card": "shelf-vase-right-cj-white-plum-hand-thrown",
+      "kind": "surface",
+      "name_he": "אגרטל לבן במדף",
+      "depth_m": 3.32
+    },
+    "planter": {
+      "card": "planter-cj-cement-ribbed-belly",
+      "kind": "floor",
+      "anchors": [
+        [
+          0.5,
+          0.75
+        ]
+      ]
+    },
+    "floor-lamp": {
+      "card": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master",
+      "kind": "floor",
+      "anchors": [
+        [
+          0.5,
+          0.2
+        ]
+      ]
+    },
+    "magazine-holder": {
+      "card": "magazine-holder-cj-gunmetal-leather-strap-master",
+      "kind": "floor",
+      "name_he": "מחזיק עיתונים",
+      "depth_m": 2.6
+    },
+    "nightstand-tray": {
+      "card": "nightstand-tray-cj-black-walnut-rect-tray",
+      "kind": "surface",
+      "anchors": [
+        [
+          0.2,
+          0.6
+        ]
+      ]
+    },
+    "nightstand-vase": {
+      "card": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+      "kind": "surface",
+      "anchors": [
+        [
+          0.5,
+          0.65
+        ]
+      ]
+    },
+    "candle-holders": {
+      "card": "candle-holders-cj-travertine-pedestal",
+      "kind": "surface"
+    },
+    "bedside-carafe": {
+      "card": "open-shelf-ceramics-cj-patina-clay-pitcher-and-jar",
+      "kind": "surface"
+    },
+    "trinket-dish": {
+      "card": "trinket-dish-cj-travertine-rough-edge-10x10",
+      "kind": "surface"
+    },
+    "pillowcases": {
+      "card": "pillowcases-cj-pure-linen-envelope-pair-48x74",
+      "kind": "surface",
+      "anchors": [
+        [
+          0.28,
+          0.45
+        ]
+      ]
+    },
+    "bedding": {
+      "card": "bedding-cj-washed-linen-natural-set",
+      "kind": "surface",
+      "anchors": [
+        [
+          0.5,
+          0.42
+        ]
+      ]
+    },
+    "cushions": {
+      "card": "cushions-cj-boucle-teddy",
+      "kind": "surface"
+    },
+    "throw": {
+      "card": "sofa-cover-cj-cotton-muslin-fringe",
+      "kind": "surface",
+      "anchors": [
+        [
+          0.62,
+          0.5
+        ]
+      ],
+      "hero": true
+    }
   }
 }

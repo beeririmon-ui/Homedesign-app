@@ -1,0 +1,142 @@
+{
+  "note": "MOCK5 (2026-11-24): the kitchen-dining's rest frame D1 (the table under the pendant, the kitchen run behind), QA qa/reports/2026-11-20-kitchen-dining and 2026-11-24-kitchen-d2-stage (10.9: the D2 changes projected into D1), owner approval AP3-KW (2026-11-24). Read by tools/make-tour-room.ts: the manifest has two frames (`frame_id` picks D1's layers, lights and plate; retired layers never compose). The condiment set and the sink set are two products each (a config entry each: `of`, `product`). The sample slot is the pendant, V1 and V3 (V2 retired, KD-L3). The print 386242 is ×1 only by its card's rights. The table, the chairs and the bench are in the plate (fixed, not sold). Behind HD_PUBLIC=0.",
+  "room": "dining",
+  "group": "dining",
+  "frame_id": "D1",
+  "frame_he": "פינת האוכל",
+  "style": "warm-modern",
+  "name_he": "מטבח",
+  "layers": "assets/renders/dining/warm-modern/stage1-2026-11-20",
+  "manifest": "manifest.json",
+  "truth": "D1-defaults.png",
+  "plate": "plate-D1.png",
+  "plan": "docs/house-plan.json",
+  "camera": "D1",
+  "room_plan": "kitchen-dining",
+  "slots_file": "data/slots/dining-room.json",
+  "sample": "dining-pendant",
+  "prints": [
+    "framed-art"
+  ],
+  "slots": {
+    "curtains": {
+      "card": "curtains-aliexpress-linen-blend-s-fold-180502",
+      "kind": "wall",
+      "name_he": "וילון",
+      "anchors": [
+        [
+          0.5,
+          0.4
+        ]
+      ]
+    },
+    "framed-art": {
+      "card": "framed-art-aliexpress-misty-landscape-386242-work",
+      "kind": "wall",
+      "name_he": "תמונה נשענת על המדף"
+    },
+    "mug-set": {
+      "card": "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3",
+      "kind": "surface",
+      "name_he": "ספלים (3)"
+    },
+    "open-shelf-ceramics": {
+      "card": "vase-cj-matte-moon-jar-white",
+      "kind": "surface",
+      "name_he": "כד ירח על המדף"
+    },
+    "serving-boards": {
+      "card": "serving-boards-cj-black-walnut-paddle-pair-39-34",
+      "kind": "surface"
+    },
+    "cutting-boards": {
+      "card": "cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363",
+      "kind": "surface"
+    },
+    "kitchen-sconce": {
+      "card": "wall-sconce-cj-travertine-dome-15-alt",
+      "kind": "wall"
+    },
+    "condiment-set": {
+      "card": "condiment-set-cj-rubberwood-mill-pair-6in",
+      "kind": "surface",
+      "product": "condiment-set-cj-rubberwood-mill-pair-6in",
+      "name_he": "מטחנות מלח ופלפל"
+    },
+    "condiment-set-2": {
+      "card": "condiment-set-cj-kiln-stoneware-oil-cruet-trio",
+      "kind": "surface",
+      "of": "condiment-set",
+      "product": "condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white",
+      "name_he": "בקבוקי שמן וחומץ"
+    },
+    "counter-vessel": {
+      "card": "counter-vessel-cj-white-textured-jar",
+      "kind": "surface",
+      "anchors": [
+        [
+          0.5,
+          0.75
+        ]
+      ]
+    },
+    "paper-towel-holder": {
+      "card": "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand",
+      "kind": "surface"
+    },
+    "sink-set": {
+      "card": "key-tray-cj-black-walnut-tray-20x13",
+      "kind": "surface",
+      "product": "key-tray-cj-black-walnut-tray-20x13",
+      "name_he": "מגש אגוז ליד הכיור"
+    },
+    "sink-set-2": {
+      "card": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle",
+      "kind": "surface",
+      "of": "sink-set",
+      "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped",
+      "name_he": "מתקן סבון ליד הכיור"
+    },
+    "bowl": {
+      "card": "bowl-cj-glutinous-white-belly-bowl-21",
+      "kind": "surface",
+      "name_he": "קערה"
+    },
+    "floor-vase": {
+      "card": "pool-cj-wabi-sabi-floor-vase-white",
+      "kind": "floor",
+      "name_he": "אגרטל רצפה"
+    },
+    "table-runner": {
+      "card": "table-runner-aliexpress-french-linen-stonewash-40x140",
+      "kind": "surface"
+    },
+    "bench-pad": {
+      "card": "bench-pad-aliexpress-linen-look-box-cushion-130x35x5",
+      "kind": "surface"
+    },
+    "candle-holders": {
+      "card": "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+      "kind": "surface",
+      "name_he": "פמוטים (זוג)"
+    },
+    "centerpiece-vase": {
+      "card": "nightstand-vase-cj-unglazed-white-amphora-26",
+      "kind": "surface"
+    },
+    "dining-pendant": {
+      "card": "pendant-cj-silk-ribbed-pumpkin-40",
+      "kind": "hang",
+      "hero": true,
+      "anchors": [
+        [
+          0.5,
+          0.7
+        ]
+      ]
+    }
+  },
+  "variant_cards": {
+    "pendant-cj-scalloped-pleated-bell-45": "pendant-cj-scalloped-pleated-bell"
+  }
+}

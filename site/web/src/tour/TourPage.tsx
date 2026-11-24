@@ -29,7 +29,26 @@ import { NOT_FOR_SALE_HE } from '../set-copy';
 import { IconDoor } from '../components/Icons';
 import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
-import { NORDIC, NORDIC_NAME_HE, ROOMS, ROOM_HE, WM, cardUrl, forSale, setRoom, tour, type HouseId, type RoomId, type TourOption, type TourSlot } from './data';
+import {
+  FRAMES,
+  GROUP_HE,
+  NORDIC,
+  NORDIC_NAME_HE,
+  ROOMS,
+  ROOM_HE,
+  ROOM_IDS,
+  WM,
+  cardUrl,
+  groupOf,
+  roomCount,
+  setRoom,
+  tour,
+  type GroupId,
+  type HouseId,
+  type RoomId,
+  type TourOption,
+  type TourSlot,
+} from './data';
 import { arrival, camAt, doorUrl, frameAt, hcUrl, labelOpacity, labelPose, layoutLabels, walkFor, walkUrl } from './arrival';
 import type { TourEngine } from './engine';
 import { metrics, report, statLine } from './metrics';
@@ -100,7 +119,7 @@ function readCfg(): Cfg {
     zoom: pick(q.get('zoom'), ['pinch', 'double'] as const, DEFAULTS.zoom),
     bg: pick(q.get('bg'), ['paper', 'dark'] as const, DEFAULTS.bg),
     sharp: q.get('sharp') === '1',
-    room: pick(q.get('room'), ['living-room', 'master', 'bath'] as const, DEFAULTS.room),
+    room: pick(q.get('room'), ROOM_IDS, DEFAULTS.room),
   };
 }
 
@@ -123,6 +142,11 @@ const inWin = (p: { x: number; y: number }, vp: { w: number; h: number }) => ({
  * T-C* clips between the rooms exist (route ch. 11.2–11.4); then a clip plays in its place (tour/engine.ts toRoom).
  */
 const ROOM_FADE_MS = 900;
+/**
+ * MOCK5, TEMPORARY: the move between two frames of one room (MB0 / MB1, B2 / B1, D1 / D2) is a short plain dissolve
+ * (rule ו.6: never a zoom-in), like the move between rooms, until the in-room moves have clips of their own.
+ */
+const FRAME_FADE_MS = 600;
 /** a card: its own file, or (MOCK4) its place on its room's sheet of cards, as an SVG that shows only that place */
 function CardPic({ o, cls, size }: { o: TourOption; cls?: string; size?: number }) {
   const c = o.card;
@@ -181,14 +205,23 @@ function wheelHouse(s: TourSlot): House {
 
 /** the next animation frame: the page has rendered and laid out what was just asked of it */
 const frame = (): Promise<void> => new Promise((r) => requestAnimationFrame(() => r()));
-/** a tiny plan of the house, three cells; the room the visitor is in is brass (FB3: "ריבוע קטן למטה שיסמן את המשך הסיור") */
-const PlanIcon = ({ at }: { at: 'entry' | 'living' | 'rest' | 'bed' | 'bath' }) => (
+/**
+ * a tiny plan of the house; the room the visitor is in is brass (FB3: "ריבוע קטן למטה שיסמן את המשך הסיור"). MOCK5: six
+ * cells, as the plan lies — the living room and the kitchen at the front, the work room, the entrance and the bath in
+ * the middle, the bedroom at the back
+ */
+type At = 'entry' | 'living' | 'kitchen' | 'work' | 'bed' | 'bath';
+const PlanIcon = ({ at }: { at: At }) => (
   <svg class="tour-plan" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
-    <rect x="2" y="2" width="9" height="16" data-on={at === 'living' ? '' : undefined} />
-    <rect x="11" y="2" width="7" height="8" data-on={at === 'rest' || at === 'bed' ? '' : undefined} />
-    <rect x="11" y="10" width="7" height="8" data-on={at === 'entry' || at === 'bath' ? '' : undefined} />
+    <rect x="2" y="2" width="8" height="6" data-on={at === 'living' ? '' : undefined} />
+    <rect x="10" y="2" width="8" height="6" data-on={at === 'kitchen' ? '' : undefined} />
+    <rect x="2" y="8" width="5" height="5" data-on={at === 'work' ? '' : undefined} />
+    <rect x="7" y="8" width="4" height="5" data-on={at === 'entry' ? '' : undefined} />
+    <rect x="11" y="8" width="7" height="5" data-on={at === 'bath' ? '' : undefined} />
+    <rect x="2" y="13" width="16" height="5" data-on={at === 'bed' ? '' : undefined} />
   </svg>
 );
+const AT: Record<GroupId, At> = { 'living-room': 'living', master: 'bed', bath: 'bath', dining: 'kitchen', work: 'work' };
 const IconZoom = ({ out }: { out: boolean }) => (
   <svg
     viewBox="0 0 24 24"
@@ -208,7 +241,7 @@ type Eye = HouseId | 'rotate';
 /** the house's name beside the window (the designer's words); the style's own short name is the shop's (tour.name_he) */
 const HOUSE_HE: Record<HouseId, string> = { [WM]: 'הבית המודרני החם', [NORDIC]: 'הבית הנורדי' };
 /** MOCK4: a room as a sentence names it ("חדר השינה בבית …"); the article goes on the room's own word */
-const PLACE_HE: Record<RoomId, string> = { 'living-room': 'הסלון', master: 'חדר השינה', bath: 'חדר הרחצה' };
+const PLACE_HE: Record<GroupId, string> = { 'living-room': 'הסלון', master: 'חדר השינה', bath: 'חדר הרחצה', dining: 'המטבח ופינת האוכל', work: 'חדר העבודה' };
 
 export function TourPage() {
   const stage = useRef<HTMLElement>(null);
@@ -1030,8 +1063,9 @@ export function TourPage() {
   /**
    * MOCK4: to a room of the house (the panel's "חדרים"). TEMPORARY: a dissolve between the two rooms at rest (engine
    * toRoom), until the T-C* clips exist. From the door, the door's frame dissolves into the room.
+   * MOCK5: and to another frame of the room the visitor is in (the frame control): the same, a shorter dissolve.
    */
-  const goRoom = (id: RoomId) =>
+  const goRoom = (id: RoomId, inRoom = false) =>
     (live.current.phase === 'room' || live.current.phase === 'door') &&
     !live.current.open &&
     !(live.current.phase === 'room' && live.current.room === id) &&
@@ -1053,7 +1087,8 @@ export function TourPage() {
           held.current.push(img);
           await decoded(img);
         }
-        await e.toRoom(id, fromDoor ? 0 : ROOM_FADE_MS);
+        // TEMPORARY (FB11): a dissolve, between rooms and between the frames of a room, until the clips exist
+        await e.toRoom(id, fromDoor ? 0 : inRoom ? FRAME_FADE_MS : ROOM_FADE_MS, true, inRoom ? `frame-${id}` : `room-${id}`);
         setHouse(WM);
         setRoomUi(id);
         if (fromDoor) {
@@ -1064,10 +1099,13 @@ export function TourPage() {
         place();
         ui.count(items().length, true);
         atRest(e);
-        announce(`${ROOM_HE[id]}, ${forSale(tour)} מוצרים למכירה בחדר`);
-        title.current?.focus({ preventScroll: true });
+        announce(
+          inRoom && tour.frame_he ? `${ROOM_HE[id]}, ${tour.frame_he}` : `${ROOM_HE[id]}, ${roomCount(groupOf(id)).total} מוצרים למכירה בחדר`,
+        );
+        // the frame control keeps the focus where it was (the visitor may switch back); a room's button gives it to the title
+        if (!inRoom) title.current?.focus({ preventScroll: true });
       },
-      () => goRoom(id),
+      () => goRoom(id, inRoom),
     );
   const replay = (fx?: Reveal) =>
     live.current.phase === 'room' &&
@@ -1140,32 +1178,64 @@ export function TourPage() {
     return clear(e, cam, b) ?? { ...e.rest };
   }
   /**
-   * MOCK4: a close-up never shows the room's ×1-only box (the bedroom's art 776445, whose rights are unclear): a view
-   * that would is moved down below it, and closer if it must be, while the product stays in it; if the product cannot
-   * be seen without it, there is no close-up (null). The box is above every product it neighbours in the frames we have.
+   * MOCK4: a close-up never shows the room's ×1-only boxes (prints whose rights are unclear: the bedroom's 776445, and
+   * MOCK5's 386242 in the bedroom, the kitchen and the work room). A view that would show one is moved past it — below,
+   * above or to a side, and closer if it must be — while the product stays whole in it; of the views that show none, the
+   * one nearest the close-up wins. If the product cannot be seen without a box, there is no close-up (null).
    */
   function clear(e: TourEngine, cam: Cam, b: [number, number, number, number]): Cam | null {
-    const a = tour.avoid;
-    if (!a) return cam;
+    const boxes = tour.avoid ?? [];
+    if (!boxes.length) return cam;
     const { fw, fh } = coverSize(e.vp, tour.aspect);
+    const half = (c: Cam) => [e.vp.w / (2 * fw * c.z), e.vp.h / (2 * fh * c.z)] as const;
     const view = (c: Cam) => {
-      const hu = e.vp.w / (2 * fw * c.z);
-      const hv = e.vp.h / (2 * fh * c.z);
+      const [hu, hv] = half(c);
       return [c.cu - hu, c.cu + hu, c.cv - hv, c.cv + hv] as const;
     };
     const m = 0.008;
     const hits = (c: Cam) => {
       const v = view(c);
-      return v[0] < a[1] + m && v[1] > a[0] - m && v[2] < a[3] + m && v[3] > a[2] - m;
+      return boxes.some((a) => v[0] < a[1] + m && v[1] > a[0] - m && v[2] < a[3] + m && v[3] > a[2] - m);
+    };
+    const keeps = (c: Cam) => {
+      const v = view(c);
+      return v[0] <= b[0] && v[1] >= b[1] && v[2] <= b[2] && v[3] >= b[3];
     };
     if (!hits(cam)) return cam;
     // pushed a little further than the test, so the view's edge is clearly past the box
-    const top = a[3] + m * 1.5;
-    if (b[2] < top) return null;
-    const k = e.vp.h / (2 * fh);
-    const z = Math.max(cam.z, (2 * k) / (1 - top));
-    const out = clampCam({ cu: cam.cu, cv: Math.max(cam.cv, top + k / z), z }, e.vp, tour.aspect);
-    return hits(out) ? null : out;
+    const p = m * 1.5;
+    const kv = e.vp.h / (2 * fh);
+    const ku = e.vp.w / (2 * fw);
+    const tries: Cam[] = [];
+    for (const a of boxes) {
+      // below the box: the view's top edge under its bottom (MOCK4's one move), closer if the frame's height asks it
+      const top = a[3] + p;
+      if (b[2] >= top) {
+        const z = Math.max(cam.z, (2 * kv) / (1 - top));
+        tries.push({ cu: cam.cu, cv: Math.max(cam.cv, top + kv / z), z });
+      }
+      // above it: the view's bottom edge over its top
+      const bottom = a[2] - p;
+      if (b[3] <= bottom) {
+        const z = Math.max(cam.z, (2 * kv) / bottom);
+        tries.push({ cu: cam.cu, cv: Math.min(cam.cv, bottom - kv / z), z });
+      }
+      // beside it: the view's edge past its left or right side
+      const left = a[0] - p;
+      if (b[1] <= left) {
+        const z = Math.max(cam.z, (2 * ku) / left);
+        tries.push({ cu: Math.min(cam.cu, left - ku / z), cv: cam.cv, z });
+      }
+      const right = a[1] + p;
+      if (b[0] >= right) {
+        const z = Math.max(cam.z, (2 * ku) / (1 - right));
+        tries.push({ cu: Math.max(cam.cu, right + ku / z), cv: cam.cv, z });
+      }
+    }
+    const ok = tries.map((c) => clampCam(c, e.vp, tour.aspect)).filter((c) => !hits(c) && keeps(c));
+    if (!ok.length) return null;
+    const cost = (c: Cam) => Math.abs(Math.log(c.z / cam.z)) * 2 + Math.hypot(c.cu - cam.cu, c.cv - cam.cv);
+    return ok.sort((x, y) => cost(x) - cost(y))[0]!;
   }
   const picker = () => stage.current?.querySelector<HTMLElement>('.picker') ?? null;
   const openSlot = (s: TourSlot, from?: HTMLElement | null) =>
@@ -1418,18 +1488,27 @@ export function TourPage() {
       ))}
     </fieldset>
   );
-  // MOCK4: the rooms of the house that are built: the door, the living room, the bedroom and the bathroom (a button
-  // each, TOUR1); the move between rooms is a temporary dissolve until the T-C* clips exist
-  const here = (r: RoomId) => inRoom && room === r;
-  const toRoomBtn = (r: RoomId) => () => void (here(r) ? setMore(false) : phase === 'door' && r === 'living-room' ? goIn() : goRoom(r));
-  const rooms: { id?: string; name: string; at: 'entry' | 'living' | 'rest' | 'bed' | 'bath'; here?: boolean; go?: () => void }[] = [
+  // MOCK4: the rooms of the house that are built (a button each, TOUR1); the move between rooms is a temporary
+  // dissolve until the T-C* clips exist. MOCK5: every room the owner approved — the living room, the bedroom, the bath,
+  // the kitchen and the work room; a room's button lands on its rest frame (FRAMES[room][0])
+  const group = groupOf(room);
+  const here = (g: GroupId) => inRoom && group === g;
+  const toRoomBtn = (g: GroupId) => () =>
+    void (here(g) ? setMore(false) : phase === 'door' && g === 'living-room' ? goIn() : goRoom(FRAMES[g][0]!));
+  const rooms: { id?: string; name: string; at: At; here?: boolean; go?: () => void }[] = [
     // the room the visitor is in: its button only closes the panel
     { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void (phase === 'door' ? setMore(false) : goOut()) },
-    { id: 'tour-living', name: ROOM_HE['living-room'], at: 'living', here: here('living-room'), go: toRoomBtn('living-room') },
-    { id: 'tour-master', name: ROOM_HE.master, at: 'bed', here: here('master'), go: toRoomBtn('master') },
-    { id: 'tour-bath', name: ROOM_HE.bath, at: 'bath', here: here('bath'), go: toRoomBtn('bath') },
-    { name: 'פינת אוכל', at: 'rest' },
+    ...(['living-room', 'master', 'bath', 'dining', 'work'] as const).map((g) => ({
+      id: g === 'living-room' ? 'tour-living' : `tour-${g}`,
+      name: GROUP_HE[g],
+      at: AT[g],
+      here: here(g),
+      go: toRoomBtn(g),
+    })),
   ];
+  /** MOCK5: the frames of the room the visitor is in (the frame control, when it has more than one) */
+  const frames = FRAMES[group];
+  const count = roomCount(group);
   // "קנה את המראה": the style's own magazine page on the site; the Artifact preview has no such page, and shows the
   // list of the room's products under the tour instead. MOCK4: only the living room has a magazine page so far
   const lookHref = __ARTIFACT__ || room !== 'living-room' ? null : `/story/${tour.room}/${house}/`;
@@ -1491,10 +1570,28 @@ export function TourPage() {
                   <span class="sr-only"> · {HOUSE_HE[house]}</span>
                 </h1>
               )}
-              {/* MOCK4, temporary, for the owner: how many products the room sells */}
+              {/* MOCK4, temporary, for the owner: how many products the room sells; MOCK5: the room's, every frame of it,
+                  a product once (in the frame where it is biggest) */}
               <span class="tour-sale" data-temp="" {...(inRoom && wm ? {} : { hidden: true })}>
-                {forSale(tour)} מוצרים למכירה בחדר
+                {count.total} מוצרים למכירה בחדר
               </span>
+              {/* MOCK5: the frames of the room (TEMPORARY: a dissolve between them, never a zoom-in) */}
+              {frames.length > 1 ? (
+                <div class="tour-frames segmented" role="group" aria-label="נקודת מבט בחדר" {...(inRoom && wm ? {} : { hidden: true })}>
+                  {frames.map((f) => (
+                    <button
+                      key={f}
+                      type="button"
+                      data-frame={f}
+                      aria-pressed={room === f}
+                      disabled={busy || !!open}
+                      onClick={() => void (room === f ? undefined : goRoom(f, true))}
+                    >
+                      {ROOMS[f].frame_he ?? ROOMS[f].frame}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -1509,7 +1606,7 @@ export function TourPage() {
                 phase === 'door'
                   ? 'דלת הכניסה של הבית המודרני החם: דלת אגוז בקיר אבן בהיר, מנורת קיר, ואדנית עם לבנדר.'
                   : wm
-                    ? `${PLACE_HE[room]} בבית המודרני החם, עם ${shown.length} פריטים. הרשימה שמתחת לחדר מפרטת אותם.`
+                    ? `${PLACE_HE[group]} בבית המודרני החם${tour.frame_he ? ` (${tour.frame_he})` : ''}, עם ${shown.length} פריטים. הרשימה שמתחת לחדר מפרטת אותם.`
                     : 'הסלון בבית הנורדי, בתמונות זמניות.'
               }
             />
@@ -1713,7 +1810,7 @@ export function TourPage() {
               {...(open ? off : {})}
               onClick={toggleMore}
             >
-              <PlanIcon at={phase === 'door' ? 'entry' : room === 'master' ? 'bed' : room === 'bath' ? 'bath' : 'living'} />
+              <PlanIcon at={phase === 'door' ? 'entry' : AT[group]} />
               <span class="long">המשך הסיור</span>
               <span class="short">הסיור</span>
               <svg

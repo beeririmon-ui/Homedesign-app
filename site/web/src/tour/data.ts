@@ -5,10 +5,19 @@
  * MOCK4: three rooms of the warm-modern house — the living room, and the bedroom and the bathroom that
  * tools/make-tour-room.ts builds from their render folders. `tour` is the room the visitor is in: a live binding that
  * `setRoom` changes, so the engine, the effects and the page read the room they are in wherever they read `tour`.
+ *
+ * MOCK5 (2026-11-24): every room the owner approved — the living room, the bedroom (MB0, MB1), the bath (B2, B1), the
+ * kitchen (D1, D2) and the work room (W0). An entry of ROOMS is a frame (its `room` is the frame's key, a file name);
+ * the house's room it is of is its `group`, and a room's first frame is where its button lands (tools/tour/frames.json).
  */
 import json from '@generated/tour.living-room.warm-modern.json';
 import masterJson from '@generated/tour.master.warm-modern.json';
+import masterMb1Json from '@generated/tour.master-mb1.warm-modern.json';
 import bathJson from '@generated/tour.bath.warm-modern.json';
+import bathB1Json from '@generated/tour.bath-b1.warm-modern.json';
+import diningJson from '@generated/tour.dining.warm-modern.json';
+import diningD2Json from '@generated/tour.dining-d2.warm-modern.json';
+import workJson from '@generated/tour.work.warm-modern.json';
 import type { Box } from '../engine/types';
 import { buildLayers } from '../engine/layers';
 import { defaultSelection, livingRoom, scene as nordicScene } from '../catalog';
@@ -28,7 +37,8 @@ export type TourCard = {
 /** MOCK4: a layer packed in an atlas page: [page (from 1), x, y, w, h] in the page's pixels */
 export type AtlasRef = [number, number, number, number, number];
 export type AtlasPage = { src: string; w: number; h: number };
-export type TourLight = { id: string; slot: string; rect: Box; atlas: Record<string, AtlasRef> };
+/** a light of a slot's lamp (drawn with it); MOCK5: `slot` null — a lamp outside the frame, its light always on (D2) */
+export type TourLight = { id: string; slot: string | null; rect: Box; atlas: Record<string, AtlasRef> };
 export type TourOption = {
   position: number;
   card: TourCard;
@@ -66,6 +76,10 @@ export type TourSlot = {
   shadows?: number[];
   /** MOCK4: the product and its shadow in the room's atlas pages, per composition width (absent: files of its own) */
   atlas?: Record<string, { product: AtlasRef; shadow: AtlasRef }>;
+  /** MOCK5: the key the owner's count counts the product by in its room (its card's original listing), and its area
+   *  in this frame (a product is counted once in its room, in the frame where it is biggest) */
+  count_key?: string | null;
+  area_px?: number;
 };
 export type TourCamera = {
   frame: Box;
@@ -98,30 +112,75 @@ export type TourData = {
   sample?: string;
   /** MOCK4: false: the visitor does not zoom here (the bedroom: the art's rights, ×1 only) */
   zoom?: boolean;
-  /** MOCK4: a box of the frame no close-up and no zoom may show (canvas UV) */
-  avoid?: Box | null;
+  /** MOCK4: the boxes of the frame no close-up and no zoom may show (canvas UV); MOCK5: one a print whose rights are
+   *  not confirmed (the bedroom's two, the kitchen's 386242, the work room's two) */
+  avoid?: Box[];
+  /** MOCK5: the house's room the frame is of, its camera, and its name in the frame control */
+  group?: string;
+  frame?: string;
+  frame_he?: string | null;
   atlas?: Record<string, { product: AtlasPage[]; shadow: AtlasPage[] }>;
   lights?: TourLight[];
   /** MOCK4: how many products for sale the room shows (the owner's temporary line) */
   for_sale?: number;
 };
 
-export type RoomId = 'living-room' | 'master' | 'bath';
+/** MOCK5: a frame of the tour (a file name); the frames of a room are `FRAMES[group]` */
+export type RoomId = 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work';
+export const ROOM_IDS = ['living-room', 'master', 'master-mb1', 'bath', 'bath-b1', 'dining', 'dining-d2', 'work'] as const satisfies readonly RoomId[];
 export const ROOMS: Record<RoomId, TourData> = {
   'living-room': json as unknown as TourData,
   master: masterJson as unknown as TourData,
+  'master-mb1': masterMb1Json as unknown as TourData,
   bath: bathJson as unknown as TourData,
+  'bath-b1': bathB1Json as unknown as TourData,
+  dining: diningJson as unknown as TourData,
+  'dining-d2': diningD2Json as unknown as TourData,
+  work: workJson as unknown as TourData,
 };
-/** route ch. 5.5: the rooms' names in the tour */
-export const ROOM_HE: Record<RoomId, string> = { 'living-room': 'סלון', master: 'חדר שינה', bath: 'חדר רחצה' };
+/** MOCK5: the house's rooms in the tour, and their frames (the first is the room's rest frame: tools/tour/frames.json) */
+export type GroupId = 'living-room' | 'master' | 'bath' | 'dining' | 'work';
+export const FRAMES: Record<GroupId, RoomId[]> = {
+  'living-room': ['living-room'],
+  master: ['master', 'master-mb1'],
+  bath: ['bath', 'bath-b1'],
+  dining: ['dining', 'dining-d2'],
+  work: ['work'],
+};
+export const groupOf = (id: RoomId): GroupId => (ROOMS[id].group ?? id) as GroupId;
+/** route ch. 5.5: the rooms' names in the tour (a frame is named by its room) */
+export const GROUP_HE: Record<GroupId, string> = { 'living-room': 'סלון', master: 'חדר שינה', bath: 'חדר רחצה', dining: 'מטבח', work: 'חדר עבודה' };
+export const ROOM_HE = Object.fromEntries(ROOM_IDS.map((id) => [id, GROUP_HE[groupOf(id)]])) as Record<RoomId, string>;
 /** the room the visitor is in (a live binding: setRoom changes it for every module that reads it) */
 export let tour: TourData = ROOMS['living-room'];
 export const roomOf = (): RoomId => tour.room as RoomId;
 export function setRoom(id: RoomId): void {
   tour = ROOMS[id];
 }
-/** the products a room sells, as the owner's line counts them: a mark each, and a set's every product */
+/** the products a frame sells, as the owner's line counts them: a mark each, and a set's every product */
 export const forSale = (r: TourData): number => r.for_sale ?? r.slots.reduce((n, s) => n + (s.fixed ? 0 : s.options[0]?.set ? 4 : 1), 0);
+/**
+ * MOCK5, the owner's line ("X מוצרים למכירה בחדר"): the products a room sells, each once, in the frame where it is
+ * biggest (the counting rule, FB10 / V7Q6 with the manager's card count). A product is its card's original listing
+ * (`count_key`: registration 1.3.9's copies, and two cards of one SKU, are one product). Returns the room's count and
+ * how many of them each frame holds.
+ */
+export function roomCount(group: GroupId): { total: number; by: Partial<Record<RoomId, number>> } {
+  const frames = FRAMES[group];
+  if (frames.length === 1 && !ROOMS[frames[0]!].slots.some((s) => s.count_key)) return { total: forSale(ROOMS[frames[0]!]), by: { [frames[0]!]: forSale(ROOMS[frames[0]!]) } };
+  const best = new Map<string, { f: RoomId; a: number }>();
+  for (const f of frames)
+    for (const s of ROOMS[f].slots) {
+      if (s.fixed) continue;
+      const k = s.count_key ?? `${f}:${s.id}`;
+      const a = s.area_px ?? 0;
+      const b = best.get(k);
+      if (!b || a > b.a) best.set(k, { f, a });
+    }
+  const by: Partial<Record<RoomId, number>> = {};
+  for (const { f } of best.values()) by[f] = (by[f] ?? 0) + 1;
+  return { total: best.size, by };
+}
 export const WM = 'warm-modern';
 export const NORDIC = 'nordic';
 export type HouseId = typeof WM | typeof NORDIC;

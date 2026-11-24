@@ -79,7 +79,9 @@ type Room = {
   atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
   slots: { src: string; atlas?: unknown; shadows?: number[]; options: { position: number; card: { src: string } }[] }[];
 };
-for (const id of ['master', 'bath']) {
+// MOCK5: every frame of every room built from a render folder (tools/tour/frames.json)
+const tourFrames = (JSON.parse(readFileSync(sitePath('tools/tour/frames.json'), 'utf8')) as { rooms: { frames: string[] }[] }).rooms.flatMap((x) => x.frames);
+for (const id of tourFrames) {
   const r = JSON.parse(readFileSync(sitePath(`.generated/tour.${id}.warm-modern.json`), 'utf8')) as Room;
   const lo = r.widths.lo;
   files.add(`${r.base.src}.${lo}.webp`);

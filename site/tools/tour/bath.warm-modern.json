@@ -1,6 +1,8 @@
 {
-  "note": "MOCK4 (2026-11-18): the warm-modern bathroom in the tour (B2 stage one with FB10, QA qa/reports/2026-11-18-bath-b2 and 2026-11-18-bath-fb10; temporary, for the owner). Read by tools/make-tour-room.ts, as tools/tour/master.warm-modern.json (its note). The vanity is part of the plate and has no layer. The sample slot carries the wheel's three variants: the two colours of the linen towel and the khaki tea towel (its own card, its own layer and shadow). Behind HD_PUBLIC=0.",
+  "note": "MOCK4 (2026-11-18): the warm-modern bathroom in the tour (B2 stage one with FB10, QA qa/reports/2026-11-18-bath-b2 and 2026-11-18-bath-fb10; temporary, for the owner). Read by tools/make-tour-room.ts, as tools/tour/master.warm-modern.json (its note). The vanity is part of the plate and has no layer. The sample slot carries the wheel's three variants: the two colours of the linen towel and the khaki tea towel (its own card, its own layer and shadow). Behind HD_PUBLIC=0. MOCK5 (2026-11-24): the frame is B2, the bath's rest frame (`group` bath).",
   "room": "bath",
+  "group": "bath",
+  "frame_he": "הכיור",
   "style": "warm-modern",
   "name_he": "חדר רחצה",
   "layers": "assets/renders/bath/warm-modern/stage1-2026-11-17",
@@ -11,28 +13,99 @@
   "room_plan": "bath",
   "slots_file": "data/slots/bath.json",
   "sample": "hand-towel",
-  "avoid": null,
   "zoom": true,
   "slots": {
-    "shower-dispensers": { "card": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle", "kind": "surface" },
+    "shower-dispensers": {
+      "card": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+      "kind": "surface"
+    },
     "vanity-sconces": {
       "card": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
       "kind": "wall",
       "anchors": [
-        [0.04, 0.5],
-        [0.96, 0.5]
+        [
+          0.04,
+          0.5
+        ],
+        [
+          0.96,
+          0.5
+        ]
       ]
     },
-    "shower-curtain": { "card": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270", "kind": "hang", "anchors": [[0.5, 0.45]] },
-    "floor-planter": { "card": "planter-cj-cement-ribbed-belly", "kind": "floor", "anchors": [[0.5, 0.6]] },
-    "bath-towels": { "card": "bath-towels-cj-waffle-cotton-milky-white-70x140", "kind": "hang" },
-    "storage-basket": { "card": "storage-basket-cj-two-tone-cotton-rope-basket-38x25x23", "kind": "surface", "anchors": [[0.5, 0.35]] },
-    "vanity-tray": { "card": "pool-cj-travertine-organic-tray-24", "kind": "surface", "name_he": "מגש טרוורטין ליד הכיור", "depth_m": 2.28 },
-    "soap-dispenser": { "card": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle", "kind": "surface" },
-    "toothbrush-cup": { "card": "toothbrush-cup-cj-silver-travertine-cup", "kind": "surface" },
-    "vanity-vase": { "card": "vanity-vase-cj-matte-black-pottery-bud-vase-10", "kind": "surface" },
-    "towel-ring": { "card": "towel-ring-aliexpress-1-2pcs-bathroom-towel-842335", "kind": "wall", "anchors": [[0.5, 0.15]] },
-    "hand-towel": { "card": "hand-towel-aliexpress-pure-linen-towel-38x55", "kind": "hang", "anchors": [[0.5, 0.6]], "hero": true }
+    "shower-curtain": {
+      "card": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+      "kind": "hang",
+      "anchors": [
+        [
+          0.5,
+          0.45
+        ]
+      ]
+    },
+    "floor-planter": {
+      "card": "planter-cj-cement-ribbed-belly",
+      "kind": "floor",
+      "anchors": [
+        [
+          0.5,
+          0.6
+        ]
+      ]
+    },
+    "bath-towels": {
+      "card": "bath-towels-cj-waffle-cotton-milky-white-70x140",
+      "kind": "hang"
+    },
+    "storage-basket": {
+      "card": "storage-basket-cj-two-tone-cotton-rope-basket-38x25x23",
+      "kind": "surface",
+      "anchors": [
+        [
+          0.5,
+          0.35
+        ]
+      ]
+    },
+    "vanity-tray": {
+      "card": "pool-cj-travertine-organic-tray-24",
+      "kind": "surface",
+      "name_he": "מגש טרוורטין ליד הכיור",
+      "depth_m": 2.28
+    },
+    "soap-dispenser": {
+      "card": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle",
+      "kind": "surface"
+    },
+    "toothbrush-cup": {
+      "card": "toothbrush-cup-cj-silver-travertine-cup",
+      "kind": "surface"
+    },
+    "vanity-vase": {
+      "card": "vanity-vase-cj-matte-black-pottery-bud-vase-10",
+      "kind": "surface"
+    },
+    "towel-ring": {
+      "card": "towel-ring-aliexpress-1-2pcs-bathroom-towel-842335",
+      "kind": "wall",
+      "anchors": [
+        [
+          0.5,
+          0.15
+        ]
+      ]
+    },
+    "hand-towel": {
+      "card": "hand-towel-aliexpress-pure-linen-towel-38x55",
+      "kind": "hang",
+      "anchors": [
+        [
+          0.5,
+          0.6
+        ]
+      ],
+      "hero": true
+    }
   },
   "variant_cards": {
     "tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki": "tea-towel-cj-waffle-cotton-beige-45x65-pair"

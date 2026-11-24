@@ -569,9 +569,22 @@ function buildOptions(
   };
 }
 
+/**
+ * MOCK5 (registration 1.3.9): a card copied to a second slot (one card a slot, the same supplier, SKU and price) says so
+ * in its notes, `mirror_of: <id>`. The studio's pricing, its freight lines and the final round's record are keyed by the
+ * original's id, so a copy reads them through the original; it stays its own product (its id, its slot, its room).
+ */
+const mirrorOf = (card: ProductCard): string | null => {
+  const notes = (card as { notes?: unknown }).notes;
+  const text = Array.isArray(notes) ? notes.join(' ') : typeof notes === 'string' ? notes : '';
+  const id = /mirror_of:\s*([a-z0-9][a-z0-9-]*[a-z0-9])/.exec(text)?.[1] ?? null;
+  return id && id !== card.id && cards.some((c) => c.card.id === id) ? id : null;
+};
 function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slot, fillerNames: string[]): FullProduct | HiddenProduct {
-  const econ = productEcon[card.id];
-  const lead = leads.get(card.id) ?? null;
+  // MOCK5: the economics of a copy are its original's (the same SKU and price)
+  const econId = mirrorOf(card) ?? card.id;
+  const econ = productEcon[econId];
+  const lead = leads.get(econId) ?? null;
   // units per sale: the studio's sell_qty, else the studio's own default rule (studio/build.py sell_qty_default)
   const qtyDefault = sellQtyDefault(card, slot, lead);
   const sellQty = econ?.sell_qty ?? qtyDefault.qty;
@@ -581,8 +594,8 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const cost = usdToCents(saleCost !== null ? saleCost / sellQty : card.price.currency === 'USD' ? card.price.cost : NaN);
   if (!Number.isFinite(cost)) return { id: card.id, slot: slot.id, reason: `price.currency ${card.price.currency} is not USD` };
   // the shipping line, in the studio's order; a product without one is not priced (no default figure, SITE1)
-  const cjEntry = freights.cj?.products[card.id] as { pid?: string; vid?: string } | undefined;
-  const ship = resolveShipping({ id: card.id, card, row: econ, freights, cache: cachedFreight(REPO, card, cjEntry), lead, sellQty });
+  const cjEntry = freights.cj?.products[econId] as { pid?: string; vid?: string } | undefined;
+  const ship = resolveShipping({ id: econId, card, row: econ, freights, cache: cachedFreight(REPO, card, cjEntry), lead, sellQty });
   if (!ship.ok)
     return {
       id: card.id,
@@ -602,7 +615,7 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
     const issue = skuAnchorIssue(
       econ as { retail_ils: number; retail_src?: string | null; retail_sku?: string | null },
       card.options.default_sku,
-      priceAnchors[card.id],
+      priceAnchors[econId],
     );
     if (issue)
       priceSkuWarnings.push({ id: card.id, retail_ils: econ.retail_ils, retail_src: econ.retail_src ?? null, default_sku: card.options.default_sku, ...issue });
@@ -623,14 +636,15 @@ function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slo
   const fulfillment = econ?.fulfillment_source ?? 'dropship_cj';
   const materials = materialsHe(card.materials);
   const color = colorNameHe(card.colors.dominant_hex);
-  const named = designerNames[card.id];
+  // MOCK5: a copy is the same product: the designer's name and the line of its original when it has none of its own
+  const named = designerNames[card.id] ?? designerNames[econId];
   // ת8: the line names the default SKU by its Hebrew labels (a set's own axis aside); a product the designer has not
   // named takes its base name and that label (the line rule), else the name composed from slot, material and colour
-  const set = lineData.sets[card.id] ?? null;
+  const set = lineData.sets[card.id] ?? lineData.sets[econId] ?? null;
   const dfltSku = card.options?.skus.find((k) => k.id === card.options!.default_sku) ?? null;
   const dfltLine = lineOf(lineData, card, (dfltSku?.values ?? {}) as Record<string, string>, '');
   const dfltLabel = dfltSku ? (dfltLine.label ?? '') : '';
-  const base = lineData.base[card.id] ?? null;
+  const base = lineData.base[card.id] ?? lineData.base[econId] ?? null;
   // S15: the slot as the site names it (tools/display-he.json), never a catalog tag such as "(סט)"
   const slotName = slotNamesHe[`${roomId}/${slot.id}`] ?? slot.name_he;
   const name_he = named ?? (base ? lineName(base, dfltLabel) : `${slotName}${materials[0] ? ` ${materials[0]}` : ''}, ${color}`);
@@ -840,6 +854,9 @@ for (const hr of house.rooms) {
   const slots: CatalogSlot[] = [];
   const frame = hr.frames?.[0] ?? sf.view ?? 'main';
   for (const slot of sf.slots) {
+    // MOCK5 (registration 1.3.9, its log ch. 6.2): a slot of one style only says so (`styles`); it is not this style's
+    const only = (slot as { styles?: unknown }).styles;
+    if (Array.isArray(only) && !only.includes(STYLE)) continue;
     // F3 (2026-10-10): a fixed piece of furniture sold as one product. Until its card exists there is nothing to open,
     // so the slot stays out of the room (no empty wheel, no mark on the sofa); the list below the room skips it too.
     if (slot.kind === 'fixed-product') {

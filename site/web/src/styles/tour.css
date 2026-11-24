@@ -252,6 +252,37 @@
 .tour-sale[hidden] {
   display: none;
 }
+/* MOCK5: the frames of the room ("קיר המיטה / מרגלי המיטה"), beside the owner's line; off the picture (FB3) */
+.tour-frames.segmented {
+  order: 4;
+  display: inline-flex;
+  align-self: center;
+  gap: 2px;
+  margin-inline-start: var(--s-2);
+  padding: 2px;
+  border: 1px solid var(--tour-line);
+  border-radius: 999px;
+}
+.tour-frames[hidden] {
+  display: none;
+}
+.tour-frames.segmented button {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font: 600 13px / 1 var(--f-text);
+  color: var(--tour-fg2);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.tour-frames.segmented button[aria-pressed='true'] {
+  background: var(--tour-fg);
+  color: var(--tour-bg);
+  text-decoration: none;
+}
+.tour-frames.segmented button:disabled:not([aria-pressed='true']) {
+  cursor: default;
+}
 
 /* ---------- the band over the window: the house and the room ---------- */
 .tour-top {
@@ -988,6 +1019,10 @@
   .tour-sale {
     margin: 0;
   }
+  /* MOCK5: the frames of the room take a line of their own under the name */
+  .tour-frames.segmented {
+    margin: var(--s-1) 0 0;
+  }
   .tour-t h1,
   .tour-t .h,
   .tour-t.t-door h1,
@@ -1343,6 +1378,18 @@
   .tour-sale {
     margin: var(--s-1) 0 0;
     white-space: normal;
+  }
+  /* MOCK5: on the narrow rail the frames stack */
+  .tour-frames.segmented {
+    display: flex;
+    flex-direction: column;
+    margin: var(--s-2) 0 0;
+    border-radius: 14px;
+  }
+  .tour-frames.segmented button {
+    padding: 6px 8px;
+    white-space: normal;
+    line-height: 1.2;
   }
   .tour-t.t-room .eyebrow,
   .tour-t.t-room h1,

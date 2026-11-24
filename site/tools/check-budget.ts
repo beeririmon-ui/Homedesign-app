@@ -192,28 +192,31 @@ if (existsSync(tourPage) && existsSync(tourData)) {
       ["the arrival's walk, a wide screen (60 fps)", mp4(a.videos.desktop.src), 8 * MB],
     );
   }
-  for (const [id, name] of [
-    ['master', 'the bedroom'],
-    ['bath', 'the bathroom'],
-  ] as const) {
+  // MOCK5: every frame of every room built from a render folder (tools/tour/frames.json); a frame without a wheel (MB1,
+  // D2) has no sample option to load
+  const frameIds = existsSync(sitePath('tools/tour/frames.json'))
+    ? (JSON.parse(readFileSync(sitePath('tools/tour/frames.json'), 'utf8')) as { rooms: { frames: string[] }[] }).rooms.flatMap((x) => x.frames)
+    : [];
+  for (const id of frameIds) {
     const f = sitePath(`.generated/tour.${id}.warm-modern.json`);
     if (!existsSync(f)) continue;
     const r = JSON.parse(readFileSync(f, 'utf8')) as {
       widths: { lo: number };
       base: { src: string };
-      sample: string;
+      sample?: string;
+      frame?: string;
+      room_he?: string;
       atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
       slots: { id: string; src: string; shadows?: number[]; options: { card: { src: string } }[] }[];
     };
     const lo = r.widths.lo;
-    const s0 = r.slots.find((x) => x.id === r.sample)!;
+    const s0 = r.slots.find((x) => x.id === r.sample);
     const media =
       file(r.base.src, lo, ['webp']) +
       [...r.atlas[String(lo)]!.product, ...r.atlas[String(lo)]!.shadow].reduce((n, p) => n + file(p.src, lo, ['webp']), 0) +
-      file(`${s0.src}/1.product`, lo, ['webp']) +
-      file(`${s0.src}/${s0.shadows?.[0] ?? 1}.shadow`, lo, ['webp']) +
-      file(s0.options[0]!.card.src, undefined, ['webp']);
-    rows.push([`first load, ${name} (a room of the tour), mobile`, page + media, BUDGET.firstLoad]);
+      (s0 ? file(`${s0.src}/1.product`, lo, ['webp']) + file(`${s0.src}/${s0.shadows?.[0] ?? 1}.shadow`, lo, ['webp']) : 0) +
+      file(r.slots.find((x) => x.options[0]?.card.src)!.options[0]!.card.src, undefined, ['webp']);
+    rows.push([`first load, ${id} (${r.frame ?? id}, a frame of the tour), mobile`, page + media, BUDGET.firstLoad]);
   }
 }
 // S5: the story's pages (behind the flag; absent from the public build). A story page's own scripts and styles, and its

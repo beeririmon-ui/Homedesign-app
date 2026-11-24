@@ -14,6 +14,7 @@ import { metrics, type EffectStat } from './metrics';
 import {
   NORDIC,
   ROOMS,
+  ROOM_IDS,
   WM,
   atlasUrl,
   baseOf,
@@ -29,8 +30,10 @@ import {
   type TourSlot,
 } from './data';
 
-/** MOCK4: whether a texture's key is of room `r` (the living room's keys carry no prefix: MOCK1–3 named them) */
-const ownKey = (r: string, key: string): boolean => (r === 'living-room' ? !/^(master|bath):/.test(key) : key.startsWith(`${r}:`));
+/** MOCK4: whether a texture's key is of room `r` (the living room's keys carry no prefix: MOCK1–3 named them);
+ *  MOCK5: every other frame's keys start with the frame's own key */
+const ownKey = (r: string, key: string): boolean =>
+  r === 'living-room' ? !ROOM_IDS.some((id) => id !== 'living-room' && key.startsWith(`${id}:`)) : key.startsWith(`${r}:`);
 
 /** cubic-bezier(x1, y1, x2, y2), as CSS: the designer's curves (section 7) */
 export function bezier(x1: number, y1: number, x2: number, y2: number): (x: number) => number {
@@ -249,7 +252,7 @@ export class TourEngine {
     ];
   }
   /** MOCK4: the room's lights (screen), on its shadows' atlas pages */
-  private lights(r: TourData = tour): (Draw & { slot: string })[] {
+  private lights(r: TourData = tour): (Draw & { slot: string | null })[] {
     const w = this.gl.width;
     return (r.lights ?? []).map((l) => {
       const a = l.atlas[String(w)]!;
@@ -288,12 +291,12 @@ export class TourEngine {
    * for the arrival's reveal), and the room left behind gives its textures and its decoded pictures back (a phone
    * holds one room at a time).
    */
-  async toRoom(id: RoomId, ms: number, products = true): Promise<void> {
+  async toRoom(id: RoomId, ms: number, products = true, label = `room-${id}`): Promise<void> {
     const next = ROOMS[id];
     const from = tour.room;
     await this.loadRoom(next, 0);
     if (this.destroyed) return;
-    await this.between(`room-${id}`, ms, () => {
+    await this.between(label, ms, () => {
       setRoom(id);
       this.house = WM;
       if (from !== id) {
@@ -417,8 +420,9 @@ export class TourEngine {
     }
     // MOCK4: the light last, in screen, with its product (the render folder's formula: every product, then the light)
     for (const l of this.lights()) {
-      const p = this.poses.get(l.slot);
-      if (!everything && !(p ? p.length : this.visible.has(l.slot))) continue;
+      // MOCK5: a light whose lamp is outside the frame (D2's pendant) is part of the room: always on
+      const p = l.slot ? this.poses.get(l.slot) : undefined;
+      if (!everything && l.slot && !(p ? p.length : this.visible.has(l.slot))) continue;
       out.push({ ...layer(l.key, l.rect, false, 0, l.sub, true), opacity: p?.[0]?.a ?? 1 });
     }
     return out;
