@@ -145,12 +145,12 @@
    "default": true,
    "layer": "layers/D1/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
    "shadow": "shadows/D1/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
-   "alpha_px": 7111,
-   "shadow_px": 7474,
+   "alpha_px": 6862,
+   "shadow_px": 7263,
    "bbox_px": [
-    1618,
+    1623,
     390,
-    1713,
+    1712,
     486
    ],
    "sold": true,
@@ -159,6 +159,20 @@
    "toned": true,
    "retired": null,
    "derived_from": "D2o",
+   "trim": {
+    "rule": "KD-L5: the body's alpha clipped to its fitted ellipse from y 400 (tools/kd_d2stage.py jar_trim)",
+    "ellipse_px": [
+     738.2,
+     426.7,
+     49.4,
+     50.7
+    ],
+    "fit_residual_px_p50_p95": [
+     0.6,
+     1.8
+    ],
+    "removed_px": 326
+   },
    "projected_from": "D2"
   },
   {
@@ -197,7 +211,7 @@
    "default": true,
    "layer": "layers/D1/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
    "shadow": "shadows/D1/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
-   "alpha_px": 14693,
+   "alpha_px": 14846,
    "shadow_px": 7487,
    "bbox_px": [
     1710,
@@ -216,7 +230,10 @@
      842.0,
      741.0
     ],
-    "F_filled_px": 80,
+    "F_filled_px": 1984,
+    "F_symmetric_about_x": 823,
+    "F_width_px": 75,
+    "F_width_vs_clay": 1.049,
     "pale_removed_px": 159,
     "rule": "Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is\n    scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm\n    against 39, width 17.4 against 18.5)"
    },
@@ -730,12 +747,12 @@
    "default": true,
    "layer": "layers/D2/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
    "shadow": "shadows/D2/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
-   "alpha_px": 8394,
-   "shadow_px": 8814,
+   "alpha_px": 8061,
+   "shadow_px": 8563,
    "bbox_px": [
-    682,
+    688,
     374,
-    789,
+    788,
     473
    ],
    "sold": true,
@@ -743,7 +760,21 @@
    "pass_": "jar-move",
    "toned": true,
    "retired": null,
-   "derived_from": "D2o"
+   "derived_from": "D2o",
+   "trim": {
+    "rule": "KD-L5: the body's alpha clipped to its fitted ellipse from y 400 (tools/kd_d2stage.py jar_trim)",
+    "ellipse_px": [
+     738.2,
+     426.7,
+     49.4,
+     50.7
+    ],
+    "fit_residual_px_p50_p95": [
+     0.6,
+     1.8
+    ],
+    "removed_px": 326
+   }
   },
   {
    "frame": "D2",
@@ -780,7 +811,7 @@
    "default": true,
    "layer": "layers/D2/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
    "shadow": "shadows/D2/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
-   "alpha_px": 15852,
+   "alpha_px": 16027,
    "shadow_px": 7845,
    "bbox_px": [
     786,
@@ -799,7 +830,10 @@
      842.0,
      741.0
     ],
-    "F_filled_px": 80,
+    "F_filled_px": 1984,
+    "F_symmetric_about_x": 823,
+    "F_width_px": 75,
+    "F_width_vs_clay": 1.049,
     "pale_removed_px": 159,
     "rule": "Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is\n    scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm\n    against 39, width 17.4 against 18.5)"
    }
@@ -1410,7 +1444,7 @@
   }
  ],
  "status": "for QA: 10.9 'D2 takes the stage' (2026-11-24), only what changed; then the owner's approval 3. Not for the site before QA.",
- "updated": "2026-11-24 (10.9)",
+ "updated": "2026-11-24 (10.9 + QA fixes KD-L5, KD-L6)",
  "frames_out": {
   "D1-defaults": "D1-defaults.png / D1-defaults-frame.png (plate graded, KD-L4; the D2 changes projected)",
   "D2-defaults": "D2-defaults.png / D2-defaults-frame.png (yaw -86, KD-15)",
@@ -1436,12 +1470,12 @@
   "python3 tools/kd_d2stage.py plate            (KD-15: the -86 plate from the two plates; scratchpad intermediate)",
   "python3 tools/kd_crop.py assemble N-niche && python3 tools/kd_d2stage.py niche-apply   (KD-16)",
   "python3 tools/kd_d2stage.py grade            (KD-L4: plate-D1.png, plate-D2.png)",
-  "python3 tools/kd_d2stage.py jar && python3 tools/kd_d2stage.py retire",
+  "python3 tools/kd_d2stage.py jar && python3 tools/kd_d2stage.py jar-trim && python3 tools/kd_d2stage.py retire   (jar-trim: KD-L5)",
   "python3 tools/compose_edits.py project        (the bases of the next edits need the projected layers)",
   "python3 tools/kd_crop.py assemble G-niche-fill ; ... H-islands ; ... Hv-vessel ; ... Hb-boards   (crop canvases, scratchpad)",
   "python3 tools/kd_cut2.py cut G-niche-fill H-islands Hv-vessel Hb-boards",
   "python3.12 -I tools/kd_print.py   (print 05, the 40x50 SKU, into the frame's canvas; reads the listing file from the scratchpad)",
-  "python3 tools/kd_d2stage.py vessel-fix && python3 tools/kd_d2stage.py boards-fix",
+  "python3 tools/kd_d2stage.py vessel-fix && python3 tools/kd_d2stage.py boards-fix   (boards-fix: B x0.78, F symmetric about x 823, KD-L6)",
   "python3 tools/compose_edits.py project && python3 tools/kd_variants.py frames && python3 tools/checks.py && python3 tools/kd_qa_sheet.py"
  ],
  "source_frames": [

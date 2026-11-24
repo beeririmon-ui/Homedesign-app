@@ -568,7 +568,7 @@ if __name__ == "__main__" and sys.argv[1] == "base-boards":
 def boards_fix(s=0.78):
     """Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is
     scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm
-    against 39, width 17.4 against 18.5). Where B no longer covers F, F's right edge below its own drawn corner is continued from F. The pale
+    against 39, width 17.4 against 18.5). F is made symmetric about x 823 (KD-L6): its right half is its left half mirrored, the edit's own walnut kept where it drew F. The pale
     flecks of splash the cut took between the boards go (the boards are walnut, L* under 55)."""
     man = CE.load_man()
     l = [x for x in man["layers"] if x["frame"] == "D2" and x["slot"] == "serving-boards" and not x.get("projected_from")][0]
@@ -591,33 +591,26 @@ def boards_fix(s=0.78):
     Fm = (a > 0) & ~Bm
     aF = a * Fm
     rgbF = rgb.copy()
-    # F behind the old B: the edit drew F's own rounded top-right corner just left of B (x about 846), so F ends there; what B no
-    # longer covers is F's right edge below that corner: the outline is F's top edge (a line fitted on x 800-830) to x 846.5 with a
-    # rounded corner of r 6 px (the edit's), anti-aliased at 4x; the walnut from 40 px to the left on the same row (clear of the hole)
-    cols = np.arange(800, 831)
-    tops = np.array([np.argmax(a0[:, x] * Fm[:, x] > 0.5) for x in cols], float)
-    okc = tops > 0
-    m_, c_ = np.polyfit(cols[okc], tops[okc], 1)
-    r_ = 6.0
-    ss = 4
-    yy4, xx4 = np.mgrid[0:H * 0 + 160 * ss, 0:40 * ss].astype(np.float64)
-    Y4 = 590 + (yy4 + 0.5) / ss
-    X4 = 832 + (xx4 + 0.5) / ss
-    xr4 = np.full_like(Y4, 846.5)
-    yt4 = m_ * X4 + c_
-    inside = (Y4 >= yt4) & (X4 <= xr4) & (Y4 <= 741.0)
-    cx4, cy4 = xr4 - r_, m_ * (xr4 - r_) + c_ + r_
-    corner = (X4 > cx4) & (Y4 < cy4) & ((X4 - cx4) ** 2 + (Y4 - cy4) ** 2 > r_ ** 2)
-    shape = (inside & ~corner).astype(np.float64)
-    cov = shape.reshape(160, ss, 40, ss).mean((1, 3))
-    Fext = np.zeros((H, W))
-    Fext[590:750, 832:872] = cov
-    need = (Fext > 0) & ~(aB > 0.99) & ~(Fm & (a0 > 0.99)) & (xx >= 836)
-    src_y, src_x = np.nonzero(need)
-    sx = np.clip(src_x - 40, 0, W - 1)
-    ok = Fm[src_y, sx] & (a0[src_y, sx] > 0.5)
-    rgbF[src_y[ok], src_x[ok]] = rgb[src_y[ok], sx[ok]]
-    aF[src_y[ok], src_x[ok]] = np.maximum(aF[src_y[ok], src_x[ok]], Fext[src_y[ok], src_x[ok]])
+    # F (KD-L6, QA 2026-11-24): the SKU's F is a symmetric rounded rectangle, 34 x 19.5, the hole in the middle. The edit drew F's
+    # left half whole (its edge at x 786, the large-radius top-left shoulder, the hole at x 821-833) and cut its right half short at
+    # x 846, where B stood. F is made symmetric about x 823 (the middle of x 786 and the clay's right edge 860): its right half's
+    # outline is its left half's mirrored, so the right edge is at x 860 (width x1.03 against the clay) and the top-right corner is
+    # the top-left one's; inside, the edit's own walnut where it drew F (the hole stays where it is, now about the middle), and in the
+    # added part F's walnut mirrored (inside F by construction)
+    xc = 823
+    Fa = a0 * Fm
+    left = Fa.copy()
+    left[:, xc + 1:] = 0
+    mir = np.zeros_like(Fa)
+    xs_m = np.arange(xc + 1, min(2 * xc + 1, W))
+    mir[:, xs_m] = left[:, 2 * xc - xs_m]
+    aF = np.where(xx <= xc, Fa, mir)
+    keep_own = (xx > xc) & (Fa > 0.5) & (mir > 0.5)
+    add = (xx > xc) & (aF > 0) & ~keep_own
+    src_y, src_x = np.nonzero(add)
+    sx = np.clip(2 * xc - src_x, 0, W - 1)                  # the mirrored pixel: inside F by construction
+    rgbF[src_y, src_x] = rgb[src_y, sx]
+    ok = add
     out_a = aB + aF * (1 - aB)
     out_rgb = (preB + rgbF * aF[..., None] * (1 - aB[..., None])) / np.maximum(out_a[..., None], 1e-4)
     # the shadow: B's part scaled with it
@@ -632,6 +625,8 @@ def boards_fix(s=0.78):
     ys, xs = np.nonzero(a8 > 0)
     l.update(alpha_px=int((a8 > 0).sum()), bbox_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1],
              shadow_px=int((sh2 < 254.5).sum()), size_fix=dict(board="B", scale=s, anchor_px=[ax, ay], F_filled_px=int(ok.sum()),
+                                                                  F_symmetric_about_x=xc, F_width_px=int(np.ptp(np.nonzero((aF > 0.5).any(0))[0]) + 1),
+                                                                  F_width_vs_clay=round(float((np.ptp(np.nonzero((aF > 0.5).any(0))[0]) + 1) / 71.5), 3),
                                                                   pale_removed_px=int(pale.sum()), rule=boards_fix.__doc__.split(". ")[0]))
     json.dump(man, open(os.path.join(ST, "manifest.json"), "w"), indent=1)
     r = rec_load()
@@ -710,3 +705,69 @@ def vessel_fix():
 
 if __name__ == "__main__" and sys.argv[1] == "vessel-fix":
     vessel_fix()
+
+
+def jar_trim():
+    """KD-L5 (QA 2026-11-24): the moon jar's layer (from stage one's E-left cut) carries two grey wedges on its sides (left at mid
+    height, right low), which read at x2 as two small handles; the SKU's moon jar (StyleG) has none: a round body on a short neck.
+    The body's outline is fitted as an ellipse on its own edge rows away from the wedges (left y 415-435, right y 448-468 left out);
+    from y 400 down the alpha is clipped to it (anti-aliased, never added), and the shadow under the removed wedges goes (the plate
+    shows there). D1 gets it by the projection."""
+    man = CE.load_man()
+    l = [x for x in man["layers"] if x["frame"] == "D2" and x["product"] == JAR_PID and not x.get("projected_from")][0]
+    lp, sp = os.path.join(ST, l["layer"]), os.path.join(ST, l["shadow"])
+    rgba = np.asarray(Image.open(lp)).copy()
+    sh = np.asarray(Image.open(sp)).astype(np.float64)
+    a = rgba[..., 3].astype(np.float64) / 255
+    P = []
+    for y in range(392, 472):
+        xs_ = np.nonzero(a[y] > 0.5)[0]
+        if xs_.size < 10:
+            continue
+        if not (415 <= y <= 435):
+            P.append((xs_.min() - 0.0, y + 0.5))
+        if not (448 <= y <= 468):
+            P.append((xs_.max() + 1.0, y + 0.5))
+    P = np.array(P)
+    M_ = np.stack([P[:, 0] ** 2, P[:, 1] ** 2, P[:, 0], P[:, 1]], -1)
+    A_, B_, C_, D_ = np.linalg.lstsq(M_, np.ones(len(P)), rcond=None)[0]
+    cx, cy = -C_ / (2 * A_), -D_ / (2 * B_)
+    F_ = 1 + C_ ** 2 / (4 * A_) + D_ ** 2 / (4 * B_)
+    ax_, by_ = np.sqrt(F_ / A_), np.sqrt(F_ / B_)
+    res = np.sqrt(((P[:, 0] - cx) / ax_) ** 2 + ((P[:, 1] - cy) / by_) ** 2) * min(ax_, by_) - min(ax_, by_)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float64)
+    r = np.sqrt(((xx + 0.5 - cx) / ax_) ** 2 + ((yy + 0.5 - cy) / by_) ** 2)
+    cover = np.clip(0.5 + (1 - r) * min(ax_, by_), 0, 1)
+    body = yy >= 400
+    a2 = np.where(body, np.minimum(a, cover), a)
+    removed = (a - a2) > 0.1
+    # the new edge takes the jar's own colour from inside (the wedges were light grey), and the shadow under the removed wedges is
+    # the shadow round them (inpainted from the ring outside the old alpha), not a lit sliver
+    rgb = rgba[..., :3].astype(np.float64) / 255
+    core = (a2 > 0.99) & body
+    rgb = np.where(((a2 > 0) & (a2 < 0.99) & body)[..., None], C.defringe(rgb, core, r=2), rgb)
+    rgba[..., :3] = C.q(rgb)
+    a8 = C.q(a2)
+    rgba[..., 3] = a8
+    rgba[..., :3][a8 == 0] = 0
+    hole_ = (C.dil(removed, 2) | (a > 0.05)).astype(np.uint8)
+    sh_in = cv2.inpaint(np.clip(np.rint(sh), 0, 255).astype(np.uint8), hole_, 4, cv2.INPAINT_TELEA).astype(np.float64)
+    sh2 = np.where(C.dil(removed, 2), sh_in, sh)
+    Image.fromarray(rgba, "RGBA").save(lp, optimize=True)
+    Image.fromarray(np.clip(np.rint(sh2), 0, 255).astype(np.uint8)).save(sp, optimize=True)
+    ys, xs = np.nonzero(a8 > 0)
+    l.update(alpha_px=int((a8 > 0).sum()), bbox_px=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1],
+             shadow_px=int((sh2 < 254.5).sum()),
+             trim=dict(rule="KD-L5: the body's alpha clipped to its fitted ellipse from y 400 (tools/kd_d2stage.py jar_trim)",
+                       ellipse_px=[round(float(cx), 1), round(float(cy), 1), round(float(ax_), 1), round(float(by_), 1)],
+                       fit_residual_px_p50_p95=[round(float(v), 2) for v in np.percentile(np.abs(res), [50, 95])],
+                       removed_px=int(removed.sum())))
+    json.dump(man, open(os.path.join(ST, "manifest.json"), "w"), indent=1)
+    r = rec_load()
+    r["jar_trim"] = l["trim"]
+    rec_save(r)
+    print(json.dumps(l["trim"]), l["bbox_px"])
+
+
+if __name__ == "__main__" and sys.argv[1] == "jar-trim":
+    jar_trim()

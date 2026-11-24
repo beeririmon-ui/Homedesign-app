@@ -194,6 +194,9 @@ def checks_10_9(man):
     out["grade_KD_L4"] = d2s["grade"]
     rec = json.load(open(os.path.join(ST, "compose.json")))
     out["print_05"] = rec.get("print-05")
+    out["qa_fixes_KD_L5_L6"] = dict(KD_L5_moon_jar=d2s.get("jar_trim"), KD_L6_board_F={k: v for k, v in d2s.get("boards_fix", {}).items()
+                                                                                       if k.startswith("F_") or k == "board"},
+                                    sheet="kd-l5-l6.jpg (before / after, x2)")
     return out
 
 

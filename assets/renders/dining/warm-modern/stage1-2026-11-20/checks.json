@@ -1,19 +1,19 @@
 {
  "rnd2": {
   "D1-defaults": {
-   "region_px": 1077237,
+   "region_px": 1077241,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.49
   },
   "D2-defaults": {
-   "region_px": 606581,
+   "region_px": 606578,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.27
   },
   "D1-V3": {
-   "region_px": 1080395,
+   "region_px": 1080399,
    "outside_differing_px": 0,
    "rule": "outside every alpha, shadow and light: plate-<frame>.png, pixel for pixel",
    "black_point_p05": 11.49,
@@ -85,14 +85,14 @@
    "vase-cj-matte-moon-jar-white-styleg": {
     "D1": {
      "slot": "open-shelf-ceramics",
-     "frame_pct": 0.178,
-     "height_pct": 6.51,
+     "frame_pct": 0.174,
+     "height_pct": 6.44,
      "v7q6": true,
      "alpha_vs_clay": 1.0
     },
     "D2": {
      "slot": "open-shelf-ceramics",
-     "frame_pct": 0.214,
+     "frame_pct": 0.209,
      "height_pct": 6.79,
      "v7q6": true,
      "alpha_vs_clay": 1.0
@@ -101,14 +101,14 @@
    "cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19": {
     "D1": {
      "slot": "serving-boards",
-     "frame_pct": 0.383,
+     "frame_pct": 0.388,
      "height_pct": 10.66,
      "v7q6": true,
      "alpha_vs_clay": 1.0
     },
     "D2": {
      "slot": "serving-boards",
-     "frame_pct": 0.42,
+     "frame_pct": 0.424,
      "height_pct": 10.8,
      "v7q6": true,
      "alpha_vs_clay": 1.0
@@ -390,8 +390,8 @@
    }
   },
   "coverage_pct": {
-   "D1": 10.75,
-   "D2": 7.8
+   "D1": 10.74,
+   "D2": 7.79
   },
   "over_1pct": {
    "D1": {
@@ -491,10 +491,10 @@
   },
   "vase-cj-matte-moon-jar-white-styleg": {
    "frame": "D2",
-   "L_p50": 15.8,
+   "L_p50": 15.7,
    "C_p50": 0.5,
    "h_p50": -0.3,
-   "L_p95": 62.8,
+   "L_p95": 63.2,
    "L_p05": 12.8,
    "target": "10.4: the espresso carrier, L* 15-35 (photo L*20)"
   },
@@ -511,8 +511,8 @@
    "frame": "D2",
    "L_p50": 27.2,
    "C_p50": 19.9,
-   "h_p50": 38.4,
-   "L_p95": 32.0,
+   "h_p50": 38.5,
+   "L_p95": 32.1,
    "L_p05": 22.6,
    "target": "10.9 / ch. 7: dark on purpose (the 'dark walnut boards' rejection applies to cutting-boards only)"
   },
@@ -1055,6 +1055,30 @@
     0.895
    ],
    "rule": "10.7 / 10.9: print 05 (the 40x50 SKU: the 4:3 design's central 5:4 crop), whole (the manager, 2026-11-24: no height lost), contained by height in the edit's canvas at the clay canvas's projected aspect; the sides are the float gap (the edit's gap profile stretched); lit by the edit's canvas light; D1 gets it by the projection"
+  },
+  "qa_fixes_KD_L5_L6": {
+   "KD_L5_moon_jar": {
+    "rule": "KD-L5: the body's alpha clipped to its fitted ellipse from y 400 (tools/kd_d2stage.py jar_trim)",
+    "ellipse_px": [
+     738.2,
+     426.7,
+     49.4,
+     50.7
+    ],
+    "fit_residual_px_p50_p95": [
+     0.6,
+     1.8
+    ],
+    "removed_px": 326
+   },
+   "KD_L6_board_F": {
+    "board": "B",
+    "F_filled_px": 1984,
+    "F_symmetric_about_x": 823,
+    "F_width_px": 75,
+    "F_width_vs_clay": 1.049
+   },
+   "sheet": "kd-l5-l6.jpg (before / after, x2)"
   }
  }
 }
