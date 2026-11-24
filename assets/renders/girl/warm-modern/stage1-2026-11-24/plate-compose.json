@@ -3,40 +3,28 @@
  "ids_identical_frac": 1.0,
  "method": "- off the band: girl = boy plate x the clays' ratio, smoothed (normalised convolution, sigma 10 px, the band itself excluded; the\n    ratio is clamped 0.85-1.25 and set to 1 where the clays differ by less than 0.5 %);\n  - on the band (ids 5, 8, 19): the boy plate's band, per channel in linear light, x (#E8D5CC / the boy band's implied albedo), where the\n    implied albedo is the band over the plaster just above the line x #ECE5DA (compose_plate_kids.band_reading): the girl's band gets\n    #E8D5CC against her plaster whatever the model did to the olive, and keeps its trowel texture;\n  - the frame's black point is then read again (WM-G1).\n  python3 girl_plate.py            (reads ../plate.png of the boy and the clay EXRs in the scratchpad)",
  "k_per_channel_per_wall": {
-  "east": [
-   2.0608,
-   1.6993,
-   2.2323
-  ],
-  "north": [
-   2.0608,
-   1.6993,
-   2.2323
-  ],
-  "east_second_pass": [
-   1.0401,
-   1.0215,
-   1.0224
-  ],
-  "north_second_pass": [
-   1.1751,
-   1.1142,
-   1.159
-  ],
+  "north": {
+   "columns": 187,
+   "F_p5_p50_p95": [
+    2.3352,
+    2.9295,
+    4.8812
+   ]
+  },
+  "east": {
+   "columns": 1865,
+   "F_p5_p50_p95": [
+    1.8755,
+    2.8192,
+    3.7934
+   ]
+  },
+  "method": "per column: (girl plaster over the line / #ECE5DA) / (boy band under the line), times the boy band's luminance, times #E8D5CC; soft shoulder at the plaster x 1.03 and 0.90 linear",
+  "band_px": 1301912,
+  "band_by_colour_outside_ids": 25497,
   "skirting": {
-   "before": [
-    22.4,
-    -1.3,
-    3.8
-   ],
-   "target_at_own_L": [
-    22.4,
-    1.3,
-    1.8
-   ],
-   "dE00": 4.27,
-   "applied": true,
-   "why": "the skirting is the band's paint (id 19); the model drew it greener and more saturated"
+   "dE00": 0.89,
+   "applied": false
   }
  },
  "bounce": {
@@ -79,7 +67,7 @@
    83.3
   ]
  },
- "black_point_p05": 12.2,
+ "black_point_p05": 12.37,
  "one_house": {
   "rule": "per surface: the girl's plate against the boy's, and the material (hue, C*/L* at its own L*) against MB0 as compose_plate_kids.py; off the band only the band's bounce differs",
   "surfaces": {
@@ -122,22 +110,22 @@
      4.0,
      6.8
     ],
-    "dE00_vs_boy": 1.45,
-    "dE00_material_vs_MB0": 1.89
+    "dE00_vs_boy": 1.46,
+    "dE00_material_vs_MB0": 1.9
    },
    "walnut, desk and chair": {
     "girl": [
-     22.2,
+     22.8,
      9.8,
-     12.7
+     12.8
     ],
     "boy": [
      21.5,
      8.9,
      12.5
     ],
-    "dE00_vs_boy": 0.9,
-    "dE00_material_vs_MB0": 2.19
+    "dE00_vs_boy": 1.22,
+    "dE00_material_vs_MB0": 2.05
    },
    "bronze": {
     "girl": [
@@ -165,7 +153,7 @@
      10.8
     ],
     "dE00_vs_boy": 2.56,
-    "dE00_material_vs_MB0": 1.67
+    "dE00_material_vs_MB0": 1.68
    }
   }
  },
@@ -173,14 +161,14 @@
   "east": {
    "wall": "east",
    "implied_albedo_srgb": [
-    232,
-    213,
-    204
+    227,
+    209,
+    197
    ],
    "implied_Lab": [
-    86.5,
-    5.0,
-    6.9
+    85.1,
+    4.2,
+    8.6
    ],
    "target": "#E8D5CC",
    "target_Lab": [
@@ -188,20 +176,20 @@
     5.1,
     6.8
    ],
-   "dE00": 0.21,
+   "dE00": 2.23,
    "columns": 400
   },
   "north": {
    "wall": "north",
    "implied_albedo_srgb": [
-    232,
-    213,
-    204
+    218,
+    211,
+    210
    ],
    "implied_Lab": [
-    86.5,
-    5.2,
-    6.7
+    85.1,
+    2.3,
+    1.4
    ],
    "target": "#E8D5CC",
    "target_Lab": [
@@ -209,7 +197,7 @@
     5.1,
     6.8
    ],
-   "dE00": 0.18,
+   "dE00": 5.42,
    "columns": 62
   }
  },
@@ -258,11 +246,31 @@
   }
  },
  "WM_G1": {
-  "black_point_p05": 12.2,
+  "black_point_p05": 12.37,
   "range": [
    11,
    14
   ],
   "ok": true
+ },
+ "K-G1_K-G2": {
+  "band_px": 1193409,
+  "band_px_all_three_over_245": 0,
+  "band_px_any_over_252": 0,
+  "implied_albedo_per_column_dE00_p5_p50_p95": [
+   1.47,
+   2.56,
+   6.13
+  ],
+  "columns": 462,
+  "band_darker_than_plaster_columns_frac": 1.0,
+  "band_L_p99": 89.3,
+  "plaster_L_p99": 95.2,
+  "hue_lit_vs_shade": [
+   53.3,
+   53.3
+  ],
+  "band_px_hue_70_110": 2851,
+  "band_px_hue_70_110_C_over_3": 2830
  }
 }

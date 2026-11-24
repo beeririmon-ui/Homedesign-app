@@ -97,6 +97,36 @@ def band_reading(rgb, ids, wall="east", target="#A8A88E"):
                 dE00=round(float(C.de00(tuple(lab), tuple(K.lab_hex(target)))), 2), columns=len(below))
 
 
+def reveal_fix(lab, ids):
+    """K-L6 (QA 2026-11-24): the window's reveal (clay id 12) is plaster, but the model carried the band's tint onto it below the 1.25 line,
+    with a hard edge. Per column of the reveal, the step at the line (the largest change of b* between rows 540 and 620, read on a 1 px
+    blur) is measured as the median L* a* b* 20 px above against 20 px below; everything below takes the step back, with a 4 px ramp"""
+    m = ids == 12
+    xs = np.nonzero(m.any(0))[0]
+    if xs.size == 0:
+        return None
+    lb = C.blur(lab, 1.0)
+    steps, lines = [], []
+    for x in xs:
+        col = lb[540:620, x, 2]
+        if not m[540:620, x].all():
+            continue
+        g = np.abs(np.convolve(col, np.r_[np.ones(4), -np.ones(4)] / 4, mode="same"))
+        lines.append(540 + int(np.argmax(g[4:-4]) + 4))
+    if len(lines) < 10:
+        return None
+    yl = int(np.median(lines))
+    up = lab[yl - 26:yl - 6][:, xs][m[yl - 26:yl - 6][:, xs]]
+    dn = lab[yl + 6:yl + 26][:, xs][m[yl + 6:yl + 26][:, xs]]
+    d = np.median(up, 0) - np.median(dn, 0)
+    yy = np.arange(H)[:, None]
+    ramp = np.clip((yy - (yl - 2)) / 4.0, 0, 1) * m
+    for c in range(3):
+        lab[..., c] += ramp * d[c]
+    return dict(line_y=yl, step_Lab=[round(float(v), 2) for v in d], px=int((ramp > 0).sum()),
+                why="K-L6: the band's tint and its hard line on the reveal below 1.25 taken back to the reveal's plaster")
+
+
 def main(raw):
     ids = K.ids("K-boy-plate")
     stable = C.ero(np.isin(ids, K.ARCH), 3) & K.frame_mask()
@@ -145,6 +175,9 @@ def main(raw):
     sk = skirting_fix(lab, ids, "#A8A88E")
     if sk and sk.get("applied"):
         fixes["skirting"] = sk
+    rv = reveal_fix(lab, ids)
+    if rv:
+        fixes["reveal below the band line"] = rv
     e2 = np.clip(C.from_lab(lab), 0, 1)
     after = {}
     for name, (g, g0) in SURF.items():

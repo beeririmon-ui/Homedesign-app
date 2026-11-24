@@ -18,6 +18,7 @@ import json
 import os
 import sys
 
+import cv2
 import numpy as np
 from PIL import Image
 
@@ -55,33 +56,82 @@ def main():
     rs = np.stack([C.blur(ratio[..., c] * w, 10) / np.maximum(C.blur(w, 10), 1e-4) for c in range(3)], -1)
     rs = np.where((C.blur(w, 10) > 0.05)[..., None], rs, 1.0)
     lin = C.lin(boy)
-    out = lin * np.where(band[..., None], 1.0, rs)
+    # K-G1 / K-G2 (QA 2026-11-24): the band is no longer the boy's band times a constant (that clipped to white where the boy's band is
+    # lit, and kept the olive's green in its shade and in the strips the clay's ids do not cover). Instead:
+    #  1. the mask by what is drawn: the clay's band ids, plus the olive the boy's plate shows below the 1.25 line round them and in
+    #     the furniture's clay regions (the legs, the chair and the foot board were drawn thinner than the clay), minus drawn walnut;
+    #  2. the paint: #E8D5CC times a light, the light being the boy's band luminance (its trowel texture, its shade) scaled per column
+    #     so that, just under the line, the band against the girl's plaster just over it is #E8D5CC against #ECE5DA (the implied
+    #     albedo is the target in every column); one chromaticity, so the shade is the lit pink, darker, not khaki;
+    #  3. a soft shoulder: never brighter than the plaster over it in its column (x 1.03), and no channel over 0.90 linear.
+    lab_b = C.to_lab(C.blur(boy, 1.0))
+    hue = np.degrees(np.arctan2(lab_b[..., 2], lab_b[..., 1]))
+    chroma = np.hypot(lab_b[..., 1], lab_b[..., 2])
+    yy = np.arange(H)[:, None]
+    bid = np.isin(ids, (5, 8))
+    line = np.where(bid.any(0), np.argmax(bid, 0), -1).astype(np.float64)
+    okc = line > 0
+    xs_ = np.arange(W)
+    line = np.interp(xs_, xs_[okc], line[okc])
+    below = yy >= (line[None, :] - 2)
+    oliv = (hue > 85) & (hue < 140) & (chroma > 5) & (lab_b[..., 0] > 8)
+    walnut = (hue > 35) & (hue < 78) & (chroma > 7) & (lab_b[..., 0] < 50)
+    cand = (C.dil(np.isin(ids, (5, 8, 19)), 30) | np.isin(ids, (12, 14, 20, 21, 22, 23, 24, 25))) & ~np.isin(ids, (0, 13, 15, 16))
+    band = (np.isin(ids, (5, 8, 19)) & ~walnut) | (cand & below & oliv)
+    band = cv2.morphologyEx(band.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(1)).astype(bool) & ~np.isin(ids, (0, 13, 15, 16))
+    out = lin * np.where(band[..., None], 1.0, rs)              # off the band: the boy's plate x the band's bounce
+    lum = lambda v: v[..., 0] * 0.2126 + v[..., 1] * 0.7152 + v[..., 2] * 0.0722   # noqa: E731
+    Yb = lum(lin)
+    Yg = lum(out)
     alb_girl = C.lin(np.array([0xE8, 0xD5, 0xCC]) / 255.0)
+    Ypl = float(lum(C.lin(np.array([0xEC, 0xE5, 0xDA]) / 255.0)))
+    east = xs_[None, :] >= np.argmax(np.isin(ids, (5,)).any(0))
+    wall_of = np.where(east, 1, 0) * np.ones((H, 1))
+    Fmap = np.zeros((H, W))
+    Smax = np.zeros((H, W))
     ks = {}
-    for wall, wd in CP.WALLS.items():              # each wall's band from its own reading (the north wall is in its own light)
-        br = CP.band_reading(boy, ids, wall)
-        alb_boy = C.lin(np.array(br["implied_albedo_srgb"]) / 255.0)
-        k = alb_girl / np.maximum(alb_boy, 1e-4)
-        ks[wall] = [round(float(v), 4) for v in k]
-        bw = np.isin(ids, wd["ids"])
-        soft = C.blur(bw.astype(np.float64), 0.8)
-        soft = np.where(C.ero(bw, 1), 1.0, np.where(C.dil(bw, 1), soft, 0.0))
-        out = out * (1 + (k - 1) * soft[..., None])
-    k = ks
-    # the plaster above each band takes the band's new bounce, the band does not (the clays' ratio on the band is its albedo change): one
-    # more pass per wall, the band against the plaster above it on the girl's own plate, to #E8D5CC
-    for wall, wd in CP.WALLS.items():
-        br2 = CP.band_reading(C.srgb(np.clip(out, 0, 1)), ids, wall, "#E8D5CC")
-        if br2 and br2["dE00"] > 1.0:
-            k2 = alb_girl / np.maximum(C.lin(np.array(br2["implied_albedo_srgb"]) / 255.0), 1e-4)
-            bw = np.isin(ids, wd["ids"])
-            soft = C.blur(bw.astype(np.float64), 0.8)
-            soft = np.where(C.ero(bw, 1), 1.0, np.where(C.dil(bw, 1), soft, 0.0))
-            out = out * (1 + (k2 - 1) * soft[..., None])
-            ks[wall + "_second_pass"] = [round(float(v), 4) for v in k2]
+    for wi, (wall, wd) in enumerate((("north", CP.WALLS["north"]), ("east", CP.WALLS["east"]))):
+        F = np.full(W, np.nan)
+        P = np.full(W, np.nan)
+        for x in range(W):
+            col = ids[:, x]
+            yb = np.nonzero(col == wd["band"])[0]
+            yp = np.nonzero(col == wd["plaster"])[0]
+            if len(yb) < 30 or len(yp) < 30 or abs(yp.max() - yb.min()) > 3:
+                continue
+            yl = yb.min()
+            pg = float(np.median(Yg[yl - 26:yl - 6, x]))
+            bt = float(np.median(Yb[yl + 6:yl + 26, x]))
+            if bt > 1e-4:
+                F[x] = (pg / Ypl) / bt
+                P[x] = pg
+        ok = np.isfinite(F)
+        if ok.sum() < 10:
+            continue
+        xo = np.nonzero(ok)[0]
+        Fm = np.array([np.median(F[xo][max(0, i - 15):i + 16]) for i in range(len(xo))])
+        Pm = np.array([np.median(P[xo][max(0, i - 15):i + 16]) for i in range(len(xo))])
+        Fx = cv2.GaussianBlur(np.interp(xs_, xo, Fm).astype(np.float32).reshape(1, -1), (0, 0), 8).ravel()
+        Px = cv2.GaussianBlur(np.interp(xs_, xo, Pm).astype(np.float32).reshape(1, -1), (0, 0), 8).ravel()
+        sel = (wall_of == wi)
+        Fmap = np.where(sel, Fx[None, :], Fmap)
+        Smax = np.where(sel, (Px / Ypl)[None, :] * 1.03, Smax)
+        ks[wall] = dict(columns=int(ok.sum()), F_p5_p50_p95=[round(float(v), 4) for v in np.percentile(Fm, [5, 50, 95])])
+    light = Fmap * Yb
+    knee = 0.8 * Smax
+    light = np.where(light > knee, knee + (Smax - knee) * np.tanh((light - knee) / np.maximum(Smax - knee, 1e-6)), light)
+    paint = alb_girl[None, None, :] * light[..., None]
+    k_, c_ = 0.70, 0.90
+    paint = np.where(paint > k_, k_ + (c_ - k_) * np.tanh((paint - k_) / (c_ - k_)), paint)
+    soft = C.blur(band.astype(np.float64), 0.7)
+    soft = np.where(C.ero(band, 1), 1.0, np.where(C.dil(band, 1), soft, 0.0))[..., None]
+    out = out * (1 - soft) + paint * soft
+    k = dict(ks, method="per column: (girl plaster over the line / #ECE5DA) / (boy band under the line), times the boy band's luminance, "
+                        "times #E8D5CC; soft shoulder at the plaster x 1.03 and 0.90 linear", band_px=int(band.sum()),
+             band_by_colour_outside_ids=int((band & ~np.isin(ids, (5, 8, 19))).sum()))
     rgb = C.srgb(np.clip(out, 0, 1))
     labk = C.to_lab(rgb)
-    ks["skirting"] = CP.skirting_fix(labk, ids, "#E8D5CC")
+    k["skirting"] = CP.skirting_fix(labk, ids, "#E8D5CC")
     rgb = np.clip(C.from_lab(labk), 0, 1)
     st = K.ST["girl"]
     K.save(os.path.join(st, "plate.png"), rgb)
@@ -121,6 +171,38 @@ def main():
     hh, ll, ss = colorsys.rgb_to_hls(*np.median(rgb[upper], 0))
     rec["plaster_above_band"]["girl_HSL"] = [round(hh * 360, 1), round(ss * 100, 1), round(ll * 100, 1)]
     rec["WM_G1"] = dict(black_point_p05=rec["black_point_p05"], range=[11, 14], ok=bool(11 <= rec["black_point_p05"] <= 14))
+    # K-G1 / K-G2 acceptance (QA 2026-11-24), on the plate
+    r8 = np.rint(rgb * 255)
+    hb = np.degrees(np.arctan2(lab[..., 2], lab[..., 1])) % 360
+    cb = np.hypot(lab[..., 1], lab[..., 2])
+    bandf = band & fr
+    cols = []
+    pl = C.lin(np.array([0xEC, 0xE5, 0xDA]) / 255.0)
+    for wall, wd in CP.WALLS.items():
+        for x in range(*wd["xr"]):
+            col = ids[:, x]
+            yb = np.nonzero(col == wd["band"])[0]
+            yp = np.nonzero(col == wd["plaster"])[0]
+            if len(yb) < 30 or len(yp) < 30 or abs(yp.max() - yb.min()) > 3:
+                continue
+            yl = yb.min()
+            bl, al = C.lin(rgb)[yl + 6:yl + 26, x].mean(0), C.lin(rgb)[yl - 26:yl - 6, x].mean(0)
+            alb = np.clip(bl / al * pl, 0, 1)
+            lab_a = C.to_lab(C.srgb(alb)[None, None])[0, 0]
+            cols.append((float(C.de00(tuple(lab_a), tuple(K.lab_hex("#E8D5CC")))), float(lab[yl + 6:yl + 26, x, 0].mean() < lab[yl - 26:yl - 6, x, 0].mean())))
+    cols = np.array(cols)
+    lit = bandf & (lab[..., 0] > 55)
+    dark = bandf & (lab[..., 0] < 50)
+    hl, hd_ = float(np.median(hb[lit])), float(np.median(hb[dark])) if dark.any() else float("nan")
+    up_l = C.ero(np.isin(ids, (1, 2)), 4) & fr
+    rec["K-G1_K-G2"] = dict(
+        band_px=int(bandf.sum()), band_px_all_three_over_245=int((bandf & (r8 > 245).all(-1)).sum()),
+        band_px_any_over_252=int((bandf & (r8 > 252).any(-1)).sum()),
+        implied_albedo_per_column_dE00_p5_p50_p95=[round(float(v), 2) for v in np.percentile(cols[:, 0], [5, 50, 95])], columns=len(cols),
+        band_darker_than_plaster_columns_frac=round(float(cols[:, 1].mean()), 4),
+        band_L_p99=round(float(np.percentile(lab[..., 0][bandf], 99)), 1), plaster_L_p99=round(float(np.percentile(lab[..., 0][up_l], 99)), 1),
+        hue_lit_vs_shade=[round(hl, 1), round(hd_, 1)], band_px_hue_70_110=int((bandf & (hb > 70) & (hb < 110)).sum()),
+        band_px_hue_70_110_C_over_3=int((bandf & (hb > 70) & (hb < 110) & (cb > 3)).sum()))
     json.dump(rec, open(os.path.join(st, "plate-compose.json"), "w"), indent=1)
     print(json.dumps(rec, indent=1)[:3000])
 
