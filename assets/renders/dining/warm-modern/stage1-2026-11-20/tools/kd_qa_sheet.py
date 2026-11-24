@@ -14,12 +14,12 @@ ST = K.ST
 # 10.9 (2026-11-24): only what changed (EFF1.3); stage one's regions passed QA on 2026-11-20
 REG = [("D2", 1, "KD-15 seam: D1's 5 deg (matched) | D2o, the 2 deg cross-fade at x 304-364; floor, bench, table end", (77, 760, 760, 1486)),
        ("D2", 2, "KD-16 niche (walnut matched to stage one), its LEDs; plates standing, bowls; canisters (D2o); two towels", (1700, 200, 2420, 800)),
-       ("D2", 3, "frame 64 x 49 with print 05 (40x50 SKU, cover-fit: see README), the moon jar at Y 1.735, the sconce", (380, 240, 900, 520)),
-       ("D2", 4, "serving boards behind the 280363 board (Hb; B scaled 0.78, F's hidden corner mirrored), sink set", (640, 520, 1000, 780)),
+       ("D2", 3, "frame 64 x 49, the whole print 05 (40x50 SKU, 5:4) with the side float gap (fixed 2026-11-24), the jar at Y 1.735", (380, 240, 900, 520)),
+       ("D2", 4, "serving boards behind the 280363 board (Hb; B scaled 0.78, F's right edge continued from F: the notch fixed)", (640, 520, 1000, 780)),
        ("D2", 5, "counter vessel + beech branches (Hv, re-cut in code), mugs, paper towel holder", (1380, 250, 1760, 790)),
        ("D1", 6, "KD-L4: the graded oak and plaster by the opening (bottom-left)", (77, 900, 1000, 1486)),
        ("D1", 7, "left shelf from D2: the bigger frame, the jar moved, the serving boards", (1380, 260, 1980, 780)),
-       ("D1", 8, "right end: the shelf without the tableware (moved to the niche); the vessel at the edge (0.43 % in frame)", (2160, 150, 2642, 800))]
+       ("D1", 8, "right end: the shelf without the tableware; the vessel at the edge (0.43 %, the intended projection: accepted)", (2160, 150, 2642, 800))]
 
 
 def main():
