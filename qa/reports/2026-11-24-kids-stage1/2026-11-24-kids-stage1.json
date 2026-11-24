@@ -457,5 +457,218 @@
   "0 tokens, no var2, no commits, no keys",
   "no edits to data/, binding docs or render-agent files",
   "supplier photos read only in the scratchpad with python3.12 -I; none copied to the repo"
- ]
+ ],
+ "recheck": {
+  "date": "2026-11-24",
+  "commit": "c4b811c0",
+  "status": {
+   "boy": "עבר QA (חדר הילד שלב 1; לבעלים לאישור 3; לא לאתר לפני רישום 1.3.9)",
+   "girl": "נכשל QA: K-G3 כלי העפרונות (קוד, 0; אחרת 400), K-G4 כתם בקצה השמיכה (קוד, 0)"
+  },
+  "rnd2": {
+   "boy": {
+    "rebuild_vs_files_px": [
+     0,
+     0,
+     0
+    ],
+    "outside_px": [
+     0,
+     0,
+     0
+    ],
+    "V2_V3_outside_throw_px": [
+     0,
+     0
+    ],
+    "black": [
+     11.58,
+     11.58,
+     11.58
+    ]
+   },
+   "girl": {
+    "rebuild_vs_files_px": [
+     0,
+     0,
+     0
+    ],
+    "outside_px": [
+     0,
+     0,
+     0
+    ],
+    "V2_V3_outside_throw_px": [
+     0,
+     0
+    ],
+    "black": [
+     12.45,
+     12.42,
+     12.46
+    ]
+   }
+  },
+  "findings": {
+   "K-B1": {
+    "result": "closed",
+    "cm": [
+     [
+      7.8,
+      5.0
+     ],
+     [
+      6.9,
+      4.6
+     ],
+     [
+      6.3,
+      4.8
+     ]
+    ],
+    "R5": [
+     69.8,
+     24.2,
+     58
+    ],
+    "photo": [
+     67.2,
+     26.6,
+     53
+    ],
+    "dE00": 3.1,
+    "silver_px": 0,
+    "black_px": 5
+   },
+   "K-B2": {
+    "result": "closed",
+    "contrast_renderagent": [
+     -10.3,
+     8.8
+    ],
+    "photo": [
+     -10.5,
+     7.5
+    ],
+    "contrast_qa_region_with_folds": [
+     -15.9,
+     9.4
+    ]
+   },
+   "K-B3": {
+    "result": "closed",
+    "overlap_px": [
+     61,
+     78
+    ],
+    "need_px": 51,
+    "bear_wall_px": 0
+   },
+   "K-G1": {
+    "result": "closed",
+    "near_white_band_px_frame_outside_products": 0,
+    "plate": 0,
+    "implied_albedo_dE00_p5_p50_p95_max": [
+     0.28,
+     0.8,
+     2.13,
+     4.1
+    ],
+    "columns_over_2": "28/445 (inner corner, right frame edge)",
+    "band_darker_than_plaster": "445/445"
+   },
+   "K-G2": {
+    "result": "closed",
+    "band_green_px_plate": 3,
+    "dark_wood_greenish_px_outside_products": 5669,
+    "band_hue_by_L": {
+     "10-30": 41,
+     "30-50": 53,
+     "50-70": 58,
+     "70-85": 47
+    },
+    "reveal_dE00": 0.86
+   },
+   "K-G3": {
+    "result": "fail",
+    "R5": [
+     78.2,
+     31.8,
+     68
+    ],
+    "photo": [
+     78.2,
+     31.8,
+     68
+    ],
+    "dE00": 0.1,
+    "grain_std": 0.62,
+    "grain_std_photo": 3.28,
+    "grain_std_boy_walnut": 3.02,
+    "faces_L_left_right": [
+     75.1,
+     75.4
+    ],
+    "boy_faces": [
+     29.7,
+     22.2
+    ],
+    "light_ring_L": 82.1,
+    "wall_in_shade_L": 68.2
+   },
+   "K-G4": {
+    "result": "partial",
+    "dE00_V1_V2_V3": [
+     5.1,
+     5.0,
+     4.8
+    ],
+    "chestnut_lit_boy_girl": [
+     52.0,
+     51.2
+    ],
+    "end_patch_canvas": [
+     1260,
+     1325,
+     945,
+     985
+    ],
+    "patch_dL": [
+     11,
+     18,
+     5
+    ],
+    "patch_dE00": [
+     9.4,
+     16.8,
+     4.4
+    ]
+   }
+  },
+  "manager_x1": {
+   "1_pen_cup": "colour representative and faithful; flat material (no grain, no face shading, light ring) -> K-G3",
+   "2_cars": "hue faithful (dE00 3.1); 0.073% of frame, ~35-39 px each at 1920: blobs at x1, cars at x2; designer K-L8",
+   "3_window_wall_band": "plausible light: north/east Y ratio 0.317 girl vs 0.350 boy; h 58-60 like the east band in shade"
+  },
+  "lows": {
+   "closed": [
+    "K-L2",
+    "K-L5",
+    "K-L6"
+   ],
+   "open": [
+    "K-L1 (partial)",
+    "K-L3",
+    "K-L4"
+   ],
+   "new": [
+    "K-L7",
+    "K-L8"
+   ]
+  },
+  "v7q6": {
+   "boy": 10,
+   "girl": 9
+  }
+ }
 }
