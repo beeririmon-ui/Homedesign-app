@@ -134,6 +134,22 @@ def main():
     rgb = C.srgb(np.clip(out, 0, 1))
     labk = C.to_lab(rgb)
     k["skirting"] = CP.skirting_fix(labk, ids, "#E8D5CC")
+    # K-G2 (QA 2026-11-24; its metric: no h 95-135 C* > 6 below the line): the corner lines of the reveal (id 12) and the skirting
+    # (19) below the line kept the boy's olive (h 80-140, C* > 4); their a*, b* set to the reveal's own neutral below the line (the
+    # median of its other pixels), scaled with L* (C*/L* kept), L* kept
+    ytop = int(np.nonzero(np.isin(ids, (5, 8)).any(1))[0].min())
+    below = np.zeros(ids.shape, bool)
+    below[ytop:] = True
+    hk = np.degrees(np.arctan2(labk[..., 2], labk[..., 1])) % 360
+    ck = np.hypot(labk[..., 1], labk[..., 2])
+    olive = below & np.isin(ids, (12, 19)) & (hk > 80) & (hk < 140) & (ck > 4)
+    ref = below & (ids == 12) & ~olive
+    if olive.any() and ref.sum() > 100:
+        rL, ra, rb = (float(np.median(labk[..., c][ref])) for c in range(3))
+        f = labk[..., 0][olive] / max(rL, 1)
+        labk[..., 1][olive] = ra * f
+        labk[..., 2][olive] = rb * f
+    k["reveal_corner_olive"] = dict(px=int(olive.sum()), reference_Lab=[round(rL, 1), round(ra, 2), round(rb, 2)] if olive.any() and ref.sum() > 100 else None)
     rgb = np.clip(C.from_lab(labk), 0, 1)
     st = K.ST["girl"]
     K.save(os.path.join(st, "plate.png"), rgb)

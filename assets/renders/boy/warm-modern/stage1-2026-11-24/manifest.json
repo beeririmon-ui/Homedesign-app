@@ -366,7 +366,7 @@
    "layer": "layers/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
    "shadow": "shadows/cushions/cushions-cj-corduroy-patchwork-reindeer-brown-45.png",
    "alpha_px": 36393,
-   "shadow_px": 12004,
+   "shadow_px": 11842,
    "bbox_px": [
     730,
     714,
@@ -873,7 +873,7 @@
       74.0
      ],
      "frame": {
-      "region_px": 1239301,
+      "region_px": 1210864,
       "outside_differing_px": 0,
       "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel",
       "black_point_p05": 11.58
@@ -898,7 +898,7 @@
       110.0
      ],
      "frame": {
-      "region_px": 1239301,
+      "region_px": 1210864,
       "outside_differing_px": 0,
       "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel",
       "black_point_p05": 11.58
@@ -908,15 +908,17 @@
    "v1_vs_photo_dE00_hue_chroma": 0.22
   },
   "K-B2 stripes": {
-   "px_taken": 204816,
-   "wall_px_let_go": 334,
+   "contrast_gain": 0.681,
+   "bear_bottom_px": 2392,
+   "px_taken": 204990,
+   "wall_px_let_go": 303,
    "stripes_L_p5_p95_before": [
     -14.7,
     11.8
    ],
    "after": [
-    -14.2,
-    12.2
+    -10.3,
+    8.8
    ],
    "photo": [
     -10.5,
@@ -998,14 +1000,17 @@
    "why": "K-B3 / K-L1: the bear's alpha carried the duvet round its feet; with the new stripes (K-B2) it read as a white patch"
   },
   "K-B3 nest edge": {
-   "px_filled": 1302,
-   "grey_px_inpainted": 107,
+   "bottom_stair_px": 71,
+   "sliver_px_let_go": 911,
+   "breaks_closed_px": 1807,
+   "px_filled": 1408,
+   "grey_px_inpainted": 38,
    "max_fill_px": 14,
    "shade_band_max_before_after": [
     0.325,
     0.25
    ],
-   "method": "K-B3 follow-up: the pair's left edge, cut against the wall in PB2 (wall_trim \"chroma\"), lies on the standing pillow since the\n    move and reads torn (notches up to about 12 px, grey bits of the old strip in them). Row by row its outline (the leftmost alpha)\n    is filled out to a smooth outer envelope (the rolling min over 41 rows, a Gaussian of 6 rows, at most 14 px out); the filled\n    pixels and the not-cushion bits at the left edge (C* < 18 within 4 px) are inpainted (Telea, 5 px) from the cushion only, a 1 px\n    soft edge. Never cuts (under the cut the pillow layer carries the old strip's grey). Its shade left of the edge (cast on the\n    old strip, ragged, down to 0.67) blurred 4 px and held to 0.25 at most: on the pillow it touches. Re-run after nest"
+   "method": "K-B3 follow-up: the pair's left edge, cut against the wall in PB2 (wall_trim \"chroma\"), lies on the standing pillow since the\n    move and reads torn (notches up to about 12 px, grey bits of the old strip in them, brown slivers of its shade on the strip and\n    under its bottom). The slivers go first (an opening of 5 px; the pieces under 2,000 px; in the outer 6 px, C* < 24: the shade,\n    the corduroy's p5 is 27.5); where they went along the bottom, the restriped duvet shows. The bottom edge's stair (1 px\n    opaque lines under its soft rows) let go: over each column's last 6 rows the alpha may only fall. Row by row its outline (the leftmost alpha)\n    is filled out to a smooth outer envelope (the rolling min over 41 rows, a Gaussian of 6 rows, at most 14 px out); the filled\n    pixels and the not-cushion bits at the left edge (C* < 18 within 4 px) are inpainted (Telea, 5 px) from the cushion only, a 1 px\n    soft edge. Never cuts (under the cut the pillow layer carries the old strip's grey). Its shade left of the edge (cast on the\n    old strip, ragged, down to 0.67) blurred 4 px and held to 0.25 at most: on the pillow it touches. Re-run after nest"
   }
  }
 }
