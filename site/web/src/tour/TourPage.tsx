@@ -1197,10 +1197,14 @@ export function TourPage() {
       const v = view(c);
       return boxes.some((a) => v[0] < a[1] + m && v[1] > a[0] - m && v[2] < a[3] + m && v[3] > a[2] - m);
     };
-    const keeps = (c: Cam) => {
+    // the product stays as whole as the close-up had it (a pendant's box runs up its cord to the ceiling, which the
+    // close-up itself may leave out)
+    const seen = (c: Cam) => {
       const v = view(c);
-      return v[0] <= b[0] && v[1] >= b[1] && v[2] <= b[2] && v[3] >= b[3];
+      return Math.max(0, Math.min(v[1], b[1]) - Math.max(v[0], b[0])) * Math.max(0, Math.min(v[3], b[3]) - Math.max(v[2], b[2]));
     };
+    const want = seen(cam) * 0.97;
+    const keeps = (c: Cam) => seen(c) >= want;
     if (!hits(cam)) return cam;
     // pushed a little further than the test, so the view's edge is clearly past the box
     const p = m * 1.5;
@@ -1220,16 +1224,18 @@ export function TourPage() {
         const z = Math.max(cam.z, (2 * kv) / bottom);
         tries.push({ cu: cam.cu, cv: Math.min(cam.cv, bottom - kv / z), z });
       }
-      // beside it: the view's edge past its left or right side
+      // beside it: the view's edge past its left or right side; the view's top edge stays where the close-up had it
+      // (the product sits in the upper part, the wheel under it)
+      const top0 = cam.cv - half(cam)[1];
       const left = a[0] - p;
       if (b[1] <= left) {
         const z = Math.max(cam.z, (2 * ku) / left);
-        tries.push({ cu: Math.min(cam.cu, left - ku / z), cv: cam.cv, z });
+        tries.push({ cu: Math.min(cam.cu, left - ku / z), cv: top0 + kv / z, z });
       }
       const right = a[1] + p;
       if (b[0] >= right) {
         const z = Math.max(cam.z, (2 * ku) / (1 - right));
-        tries.push({ cu: Math.max(cam.cu, right + ku / z), cv: cam.cv, z });
+        tries.push({ cu: Math.max(cam.cu, right + ku / z), cv: top0 + kv / z, z });
       }
     }
     const ok = tries.map((c) => clampCam(c, e.vp, tour.aspect)).filter((c) => !hits(c) && keeps(c));

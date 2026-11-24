@@ -108,6 +108,8 @@ async function closeSlot(page: Page) {
   await atRest(page);
 }
 async function audit(page: Page, label: string) {
+  // a fresh load fades the band in (the door's 0.9 s): axe reads the page once every transition has ended
+  await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== 'running'), undefined, { timeout: 10_000 });
   const r = await new AxeBuilder({ page } as unknown as ConstructorParameters<typeof AxeBuilder>[0])
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();

@@ -464,7 +464,9 @@ export class TourEngine {
   }
   /** what a changed slot asks to compose again: its rectangle, and (MOCK4) its light's, which reaches past it */
   private rects(id: string): Px[] {
-    return [this.rect(this.slot(id)), ...(tour.lights ?? []).filter((l) => l.slot === id).map((l) => this.rect(l))];
+    // MOCK5: and every light that is always on (a lamp outside the frame, D2's pendant): it belongs to no slot, so it is
+    // composed again whenever anything is (its texture may land after the room's first, base-only composition)
+    return [this.rect(this.slot(id)), ...(tour.lights ?? []).filter((l) => l.slot === id || l.slot === null).map((l) => this.rect(l))];
   }
   /** the frame's width in the device's own pixels at this camera: what decides whether the mip levels are read */
   private frameDevicePx(): number {
