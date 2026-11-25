@@ -4,16 +4,9 @@
  "agent": "qa-agent",
  "brief": "manager task 2026-11-25 (changed-only, EFF1.2); render brief briefs/wm-bath-b1-ledge-planter-2026-11-25.md",
  "scope": "changed-only: the ledge planter (card 228781, SKU 12000061187780577 'large brown round') added to B1, warm-modern bath, commit 5b1286ee, assets/renders/bath/warm-modern/b1-2026-11-19/",
- "status": "נכשל QA: ממצא בינוני אחד (B1P-M1), מתוקן בקוד ב-0 טוקנים. אחרי התיקון: בדיקה חוזרת של מה שהשתנה בלבד",
+ "status": "עבר QA (העציץ ב-B1; לבעלים בחבילה הבאה; לא לאתר לפני רישום העמדה)",
  "status_after_fix_expected": "עבר QA (העציץ ב-B1; לבעלים בחבילה הבאה; לא לאתר לפני רישום העמדה)",
- "blocking": [
-  {
-   "id": "B1P-M1",
-   "severity": "medium",
-   "fix": "code, 0 tokens",
-   "owner": "render-agent"
-  }
- ],
+ "blocking": [],
  "checks": {
   "1_fidelity": {
    "result": "pass except B1P-M1 (sheen on a matte product)",
@@ -510,5 +503,368 @@
   "did not run tools/checks_b1.py (it writes b1-checks.json in the render folder); an independent restack instead",
   "did not touch data/, binding documents, site/ or the render folder",
   "SKU photo read only with python3.12 -I in the scratchpad; no supplier pixel in the repo"
- ]
+ ],
+ "status_round1": "נכשל QA: ממצא בינוני אחד (B1P-M1), מתוקן בקוד ב-0 טוקנים. אחרי התיקון: בדיקה חוזרת של מה שהשתנה בלבד",
+ "blocking_round1": [
+  {
+   "id": "B1P-M1",
+   "severity": "medium",
+   "fix": "code, 0 tokens",
+   "owner": "render-agent"
+  }
+ ],
+ "recheck": {
+  "date": "2026-11-25",
+  "commit": "e0f3a728",
+  "scope": "changed-only since 5b1286ee: body (M1, L1, L2 in code), plant r2 (400), composites",
+  "closed": [
+   "B1P-M1",
+   "B1P-L1",
+   "B1P-L2",
+   "B1P-L3"
+  ],
+  "new_findings": [],
+  "M1": {
+   "px": 533,
+   "box_med": 58.13,
+   "sur_med": 56.12,
+   "box_minus_sur": 2.02,
+   "p99_minus_sur": 12.99,
+   "sur_p99_minus_sur": 10.79,
+   "box_lab": [
+    58.13,
+    4.71,
+    10.95
+   ],
+   "sur_lab": [
+    56.12,
+    4.99,
+    11.53
+   ],
+   "de00": 1.9,
+   "b_med": 10.95,
+   "p99_px_xy": [
+    [
+     991,
+     727
+    ],
+    [
+     973,
+     736
+    ],
+    [
+     974,
+     736
+    ],
+    [
+     974,
+     737
+    ],
+    [
+     973,
+     738
+    ],
+    [
+     989,
+     745
+    ]
+   ],
+   "col_steps_left_full_height": [
+    0.8,
+    0.6,
+    0.0,
+    1.1,
+    0.8,
+    0.7,
+    0.5,
+    0.5,
+    0.3,
+    3.5,
+    1.0,
+    0.7,
+    0.2,
+    0.2,
+    0.0,
+    0.2,
+    1.9,
+    1.5,
+    1.4,
+    0.8,
+    0.2,
+    2.5,
+    3.1,
+    0.5,
+    1.9,
+    4.5,
+    0.8,
+    1.4,
+    0.6,
+    2.6,
+    2.1,
+    0.7,
+    1.0
+   ]
+  },
+  "M1_p99_verdict": "mottle: the box p99 over its own median (+11.0) equals the surround (+10.8); fleck density 4.1% vs 3.0-5.1% elsewhere; scattered points, no band",
+  "flecks_hp_gt8_density": {
+   "box": 0.041,
+   "left_rest": 0.03,
+   "right": 0.051
+  },
+  "L1": {
+   "left": 56.59,
+   "right": 50.1,
+   "n": [
+    1454,
+    1087
+   ],
+   "cols8": [
+    [
+     964,
+     59.8
+    ],
+    [
+     972,
+     58.0
+    ],
+    [
+     980,
+     55.7
+    ],
+    [
+     988,
+     55.0
+    ],
+    [
+     996,
+     53.0
+    ],
+    [
+     1004,
+     51.5
+    ],
+    [
+     1012,
+     48.7
+    ],
+    [
+     1020,
+     49.1
+    ],
+    [
+     1028,
+     50.0
+    ]
+   ],
+   "top_bottom": [
+    55.58,
+    52.8
+   ]
+  },
+  "L1_neighbours": {
+   "candle": [
+    93.7,
+    86.3
+   ],
+   "window-sill-vase": [
+    22.5,
+    16.0
+   ],
+   "reed-diffuser": "backlit, both rims"
+  },
+  "L2_colour": {
+   "plaster_px": 10000,
+   "lit_left": {
+    "r5": [
+     58.76,
+     5.09,
+     12.7
+    ],
+    "h": 68.2,
+    "de00": 0.85
+   },
+   "shaded_right": {
+    "r5": [
+     52.22,
+     4.88,
+     12.75
+    ],
+    "h": 69.1,
+    "de00": 6.39
+   },
+   "whole": {
+    "r5": [
+     55.86,
+     4.76,
+     12.63
+    ],
+    "h": 69.4,
+    "de00": 2.9
+   },
+   "teal_fraction_a_lt0": 0.033,
+   "b_lt3_fraction": 0.006,
+   "pops_render": {
+    "hi_b": [
+     50.44,
+     6.57,
+     13.57
+    ],
+    "lo_b": [
+     56.43,
+     3.66,
+     9.85
+    ]
+   },
+   "render_light_flecks_lab": [
+    62.01,
+    -0.39,
+    4.95
+   ],
+   "sku_teal_fraction_a_lt0": 0.079,
+   "sku_b_lt3_fraction": 0.065,
+   "sku_light_flecks_lab": [
+    72.22,
+    2.17,
+    8.89
+   ],
+   "pops_sku": {
+    "hi_b": [
+     50.51,
+     6.33,
+     17.07
+    ],
+    "lo_b": [
+     65.35,
+     3.0,
+     8.94
+    ]
+   }
+  },
+  "L2_mottle_x1": {
+   "render": {
+    "L_hp_std": 4.32,
+    "C_hp_std": 3.3,
+    "ab_hp_std": 2.09
+   },
+   "sku": {
+    "L_hp_std": 4.54,
+    "C_hp_std": 2.98,
+    "ab_hp_std": 1.85
+   },
+   "v1": {
+    "L_hp_std": 3.32,
+    "C_hp_std": 2.03,
+    "ab_hp_std": 1.22
+   }
+  },
+  "plant": {
+   "px": 1947,
+   "lab": [
+    37.06,
+    -13.44,
+    19.8
+   ],
+   "C": 23.93,
+   "h": 124.2,
+   "C_p90": 30.59,
+   "L_p95": 57.71,
+   "L_p99": 62.78,
+   "frac_L_gt60": 0.028,
+   "bbox": [
+    960,
+    694,
+    1037,
+    785
+   ],
+   "width_cm": 13.69,
+   "above_rim_cm": 5.31,
+   "below_rim_cm": 10.8,
+   "hanging_leaf": {
+    "px": 94,
+    "bbox": [
+     1020,
+     737,
+     1028,
+     751
+    ],
+    "below_rim_cm": 4.6
+   },
+   "above_rim_cm_component": 5.66,
+   "pot_visible_frac_of_clay_silhouette": 0.851,
+   "fillers_plant": "pothos listed (fern, pothos, ficus)",
+   "floor_pothos": {
+    "lab": [
+     36.47,
+     -11.91,
+     19.92
+    ],
+    "C": 23.21,
+    "h": 120.9,
+    "L_p95": 65.78,
+    "C_p90": 34.61,
+    "frac_L_gt60": 0.091
+   },
+   "halo_bright_px": 0,
+   "dark_fringe_px": 19
+  },
+  "rnd2": {
+   "defaults": {
+    "rebuild_vs_file": 0,
+    "without_planter_vs_pre_planter_file": 0,
+    "rnd2_outside": 0,
+    "region_px": 696393,
+    "changed_vs_pre_planter": 6803,
+    "changed_vs_pre_outside_alpha_shadow": 0,
+    "changed_vs_v1": 6544,
+    "changed_vs_v1_outside_new_or_v1_alpha_or_shadow": 0,
+    "frame_rebuild_vs_file": 0,
+    "frame_L_min_p01_p05": [
+     10.84,
+     11.34,
+     11.78
+    ],
+    "planter_composite_L_min": 11.14
+   },
+   "beige": {
+    "rebuild_vs_file": 0,
+    "without_planter_vs_pre_planter_file": 0,
+    "rnd2_outside": 0,
+    "region_px": 696393,
+    "changed_vs_pre_planter": 6803,
+    "changed_vs_pre_outside_alpha_shadow": 0,
+    "changed_vs_v1": 6544,
+    "changed_vs_v1_outside_new_or_v1_alpha_or_shadow": 0,
+    "frame_rebuild_vs_file": 0,
+    "frame_L_min_p01_p05": [
+     10.84,
+     11.34,
+     11.78
+    ],
+    "planter_composite_L_min": 11.14,
+    "vs_defaults_outside_mat": 0
+   },
+   "overlap_other_layers_shadows": 0,
+   "light_over_planter": 0,
+   "shadow_blob_5b1286ee_and_e0f3a728": "701678a9888b35912df954195a3fea8d6387e561"
+  },
+  "layer": {
+   "alpha_px": 6317,
+   "min_L_gt0": 11.14,
+   "min_L_255": 11.14,
+   "below_11": 0,
+   "rgb_nonzero_where_a0": 0,
+   "alpha_components": 1
+  },
+  "size": {
+   "width_px": 75,
+   "width_cm": 13.17,
+   "height_cm": 11.86
+  },
+  "count": {
+   "pot_only_area_pct": "0.101-0.106",
+   "pot_height_pct": 4.64,
+   "counts_in_B1": false,
+   "room_unique": 19
+  }
+ }
 }
