@@ -11,11 +11,11 @@
   "supplier": {
     "name": "AliExpress",
     "product_url": "https://www.aliexpress.com/item/1005013452228781.html",
-    "sku": "12000061187780583",
+    "sku": "12000061187780577",
     "rating": 0.0
   },
   "price": {
-    "cost": 11.73,
+    "cost": 20.64,
     "currency": "USD",
     "suggested_retail": null
   },
@@ -25,19 +25,21 @@
     "ships_to": []
   },
   "dimensions_cm": {
-    "width": null,
-    "depth": null,
-    "height": null
+    "width": 13.2,
+    "depth": 13.2,
+    "height": 11.8
   },
   "colors": {
-    "dominant_hex": "#BDBDBF",
+    "dominant_hex": "#9E8B78",
     "secondary_hex": [
       "#887C6C",
       "#C9C8C9"
     ],
     "temperature": "neutral"
   },
-  "materials": [],
+  "materials": [
+    "stoneware"
+  ],
   "texture": "matte stoneware, stone-like dry glaze",
   "finish": "matte",
   "visual_weight": "light",
@@ -144,7 +146,7 @@
         },
         "stock": 677,
         "image": "https://ae01.alicdn.com/kf/S8998e3d1a9924cecbf450f58e3b9e25fn.jpg",
-        "in_room": true
+        "in_room": false
       },
       {
         "id": "12000061187780580",
@@ -209,7 +211,7 @@
         },
         "stock": 92,
         "image": "https://ae01.alicdn.com/kf/S9e694dfe6c4a41c2ae70ea37ed682668a.jpg",
-        "in_room": false
+        "in_room": true
       },
       {
         "id": "12000061187780584",
@@ -230,9 +232,9 @@
         "in_room": false
       }
     ],
-    "default_sku": "12000061187780583",
+    "default_sku": "12000061187780577",
     "source": "api"
   },
   "status": "candidate",
-  "notes": "DRAFT from AliExpress DS API (2026-11-20, ae-round-1120): Filled 2026-11-20 by the sourcing session: colours measured from the in-room SKU photo (median-cut, studio background removed; QA re-reads under the scene light), dimensions from the not stated in listing (verify against the supplier's size chart), texture and visual weight from the reviewer's look at the photos. SKU 12000061187780583 (Color: 101-b small brown flat type), stock 677, list price 14.66 USD. Package (not product): 19 x 17 x 16 cm, gross 0.334 kg. NO shipping option to IL returned (DELIVERY_RATE_LIMIT_FOR_SINGLE_PRODUCT). Store: JNBY (id 1102147095, CN); ratings described 4.2 / communication 4.4 / shipping 4.5; product 0.0 stars, 0 reviews, 1 sold; AE category 200001438. Fit vs spec: house row 10 (B1 ledge) and row 2 (sill-plant): matte pot D11-16 x H11-16, stoneware in sand or espresso (row 2: sand, bone or caramel, with built-in saucer). These have no saucer; the dark pebble ones fit row 10 (espresso), not row 2."
+  "notes": "DRAFT from AliExpress DS API (2026-11-20, ae-round-1120): Filled 2026-11-20 by the sourcing session: colours measured from the in-room SKU photo (median-cut, studio background removed; QA re-reads under the scene light), dimensions from the not stated in listing (verify against the supplier's size chart), texture and visual weight from the reviewer's look at the photos. SKU 12000061187780583 (Color: 101-b small brown flat type), stock 677, list price 14.66 USD. Package (not product): 19 x 17 x 16 cm, gross 0.334 kg. NO shipping option to IL returned (DELIVERY_RATE_LIMIT_FOR_SINGLE_PRODUCT). Store: JNBY (id 1102147095, CN); ratings described 4.2 / communication 4.4 / shipping 4.5; product 0.0 stars, 0 reviews, 1 sold; AE category 200001438. Fit vs spec: house row 10 (B1 ledge) and row 2 (sill-plant): matte pot D11-16 x H11-16, stoneware in sand or espresso (row 2: sand, bone or caramel, with built-in saucer). These have no saucer; the dark pebble ones fit row 10 (espresso), not row 2.\n2026-11-25: synced to the SKU that passed the AE photo check (2026-11-20 round; scratchpad picks/ae-round-photo-check.json item 24, generated 2026-11-24): default_sku and in_room …583 (101-b small brown flat type, 12.5x11.2x5.5, too low) -> …577 large-brown-round (12000061187780577). supplier.sku …583 -> …577; price.cost 11.73 -> 20.64 (…577 in options.skus). dimensions_cm D13.2 x H11.8 (width = depth = diameter), inside the B1 ledge spec per the photo check; materials [stoneware]; colors.dominant_hex #BDBDBF -> #9E8B78 from the …577 SKU photo (median L*59.0 a*4.4 b*12.7, C*13.5 h71, mottled matte taupe-sand); secondary_hex and temperature not re-measured. Shipping for …577: no shipping quote to Israel (no IL quote in the photo check; the product-level query returned no IL option)."
 }
