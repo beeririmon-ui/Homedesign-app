@@ -1,0 +1,155 @@
+{
+ "id": "wm-m0-fb12s0-motion-note",
+ "date": "2026-11-25",
+ "author": "render-agent",
+ "to": "motion-agent",
+ "what": "FB12 stage 0: the clean M0 plate without the old coffee table (path R). Erase the old table from HDx2, from clip 2 (529-701) and from the hall's station frame (hdx2-products) by projecting the floor and the sofa front from this plate.",
+ "clean_plate": {
+  "path": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/base-fb12s0.png",
+  "sha256": "7f83091908fb5331e3491598839d790129d36ced1ce01dec3f65f1d75cc265cd",
+  "size": [
+   2720,
+   1530
+  ],
+  "canvas": "the M0 1.2 overscan canvas at 2720 x 1530 (4072 x 2290 x 2720 / 4072); the 3840 x 2160 camera frame inside it at [77.49, 43.43, 2642.51, 1486.57]",
+  "grade": "v3c, the same bytes as base.png outside the changed region; frame 702 = this file"
+ },
+ "previous_plate": {
+  "path": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/base.png",
+  "sha256": "75200f46361dfd62dd03363ef46e21cce119fce04990d914a771383b551aba39",
+  "note": "kept for rollback"
+ },
+ "camera": {
+  "source": "docs/house-plan.json cameras M0 (1.2)",
+  "loc": [
+   0.83,
+   4.64,
+   1.2
+  ],
+  "yaw_deg_left": 25,
+  "lens_mm": 24,
+  "u0": 0.47,
+  "v0": 0.5,
+  "projection": "clay_wm_r1.project: u = u0 + (24/36) (p.right)/d, v = v0 - (24/36)(16/9) p.z / d; canvas px = (116 + 3840 u, 65 + 2160 v) on 4072 x 2290"
+ },
+ "homography_floor": {
+  "plane": "Z 0 (the parquet), plan axes: X right, Y toward the viewer (back wall Y 0), metres",
+  "H_plan_to_px_2720": [
+   [
+    221.149014351,
+    -413.851165054,
+    1736.715643884
+   ],
+   [
+    -70.961409919,
+    -152.17716459,
+    1215.4945014
+   ],
+   [
+    -0.092759983,
+    -0.198924399,
+    1.0
+   ]
+  ],
+  "H_plan_to_px_4072": [
+   [
+    331.07308325,
+    -619.559538271,
+    2599.965478638
+   ],
+   [
+    -106.210214846,
+    -227.768435889,
+    1819.269547847
+   ],
+   [
+    -0.092759983,
+    -0.198924399,
+    1.0
+   ]
+  ],
+  "H_px_2720_to_plan": [
+   [
+    -0.001421969,
+    -0.001084967,
+    3.788328438
+   ],
+   [
+    0.000663075,
+    -0.006065358,
+    6.220837251
+   ],
+   [
+    -0.0,
+    -0.001307189,
+    1.0
+   ]
+  ],
+  "check": "the shell's board joints run along Y: in this plane they are vertical lines (verify check 2)"
+ },
+ "homography_sofa_front": {
+  "plane": "Y 0.95 (the sofa's front: the deck rail, the base band; the plinth is recessed to Y 0.911)",
+  "coords": "(X, Z) metres",
+  "H_plan_to_px_2720": [
+   [
+    272.67957778,
+    0.0,
+    1656.622632777
+   ],
+   [
+    -87.496246912,
+    -462.887823416,
+    1320.465363685
+   ],
+   [
+    -0.114374183,
+    0.0,
+    1.0
+   ]
+  ],
+  "H_plan_to_px_4072": [
+   [
+    408.217367911,
+    0.0,
+    2480.061529657
+   ],
+   [
+    -130.95843492,
+    -692.819029819,
+    1976.382799241
+   ],
+   [
+    -0.114374183,
+    0.0,
+    1.0
+   ]
+  ]
+ },
+ "homography_rug": {
+  "plane": "Z 0.012 (the rug's top; the tool only: the arrival has no rug)",
+  "H_plan_to_px_2720": [
+   [
+    221.149054587,
+    -413.851146642,
+    1736.715677708
+   ],
+   [
+    -70.961348734,
+    -152.177161732,
+    1210.989541261
+   ],
+   [
+    -0.092759961,
+    -0.198924403,
+    1.0
+   ]
+  ]
+ },
+ "regions": {
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-fb12s0/regions-fb12s0.npz",
+  "table": "the old table: the r4 clay's table index, dilated 4 px (covers the furniture alpha's snap ring)",
+  "plate": "where the plate changed: the table region and the floor where the table's contact / cast shadow was lifted"
+ },
+ "how": "HDx2 / clip 2: the floor through H_floor and the sofa front through H_sofa_front, from this plate into each frame's own camera (the clay's geometry), with the exposure ratio measured in the wall / floor ring as in arrival-v2's pastes; holes that neither still sees from the clip's own floor (proposal a.6).",
+ "not_changed": "the sofa, the armchair, the walls, the window: the same pixels; only the table, its shadow and the sofa's hidden foot"
+}

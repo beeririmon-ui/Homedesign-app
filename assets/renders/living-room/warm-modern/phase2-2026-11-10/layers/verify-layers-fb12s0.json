@@ -1,0 +1,176 @@
+{
+ "1_plate": {
+  "base_png_sha_unchanged": true,
+  "px_changed": 327445,
+  "px_changed_outside_region": 0,
+  "regrade_px_differ": 0,
+  "ungraded_outside_region_px_differ": 0,
+  "furniture_alpha_outside_table_px_differ": 0,
+  "furniture_alpha_in_front_of_plinth_px": 0,
+  "furniture_alpha_outside_sofa_silhouette_px": 0,
+  "pass_": true
+ },
+ "2_boards": {
+  "method": "joints = dark minima of the floor's L* in the plane (400 px/m), sub-pixel per row; a line fitted on the samples outside the old table's region, the samples inside measured against it (p95, mm)",
+  "seams_crossing": 6,
+  "seams": [
+   {
+    "X_m": -0.785,
+    "samples_in": 14,
+    "samples_out": 131,
+    "slope_dX_dY": 0.0008,
+    "in_max_mm": 1.14,
+    "in_median_mm": 0.32,
+    "out_p95_mm": 0.64
+   },
+   {
+    "X_m": -0.562,
+    "samples_in": 43,
+    "samples_out": 95,
+    "slope_dX_dY": 0.0016,
+    "in_max_mm": 0.54,
+    "in_median_mm": 0.24,
+    "out_p95_mm": 0.48
+   },
+   {
+    "X_m": -0.343,
+    "samples_in": 93,
+    "samples_out": 35,
+    "slope_dX_dY": 0.0001,
+    "in_max_mm": 1.66,
+    "in_median_mm": 0.86,
+    "out_p95_mm": 0.32
+   },
+   {
+    "X_m": -0.123,
+    "samples_in": 62,
+    "samples_out": 56,
+    "slope_dX_dY": 0.0006,
+    "in_max_mm": 0.22,
+    "in_median_mm": 0.09,
+    "out_p95_mm": 0.24
+   },
+   {
+    "X_m": 0.097,
+    "samples_in": 18,
+    "samples_out": 90,
+    "slope_dX_dY": 0.0003,
+    "in_max_mm": 0.32,
+    "in_median_mm": 0.19,
+    "out_p95_mm": 0.36
+   },
+   {
+    "X_m": 0.317,
+    "samples_in": 17,
+    "samples_out": 80,
+    "slope_dX_dY": -0.0001,
+    "in_max_mm": 0.26,
+    "in_median_mm": 0.14,
+    "out_p95_mm": 0.29
+   }
+  ],
+  "worst_in_p95_mm": 1.66,
+  "limit_mm": 4.0,
+  "pass_": true
+ },
+ "3_WM_G1": {
+  "plate": 13.06,
+  "base_png": 12.4,
+  "default_B": 11.44,
+  "default_B_r9": 10.91,
+  "default_A": 12.4,
+  "default_A_r9": 11.37,
+  "default_C": 9.91,
+  "default_C_r9": 9.72,
+  "pass_": true,
+  "rule": "WM-G1: black point L* 11-14 (p0.5, OpenCV Lab, as lock_r7.py) on the plate, the tool's grade (its toe targets 12.5 on the base); the defaults' black point is set by the products in them (R9: set C 9.72, B 10.91, accepted in R8's QA): here it must not drop below R9's",
+  "defaults_below_11": [
+   "C"
+  ]
+ },
+ "4_RND2": {
+  "default_B": {
+   "px_changed": 326188,
+   "outside_region_px": 0,
+   "region_px": 326205
+  },
+  "default_A": {
+   "px_changed": 323867,
+   "outside_region_px": 0,
+   "region_px": 323893
+  },
+  "default_C": {
+   "px_changed": 323723,
+   "outside_region_px": 0,
+   "region_px": 323756
+  },
+  "rug": {
+   "px_changed": 229413,
+   "outside_table_and_zone_px": 0,
+   "alpha_changed_outside_table_px": 0,
+   "shadow_px_changed": 141,
+   "shadow_changed_outside_table_px": 0
+  },
+  "cushions_B": {
+   "layer": "cushions/set-B-fb12s0.png",
+   "shadow": "cushions/set-B-shadow-fb12s0.png",
+   "layer_px_changed": 1137,
+   "layer_outside_table_px": 0,
+   "shadow_px_changed": 1343,
+   "shadow_outside_table_px": 0
+  },
+  "cushions_A": {
+   "layer": "cushions/set-A-fb12s0.png",
+   "shadow": "cushions/set-A-shadow-fb12s0.png",
+   "layer_px_changed": 964,
+   "layer_outside_table_px": 0,
+   "shadow_px_changed": 437,
+   "shadow_outside_table_px": 0
+  },
+  "cushions_C": {
+   "layer": "cushions/set-C-fb12s0.png",
+   "shadow": "cushions/set-C-shadow-fb12s0.png",
+   "layer_px_changed": 1848,
+   "layer_outside_table_px": 0,
+   "shadow_px_changed": 1002,
+   "shadow_outside_table_px": 0
+  },
+  "pass_": true
+ },
+ "5_stack": {
+  "B": {
+   "in_region_max": 0,
+   "canvas_p99_9": 1.0,
+   "canvas_max": 4
+  },
+  "A": {
+   "in_region_max": 0,
+   "canvas_p99_9": 1.0,
+   "canvas_max": 3
+  },
+  "C": {
+   "in_region_max": 0,
+   "canvas_p99_9": 1.0,
+   "canvas_max": 4
+  },
+  "pass_": true,
+  "gate": "R9's: p99.9 <= 2, max <= 6 over the canvas; 0 inside the changed region (the truth IS the stack there)"
+ },
+ "6_hidden": {
+  "hidden": [
+   "bowl-shadow",
+   "bowl",
+   "candle-holders-shadow",
+   "candle-holders"
+  ],
+  "files_are_r9s": true,
+  "git_modified": [],
+  "pass_": true
+ },
+ "7_scope": {
+  "tracked_modified_under_living_room_wm": [],
+  "r9_manifest_sha": "1c8ae8365c1b9e45f60c4ffd39466c80872d0453f78b20b68446b6ae17bb97ac",
+  "pass_": true
+ },
+ "all_pass": true
+}

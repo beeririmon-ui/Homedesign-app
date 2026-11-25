@@ -1,0 +1,165 @@
+{
+ "id": "wm-living-room-m0-fb12-stage0",
+ "date": "2026-11-25",
+ "author": "render-agent",
+ "tokens": 0,
+ "model": "code (0 tokens, no var2)",
+ "brief": "briefs/wm-fb12-stage0-clean-plate-2026-11-25.md",
+ "spec": "docs/proposals/wm-fb12-2026-11-25.md a.5-a.7 (path R)",
+ "plate": {
+  "shadow": {
+   "model": "sofa_model(): contact under the overhang + AO tail ramped along X; S' = M in the table region, S + w max(0, M - S) around it",
+   "px_changed": 280524
+  },
+  "light_along_x": {
+   "gain_at": {
+    "60": 2.877,
+    "100": 2.877,
+    "150": 2.664,
+    "300": 2.24,
+    "500": 1.93,
+    "700": 1.502,
+    "900": 1.315,
+    "1050": 1.166,
+    "1100": 1.083
+   },
+   "note": "gs: the contrast measure's light; the colour and level of the fill: grgb (the 6 rows above the table's edge)",
+   "method": "rail rows 169..r0-5 / the band profile, Gaussian 14 px; left of the rail: linear trend of its first 80 cols"
+  },
+  "region_px": 328315,
+  "rows_r0": {
+   "60": 251,
+   "100": 227,
+   "150": 201,
+   "300": 179,
+   "600": 177,
+   "900": 179,
+   "1040": 190,
+   "1080": 257
+  },
+  "grain": {
+   "rail": {
+    "rows": [
+     166,
+     248
+    ],
+    "ref_cols": [
+     1088,
+     1196
+    ],
+    "strips": 46,
+    "sigma_ref": 0.472
+   },
+   "base": {
+    "rows": [
+     248,
+     304
+    ],
+    "ref_cols": [
+     1088,
+     1282
+    ],
+    "strips": 46,
+    "sigma_ref": 0.449
+   },
+   "contrast_target": {
+    "150": 0.188,
+    "300": 0.156,
+    "500": 0.181,
+    "700": 0.3,
+    "900": 0.324,
+    "1050": 0.432
+   }
+  },
+  "px_changed_vs_base": 327445
+ },
+ "rug": {
+  "light_fit": {
+   "model": "rug LF = c x the shell's light (anisotropic blur 0.25 / 0.10 m) x S'; c = the rug's own LF / light around the zone, normalised blur 0.15 m",
+   "ring_px": 51706,
+   "ring_residual_p05_p50_p95": [
+    0.741,
+    0.993,
+    1.136
+   ]
+  },
+  "edge_copy_px_rect": 22034,
+  "synth_px_rect": 1743622,
+  "relit_px_rect": 218790,
+  "rug_shadow_px_changed": 141,
+  "zone_px": 258139,
+  "changed_px": 229413,
+  "quilt_blocks": 752,
+  "alpha_px_new": 389672,
+  "alpha_px_old": 308037
+ },
+ "cushions": {
+  "B": {
+   "added_px": 1137,
+   "shadow_px_changed": 1343,
+   "source_px": 124
+  },
+  "A": {
+   "added_px": 964,
+   "shadow_px_changed": 437,
+   "source_px": 88
+  },
+  "C": {
+   "added_px": 1848,
+   "shadow_px_changed": 1002,
+   "source_px": 276
+  }
+ },
+ "defaults": {
+  "B": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s0-set-B-graded-v3c.png",
+   "region_px": 326205,
+   "outside_region_vs_old_truth_px": 0
+  },
+  "A": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s0-set-A-graded-v3c.png",
+   "region_px": 323893,
+   "outside_region_vs_old_truth_px": 0
+  },
+  "C": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s0-set-C-graded-v3c.png",
+   "region_px": 323756,
+   "outside_region_vs_old_truth_px": 0
+  }
+ },
+ "files": {
+  "plate": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/base-fb12s0.png",
+  "U": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-fb12s0/shell-furniture-fb12s0.png",
+  "F": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-fb12s0/fixed-furniture-fb12s0.png",
+  "S": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-fb12s0/fixed-furniture-shadow-fb12s0.png",
+  "regions": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-fb12s0/regions-fb12s0.npz",
+  "rug": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/rug/rug-cj-braided-wool-natural-fb12s0.png",
+  "rug_shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/rug/rug-cj-braided-wool-natural-shadow-fb12s0.png",
+  "cushions-B": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-B-fb12s0.png",
+  "cushions-B-shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-B-shadow-fb12s0.png",
+  "cushions-A": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-A-fb12s0.png",
+  "cushions-A-shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-A-shadow-fb12s0.png",
+  "cushions-C": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-C-fb12s0.png",
+  "cushions-C-shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-C-shadow-fb12s0.png",
+  "default-B": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s0-set-B-graded-v3c.png",
+  "default-A": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s0-set-A-graded-v3c.png",
+  "default-C": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s0-set-C-graded-v3c.png"
+ },
+ "sha256": {
+  "plate": "7f83091908fb5331e3491598839d790129d36ced1ce01dec3f65f1d75cc265cd",
+  "U": "c486cf6f9f2fd8fa79f9d93cb307db5d6cb5101181c7e326d196f7713c4e1f41",
+  "F": "eb1bcaf609755b4c84c6ec4fec28846d45812890cb6c68a0ea0f7f7bb2eefe47",
+  "S": "bb60f6b6c91c2c1dc3dc408d9aae311d435e8d0026b4b8c481187d6d4c34c371",
+  "rug": "7e92fca631cef264d2297d46fdf5e65d3a034d3a80204e5bbb30ff1fd2aa956a",
+  "rug_shadow": "f0d8322e6665d5428030b6b24ab519812b04dc600c516a67916895d3699c2f17",
+  "cushions-B": "b751e32c80ec49259e378574692c974f584458da18f1b2153dfe972ca0c902e2",
+  "cushions-B-shadow": "3de64459bcb6c811948ceff13f17654e15d20af00654a4a4c6882e1e6d96d232",
+  "cushions-A": "4592fe2136a770f08bfc5c07fdb676755e8c400ddbbc6247cd88c500cd4890b2",
+  "cushions-A-shadow": "63a2efb965f6e0a9ff9e36a127f62d610fc60117d048ca9ea4afca5cc0d7f9bc",
+  "cushions-C": "14577371136742da824aadd031754f2f7c9947ff7400d49da863c52f434241f8",
+  "cushions-C-shadow": "3a6f652002b51fbefc6e7cb90e3ff66c40133b2d5a6845841e51bbacb3c4b2b1",
+  "default-B": "e6a47affb66dd82b4d4028d49b0a5a844e7519c0a4d82577f0d4dbce1cdd26f5",
+  "default-A": "fb1cf12204897ed0442685cc5364bc4848c70494ac903af78f3e811dc0771570",
+  "default-C": "bb6669ba8701e83e5bb9f0c32ebfdc88ed4c4f3c699807b467ee22578150a365"
+ }
+}
