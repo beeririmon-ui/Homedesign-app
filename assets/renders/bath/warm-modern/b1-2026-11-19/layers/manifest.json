@@ -28,6 +28,7 @@
    "candle-shadow, candle",
    "reed-diffuser-shadow, reed-diffuser",
    "window-sill-vase-shadow, window-sill-vase",
+   "ledge-planter-shadow, ledge-planter",
    "toilet-brush-shadow, toilet-brush",
    "light (screen)"
   ],
@@ -165,6 +166,21 @@
    "shadow_px": 2128
   },
   {
+   "slot": "ledge-planter",
+   "product": "ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round",
+   "card": "data/products/bath/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781.json",
+   "sku": "12000061187780577",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+   "shadow": "shadows/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+   "alpha_px": 5784,
+   "shadow_px": 969,
+   "added": "2026-11-25 (briefs/wm-bath-b1-ledge-planter-2026-11-25.md)",
+   "filler": "a small succulent rosette and trailing stems (not sold, not counted)"
+  },
+  {
    "slot": "toilet-brush",
    "product": "toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color",
    "card": "data/products/bath/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle.json",
@@ -242,14 +258,13 @@
   }
  ],
  "rnd2": {
-  "region_px": 689584,
+  "region_px": 695860,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
  "gaps_left_empty": [
   "shower-stool",
-  "wall-art",
-  "ledge-planter"
+  "wall-art"
  ],
  "record": {
   "lock": {
@@ -573,7 +588,116 @@
     1.8
    ]
   },
-  "light_baseline_removed": 0.0
+  "light_baseline_removed": 0.0,
+  "ledge_planter": {
+   "tone_gain_linear": [
+    0.9586,
+    0.9876,
+    0.9623
+   ],
+   "drawn": {
+    "outline": {
+     "xc": 1128.5,
+     "yc": 826.3330204686235,
+     "rx": 208.247943503,
+     "ry": 226.81267887926916,
+     "resid_px": 3.73,
+     "rows": 132
+    },
+    "mouth": [
+     1131.0,
+     680.0,
+     132.0,
+     50.0
+    ],
+    "foot": 1034.0,
+    "width_cm_at_clay_scale": 14.28,
+    "back_rim_to_foot_cm": 13.96
+   },
+   "clay": {
+    "xc": 1131.43,
+    "rx": 192.51,
+    "top": 690.03,
+    "foot": 1031.4
+   },
+   "scale_w": 0.9244,
+   "plant": {
+    "method": "colour matte: a* < -6 and C* > 8 sure; (-a* - 1) / 5 within 4 px of it",
+    "plant_px_up": 37220,
+    "core_px_up": 35038
+   },
+   "colour": {
+    "method": "R5 (QA's reading) on the lit half of the pot's body (eroded 2, no plant): mid-tone median over the plaster's light right of the reveal (REF_BOX, off every product) x #ECE5DA; one per-channel linear gain on the pot (its mottle and shading kept), weighted off the plant",
+    "lit_half": "right (x >= 1001.2; the sconce is above right)",
+    "sku_photo_lab": [
+     59.0,
+     4.4,
+     12.7
+    ],
+    "plaster_ref_lin": [
+     0.7529,
+     0.7011,
+     0.6445
+    ],
+    "plaster_ref_px": 14668,
+    "body_px_lit": 1829,
+    "before": [
+     63.94,
+     2.07,
+     16.23
+    ],
+    "de00_before": 5.83,
+    "gain_linear": [
+     0.8571,
+     0.8092,
+     0.897
+    ],
+    "clipped_px": 0,
+    "after_lit": [
+     59.0,
+     4.4,
+     12.7
+    ],
+    "de00_after_lit": 0.0,
+    "after_shaded_half": [
+     53.5,
+     6.54,
+     11.76
+    ],
+    "de00_shaded_half": 5.82
+   },
+   "black_point": {
+    "rule": "WM-G1 L* 11-14: no layer pixel under 11",
+    "raised_px": 3,
+    "layer_min_L": 11.14
+   },
+   "files": {
+    "layer": "layers/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+    "shadow": "shadows/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+    "alpha_px": 5784,
+    "shadow_px": 969
+   },
+   "compose": {
+    "defaults": {
+     "rnd2_outside_differing_px": 0,
+     "region_px": 695860,
+     "changed_px": 6271,
+     "changed_outside_planter_alpha_and_shadow": 0,
+     "overlap_with_other_layers_px": 0
+    },
+    "beige": {
+     "rnd2_outside_differing_px": 0,
+     "region_px": 695860,
+     "changed_px": 6271,
+     "changed_outside_planter_alpha_and_shadow": 0,
+     "overlap_with_other_layers_px": 0
+    }
+   },
+   "tool": "tools/ledge_planter_b1.py (prep, assemble, cut, finish, compose, sheet)",
+   "job": "jobs.json sent[ledge-planter-r1]",
+   "prompt": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter.json"
+  }
  },
- "variants_note": "the sample slot has 2 variants (house-20 8.1): Khaki and Beige. The third (row 14, 8.6) is open: no other mat card has passed a photo check (Line Camel failed), so none is rendered"
+ "variants_note": "the sample slot has 2 variants (house-20 8.1): Khaki and Beige. The third (row 14, 8.6) is open: no other mat card has passed a photo check (Line Camel failed), so none is rendered",
+ "updated": "2026-11-25: the ledge planter added (render-agent)"
 }

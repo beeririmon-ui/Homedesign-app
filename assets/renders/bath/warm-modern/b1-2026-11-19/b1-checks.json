@@ -51,6 +51,10 @@
     46,
     45
    ],
+   "ledge-planter": [
+    46,
+    45
+   ],
    "toilet-brush": [
     48,
     47
@@ -64,13 +68,13 @@
    "min": 10.84,
    "p0_1": 11.33,
    "p0_5": 11.8,
-   "p5": 35.46
+   "p5": 35.42
   },
   "beige": {
    "min": 10.84,
    "p0_1": 11.33,
    "p0_5": 11.8,
-   "p5": 35.48
+   "p5": 35.44
   },
   "plate": {
    "min": 10.98,
@@ -335,6 +339,14 @@
     "counts": false,
     "items": 1
    },
+   "ledge-planter": {
+    "product": "ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round",
+    "area_pct": 0.146,
+    "height_pct": 7.07,
+    "visible_pct": 100.0,
+    "counts": false,
+    "items": 1
+   },
    "reed-diffuser": {
     "product": "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
     "area_pct": 0.134,
@@ -360,12 +372,13 @@
     "items": 1
    }
   },
-  "in_b1_frame": 11,
+  "in_b1_frame": 12,
   "counting_in_b1": 7,
   "not_counting_in_b1": [
    "shower-dispensers",
    "wall-sconce",
    "candle",
+   "ledge-planter",
    "reed-diffuser"
   ],
   "new_unique_in_b1": [
@@ -375,7 +388,8 @@
    "toilet-brush",
    "reed-diffuser",
    "candle",
-   "window-sill-vase"
+   "window-sill-vase",
+   "ledge-planter"
   ],
   "also_in_b2": [
    "shower-dispensers",
@@ -385,13 +399,12 @@
   ],
   "room_unique": {
    "b2": 11,
-   "b1_new": 7,
-   "total": 18,
+   "b1_new": 8,
+   "total": 19,
    "target": 20,
    "gaps": [
     "shower-stool",
-    "wall-art (the small print)",
-    "ledge-planter"
+    "wall-art (the small print)"
    ]
   }
  },
@@ -428,6 +441,10 @@
    },
    "candle": {
     "edge_px": 682,
+    "light_fringe_px": 0
+   },
+   "ledge-planter": {
+    "edge_px": 846,
     "light_fringe_px": 0
    },
    "reed-diffuser": {
@@ -504,5 +521,105 @@
    "alpha_px_right_of_861_rows_735_785": 102,
    "overlap_with_diffuser_px": 0
   }
+ },
+ "date_updated": "2026-11-25 (the ledge planter)",
+ "ledge_planter": {
+  "product": "ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round",
+  "sku": "12000061187780577",
+  "size": {
+   "rule": "+-5 % of 13.2 x 11.8 cm against the clay's scale (b1proj, the pot at (4.27, 10.06) on Z 1.00)",
+   "px_per_cm": [
+    5.6969,
+    5.6503
+   ],
+   "pot_width_px": 74,
+   "pot_height_px": 67.0,
+   "width_cm": 12.99,
+   "height_cm": 11.86,
+   "width_ratio": 0.984,
+   "height_ratio": 1.005,
+   "as_drawn": {
+    "outline": {
+     "xc": 1128.5,
+     "yc": 826.3330204686235,
+     "rx": 208.247943503,
+     "ry": 226.81267887926916,
+     "resid_px": 3.73,
+     "rows": 132
+    },
+    "mouth": [
+     1131.0,
+     680.0,
+     132.0,
+     50.0
+    ],
+    "foot": 1034.0,
+    "width_cm_at_clay_scale": 14.28,
+    "back_rim_to_foot_cm": 13.96
+   },
+   "note": "measured on the layer's pot (alpha >= 128, the plant's green out); the pixel rows/columns are whole pixels, so +-1 px is +-1.3 % in width and +-1.5 % in height"
+  },
+  "colour": {
+   "method": "R5 (QA's reading) on the lit half of the pot's body (eroded 2, no plant): mid-tone median over the plaster's light right of the reveal (REF_BOX, off every product) x #ECE5DA; one per-channel linear gain on the pot (its mottle and shading kept), weighted off the plant",
+   "lit_half": "right (x >= 1001.2; the sconce is above right)",
+   "sku_photo_lab": [
+    59.0,
+    4.4,
+    12.7
+   ],
+   "plaster_ref_lin": [
+    0.7529,
+    0.7011,
+    0.6445
+   ],
+   "plaster_ref_px": 14668,
+   "body_px_lit": 1829,
+   "before": [
+    63.94,
+    2.07,
+    16.23
+   ],
+   "de00_before": 5.83,
+   "gain_linear": [
+    0.8571,
+    0.8092,
+    0.897
+   ],
+   "clipped_px": 0,
+   "after_lit": [
+    59.0,
+    4.4,
+    12.7
+   ],
+   "de00_after_lit": 0.0,
+   "after_shaded_half": [
+    53.5,
+    6.54,
+    11.76
+   ],
+   "de00_shaded_half": 5.82
+  },
+  "black_point": {
+   "rule": "WM-G1 L* 11-14: no layer pixel under 11",
+   "raised_px": 3,
+   "layer_min_L": 11.14
+  },
+  "rnd2": {
+   "defaults": {
+    "rnd2_outside_differing_px": 0,
+    "region_px": 695860,
+    "changed_px": 6271,
+    "changed_outside_planter_alpha_and_shadow": 0,
+    "overlap_with_other_layers_px": 0
+   },
+   "beige": {
+    "rnd2_outside_differing_px": 0,
+    "region_px": 695860,
+    "changed_px": 6271,
+    "changed_outside_planter_alpha_and_shadow": 0,
+    "overlap_with_other_layers_px": 0
+   }
+  },
+  "plant_rises_above_rim_cm": 6.2
  }
 }

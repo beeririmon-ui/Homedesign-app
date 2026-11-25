@@ -1,0 +1,37 @@
+{
+ "asset_id": "wm-bath-b1-ledge-planter-2026-11-25",
+ "output": "the ledge planter in B1: card 228781 (ledge-planter-aliexpress-retro-ceramic-flower-vase-228781), SKU 12000061187780577 'large brown round', 13.2 x 11.8 cm, matte mottled taupe-sand stoneware, with a small succulent filler (not sold, not counted)",
+ "status": "sent once (r1), accepted with code steps (tools/ledge_planter_b1.py): ECC lock, tone gain, the body remapped onto the clay's silhouette (the model drew it 14.28 cm wide and from about 20 deg above), the plant pinned to the rim, a contact shadow, R5 on the lit half, the WM-G1 black floor. Not for the site before QA and owner approval.",
+ "model": "nano-banana-2",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "4:3",
+ "output_size": [
+  2400,
+  1792
+ ],
+ "estimate": 400,
+ "tokens": 400,
+ "idempotency_key": "wm-bath-b1-ledge-planter-r1-20261125",
+ "placeholder_id": "d2fbaa1c-6077-4f05-ae78-49842db4f2f5",
+ "task_id": "aa4d1980ac3e40e5789d3957a00e7af7",
+ "seed": "not exposed by var2",
+ "prompt_file": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter.txt",
+ "prompt_sha256": "a3d43d1c7ba900792ec82703f73962d4b70f54caaf4d4959f0b2dabaf30ae161",
+ "prompt": "This is a close-up crop of a bathroom photograph: a pale limestone ledge in front of a fluted-glass window with a bronze frame, and a warm off-white plaster wall. On the ledge, from the left: a ribbed white candle cup and a speckled reed diffuser with black reeds. Turn ONLY the plain round taupe placeholder at the right end of the ledge into product 1 of the reference image, exactly where the placeholder is and exactly its size (13.2 cm wide, 11.8 cm tall: the same width and the same height as the placeholder, no bigger), standing on the ledge where the placeholder stands; keep every other pixel as it is.\nProduct 1, the planter of the reference: a round ball-shaped stoneware pot with a small flat foot and a plain round opening at the top (8 cm across, no lip, no rim band). Mottled matte stoneware: warm rust-brown clay densely speckled with soft grey-blue and sand flecks, reading overall as a taupe-sand tone, as in the reference. Completely matte, no glaze shine, no highlights, no glossy spots.\nIn the opening, a small low green succulent rosette with a few short trailing green stems, rising only about 4 cm above the opening and hanging only a little over the front edge. The plant is the only green.\nA soft contact shadow under the pot on the limestone ledge, in the same soft light as the candle cup and the diffuser beside it. No saucer, no text, no labels, no other objects; do not change the candle cup, the diffuser, the window, the ledge or the wall.\n",
+ "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/11895dd3-6b77-4fce-81b1-2e241f06a080.png",
+ "image_local": "assets/renders/bath/warm-modern/b1-2026-11-19/inputs/planter-crop.png",
+ "image_sha256": "ab2a64a020d62b75d929c0b22ecbba361ee4d3da30f96f8c2ffa73f344497b9d",
+ "input_made_by": "assets/renders/bath/warm-modern/b1-2026-11-19/tools/ledge_planter_b1.py prep (b1-defaults.png of 2026-11-19 with the analytic placeholder, crop 780,590,1180,890, x5.12; inputs/planter-prep.json)",
+ "image_refs": [
+  {
+   "n": 1,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/dcff2c53-ab6b-44e2-8da9-d6af6095891d.png",
+   "what": "the SKU photo of ...577 (scratchpad picks/img/ec6f0117_S9e694dfe6c4a41c2ae70ea37ed682668a.jpg), cropped 95,160,665,720 to leave out the seller's size text; reference only, no supplier pixel in any layer"
+  }
+ ],
+ "result_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-aa4d1980ac3e40e5789d3957a00e7af7-0-1795600821553-41af80e0.jpg",
+ "raw": "assets/renders/bath/warm-modern/b1-2026-11-19/raw/ledge-planter-r1.jpg",
+ "recipe": "python3 tools/ledge_planter_b1.py prep | assemble raw/ledge-planter-r1.jpg | cut | finish | compose | sheet; then tools/checks_b1.py",
+ "sent_at": "2026-11-25 09:59 UTC"
+}

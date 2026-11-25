@@ -2,9 +2,9 @@
  "run": "render-agent, 2026-11-19: the warm-modern bath, B1, the second frame (briefs/wm-bath-b1-render-2026-11-19.md)",
  "plan": 3300,
  "stop_above": 4100,
- "spent_confirmed": 1300,
- "spent_worst_case": 2600,
- "spent_note": "1,300 = two jobs of 650 (plate r1, defaults r2). The two failed submissions of defaults r1 (12 references) returned no task and 'credits_refunded: false'; var2 says failed generations are refunded, but this could not be checked: if both were billed, 2,600. Either way under the plan and the stop line.",
+ "spent_confirmed": 1700,
+ "spent_worst_case": 3000,
+ "spent_note": "1,300 = two jobs of 650 (plate r1, defaults r2). The two failed submissions of defaults r1 (12 references) returned no task and 'credits_refunded: false'; var2 says failed generations are refunded, but this could not be checked: if both were billed, 2,600. Either way under the plan and the stop line. 2026-11-25: +400 for the ledge planter (one nano-banana-2 2K send).",
  "estimates": "var2_estimate_cost before every send: plate (3 refs) 650, defaults (12 refs) 650, defaults (9 refs) 650",
  "var2": {
   "connected_during_sends": true,
@@ -52,6 +52,41 @@
    "raw": "assets/renders/bath/warm-modern/b1-2026-11-19/raw/defaults-r1.png",
    "final": "assets/renders/bath/warm-modern/b1-2026-11-19/b1-defaults.png",
    "verdict": "accepted for the layers with code steps (tools/compose_b1_defaults.py)"
+  },
+  {
+   "id": "ledge-planter-r1",
+   "run": "render-agent, 2026-11-25: the ledge planter (briefs/wm-bath-b1-ledge-planter-2026-11-25.md)",
+   "output": "crop edit: the ledge planter, card 228781 SKU ...577 'large brown round' (13.2 x 11.8), with a small succulent filler",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "4:3",
+   "estimate": 400,
+   "tokens": 400,
+   "placeholder_id": "d2fbaa1c-6077-4f05-ae78-49842db4f2f5",
+   "task_id": "aa4d1980ac3e40e5789d3957a00e7af7",
+   "idempotency_key": "wm-bath-b1-ledge-planter-r1-20261125",
+   "input": "inputs/planter-crop.png (crop 780,590,1180,890 of b1-defaults.png with the analytic placeholder, x5.12; inputs/planter-prep.json)",
+   "input_sha256": "ab2a64a020d62b75d929c0b22ecbba361ee4d3da30f96f8c2ffa73f344497b9d",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/11895dd3-6b77-4fce-81b1-2e241f06a080.png",
+   "refs": [
+    "SKU photo ...577 (picks/img/ec6f0117_S9e694dfe6c4a41c2ae70ea37ed682668a.jpg), cropped 95,160,665,720 to drop the seller's size text; scratchpad only, never in a layer"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/dcff2c53-ab6b-44e2-8da9-d6af6095891d.png"
+   ],
+   "prompt": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter.txt",
+   "seed": "not exposed by var2",
+   "sent_at": "2026-11-25 09:59 UTC",
+   "state": "completed",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-aa4d1980ac3e40e5789d3957a00e7af7-0-1795600821553-41af80e0.jpg",
+   "raw": "raw/ledge-planter-r1.jpg",
+   "output_size": [
+    2400,
+    1792
+   ],
+   "prompt_record": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter.json",
+   "verdict": "accepted with code steps (tools/ledge_planter_b1.py): the pot remapped to the clay's silhouette (drawn 14.28 x 13.96 cm from about 20 deg above, now 12.99 x 11.86), the plant pinned to the rim, contact shadow, R5 on the lit half (dE00 5.83 -> 0.0), black floor L* 11.3; no second send"
   }
  ],
  "in_code": {
@@ -61,10 +96,22 @@
    "the plate's relight, plaster colour and grade (compose_b1_plate.py)",
    "the defaults' cut into layers, shadows and light (compose_b1_defaults.py)",
    "the Beige mat variant (variant_b1_mat.py)",
-   "the checks (checks_b1.py)"
+   "the checks (checks_b1.py)",
+   "the ledge planter: lock, cut, remap to the clay, plant, shadow, R5, black floor, restack (ledge_planter_b1.py)"
   ]
  },
  "not_sent": {
   "third_mat_variant": "row 14 / 8.6 has no third mat card that passed the photo check (Line Camel failed): nothing to render"
+ },
+ "runs": [],
+ "planter_run": {
+  "brief": "briefs/wm-bath-b1-ledge-planter-2026-11-25.md",
+  "plan": 400,
+  "cap": 800,
+  "spent": 400,
+  "sends": 1,
+  "estimates": "var2_estimate_cost before the send: 400 (nano-banana-2, image-to-image, 2K, 4:3, 1 reference)",
+  "retry": "not needed: size, colour, RND2 and black point fixed in code (0 tokens)",
+  "var2": "connected during the send and the result fetch; no re-authorisation was asked"
  }
 }

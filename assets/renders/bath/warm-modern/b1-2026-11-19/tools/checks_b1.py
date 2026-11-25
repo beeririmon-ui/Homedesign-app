@@ -10,6 +10,7 @@ composites, the plate, the clay ids) and writes b1-checks.json:
   counts       V7Q6 (03.11): a product counts at >= 0.5 % of the frame, or >= 0.15 % and >= 6 % of its height, and >= 50 % visible;
                a group of 3 or 5 is one item
   halos        light fringes: soft-edge pixels of a product lighter than both the plate under them and the product's own edge by 6 L*
+  ledge_planter (2026-11-25) size against the clay's scale, colour (R5 on the lit half), black point, RND2
   python3 checks_b1.py
 """
 import json
@@ -129,13 +130,13 @@ def main():
         rows[k] = dict(product=lay[k]["product"], area_pct=round(float(area), 3), height_pct=round(float(hgt), 2),
                        visible_pct=round(float(visible), 1), counts=bool(ok), items=1)
     n_ok = sum(1 for r in rows.values() if r["counts"])
-    new_in_b1 = ["bath-mat", "toilet-paper-stand", "bin", "toilet-brush", "reed-diffuser", "candle", "window-sill-vase"]
+    new_in_b1 = ["bath-mat", "toilet-paper-stand", "bin", "toilet-brush", "reed-diffuser", "candle", "window-sill-vase", "ledge-planter"]
     out["counts"] = dict(rule="V7Q6 (03.11): >= 0.5 % of the frame, or >= 0.15 % and >= 6 % of its height; >= 50 % visible; a group of 3 or 5 = one item",
                          frame_px=int(farea), per_product=rows, in_b1_frame=len(rows), counting_in_b1=n_ok,
                          not_counting_in_b1=[k for k, r in rows.items() if not r["counts"]],
                          new_unique_in_b1=new_in_b1, also_in_b2=[k for k in rows if k not in new_in_b1],
                          room_unique=dict(b2=11, b1_new=len(new_in_b1), total=11 + len(new_in_b1), target=20,
-                                          gaps=["shower-stool", "wall-art (the small print)", "ledge-planter"]))
+                                          gaps=["shower-stool", "wall-art (the small print)"]))
     # halos
     hal = {}
     Lc, Lp = G.to_lab(dflt)[..., 0], G.to_lab(plate)[..., 0]
@@ -169,6 +170,30 @@ def main():
                         stray_line_px_left_of_edge=int(((cur[1280:1340, 1728:1737] > 0) & (cur[1280:1340, 1737:1746] == 0)).sum())),
         B1_L1_candle=dict(alpha_px_right_of_861_rows_735_785=int((A["candle"][735:786, 862:880] > 0).sum()),
                           overlap_with_diffuser_px=int(((A["candle"] > 0) & (A["reed-diffuser"] > 0)).sum())))
+    # the ledge planter (2026-11-25, briefs/wm-bath-b1-ledge-planter-2026-11-25.md; tools/ledge_planter_b1.py)
+    if "ledge-planter" in A:
+        import ledge_planter_b1 as LP
+        lr = man["record"]["ledge_planter"]
+        ps = json.load(open(os.path.join(ST, "inputs", "planter-prep.json")))["placeholder"]["clay_scale"]
+        lpa = np.asarray(Image.open(os.path.join(ST, lay["ledge-planter"]["layer"])))
+        lab_l = G.to_lab(lpa[..., :3].astype(np.float64) / 255)
+        green = (lab_l[..., 1] < -4) & (lpa[..., 3] > 0)
+        pot = (lpa[..., 3] >= 128) & ~C.dil(green, 1)
+        pys, pxs = np.nonzero(pot)
+        rows_w = [int(r.sum()) for r in pot]
+        wpx, hpx = max(rows_w), float(pys.max() - pys.min() + 1)
+        allp = lpa[..., 3] >= 128
+        out["date_updated"] = "2026-11-25 (the ledge planter)"
+        out["ledge_planter"] = dict(
+            product=lay["ledge-planter"]["product"], sku=lay["ledge-planter"]["sku"],
+            size=dict(rule="+-5 % of 13.2 x 11.8 cm against the clay's scale (b1proj, the pot at (4.27, 10.06) on Z 1.00)",
+                      px_per_cm=[ps["px_per_cm_w"], ps["px_per_cm_h"]], pot_width_px=wpx, pot_height_px=hpx,
+                      width_cm=round(wpx / ps["px_per_cm_w"], 2), height_cm=round(hpx / ps["px_per_cm_h"], 2),
+                      width_ratio=round(wpx / ps["px_per_cm_w"] / LP.POT_W, 3), height_ratio=round(hpx / ps["px_per_cm_h"] / LP.POT_H, 3),
+                      as_drawn=lr["drawn"], note="measured on the layer's pot (alpha >= 128, the plant's green out); the pixel rows/columns "
+                                                  "are whole pixels, so +-1 px is +-1.3 % in width and +-1.5 % in height"),
+            colour=lr["colour"], black_point=lr["black_point"], rnd2=lr["compose"],
+            plant_rises_above_rim_cm=round(float((pys.min() - np.nonzero(allp.any(1))[0].min()) / ps["px_per_cm_h"]), 1))
     json.dump(out, open(os.path.join(ST, "b1-checks.json"), "w"), indent=1, ensure_ascii=False)
     print(json.dumps(out["qa_round1"]))
     print(json.dumps(dict(rnd2=out["rnd2"], black=out["black_point"]["defaults"], black_ok=out["black_point"]["ok"], jar=out["colour"]["jar"]["as_seen_mid_tone"],
