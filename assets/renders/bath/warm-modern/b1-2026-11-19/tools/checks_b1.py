@@ -116,6 +116,9 @@ def main():
     rows = {}
     for i, k in enumerate(order):
         a = (A[k] >= 128) & fm
+        if k == "ledge-planter":                # the vessel only: its plant is a filler, not sold and not counted (QA 2026-11-25)
+            lab_k = G.to_lab(np.asarray(Image.open(os.path.join(ST, lay[k]["layer"])))[..., :3].astype(np.float64) / 255)
+            a &= ~C.dil((lab_k[..., 1] < -4) & (A[k] > 0), 1)
         if not a.any():
             continue
         above = np.zeros((H, W), bool)

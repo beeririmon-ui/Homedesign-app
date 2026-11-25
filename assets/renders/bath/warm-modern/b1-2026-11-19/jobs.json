@@ -86,7 +86,7 @@
     1792
    ],
    "prompt_record": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter.json",
-   "verdict": "accepted with code steps (tools/ledge_planter_b1.py): the pot remapped to the clay's silhouette (drawn 14.28 x 13.96 cm from about 20 deg above, now 12.99 x 11.86), the plant pinned to the rim, contact shadow, R5 on the lit half (dE00 5.83 -> 0.0), black floor L* 11.3; no second send"
+   "verdict": "accepted with code steps (tools/ledge_planter_b1.py): the pot remapped to the clay's silhouette (drawn 14.28 x 13.96 cm from about 20 deg above, now 12.99 x 11.86), the plant pinned to the rim, contact shadow, R5 on the lit half (dE00 5.83 -> 0.0), black floor L* 11.3; no second send; QA round 1: its pot texture kept, its light and colour re-made in code (B1P-M1, L1, L2), its plant replaced (r2)"
   },
   {
    "id": "ledge-planter-plant-r2",
@@ -113,7 +113,15 @@
    "prompt": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter-plant.txt",
    "seed": "not exposed by var2",
    "sent_at": "2026-11-25 10:55 UTC",
-   "state": "sent"
+   "state": "completed",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-60f006eb28979301e7cfc0bf6bc8d6e2-0-1795604090840-73a673c3.jpg",
+   "raw": "raw/ledge-planter-plant-r2.jpg",
+   "output_size": [
+    2400,
+    1792
+   ],
+   "prompt_record": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter-plant.json",
+   "verdict": "used for the plant only (the pot is the layer's): the model drew a pothos bush 14.4 cm high and 36 cm wide, glossy and saturated (C* 34); cut by colour, brought to the floor pothos's range (C* x0.70, gloss softened), scaled x0.38 about the rim's centre: 5.5 cm above the rim, 13.7 cm wide; one leaf hangs 4.6 cm below the rim. No further send (800 = the cap)"
   }
  ],
  "in_code": {
@@ -124,7 +132,8 @@
    "the defaults' cut into layers, shadows and light (compose_b1_defaults.py)",
    "the Beige mat variant (variant_b1_mat.py)",
    "the checks (checks_b1.py)",
-   "the ledge planter: lock, cut, remap to the clay, plant, shadow, R5, black floor, restack (ledge_planter_b1.py)"
+   "the ledge planter: lock, cut, remap to the clay, plant, shadow, R5, black floor, restack (ledge_planter_b1.py)",
+   "QA round 1 on the planter: seam, relight from the left, hue and mottle, the r1 plant out (ledge_planter_b1.py cut/finish); the r2 plant cut, recoloured and scaled (cut_plant/finish_plant)"
   ]
  },
  "not_sent": {
