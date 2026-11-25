@@ -202,10 +202,10 @@ test.describe('MOCK4: the house as it stands', () => {
   });
 
   // MOCK5: a mark per product of the frame (MB0 19, B2 12); the owner's line counts the room, every frame of it, a
-  // product once (the bedroom 22 with MB1, the bath 18 with B1: e2e/mock5.spec.ts)
+  // product once (the bedroom 22 with MB1, the bath 18 with B1: e2e/mock5.spec.ts; MOCK6: 19, B1's ledge planter)
   for (const [id, count, room] of [
     ['master', 19, 22],
-    ['bath', 12, 18],
+    ['bath', 12, 19],
   ] as const) {
     test(`the ${id === 'master' ? 'bedroom' : 'bathroom'}: from the panel; the plain composition at rest; a mark per product for sale; the owner's line`, async ({
       page,

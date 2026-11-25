@@ -210,7 +210,8 @@ if (existsSync(tourPage) && existsSync(tourData)) {
       slots: { id: string; src: string; shadows?: number[]; atlas_opts?: unknown; options: { card: { src: string } }[] }[];
     };
     const lo = r.widths.lo;
-    // MOCK5: the sample's options are on the room's sample pages (in the atlas list); a file of their own before
+    // MOCK5: the sample's options are on the room's sample pages (in the atlas list); a file of their own before. MOCK6:
+    // on the frame's own atlas pages; a wheel of many options (`lazy`) loads its chosen option's patch, a file each
     const s0 = r.slots.find((x) => x.id === r.sample && !x.atlas_opts);
     const media =
       file(r.base.src, lo, ['webp']) +

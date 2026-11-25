@@ -17,6 +17,9 @@
  *  8. axe on the new rooms at rest (a wide screen and a phone), the frame control, and the two new wheels.
  *
  * The numbers go to the evidence when HD_EVIDENCE_DIR is set.
+ *
+ * MOCK6 (2026-11-25): the rooms here are MOCK5's (tools/tour/frames.json now lists the kids' rooms too, which
+ * e2e/mock6.spec.ts holds); the bath counts 19 with B1's ledge planter (the brief, ch. 4).
  */
 import { test, expect, devices, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -52,9 +55,12 @@ type Frame = {
   sample?: string;
 };
 const frame = (id: string) => read<Frame>(resolve(SITE, `.generated/tour.${id}.warm-modern.json`));
-const index = read<{ rooms: { id: string; frames: string[] }[] }>(resolve(SITE, 'tools/tour/frames.json'));
-/** the brief's counts (MOCK5 ch. 8) */
-const COUNT: Record<string, number> = { 'living-room': 16, master: 22, bath: 18, dining: 23, work: 18 };
+/** the brief's counts (MOCK5 ch. 8; MOCK6: the bath 19, B1's ledge planter) */
+const COUNT: Record<string, number> = { 'living-room': 16, master: 22, bath: 19, dining: 23, work: 18 };
+/** MOCK5's rooms (MOCK6 added the kids' to the list: e2e/mock6.spec.ts) */
+const index = {
+  rooms: read<{ rooms: { id: string; frames: string[] }[] }>(resolve(SITE, 'tools/tour/frames.json')).rooms.filter((r) => r.id in COUNT),
+};
 const TITLE: Record<string, RegExp> = { master: /^חדר שינה/, bath: /^חדר רחצה/, dining: /^מטבח/, work: /^חדר עבודה/ };
 
 const ready = (page: Page) => page.waitForFunction(() => window.__hdTour?.ready === true, undefined, { timeout: 60_000 });

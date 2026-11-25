@@ -255,6 +255,14 @@ const cards: { card: ProductCard; path: string }[] = walk(repoPath('data/product
   return [{ card: parsed.data, path: relative(REPO, p) }];
 });
 
+/** MOCK6: the ids of the shared pool's cards (data/products/pool/), valid or not: an original a `mirror_of` copy may name */
+const poolIds = new Set(
+  walk(repoPath('data/products/pool')).flatMap((p) => {
+    const id = (readJson(p) as { id?: unknown }).id;
+    return typeof id === 'string' ? [id] : [];
+  }),
+);
+
 /** Cards whose own `room` (card schema 1.1, Q2) disagrees with their folder: the card's room is used, and this is reported. */
 const roomVsFolder = cards.flatMap(({ card, path }) => {
   const folder = roomFromPath(path);
@@ -578,7 +586,13 @@ const mirrorOf = (card: ProductCard): string | null => {
   const notes = (card as { notes?: unknown }).notes;
   const text = Array.isArray(notes) ? notes.join(' ') : typeof notes === 'string' ? notes : '';
   const id = /mirror_of:\s*([a-z0-9][a-z0-9-]*[a-z0-9])/.exec(text)?.[1] ?? null;
-  return id && id !== card.id && cards.some((c) => c.card.id === id) ? id : null;
+  // MOCK6 (option (a) of data/leads/cards-kids-after-reg-2026-11-25.md 5.1): the original may be a card of the shared
+  // pool (data/products/pool/), which has no room and no slot, so it never passes the schema; its economics are keyed by
+  // its id all the same (the CJ-L2 copies: the travertine tray in the bath and the work room, the dining floor vase).
+  // Only in a catalog behind the flag (--lenient: the tour's), for now: in a strict one (the shop, the test page) such a
+  // copy stays hidden, since the pool's cards have no Hebrew option labels yet and the floor vase's "Retro color" would
+  // stop the build (ת12); once data/catalog/option-labels-he.json names them, this can hold everywhere
+  return id && id !== card.id && (cards.some((c) => c.card.id === id) || (LENIENT && poolIds.has(id))) ? id : null;
 };
 function buildProduct(card: ProductCard, path: string, roomId: string, slot: Slot, fillerNames: string[]): FullProduct | HiddenProduct {
   // MOCK5: the economics of a copy are its original's (the same SKU and price)

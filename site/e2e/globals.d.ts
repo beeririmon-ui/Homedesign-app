@@ -109,10 +109,12 @@ declare global {
       more: boolean;
       lay: 'portrait' | 'rails' | 'desk';
       /** MOCK4: the room the visitor is in, and the frame of the arrival's walk on screen (60 fps, 1-based); MOCK5: the
-       *  frame of the room (web/src/tour/data.ts RoomId) */
-      room: 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work';
+       *  frame of the room (web/src/tour/data.ts RoomId); MOCK6: and the kids' rooms */
+      room: 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work' | 'boy' | 'girl';
       walk: number;
     };
+    /** MOCK6: what the fixture of the wheel of many options asked for, chose and cancelled (web/src/tour/fixture-wheel.ts) */
+    __hdWheelFixture?: { loads: number[]; shown: number; chosen: number | null; cancelled: boolean };
     __hdTourFx?: {
       ui: TourUi;
       /** MOCK2: the counters, per effect (web/src/tour/metrics.ts) */

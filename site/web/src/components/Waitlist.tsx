@@ -17,9 +17,18 @@ const WHY = copyHe('waitlist.why');
 const SUBMIT = copyHe('waitlist.submit');
 const DONE = copyHe('waitlist.done');
 
-type Props = { product_id?: string; room?: string; slot?: string; id: string; onStage?: boolean };
+type Props = {
+  product_id?: string;
+  room?: string;
+  slot?: string;
+  id: string;
+  onStage?: boolean;
+  /** MOCK6: the line in place of "המלאי אינו זמין כעת" (a toy waiting for EN 71 is not out of stock); null: none, the
+   *  caller says it already */
+  status?: string | null;
+};
 
-export function Waitlist({ product_id, room, slot, id, onStage }: Props) {
+export function Waitlist({ product_id, room, slot, id, onStage, status }: Props) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [state, setState] = useState<'idle' | 'busy' | 'done'>('idle');
@@ -44,7 +53,7 @@ export function Waitlist({ product_id, room, slot, id, onStage }: Props) {
 
   return (
     <div class={`waitlist${onStage ? ' on-stage' : ''}`}>
-      <p class="waitlist-status">המלאי אינו זמין כעת</p>
+      {status === null ? null : <p class="waitlist-status">{status ?? 'המלאי אינו זמין כעת'}</p>}
       {!OFFER ? null : state === 'done' ? (
         <p class="small" role="status">
           {DONE}

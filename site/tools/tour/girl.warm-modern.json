@@ -1,0 +1,94 @@
+{
+  "note": "MOCK6 (2026-11-25, briefs/site-mock6-kids-rooms-2026-11-25.md): the girl's room K-girl (stage one, QA qa/reports/2026-11-24-kids-stage1, passed after re-check 2; owner approval AP3-KIDS, registration 1.3.9a). Read by tools/make-tour-room.ts. The layers are the render folder's own (never changed here), composed in z order exactly as its manifest.json says (checked against K-girl-defaults.png at build). The camera is the warm-modern kids shell's (style_shells_1_3_1.warm-modern.kids), which holds the girl's room as the boy's shifted by girl_offset_y: the girl's slot places shift with it. The walnut bed, desk and chair are in the plate (plan B: fixed, not sold, no mark, not counted). The sample slot is the throw (bedspread), V1-V3 of one listing in three colours, sharing the default's shadow. The prints set is a print: its card's rights are unclear, so it is ×1 only and the frame has no zoom (the rights rule of MOCK5). Safety (AP2-NEW, QA K-I7, kids.json by_style sale_note): the Roman blind 868827 is shown and not sold until a cordless mechanism is confirmed in writing (EN 13120); the pendant (the corridor's silk lantern) is not sold for a kids' room until CE: it keeps its mark, which says so (MOCK6's choice: the mark stays, so the room's count and its marks agree); the toys wait for an EN 71 report ('notify', PRE1's waiting list, whose offer shows once an email provider sends it, S18). Textiles are sold as usual. Behind HD_PUBLIC=0.",
+  "room": "girl",
+  "group": "girl",
+  "style": "warm-modern",
+  "name_he": "חדר הילדה",
+  "layers": "assets/renders/girl/warm-modern/stage1-2026-11-24",
+  "manifest": "manifest.json",
+  "truth": "K-girl-defaults.png",
+  "plan": "docs/house-plan.json",
+  "camera": "K-girl",
+  "room_plan": "girl",
+  "shell": "kids",
+  "offset": {
+    "key": "girl_offset_y",
+    "from_camera": "K-boy"
+  },
+  "slots_file": "data/slots/kids.json",
+  "sample": "bedspread",
+  "prints": ["framed-prints"],
+  "names": "slot-when-provisional",
+  "slots": {
+    "roman-blind": {
+      "card": "roman-blind-aliexpress-modern-beige-color-flat-868827",
+      "kind": "wall",
+      "name_he": "וילון רומאי",
+      "sale": "blocked",
+      "sale_he": "לא במכירה",
+      "sale_why_he": "הווילון מוצג בחדר בלבד: עוד אין אישור בכתב שהמנגנון שלו בלי חבל (תקן EN 13120)."
+    },
+    "bookshelf": {
+      "card": "bookshelf-cj-natural-wood-ledge-pair-42-x2",
+      "kind": "wall",
+      "name_he": "מדפי ספרים"
+    },
+    "framed-prints": {
+      "card": "framed-prints-cj-flower-cutout-set-30x40",
+      "kind": "wall",
+      "name_he": "סט תמונות ממוסגרות",
+      "depth_m": 2.76
+    },
+    "bookends": {
+      "card": "bookends-cj-black-walnut-l-bookend-pair-kids",
+      "kind": "surface"
+    },
+    "pen-cup": {
+      "card": "pen-cup-cj-walnut-beech-square-pen-cup-8x11",
+      "kind": "surface"
+    },
+    "bedding": {
+      "card": "bedding-cj-muslin-cotton-duvet-dune",
+      "kind": "surface",
+      "name_he": "מצעי יחיד"
+    },
+    "pillowcase": {
+      "card": "pillowcase-cj-washed-linen-double-ruffle-48x74",
+      "kind": "surface",
+      "name_he": "זוג ציפיות",
+      "depth_m": 3.55
+    },
+    "bedspread": {
+      "card": "bedspread-cj-waffle-gauze-fringe-150x200",
+      "kind": "surface",
+      "name_he": "שמיכה מקופלת",
+      "hero": true
+    },
+    "cushions": {
+      "card": "cushions-cj-dusty-pink-corduroy-patchwork-45",
+      "kind": "surface",
+      "name_he": "זוג כריות נוי"
+    },
+    "soft-toy": {
+      "card": "soft-toy-aliexpress-stuffed-bunny-cloth-dress-063285",
+      "kind": "surface",
+      "name_he": "ארנבת רכה",
+      "sale": "notify",
+      "sale_he": "ממתין לתקן EN 71",
+      "sale_why_he": "צעצוע נמכר רק אחרי דוח בדיקה לתקן הבטיחות לצעצועים (EN 71)."
+    },
+    "toy-basket": {
+      "card": "toy-basket-cj-cotton-rope-white",
+      "kind": "floor",
+      "name_he": "סל צעצועים"
+    },
+    "pendant": {
+      "card": "pendant-cj-silk-pumpkin-lantern-30",
+      "kind": "hang",
+      "name_he": "מנורה תלויה",
+      "sale": "blocked",
+      "sale_he": "לא במכירה לחדר ילדים",
+      "sale_why_he": "למנורה אין סימון CE מוצהר, ולכן היא לא נמכרת לחדר ילדים."
+    }
+  }
+}

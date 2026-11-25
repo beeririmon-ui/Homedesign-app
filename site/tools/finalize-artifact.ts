@@ -24,7 +24,7 @@ const page = [
   '<link rel="preconnect" href="https://fonts.googleapis.com">',
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
   `<link rel="stylesheet" href="${FONTS}">`,
-  '<meta name="description" content="תצוגה מקדימה: הסיור בבית המודרני החם (הדלת, ההגעה דרך המבואה לסלון, חדר השינה וחדר הרחצה, חשיפת המוצרים, גלגל הגרסאות ומעבר הסגנון), ומאחוריה החנות. חלקים זמניים מסומנים.">',
+  '<meta name="description" content="תצוגה מקדימה: הסיור בבית המודרני החם (הדלת, ההגעה דרך המבואה לסלון, חדר השינה, חדר הרחצה, המטבח, חדר העבודה וחדרי הילדים, חשיפת המוצרים, גלגל הגרסאות ומעבר הסגנון), ומאחוריה החנות. חלקים זמניים מסומנים.">',
   '<div id="app"></div>',
   `<script type="module">${scripts[0]!.replace(/<\/script/gi, '<\\/script')}</script>`,
   '',

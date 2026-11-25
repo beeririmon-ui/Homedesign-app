@@ -41,6 +41,20 @@
  *
  * A product's name and price are the shop's own record of its card (.generated/catalog.tour-rooms.full.json, the same
  * pricing path as every product; npm run tour builds it first). A card the shop cannot price yet keeps its slot's name.
+ *
+ * MOCK6 (2026-11-25, briefs/site-mock6-kids-rooms-2026-11-25.md): the boy's and the girl's rooms (K-boy, K-girl), and
+ * B1's ledge planter. What it learned:
+ *  - one style shell for two rooms (`shell`: style_shells_1_3_1.warm-modern.kids holds K-boy and K-girl); the girl's
+ *    room is the boy's shifted in Y (`offset`: the shell's girl_offset_y), so her slots' plan places shift with it, and
+ *    her camera is checked to be the boy's plus that offset;
+ *  - a light's lamp may be named by its product (the kids' pendant), not only by its slot;
+ *  - the safety rule (AP2-NEW, QA K-I7): a product may be shown and not sold (`sale`: "blocked", the Roman blind without
+ *    EN 13120, the pendant without CE in a kids' room) or wait for its standard ("notify", the toys until EN 71). Either
+ *    way it has no price and no cart here, and its slot carries the line the visitor reads and why;
+ *  - the sample's options sit on the frame's own atlas pages (MOCK5 gave them two pages of their own): two files fewer a
+ *    frame with a wheel, so the kids' rooms fit the Artifact's 255 files;
+ *  - a wheel of many options (4–12, the kids' art sets to come, FB12): each option is a patch of its own (its product and
+ *    its shadow, a file each), which the page loads only when the option is chosen (`lazy`), never in the background.
  */
 import sharp, { type OverlayOptions } from 'sharp';
 import { createHash } from 'node:crypto';
@@ -62,6 +76,11 @@ type SlotCfg = {
   of?: string;
   /** MOCK5: which product of the manifest's slot (a slot with two products); absent: every layer of the slot */
   product?: string;
+  /** MOCK6, the safety rule: shown and not sold here ("blocked"), or waiting for its standard ("notify") */
+  sale?: 'blocked' | 'notify';
+  /** MOCK6: the short line the visitor reads in place of a price ("לא במכירה"), and why, in a sentence */
+  sale_he?: string;
+  sale_why_he?: string;
 };
 type Cfg = {
   room: string;
@@ -81,6 +100,11 @@ type Cfg = {
   plan: string;
   camera: string;
   room_plan: string;
+  /** MOCK6: the style shell the camera is registered in, when it is not the room's own (the kids' rooms share `kids`) */
+  shell?: string;
+  /** MOCK6: a room that is another shifted in Y (the girl's): the shell's key that holds the shift, and the camera it
+   *  shifts (the slots' plan places are the other room's, so they shift with it) */
+  offset?: { key: string; from_camera: string };
   slots_file: string;
   sample: string | null;
   avoid?: string | null;
@@ -89,6 +113,9 @@ type Cfg = {
   zoom?: boolean;
   slots: Record<string, SlotCfg>;
   variant_cards?: Record<string, string>;
+  /** MOCK6: where the shop's name is only composed (`name_provisional`: a slot's name, a material and a colour, the
+   *  slot often the living room's: "כריות ושמיכה" for the girl's cushions), the tour shows the slot's name instead */
+  names?: 'slot-when-provisional';
 };
 type Light = { file: string; blend: string; slot?: string; product?: string; lamps?: string[]; frame?: string; retired?: unknown };
 type MLayer = {
@@ -185,8 +212,9 @@ const MASK_LIGHT = /times \(1 - every alpha\)/.test(typeof m.compose === 'string
 const lightSlot = (x: Light): string | null => {
   const named = x.slot ?? layers.find((l) => l.product === x.product)?.slot ?? x.lamps?.[0]?.replace(/-(east|west)$/, '');
   if (!named) fail(`light ${x.file}: no slot, product or lamp`);
-  // a lamp outside the frame (D2's pendant): its light is part of the room, always on
-  const l = layers.find((y) => y.slot === named);
+  // a lamp outside the frame (D2's pendant): its light is part of the room, always on. MOCK6: a lamp may be named by
+  // its product (the kids' pendant, `ceiling-lights-…-warm-light`)
+  const l = layers.find((y) => y.slot === named) ?? layers.find((y) => y.product === named);
   return l ? tourSlotOf(l) : null;
 };
 const lightEntries = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFrame).map((x) => {
@@ -210,8 +238,10 @@ if (c.sample) {
       shadow: v.shadow,
       card: c.variant_cards?.[v.product] ?? (v.card ? basename(v.card, '.json') : c.slots[c.sample]!.card),
     });
-  if (sampleOpts.length < 2 || sampleOpts.length > 3) fail(`the sample slot ${c.sample} has ${sampleOpts.length} options, not 2 or 3`);
+  if (sampleOpts.length < 2 || sampleOpts.length > 12) fail(`the sample slot ${c.sample} has ${sampleOpts.length} options, not 2 to 12`);
 }
+/** MOCK6: a wheel of many options (4–12): a patch file each, loaded only when chosen; two or three sit on the atlas */
+const MANY = sampleOpts.length > 3;
 const strays = indexed.filter((x) => x.l.default === false && (!c.sample || x.l.slot !== (c.slots[c.sample]!.of ?? c.sample)));
 if (strays.length) fail(`variant layers outside the sample slot: ${strays.map((x) => x.l.product).join(', ')}`);
 
@@ -336,16 +366,33 @@ async function lightRegion(f: string): Promise<Px> {
 
 // ---------- the plan: each product's depth along the camera's axis (the mask's code, the reveal's plane) ----------
 type Camera = { id?: string; loc: [number, number, number]; yaw_deg_left: number; u0: number; v0: number };
+type Shell = Record<string, unknown> & { cameras?: Record<string, unknown> };
 type Plan = {
   cameras: (Camera & { id: string })[];
   rooms: { id: string; x: [number, number]; y: [number, number]; h: number }[];
-  style_shells_1_3_1?: Record<string, Record<string, { cameras?: Record<string, unknown> }>>;
+  style_shells_1_3_1?: Record<string, Record<string, Shell>>;
 };
 const plan = read<Plan>(repoPath(c.plan));
-// MOCK5 (registration 1.3.9, ch. 6.1): a style's own camera first (its shell), then the shared list
-const shellCam = plan.style_shells_1_3_1?.[c.style]?.[c.room_plan]?.cameras?.[c.camera] as Camera | undefined;
+// MOCK5 (registration 1.3.9, ch. 6.1): a style's own camera first (its shell), then the shared list. MOCK6: the shell
+// may be shared by two rooms (registration 1.3.9a: `kids` holds K-boy and K-girl)
+const shellKey = c.shell ?? c.room_plan;
+const shell = plan.style_shells_1_3_1?.[c.style]?.[shellKey];
+const shellCam = shell?.cameras?.[c.camera] as Camera | undefined;
 const cam: Camera = shellCam && Array.isArray(shellCam.loc) ? shellCam : (plan.cameras.find((x) => x.id === c.camera) ?? fail(`no camera ${c.camera}`));
-const camFrom = shellCam && Array.isArray(shellCam.loc) ? `style_shells_1_3_1.${c.style}.${c.room_plan}.cameras.${c.camera}` : `cameras.${c.camera}`;
+const camFrom = shellCam && Array.isArray(shellCam.loc) ? `style_shells_1_3_1.${c.style}.${shellKey}.cameras.${c.camera}` : `cameras.${c.camera}`;
+// MOCK6: the girl's room is the boy's shifted exactly in Y (the shell's girl_offset_y): her camera must be his plus the
+// shift (checked), and the slots' plan places, which are the boy's, shift with it
+let offY = 0;
+if (c.offset) {
+  const v = shell?.[c.offset.key];
+  if (typeof v !== 'number') fail(`no number ${c.offset.key} in style_shells_1_3_1.${c.style}.${shellKey}`);
+  const ref = shell?.cameras?.[c.offset.from_camera] as Camera | undefined;
+  if (!ref || !Array.isArray(ref.loc)) fail(`no camera ${c.offset.from_camera} in style_shells_1_3_1.${c.style}.${shellKey}`);
+  const d = [cam.loc[0] - ref!.loc[0], cam.loc[1] - ref!.loc[1], cam.loc[2] - ref!.loc[2]];
+  if (Math.abs(d[0]!) > 1e-9 || Math.abs(d[1]! - (v as number)) > 1e-9 || Math.abs(d[2]!) > 1e-9 || cam.yaw_deg_left !== ref!.yaw_deg_left)
+    fail(`camera ${c.camera} is not ${c.offset.from_camera} shifted ${String(v)} in Y`);
+  offY = v as number;
+}
 const box = plan.rooms.find((r) => r.id === c.room_plan) ?? fail(`no room ${c.room_plan}`);
 const yaw = (cam.yaw_deg_left * Math.PI) / 180;
 const fwd: [number, number] = [-Math.sin(yaw), -Math.cos(yaw)];
@@ -368,7 +415,7 @@ function planDepth(id: string): number | null {
   for (const s of (p.stacks_y as number[][] | undefined) ?? []) if (mid(p.x) !== null) pts.push([mid(p.x)!, (s[0]! + s[1]!) / 2]);
   if (!pts.length && mid(p.x) !== null && mid(p.y) !== null) pts.push([mid(p.x)!, mid(p.y)!]);
   if (!pts.length) return null;
-  return depthOf(pts.reduce((a, q) => a + q[0], 0) / pts.length, pts.reduce((a, q) => a + q[1], 0) / pts.length);
+  return depthOf(pts.reduce((a, q) => a + q[0], 0) / pts.length, pts.reduce((a, q) => a + q[1], 0) / pts.length + offY);
 }
 
 // ---------- the cards of the repo: a print's rights, and the key the owner's count counts a product by ----------
@@ -433,6 +480,7 @@ type Shop = {
   id: string;
   card_id?: string;
   name_he: string;
+  name_provisional?: boolean;
   price_agorot: number | null;
   price_provisional: boolean;
   availability: { status: string };
@@ -471,7 +519,9 @@ function shopName(p: Shop, product: string, card: string): string {
 
 // ---------- widths, files ----------
 const REL = `tour/${c.room}/${c.style}`;
-const OUT = join(MEDIA_OUT, REL);
+// MOCK6: the tool's own test (tools/test/mock6-tour-room.test.ts) writes a fixture elsewhere, never into the site's media
+const OUT = join(process.env.HD_TOUR_MEDIA ?? MEDIA_OUT, REL);
+const GEN_OUT = process.env.HD_TOUR_GENERATED ?? GENERATED;
 const WIDTHS = { lo: 1920, hi: W } as const;
 const CARD = 360;
 const tierRect = (r: Px, Wt: number): Px => {
@@ -553,7 +603,6 @@ const stamp = createHash('sha256')
   .slice(0, 16);
 const STAMP = join(OUT, 'stamp.json');
 type AtlasRef = [number, number, number, number, number];
-type Px4 = [number, number, number, number];
 type Built = {
   rects: Record<string, Px>;
   alpha: Record<string, Px>;
@@ -566,8 +615,9 @@ type Built = {
       shadow: AtlasRef[];
       light: AtlasRef[];
       pages: { product: [number, number][]; shadow: [number, number][] };
-      /** MOCK5: the sample slot's options on a page of their own (one for the products, one for their shadows) */
-      sample?: { product: Px4[]; shadow: Px4[]; pages: { product: [number, number]; shadow: [number, number] } };
+      /** MOCK5: the sample slot's options on a page of their own; MOCK6: on the frame's own atlas pages (a place each,
+       *  [page, x, y, w, h]); a wheel of many options (MANY) has none here: a patch file each */
+      sample?: { product: AtlasRef[]; shadow: AtlasRef[] };
     }
   >;
   cards: { at: Record<string, [number, number, number, number]>; sheet: [number, number] };
@@ -576,7 +626,7 @@ type Built = {
 let built: Built;
 const others = order.filter((id) => id !== c.sample);
 const cached = existsSync(STAMP) ? read<{ stamp: string; built: Built }>(STAMP) : null;
-if (cached?.stamp === stamp && cached.built.area && (!c.sample || cached.built.atlas[WIDTHS.lo]?.sample)) built = cached.built;
+if (cached?.stamp === stamp && cached.built.area && (!c.sample || MANY || cached.built.atlas[WIDTHS.lo]?.sample)) built = cached.built;
 else {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
@@ -600,13 +650,20 @@ else {
   const shaOf = sampleOpts.map((o) => sha(join(dir, o.shadow)));
   sampleOpts.forEach((_, n) => shadowOf.push(shaOf.indexOf(shaOf[n]!) + 1));
   const atlas: Built['atlas'] = {};
+  // the sample's options that have a shadow of their own (the others share one to the byte)
+  const own = sampleOpts.flatMap((_, n) => (shadowOf[n] === n + 1 ? [n] : []));
   for (const Wt of new Set(Object.values(WIDTHS))) {
     // every other product and its shadow, and the light, in pages no wider than the composition (the engine already
-    // needs a texture that wide, so every card that runs the tour holds one)
-    const prods = await Promise.all(others.map((id) => piece(slotPiece.get(id)!.layer, 'product', rects[id]!, Wt)));
+    // needs a texture that wide, so every card that runs the tour holds one). MOCK6: and the sample's options after
+    // them (two or three; MOCK5 gave them two pages of their own), an option that shares its shadow sharing its place
+    const onAtlas = c.sample && !MANY;
+    const sp = onAtlas ? await Promise.all(sampleOpts.map((o) => piece(o.layer, 'product', rects[c.sample!]!, Wt))) : [];
+    const ss = onAtlas ? await Promise.all(own.map((n) => piece(sampleOpts[n]!.shadow, 'shadow', rects[c.sample!]!, Wt))) : [];
+    const prods = [...(await Promise.all(others.map((id) => piece(slotPiece.get(id)!.layer, 'product', rects[id]!, Wt)))), ...sp];
     const shads = [
       ...(await Promise.all(others.map((id) => piece(slotPiece.get(id)!.shadow, 'shadow', rects[id]!, Wt)))),
       ...(await Promise.all(lights.map((f, i) => piece(f, 'light', lightRects[i]!, Wt)))),
+      ...ss,
     ];
     const pa = pack(prods, Wt);
     const sa = pack(shads, Wt);
@@ -623,40 +680,46 @@ else {
       pages.shadow.push([meta.width!, meta.height!]);
       await s.webp({ lossless: true, effort: 5 }).toFile(join(OUT, `atlas.shadow.${pg + 1}.${Wt}.webp`));
     }
+    const ref = (at: { page: number; x: number; y: number }[], pcs: { w: number; h: number }[], k: number): AtlasRef => [
+      at[k]!.page + 1,
+      at[k]!.x,
+      at[k]!.y,
+      pcs[k]!.w,
+      pcs[k]!.h,
+    ];
     atlas[Wt] = {
-      product: prods.map((p, i) => [pa[i]!.page + 1, pa[i]!.x, pa[i]!.y, p.w, p.h]),
-      shadow: others.map((_, i) => [sa[i]!.page + 1, sa[i]!.x, sa[i]!.y, shads[i]!.w, shads[i]!.h]),
-      light: lights.map((_, i) => {
-        const k = others.length + i;
-        return [sa[k]!.page + 1, sa[k]!.x, sa[k]!.y, shads[k]!.w, shads[k]!.h];
-      }),
+      product: others.map((_, i) => ref(pa, prods, i)),
+      shadow: others.map((_, i) => ref(sa, shads, i)),
+      light: lights.map((_, i) => ref(sa, shads, others.length + i)),
       pages,
+      // the sample's options (the wheel swaps them by their place on the page). MOCK4 wrote a file each, MOCK5 two pages
+      // of their own; MOCK6 the frame's pages, so a frame with a wheel is two files fewer (the Artifact's 255)
+      ...(onAtlas
+        ? {
+            sample: {
+              product: sampleOpts.map((_, n) => ref(pa, prods, others.length + n)),
+              shadow: sampleOpts.map((_, n) => ref(sa, shads, others.length + lights.length + own.indexOf(shadowOf[n]! - 1))),
+            },
+          }
+        : {}),
     };
-    // the sample's options (the wheel swaps them). MOCK4 wrote a file each; MOCK5 puts them on a page of their own, one
-    // for the products and one for their shadows (an option that shares its shadow to the byte shares its place): the
-    // wheel swaps them by their place on the page, and seven frames stay inside the Artifact's 255 files
-    if (c.sample) {
+    // MOCK6: a wheel of many options (the kids' art sets to come): a patch each, its product and its shadow a file of
+    // their own, which the page loads only when that option is chosen (never in the background, never all ten)
+    if (c.sample && MANY) {
       const r = rects[c.sample]!;
-      const sp = await Promise.all(sampleOpts.map((o) => piece(o.layer, 'product', r, Wt)));
-      const own = sampleOpts.flatMap((_, n) => (shadowOf[n] === n + 1 ? [n] : []));
-      const ss = await Promise.all(own.map((n) => piece(sampleOpts[n]!.shadow, 'shadow', r, Wt)));
-      const spa = pack(sp, Wt);
-      const ssa = pack(ss, Wt);
-      if (spa.some((a) => a.page) || ssa.some((a) => a.page)) fail(`the sample slot ${c.sample}'s options do not fit one page at ${Wt}`);
-      const ps = await sheet(sp, spa, 0, 4);
-      const pm = await ps.metadata();
-      await ps.webp({ nearLossless: true, quality: 60, effort: 5 }).toFile(join(OUT, `sample.product.${Wt}.webp`));
-      const shs = await sheet(ss, ssa, 0, 3);
-      const sm = await shs.metadata();
-      await shs.webp({ lossless: true, effort: 5 }).toFile(join(OUT, `sample.shadow.${Wt}.webp`));
-      atlas[Wt]!.sample = {
-        product: sp.map((p, i): Px4 => [spa[i]!.x, spa[i]!.y, p.w, p.h]),
-        shadow: sampleOpts.map((_, n): Px4 => {
-          const k = own.indexOf(shadowOf[n]! - 1);
-          return [ssa[k]!.x, ssa[k]!.y, ss[k]!.w, ss[k]!.h];
-        }),
-        pages: { product: [pm.width!, pm.height!], shadow: [sm.width!, sm.height!] },
-      };
+      mkdirSync(join(OUT, 'slots', c.sample), { recursive: true });
+      for (const [n, o] of sampleOpts.entries()) {
+        const pp = await piece(o.layer, 'product', r, Wt);
+        await sharp(pp.data, { raw: { width: pp.w, height: pp.h, channels: pp.ch } })
+          .webp({ nearLossless: true, quality: 60, effort: 5 })
+          .toFile(join(OUT, 'slots', c.sample, `${n + 1}.product.${Wt}.webp`));
+        if (shadowOf[n] !== n + 1) continue;
+        const sh = await piece(o.shadow, 'shadow', r, Wt);
+        await sharp(sh.data, { raw: { width: sh.w, height: sh.h, channels: sh.ch } })
+          .removeAlpha()
+          .webp({ lossless: true, effort: 5 })
+          .toFile(join(OUT, 'slots', c.sample, `${n + 1}.shadow.${Wt}.webp`));
+      }
     }
   }
   // the base: the plate, byte for byte (the folder's own), at both widths
@@ -736,6 +799,8 @@ const depth = (id: string): number => {
 const cardsSrc = `${REL}/cards.${CARD}`;
 const option = (slot: string, n: number, product: string, card: string | null) => {
   const p = card ? shop.get(card) : undefined;
+  // MOCK6, the safety rule: a product shown and not sold here (or waiting for its standard) has no price and no cart
+  const held = !!c.slots[slot]!.sale;
   const at = built.cards.at[`${slot}:${n}`]!;
   const a = built.alpha[`${slot}:${n}`]!;
   return {
@@ -744,10 +809,10 @@ const option = (slot: string, n: number, product: string, card: string | null) =
     box: uv({ ...a, x1: a.x1 + 1, y1: a.y1 + 1 }),
     product_id: p?.id ?? null,
     card_id: card,
-    name_he: p ? shopName(p, product, card!) : null,
-    price_agorot: p?.price_agorot ?? null,
-    price_provisional: p?.price_provisional ?? false,
-    available: !!p && p.availability.status === 'available',
+    name_he: p ? (c.names === 'slot-when-provisional' && p.name_provisional ? slotName(slot) : shopName(p, product, card!)) : null,
+    price_agorot: held ? null : (p?.price_agorot ?? null),
+    price_provisional: held ? false : (p?.price_provisional ?? false),
+    available: !held && !!p && p.availability.status === 'available',
     dims_he: p ? dimsHe(p.dimensions_cm, c.slots[slot]!.kind) : null,
     set: false,
   };
@@ -793,16 +858,26 @@ const slots = await Promise.all(
       area_px: built.area[id] ?? 0,
       // the atlas: [page, x, y, w, h] of this product and of its shadow, per width
       atlas: sample ? undefined : Object.fromEntries(Object.values(WIDTHS).map((Wt) => [Wt, { product: at(Wt).product[k]!, shadow: at(Wt).shadow[k]! }])),
-      // MOCK5: the sample's options, on the room's last two pages (the sample's own), per width and option
-      atlas_opts: sample
-        ? Object.fromEntries(
-            Object.values(WIDTHS).map((Wt) => {
-              const sa = at(Wt).sample!;
-              const P = at(Wt).pages.product.length + 1;
-              const S = at(Wt).pages.shadow.length + 1;
-              return [Wt, sampleOpts.map((_, n) => ({ product: [P, ...sa.product[n]!] as AtlasRef, shadow: [S, ...sa.shadow[n]!] as AtlasRef }))];
-            }),
-          )
+      // MOCK5: the sample's options, a place each on the atlas pages (MOCK6: the frame's own), per width and option
+      atlas_opts:
+        sample && !MANY
+          ? Object.fromEntries(
+              Object.values(WIDTHS).map((Wt) => {
+                const sa = at(Wt).sample!;
+                return [Wt, sampleOpts.map((_, n) => ({ product: sa.product[n]!, shadow: sa.shadow[n]! }))];
+              }),
+            )
+          : undefined,
+      // MOCK6: a wheel of many options: a patch file each (src/<n>.product, src/<shadows[n]>.shadow), loaded only when
+      // that option is chosen, never in the background
+      lazy: sample && MANY ? true : undefined,
+      // MOCK6, the safety rule: shown and not sold here, or waiting for its standard (the line the visitor reads, and why)
+      sale: cfg.sale
+        ? {
+            state: cfg.sale,
+            label_he: cfg.sale_he ?? fail(`slot ${id}: sale without sale_he`),
+            why_he: cfg.sale_why_he ?? fail(`slot ${id}: sale without sale_why_he`),
+          }
         : undefined,
       // a fixed piece of furniture is composed like any layer and has no option to show: one, with no card
       options: cfg.fixed
@@ -855,14 +930,8 @@ const data = {
     Object.values(WIDTHS).map((Wt) => [
       Wt,
       {
-        product: [
-          ...at(Wt).pages.product.map(([w, h], i) => ({ src: `${REL}/atlas.product.${i + 1}`, w, h })),
-          ...(at(Wt).sample ? [{ src: `${REL}/sample.product`, w: at(Wt).sample!.pages.product[0], h: at(Wt).sample!.pages.product[1] }] : []),
-        ],
-        shadow: [
-          ...at(Wt).pages.shadow.map(([w, h], i) => ({ src: `${REL}/atlas.shadow.${i + 1}`, w, h })),
-          ...(at(Wt).sample ? [{ src: `${REL}/sample.shadow`, w: at(Wt).sample!.pages.shadow[0], h: at(Wt).sample!.pages.shadow[1] }] : []),
-        ],
+        product: at(Wt).pages.product.map(([w, h], i) => ({ src: `${REL}/atlas.product.${i + 1}`, w, h })),
+        shadow: at(Wt).pages.shadow.map(([w, h], i) => ({ src: `${REL}/atlas.shadow.${i + 1}`, w, h })),
       },
     ]),
   ),
@@ -877,8 +946,8 @@ const data = {
 };
 // how much of the frame the products fill (the counter's line): their alpha boxes would overstate it, so it is left
 // out here (0) and the page shows the count alone
-mkdirSync(GENERATED, { recursive: true });
-const outFile = join(GENERATED, `tour.${c.room}.${c.style}.json`);
+mkdirSync(GEN_OUT, { recursive: true });
+const outFile = join(GEN_OUT, `tour.${c.room}.${c.style}.json`);
 writeFileSync(outFile, JSON.stringify(data));
 
 const kb = (f: string) => statSync(join(OUT, f)).size / 1024;
@@ -887,13 +956,17 @@ const loFiles = [
   `base.${lo}.webp`,
   ...data.atlas[lo]!.product.map((p) => `${basename(p.src)}.${lo}.webp`),
   ...data.atlas[lo]!.shadow.map((p) => `${basename(p.src)}.${lo}.webp`),
+  // MOCK6: a wheel of many options loads its chosen option's patch only (the first, at rest)
+  ...(c.sample && MANY ? [`slots/${c.sample}/1.product.${lo}.webp`, `slots/${c.sample}/1.shadow.${lo}.webp`] : []),
   `cards.${CARD}.webp`,
 ];
+const held = slots.filter((s) => s.sale).map((s) => `${s.id} (${s.sale!.state})`);
 const unsold = slots.filter((s) => !s.fixed).flatMap((s) => s.options.filter((o) => !o.product_id).map((o) => `${s.id} ${o.position}`));
 console.log(
   `tour ${c.room}/${c.style} (${GROUP} ${c.camera}, camera ${camFrom}, yaw ${cam.yaw_deg_left}): ${data.source}; ${slots.length} layers (${data.for_sale} for sale, ` +
     `${slots.length - data.for_sale} fixed), ${lights.length} light${MASK_LIGHT ? ' (masked by every alpha)' : ''}; the order gives ${c.truth} to the pixel; ` +
     `×1 only: ${rights.length || x1.size ? [...x1].map((id) => `${id} (${rights.find((r) => r.slot === id)?.usage_rights ?? 'config'})`).join(', ') || 'none' : 'none'}; ` +
     `a phone's first load ${loFiles.reduce((n, f) => n + kb(f), 0).toFixed(0)} KB in ${loFiles.length} files ` +
-    `(atlas pages ${data.atlas[lo]!.product.length}+${data.atlas[lo]!.shadow.length}); ${unsold.length} not priced by the shop yet (${unsold.join(', ')}) → ${outFile}`,
+    `(atlas pages ${data.atlas[lo]!.product.length}+${data.atlas[lo]!.shadow.length}); ${unsold.length} not priced by the shop yet (${unsold.join(', ')}); ` +
+    `held for safety: ${held.join(', ') || 'none'} → ${outFile}`,
 );

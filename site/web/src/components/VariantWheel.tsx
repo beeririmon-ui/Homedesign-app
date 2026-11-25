@@ -24,7 +24,8 @@ import { wheelCountHe } from '../set-copy';
 
 const STEP_DEG = 34;
 
-type Props = {
+/** MOCK6: the wheel's props, shared by the many-option wheel (ScrollWheel) */
+export type WheelProps = {
   /** S10: the house the slot is in (its products; a set's picture and panel) */
   house?: House;
   slot: CatalogSlot;
@@ -47,7 +48,7 @@ type Props = {
   closeLabel?: string;
 };
 
-export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose, onCancel, arc: fixed, inline, chooseLabel, closeLabel }: Props) {
+export function VariantWheel({ house, slot, roomId, initial, onPreview, onChoose, onCancel, arc: fixed, inline, chooseLabel, closeLabel }: WheelProps) {
   const lookup = house?.product ?? product;
   const n = slot.options.length;
   const physics = useRef(new ArcPhysics(n));

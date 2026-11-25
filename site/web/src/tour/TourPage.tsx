@@ -29,9 +29,12 @@ import { NOT_FOR_SALE_HE } from '../set-copy';
 import { IconDoor } from '../components/Icons';
 import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
+import { Waitlist } from '../components/Waitlist';
+import { MANY_FROM } from '../components/scroll-wheel';
 import {
   FRAMES,
   GROUP_HE,
+  GROUP_IDS,
   NORDIC,
   NORDIC_NAME_HE,
   ROOMS,
@@ -41,6 +44,8 @@ import {
   cardUrl,
   groupOf,
   roomCount,
+  roomHeld,
+  saleLine,
   setRoom,
   tour,
   type GroupId,
@@ -91,6 +96,9 @@ type Cfg = {
   sharp: boolean;
   /** MOCK4: with ?skip=1, the room the tour starts in (the tests and the evidence) */
   room: RoomId;
+  /** MOCK6: ?fixture=wheel10 opens the fixture of the wheel of many options over the room at rest (never in the
+   *  Artifact; numbered swatches said to be a demo, no product and no art: tour/fixture-wheel.ts) */
+  fixture: 'wheel10' | null;
 };
 const DEFAULTS: Cfg = {
   fx: 'b',
@@ -104,6 +112,7 @@ const DEFAULTS: Cfg = {
   bg: 'paper',
   sharp: false,
   room: 'living-room',
+  fixture: null,
 };
 const pick = <T extends string>(v: string | null, of: readonly T[], d: T): T => (of.includes(v as T) ? (v as T) : d);
 function readCfg(): Cfg {
@@ -120,6 +129,7 @@ function readCfg(): Cfg {
     bg: pick(q.get('bg'), ['paper', 'dark'] as const, DEFAULTS.bg),
     sharp: q.get('sharp') === '1',
     room: pick(q.get('room'), ROOM_IDS, DEFAULTS.room),
+    fixture: !__ARTIFACT__ && q.get('fixture') === 'wheel10' ? 'wheel10' : null,
   };
 }
 
@@ -147,22 +157,28 @@ const ROOM_FADE_MS = 900;
  * (rule ו.6: never a zoom-in), like the move between rooms, until the in-room moves have clips of their own.
  */
 const FRAME_FADE_MS = 600;
-/** a card: its own file, or (MOCK4) its place on its room's sheet of cards, as an SVG that shows only that place */
+/** a card: its own file, or (MOCK4) its place on its room's sheet of cards, as an SVG that shows only that place.
+ *  MOCK6: the place is clipped (an inner svg is its own viewport): a card much taller or wider than the square it is
+ *  shown in (the kids' pendant on its cord) no longer shows its neighbours on the sheet beside it */
 function CardPic({ o, cls, size }: { o: TourOption; cls?: string; size?: number }) {
   const c = o.card;
   if (c.sprite && c.sheet) {
     const [x, y, w, h] = c.sprite;
     return (
       <svg class={`sprite${cls ? ` ${cls}` : ''}`} viewBox={`${x} ${y} ${w} ${h}`} width={size} height={size} aria-hidden="true" focusable="false">
-        <image href={cardUrl(o)} width={c.sheet[0]} height={c.sheet[1]} />
+        <svg x={x} y={y} width={w} height={h} viewBox={`${x} ${y} ${w} ${h}`}>
+          <image href={cardUrl(o)} width={c.sheet[0]} height={c.sheet[1]} />
+        </svg>
       </svg>
     );
   }
   return <img class={cls} src={cardUrl(o)} alt="" width={size} height={size} draggable={false} loading={cls === 'thumb' ? 'lazy' : undefined} />;
 }
-/** PRE1: a product the shop has and cannot sell now says so; a card the shop does not have yet is "עוד לא במכירה" */
+/** PRE1: a product the shop has and cannot sell now says so; a card the shop does not have yet is "עוד לא במכירה".
+ *  MOCK6: a product the safety rule holds says why first ("לא במכירה", "לא במכירה לחדר ילדים", "ממתין לתקן EN 71") */
 const OUT_HE = 'המלאי אינו זמין כעת';
-const priceHe = (o: TourOption): string => (o.set ? '' : !o.product_id ? NOT_FOR_SALE_HE : o.price_agorot && o.available ? formatIls(o.price_agorot) : OUT_HE);
+const priceHe = (s: TourSlot, o: TourOption): string =>
+  saleLine(s) ?? (o.set ? '' : !o.product_id ? NOT_FOR_SALE_HE : o.price_agorot && o.available ? formatIls(o.price_agorot) : OUT_HE);
 const nameHe = (s: TourSlot, o: TourOption): string => o.name_he ?? s.name_he;
 /** the slot as the wheel reads it: its options by name; the price and the way to the product are the panel's */
 const wheelSlot = (s: TourSlot): CatalogSlot =>
@@ -193,9 +209,21 @@ function wheelHouse(s: TourSlot): House {
       const o = s.options[pos - 1]!;
       // the product's own page, when the shop has one
       const page = o.product_id && product(o.product_id) ? shopPath(o.product_id) : null;
+      // MOCK6, the safety rule: the line, why, and for a toy waiting for EN 71 the waiting list (PRE1: its offer shows
+      // once an email provider sends it, S18; until then the line alone)
+      if (s.sale)
+        return (
+          <div class="tour-info tour-held" key={pos} data-sale={s.sale.state}>
+            <p class="specs">
+              <span class="held">{s.sale.label_he}</span>
+            </p>
+            <p class="small muted">{s.sale.why_he}</p>
+            {s.sale.state === 'notify' ? <Waitlist room={groupOf(tour.room as RoomId)} slot={s.id} id={`wl-tour-${s.id}`} onStage status={null} /> : null}
+          </div>
+        );
       return (
         <p class="specs tour-info" key={pos}>
-          {o.price_agorot && o.available ? <Price agorot={o.price_agorot} provisional={o.price_provisional} /> : o.set ? null : <span>{priceHe(o)}</span>}
+          {o.price_agorot && o.available ? <Price agorot={o.price_agorot} provisional={o.price_provisional} /> : o.set ? null : <span>{priceHe(s, o)}</span>}
           {page ? <a href={page}>לעמוד המוצר</a> : null}
         </p>
       );
@@ -208,20 +236,23 @@ const frame = (): Promise<void> => new Promise((r) => requestAnimationFrame(() =
 /**
  * a tiny plan of the house; the room the visitor is in is brass (FB3: "ריבוע קטן למטה שיסמן את המשך הסיור"). MOCK5: six
  * cells, as the plan lies — the living room and the kitchen at the front, the work room, the entrance and the bath in
- * the middle, the bedroom at the back
+ * the middle, the bedroom at the back. MOCK6: eight — the boy's and the girl's rooms between the work room and the
+ * bedroom, on the plan's west side, the bath across the corridor from the boy's (docs/house-plan.json rooms)
  */
-type At = 'entry' | 'living' | 'kitchen' | 'work' | 'bed' | 'bath';
+type At = 'entry' | 'living' | 'kitchen' | 'work' | 'bed' | 'bath' | 'boy' | 'girl';
 const PlanIcon = ({ at }: { at: At }) => (
   <svg class="tour-plan" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
-    <rect x="2" y="2" width="8" height="6" data-on={at === 'living' ? '' : undefined} />
-    <rect x="10" y="2" width="8" height="6" data-on={at === 'kitchen' ? '' : undefined} />
-    <rect x="2" y="8" width="5" height="5" data-on={at === 'work' ? '' : undefined} />
-    <rect x="7" y="8" width="4" height="5" data-on={at === 'entry' ? '' : undefined} />
-    <rect x="11" y="8" width="7" height="5" data-on={at === 'bath' ? '' : undefined} />
-    <rect x="2" y="13" width="16" height="5" data-on={at === 'bed' ? '' : undefined} />
+    <rect x="2" y="2" width="8" height="5" data-on={at === 'living' ? '' : undefined} />
+    <rect x="10" y="2" width="8" height="5" data-on={at === 'kitchen' ? '' : undefined} />
+    <rect x="2" y="7" width="5" height="3" data-on={at === 'work' ? '' : undefined} />
+    <rect x="7" y="7" width="5" height="3" data-on={at === 'entry' ? '' : undefined} />
+    <rect x="2" y="10" width="6.5" height="2.75" data-on={at === 'boy' ? '' : undefined} />
+    <rect x="11" y="10" width="7" height="2.75" data-on={at === 'bath' ? '' : undefined} />
+    <rect x="2" y="12.75" width="6.5" height="2.75" data-on={at === 'girl' ? '' : undefined} />
+    <rect x="2" y="15.5" width="9" height="2.5" data-on={at === 'bed' ? '' : undefined} />
   </svg>
 );
-const AT: Record<GroupId, At> = { 'living-room': 'living', master: 'bed', bath: 'bath', dining: 'kitchen', work: 'work' };
+const AT: Record<GroupId, At> = { 'living-room': 'living', master: 'bed', bath: 'bath', dining: 'kitchen', work: 'work', boy: 'boy', girl: 'girl' };
 const IconZoom = ({ out }: { out: boolean }) => (
   <svg
     viewBox="0 0 24 24"
@@ -241,7 +272,15 @@ type Eye = HouseId | 'rotate';
 /** the house's name beside the window (the designer's words); the style's own short name is the shop's (tour.name_he) */
 const HOUSE_HE: Record<HouseId, string> = { [WM]: 'הבית המודרני החם', [NORDIC]: 'הבית הנורדי' };
 /** MOCK4: a room as a sentence names it ("חדר השינה בבית …"); the article goes on the room's own word */
-const PLACE_HE: Record<GroupId, string> = { 'living-room': 'הסלון', master: 'חדר השינה', bath: 'חדר הרחצה', dining: 'המטבח ופינת האוכל', work: 'חדר העבודה' };
+const PLACE_HE: Record<GroupId, string> = {
+  'living-room': 'הסלון',
+  master: 'חדר השינה',
+  bath: 'חדר הרחצה',
+  dining: 'המטבח ופינת האוכל',
+  work: 'חדר העבודה',
+  boy: 'חדר הילד',
+  girl: 'חדר הילדה',
+};
 
 export function TourPage() {
   const stage = useRef<HTMLElement>(null);
@@ -292,6 +331,14 @@ export function TourPage() {
   const [sel, setSel] = useState<Record<string, number>>(() => Object.fromEntries(tour.slots.map((s) => [s.id, 1])));
   const [open, setOpenState] = useState<{ slot: TourSlot; before: number } | null>(null);
   const [Wheel, setWheel] = useState<typeof WheelComponent | null>(null);
+  /** MOCK6: the fixture of the wheel of many options, open over the room at rest (?fixture=wheel10) */
+  const [fixture, setFixture] = useState<{ W: typeof WheelComponent; mod: typeof import('./fixture-wheel'); load: (pos: number) => void } | null>(null);
+  const fixtureDone = useRef(false);
+  useEffect(() => {
+    if (!loadFixture || cfg.fixture !== 'wheel10' || fixtureDone.current || phase !== 'room' || busy) return;
+    fixtureDone.current = true;
+    void loadFixture().then(([W, mod]) => setFixture({ W, mod, load: mod.fixtureLoader() }));
+  }, [cfg.fixture, phase, busy]);
   const countEl = useRef<HTMLParagraphElement>(null);
   const [stat, setStat] = useState('');
   /** MOCK3: which of the three layouts the screen gets, and the window's size — measured on load, resize and rotation */
@@ -1248,7 +1295,8 @@ export function TourPage() {
     !live.current.open &&
     beat(async (e) => {
       opener.current = from ?? (document.activeElement as HTMLElement | null);
-      const W = await (wheelChunk ??= import('../components/VariantWheel').then((x) => x.VariantWheel));
+      // MOCK6: a slot of many options (the kids' art sets to come) takes the scroll-snap wheel; two or three, the arc
+      const W = await wheelFor(s.options.length);
       clearTimeout(turn.current);
       if (live.current.lay !== 'desk') setEye(live.current.house);
       ui.label(null, false);
@@ -1501,7 +1549,7 @@ export function TourPage() {
   const rooms: { id?: string; name: string; at: At; here?: boolean; go?: () => void }[] = [
     // the room the visitor is in: its button only closes the panel
     { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void (phase === 'door' ? setMore(false) : goOut()) },
-    ...(['living-room', 'master', 'bath', 'dining', 'work'] as const).map((g) => ({
+    ...GROUP_IDS.map((g) => ({
       id: g === 'living-room' ? 'tour-living' : `tour-${g}`,
       name: GROUP_HE[g],
       at: AT[g],
@@ -1512,6 +1560,8 @@ export function TourPage() {
   /** MOCK5: the frames of the room the visitor is in (the frame control, when it has more than one) */
   const frames = FRAMES[group];
   const count = roomCount(group);
+  // MOCK6: how many of them the safety rule holds (shown, not sold here or waiting for their standard)
+  const heldN = roomHeld(group);
   // "קנה את המראה": the style's own magazine page on the site; the Artifact preview has no such page, and shows the
   // list of the room's products under the tour instead. MOCK4: only the living room has a magazine page so far
   const lookHref = __ARTIFACT__ || room !== 'living-room' ? null : `/story/${tour.room}/${house}/`;
@@ -1528,7 +1578,7 @@ export function TourPage() {
         data-frame={cfg.frame}
         data-pick={cfg.pick}
         data-bg={cfg.bg}
-        data-close={open ? '' : undefined}
+        data-close={open || fixture ? '' : undefined}
         data-more={more ? '' : undefined}
         data-zoomed={zoomed ? '' : undefined}
         style={{ '--cu': String(phase === 'door' ? (prefersReducedMotion() ? tour.mobile_center_u : DOOR_CU) : tour.mobile_center_u) }}
@@ -1577,6 +1627,7 @@ export function TourPage() {
                   a product once (in the frame where it is biggest) */}
               <span class="tour-sale" data-temp="" {...(inRoom && wm ? {} : { hidden: true })}>
                 {count.total} מוצרים למכירה בחדר
+                {heldN ? <span class="tour-held-n"> · {heldN} מהם מחכים לתקן בטיחות</span> : null}
               </span>
               {/* MOCK5: the frames of the room (TEMPORARY: a dissolve between them, never a zoom-in) */}
               {frames.length > 1 ? (
@@ -1680,13 +1731,13 @@ export function TourPage() {
               class="hotspots tour-spots"
               role="group"
               aria-label="פריטים בחדר"
-              hidden={phase === 'door' || !wm}
+              hidden={phase === 'door' || !wm || !!fixture}
               {...(strip ? off : {})}
               key={`spots-${room}`}
             >
               {shown.map((s) => {
                 const o = optionOf(s, sel);
-                const price = priceHe(o);
+                const price = priceHe(s, o);
                 return (
                   <button
                     key={s.id}
@@ -1750,7 +1801,7 @@ export function TourPage() {
               <ul class="tour-strip" role="list" aria-label="פריטים בחדר" {...(listOn ? {} : off)} key={`strip-${room}`}>
                 {shown.map((s) => {
                   const o = optionOf(s, sel);
-                  const price = priceHe(o);
+                  const price = priceHe(s, o);
                   return (
                     <li key={s.id}>
                       <button
@@ -2048,6 +2099,35 @@ export function TourPage() {
               closeLabel="סגירת התקריב"
             />
           ) : null}
+          {/* MOCK6: the fixture of the wheel of many options (a demo: ten numbered swatches, nothing in the room changes) */}
+          {fixture && !open ? (
+            <div
+              class="tour-fixture"
+              ref={(el) => {
+                const p = el?.querySelector('.picker');
+                if (p && !p.hasAttribute('data-in')) requestAnimationFrame(() => p.setAttribute('data-in', ''));
+              }}
+            >
+              <fixture.W
+                house={fixture.mod.fixtureHouse()}
+                slot={fixture.mod.fixtureSlot()}
+                roomId={tour.room}
+                initial={1}
+                onPreview={fixture.load}
+                onChoose={(pos) => {
+                  window.__hdWheelFixture!.chosen = pos;
+                  setFixture(null);
+                }}
+                onCancel={() => {
+                  window.__hdWheelFixture!.cancelled = true;
+                  setFixture(null);
+                }}
+                inline
+                chooseLabel={phone ? 'בחירה' : undefined}
+                closeLabel="סגירת ההדגמה"
+              />
+            </div>
+          ) : null}
         </div>
       </section>
       <section class="wrap page tour-list" aria-labelledby="tour-items">
@@ -2064,9 +2144,13 @@ export function TourPage() {
                 <CardPic o={o} cls="thumb" size={64} />
                 <div class="meta">
                   <strong>{s.name_he}</strong>
-                  <span class="small">{o.name_he ?? <span class="muted">{NOT_FOR_SALE_HE}</span>}</span>
+                  <span class="small">{o.name_he ?? <span class="muted">{s.sale ? s.sale.label_he : NOT_FOR_SALE_HE}</span>}</span>
                   <span class="row">
-                    {o.price_agorot && o.available ? (
+                    {s.sale ? (
+                      o.name_he ? (
+                        <span class="small muted">{s.sale.label_he}</span>
+                      ) : null
+                    ) : o.price_agorot && o.available ? (
                       <Price agorot={o.price_agorot} provisional={o.price_provisional} />
                     ) : o.product_id ? (
                       <span class="small muted">{OUT_HE}</span>
@@ -2082,3 +2166,11 @@ export function TourPage() {
   );
 }
 let wheelChunk: Promise<typeof WheelComponent> | null = null;
+let manyChunk: Promise<typeof WheelComponent> | null = null;
+/** MOCK6: the wheel for a slot of `n` options: the 3D arc for two or three, the scroll-snap carousel from MANY_FROM on */
+const wheelFor = (n: number): Promise<typeof WheelComponent> =>
+  n >= MANY_FROM
+    ? (manyChunk ??= import('../components/ScrollWheel').then((x) => x.ScrollWheel))
+    : (wheelChunk ??= import('../components/VariantWheel').then((x) => x.VariantWheel));
+/** MOCK6: the fixture of the wheel of many options and its wheel; never in the Artifact (the build drops the import) */
+const loadFixture = __ARTIFACT__ ? null : () => Promise.all([wheelFor(10), import('./fixture-wheel')]);

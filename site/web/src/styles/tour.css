@@ -640,8 +640,8 @@
 }
 .tour-rooms > div {
   display: grid;
-  /* MOCK5: the door and five rooms, two rows of three */
-  grid-template-columns: repeat(3, minmax(64px, 1fr));
+  /* MOCK5: the door and five rooms, two rows of three; MOCK6: and the boy's and the girl's, two rows of four */
+  grid-template-columns: repeat(4, minmax(64px, 1fr));
   gap: var(--s-2);
 }
 .tour-rooms button {
@@ -1820,4 +1820,41 @@
     margin-block: -22px -6px;
     padding-block: 22px 6px;
   }
+}
+
+/* ---------- MOCK6: the wheel of many options in the tour (ScrollWheel: the arc's cell, the counter under it) ---------- */
+/* MOCK6, the safety rule: a product shown and held (not sold here, or waiting for its standard) says so in the panel */
+.tour .picker .tour-held .held {
+  font-weight: 600;
+}
+@media (max-aspect-ratio: 11/10) {
+  .tour[data-frame='whole'] .picker-many {
+    --snap-cw: clamp(80px, 24cqw, 112px);
+  }
+  .tour[data-frame='whole'] .snap-card .disc {
+    background: var(--tour-card);
+    border-color: rgba(138, 132, 123, 0.35);
+  }
+  .tour[data-frame='whole'] .snap-card[aria-checked='true'] .disc {
+    border-color: var(--tour-fg);
+  }
+  .tour[data-frame='whole'] .snap-card img,
+  .tour[data-frame='whole'] .snap-card svg.sprite {
+    filter: none;
+  }
+  .tour[data-frame='whole'] .picker .snap-count {
+    background: none;
+    color: var(--tour-fg2);
+  }
+}
+@media (min-aspect-ratio: 11/10) and (max-height: 500px) {
+  /* a phone on its side: the arc's cell is 96 px, so a card of 64 and the counter under it */
+  .tour[data-frame='whole'] .picker-many {
+    --snap-cw: 64px;
+    --snap-gap: 10px;
+  }
+}
+/* MOCK6: the fixture of the wheel of many options sits where the wheel does (?fixture=wheel10, a demo) */
+.tour-fixture {
+  display: contents;
 }

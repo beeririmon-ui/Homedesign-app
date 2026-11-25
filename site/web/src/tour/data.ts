@@ -9,6 +9,10 @@
  * MOCK5 (2026-11-24): every room the owner approved — the living room, the bedroom (MB0, MB1), the bath (B2, B1), the
  * kitchen (D1, D2) and the work room (W0). An entry of ROOMS is a frame (its `room` is the frame's key, a file name);
  * the house's room it is of is its `group`, and a room's first frame is where its button lands (tools/tour/frames.json).
+ *
+ * MOCK6 (2026-11-25): the boy's and the girl's rooms (K-boy, K-girl), a frame each. A product may be shown and not sold
+ * (`sale`, the safety rule of the kids' rooms), and a wheel may have many options (`lazy`: a patch each, loaded when
+ * chosen).
  */
 import json from '@generated/tour.living-room.warm-modern.json';
 import masterJson from '@generated/tour.master.warm-modern.json';
@@ -18,6 +22,8 @@ import bathB1Json from '@generated/tour.bath-b1.warm-modern.json';
 import diningJson from '@generated/tour.dining.warm-modern.json';
 import diningD2Json from '@generated/tour.dining-d2.warm-modern.json';
 import workJson from '@generated/tour.work.warm-modern.json';
+import boyJson from '@generated/tour.boy.warm-modern.json';
+import girlJson from '@generated/tour.girl.warm-modern.json';
 import type { Box } from '../engine/types';
 import { buildLayers } from '../engine/layers';
 import { defaultSelection, livingRoom, scene as nordicScene } from '../catalog';
@@ -82,7 +88,15 @@ export type TourSlot = {
    *  in this frame (a product is counted once in its room, in the frame where it is biggest) */
   count_key?: string | null;
   area_px?: number;
+  /** MOCK6: a wheel of many options (4–12): a patch file each, loaded only when the option is chosen (never in the
+   *  background) */
+  lazy?: boolean;
+  /** MOCK6, the safety rule (AP2-NEW, QA K-I7): shown and not sold here ("blocked": the Roman blind without EN 13120, the
+   *  pendant without CE in a kids' room), or waiting for its standard ("notify": the toys until EN 71). No price, no
+   *  cart; `label_he` is read in the price's place, `why_he` in the product's panel */
+  sale?: SaleHold;
 };
+export type SaleHold = { state: 'blocked' | 'notify'; label_he: string; why_he: string };
 export type TourCamera = {
   frame: Box;
   u0: number;
@@ -128,8 +142,19 @@ export type TourData = {
 };
 
 /** MOCK5: a frame of the tour (a file name); the frames of a room are `FRAMES[group]` */
-export type RoomId = 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work';
-export const ROOM_IDS = ['living-room', 'master', 'master-mb1', 'bath', 'bath-b1', 'dining', 'dining-d2', 'work'] as const satisfies readonly RoomId[];
+export type RoomId = 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work' | 'boy' | 'girl';
+export const ROOM_IDS = [
+  'living-room',
+  'master',
+  'master-mb1',
+  'bath',
+  'bath-b1',
+  'dining',
+  'dining-d2',
+  'work',
+  'boy',
+  'girl',
+] as const satisfies readonly RoomId[];
 export const ROOMS: Record<RoomId, TourData> = {
   'living-room': json as unknown as TourData,
   master: masterJson as unknown as TourData,
@@ -139,19 +164,33 @@ export const ROOMS: Record<RoomId, TourData> = {
   dining: diningJson as unknown as TourData,
   'dining-d2': diningD2Json as unknown as TourData,
   work: workJson as unknown as TourData,
+  boy: boyJson as unknown as TourData,
+  girl: girlJson as unknown as TourData,
 };
 /** MOCK5: the house's rooms in the tour, and their frames (the first is the room's rest frame: tools/tour/frames.json) */
-export type GroupId = 'living-room' | 'master' | 'bath' | 'dining' | 'work';
+export type GroupId = 'living-room' | 'master' | 'bath' | 'dining' | 'work' | 'boy' | 'girl';
+/** the house's rooms in the order of the room buttons */
+export const GROUP_IDS = ['living-room', 'master', 'bath', 'dining', 'work', 'boy', 'girl'] as const satisfies readonly GroupId[];
 export const FRAMES: Record<GroupId, RoomId[]> = {
   'living-room': ['living-room'],
   master: ['master', 'master-mb1'],
   bath: ['bath', 'bath-b1'],
   dining: ['dining', 'dining-d2'],
   work: ['work'],
+  boy: ['boy'],
+  girl: ['girl'],
 };
 export const groupOf = (id: RoomId): GroupId => (ROOMS[id].group ?? id) as GroupId;
 /** route ch. 5.5: the rooms' names in the tour (a frame is named by its room) */
-export const GROUP_HE: Record<GroupId, string> = { 'living-room': 'סלון', master: 'חדר שינה', bath: 'חדר רחצה', dining: 'מטבח', work: 'חדר עבודה' };
+export const GROUP_HE: Record<GroupId, string> = {
+  'living-room': 'סלון',
+  master: 'חדר שינה',
+  bath: 'חדר רחצה',
+  dining: 'מטבח',
+  work: 'חדר עבודה',
+  boy: 'חדר הילד',
+  girl: 'חדר הילדה',
+};
 export const ROOM_HE = Object.fromEntries(ROOM_IDS.map((id) => [id, GROUP_HE[groupOf(id)]])) as Record<RoomId, string>;
 /** the room the visitor is in (a live binding: setRoom changes it for every module that reads it) */
 export let tour: TourData = ROOMS['living-room'];
@@ -183,6 +222,29 @@ export function roomCount(group: GroupId): { total: number; by: Partial<Record<R
   const by: Partial<Record<RoomId, number>> = {};
   for (const { f } of best.values()) by[f] = (by[f] ?? 0) + 1;
   return { total: best.size, by };
+}
+/**
+ * MOCK6, the safety rule: how many of a room's products are shown and held (not sold here, or waiting for their
+ * standard), each once (the owner's line says it beside the count)
+ */
+export function roomHeld(group: GroupId): number {
+  const held = new Set<string>();
+  for (const f of FRAMES[group]) for (const s of ROOMS[f].slots) if (!s.fixed && s.sale) held.add(s.count_key ?? `${f}:${s.id}`);
+  return held.size;
+}
+/** MOCK6: what the visitor reads in a product's price place: the safety rule's line first, else the price's */
+export const saleLine = (s: TourSlot): string | null => s.sale?.label_he ?? null;
+/**
+ * MOCK6: the options the engine loads behind a room at rest (the skeleton: variants load in the background once the
+ * room is shown). A wheel of many options is never loaded ahead: its options' patches load one at a time, when chosen.
+ */
+export function behind(slots: readonly TourSlot[], selection: Readonly<Record<string, number>>): [string, number][] {
+  const out: [string, number][] = [];
+  for (const s of slots) {
+    if (s.lazy) continue;
+    for (const o of s.options) if (o.position !== (selection[s.id] ?? 1)) out.push([s.id, o.position]);
+  }
+  return out;
 }
 export const WM = 'warm-modern';
 export const NORDIC = 'nordic';

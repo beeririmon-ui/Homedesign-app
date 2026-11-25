@@ -21,12 +21,17 @@
  * A product's name and price are the shop's record of its card (.generated/catalog.story.full.json, the same pricing
  * path), when the shop has one. A card the shop does not sell yet has no public name and no price: it is shown under its
  * slot's name, "עוד לא במכירה" (no data is written here, and no card is read for a name).
+ *
+ * MOCK6 (2026-11-25): the living room is pinned to what MOCK5 used (`pin`: tools/tour/living-room.pin.json, the git blob
+ * of every file read here), while render-agent makes the clean M0 plate in the same folder (FB12). A file whose blob
+ * differs on disk is read from git's own copy of the pinned blob, so no new living-room file is picked up.
  */
 import sharp from 'sharp';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
+import { dirname, extname, join, relative } from 'node:path';
+import { GENERATED, MEDIA_OUT, REPO, repoPath, sitePath } from './lib/paths';
 
 type Box = [number, number, number, number];
 type SlotCfg = { depth_m: number; kind: 'floor' | 'wall' | 'surface' | 'hang'; anchors: [number, number][]; order_a: number; dims?: boolean; hero?: boolean };
@@ -39,6 +44,8 @@ type TourManifest = {
   plan: string;
   camera: string;
   room_plan: string;
+  /** MOCK6: the git blobs this room is pinned to (tools/tour/living-room.pin.json) */
+  pin?: string;
   slots: Record<string, SlotCfg>;
 };
 type Product = { card_id: string; sku?: string };
@@ -62,7 +69,32 @@ const fail = (msg: string): never => {
 };
 const t = read<TourManifest>(sitePath(MANIFEST));
 const dir = repoPath(t.layers);
-const lm = read<LayersManifest>(join(dir, t.manifest));
+
+// ---------- MOCK6: the pin (every file read below is the blob MOCK5 used) ----------
+const pin = t.pin ? read<{ commit: string; files: Record<string, string> }>(sitePath(t.pin)) : null;
+const pinnedFrom: string[] = [];
+const checked = new Map<string, string>();
+/** the file to read for `f`: itself when its git blob is the pinned one, else git's own copy of the pinned blob */
+const at = (f: string): string => {
+  if (!pin) return f;
+  const hit = checked.get(f);
+  if (hit) return hit;
+  const rel = relative(REPO, f);
+  const want = pin.files[rel] ?? fail(`${rel} is not in ${t.pin}: the living room reads only what MOCK5 read`);
+  const blob = (b: Buffer) => createHash('sha1').update(`blob ${b.length}\0`).update(b).digest('hex');
+  let use = f;
+  if (!existsSync(f) || blob(readFileSync(f)) !== want) {
+    use = join(GENERATED, 'pinned', `${want}${extname(f)}`);
+    if (!existsSync(use)) {
+      mkdirSync(dirname(use), { recursive: true });
+      writeFileSync(use, execFileSync('git', ['cat-file', 'blob', want], { cwd: REPO, maxBuffer: 1 << 30 }));
+    }
+    pinnedFrom.push(rel);
+  }
+  checked.set(f, use);
+  return use;
+};
+const lm = read<LayersManifest>(at(join(dir, t.manifest)));
 const W = lm.size.width;
 const H = lm.size.height;
 const sha = (f: string) => createHash('sha256').update(readFileSync(f)).digest('hex');
@@ -78,8 +110,8 @@ const hm = read<{
 const houseFile = join(GENERATED, `house.${t.room}.${t.style}.json`);
 if (!existsSync(houseFile)) fail(`${houseFile} is missing: tools/make-house.ts runs first (npm run story)`);
 const house = read<{ name_he: string; scene: { base: { src: string; widths: number[] }[]; aspect: number } }>(houseFile);
-const pilotBase = join(repoPath(hm.pilot), hm.layers_dir, 'base.png');
-if (sha(join(dir, 'base.png')) !== sha(pilotBase))
+const pilotBase = at(join(repoPath(hm.pilot), hm.layers_dir, 'base.png'));
+if (sha(at(join(dir, 'base.png'))) !== sha(pilotBase))
   fail(`${t.layers}/base.png is not the house's base (${hm.pilot}/${hm.layers_dir}/base.png): encode it here first`);
 
 // ---------- the shop's records, by card ----------
@@ -127,7 +159,7 @@ const slots = slotIds.map((id) => {
   return { id, cfg, z, options };
 });
 for (const id of Object.keys(t.slots)) if (!slotIds.includes(id)) fail(`tools/tour names slot ${id}, which ${t.manifest} does not compose`);
-const sources = slots.flatMap((s) => s.options.flatMap((o) => [join(dir, o.layer), join(dir, o.shadow), join(dir, o.truth)]));
+const sources = slots.flatMap((s) => s.options.flatMap((o) => [at(join(dir, o.layer)), at(join(dir, o.shadow)), at(join(dir, o.truth))]));
 for (const f of sources) if (!existsSync(f)) fail(`missing ${f}`);
 
 const REL = `tour/${t.room}/${t.style}/M0`;
@@ -147,7 +179,7 @@ const stamp = createHash('sha256')
     JSON.stringify({
       t,
       tool: readFileSync(new URL(import.meta.url), 'utf8'),
-      manifest: sha(join(dir, t.manifest)),
+      manifest: sha(at(join(dir, t.manifest))),
       sources: [...new Set(sources)].map((f) => [f, statSync(f).size, statSync(f).mtimeMs]),
     }),
   )
@@ -202,8 +234,8 @@ if (cached?.stamp === stamp) {
     const alpha: Px[] = [];
     for (const [n, o] of s.options.entries()) {
       const a = empty();
-      const p = await raw(join(dir, o.layer));
-      const sh = await raw(join(dir, o.shadow));
+      const p = await raw(at(join(dir, o.layer)));
+      const sh = await raw(at(join(dir, o.shadow)));
       for (let i = 0; i < W * H; i++) {
         const k = i * 4;
         const on = p[k + 3]! > 0;
@@ -229,12 +261,16 @@ if (cached?.stamp === stamp) {
         // the slot's rectangle in that width's pixels, exactly as the engine rounds it (web/src/tour/gl.ts drawLayers)
         const r = tierRect(rect, Wt);
         const size = { width: r.x1 - r.x0, height: r.y1 - r.y0 };
-        const layer = sharp(join(dir, o.layer)).ensureAlpha().extract(cut);
+        const layer = sharp(at(join(dir, o.layer)))
+          .ensureAlpha()
+          .extract(cut);
         await (Wt === W ? layer : layer.resize(size))
           // S12: near-lossless (lossy q86 and q95 missed the tool-layer threshold on the textiles)
           .webp({ nearLossless: true, quality: 60, effort: 5 })
           .toFile(out(`slots/${s.id}/${n + 1}.product.${Wt}.webp`));
-        const shadow = sharp(join(dir, o.shadow)).removeAlpha().extract(cut);
+        const shadow = sharp(at(join(dir, o.shadow)))
+          .removeAlpha()
+          .extract(cut);
         await (Wt === W ? shadow : shadow.resize(size))
           // a shadow multiplies the room: lossless, or the codec's noise near white would darken around the product
           .webp({ lossless: true, effort: 5 })
@@ -253,7 +289,7 @@ if (cached?.stamp === stamp) {
         height: Math.min(H, a.y1 + 1 + pad) - top,
       };
       const k = CARD / Math.max(box.width, box.height);
-      await sharp(join(dir, o.layer))
+      await sharp(at(join(dir, o.layer)))
         .ensureAlpha()
         .extract(box)
         .resize({ width: Math.max(1, Math.round(box.width * k)), height: Math.max(1, Math.round(box.height * k)) })
@@ -387,5 +423,9 @@ console.log(
     `; the default composition's ${slots.length * 2} layers ${defaults.toFixed(0)} KB of ${all.toFixed(0)} KB at ${W}` +
     `); the products fill ${(cover * 100).toFixed(1)}% of the frame; the wheel's cards: ${studioCards} our own studio pictures and ` +
     `${data.slots.reduce((n, s) => n + s.options.length, 0) - studioCards} trimmed layers, no room crops; ` +
-    `${unsold.length} options are not in the shop yet (${unsold.join(', ')}) → ${outFile}`,
+    `${unsold.length} options are not in the shop yet (${unsold.join(', ')})` +
+    (pin
+      ? `; pinned to ${t.pin} (${Object.keys(pin.files).length} files, ${pinnedFrom.length} read from git: ${pinnedFrom.join(', ') || 'none changed on disk'})`
+      : '') +
+    ` → ${outFile}`,
 );
