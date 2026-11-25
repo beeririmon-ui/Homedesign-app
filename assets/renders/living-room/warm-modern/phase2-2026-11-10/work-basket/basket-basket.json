@@ -1,0 +1,122 @@
+{
+ "old_floor_centre": [
+  -1.62,
+  0.78
+ ],
+ "new_floor_centre": [
+  -1.2,
+  0.3
+ ],
+ "old_centre_evidence": {
+  "layer_axis_x": 1061.0,
+  "plan_point_x": 1060.84,
+  "record_render_centre": [
+   -1.6,
+   0.762
+  ],
+  "record_render_centre_x": 1070.91,
+  "note": "the record's centre carries its method's bias (the clay read the same way: (-1.605, 0.764)); the axis is the plan point"
+ },
+ "contact_px": {
+  "old": [
+   1060.84,
+   1217.71
+  ],
+  "new": [
+   1281.04,
+   1193.38
+  ]
+ },
+ "depth_m": {
+  "old": 4.5338,
+  "new": 4.7913
+ },
+ "scale": 0.94625,
+ "affine": [
+  [
+   0.946251,
+   0.0,
+   277.217139
+  ],
+  [
+   0.0,
+   0.946251,
+   41.118141
+  ]
+ ],
+ "floor_homography_move": [
+  [
+   1.106177871,
+   0.715847362,
+   -547.62331386
+  ],
+  [
+   6e-09,
+   1.212355619,
+   -81.226020869
+  ],
+  [
+   0.0,
+   0.000138795,
+   1.0
+  ]
+ ],
+ "homography_jacobian_at_contact": [
+  [
+   0.9463,
+   0.4603
+  ],
+  [
+   -0.0,
+   0.8954
+  ]
+ ],
+ "plan_translation_m": [
+  0.42,
+  -0.48
+ ],
+ "exposure": {
+  "old": {
+   "wall": 0.47034648060798645,
+   "wall_px": 1693,
+   "floor": 0.12872886657714844,
+   "floor_px": 5994
+  },
+  "new": {
+   "wall": 0.8273596167564392,
+   "wall_px": 6290,
+   "floor": 0.27521759271621704,
+   "floor_px": 3895
+  },
+  "ratio_wall": 1.759,
+  "ratio_floor": 2.138,
+  "ratio_plate": 1.939,
+  "cap_dE00_p95_3": 1.005,
+  "gain": 1.005,
+  "rule": "gain = min(the plate's ratio (geometric mean of floor and wall), the largest factor whose dE00 p95 against the same file is <= 3 and whose p99.5 linear channel stays <= 1); one factor on RGB in linear light"
+ },
+ "shadow": {
+  "src_holes_filled_px": 25674,
+  "px": 2983,
+  "darkening_max": 0.282,
+  "px_on_sofa_fa_over_0_5": 0,
+  "max_levels_on_sofa_fa_over_0_5": 0
+ },
+ "occluder": {
+  "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/work-fb12s0/fixed-furniture-fb12s0.png",
+  "rule": "alpha x (1 - smoothstep(0.35, 0.65, fa)): the plate's own sofa alpha (fb12s0), sharpened to its silhouette (fa() docstring)"
+ },
+ "planter_shadow": {
+  "changed_px": 797,
+  "changed_outside_old_region_px": 0,
+  "light_gap_px_before": 579,
+  "light_gap_px_after": 0,
+  "zone_px": 1178,
+  "rule": "in the old basket region, rows >= 1135, the R7 cut's soft edge and the floor <= 3 px out: min(shadow, the darkest within 5 px); faded in over 8 px from the region's border and from row 1135"
+ },
+ "files": {
+  "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/basket/basket-cj-jute-rope-cylinder-basket.png",
+  "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/basket/basket-cj-jute-rope-cylinder-basket-shadow.png",
+  "planter_shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/planter/planter-cj-cement-ribbed-belly-basket-shadow.png"
+ }
+}
