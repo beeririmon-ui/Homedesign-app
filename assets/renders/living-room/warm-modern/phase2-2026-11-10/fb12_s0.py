@@ -21,9 +21,9 @@ The plate is rebuilt in phase 1's own ungraded model and graded with the ONE v3c
 Then (same run):
   * the rug layer: whole under the old table. In the rug plane (Z 0.012, 900 px/m): where the table hid the rug, or its shadow sat on
     the rug (gain > 1.15), the grain is hole-filled by quilting from the visible rug (blocks of the same depth band and, where there
-    are enough, the same side within 0.6 m, since the rendered braid size drifts; 1 - NCC choice; min-cut seams); its colour and
-    level: the room's light (the shell, board scale out) x S' x the rug's own ratio carried in from around the zone; faint shadow is
-    relit (x LFt / LF); the back edge left of the sofa copied along X; alpha = the rug's footprint (back edge Y 0.777, left X -1.45)
+    are enough, the same side within 0.45 m, since the rendered braid size drifts; tall blocks along the ribs; 1 - NCC choice;
+    min-cut seams); its colour and level: the room's light (the shell, board scale out) x S' x the rug's own ratio carried in from around the zone; faint shadow is
+    relit (x LFt / LF; right of the old right drum, where the render's braid is larger, up to x 1.9); the back edge left of the sofa copied along X; alpha = the rug's footprint (back edge Y 0.777, left X -1.45)
     x (1 - fa'); the rug's edge shadow extended along that edge.
   * the cushion sets: inside the old table's region only, the throw's darkening of the sofa is carried in (fades over 40 px) and the
     set's shadow on the old table top becomes its own continuation; every R9 pixel outside the region is kept.
@@ -547,7 +547,7 @@ def box_lf(x, k, bw=45, bh=39):
     return num / np.maximum(den, 1e-6), den / (bw * bh)
 
 
-def fill_quilt(tex, known, todo, bs=(96, 48), ov=(20, 14), n_cand=600, top=4, depth=None, dlocal=0.15, xm=None, xlocal=0.6, rng=RNG):
+def fill_quilt(tex, known, todo, bs=(150, 56), ov=(30, 14), n_cand=600, top=3, depth=None, dlocal=0.15, xm=None, xlocal=0.45, rng=RNG):
     """hole filling by quilting: blocks (h, w) in raster order over the bbox of todo; each block's error is the SSD against every
     known (original or already filled) pixel in its window; the patch goes into the unknown pixels, with min-cut seams in the left /
     top overlaps where those overlaps were themselves filled; candidates: fully-known source windows within ylocal rows (the same
@@ -686,10 +686,13 @@ def rug(pl):
     # shadowed (gain > 1.15) or without an LF: synthesised
     LFz, coverz = box_lf(Lr, (ar > 0.995).astype(np.float32))
     gain = np.where(coverz > 0.6, LFt / np.maximum(LFz, 1e-5), 9.0)
-    synth = zone & (Tr | (gain > 1.15))
+    # right of the old right drum the visible rug keeps its own (larger) braid: it is relit up to x 1.9 there, and only the hidden
+    # part and the drum's contact are synthesised (the rendered braid grows from 2.5 cm on the left to 5.7 cm on the right)
+    gmax = (1.15 + (1.9 - 1.15) * np.clip((Xg - 0.50) / 0.15, 0, 1)).astype(np.float32)
+    synth = zone & (Tr | (gain > gmax))
     synth = cv2.morphologyEx(synth.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((21, 21), np.uint8)).astype(bool)
     synth = cv2.dilate(synth.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (13, 13))).astype(bool) & zone
-    gz = np.clip(np.where(zone & ~synth, gain, 1.0), 0.85, 1.2).astype(np.float32)
+    gz = np.clip(np.where(zone & ~synth, gain, 1.0), 0.85, gmax + 0.05).astype(np.float32)
     gz = np.where(synth, 1.0, gz)
     relit = np.clip(lin * gz[..., None], 0, 1)
     # the grain: the clean rug's own RGB over its per-channel LF (colour and grain kept together), hole-filled by quilting
