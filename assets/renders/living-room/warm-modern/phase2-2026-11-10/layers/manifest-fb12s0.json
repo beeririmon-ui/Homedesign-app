@@ -8,7 +8,7 @@
  "author": "render-agent",
  "brief": "briefs/wm-fb12-stage0-clean-plate-2026-11-25.md (FB12 stage 0, code only, 0 tokens); docs/proposals/wm-fb12-2026-11-25.md a.5-a.7 (path R)",
  "approval": "PH2-WM (owner, 2026-11-10); the reserve 1,300 by the manager; R3 under SPEND2 (owner, 2026-11-10), two passes at 650 by the manager; base and cushions: AP3-WM + QA qa/reports/2026-11-10-wm-tool-layers-v3c.md; R4: code only, 0 tokens (studio rules: 0-token code fixes are decided at once); R5: PH2-WM, passes 4' and 5' at 650 each (jobs-r5.json); R6: code only, 0 tokens (studio rules: 0-token code fixes are decided at once); the curtains' default order: the designer under FR-F (the coordinator: within the designer's authority, the owner informed); R7: WM-T2 / WM-C3 / SUP-C1 (owner 2026-11-12) and the coordinator's planter addition; passes 6' and 7' under PH2-WM (phase 2: 5,850 + 1,300 = 7,150 of 9,740); R8: code fixes, 0 tokens: the designer's section 3 (wm-r7-table-decisions) and QA's R6/R7 section 10 (the coordinator); R9: code fixes, 0 tokens: P2-1 (the designer) and QA R8 F1 / F2 / F8 (the coordinator); FB12 stage 0: code only, 0 tokens (FB12, owner 2026-11-25; the paid steps wait for FB12-T, SPEND2)",
- "status": "FB12 stage 0: the old coffee table (fixed-product walnut) is out of the plate. base = the clean plate; the rug layer is whole under the old table; the cushion sets' sofa-shading at the old table's outline fades out; the bowl and the candle holders (they stood on the old table) are hidden in the defaults, their layers kept. 11 defaults shown (12 minus 2 hidden, the new table not yet in) + 10 variants. Not QA'd; for qa-agent. HD_PUBLIC=0 only.",
+ "status": "FB12 stage 0: the old coffee table (fixed-product walnut) is out of the plate. base = the clean plate; the rug layer is whole under the old table; the cushion sets' darkening of the sofa by the throw continues into the old table's region (it stopped at its outline); the bowl and the candle holders (they stood on the old table) are hidden in the defaults, their layers kept. 10 defaults shown (R9's 12 minus the 2 hidden; the new table not yet in) + 10 variants. Not QA'd; for qa-agent. HD_PUBLIC=0 only.",
  "grade": "v3c, ONE display grade (stack.Grade = phase 1 grade_v3c; base.png reproduced byte for byte). Every layer is cut from the graded composites; no layer is graded on its own; the site applies no further grade",
  "grade_params": {
   "gain": 1.000848,
@@ -4304,7 +4304,7 @@
    "A": "../graded/default-scene-fb12s0-set-A-graded-v3c.png",
    "C": "../graded/default-scene-fb12s0-set-C-graded-v3c.png"
   },
-  "note": "FB12 stage 0: each default = the 8-bit stack of this manifest (the hidden slots out) where the stack changed, the R8 truth's own bytes elsewhere (RND2 0 outside); variant truths are R9's (no variant touches the old table)"
+  "note": "FB12 stage 0: each default = the 8-bit stack of this manifest (the hidden slots out) where the stack changed, the R8 truth's own bytes elsewhere (RND2 0 outside); variant truths are R9's: the bowl and candle-holder variants are hidden with their slots (variants_hidden); the other variants' regions do not touch the old table (their R9 truths still show it; the per-variant check is inside the region only)"
  },
  "defaults_hidden": [
   "bowl",
@@ -4728,5 +4728,9 @@
    "bowl point": "the designer (section 1.4)",
    "bowl-v3, candle-holders-v3": "a new pass, or a code salvage the designer approves (not done)"
   }
+ },
+ "variants_hidden": {
+  "bowl": "FB12 stage 0: the slot is hidden until the new table is in; its variants are not offered in the wheel",
+  "candle-holders": "FB12 stage 0: the slot is hidden until the new table is in; its variants are not offered in the wheel"
  }
 }

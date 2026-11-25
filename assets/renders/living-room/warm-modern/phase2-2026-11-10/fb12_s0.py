@@ -20,11 +20,12 @@ The plate is rebuilt in phase 1's own ungraded model and graded with the ONE v3c
   * outside the changed region the plate is base.png's own bytes (RND2 0).
 Then (same run):
   * the rug layer: whole under the old table. In the rug plane (Z 0.012, 900 px/m): where the table hid the rug, or its shadow sat on
-    the rug (gain > 1.15), the grain is hole-filled by quilting from the visible rug (blocks of the same depth band and, where there
-    are enough, the same side within 0.45 m, since the rendered braid size drifts; tall blocks along the ribs; 1 - NCC choice;
-    min-cut seams); its colour and level: the room's light (the shell, board scale out) x S' x the rug's own ratio carried in from around the zone; faint shadow is
-    relit (x LFt / LF; right of the old right drum, where the render's braid is larger, up to x 1.9); the back edge left of the sofa copied along X; alpha = the rug's footprint (back edge Y 0.777, left X -1.45)
-    x (1 - fa'); the rug's edge shadow extended along that edge.
+    it (gain > 1.15), the grain is hole-filled by quilting from the visible rug (blocks of the same depth band and, where there are
+    enough, the same side within 0.45 m, since the rendered braid size drifts; tall blocks along the ribs; 1 - NCC choice; min-cut
+    seams); its colour and level: the room's light (the shell, board scale out) x S' x the rug's own ratio carried in from around
+    the zone. Faint shadow is relit (x LFt / LF; right of the old right drum, where the render's braid is larger, up to x 1.9).
+    The back edge left of the sofa is copied along X; alpha = the rug's footprint (back edge Y 0.777, left X -1.45) x (1 - fa');
+    the rug's edge shadow is extended along that edge.
   * the cushion sets: inside the old table's region only, the throw's darkening of the sofa is carried in (fades over 40 px) and the
     set's shadow on the old table top becomes its own continuation; every R9 pixel outside the region is kept.
   * the defaults (sets B / A / C): the 8-bit stack of the new manifest (bowl and candle holders hidden) where the stack changed, the
@@ -1020,9 +1021,9 @@ def manifest_out():
                    "docs/proposals/wm-fb12-2026-11-25.md a.5-a.7 (path R)")
     m["approval"] = r9["approval"] + "; FB12 stage 0: code only, 0 tokens (FB12, owner 2026-11-25; the paid steps wait for FB12-T, SPEND2)"
     m["status"] = ("FB12 stage 0: the old coffee table (fixed-product walnut) is out of the plate. base = the clean plate; the rug layer "
-                   "is whole under the old table; the cushion sets' sofa-shading at the old table's outline fades out; the bowl and the "
-                   "candle holders (they stood on the old table) are hidden in the defaults, their layers kept. 11 defaults shown "
-                   "(12 minus 2 hidden, the new table not yet in) + 10 variants. Not QA'd; for qa-agent. HD_PUBLIC=0 only.")
+                   "is whole under the old table; the cushion sets' darkening of the sofa by the throw continues into the old table's region (it stopped at its outline); the bowl and the "
+                   "candle holders (they stood on the old table) are hidden in the defaults, their layers kept. 10 defaults shown "
+                   "(R9's 12 minus the 2 hidden; the new table not yet in) + 10 variants. Not QA'd; for qa-agent. HD_PUBLIC=0 only.")
     P = rec["files"]
     relL = lambda k: os.path.relpath(os.path.join(REPO, P[k]), LAY_OUT)
     for l_ in m["layers"]:
@@ -1060,8 +1061,10 @@ def manifest_out():
                        f"({rec['cushions'][st]['shadow_px_changed']} px); every R9 pixel outside the region kept")
     m["truths"] = dict(default={st: os.path.relpath(os.path.join(REPO, P[f"default-{st}"]), LAY_OUT) for st in r9["truths"]["default"]},
                        note="FB12 stage 0: each default = the 8-bit stack of this manifest (the hidden slots out) where the stack changed, "
-                            "the R8 truth's own bytes elsewhere (RND2 0 outside); variant truths are R9's (no variant touches the old table)")
+                            "the R8 truth's own bytes elsewhere (RND2 0 outside); variant truths are R9's: the bowl and candle-holder variants are hidden with their slots (variants_hidden); the other variants' regions do not touch the old table (their R9 truths still show it; the per-variant check is inside the region only)")
     m["defaults_hidden"] = list(HIDDEN)
+    m["variants_hidden"] = {k: "FB12 stage 0: the slot is hidden until the new table is in; its variants are not offered in the wheel"
+                            for k in HIDDEN if k in m.get("variants", {})}
     m["fb12s0"] = dict(record=rel(os.path.join(WORK, f"{TAG}.json")), motion_note=rel(os.path.join(WORK, f"motion-note-{TAG}.json")),
                        regions=os.path.relpath(os.path.join(WORK, f"regions-{TAG}.npz"), OUT),
                        files={k: os.path.relpath(os.path.join(REPO, v), OUT) for k, v in P.items()},

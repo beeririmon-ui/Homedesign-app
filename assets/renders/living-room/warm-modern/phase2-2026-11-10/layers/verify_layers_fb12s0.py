@@ -19,7 +19,8 @@ stack.Grade read-only); writes verify-layers-fb12s0.json; exit 0 = every check p
   5 stack     the new manifest's stack (8-bit, the hidden slots out) = the new truths inside the changed region (0 px), and over the
               canvas within R9's gate (p99.9 <= 2, max <= 6)
   6 hidden    the bowl and the candle holders: marked hidden_in_defaults, their layers and shadows the R9 files, unchanged in git
-  7 scope     no tracked file under the warm-modern living room is modified in git; base.png, the R9 manifest and truths unchanged
+  7 scope     no tracked file under the warm-modern living room is modified in git, other than this stage's own (base.png, the R9
+              manifest, layers and truths unchanged)
 """
 import hashlib
 import importlib.util
@@ -241,9 +242,12 @@ def main():
     out["6_hidden"] = c6
 
     # 7 scope
+    # this stage's own files may be tracked already (the coordinator's WIP checkpoints) and re-written by a re-run: they are not R9's
+    own = ("fb12s0", "fb12-stage0", "fb12_s0", "work-fb12s0")
     mod = git_modified([os.path.dirname(P2)])
-    c7 = dict(tracked_modified_under_living_room_wm=mod, r9_manifest_sha=sha(R9))
-    c7["pass_"] = bool(not mod)
+    other = [ln for ln in mod if not any(k in ln for k in own)]
+    c7 = dict(tracked_modified_not_this_stage=other, this_stage_files_rewritten=len(mod) - len(other), r9_manifest_sha=sha(R9))
+    c7["pass_"] = bool(not other)
     out["7_scope"] = c7
 
     ok = all(v["pass_"] for v in out.values())
