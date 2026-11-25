@@ -194,6 +194,51 @@ def main():
                                                   "are whole pixels, so +-1 px is +-1.3 % in width and +-1.5 % in height"),
             colour=lr["colour"], black_point=lr["black_point"], rnd2=lr["compose"],
             plant_rises_above_rim_cm=round(float((pys.min() - np.nonzero(allp.any(1))[0].min()) / ps["px_per_cm_h"]), 1))
+        # QA round 1 on the planter (qa/reports/2026-11-25-bath-b1-planter): B1P-M1, L1, L2, L3, as QA framed them
+        lpf = lpa.astype(np.float64)
+        rgb_l, a_l = lpf[..., :3] / 255, lpf[..., 3] / 255
+        lab_f = G.to_lab(rgb_l)
+        body = C.ero(a_l > 0.99, 1) & ~C.dil(green, 2)
+        reg = np.zeros_like(body)
+        reg[722:756, 968:993] = True
+        near = np.zeros_like(body)
+        near[710:780, 955:1020] = True
+        Lf = lab_f[..., 0]
+        sur = np.median(Lf[near & body & ~reg])
+        steps = [float(np.abs(Lf[726:751, c] - Lf[726:751, c + 1])[body[726:751, c] & body[726:751, c + 1]].mean()) for c in range(972, 986)]
+        dflt_ = dflt
+        ref_, _ = LP.plaster_ref(dflt_, ids, np.zeros_like(body) | (lpa[..., 3] > 0) | (np.asarray(Image.open(os.path.join(ST, lay["ledge-planter"]["shadow"]))) < 255)
+                                 | np.any([A[k] > 0 for k in A if k != "ledge-planter"], 0))
+        ax_ = LP.P.px(LP.CENTRE[0], LP.CENTRE[1], LP.LEDGE_Z)[0]
+        xx_ = np.arange(W)[None, :]
+        def r5(m):  # noqa: E306
+            v = C.r5_lab(rgb_l, m, ref_, "plaster")
+            return dict(lab=[round(float(x), 2) for x in v], h=round(float(np.degrees(np.arctan2(v[2], v[1]))), 1),
+                        de00=round(float(G.de00(v[None], np.array([LP.SKU_LAB]))[0]), 2))
+        hpL, hpC = LP.hp_metric(rgb_l, a_l)
+        pl = (a_l > 0) & (lab_f[..., 1] < -4)
+        plab = np.median(lab_f[pl & (a_l > 0.9)], 0)
+        out["ledge_planter"]["qa_round1"] = dict(
+            report="qa/reports/2026-11-25-bath-b1-planter/README.md",
+            M1_seam=dict(box=[968, 722, 992, 755], region_L_median=round(float(np.median(Lf[reg & body])), 1), surround_L_median=round(float(sur), 1),
+                         region_minus_surround=round(float(np.median(Lf[reg & body]) - sur), 1),
+                         p99_minus_surround=round(float(np.percentile(Lf[reg & body], 99) - sur), 1),
+                         b_star_median=round(float(np.median(lab_f[..., 2][reg & body])), 1),
+                         de00_region_vs_surround=round(float(G.de00(np.median(lab_f[reg & body], 0)[None], np.median(lab_f[near & body & ~reg], 0)[None])[0]), 2),
+                         column_steps_972_985=[round(v, 1) for v in steps],
+                         note="the p99 over the surround is the mottle's grey flecks on the lit side (the photo's flecks are about +15 L* over the rust)"),
+            L1_light=dict(L_left=round(float(Lf[body & (xx_ < ax_)].mean()), 1), L_right=round(float(Lf[body & (xx_ >= ax_)].mean()), 1),
+                          lit="left (the window), as the candle and the jar"),
+            L2_colour=dict(lit_left=r5(body & (xx_ < ax_)), shaded_right=r5(body & (xx_ >= ax_)), whole=r5(body), photo_lab=list(LP.SKU_LAB),
+                           photo_h=71.5, mottle_hp_L_std_x1=round(hpL, 2), mottle_C_hp_x1=round(hpC, 2),
+                           photo_same_reading=list(LP.HP_TARGET), v1_same_reading=[3.28, 1.64]),
+            vessel_only_v7q6=dict(area_pct=round(float(100 * ((lpa[..., 3] >= 128) & ~C.dil(green, 1) & fm).sum() / farea), 3),
+                                  height_pct=round(100 * hpx / fh, 2), counts_in_b1=False,
+                                  note="the counts table above includes the filler (the plant is not sold and not counted): the vessel alone is under "
+                                       "V7Q6's 0.15 % / 6 %, so it counts in the shelf close-up only, as the candle and the diffuser; the room stays at 19"),
+            L3_plant=dict(what="a small pothos cutting (fillers.plant: fern, pothos, ficus, sage range)", median_lch=[round(float(plab[0]), 1),
+                          round(float(np.hypot(plab[1], plab[2])), 1), round(float(np.degrees(np.arctan2(plab[2], plab[1]))), 1)],
+                          floor_pothos_lch=list(LP.FLOOR_POTHOS_LCH)))
     json.dump(out, open(os.path.join(ST, "b1-checks.json"), "w"), indent=1, ensure_ascii=False)
     print(json.dumps(out["qa_round1"]))
     print(json.dumps(dict(rnd2=out["rnd2"], black=out["black_point"]["defaults"], black_ok=out["black_point"]["ok"], jar=out["colour"]["jar"]["as_seen_mid_tone"],

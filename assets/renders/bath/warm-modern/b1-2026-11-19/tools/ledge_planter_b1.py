@@ -373,6 +373,11 @@ def relight_body(body, ba, kL=None, kC=None, hole=None):
     # outermost 4 up-px (0.8 canvas px), where the remap samples the drawn edge
     dist = cv2.distanceTransform(m.astype(np.uint8), cv2.DIST_L2, 5)
     taper = np.clip((dist - 1.0) / 4.0, 0, 1)
+    # and over the lowest 14 up-px (under 3 canvas px) above the foot, where the remap samples the drawn foot ring and the ledge
+    rows = np.arange(h, dtype=np.float64)[:, None]
+    has = m.any(0)
+    bot = np.where(has, h - 1 - np.argmax(m[::-1], 0), 0).astype(np.float64)[None, :]
+    taper = np.minimum(taper, np.clip((bot - rows - 2.0) / 12.0, 0, 1))
     for i in range(3):
         sdv = hp[i][me].std()
         hp[i] = np.clip(hp[i], -3.5 * sdv, 3.5 * sdv) * taper
@@ -630,7 +635,7 @@ def finish():
     rec["colour"] = dict(method="R5 (QA's reading) on the lit half of the pot's body (eroded 2, no plant): mid-tone median over the plaster's "
                                 "light right of the reveal (REF_BOX, off every product) x #ECE5DA; one per-channel linear gain on the pot (its "
                                 "mottle and shading kept), weighted off the plant",
-                         lit_half="right (x >= %.1f; the sconce is above right)" % ax if not (Ls > Lr) else "left (x < %.1f)" % ax,
+                         lit_half="right (x >= %.1f)" % ax if not (Ls > Lr) else "left (x < %.1f; the window, QA B1P-L1)" % ax,
                          sku_photo_lab=list(SKU_LAB), plaster_ref_lin=[round(float(v), 4) for v in ref], plaster_ref_px=nref, body_px_lit=nb,
                          before=[round(float(v), 2) for v in before], de00_before=de(before, SKU_LAB),
                          gain_linear=[round(float(v), 4) for v in k], clipped_px=clipped,
@@ -655,8 +660,10 @@ def compose():
     old["layers"] = [l for l in old["layers"] if l["slot"] != SLOT]
     ent = dict(slot=SLOT, product=PID, card=CARD, sku=SKU, z=Z, shadow_z=Z - 1, default=True, layer=rec["files"]["layer"],
                shadow=rec["files"]["shadow"], alpha_px=rec["files"]["alpha_px"], shadow_px=rec["files"]["shadow_px"],
-               added="2026-11-25 (briefs/wm-bath-b1-ledge-planter-2026-11-25.md)", filler="a small succulent rosette and trailing stems "
-               "(not sold, not counted)")
+               added="2026-11-25 (briefs/wm-bath-b1-ledge-planter-2026-11-25.md)",
+               qa_round1="2026-11-25 (qa/reports/2026-11-25-bath-b1-planter): B1P-M1 seam, B1P-L1 light from the left, B1P-L2 hue and mottle "
+               "(code, 0); B1P-L3 the plant re-made (r2, 400)",
+               filler="a small pothos cutting, in the floor pothos's range (the slot's fillers.plant; not sold, not counted)")
     lays = [l for l in man["layers"] if l["slot"] != SLOT]
     i = [l["slot"] for l in lays].index("window-sill-vase") + 1
     lays.insert(i, ent)
@@ -705,7 +712,11 @@ def sheet():
     man = json.load(open(os.path.join(ST, "layers", "manifest.json")))
     old = copy.deepcopy(man)
     old["layers"] = [l for l in old["layers"] if l["slot"] != SLOT]
-    before = defaults_without_planter()
+    import subprocess
+    import io
+    blob = subprocess.run(["git", "-C", ST, "show", "5b1286ee:assets/renders/bath/warm-modern/b1-2026-11-19/b1-defaults.png"],
+                          capture_output=True, check=True).stdout
+    before = np.asarray(Image.open(io.BytesIO(blob)).convert("RGB"))      # v1, as QA read it (commit 5b1286ee)
     after = np.asarray(Image.open(os.path.join(ST, "b1-defaults.png")).convert("RGB"))
     lay = [l for l in man["layers"] if l["slot"] == SLOT][0]
     a = np.asarray(Image.open(os.path.join(ST, lay["layer"])))[..., 3]
@@ -727,34 +738,38 @@ def sheet():
     ov[cm & ~C.ero(cm, 1)] = [20, 200, 60]
     f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
     fs = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 19)
-    out = Image.new("RGB", (W2 * 2 + 30, H2 * 2 + 90), (245, 243, 239))
+    out = Image.new("RGB", (W2 * 2 + 30, H2 * 2 + 100), (245, 243, 239))
     d = ImageDraw.Draw(out)
-    tiles = [(panel(before), "before (B1 defaults, 2026-11-19), x2"), (panel(after), "after: ledge planter 228781 ...577, x2"),
+    tiles = [(panel(before), "before: v1 as QA read it (5b1286ee), x2"), (panel(after), "after: QA round 1 fixed (M1, L1, L2; plant L3), x2"),
              (panel(C.q(ov / 255)), "alpha >= 128 (red), shadow < 0.97 (blue), clay silhouette (green)")]
     for i, (im, t) in enumerate(tiles):
         x, y = (i % 2) * (W2 + 30), (i // 2) * (H2 + 45)
         d.text((x + 6, y + 8), t, fill=(30, 30, 30), font=f)
         out.paste(im, (x, y + 40))
     x, y = W2 + 30, H2 + 45
-    sz, col = ck["size"], ck["colour"]
+    sz, col, q1 = ck["size"], ck["colour"], ck["qa_round1"]
     lines = [f"Shelf region canvas x {x0}-{x1}, y {y0}-{y1} (2720 x 1530), shown x2",
              f"Size vs clay scale: W {sz['width_cm']} cm ({sz['width_ratio']:.3f}), H {sz['height_cm']} cm ({sz['height_ratio']:.3f});",
              f"   SKU 13.2 x 11.8, rule +-5 %. As drawn: W {sz['as_drawn']['width_cm_at_clay_scale']} cm, back rim-foot {sz['as_drawn']['back_rim_to_foot_cm']} cm",
-             f"Colour R5, lit half (right): {col['after_lit']}  dE00 {col['de00_after_lit']} (before gain {col['de00_before']})",
+             f"Colour R5, lit half ({col['lit_half'].split(' ')[0]}): {col['after_lit']}  dE00 {col['de00_after_lit']} (before gain {col['de00_before']})",
              f"   SKU photo ...577: {col['sku_photo_lab']}; shaded half {col['after_shaded_half']} dE00 {col['de00_shaded_half']}",
              f"Black point: layer min L* {ck['black_point']['layer_min_L']} (WM-G1 11-14)",
              f"RND2 outside every mask: {ck['rnd2']['defaults']['rnd2_outside_differing_px']} (defaults), {ck['rnd2']['beige']['rnd2_outside_differing_px']} (Beige)",
              f"Changed outside the planter alpha+shadow: {ck['rnd2']['defaults']['changed_outside_planter_alpha_and_shadow']}",
-             f"Plant (filler, not sold): rises {ck['plant_rises_above_rim_cm']} cm above the rim",
+             f"Plant (filler): pothos, {ck['plant_rises_above_rim_cm']} cm; LCh {q1['L3_plant']['median_lch']}, floor pothos {list(FLOOR_POTHOS_LCH)}",
+             f"M1 box 968-992 x 722-755: +{q1['M1_seam']['region_minus_surround']} L* over the body, dE00 {q1['M1_seam']['de00_region_vs_surround']}, b* {q1['M1_seam']['b_star_median']}, no step at 978",
+             f"L1 light: left {q1['L1_light']['L_left']}, right {q1['L1_light']['L_right']} (window on the left)",
+             f"L2 hue: lit {q1['L2_colour']['lit_left']['h']}, shaded {q1['L2_colour']['shaded_right']['h']}, whole {q1['L2_colour']['whole']['h']} (photo 71.5)",
+             f"L2 mottle at x1: L* {q1['L2_colour']['mottle_hp_L_std_x1']} / C* {q1['L2_colour']['mottle_C_hp_x1']} (photo {HP_TARGET[0]} / {HP_TARGET[1]}; v1 3.28 / 1.64)",
              "Swatches (flat, from L*a*b*): SKU reading | R5 after | rendered lit-half median"]
     for j, t in enumerate(lines):
         d.text((x + 6, y + 10 + j * 30), t, fill=(30, 30, 30), font=fs)
     pg = after.astype(np.float64) / 255
-    lab_lit = G.to_lab(pg[(a == 255) & (np.arange(2720)[None, :] >= P.px(CENTRE[0], CENTRE[1], LEDGE_Z)[0])
+    lab_lit = G.to_lab(pg[(a == 255) & (np.arange(2720)[None, :] < P.px(CENTRE[0], CENTRE[1], LEDGE_Z)[0])
                           & ~C.dil(G.to_lab(pg)[..., 1] < -4, 1)])
     sw = [G.from_lab(np.array([SKU_LAB]))[0], G.from_lab(np.array([col["after_lit"]]))[0], G.from_lab(np.median(lab_lit, 0)[None])[0]]
     for j, c in enumerate(sw):
-        d.rectangle([x + 10 + j * 150, y + 320, x + 140 + j * 150, y + 420], fill=tuple(int(v) for v in C.q(np.clip(c, 0, 1))))
+        d.rectangle([x + 10 + j * 150, y + 470, x + 140 + j * 150, y + 545], fill=tuple(int(v) for v in C.q(np.clip(c, 0, 1))))
     out.save(os.path.join(ST, "qa-sheet-planter.jpg"), quality=90)
     print(out.size)
 
@@ -809,6 +824,113 @@ def assemble_plant(rawp):
     pr["plant_r2"]["assemble"] = rec
     json.dump(pr, open(PREP, "w"), indent=1, ensure_ascii=False)
     print(json.dumps(rec))
+
+
+PLANT_H_CM = 5.5                        # the plant's top above the rim (the brief: low; the edit drew a bush 14.5 cm high, 36 cm wide)
+FLOOR_POTHOS_LCH = (36.2, 23.9, 121.3)  # the floor planter's pothos in B1 (median L*, C*, h of its green): the same plant, the same range
+
+
+def cut_plant():
+    """the plant of the second edit: its matte by colour (closed over its own highlights), its colours from the leaf interior at the
+    edges; brought to the floor pothos's range (C* x, the gloss's highlights softened); scaled about the rim's centre so its top is
+    PLANT_H_CM above the rim (the edit drew far more than the small cutting asked for); down to the canvas"""
+    al = np.load(SCR + "aligned-plant.npy").astype(np.float64)
+    inp = C.load(os.path.join(ST, "inputs", "planter-plant-crop.png"))
+    h, w = al.shape[:2]
+    lab = G.to_lab(al)
+    A, B, L = lab[..., 1], lab[..., 2], lab[..., 0]
+    d = np.abs(al - inp).max(2)
+    core = (A < -6) & (np.hypot(A, B) > 8) & (d > 0.06)
+    n, lab_, st, _ = cv2.connectedComponentsWithStats(core.astype(np.uint8), connectivity=8)
+    core = np.isin(lab_, [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] >= 80])
+    f = cv2.morphologyEx(core.astype(np.uint8), cv2.MORPH_CLOSE, C.disk(3)).astype(bool)
+    # the gloss and the variegation inside a leaf (white, not green) are part of it: enclosed holes under 2,500 up-px are filled
+    inv = (~f).astype(np.uint8)
+    nh, labh, sth, _ = cv2.connectedComponentsWithStats(inv, connectivity=4)
+    border = set(np.unique(np.concatenate([labh[0], labh[-1], labh[:, 0], labh[:, -1]])))
+    small = [i for i in range(1, nh) if i not in border and sth[i, cv2.CC_STAT_AREA] < 2500 and (d[labh == i] > 0.06).mean() > 0.5]
+    f |= np.isin(labh, small)
+    edge = C.dil(f, 3) & ~C.ero(f, 1)
+    soft = np.clip((-A - 1.5) / 5.0, 0, 1) * (d > 0.04)
+    a = np.where(C.ero(f, 1), 1.0, np.where(edge, soft, 0.0))
+    inner = C.ero(f, 2)
+    wv = C.blur(inner.astype(np.float64), 2.5)
+    spread = np.stack([C.blur(al[..., i] * inner, 2.5) for i in range(3)], -1) / np.maximum(wv, 1e-6)[..., None]
+    col = al.copy()
+    ring = (a > 0) & ~inner
+    col[ring] = np.where((wv[ring] > 0.02)[:, None], spread[ring], al[ring])
+    # the colour: the floor pothos's range: chroma to its median, the drawn gloss softened (L* over 55 compressed x 0.55), level to it
+    lab2 = G.to_lab(np.clip(col, 0, 1))
+    m = a > 0.5
+    Cm = float(np.median(np.hypot(lab2[..., 1], lab2[..., 2])[m]))
+    kc = FLOOR_POTHOS_LCH[1] / Cm
+    L2 = lab2[..., 0]
+    L2 = np.where(L2 > 55, 55 + (L2 - 55) * 0.55, L2)
+    L2 = L2 + (FLOOR_POTHOS_LCH[0] - float(np.median(L2[m])))
+    lab2 = np.stack([np.clip(L2, BLACK_L, 100), lab2[..., 1] * kc, lab2[..., 2] * kc], -1)
+    col = np.clip(G.from_lab(lab2), 0, 1)
+    # the scale about the rim's centre (the clay's top at its axis, as in the input)
+    _, cl = clay_up()
+    ys, xs = np.nonzero(m)
+    top = float(ys.min())
+    pr = json.load(open(PREP))["placeholder"]["clay_scale"]
+    s2 = PLANT_H_CM * pr["px_per_cm_h"] * UP / (cl["top_c"] - top)
+    ax, ay = cl["xc"], cl["top_c"]
+    M = np.float32([[s2, 0, ax - s2 * ax], [0, s2, ay - s2 * ay]])
+    prem = cv2.warpAffine(np.dstack([col * a[..., None], a]).astype(np.float32), M, (w, h), flags=cv2.INTER_AREA,
+                          borderMode=cv2.BORDER_CONSTANT, borderValue=0).astype(np.float64)
+    x0, y0, x1, y1 = BOX
+    cw, ch = x1 - x0, y1 - y0
+    pc = cv2.resize(prem.astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
+    pa = np.clip(pc[..., 3], 0, 1)
+    pa[pa < 1 / 255] = 0
+    prgb = np.where((pa > 0)[..., None], pc[..., :3] / np.maximum(pa, 1e-6)[..., None], 0)
+    np.savez_compressed(SCR + "plant.npz", rgb=prgb, a=pa)
+    pys = np.nonzero((pa >= 0.5).any(1))[0]
+    pxs = np.nonzero((pa >= 0.5).any(0))[0]
+    rec = dict(matte="colour (a* < -6, C* > 8, changed > 0.06), closed 3 px, enclosed highlights under 2,500 up-px filled; edge (-a* - 1.5) / 5",
+               drawn=dict(bbox_up=[int(xs.min()), int(top), int(xs.max()), int(ys.max())], height_above_rim_cm=round((cl["top_c"] - top) / UP / pr["px_per_cm_h"], 1),
+                          width_cm=round((xs.max() - xs.min()) / UP / pr["px_per_cm_w"], 1), median_C=round(Cm, 1)),
+               colour=dict(chroma_gain=round(float(kc), 3), gloss_knee_L=55, gloss_slope=0.55, level_to_floor_pothos_L=FLOOR_POTHOS_LCH[0],
+                           floor_pothos_lch=list(FLOOR_POTHOS_LCH)),
+               scale_about_rim_centre=round(float(s2), 4), rim_centre_up=[round(ax, 1), round(ay, 1)],
+               placed=dict(top_above_rim_cm=round((y0 + ay / UP - (y0 + pys.min())) / pr["px_per_cm_h"], 1),
+                           lowest_below_rim_cm=round((pys.max() - ay / UP) / pr["px_per_cm_h"], 1),
+                           width_cm=round((pxs.max() - pxs.min() + 1) / pr["px_per_cm_w"], 1), px=int((pa >= 0.5).sum())))
+    r = json.load(open(SCR + "cut-record.json"))
+    r["plant"] = rec
+    json.dump(r, open(SCR + "cut-record.json", "w"), indent=1)
+    print(json.dumps(rec, indent=1))
+
+
+def finish_plant():
+    """the plant over the pot's body (premultiplied) in the layer finish() wrote; the black floor again; the record updated"""
+    lp = os.path.join(ST, "layers", SLOT, PID + ".png")
+    lay = np.asarray(Image.open(lp)).astype(np.float64) / 255
+    brgb, ba = lay[..., :3], lay[..., 3]
+    z = np.load(SCR + "plant.npz")
+    x0, y0, x1, y1 = BOX
+    pa = np.zeros(ba.shape)
+    prgb = np.zeros(brgb.shape)
+    pa[y0:y1, x0:x1], prgb[y0:y1, x0:x1] = z["a"], z["rgb"]
+    a = pa + ba * (1 - pa)
+    prem = prgb * pa[..., None] + brgb * ba[..., None] * (1 - pa[..., None])
+    rgb = np.where((a > 0)[..., None], prem / np.maximum(a, 1e-6)[..., None], 0)
+    lab = G.to_lab(np.clip(rgb, 0, 1))
+    low = (a > 0) & (lab[..., 0] < BLACK_L)
+    if low.any():
+        lab[low, 0] = BLACK_L
+        rgb[low] = np.clip(G.from_lab(lab[low]), 0, 1)
+    a8 = C.q(a)
+    rgba = np.dstack([np.where((a8 > 0)[..., None], C.q(rgb), 0), a8])
+    Image.fromarray(rgba, "RGBA").save(lp)
+    rec = json.load(open(SCR + "cut-record.json"))
+    s8 = np.asarray(Image.open(os.path.join(ST, rec["files"]["shadow"])))
+    rec["files"].update(alpha_px=int((a8 > 0).sum()), shadow_px=int((s8 < 255).sum()))
+    rec["black_point"]["raised_px_plant"] = int(low.sum())
+    rec["black_point"]["layer_min_L"] = round(float(G.to_lab(rgba[..., :3][a8 > 0].astype(np.float64) / 255)[:, 0].min()), 2)
+    json.dump(rec, open(SCR + "cut-record.json", "w"), indent=1)
+    print(json.dumps(dict(files=rec["files"], black=rec["black_point"])))
 
 
 if __name__ == "__main__":

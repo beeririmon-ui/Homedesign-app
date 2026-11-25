@@ -175,10 +175,11 @@
    "default": true,
    "layer": "layers/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
    "shadow": "shadows/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
-   "alpha_px": 5784,
+   "alpha_px": 6317,
    "shadow_px": 969,
    "added": "2026-11-25 (briefs/wm-bath-b1-ledge-planter-2026-11-25.md)",
-   "filler": "a small succulent rosette and trailing stems (not sold, not counted)"
+   "qa_round1": "2026-11-25 (qa/reports/2026-11-25-bath-b1-planter): B1P-M1 seam, B1P-L1 light from the left, B1P-L2 hue and mottle (code, 0); B1P-L3 the plant re-made (r2, 400)",
+   "filler": "a small pothos cutting, in the floor pothos's range (the slot's fillers.plant; not sold, not counted)"
   },
   {
    "slot": "toilet-brush",
@@ -258,7 +259,7 @@
   }
  ],
  "rnd2": {
-  "region_px": 695860,
+  "region_px": 696393,
   "outside_differing_px": 0,
   "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
  },
@@ -621,14 +622,46 @@
     "foot": 1031.4
    },
    "scale_w": 0.9244,
-   "plant": {
+   "r1_plant_removed": {
     "method": "colour matte: a* < -6 and C* > 8 sure; (-a* - 1) / 5 within 4 px of it",
     "plant_px_up": 37220,
-    "core_px_up": 35038
+    "core_px_up": 35038,
+    "hole_px_up": 15367,
+    "mirror_filled_px_up": 13114,
+    "inpainted_px_up": 2253
+   },
+   "body": {
+    "seam_smoothing_sigma_up_px": 12.0,
+    "texture_margin_up_px": 30.0,
+    "relight": {
+     "light_dir": [
+      -0.9,
+      0.3,
+      0.15
+     ],
+     "ambient": 0.62,
+     "key": 0.36,
+     "top_fill": 0.04,
+     "ao_cm": 2.5,
+     "hue": 71.5,
+     "chroma": 13.5,
+     "texture_sigma_canvas_px": 3.0,
+     "gain_L": 1.59,
+     "gain_C": 1.97,
+     "hp_at_x1": [
+      4.48,
+      3.04
+     ],
+     "hp_target": [
+      4.48,
+      3.04
+     ]
+    },
+    "top_rule": "front rim arc in the mouth's columns, max(outline top, the arc's end) beside it, gaussian-smoothed"
    },
    "colour": {
     "method": "R5 (QA's reading) on the lit half of the pot's body (eroded 2, no plant): mid-tone median over the plaster's light right of the reveal (REF_BOX, off every product) x #ECE5DA; one per-channel linear gain on the pot (its mottle and shading kept), weighted off the plant",
-    "lit_half": "right (x >= 1001.2; the sconce is above right)",
+    "lit_half": "left (x < 1001.2; the window, QA B1P-L1)",
     "sku_photo_lab": [
      59.0,
      4.4,
@@ -639,18 +672,18 @@
      0.7011,
      0.6445
     ],
-    "plaster_ref_px": 14668,
-    "body_px_lit": 1829,
+    "plaster_ref_px": 14941,
+    "body_px_lit": 1955,
     "before": [
-     63.94,
-     2.07,
-     16.23
+     64.18,
+     3.8,
+     14.51
     ],
-    "de00_before": 5.83,
+    "de00_before": 4.72,
     "gain_linear": [
-     0.8571,
-     0.8092,
-     0.897
+     0.8286,
+     0.8126,
+     0.8416
     ],
     "clipped_px": 0,
     "after_lit": [
@@ -660,35 +693,72 @@
     ],
     "de00_after_lit": 0.0,
     "after_shaded_half": [
-     53.5,
-     6.54,
-     11.76
+     52.42,
+     4.51,
+     12.79
     ],
-    "de00_shaded_half": 5.82
+    "de00_shaded_half": 6.16
    },
    "black_point": {
     "rule": "WM-G1 L* 11-14: no layer pixel under 11",
-    "raised_px": 3,
-    "layer_min_L": 11.14
+    "raised_px": 0,
+    "layer_min_L": 11.14,
+    "raised_px_plant": 15
    },
    "files": {
     "layer": "layers/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
     "shadow": "shadows/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
-    "alpha_px": 5784,
+    "alpha_px": 6317,
     "shadow_px": 969
+   },
+   "plant": {
+    "matte": "colour (a* < -6, C* > 8, changed > 0.06), closed 3 px, enclosed highlights under 2,500 up-px filled; edge (-a* - 1.5) / 5",
+    "drawn": {
+     "bbox_up": [
+      584,
+      273,
+      1624,
+      1049
+     ],
+     "height_above_rim_cm": 14.4,
+     "width_cm": 35.7,
+     "median_C": 34.4
+    },
+    "colour": {
+     "chroma_gain": 0.695,
+     "gloss_knee_L": 55,
+     "gloss_slope": 0.55,
+     "level_to_floor_pothos_L": 36.2,
+     "floor_pothos_lch": [
+      36.2,
+      23.9,
+      121.3
+     ]
+    },
+    "scale_about_rim_centre": 0.3815,
+    "rim_centre_up": [
+     1131.4,
+     690.0
+    ],
+    "placed": {
+     "top_above_rim_cm": 5.4,
+     "lowest_below_rim_cm": 4.6,
+     "width_cm": 13.7,
+     "px": 2070
+    }
    },
    "compose": {
     "defaults": {
      "rnd2_outside_differing_px": 0,
-     "region_px": 695860,
-     "changed_px": 6271,
+     "region_px": 696393,
+     "changed_px": 6803,
      "changed_outside_planter_alpha_and_shadow": 0,
      "overlap_with_other_layers_px": 0
     },
     "beige": {
      "rnd2_outside_differing_px": 0,
-     "region_px": 695860,
-     "changed_px": 6271,
+     "region_px": 696393,
+     "changed_px": 6803,
      "changed_outside_planter_alpha_and_shadow": 0,
      "overlap_with_other_layers_px": 0
     }

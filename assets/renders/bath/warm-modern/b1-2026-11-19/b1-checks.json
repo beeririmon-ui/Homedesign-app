@@ -67,14 +67,14 @@
   "defaults": {
    "min": 10.84,
    "p0_1": 11.33,
-   "p0_5": 11.8,
-   "p5": 35.42
+   "p0_5": 11.78,
+   "p5": 35.32
   },
   "beige": {
    "min": 10.84,
    "p0_1": 11.33,
-   "p0_5": 11.8,
-   "p5": 35.44
+   "p0_5": 11.78,
+   "p5": 35.34
   },
   "plate": {
    "min": 10.98,
@@ -341,10 +341,10 @@
    },
    "ledge-planter": {
     "product": "ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round",
-    "area_pct": 0.146,
-    "height_pct": 7.07,
+    "area_pct": 0.161,
+    "height_pct": 6.79,
     "visible_pct": 100.0,
-    "counts": false,
+    "counts": true,
     "items": 1
    },
    "reed-diffuser": {
@@ -373,12 +373,11 @@
    }
   },
   "in_b1_frame": 12,
-  "counting_in_b1": 7,
+  "counting_in_b1": 8,
   "not_counting_in_b1": [
    "shower-dispensers",
    "wall-sconce",
    "candle",
-   "ledge-planter",
    "reed-diffuser"
   ],
   "new_unique_in_b1": [
@@ -444,7 +443,7 @@
     "light_fringe_px": 0
    },
    "ledge-planter": {
-    "edge_px": 846,
+    "edge_px": 733,
     "light_fringe_px": 0
    },
    "reed-diffuser": {
@@ -532,11 +531,11 @@
     5.6969,
     5.6503
    ],
-   "pot_width_px": 74,
+   "pot_width_px": 75,
    "pot_height_px": 67.0,
-   "width_cm": 12.99,
+   "width_cm": 13.17,
    "height_cm": 11.86,
-   "width_ratio": 0.984,
+   "width_ratio": 0.997,
    "height_ratio": 1.005,
    "as_drawn": {
     "outline": {
@@ -561,7 +560,7 @@
   },
   "colour": {
    "method": "R5 (QA's reading) on the lit half of the pot's body (eroded 2, no plant): mid-tone median over the plaster's light right of the reveal (REF_BOX, off every product) x #ECE5DA; one per-channel linear gain on the pot (its mottle and shading kept), weighted off the plant",
-   "lit_half": "right (x >= 1001.2; the sconce is above right)",
+   "lit_half": "left (x < 1001.2; the window, QA B1P-L1)",
    "sku_photo_lab": [
     59.0,
     4.4,
@@ -572,18 +571,18 @@
     0.7011,
     0.6445
    ],
-   "plaster_ref_px": 14668,
-   "body_px_lit": 1829,
+   "plaster_ref_px": 14941,
+   "body_px_lit": 1955,
    "before": [
-    63.94,
-    2.07,
-    16.23
+    64.18,
+    3.8,
+    14.51
    ],
-   "de00_before": 5.83,
+   "de00_before": 4.72,
    "gain_linear": [
-    0.8571,
-    0.8092,
-    0.897
+    0.8286,
+    0.8126,
+    0.8416
    ],
    "clipped_px": 0,
    "after_lit": [
@@ -593,33 +592,137 @@
    ],
    "de00_after_lit": 0.0,
    "after_shaded_half": [
-    53.5,
-    6.54,
-    11.76
+    52.42,
+    4.51,
+    12.79
    ],
-   "de00_shaded_half": 5.82
+   "de00_shaded_half": 6.16
   },
   "black_point": {
    "rule": "WM-G1 L* 11-14: no layer pixel under 11",
-   "raised_px": 3,
-   "layer_min_L": 11.14
+   "raised_px": 0,
+   "layer_min_L": 11.14,
+   "raised_px_plant": 15
   },
   "rnd2": {
    "defaults": {
     "rnd2_outside_differing_px": 0,
-    "region_px": 695860,
-    "changed_px": 6271,
+    "region_px": 696393,
+    "changed_px": 6803,
     "changed_outside_planter_alpha_and_shadow": 0,
     "overlap_with_other_layers_px": 0
    },
    "beige": {
     "rnd2_outside_differing_px": 0,
-    "region_px": 695860,
-    "changed_px": 6271,
+    "region_px": 696393,
+    "changed_px": 6803,
     "changed_outside_planter_alpha_and_shadow": 0,
     "overlap_with_other_layers_px": 0
    }
   },
-  "plant_rises_above_rim_cm": 6.2
+  "plant_rises_above_rim_cm": 5.5,
+  "qa_round1": {
+   "report": "qa/reports/2026-11-25-bath-b1-planter/README.md",
+   "M1_seam": {
+    "box": [
+     968,
+     722,
+     992,
+     755
+    ],
+    "region_L_median": 58.3,
+    "surround_L_median": 54.3,
+    "region_minus_surround": 4.0,
+    "p99_minus_surround": 14.7,
+    "b_star_median": 10.9,
+    "de00_region_vs_surround": 3.71,
+    "column_steps_972_985": [
+     3.0,
+     2.1,
+     2.2,
+     3.2,
+     2.1,
+     2.2,
+     2.1,
+     1.2,
+     4.2,
+     4.0,
+     4.2,
+     2.7,
+     4.2,
+     5.4
+    ],
+    "note": "the p99 over the surround is the mottle's grey flecks on the lit side (the photo's flecks are about +15 L* over the rust)"
+   },
+   "L1_light": {
+    "L_left": 55.9,
+    "L_right": 49.9,
+    "lit": "left (the window), as the candle and the jar"
+   },
+   "L2_colour": {
+    "lit_left": {
+     "lab": [
+      59.08,
+      4.25,
+      13.05
+     ],
+     "h": 71.9,
+     "de00": 0.34
+    },
+    "shaded_right": {
+     "lab": [
+      52.49,
+      4.05,
+      13.12
+     ],
+     "h": 72.9,
+     "de00": 6.12
+    },
+    "whole": {
+     "lab": [
+      55.88,
+      4.52,
+      12.6
+     ],
+     "h": 70.3,
+     "de00": 2.85
+    },
+    "photo_lab": [
+     59.0,
+     4.4,
+     12.7
+    ],
+    "photo_h": 71.5,
+    "mottle_hp_L_std_x1": 4.21,
+    "mottle_C_hp_x1": 2.92,
+    "photo_same_reading": [
+     4.48,
+     3.04
+    ],
+    "v1_same_reading": [
+     3.28,
+     1.64
+    ]
+   },
+   "vessel_only_v7q6": {
+    "area_pct": 0.101,
+    "height_pct": 4.64,
+    "counts_in_b1": false,
+    "note": "the counts table above includes the filler (the plant is not sold and not counted): the vessel alone is under V7Q6's 0.15 % / 6 %, so it counts in the shelf close-up only, as the candle and the diffuser; the room stays at 19"
+   },
+   "L3_plant": {
+    "what": "a small pothos cutting (fillers.plant: fern, pothos, ficus, sage range)",
+    "median_lch": [
+     36.7,
+     24.0,
+     124.2
+    ],
+    "floor_pothos_lch": [
+     36.2,
+     23.9,
+     121.3
+    ]
+   }
+  }
  }
 }
