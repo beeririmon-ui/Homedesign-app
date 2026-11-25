@@ -2,9 +2,9 @@
  "run": "render-agent, 2026-11-19: the warm-modern bath, B1, the second frame (briefs/wm-bath-b1-render-2026-11-19.md)",
  "plan": 3300,
  "stop_above": 4100,
- "spent_confirmed": 1700,
- "spent_worst_case": 3000,
- "spent_note": "1,300 = two jobs of 650 (plate r1, defaults r2). The two failed submissions of defaults r1 (12 references) returned no task and 'credits_refunded: false'; var2 says failed generations are refunded, but this could not be checked: if both were billed, 2,600. Either way under the plan and the stop line. 2026-11-25: +400 for the ledge planter (one nano-banana-2 2K send).",
+ "spent_confirmed": 2100,
+ "spent_worst_case": 3400,
+ "spent_note": "1,300 = two jobs of 650 (plate r1, defaults r2). The two failed submissions of defaults r1 (12 references) returned no task and 'credits_refunded: false'; var2 says failed generations are refunded, but this could not be checked: if both were billed, 2,600. Either way under the plan and the stop line. 2026-11-25: +400 for the ledge planter (one nano-banana-2 2K send). 2026-11-25: +400 for the planter's plant (r2, QA B1P-L3).",
  "estimates": "var2_estimate_cost before every send: plate (3 refs) 650, defaults (12 refs) 650, defaults (9 refs) 650",
  "var2": {
   "connected_during_sends": true,
@@ -87,6 +87,33 @@
    ],
    "prompt_record": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter.json",
    "verdict": "accepted with code steps (tools/ledge_planter_b1.py): the pot remapped to the clay's silhouette (drawn 14.28 x 13.96 cm from about 20 deg above, now 12.99 x 11.86), the plant pinned to the rim, contact shadow, R5 on the lit half (dE00 5.83 -> 0.0), black floor L* 11.3; no second send"
+  },
+  {
+   "id": "ledge-planter-plant-r2",
+   "run": "render-agent, 2026-11-25: QA round 1 on the planter (qa/reports/2026-11-25-bath-b1-planter), B1P-L3: the plant re-made as the slot's filler (pothos, sage range)",
+   "output": "crop edit: a small trailing pothos cutting in the ledge planter (the pot kept; only the plant is taken)",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "4:3",
+   "estimate": 400,
+   "tokens": 400,
+   "placeholder_id": "f73ca6b9-38b7-4ba4-b82e-c28653b0771c",
+   "task_id": "60f006eb28979301e7cfc0bf6bc8d6e2",
+   "idempotency_key": "wm-bath-b1-ledge-planter-plant-r2-20261125",
+   "input": "inputs/planter-plant-crop.png (the frame with the fixed pot body, no plant; crop 780,590,1180,890, x5.12; inputs/planter-prep.json plant_r2)",
+   "input_sha256": "c1b31cc56bc44da374bb1d0089da0a01be57bd34fd8a480b0b73b6e7196128d8",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7b360029-e38a-48a3-ba20-6e6fa7e8bb2e.png",
+   "refs": [
+    "inputs/planter-plant-ref.jpg: the floor planter's pothos in B1, our own render (no supplier pixels)"
+   ],
+   "ref_urls": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4dd918d3-4a10-404f-bb28-937ffa332820.jpg"
+   ],
+   "prompt": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter-plant.txt",
+   "seed": "not exposed by var2",
+   "sent_at": "2026-11-25 10:55 UTC",
+   "state": "sent"
   }
  ],
  "in_code": {
@@ -108,10 +135,10 @@
   "brief": "briefs/wm-bath-b1-ledge-planter-2026-11-25.md",
   "plan": 400,
   "cap": 800,
-  "spent": 400,
-  "sends": 1,
-  "estimates": "var2_estimate_cost before the send: 400 (nano-banana-2, image-to-image, 2K, 4:3, 1 reference)",
-  "retry": "not needed: size, colour, RND2 and black point fixed in code (0 tokens)",
+  "spent": 800,
+  "sends": 2,
+  "estimates": "var2_estimate_cost before the send: 400 (nano-banana-2, image-to-image, 2K, 4:3, 1 reference); plant r2 (QA B1P-L3): 400 (nano-banana-2, image-to-image, 2K, 4:3, 1 reference)",
+  "retry": "r1 not retried; r2 is the plant only (QA B1P-L3, a brief error). 800 = the cap: no further send",
   "var2": "connected during the send and the result fetch; no re-authorisation was asked"
  }
 }

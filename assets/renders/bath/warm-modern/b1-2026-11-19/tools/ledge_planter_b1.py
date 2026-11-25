@@ -310,6 +310,112 @@ def plant_alpha(al):
                         core_px_up=int(core.sum()))
 
 
+# ---- QA round 1 on the planter (qa/reports/2026-11-25-bath-b1-planter): the body's light and colour re-made, its mottle kept ----
+LIGHT_DIR = (-0.9, 0.3, 0.15)          # camera axes (x right, y towards the camera, z up): the window, left of the pot and a little behind
+                                        # it, and the reveal's bounce in front; the candle and the jar are lit from the left (QA B1P-L1)
+AMB, KEY, TOPF = 0.62, 0.36, 0.04       # ambient, key (Lambert), top fill
+AO_CM = 2.5                             # the foot's occlusion fades over the lowest 2.5 cm
+HUE = 71.5                              # the SKU photo's hue (QA: 71.5; the photo check: 71)
+CHROMA = 13.5                           # the photo check's C*
+HOLE_SHIFT = 130.0                      # up-px: the texture source for the r1 plant's place
+SIG_D_PX = 3.0                          # the texture: what is finer than 3 canvas px (QA's high-pass, sigma 3 at x1)
+HP_TARGET = (4.48, 3.04)                # the photo at the layer's pixel size in this tool's reading (L* hp std, C* hp mean);
+                                        # QA read the photo 4.58 and the v1 layer 3.32 where this tool reads 4.48 and 3.28
+
+
+def masked_blur(v, m, sig):
+    w = C.blur(m.astype(np.float64), sig)
+    return C.blur(v * m, sig) / np.maximum(w, 1e-6)
+
+
+def shading_up(h, w):
+    """the analytic shading of the clay ellipsoid (orthographic normals, as the placeholder), at up-res, normalised to median 1"""
+    pr = json.load(open(PREP))["placeholder"]["clay_scale"]
+    x0, y0 = BOX[0], BOX[1]
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float64)
+    cx, cy = x0 + (xx + 0.5) / UP, y0 + (yy + 0.5) / UP
+    fx, fy = pr["foot_centre"]
+    u = (cx - fx) / pr["px_per_cm_w"]
+    zc = np.clip((fy - cy) / pr["px_per_cm_h"], 0, POT_H)
+    aa, bb = ellipsoid()
+    r = radius(zc)
+    d = np.sqrt(np.clip(r ** 2 - u ** 2, 0, None))
+    n = np.stack([u / aa ** 2, d / aa ** 2, (zc - POT_H / 2) / bb ** 2], -1)
+    n /= np.linalg.norm(n, axis=-1, keepdims=True) + 1e-9
+    lv = np.array(LIGHT_DIR, float)
+    lv /= np.linalg.norm(lv)
+    sh = AMB + KEY * np.clip(n @ lv, 0, 1) + TOPF * np.clip(n[..., 2], 0, 1)
+    sh *= 0.72 + 0.28 * np.clip(zc / AO_CM, 0, 1)
+    return sh, u
+
+
+def relight_body(body, ba, kL=None, kC=None, hole=None):
+    """QA B1P-M1 / L1 / L2: the drawn body's large-scale light (lit from the right as the placeholder was, a sheen, the bright band
+    the remap took from the rim's top surface at the seam) is replaced by the clay ellipsoid's analytic shading lit from the left; its
+    texture (L*, a*, b* finer than 3 canvas px) is kept, at the photo's contrast (L* and C* gains solved at x1); the large-scale
+    colour is the photo's hue (71.5) at its C*. R5 then sets the level in finish()"""
+    h, w = ba.shape
+    m = ba > 0.5
+    me = C.ero(m, 3)
+    lab = G.to_lab(np.clip(body, 0, 1))
+    sd = SIG_D_PX * UP
+    keep = me & ~(hole if hole is not None else np.zeros_like(me))
+    hp = [lab[..., i] - masked_blur(lab[..., i], keep, sd) for i in range(3)]
+    if hole is not None and hole.any():
+        # where the r1 plant hung (its leaves, fringe and the shade they cast): the texture of the pot 130 up-px (25 canvas px) to the
+        # left, feathered over 4 up-px; a texture has no large-scale level, so no step shows
+        yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+        wgt = np.clip(C.blur(C.dil(hole, 4).astype(np.float64), 2.0), 0, 1)
+        for i in range(3):
+            src = cv2.remap(hp[i].astype(np.float32), xx - HOLE_SHIFT, yy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT).astype(np.float64)
+            hp[i] = hp[i] * (1 - wgt) + src * wgt
+    # the texture only inside: clamped to 3.5 sd (the drawn rim's dark line and bright lip are not mottle) and faded to 0 over the
+    # outermost 4 up-px (0.8 canvas px), where the remap samples the drawn edge
+    dist = cv2.distanceTransform(m.astype(np.uint8), cv2.DIST_L2, 5)
+    taper = np.clip((dist - 1.0) / 4.0, 0, 1)
+    for i in range(3):
+        sdv = hp[i][me].std()
+        hp[i] = np.clip(hp[i], -3.5 * sdv, 3.5 * sdv) * taper
+    sh, _ = shading_up(h, w)
+    med = np.median(sh[me])
+    Ymid = G.from_lab(np.array([[57.0, 0, 0]]))[0]
+    Ymid = float(C.lin(Ymid)[0])
+    Lb = G.to_lab(np.repeat(C.srgb(np.clip(Ymid * sh / med, 0, 1))[..., None], 3, -1))[..., 0]
+    ab = CHROMA * np.array([np.cos(np.radians(HUE)), np.sin(np.radians(HUE))])
+
+    def make(kl, kc):
+        out = np.stack([Lb + kl * hp[0], ab[0] + kc * hp[1], ab[1] + kc * hp[2]], -1)
+        return np.clip(G.from_lab(out), 0, 1)
+
+    def measure(img):
+        x0, y0, x1, y1 = BOX
+        cw, ch = x1 - x0, y1 - y0
+        pc = cv2.resize((img * ba[..., None]).astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
+        ac = cv2.resize(ba.astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
+        rgb = np.where((ac > 0)[..., None], pc / np.maximum(ac, 1e-6)[..., None], 0)
+        return hp_metric(rgb, ac)
+
+    kl, kc = (kL or 1.0), (kC or 1.0)
+    for _ in range(4 if kL is None else 0):
+        got = measure(make(kl, kc))
+        kl *= HP_TARGET[0] / got[0]
+        kc *= HP_TARGET[1] / got[1]
+    out = make(kl, kc)
+    got = measure(out)
+    return out, dict(light_dir=list(LIGHT_DIR), ambient=AMB, key=KEY, top_fill=TOPF, ao_cm=AO_CM, hue=HUE, chroma=CHROMA,
+                     texture_sigma_canvas_px=SIG_D_PX, gain_L=round(float(kl), 3), gain_C=round(float(kc), 3),
+                     hp_at_x1=[round(float(v), 2) for v in got], hp_target=list(HP_TARGET))
+
+
+def hp_metric(rgb, a, sig=3.0):
+    """the texture's contrast at x1: L* high-pass (sigma 3) std, and the mean C* distance of a*b* from its sigma-3 mean, over the body
+    (alpha 1, eroded 2)"""
+    lab = G.to_lab(np.clip(rgb, 0, 1))
+    body = C.ero(a > 0.99, 2) & ~C.dil(lab[..., 1] < -4, 2)
+    lo = [masked_blur(lab[..., i], body, sig) for i in range(3)]
+    return float((lab[..., 0] - lo[0])[body].std()), float(np.hypot(lab[..., 1] - lo[1], lab[..., 2] - lo[2])[body].mean())
+
+
 def cut():
     al = np.load(SCR + "aligned.npy").astype(np.float64)
     base = base_crop_up()
@@ -335,57 +441,77 @@ def cut():
     rec["scale_w"] = round(float(s), 4)
     MX, MY, MRX, MRY = MOUTH_D
 
+    TEX_MARGIN = 30.0                                       # up-px below the arc's end (MY), beside the mouth
+    SEAM_SIG = 12.0                                         # QA B1P-M1: the top line smoothed across the seam (up-px)
+    gx = np.arange(700.0, 1560.0)
+    gdx = gx - MX
+    g_arc = MY + MRY * np.sqrt(np.clip(1 - (gdx / MRX) ** 2, 0, 1))
+    g_ell = dr["yc"] - dr["ry"] * np.sqrt(np.clip(1 - ((gx - dr["xc"]) / dr["rx"]) ** 2, 0, 1))
+    # in the mouth's columns the front rim arc; beside it never above the arc's end (MY): the drawn rim's top surface, lit and seen
+    # from above, is left out there too (it made the bright, cool band with a straight edge at the seam); then smoothed
+    g_top = np.where(np.abs(gdx) < MRX, g_arc, np.maximum(g_ell, MY))
+    g_top = np.maximum(g_top, MY + TEX_MARGIN)               # and the texture from below the drawn shoulder's smooth, top-lit band
+    g_top = cv2.GaussianBlur(g_top[None, :].astype(np.float64), (0, 0), SEAM_SIG, borderType=cv2.BORDER_REPLICATE)[0]
+
     def top_d(x):
-        dx = x - MX
-        inm = np.abs(dx) < MRX
-        arc = MY + MRY * np.sqrt(np.clip(1 - (dx / MRX) ** 2, 0, 1))
-        ell = dr["yc"] - dr["ry"] * np.sqrt(np.clip(1 - ((x - dr["xc"]) / dr["rx"]) ** 2, 0, 1))
-        return np.where(inm, arc, ell)
+        return np.interp(x, gx, g_top)
 
     def bot_d(x):
         ell = dr["yc"] + dr["ry"] * np.sqrt(np.clip(1 - ((x - dr["xc"]) / dr["rx"]) ** 2, 0, 1))
         return np.minimum(FOOT_D, ell)
 
-    # 3. the body: every clay pixel takes the drawn pot's pixel at the same relative column (u, of the max half-width) and the same
-    #    relative height in that column (t, between the column's bottom and top; the drawn top is the FRONT rim arc in the mouth's
-    #    columns, so the mouth seen from above is left out): the drawn view (about 20 deg above) becomes the clay's (0.6 deg),
-    #    the width the card's; t clipped 0.012-0.985 and u to 0.99 so no outside pixel is sampled
+    # 3a. the r1 plant out of the drawn pot (QA B1P-L3: the plant is re-made in a second edit): where it covered the pot below the
+    #     rim, the pot's own pixel from the mirror column across the drawn axis, at this side's large-scale shading
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float64)
+    pa, pcol, prec = plant_alpha(al)
+    rec["r1_plant_removed"] = prec
+    inpot = (((xx - dr["xc"]) / dr["rx"]) ** 2 + ((yy - dr["yc"]) / dr["ry"]) ** 2 <= 1.0) & (yy >= top_d(xx) - 2) & (yy <= FOOT_D)
+    hole = C.dil(pa > 0.02, 10) & inpot                    # the leaves, their fringe and the shade they cast on the pot
+    potpx = inpot & ~hole
+    Yl = C.lin(al) @ np.array([0.2126, 0.7152, 0.0722])
+    wv = C.blur(potpx.astype(np.float64), 25.0)
+    Ilo = C.blur(Yl * potpx, 25.0) / np.maximum(wv, 1e-6)
+    xm = 2 * dr["xc"] - xx
+    src = cv2.remap(al.astype(np.float32), xm.astype(np.float32), yy.astype(np.float32), cv2.INTER_LINEAR).astype(np.float64)
+    Ilm = cv2.remap(Ilo.astype(np.float32), xm.astype(np.float32), yy.astype(np.float32), cv2.INTER_LINEAR).astype(np.float64)
+    okm = cv2.remap(potpx.astype(np.float32), xm.astype(np.float32), yy.astype(np.float32), cv2.INTER_LINEAR) > 0.99
+    fill = C.srgb(np.clip(C.lin(src) * (Ilo / np.maximum(Ilm, 1e-6))[..., None], 0, 1))
+    clean = al.copy()
+    use = hole & okm
+    clean[use] = fill[use]
+    rest = (hole & ~okm).astype(np.uint8)
+    if rest.any():
+        clean = cv2.inpaint(C.q(clean), rest, 5, cv2.INPAINT_TELEA).astype(np.float64) / 255
+    rec["r1_plant_removed"].update(hole_px_up=int(hole.sum()), mirror_filled_px_up=int(use.sum()), inpainted_px_up=int(rest.sum()))
+    # 3b. the body: every clay pixel takes the drawn pot's pixel at the same relative column (u, of the max half-width) and the same
+    #     relative height in that column (t, between the column's bottom and top; the drawn top is the FRONT rim arc in the mouth's
+    #     columns, so the mouth seen from above is left out): the drawn view (about 20 deg above) becomes the clay's (0.6 deg),
+    #     the width the card's; t clipped 0.012-0.985 and u to 0.99 so no outside pixel is sampled. Only its TEXTURE is kept
+    #     (relight_body: QA B1P-M1, L1, L2)
     tc = np.interp(xx[0], cl["xs"], cl["top"], left=np.nan, right=np.nan)
     bc = np.interp(xx[0], cl["xs"], cl["bot"], left=np.nan, right=np.nan)
     u = np.clip((xx - cl["xc"]) / cl["rx"], -0.99, 0.99)
-    t = np.clip((bc[None, :] - yy) / np.maximum(bc - tc, 1e-3)[None, :], 0.012, 0.985)
+    t = np.clip((bc[None, :] - yy) / np.maximum(bc - tc, 1e-3)[None, :], 0.03, 0.96)
     xd = dr["xc"] + u * dr["rx"]
     yd = bot_d(xd) - t * (bot_d(xd) - top_d(xd))
     xd, yd = np.nan_to_num(xd, nan=-10.0), np.nan_to_num(yd, nan=-10.0)
-    body = cv2.remap(al.astype(np.float32), xd.astype(np.float32), yd.astype(np.float32), cv2.INTER_LINEAR,
+    body = cv2.remap(clean.astype(np.float32), xd.astype(np.float32), yd.astype(np.float32), cv2.INTER_LINEAR,
                      borderMode=cv2.BORDER_REPLICATE).astype(np.float64)
     body = np.nan_to_num(body)
     ba = np.nan_to_num(ca) * np.isfinite(tc)[None, :]
-    # 4. the plant: pinned to the rim: x by the same scale about the axis, y from the drawn front-rim arc (the mouth's mid height
-    #    beyond its columns) to the clay's rim line, at the same scale; only what the edit drew ABOVE that line (what hangs over the
-    #    front came with the body)
-    pa, pcol, prec = plant_alpha(al)
-    rec["plant"] = prec
-    xs_ = dr["xc"] + (xx - cl["xc"]) / s                       # inverse: output -> drawn
-    A_ = np.where(np.abs(xs_ - MX) < MRX, MY + MRY * np.sqrt(np.clip(1 - ((xs_ - MX) / MRX) ** 2, 0, 1)), MY)
-    ys_ = A_ + (yy - cl["top_c"]) / s
-    pr = cv2.remap(np.dstack([pcol * pa[..., None], pa]).astype(np.float32), xs_.astype(np.float32), ys_.astype(np.float32),
-                   cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0).astype(np.float64)
-    above = ys_ < A_ - 0.5
-    pr *= above[..., None]
-    pal = np.clip(pr[..., 3], 0, 1)
-    # 5. compose at up-res (premultiplied): plant over body; then down to the canvas (area, x 1/5.12) and straight alpha
-    prem = pr[..., :3] + body * ba[..., None] * (1 - pal[..., None])
-    alpha = pal + ba * (1 - pal)
+    hole_o = cv2.remap(hole.astype(np.float32), xd.astype(np.float32), yd.astype(np.float32), cv2.INTER_LINEAR) > 0.01
+    body, rrec = relight_body(body, ba, hole=hole_o)
+    rec["body"] = dict(seam_smoothing_sigma_up_px=SEAM_SIG, texture_margin_up_px=TEX_MARGIN, relight=rrec,
+                       top_rule="front rim arc in the mouth's columns, max(outline top, the arc's end) beside it, gaussian-smoothed")
+    # 5. down to the canvas (area, x 1/5.12), straight alpha; no plant here (cut_plant() makes it from the second edit)
     x0, y0, x1, y1 = BOX
     cw, ch = x1 - x0, y1 - y0
-    prem_c = cv2.resize(prem.astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
-    a_c = cv2.resize(alpha.astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
-    pal_c = cv2.resize(pal.astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
-    ba_c = cv2.resize(ba.astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
+    prem_c = cv2.resize((body * ba[..., None]).astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
+    a_c = cv2.resize(ba.astype(np.float32), (cw, ch), interpolation=cv2.INTER_AREA).astype(np.float64)
     a_c[a_c < 1 / 255] = 0
     rgb_c = np.where((a_c > 0)[..., None], prem_c / np.maximum(a_c, 1e-6)[..., None], 0)
+    pal_c = np.zeros_like(a_c)
+    ba_c = a_c.copy()
     # 6. the contact shadow: the edit's darkening of the ledge round the foot (luminance ratio to the frame), filled under the drawn
     #    pot (inpaint) and scaled about the axis with the pot; one z below
     Y = lambda im: C.lin(im) @ np.array([0.2126, 0.7152, 0.0722])  # noqa: E731
@@ -631,6 +757,58 @@ def sheet():
         d.rectangle([x + 10 + j * 150, y + 320, x + 140 + j * 150, y + 420], fill=tuple(int(v) for v in C.q(np.clip(c, 0, 1))))
     out.save(os.path.join(ST, "qa-sheet-planter.jpg"), quality=90)
     print(out.size)
+
+
+# ---- the plant, second edit (QA B1P-L3: data/slots/bath.json fillers.plant: "soft-leaved plants that like humidity (fern, pothos,
+#      ficus), sage range, same in every variant"): the pot as it is now (body, its shadow), the r1 plant out; only the plant is taken ----
+PLANT_REF_BOX = (1335, 1092, 1570, 1212)     # x0, y0, x1, y1: the floor planter's pothos in B1 (our own render: the same plant, smaller)
+
+
+def prep_plant():
+    man = json.load(open(os.path.join(ST, "layers", "manifest.json")))
+    o8 = stack_files(man)[0]                 # the frame with the pot body only (finish() wrote it, no plant)
+    x0, y0, x1, y1 = BOX
+    crop = Image.fromarray(o8).crop((x0, y0, x1, y1)).resize((2048, int(round((y1 - y0) * UP))), Image.LANCZOS)
+    cp = os.path.join(ST, "inputs", "planter-plant-crop.png")
+    crop.save(cp)
+    rx0, ry0, rx1, ry1 = PLANT_REF_BOX
+    ref = Image.fromarray(defaults_without_planter()).crop((rx0, ry0, rx1, ry1))
+    ref = ref.resize((ref.width * 4, ref.height * 4), Image.LANCZOS)
+    rp = os.path.join(ST, "inputs", "planter-plant-ref.jpg")
+    ref.save(rp, quality=92)
+    import hashlib
+    pr = json.load(open(PREP))
+    pr["plant_r2"] = dict(pass_="ledge-planter-plant-r2", base="the frame with the pot body after QA round 1's fixes (layer and shadow as "
+                          "finish() wrote them, no plant)", crop_box=list(BOX), upscale=UP, aspect="4:3", crop="inputs/planter-plant-crop.png",
+                          crop_sha256=hashlib.sha256(open(cp, "rb").read()).hexdigest(),
+                          reference=dict(file="inputs/planter-plant-ref.jpg", what="the floor planter's pothos in B1, our own render "
+                                         "(b1-defaults, box %s), x4" % list(PLANT_REF_BOX)))
+    json.dump(pr, open(PREP, "w"), indent=1, ensure_ascii=False)
+    print(json.dumps(pr["plant_r2"], indent=1))
+
+
+def assemble_plant(rawp):
+    """the plant edit back to the upload's size, locked onto it (ECC affine on the gradient, away from the plant's box)"""
+    inp = C.load(os.path.join(ST, "inputs", "planter-plant-crop.png"))
+    h, w = inp.shape[:2]
+    raw = C.load(rawp, (h, w))
+    keep = np.ones((h, w), bool)
+    keep[150:1150, 450:1750] = False
+    warp = np.eye(2, 3, dtype=np.float32)
+    crit = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6)
+    cc, warp = cv2.findTransformECC(grad(inp), grad(raw), warp, cv2.MOTION_AFFINE, crit, keep.astype(np.uint8), 5)
+    al = cv2.warpAffine(raw.astype(np.float32), warp, (w, h), flags=cv2.INTER_LANCZOS4 + cv2.WARP_INVERSE_MAP,
+                        borderMode=cv2.BORDER_REPLICATE).astype(np.float64)
+    al = np.clip(al, 0, 1)
+    np.save(SCR + "aligned-plant.npy", al.astype(np.float32))
+    d = np.abs(al - inp).max(2)
+    rec = dict(raw=os.path.relpath(rawp, ST), raw_size=list(Image.open(rawp).size), ecc=round(float(cc), 4),
+               warp=[[round(float(v), 5) for v in r] for r in warp], stable_px=int(keep.sum()),
+               outside_diff_p50_p99=[round(float(np.percentile(d[keep], q)) * 255, 2) for q in (50, 99)])
+    pr = json.load(open(PREP))
+    pr["plant_r2"]["assemble"] = rec
+    json.dump(pr, open(PREP, "w"), indent=1, ensure_ascii=False)
+    print(json.dumps(rec))
 
 
 if __name__ == "__main__":
