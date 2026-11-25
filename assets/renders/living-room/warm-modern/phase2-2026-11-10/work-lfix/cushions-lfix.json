@@ -1,0 +1,133 @@
+{
+ "B": {
+  "from_layer": "cushions/set-B-fb12s0.png",
+  "from_shadow": "cushions/set-B-shadow-fb12s0.png",
+  "cushion_shadow": {
+   "zone_px": 14925,
+   "changed_px": 7227,
+   "bbox": [
+    1619,
+    919,
+    1681,
+    1077
+   ],
+   "dark_before_mean": 0.228,
+   "dark_after_mean": 0.021,
+   "model": "max(old, 1 - 0.30 exp(-d / 7 px)), d = distance from the left cushion's alpha; feathered 6 px; below its bottom unchanged"
+  },
+  "throw": {
+   "columns": 190,
+   "x": [
+    1952,
+    2141
+   ],
+   "d_px_max": 18.0,
+   "d_px_median": 12.7,
+   "stretch_max": 1.2,
+   "margin_px": 6,
+   "gap_px_before": 790,
+   "gap_px_after": 40,
+   "how": "per column: the throw's lower R = max(90, 4 d) px stretched over R + d (premultiplied RGBA, bilinear), so its cut edge lies d px lower, MARGIN px behind Olia's top; d smoothed along x (dilate 9, Gaussian 3, never under the need)"
+  },
+  "stripe": {
+   "px": 0
+  }
+ },
+ "A": {
+  "from_layer": "cushions/set-A-fb12s1.png",
+  "from_shadow": "cushions/set-A-shadow-fb12s1.png",
+  "cushion_shadow": {
+   "zone_px": 15525,
+   "changed_px": 7293,
+   "bbox": [
+    1628,
+    920,
+    1691,
+    1079
+   ],
+   "dark_before_mean": 0.216,
+   "dark_after_mean": 0.021,
+   "model": "max(old, 1 - 0.30 exp(-d / 7 px)), d = distance from the left cushion's alpha; feathered 6 px; below its bottom unchanged"
+  },
+  "throw": {
+   "columns": 158,
+   "x": [
+    1984,
+    2141
+   ],
+   "d_px_max": 15.0,
+   "d_px_median": 11.1,
+   "stretch_max": 1.167,
+   "margin_px": 6,
+   "gap_px_before": 517,
+   "gap_px_after": 39,
+   "how": "per column: the throw's lower R = max(90, 4 d) px stretched over R + d (premultiplied RGBA, bilinear), so its cut edge lies d px lower, MARGIN px behind Olia's top; d smoothed along x (dilate 9, Gaussian 3, never under the need)"
+  },
+  "stripe": {
+   "px": 782,
+   "rows": [
+    1265,
+    1266,
+    1267,
+    1268,
+    1269,
+    1270
+   ],
+   "box": [
+    2150,
+    1252,
+    2260,
+    1282
+   ]
+  }
+ },
+ "C": {
+  "from_layer": "cushions/set-C-fb12s1.png",
+  "from_shadow": "cushions/set-C-shadow-fb12s1.png",
+  "cushion_shadow": {
+   "zone_px": 15525,
+   "changed_px": 7740,
+   "bbox": [
+    1619,
+    918,
+    1684,
+    1083
+   ],
+   "dark_before_mean": 0.235,
+   "dark_after_mean": 0.022,
+   "model": "max(old, 1 - 0.30 exp(-d / 7 px)), d = distance from the left cushion's alpha; feathered 6 px; below its bottom unchanged"
+  },
+  "throw": {
+   "columns": 215,
+   "x": [
+    1927,
+    2141
+   ],
+   "d_px_max": 21.0,
+   "d_px_median": 12.2,
+   "stretch_max": 1.233,
+   "margin_px": 6,
+   "gap_px_before": 886,
+   "gap_px_after": 81,
+   "how": "per column: the throw's lower R = max(90, 4 d) px stretched over R + d (premultiplied RGBA, bilinear), so its cut edge lies d px lower, MARGIN px behind Olia's top; d smoothed along x (dilate 9, Gaussian 3, never under the need)"
+  },
+  "stripe": {
+   "px": 247,
+   "rows": [
+    1264,
+    1265,
+    1266,
+    1267,
+    1268,
+    1269,
+    1270
+   ],
+   "box": [
+    2174,
+    1252,
+    2203,
+    1282
+   ]
+  }
+ }
+}
