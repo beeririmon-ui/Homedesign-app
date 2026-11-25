@@ -1,0 +1,732 @@
+/* FB13, direction C, "הקרנה" (the hybrid): the tour as a screening. A dark stage round the picture so the renders
+   glow, a light serif for the names (the magazine), a mono face for the numbers (the instrument), brass for the one
+   accent. Rooms are chapters: a title card fades in over the picture when one opens and clears away, so the room at
+   rest is clean. Motion is slow and cinematic: long fades, a curtain-like rise of the panels.
+   Everything is scoped by html[data-design='c'] (design/design.ts); without it nothing here applies.
+   NOTE for the owner's choice: the dark stage is for the tour only (the shop's pages stay paper); the current art
+   direction has no dark mode at launch (ART3), and this is not a mode the visitor switches — but it is a change. */
+@import '@fontsource/ibm-plex-sans-hebrew/400.css';
+@import '@fontsource/ibm-plex-sans-hebrew/500.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+html[data-design='c'] {
+  --f-text: 'IBM Plex Sans Hebrew', 'Assistant', system-ui, sans-serif;
+  --dz-mono: 'IBM Plex Mono', 'IBM Plex Sans Hebrew', ui-monospace, monospace;
+  --dz-serif: 'Frank Ruhl Libre', 'David Libre', serif;
+  --dz-night: #12110f;
+  --dz-night-2: #1d1b18;
+  --dz-light: #f1ece4;
+  --dz-light-2: #b9b1a5;
+  --dz-brass: #c9a46a;
+  --dz-hair: rgba(241, 236, 228, 0.16);
+  --dz-slow: 700ms;
+  --dz-ease: cubic-bezier(0.45, 0, 0.15, 1);
+  --paper: #f3efe8;
+  --ink: #17150f;
+  --ink-2: #57524a;
+}
+html[data-design='c'] body {
+  font-family: var(--f-text);
+}
+html[data-design='c'] :focus-visible {
+  outline: 2px solid var(--dz-brass);
+  outline-offset: 3px;
+}
+html[data-design='c'] main :focus-visible {
+  outline-color: currentColor;
+}
+
+/* ---------- the bar: black on every page, the brand in the serif, the links in mono ---------- */
+html[data-design='c'] .site-header {
+  background: var(--dz-night);
+  border-bottom: 1px solid var(--dz-hair);
+  color: var(--dz-light);
+}
+html[data-design='c'] .site-header .wrap {
+  max-width: none;
+  padding-inline: clamp(16px, 3vw, 40px);
+}
+html[data-design='c'] .brand {
+  color: var(--dz-light);
+  font: 300 26px / 1 var(--dz-serif);
+}
+html[data-design='c'] .nav a {
+  color: var(--dz-light);
+  border-radius: 0;
+  font: 500 13px / 1 var(--dz-mono);
+}
+html[data-design='c'] .nav a:hover,
+html[data-design='c'] .nav a[aria-current='page'] {
+  background: none;
+  color: var(--dz-brass);
+}
+html[data-design='c'] .btn {
+  border-radius: 999px;
+}
+html[data-design='c'] .btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+html[data-design='c'] :focus-visible:where(.site-header *) {
+  outline-color: var(--dz-brass);
+}
+
+/* ---------- the tour: the night round the picture ---------- */
+html[data-design='c'] .tour {
+  --tour-bg: var(--dz-night);
+  --tour-fg: var(--dz-light);
+  --tour-fg2: var(--dz-light-2);
+  --tour-line: rgba(241, 236, 228, 0.32);
+  --tour-card: var(--dz-night-2);
+  --brass: var(--dz-brass);
+  --label: rgba(18, 17, 15, 0.86);
+  font-family: var(--f-text);
+}
+html[data-design='c'] .tour :focus-visible {
+  outline-color: var(--dz-brass);
+}
+html[data-design='c'] .tour-win {
+  background: #000;
+  box-shadow:
+    0 0 0 1px var(--dz-hair),
+    0 40px 80px -30px #000;
+}
+@media (min-aspect-ratio: 11/10) and (min-height: 501px) {
+  html[data-design='c'] .tour-g {
+    --dz-band: 92px;
+    --wh: min(100cqh - var(--dz-band) - 24px, (100cqw - 64px) * 0.5625);
+    --wy: calc((100cqh - var(--dz-band) - var(--wh)) / 2);
+    grid-template: 'win win win' minmax(0, 1fr) 'top fold count' var(--dz-band) / minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+  html[data-design='c'] .tour-top {
+    padding-inline: var(--wx) var(--s-3);
+  }
+  html[data-design='c'] .tour-count {
+    padding-inline: var(--s-3) var(--wx);
+  }
+  html[data-design='c'] .tour-cell {
+    padding-inline-end: var(--wx);
+  }
+  html[data-design='c'] .tour-t,
+  html[data-design='c'] .tour-t.t-door {
+    flex-wrap: wrap;
+    align-content: center;
+    column-gap: var(--s-3);
+    row-gap: 2px;
+    padding-top: 16px;
+  }
+  html[data-design='c'] .tour-t h1,
+  html[data-design='c'] .tour-t .h,
+  html[data-design='c'] .tour-t.t-door h1,
+  html[data-design='c'] .tour-t.t-door .h {
+    flex-basis: 100%;
+    order: 0;
+    font: 300 36px / 1.1 var(--dz-serif);
+    color: var(--dz-light);
+  }
+  html[data-design='c'] .tour-t.t-room h1::after,
+  html[data-design='c'] .tour-t.t-room .h::after {
+    content: none;
+  }
+  /* the phone's invitation to turn it is never shown here: it must not set the eyebrow's width */
+  html[data-design='c'] .tour-eyes > [data-k='rotate'] {
+    display: none;
+  }
+
+  html[data-design='c'] .dz-chap-b {
+    top: calc(var(--wy) + var(--wh) + 16px);
+    inset-inline-start: var(--wx);
+  }
+  html[data-design='c'] .dz-meta {
+    top: calc(var(--wy) + var(--wh) + 16px);
+    inset-inline-end: var(--wx);
+  }
+  html[data-design='c'] .tour-count {
+    align-self: end;
+    margin-bottom: 22px;
+  }
+}
+html[data-design='c'] .tour-t .eyebrow,
+html[data-design='c'] .tour-t.t-door .eyebrow {
+  font: 400 13px / 1.3 var(--f-text);
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .tour-sale {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  font: 500 12px / 1.3 var(--dz-mono);
+  color: var(--dz-brass);
+}
+html[data-design='c'] .tour-count {
+  font: 500 12px / 1.2 var(--dz-mono);
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .dz-chap-b,
+html[data-design='c'] .dz-meta {
+  position: absolute;
+  font: 500 12px / 1 var(--dz-mono);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity var(--dz-slow) var(--dz-ease);
+}
+html[data-design='c'] .dz-chap-b {
+  color: var(--dz-brass);
+}
+html[data-design='c'] .dz-meta {
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .tour[data-phase='room']:not([data-close]) .dz-meta,
+html[data-design='c'] .tour[data-phase='door'] .dz-chap-b {
+  opacity: 0;
+}
+html[data-design='c'] .tour-fold {
+  height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--tour-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--dz-light);
+  font: 500 14px / 1 var(--f-text);
+}
+html[data-design='c'] .tour-plan rect {
+  stroke-width: 1.1;
+}
+html[data-design='c'] .tour-door-act .btn,
+html[data-design='c'] .tour-walk-act .btn {
+  background: var(--dz-light);
+  color: var(--dz-night);
+  border-radius: 999px;
+  font: 500 16px / 1 var(--f-text);
+}
+html[data-design='c'] .tour-temp {
+  color: var(--dz-light-2);
+  font: 400 12px / 1 var(--dz-mono);
+}
+
+/* ---------- on the picture: a fade from black at the door, and a chapter's title card ---------- */
+html[data-design='c'] .dz-win {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+html[data-design='c'] .dz-fade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  animation: dz-c-fade 1600ms var(--dz-ease) both;
+}
+html[data-design='c'] .tour:not([data-phase='door']) .dz-fade {
+  display: none;
+}
+@keyframes dz-c-fade {
+  to {
+    opacity: 0;
+  }
+}
+html[data-design='c'] .dz-card {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: grid;
+  justify-items: start;
+  gap: 0.6cqw;
+  padding: 10cqw 4cqw 3.4cqw;
+  background: linear-gradient(to top, rgba(18, 17, 15, 0.78), rgba(18, 17, 15, 0));
+  color: var(--dz-light);
+}
+html[data-design='c'] .dz-chap {
+  font: 500 clamp(11px, 1.1cqw, 14px) / 1 var(--dz-mono);
+  color: var(--dz-brass);
+}
+html[data-design='c'] .dz-ttl {
+  font: 300 clamp(30px, 5.4cqw, 68px) / 1 var(--dz-serif);
+}
+/* at the door the card stays; in a room it comes, holds and clears, so the room at rest is clean */
+html[data-design='c'] .tour[data-phase='door'] .dz-card {
+  animation: dz-c-in 1400ms var(--dz-ease) 500ms both;
+}
+html[data-design='c'] .tour:not([data-phase='door']) .dz-card {
+  animation: dz-c-card 3200ms var(--dz-ease) both;
+}
+@keyframes dz-c-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes dz-c-card {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  22%,
+  70% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+html[data-design='c'] .tour[data-close] .dz-card,
+html[data-design='c'] .tour[data-zoomed] .dz-card {
+  display: none;
+}
+
+/* ---------- the marks: a point of light in a brass ring; the label is a dark chip with the name in the serif ---------- */
+html[data-design='c'] .tour-spot .mark {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: var(--dz-light);
+  box-shadow:
+    0 0 0 4px rgba(18, 17, 15, 0.35),
+    0 0 0 5px var(--dz-brass);
+}
+html[data-design='c'] .tour-spot:focus-visible .mark,
+html[data-design='c'] .tour-spot:hover .mark {
+  background: var(--dz-brass);
+  box-shadow:
+    0 0 0 4px rgba(18, 17, 15, 0.5),
+    0 0 0 5px var(--dz-light);
+}
+html[data-design='c'] .tour-spot[data-on] {
+  transition: opacity var(--dz-slow) var(--dz-ease) calc(var(--n, 0) * 60ms);
+}
+html[data-design='c'] .tour-spot .tag {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(18, 17, 15, 0.88);
+  box-shadow: 0 0 0 1px var(--dz-hair);
+  color: var(--dz-light);
+  font: 400 17px / 1.15 var(--dz-serif);
+}
+html[data-design='c'] .tour-spot .tag .dz-i {
+  margin-inline-end: 8px;
+  color: var(--dz-brass);
+  font: 500 11px / 1 var(--dz-mono);
+}
+html[data-design='c'] .tour-spot .tag .num {
+  color: var(--dz-light-2);
+  font: 500 12px / 1 var(--dz-mono);
+}
+html[data-design='c'] .tour-ring i {
+  border-color: var(--dz-brass);
+}
+html[data-design='c'] .tour-dim {
+  border-color: var(--dz-light);
+}
+html[data-design='c'] .tour-dim b {
+  border-radius: 999px;
+  background: rgba(18, 17, 15, 0.88);
+  color: var(--dz-light);
+  font: 500 12px / 1.2 var(--dz-mono);
+}
+
+/* ---------- the chapters: the rooms panel rises over the bottom of the picture, a row of chapters ---------- */
+html[data-design='c'] .tour-more {
+  background: rgba(18, 17, 15, 0.96);
+  color: var(--dz-light);
+  border-radius: 0;
+  box-shadow:
+    0 0 0 1px var(--dz-hair),
+    0 -30px 60px -20px #000;
+}
+@media (min-aspect-ratio: 11/10) and (min-height: 501px) {
+  html[data-design='c'] .tour-more {
+    left: var(--wx);
+    width: var(--ww);
+    bottom: calc(100cqh - var(--wy) - var(--wh));
+    max-height: var(--wh);
+    padding: 0 var(--s-6) var(--s-5);
+    transform: translateY(40px);
+  }
+  html[data-design='c'] .tour[data-more] .tour-more {
+    transform: none;
+    transition:
+      transform var(--dz-slow) var(--dz-ease),
+      opacity var(--dz-slow) var(--dz-ease);
+  }
+  html[data-design='c'] .tour-rooms > div {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  html[data-design='c'] .tour-more-head .grip {
+    display: none;
+  }
+  html[data-design='c'] .tour-more {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    column-gap: var(--s-6);
+    align-items: start;
+  }
+  html[data-design='c'] .tour-more-head,
+  html[data-design='c'] .tour-panel {
+    grid-column: 1 / -1;
+  }
+  html[data-design='c'] .tour-rooms {
+    grid-row: 2 / span 3;
+  }
+  html[data-design='c'] .tour-style {
+    margin-top: 0;
+  }
+}
+html[data-design='c'] .tour-more-x {
+  color: var(--dz-light);
+}
+html[data-design='c'] .tour-more h2 {
+  font: 500 11px / 1 var(--dz-mono);
+  color: var(--dz-brass);
+}
+html[data-design='c'] .tour-rooms > div {
+  gap: 1px;
+  background: var(--dz-hair);
+  border: 1px solid var(--dz-hair);
+}
+html[data-design='c'] .tour-rooms button {
+  min-height: 92px;
+  padding: 12px 14px;
+  grid-template-rows: auto 1fr auto;
+  justify-items: start;
+  align-content: stretch;
+  gap: 6px;
+  border: 0;
+  border-radius: 0;
+  background: var(--dz-night);
+  color: var(--dz-light);
+  font: 300 22px / 1.1 var(--dz-serif);
+  text-align: start;
+}
+html[data-design='c'] .tour-rooms button::before {
+  content: attr(data-n);
+  font: 500 11px / 1 var(--dz-mono);
+  color: var(--dz-brass);
+}
+html[data-design='c'] .tour-rooms button svg {
+  display: none;
+}
+html[data-design='c'] .tour-rooms small {
+  font: 500 11px / 1 var(--dz-mono);
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .tour-rooms button:hover {
+  background: var(--dz-night-2);
+}
+html[data-design='c'] .tour-rooms button[aria-current='true'] {
+  background: var(--dz-light);
+  color: var(--dz-night);
+  box-shadow: none;
+}
+html[data-design='c'] .tour-rooms button[aria-current='true']::before,
+html[data-design='c'] .tour-rooms button[aria-current='true'] small {
+  color: var(--ink-2);
+}
+html[data-design='c'] .tour-style .segmented button {
+  border: 1px solid var(--tour-line);
+  border-radius: 999px;
+  color: var(--dz-light-2);
+  font: 400 14px / 1 var(--f-text);
+}
+html[data-design='c'] .tour-style .segmented button[aria-pressed='true'] {
+  border-color: var(--dz-light);
+  box-shadow: none;
+  color: var(--dz-light);
+}
+html[data-design='c'] .tour-links {
+  flex-direction: column;
+}
+html[data-design='c'] .tour-links .btn {
+  border: 1px solid var(--tour-line);
+  border-radius: 999px;
+  color: var(--dz-light);
+}
+html[data-design='c'] .tour-panel {
+  color: var(--dz-light-2);
+}
+
+/* ---------- the close-up and the wheel: subtitles under the picture's light ---------- */
+html[data-design='c'] .tour .picker {
+  background: linear-gradient(to top, rgba(18, 17, 15, 0.9), rgba(18, 17, 15, 0.3) 46%, rgba(18, 17, 15, 0) 70%);
+  color: var(--dz-light);
+}
+html[data-design='c'] .picker-head,
+html[data-design='c'] .picker-info {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--dz-light);
+}
+@media (min-aspect-ratio: 11/10) and (min-height: 501px) {
+  html[data-design='c'] .tour .picker {
+    grid-template-rows: minmax(0, 1fr) clamp(96px, 20svh, 148px) auto;
+    column-gap: var(--s-5);
+    grid-template-columns: 1fr 1fr;
+  }
+  html[data-design='c'] .tour .picker .arc {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+  html[data-design='c'] .picker-head {
+    grid-row: 3;
+    grid-column: 1;
+    justify-self: start;
+    align-self: end;
+    padding: 0 var(--s-6) var(--s-6);
+  }
+  html[data-design='c'] .tour .picker .picker-info {
+    grid-row: 3;
+    grid-column: 2;
+    justify-self: end;
+    justify-items: end;
+    align-self: end;
+    padding: 0 var(--s-6) var(--s-6);
+    text-align: end;
+  }
+  html[data-design='c'] .picker-info .specs,
+  html[data-design='c'] .picker .tour-info {
+    justify-content: flex-end;
+  }
+  html[data-design='c'] .picker-actions {
+    justify-content: flex-end;
+  }
+}
+html[data-design='c'] .picker-head h2 {
+  font: 300 48px / 1 var(--dz-serif);
+}
+html[data-design='c'] .picker-head .eyebrow {
+  margin-bottom: 8px;
+  font: 500 12px / 1 var(--dz-mono);
+  color: var(--dz-brass);
+}
+html[data-design='c'] .close-btn,
+html[data-design='c'] .arc-nav button {
+  border-radius: 999px;
+  background: none;
+  box-shadow: inset 0 0 0 1px rgba(241, 236, 228, 0.5);
+  color: var(--dz-light);
+}
+html[data-design='c'] .picker-info .name {
+  font: 300 26px / 1.15 var(--dz-serif);
+}
+html[data-design='c'] .picker-info .specs,
+html[data-design='c'] .picker .tour-info {
+  color: var(--dz-light-2);
+  font: 500 13px / 1.4 var(--dz-mono);
+}
+html[data-design='c'] .picker .tour-info a {
+  color: var(--dz-light);
+}
+html[data-design='c'] .pips i {
+  height: 2px;
+  background: rgba(241, 236, 228, 0.3);
+}
+html[data-design='c'] .pips i.on {
+  background: var(--dz-brass);
+}
+html[data-design='c'] .picker-actions {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+html[data-design='c'] .picker-actions .btn-primary {
+  background: var(--dz-light);
+  color: var(--dz-night);
+}
+html[data-design='c'] .arc-card .disc {
+  background: radial-gradient(closest-side, rgba(29, 27, 24, 0.85), rgba(18, 17, 15, 0.7));
+  border: 1px solid rgba(241, 236, 228, 0.22);
+}
+html[data-design='c'] .arc-card[aria-checked='true'] .disc {
+  border: 1.5px solid var(--dz-brass);
+  box-shadow: 0 0 40px -6px rgba(201, 164, 106, 0.45);
+}
+html[data-design='c'] .arc-card .veil {
+  background: var(--dz-night);
+}
+html[data-design='c'] .arc-card .num-tag {
+  bottom: -18px;
+  color: var(--dz-brass);
+  font: 500 11px / 1 var(--dz-mono);
+  opacity: 1;
+}
+html[data-design='c'] .tour .picker[data-in] {
+  transition:
+    opacity var(--dz-slow) var(--dz-ease),
+    transform var(--dz-slow) var(--dz-ease);
+}
+html[data-design='c'] .snap-card .disc {
+  background: var(--dz-night-2);
+}
+html[data-design='c'] .snap-card[aria-checked='true'] .disc {
+  border: 1.5px solid var(--dz-brass);
+}
+html[data-design='c'] .snap-count {
+  font-family: var(--dz-mono);
+}
+
+/* ---------- a phone upright: the chapter over the title, dark cards ---------- */
+@media (max-aspect-ratio: 11/10) {
+  html[data-design='c'] .dz-chap-b,
+  html[data-design='c'] .dz-meta {
+    display: none;
+  }
+  html[data-design='c'] .tour-spot .mark {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    box-shadow:
+      0 0 0 2.5px rgba(18, 17, 15, 0.35),
+      0 0 0 3.5px var(--dz-brass);
+  }
+  html[data-design='c'] .tour[data-close] .dz-chap-b {
+    opacity: 0;
+  }
+  html[data-design='c'] .dz-card {
+    padding: 8cqw 4cqw 3cqw;
+  }
+  html[data-design='c'] .dz-ttl {
+    font-size: 26px;
+  }
+  html[data-design='c'] .tour-top {
+    align-items: end;
+    padding-bottom: var(--s-4);
+  }
+  html[data-design='c'] .tour-t h1,
+  html[data-design='c'] .tour-t .h,
+  html[data-design='c'] .tour-t.t-door h1,
+  html[data-design='c'] .tour-t.t-door .h {
+    font: 300 40px / 1.05 var(--dz-serif);
+    color: var(--dz-light);
+  }
+  html[data-design='c'] .tour-tile {
+    position: relative;
+  }
+  html[data-design='c'] .tour-tile .pic {
+    border-radius: 0;
+    background: var(--dz-night-2);
+    box-shadow: inset 0 0 0 1px var(--dz-hair);
+  }
+  html[data-design='c'] .tour-tile::before {
+    content: attr(data-n);
+    position: absolute;
+    top: 5px;
+    inset-inline-start: 6px;
+    z-index: 1;
+    font: 500 10px / 1 var(--dz-mono);
+    color: var(--dz-brass);
+  }
+  html[data-design='c'] .tour-tile .nm {
+    color: var(--dz-light);
+    font: 400 12px / 16px var(--f-text);
+  }
+  html[data-design='c'] .tour-more {
+    box-shadow: 0 -1px 0 var(--dz-hair);
+  }
+  html[data-design='c'] .tour-rooms > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html[data-design='c'] .tour-rooms button {
+    min-height: 64px;
+    font-size: 19px;
+  }
+  html[data-design='c'] .tour[data-frame] .picker {
+    background: none;
+  }
+  html[data-design='c'] .tour[data-frame] .picker-head h2 {
+    font: 300 38px / 1.05 var(--dz-serif);
+  }
+  html[data-design='c'] .tour[data-frame] .picker-head .eyebrow {
+    font: 500 11px / 1.4 var(--dz-mono);
+    color: var(--dz-brass);
+  }
+  html[data-design='c'] .tour[data-frame] .arc-card .disc {
+    background: var(--dz-night-2);
+    border: 1px solid var(--dz-hair);
+  }
+  html[data-design='c'] .tour[data-frame] .arc-card[aria-checked='true'] .disc {
+    border: 1.5px solid var(--dz-brass);
+  }
+  html[data-design='c'] .tour[data-frame] .arc-card .veil {
+    background: var(--dz-night);
+  }
+  html[data-design='c'] .tour[data-frame] .picker .name {
+    color: var(--dz-light);
+    font: 400 18px / 20px var(--dz-serif);
+    overflow: visible;
+  }
+  html[data-design='c'] .tour[data-frame] .picker .tour-info {
+    color: var(--dz-light-2);
+    font: 500 12px / 16px var(--dz-mono);
+  }
+  html[data-design='c'] .tour[data-frame] .picker .btn-primary {
+    border-radius: 999px;
+    background: var(--dz-light);
+    color: var(--dz-night);
+  }
+}
+
+/* ---------- the cart: paper (the shop stays light), the serif for names, mono for numbers, hairlines ---------- */
+html[data-design='c'] .page-head h1 {
+  font: 300 clamp(40px, 6vw, 68px) / 1 var(--dz-serif);
+}
+html[data-design='c'] .cart-lines {
+  counter-reset: dz-line;
+  border-top: 1px solid var(--ink);
+}
+html[data-design='c'] .cart-line {
+  counter-increment: dz-line;
+  position: relative;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(23, 21, 15, 0.14);
+  box-shadow: none;
+  background: none;
+}
+html[data-design='c'] .cart-line::before {
+  content: counter(dz-line, decimal-leading-zero);
+  position: absolute;
+  bottom: var(--s-3);
+  inset-inline-end: 0;
+  font: 500 11px / 1 var(--dz-mono);
+  color: var(--ink-2);
+}
+html[data-design='c'] .cart-line .title {
+  font: 400 21px / 1.2 var(--dz-serif);
+}
+html[data-design='c'] .cart-line .line-total,
+html[data-design='c'] .summary .price {
+  font-family: var(--dz-mono);
+}
+html[data-design='c'] .summary {
+  padding: var(--s-5);
+  border-radius: 0;
+  background: var(--dz-night);
+  color: var(--dz-light);
+  box-shadow: none;
+}
+html[data-design='c'] .summary .muted,
+html[data-design='c'] .summary .small {
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .summary .btn-primary {
+  background: var(--dz-light);
+  color: var(--dz-night);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-design='c'] .dz-fade {
+    display: none;
+  }
+  html[data-design='c'] .tour[data-phase='door'] .dz-card {
+    animation: none;
+  }
+  html[data-design='c'] .tour:not([data-phase='door']) .dz-card {
+    display: none;
+  }
+  html[data-design='c'] .tour-spot[data-on] {
+    transition-delay: 0s;
+  }
+  html[data-design='c'] .tour-more {
+    transform: none;
+  }
+}

@@ -51,20 +51,18 @@ export function WinChrome({ c, replay }: { c: ChromeData; replay: string }) {
         <i class="dz-br" data-k="2" />
         <i class="dz-br" data-k="3" />
         <i class="dz-br" data-k="4" />
-        <span class="dz-scan" key={`scan-${replay}`} />
-        <span class="dz-tick" dir="ltr">
-          <span>{c.frame}</span>
-          {c.camH ? <span>h {c.camH.toFixed(2)} m</span> : null}
-          <span>16:9</span>
+        <span class="dz-sweep" key={`sweep-${replay}`} />
+        <span class="dz-door">
+          <span dir="ltr">{two(c.stops - 1)}</span> חדרים · <span dir="ltr">{c.total}</span> מוצרים · <span dir="ltr">170</span> מ״ר
         </span>
       </div>
     );
   return (
     <div class="dz-win" aria-hidden="true">
       <span class="dz-fade" key={`fade-${replay}`} />
-      <div class="dz-card">
+      <div class="dz-card" key={`card-${replay}`}>
         <span class="dz-chap">פרק {two(c.stop)}</span>
-        <span class="dz-ttl">{c.phase === 'door' ? c.houseHe : c.roomHe}</span>
+        <span class="dz-ttl">{c.phase === 'door' ? 'כניסה' : c.roomHe}</span>
       </div>
     </div>
   );
@@ -80,7 +78,8 @@ export function BandChrome({ c }: { c: ChromeData }) {
           <span class="dz-f1">גיליון 01 — {c.houseHe}</span>
           <span class="dz-rule" />
           <span class="dz-f2">
-            {c.open ? `פריט ${two(c.open.n)} מתוך ${two(c.open.of)}` : where} <span class="dz-of">/ {two(c.stops - 1)}</span>
+            {c.open ? `פריט ${two(c.open.n)} מתוך ${two(c.open.of)}` : where}
+            {c.open ? null : <span class="dz-of"> / {two(c.stops - 1)}</span>}
           </span>
         </div>
         <span class="dz-num" aria-hidden="true">
@@ -98,24 +97,24 @@ export function BandChrome({ c }: { c: ChromeData }) {
         <span class="dz-read" aria-hidden="true">
           {c.open ? (
             <>
-              <b>נבחר</b> <span dir="ltr">{two(c.open.n)}/{two(c.open.of)}</span> · {c.open.name}
+              <b>נבחר</b>{' '}
+              <span dir="ltr">
+                {two(c.open.n)}/{two(c.open.of)}
+              </span>{' '}
+              · {c.open.name}
             </>
-          ) : c.phase === 'door' ? (
-            <>
-              <span dir="ltr">{two(c.stops - 1)}</span> חדרים · <span dir="ltr">{c.total}</span> מוצרים · <span dir="ltr">170</span> מ״ר
-            </>
-          ) : (
-            <>
-              <span dir="ltr">{c.items}</span> סימנים · <span dir="ltr">{c.sale}</span> למכירה
-            </>
-          )}
+          ) : null}
+        </span>
+        <span class="dz-cam" aria-hidden="true" dir="ltr">
+          {c.phase === 'door' ? 'D0' : c.frame}
+          {c.camH && c.phase !== 'door' ? ` · h ${c.camH.toFixed(2)} m` : ''} · 16:9
         </span>
       </>
     );
   return (
     <>
       <span class="dz-chap-b" aria-hidden="true">
-        {c.open ? `${two(c.open.n)} / ${two(c.open.of)}` : `פרק ${two(c.stop)}`}
+        {c.open ? <span dir="ltr">{`${two(c.open.n)} / ${two(c.open.of)}`}</span> : `פרק ${two(c.stop)}`}
       </span>
       <span class="dz-meta" aria-hidden="true">
         {c.phase === 'door' ? (

@@ -30,7 +30,9 @@ html[data-design='a'] :focus-visible {
 html[data-design='a'] .site-header {
   background: var(--paper);
   border-bottom: 1px solid var(--ink);
-  box-shadow: 0 3px 0 -2px var(--paper), 0 4px 0 -2px var(--ink);
+  box-shadow:
+    0 3px 0 -2px var(--paper),
+    0 4px 0 -2px var(--ink);
 }
 html[data-design='a'] .site-header .wrap {
   position: relative;
@@ -40,18 +42,24 @@ html[data-design='a'] .site-header .wrap {
 html[data-design='a'] .site-header .wrap::before {
   content: 'גיליון 01';
   content: 'גיליון 01' / '';
-  font: 400 13px / 1 'Frank Ruhl Libre', serif;
+  font:
+    400 13px / 1 'Frank Ruhl Libre',
+    serif;
   color: var(--ink-2);
 }
 html[data-design='a'] .brand {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font: 300 30px / 1 'Frank Ruhl Libre', serif;
+  font:
+    300 30px / 1 'Frank Ruhl Libre',
+    serif;
   color: var(--ink);
 }
 html[data-design='a'] .nav a {
-  font: 500 16px / 1 'Frank Ruhl Libre', serif;
+  font:
+    500 16px / 1 'Frank Ruhl Libre',
+    serif;
   border-radius: 0;
   text-underline-offset: 6px;
 }
@@ -67,7 +75,9 @@ html[data-design='a'] .btn {
 html[data-design='a'] .btn-primary {
   background: var(--ink);
   color: var(--paper);
-  font: 500 17px / 1 'Frank Ruhl Libre', serif;
+  font:
+    500 17px / 1 'Frank Ruhl Libre',
+    serif;
 }
 
 /* ---------- the tour: paper round the picture ---------- */
@@ -103,18 +113,37 @@ html[data-design='a'] .tour {
   html[data-design='a'] .tour-t .h,
   html[data-design='a'] .tour-t.t-door h1,
   html[data-design='a'] .tour-t.t-door .h {
-    font: 300 40px / 1.1 'Frank Ruhl Libre', serif;
+    font:
+      300 40px / 1.1 'Frank Ruhl Libre',
+      serif;
   }
   html[data-design='a'] .tour-t .eyebrow,
   html[data-design='a'] .tour-t.t-door .eyebrow {
-    font: 400 15px / 1.2 'Frank Ruhl Libre', serif;
+    font:
+      400 15px / 1.2 'Frank Ruhl Libre',
+      serif;
     color: var(--ink-2);
+  }
+  /* the title on its own line, the house and the owner's line under it as a caption */
+  html[data-design='a'] .tour-t,
+  html[data-design='a'] .tour-t.t-door {
+    flex-wrap: wrap;
+    align-content: center;
+    column-gap: var(--s-3);
+    row-gap: 4px;
+  }
+  html[data-design='a'] .tour-t h1,
+  html[data-design='a'] .tour-t .h {
+    flex-basis: 100%;
+    order: 0;
   }
   html[data-design='a'] .tour-t.t-room h1::after,
   html[data-design='a'] .tour-t.t-room .h::after {
-    content: '—';
-    content: '—' / '';
-    font: 300 24px / 1 'Frank Ruhl Libre', serif;
+    content: none;
+  }
+  /* the phone's invitation to turn it is never shown here: it must not set the eyebrow's width */
+  html[data-design='a'] .tour-eyes > [data-k='rotate'] {
+    display: none;
   }
 }
 html[data-design='a'] .tour-win {
@@ -130,7 +159,9 @@ html[data-design='a'] .dz-folio {
   display: flex;
   align-items: center;
   gap: var(--s-4);
-  font: 400 15px / 20px 'Frank Ruhl Libre', serif;
+  font:
+    400 15px / 20px 'Frank Ruhl Libre',
+    serif;
   color: var(--ink);
   pointer-events: none;
 }
@@ -147,14 +178,18 @@ html[data-design='a'] .dz-num {
   position: absolute;
   top: calc(var(--wy) + var(--wh) + 14px);
   inset-inline-start: var(--wx);
-  font: 300 52px / 1 'Frank Ruhl Libre', serif;
+  font:
+    300 52px / 1 'Frank Ruhl Libre',
+    serif;
   color: var(--dz-red);
   pointer-events: none;
   transition: opacity var(--dz-slow) var(--dz-ease);
 }
-html[data-design='a'] .tour[data-close] ~ .dz-num,
-html[data-design='a'] .tour-g:has(.picker) .dz-num {
+html[data-design='a'] .tour[data-close] .dz-num {
   opacity: 0.25;
+}
+html[data-design='a'] .tour[data-phase='door'] .dz-num {
+  opacity: 0;
 }
 
 /* the owner's line: a caption, not a pill */
@@ -163,11 +198,15 @@ html[data-design='a'] .tour-sale {
   border: 0;
   border-radius: 0;
   background: none;
-  font: 400 14px / 1.3 'Assistant', sans-serif;
+  font:
+    400 14px / 1.3 'Assistant',
+    sans-serif;
   color: var(--ink-2);
 }
 html[data-design='a'] .tour-count {
-  font: 400 14px / 1.3 'Frank Ruhl Libre', serif;
+  font:
+    400 14px / 1.3 'Frank Ruhl Libre',
+    serif;
   color: var(--ink-2);
 }
 
@@ -180,7 +219,9 @@ html[data-design='a'] .tour-fold {
   border-bottom: 1px solid var(--ink);
   border-radius: 0;
   background: none;
-  font: 500 18px / 1 'Frank Ruhl Libre', serif;
+  font:
+    500 18px / 1 'Frank Ruhl Libre',
+    serif;
 }
 html[data-design='a'] .tour-fold .tour-plan {
   display: none;
@@ -210,19 +251,25 @@ html[data-design='a'] .tour:not([data-phase='door']) .dz-cover {
     visibility 0s linear var(--dz-slow);
 }
 html[data-design='a'] .dz-mast {
-  font: 300 clamp(64px, 14cqw, 168px) / 0.86 'Frank Ruhl Libre', serif;
+  font:
+    300 clamp(64px, 14cqw, 168px) / 0.86 'Frank Ruhl Libre',
+    serif;
   animation: dz-a-rise 900ms var(--dz-land) both;
 }
 html[data-design='a'] .dz-issue {
   margin-top: 1.2cqw;
   padding-top: 0.8cqw;
   border-top: 1px solid var(--ink);
-  font: 600 clamp(12px, 1.3cqw, 15px) / 1.3 'Assistant', sans-serif;
+  font:
+    600 clamp(12px, 1.3cqw, 15px) / 1.3 'Assistant',
+    sans-serif;
   animation: dz-a-rise 900ms var(--dz-land) 120ms both;
 }
 html[data-design='a'] .dz-lines {
   grid-row: 4;
-  font: 300 clamp(18px, 2.3cqw, 30px) / 1.15 'Frank Ruhl Libre', serif;
+  font:
+    300 clamp(18px, 2.3cqw, 30px) / 1.15 'Frank Ruhl Libre',
+    serif;
   animation: dz-a-rise 900ms var(--dz-land) 240ms both;
 }
 @keyframes dz-a-rise {
@@ -253,7 +300,9 @@ html[data-design='a'] .tour-spot::after {
   padding: 2px 4px 1px;
   background: var(--paper);
   color: var(--ink);
-  font: 500 12px / 1 'Frank Ruhl Libre', serif;
+  font:
+    500 12px / 1 'Frank Ruhl Libre',
+    serif;
   pointer-events: none;
 }
 html[data-design='a'] .tour-spot[data-flip]::after {
@@ -268,14 +317,18 @@ html[data-design='a'] .tour-spot .tag {
   border-radius: 0;
   background: var(--paper);
   box-shadow: 0 0 0 1px var(--ink);
-  font: 500 16px / 1.2 'Frank Ruhl Libre', serif;
+  font:
+    500 16px / 1.2 'Frank Ruhl Libre',
+    serif;
 }
 html[data-design='a'] .tour-spot .tag .dz-i {
   margin-inline-end: 8px;
   color: var(--dz-red);
 }
 html[data-design='a'] .tour-spot .tag .num {
-  font: 400 14px / 1 'Assistant', sans-serif;
+  font:
+    400 14px / 1 'Assistant',
+    sans-serif;
   color: var(--ink-2);
 }
 html[data-design='a'] .tour-ring i {
@@ -310,7 +363,9 @@ html[data-design='a'] .tour-more h2 {
   margin: var(--s-3) 0 var(--s-2);
   padding-bottom: var(--s-2);
   border-bottom: 1px solid var(--ink);
-  font: 300 34px / 1.1 'Frank Ruhl Libre', serif;
+  font:
+    300 34px / 1.1 'Frank Ruhl Libre',
+    serif;
   color: var(--ink);
 }
 html[data-design='a'] .tour-rooms > div {
@@ -327,19 +382,25 @@ html[data-design='a'] .tour-rooms button {
   border: 0;
   border-bottom: 1px solid var(--rule);
   border-radius: 0;
-  font: 400 24px / 1.15 'Frank Ruhl Libre', serif;
+  font:
+    400 24px / 1.15 'Frank Ruhl Libre',
+    serif;
   text-align: start;
 }
 html[data-design='a'] .tour-rooms button::before {
   content: attr(data-n);
-  font: 400 15px / 1 'Frank Ruhl Libre', serif;
+  font:
+    400 15px / 1 'Frank Ruhl Libre',
+    serif;
   color: var(--dz-red);
 }
 html[data-design='a'] .tour-rooms button svg {
   display: none;
 }
 html[data-design='a'] .tour-rooms small {
-  font: 400 13px / 1 'Assistant', sans-serif;
+  font:
+    400 13px / 1 'Assistant',
+    sans-serif;
   color: var(--ink-2);
 }
 html[data-design='a'] .tour-rooms button[aria-current='true'] {
@@ -358,7 +419,9 @@ html[data-design='a'] .tour-style .segmented button {
   border: 0;
   border-bottom: 1px solid var(--rule);
   border-radius: 0;
-  font: 400 19px / 1 'Frank Ruhl Libre', serif;
+  font:
+    400 19px / 1 'Frank Ruhl Libre',
+    serif;
 }
 html[data-design='a'] .tour-style .segmented button[aria-pressed='true'] {
   box-shadow: none;
@@ -367,7 +430,9 @@ html[data-design='a'] .tour-style .segmented button[aria-pressed='true'] {
 html[data-design='a'] .tour-links .btn {
   border: 1px solid var(--ink);
   border-radius: 0;
-  font: 500 17px / 1 'Frank Ruhl Libre', serif;
+  font:
+    500 17px / 1 'Frank Ruhl Libre',
+    serif;
 }
 
 /* ---------- the close-up and the wheel: a caption block, square plates, a column of text ---------- */
@@ -386,11 +451,15 @@ html[data-design='a'] .picker-head {
   padding: var(--s-4) var(--s-5) var(--s-3);
 }
 html[data-design='a'] .picker-head h2 {
-  font: 300 44px / 1.05 'Frank Ruhl Libre', serif;
+  font:
+    300 44px / 1.05 'Frank Ruhl Libre',
+    serif;
 }
 html[data-design='a'] .picker-head .eyebrow {
   margin-bottom: var(--s-1);
-  font: 400 15px / 1.2 'Frank Ruhl Libre', serif;
+  font:
+    400 15px / 1.2 'Frank Ruhl Libre',
+    serif;
   color: var(--dz-red);
 }
 html[data-design='a'] .close-btn {
@@ -407,12 +476,16 @@ html[data-design='a'] .picker-info {
   text-align: start;
 }
 html[data-design='a'] .picker-info .name {
-  font: 300 28px / 1.15 'Frank Ruhl Libre', serif;
+  font:
+    300 28px / 1.15 'Frank Ruhl Libre',
+    serif;
 }
 html[data-design='a'] .picker-info .specs,
 html[data-design='a'] .picker .tour-info {
   justify-content: flex-start;
-  font: 400 15px / 1.4 'Assistant', sans-serif;
+  font:
+    400 15px / 1.4 'Assistant',
+    sans-serif;
 }
 html[data-design='a'] .pips i {
   width: 18px;
@@ -446,7 +519,9 @@ html[data-design='a'] .arc-card .disc {
 }
 html[data-design='a'] .arc-card[aria-checked='true'] .disc {
   border: 1px solid var(--ink);
-  box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--ink);
+  box-shadow:
+    0 0 0 4px var(--paper),
+    0 0 0 5px var(--ink);
 }
 html[data-design='a'] .arc-card .veil {
   background: var(--paper);
@@ -460,7 +535,9 @@ html[data-design='a'] .arc-card .num-tag {
   padding: 1px 6px;
   background: var(--paper);
   color: var(--ink);
-  font: 400 14px / 1.2 'Frank Ruhl Libre', serif;
+  font:
+    400 14px / 1.2 'Frank Ruhl Libre',
+    serif;
   opacity: 1;
 }
 html[data-design='a'] .tour .picker[data-in] {
@@ -484,6 +561,10 @@ html[data-design='a'] .snap-card {
     width: calc(100% - 2 * var(--s-4));
     font-size: 13px;
   }
+  html[data-design='a'] .tour[data-close] .dz-num,
+  html[data-design='a'] .tour-spot::after {
+    display: none;
+  }
   html[data-design='a'] .dz-num {
     top: auto;
     bottom: calc(100cqh - var(--wy) + 14px);
@@ -499,10 +580,14 @@ html[data-design='a'] .snap-card {
   html[data-design='a'] .tour-t .h,
   html[data-design='a'] .tour-t.t-door h1,
   html[data-design='a'] .tour-t.t-door .h {
-    font: 300 44px / 1.05 'Frank Ruhl Libre', serif;
+    font:
+      300 44px / 1.05 'Frank Ruhl Libre',
+      serif;
   }
   html[data-design='a'] .tour-t .eyebrow {
-    font: 400 15px / 1.3 'Frank Ruhl Libre', serif;
+    font:
+      400 15px / 1.3 'Frank Ruhl Libre',
+      serif;
   }
   html[data-design='a'] .tour-tile {
     position: relative;
@@ -517,11 +602,15 @@ html[data-design='a'] .snap-card {
     position: absolute;
     top: 4px;
     inset-inline-start: 5px;
-    font: 400 12px / 1 'Frank Ruhl Libre', serif;
+    font:
+      400 12px / 1 'Frank Ruhl Libre',
+      serif;
     color: var(--dz-red);
   }
   html[data-design='a'] .tour-tile .nm {
-    font: 400 13px / 16px 'Frank Ruhl Libre', serif;
+    font:
+      400 13px / 16px 'Frank Ruhl Libre',
+      serif;
   }
   html[data-design='a'] .tour-more {
     border-radius: 0;
@@ -532,10 +621,14 @@ html[data-design='a'] .snap-card {
     box-shadow: none;
   }
   html[data-design='a'] .tour[data-frame] .picker-head h2 {
-    font: 300 40px / 1.05 'Frank Ruhl Libre', serif;
+    font:
+      300 40px / 1.05 'Frank Ruhl Libre',
+      serif;
   }
   html[data-design='a'] .tour[data-frame] .picker-head .eyebrow {
-    font: 400 15px / 1.3 'Frank Ruhl Libre', serif;
+    font:
+      400 15px / 1.3 'Frank Ruhl Libre',
+      serif;
     color: var(--dz-red);
   }
   html[data-design='a'] .tour[data-frame] .arc-card .disc {
@@ -546,18 +639,24 @@ html[data-design='a'] .snap-card {
     border-color: var(--ink);
   }
   html[data-design='a'] .tour[data-frame] .picker .name {
-    font: 400 17px / 20px 'Frank Ruhl Libre', serif;
+    font:
+      400 17px / 20px 'Frank Ruhl Libre',
+      serif;
     overflow: visible;
   }
   html[data-design='a'] .tour[data-frame] .picker .btn-primary {
     border-radius: 0;
-    font: 500 18px / 1 'Frank Ruhl Libre', serif;
+    font:
+      500 18px / 1 'Frank Ruhl Libre',
+      serif;
   }
 }
 
 /* ---------- the cart: a numbered list like an index, sums on a double rule ---------- */
 html[data-design='a'] .page-head h1 {
-  font: 300 clamp(40px, 6vw, 72px) / 1 'Frank Ruhl Libre', serif;
+  font:
+    300 clamp(40px, 6vw, 72px) / 1 'Frank Ruhl Libre',
+    serif;
 }
 html[data-design='a'] .cart-lines {
   counter-reset: dz-line;
@@ -574,13 +673,17 @@ html[data-design='a'] .cart-line {
 html[data-design='a'] .cart-line::before {
   content: counter(dz-line, decimal-leading-zero);
   position: absolute;
-  top: var(--s-3);
+  bottom: var(--s-3);
   inset-inline-end: 0;
-  font: 400 14px / 1 'Frank Ruhl Libre', serif;
+  font:
+    400 14px / 1 'Frank Ruhl Libre',
+    serif;
   color: var(--dz-red);
 }
 html[data-design='a'] .cart-line .title {
-  font: 400 22px / 1.2 'Frank Ruhl Libre', serif;
+  font:
+    400 22px / 1.2 'Frank Ruhl Libre',
+    serif;
 }
 html[data-design='a'] .summary {
   border-radius: 0;
@@ -589,7 +692,9 @@ html[data-design='a'] .summary {
   background: none;
 }
 html[data-design='a'] .cart-empty {
-  font: 300 22px / 1.4 'Frank Ruhl Libre', serif;
+  font:
+    300 22px / 1.4 'Frank Ruhl Libre',
+    serif;
 }
 
 @media (prefers-reduced-motion: reduce) {
