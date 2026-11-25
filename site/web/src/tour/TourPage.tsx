@@ -59,6 +59,8 @@ import type { TourEngine } from './engine';
 import { metrics, report, statLine } from './metrics';
 import type { Reveal, Style, Swap, Ui } from './fx';
 import { MQ, ZOOM, closeReserve, doorRect, overArc, padded, pinchZoom, rubber, tapRule, wheelArc, type Layout, type Mark } from './layout';
+import { design as DESIGN, type Design } from '../design/design';
+import { BandChrome, PlanBig, WinChrome, two as dz2, type ChromeData } from '../design/Chrome';
 
 type Stage = typeof import('./stage');
 declare global {
@@ -348,6 +350,9 @@ export function TourPage() {
   const [more, setMoreState] = useState(false);
   /** the line over the room's name: the house, or once a visit the invitation to turn the phone */
   const [eye, setEyeState] = useState<Eye>(WM);
+  /** FB13: the design direction (?design=a|b|c), after the first paint so the prerendered page hydrates as it is */
+  const [dz, setDz] = useState<Design | null>(null);
+  useEffect(() => setDz(DESIGN), []);
   // what the engine's callbacks and the queued presses read (they outlive a render)
   const live = useRef({ phase, busy, house, cfg, sel, open, lay, zoomed, more, room, walk: 0 });
   live.current = { phase, busy, house, cfg, sel, open, lay, zoomed, more, room, walk: live.current?.walk ?? 0 };
@@ -1546,7 +1551,7 @@ export function TourPage() {
   const group = groupOf(room);
   const here = (g: GroupId) => inRoom && group === g;
   const toRoomBtn = (g: GroupId) => () => void (here(g) ? setMore(false) : phase === 'door' && g === 'living-room' ? goIn() : goRoom(FRAMES[g][0]!));
-  const rooms: { id?: string; name: string; at: At; here?: boolean; go?: () => void }[] = [
+  const rooms: { id?: string; name: string; at: At; here?: boolean; go?: () => void; n?: number }[] = [
     // the room the visitor is in: its button only closes the panel
     { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void (phase === 'door' ? setMore(false) : goOut()) },
     ...GROUP_IDS.map((g) => ({
@@ -1555,6 +1560,8 @@ export function TourPage() {
       at: AT[g],
       here: here(g),
       go: toRoomBtn(g),
+      // FB13: a direction shows how many products each room sells (the owner's line)
+      n: dz ? roomCount(g).total : undefined,
     })),
   ];
   /** MOCK5: the frames of the room the visitor is in (the frame control, when it has more than one) */
@@ -1567,6 +1574,23 @@ export function TourPage() {
   const lookHref = __ARTIFACT__ || room !== 'living-room' ? null : `/story/${tour.room}/${house}/`;
   const living = room === 'living-room';
   const shown = items();
+  // FB13: what the chosen direction draws round the tour (design/Chrome.tsx), all of it from the tour's own data
+  const chrome: ChromeData | null = dz
+    ? {
+        d: dz,
+        phase,
+        stop: phase === 'door' ? 0 : GROUP_IDS.indexOf(group) + 1,
+        stops: GROUP_IDS.length + 1,
+        roomHe: ROOM_HE[room],
+        houseHe: HOUSE_HE[house],
+        frame: tour.frame ?? 'M0',
+        camH: tour.camera?.loc?.[2] ?? null,
+        items: shown.length,
+        sale: count.total,
+        total: GROUP_IDS.reduce((n, g) => n + roomCount(g).total, 0),
+        open: open ? { n: shown.findIndex((s) => s.id === open.slot.id) + 1, of: shown.length, name: open.slot.name_he } : null,
+      }
+    : null;
   return (
     <>
       <section
@@ -1574,6 +1598,7 @@ export function TourPage() {
         ref={stage}
         data-phase={phase}
         data-house={house}
+        data-design={dz ?? undefined}
         data-ready={ready ? '' : undefined}
         data-frame={cfg.frame}
         data-pick={cfg.pick}
@@ -1648,6 +1673,7 @@ export function TourPage() {
               ) : null}
             </div>
           </div>
+          {chrome ? <BandChrome c={chrome} /> : null}
 
           {/* the window: one 16:9 frame in every phase. On it, the products' marks and nothing else. */}
           <div class="tour-win" ref={win} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
@@ -1696,6 +1722,7 @@ export function TourPage() {
                 </span>
               ))}
             </div>
+            {chrome ? <WinChrome c={chrome} replay={`${room}:${phase}`} /> : null}
             <div class="tour-rings" aria-hidden="true" key={`rings-${room}`}>
               {shown.flatMap((s) =>
                 s.anchors.map((_, i) => (
@@ -1735,7 +1762,7 @@ export function TourPage() {
               {...(strip ? off : {})}
               key={`spots-${room}`}
             >
-              {shown.map((s) => {
+              {shown.map((s, i) => {
                 const o = optionOf(s, sel);
                 const price = priceHe(s, o);
                 return (
@@ -1744,11 +1771,12 @@ export function TourPage() {
                     type="button"
                     class="tour-spot"
                     data-slot={s.id}
+                    data-n={dz ? dz2(i + 1) : undefined}
                     ref={(el) => {
                       if (el) spots.current.set(s.id, el);
                       else spots.current.delete(s.id);
                     }}
-                    style={{ left: 0, top: 0 }}
+                    style={dz ? { left: 0, top: 0, '--n': String(i) } : { left: 0, top: 0 }}
                     tabIndex={strip ? -1 : undefined}
                     aria-label={`${s.name_he}: ${nameHe(s, o)}${price ? `, ${price}` : ''}. ${s.options.length > 1 ? `פתיחת ${s.options.length} גרסאות` : s.closeup === false ? 'פרטים' : 'תקריב'}`}
                     disabled={busy || !!open}
@@ -1756,6 +1784,7 @@ export function TourPage() {
                   >
                     <span class="mark" aria-hidden="true" />
                     <span class="tag" aria-hidden="true">
+                      {dz ? <span class="dz-i">{dz2(i + 1)}</span> : null}
                       {nameHe(s, o)}
                       {price ? <span class="num"> · {price}</span> : null}
                     </span>
@@ -1799,7 +1828,7 @@ export function TourPage() {
               {/* the role is said outright: a list without markers loses it in Safari's screen reader */}
               {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
               <ul class="tour-strip" role="list" aria-label="פריטים בחדר" {...(listOn ? {} : off)} key={`strip-${room}`}>
-                {shown.map((s) => {
+                {shown.map((s, i) => {
                   const o = optionOf(s, sel);
                   const price = priceHe(s, o);
                   return (
@@ -1808,6 +1837,7 @@ export function TourPage() {
                         type="button"
                         class="tour-tile"
                         data-slot={s.id}
+                        data-n={dz ? dz2(i + 1) : undefined}
                         ref={(el) => {
                           if (el) tiles.current.set(s.id, el);
                           else tiles.current.delete(s.id);
@@ -1903,14 +1933,16 @@ export function TourPage() {
               </button>
             </div>
             {/* a button per room (TOUR1): the door and the living room are here; a room that is not built yet says so */}
+            {dz === 'b' ? <PlanBig at={phase === 'door' ? 'entry' : AT[group]} /> : null}
             <nav class="tour-rooms" aria-label="חדרים">
               <h2>חדרים</h2>
               <div>
-                {rooms.map((r) => (
+                {rooms.map((r, i) => (
                   <button
                     key={r.name}
                     type="button"
                     id={r.id}
+                    data-n={dz ? dz2(i) : undefined}
                     class={r.go ? 'tour-room' : undefined}
                     aria-current={r.here ? 'true' : undefined}
                     aria-disabled={r.go ? undefined : 'true'}
@@ -1918,6 +1950,7 @@ export function TourPage() {
                   >
                     {r.at === 'entry' ? <IconDoor /> : <PlanIcon at={r.at} />}
                     <span>{r.name}</span>
+                    {r.n != null ? <small class="dz-n">{r.n} מוצרים</small> : null}
                     {r.go ? null : <small>בקרוב</small>}
                   </button>
                 ))}

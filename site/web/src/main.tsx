@@ -11,10 +11,13 @@ import { initRouter, match, onLinkClick, path, setBeforeDocumentLoad } from './r
 import { cartMounted, cartPageShown, leaveFor, loadCart } from './state/cart';
 import { preloadRoute } from './pages/lazy';
 import { loadHouse } from './house';
+import { applyDesign } from './design/design';
 
 // The artifact has no <html> tag of its own: set language and direction here (the site's index.html has them too).
 document.documentElement.lang = 'he';
 document.documentElement.dir = 'rtl';
+// FB13: the design direction this tab wears (?design=a|b|c; none: the current look, nothing loaded)
+applyDesign();
 initRouter();
 // S21, QA ת63: a full load to the cart or the checkout waits for a cart write on its way (S23: the cart id of a browser
 // without storage goes in window.name, never in the address)
