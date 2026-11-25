@@ -1,0 +1,514 @@
+{
+ "id": "2026-11-25-bath-b1-planter",
+ "date": "2026-11-25",
+ "agent": "qa-agent",
+ "brief": "manager task 2026-11-25 (changed-only, EFF1.2); render brief briefs/wm-bath-b1-ledge-planter-2026-11-25.md",
+ "scope": "changed-only: the ledge planter (card 228781, SKU 12000061187780577 'large brown round') added to B1, warm-modern bath, commit 5b1286ee, assets/renders/bath/warm-modern/b1-2026-11-19/",
+ "status": "נכשל QA: ממצא בינוני אחד (B1P-M1), מתוקן בקוד ב-0 טוקנים. אחרי התיקון: בדיקה חוזרת של מה שהשתנה בלבד",
+ "status_after_fix_expected": "עבר QA (העציץ ב-B1; לבעלים בחבילה הבאה; לא לאתר לפני רישום העמדה)",
+ "blocking": [
+  {
+   "id": "B1P-M1",
+   "severity": "medium",
+   "fix": "code, 0 tokens",
+   "owner": "render-agent"
+  }
+ ],
+ "checks": {
+  "1_fidelity": {
+   "result": "pass except B1P-M1 (sheen on a matte product)",
+   "findings": [
+    "B1P-L2"
+   ],
+   "size": {
+    "clay_projection_width_px": 75.19,
+    "measured_width_px": 74,
+    "width_ratio": 0.984,
+    "height_px": 67,
+    "height_ratio": 1.005,
+    "hw_ratio_render": 0.905,
+    "hw_ratio_sku": 0.894,
+    "foot_centre_clay": [
+     1001.17,
+     790.35
+    ],
+    "axis_measured_x": 1001.5,
+    "foot_row": 790
+   },
+   "shape": "truncated ball, flat foot; the mouth is a line at the camera's 0.6 deg, so the flat top with the plant on it is the right view",
+   "colour_r5": {
+    "plaster_ref_box": "x 1048-1170, y 690-780",
+    "plaster_ref_px": 9940,
+    "sku_photo_median_qa": [
+     59.36,
+     4.15,
+     12.4
+    ],
+    "sku_reading_card": [
+     59.0,
+     4.4,
+     12.7
+    ],
+    "lit_right": {
+     "r5": [
+      58.84,
+      5.36,
+      13.41
+     ],
+     "raw_in_frame": [
+      56.6,
+      5.21,
+      12.13
+     ],
+     "de00_r5_vs_sku": 1.1,
+     "hue_r5": 68.2,
+     "hue_raw": 66.8
+    },
+    "shaded_left": {
+     "r5": [
+      52.7,
+      7.05,
+      11.7
+     ],
+     "raw_in_frame": [
+      50.64,
+      6.85,
+      10.53
+     ],
+     "de00_r5_vs_sku": 6.78,
+     "hue_r5": 58.9,
+     "hue_raw": 57.0
+    },
+    "whole": {
+     "r5": [
+      55.0,
+      6.38,
+      12.03
+     ],
+     "raw_in_frame": [
+      52.87,
+      6.2,
+      10.82
+     ],
+     "de00_r5_vs_sku": 4.45,
+     "hue_r5": 62.1,
+     "hue_raw": 60.2
+    },
+    "render_agent_lit_de00": 0.0,
+    "rule": "lit half dE00 <= 6 (brief)",
+    "pass": true
+   },
+   "mottle_highpass_sigma3_at_1x": {
+    "scale_sku_to_render": 0.1538,
+    "sku": {
+     "L_hp_std": 4.58,
+     "L_hp_p95_abs": 9.08,
+     "ab_hp_std": 1.85,
+     "L_std_raw": 9.48
+    },
+    "render": {
+     "L_hp_std": 3.32,
+     "L_hp_p95_abs": 6.63,
+     "ab_hp_std": 1.22,
+     "L_std_raw": 8.7
+    }
+   },
+   "speckle_populations": {
+    "sku_rust": [
+     50.51,
+     6.33,
+     17.07
+    ],
+    "sku_grey": [
+     65.35,
+     3.0,
+     8.94
+    ],
+    "render_hi_b": [
+     48.48,
+     7.83,
+     13.41
+    ],
+    "render_lo_b": [
+     55.18,
+     5.54,
+     8.97
+    ]
+   }
+  },
+  "2_light": {
+   "result": "low (B1P-L1)",
+   "planter": {
+    "left_L_med": 50.77,
+    "right_L_med": 56.54,
+    "n": [
+     1816,
+     988
+    ]
+   },
+   "planter_L_by_column_8px": [
+    [
+     964,
+     56.6
+    ],
+    [
+     972,
+     53.8
+    ],
+    [
+     980,
+     48.8
+    ],
+    [
+     988,
+     48.5
+    ],
+    [
+     996,
+     52.5
+    ],
+    [
+     1004,
+     55.6
+    ],
+    [
+     1012,
+     53.7
+    ],
+    [
+     1020,
+     56.7
+    ],
+    [
+     1028,
+     59.9
+    ]
+   ],
+   "candle": {
+    "left_L_med": 93.7,
+    "right_L_med": 86.32,
+    "L_by_column_6px": [
+     [
+      805,
+      97.5
+     ],
+     [
+      811,
+      96.6
+     ],
+     [
+      817,
+      94.0
+     ],
+     [
+      823,
+      91.9
+     ],
+     [
+      829,
+      89.3
+     ],
+     [
+      835,
+      86.2
+     ],
+     [
+      841,
+      84.3
+     ],
+     [
+      847,
+      85.6
+     ],
+     [
+      853,
+      89.8
+     ]
+    ]
+   },
+   "reed_diffuser": {
+    "left_L_med": 77.67,
+    "right_L_med": 80.3,
+    "L_by_column_6px": [
+     [
+      870,
+      92.2
+     ],
+     [
+      876,
+      83.8
+     ],
+     [
+      882,
+      76.1
+     ],
+     [
+      888,
+      75.5
+     ],
+     [
+      894,
+      77.5
+     ],
+     [
+      900,
+      77.0
+     ],
+     [
+      906,
+      79.7
+     ],
+     [
+      912,
+      83.5
+     ],
+     [
+      918,
+      89.4
+     ]
+    ]
+   },
+   "window_sill_vase": {
+    "left_L_med": 22.53,
+    "right_L_med": 16.04
+   },
+   "plaster_L_row_700": {
+    "x940_1000": [
+     98.9,
+     99.2,
+     99.0,
+     97.9
+    ],
+    "x1060_1240": "87-92"
+   },
+   "ledge_top_L": {
+    "x780_920": 99.9,
+    "x980_1040": [
+     80.5,
+     78.8,
+     74.3,
+     70.0
+    ]
+   },
+   "placeholder_light_vector": [
+    0.35,
+    0.65,
+    0.68
+   ]
+  },
+  "3_contact_shadow": {
+   "result": "pass (info: darker than the neighbours)",
+   "z": 46,
+   "shadow_z": 45,
+   "px": 969,
+   "visible_alpha0_px": 492,
+   "visible_lt_half_px": 143,
+   "visible_min_multiply": 0.235,
+   "composite_L_in_dark_core": [
+    23.6,
+    33.6
+   ],
+   "rows": [
+    780,
+    797
+   ],
+   "foot_row": 790,
+   "x_rel_axis_lt250": [
+    -28,
+    51
+   ],
+   "centroid_dx_visible_px": 11.4,
+   "stray_specks_px": [
+    13,
+    2,
+    2,
+    1
+   ],
+   "stray_min_multiply": 0.96,
+   "neighbours_min_multiply": {
+    "candle": 0.914,
+    "reed-diffuser": 0.675,
+    "window-sill-vase": 0.71
+   }
+  },
+  "4_x1_x2": {
+   "result": "fail (B1P-M1)",
+   "left_shoulder_spot": {
+    "px": 87,
+    "L_med": 77.17,
+    "L_max": 84.18,
+    "lab_med": [
+     77.17,
+     4.41,
+     -1.64
+    ],
+    "ring_lab_med": [
+     54.01,
+     5.96,
+     7.5
+    ],
+    "de00_spot_vs_ring": 20.47,
+    "body_L_p95": 68.62,
+    "body_L_p99": 80.33
+   },
+   "right_shoulder_spot": {
+    "px": 12,
+    "L_med": 57.28
+   },
+   "seam_column_x": 978.5,
+   "halo_px": 0,
+   "edge_partial_alpha_px": {
+    "planter": 0.94,
+    "candle": 2.0,
+    "reed-diffuser": 2.0,
+    "window-sill-vase": 0.91
+   },
+   "plant": {
+    "px": 1158,
+    "median_lab": [
+     52.3,
+     -17.1,
+     25.1
+    ],
+    "C": 30.4,
+    "h": 124.3,
+    "floor_pothos_same_frame": {
+     "lab": [
+      36.5,
+      -11.9,
+      19.9
+     ],
+     "C": 23.2
+    }
+   }
+  },
+  "5_rnd2_black_point": {
+   "result": "pass",
+   "independent_restack": "plate + 12 layers + 12 shadows + light (screen), manifest order and formula",
+   "defaults_rebuild_vs_file_px": 0,
+   "beige_rebuild_vs_file_px": 0,
+   "frames_rebuild_vs_file_px": [
+    0,
+    0
+   ],
+   "restack_without_planter_vs_pre_commit_px": [
+    0,
+    0
+   ],
+   "rnd2_outside_masks": {
+    "defaults": 0,
+    "beige": 0
+   },
+   "region_px": 695860,
+   "changed_vs_pre_commit_px": 6271,
+   "changed_outside_planter_alpha_shadow": 0,
+   "planter_alpha_or_shadow_px": 6276,
+   "beige_vs_defaults_outside_mat_px": 0,
+   "overlap_with_other_layers_or_shadows_px": 0,
+   "light_over_planter_px": 0,
+   "frame_changed_bbox_canvas": [
+    959,
+    686,
+    1055,
+    800
+   ],
+   "layer_min_L": {
+    "alpha_gt0": 11.14,
+    "alpha_255": 12.18,
+    "below_11": 0
+   },
+   "composite_min_L_planter": 12.18,
+   "frame_L_min_p01_p05": [
+    10.84,
+    11.34,
+    11.8
+   ],
+   "frame_note": "unchanged since QA round 1 (from the plate, outside the planter)",
+   "transparent_rgb_zero": true,
+   "alpha_components": 1
+  },
+  "6_count": {
+   "result": "pass",
+   "frame_px": 3705304,
+   "with_plant": {
+    "area_pct_alpha_ge128": 0.1457,
+    "area_pct_alpha_sum": 0.1458,
+    "area_pct_alpha_gt0": 0.1563,
+    "height_pct": 7.07
+   },
+   "pot_only": {
+    "area_pct": 0.1116,
+    "height_pct": 4.71
+   },
+   "counts_in_B1": false,
+   "counts_in": "the toilet-shelf close-up (house-20 2.5)",
+   "B1_in_frame": 12,
+   "B1_counted": 7,
+   "room_unique": 19,
+   "room_breakdown": "B2 11 + B1 8 new"
+  }
+ },
+ "findings": [
+  {
+   "id": "B1P-M1",
+   "severity": "medium",
+   "title": "remap seam: a bright cool band on the planter's left shoulder, visible at x2 (the close-up scale)",
+   "where": "x 974-981, y 726-750 (canvas 2720x1530)",
+   "measures": {
+    "lab": [
+     77.17,
+     4.41,
+     -1.64
+    ],
+    "L_max": 84.18,
+    "ring_lab": [
+     54.01,
+     5.96,
+     7.5
+    ],
+    "de00": 20.47,
+    "step_L_in_4px": 20,
+    "seam_x": 978.5
+   },
+   "fix": "tools/ledge_planter_b1.py cut(): blend top_d between the rim arc and the outline over the seam (or sample the side columns below the drawn rim lip); then finish, compose, sheet. A soft left rim light may stay, without a straight inner edge. Update the README line on the card (already synced to ...577)",
+   "accept": "in x 968-992, y 722-755: no pixel more than ~10 L* over the local body median (now +23), b* >= 2 (now -1.6), no vertical step at x 978-979; RND2 0; lit half dE00 <= 6; at x2 the shoulder reads matte",
+   "owner": "render-agent",
+   "cost": "0 tokens"
+  },
+  {
+   "id": "B1P-L1",
+   "severity": "low",
+   "title": "the pot's shading is lit right; the shelf's key light (window glow) is from the left",
+   "owner": "render-agent",
+   "cost": "0 tokens",
+   "when": "with B1P-M1 if convenient, else before HD_PUBLIC=1"
+  },
+  {
+   "id": "B1P-L2",
+   "severity": "low",
+   "title": "rosier than the photo in the shaded half (h 59 vs 71) and softer speckle (72% of the photo's fine contrast at x1)",
+   "owner": "render-agent",
+   "cost": "0 tokens",
+   "when": "with B1P-M1 if convenient, else before HD_PUBLIC=1"
+  },
+  {
+   "id": "B1P-L3",
+   "severity": "low",
+   "title": "the filler is a succulent; data/slots/bath.json fillers.plant says fern, pothos or ficus (the brief allowed a succulent)",
+   "owner": "manager (at the slot's 1.3.9 registration)",
+   "when": "with the ledge-planter registration"
+  }
+ ],
+ "info": [
+  "contact shadow darker than the neighbours (x0.24 vs x0.67-0.91), justified by the ball's overhang; reads as firm contact at x2",
+  "README says the card still points to ...583; the card was synced to ...577 in 0c837ffe",
+  "outline crisper than the candle and diffuser (0.94 vs 2.0 px of partial alpha), like the jar (0.91); not visible at x2",
+  "the candle is +3.8% over its card width at the clay scale (existing, not in scope)"
+ ],
+ "not_done": [
+  "0 tokens, no var2, no commit, no keys",
+  "did not run tools/checks_b1.py (it writes b1-checks.json in the render folder); an independent restack instead",
+  "did not touch data/, binding documents, site/ or the render folder",
+  "SKU photo read only with python3.12 -I in the scratchpad; no supplier pixel in the repo"
+ ]
+}
