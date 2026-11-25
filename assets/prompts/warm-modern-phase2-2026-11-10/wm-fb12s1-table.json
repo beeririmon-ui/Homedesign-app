@@ -1,0 +1,90 @@
+{
+ "id": "wm-fb12s1-table",
+ "model": "seedream-5-pro",
+ "type": "image-to-image",
+ "resolution": "2K",
+ "aspect_ratio": "auto",
+ "tokens": 650,
+ "estimate": 650,
+ "estimate_call": {
+  "tool": "var2_estimate_cost",
+  "model_id": "seedream-5-pro",
+  "type": "image-to-image",
+  "params": {
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "image_refs": 3
+  },
+  "total_tokens": 650
+ },
+ "idempotency_key": "wm-fb12s1-table-20261125",
+ "placeholder_id": "0b3888ee-e17e-408c-bc79-bfdb207b3287",
+ "task_id": "77c8469bcc885bc337225fd489d6d6f6",
+ "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-77c8469bcc885bc337225fd489d6d6f6-0-1795629230138-6da444c4.png",
+ "raw": "raw/fb12s1-seedream.png",
+ "raw_sha256": "93a7de9a3ea6e5936fb81208c5a870276b1a08542eebea319ab81d14c1c8550e",
+ "returned_px": [
+  2720,
+  1530
+ ],
+ "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e36b007e-6aae-45bb-9a94-5cc229ea3872.png",
+ "image_url_local": "inputs/fb12s1-input.png",
+ "image_sha256": "1967753fbe87052ca2a57b32287a6f5cb41c726909b09bff5a7139ff237dd96e",
+ "image_upload_verified": "GET of the public URL returned the same sha256",
+ "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/fb12s1-table.txt",
+ "seed": null,
+ "seed_note": "seedream-5-pro takes no seed in var2: the prompt, the input, the references and the settings are kept",
+ "refs": [
+  {
+   "n": 1,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/aef5bbea-09dc-4eb5-9aa3-7d5c4e0f9991.png",
+   "card": "coffee-table-idana-javorina-olia-natural",
+   "sku": "J-OF120-N",
+   "what": "the real unit in a home, natural finish (card image 2, cropped to the table)",
+   "source_image": "card images.urls[1]",
+   "crop_px": [
+    170,
+    560,
+    830,
+    930
+   ],
+   "sha256": "3437d70fac9fcd7c00f408c11afeb0f3933c9d7da5e313c8a5aaf4fc6c67c51d"
+  },
+  {
+   "n": 2,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6c8c4dd8-50d3-4b7b-bf0f-f57703b83067.png",
+   "card": "coffee-table-idana-javorina-olia-natural",
+   "sku": "J-OF120-N",
+   "what": "the real unit, close-up of the rolled waterfall edge and the grain (card image 3)",
+   "source_image": "card images.urls[2]",
+   "crop_px": [
+    70,
+    430,
+    950,
+    1090
+   ],
+   "sha256": "844014054616dad0a59ddff2cdf8518af09939411decdecc4556b8de949b6f98"
+  },
+  {
+   "n": 3,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/89c27508-9cf3-4f15-bd05-53e262645ddb.png",
+   "card": "coffee-table-idana-javorina-olia-natural",
+   "sku": "J-OF120-N",
+   "what": "the supplier's studio shot, three-quarter view (card image 1), for the shape",
+   "source_image": "card images.urls[0]",
+   "crop_px": [
+    20,
+    395,
+    920,
+    830
+   ],
+   "sha256": "e078b4118bb2c6aab83c7c0c28dac8121614ce97e9dfbaaf707019b6db4efb44"
+  }
+ ],
+ "references_policy": "supplier images are references only: downloaded and cropped in the scratchpad, uploaded to var2, never stored in the repo; no supplier pixel in a layer",
+ "result": "used: the table layer (z 57) and its shadow (z 56); its rug detail under the table also feeds the rug's leftover fix",
+ "date": "2026-11-25",
+ "author": "render-agent",
+ "brief": "briefs/wm-fb12-stage1-olia-2026-11-25.md",
+ "prompt_chars": 2471
+}

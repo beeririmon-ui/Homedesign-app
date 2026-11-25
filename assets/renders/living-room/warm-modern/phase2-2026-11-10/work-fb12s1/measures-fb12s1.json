@@ -1,0 +1,90 @@
+{
+ "ends_vs_clay": {
+  "left_end": {
+   "median_px": 1.0,
+   "max_abs_px": 1,
+   "median_cm": 0.18,
+   "max_abs_cm": 0.18
+  },
+  "right_end": {
+   "median_px": 5.0,
+   "max_abs_px": 9,
+   "median_cm": 0.6,
+   "max_abs_cm": 1.08
+  }
+ },
+ "length_cm": 120.8,
+ "back_edge_vs_clay": {
+  "median_px": -2.0,
+  "max_abs_px": 7,
+  "median_cm": -1.28
+ },
+ "legs_vs_clay": {
+  "left_leg_bottom": {
+   "median_px": -1.0,
+   "max_abs_px": 5,
+   "median_cm": -0.18
+  },
+  "right_leg_inner_edge": {
+   "median_px": 11.0,
+   "max_abs_px": 12,
+   "median_cm": 1.5,
+   "note": "the render shows the right leg's inner face a little wider than the clay near the floor"
+  }
+ },
+ "slab_thickness": {
+  "silhouette_bottom_vs_clay_px": {
+   "median": 0.0,
+   "min": -2,
+   "max": 3
+  },
+  "face_band_median_px": 9.0,
+  "face_band_p25_p75_px": [
+   8.0,
+   9.0
+  ],
+  "face_band_cm": 1.36,
+  "clay_cm": 2.1999999999999997,
+  "px_per_cm": 6.64,
+  "note": "the slab's silhouette (the top's surface + its edge) ends where the clay's 2.2 cm slab ends (median 0 px); the darker edge face itself reads ~1.4 cm, the rest is the hand-eased rounding that catches the light. The SKU photos read ~2 cm (1.7-2.5); the brief's 3-4 cm does not match the product"
+ },
+ "air_under_top": {
+  "plan_share_of_length": 0.965,
+  "image_share_cut": 0.807,
+  "image_share_clay": 0.817,
+  "rule": ">= 0.60",
+  "note": "plan: the length between the slab legs (clay, Z 0.19); image: the front plane's mid-height line through the picture (the left leg's inner face is seen behind it, so the image share is lower for the clay too)"
+ },
+ "iou_cut_vs_clay": 0.9438,
+ "tone": {
+  "top_Lab_median": [
+   77.6,
+   7.6,
+   23.4
+  ],
+  "top_over_rug_Y": {
+   "rug_left": 0.677,
+   "rug_right": 0.888
+  },
+  "sku_top_over_rug_Y": {
+   "real_photo_2": 0.775,
+   "real_photo_3_grazing": 0.925
+  },
+  "sku_after_white_balance": {
+   "L_lit_top": [
+    68.3,
+    69.3
+   ],
+   "hsl_S_lit": [
+    25,
+    33
+   ],
+   "hue_deg": [
+    29,
+    30
+   ],
+   "method": "the scratchpad script: white balance on the photo's own white cabinets, median of the lit top"
+  },
+  "note": "L* of a photographed surface depends on its exposure: the check is relative, oak top / the cream rug beside it"
+ }
+}

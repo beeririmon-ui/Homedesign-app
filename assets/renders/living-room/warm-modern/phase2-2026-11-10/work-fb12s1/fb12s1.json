@@ -1,0 +1,802 @@
+{
+ "id": "wm-living-room-m0-fb12s1",
+ "date": "2026-11-25",
+ "author": "render-agent",
+ "brief": "briefs/wm-fb12-stage1-olia-2026-11-25.md",
+ "spec": "docs/proposals/wm-fb12-2026-11-25.md a.3, a.6 (stage 1), a.7, a.10",
+ "owner": "FB12-T (2026-11-25): render Olia as a swappable layer; cap 2,650",
+ "card": "data/products/living-room/coffee-table/coffee-table-idana-javorina-olia-natural.json",
+ "tokens": {
+  "spent": 1100,
+  "table": 650,
+  "rug_edit_rejected": 450,
+  "cap": 2650,
+  "expected": 1100
+ },
+ "tone_check": {
+  "method": "the card's real photos (scratchpad only, python3.12 -I): white balance on each photo's own white cabinets; exposure-free ratio of the oak top to the cream rug beside it",
+  "lit_top_L": [
+   68.3,
+   69.3
+  ],
+  "lit_top_hsl_S": [
+   25,
+   33
+  ],
+  "hue_deg": [
+   29,
+   30
+  ],
+  "studio_shot_lit_leg_L": 64.7,
+  "top_over_rug_Y": {
+   "real_photo_2": 0.775,
+   "real_photo_3_grazing": 0.925
+  },
+  "verdict": "L* ~64-69 (the top of a.3's 56-66, 67-68 borderline, never 'far outside'); S 25-33 after white balance (<= 36: not honey). Went ahead."
+ },
+ "thickness_note": "the SKU photos show one slab ~2 cm thick (1.7-2.5; legs the same), not the 3-4 cm the brief names: the clay and the render follow the photos (fidelity first); the render's silhouette = the clay's 2.2 cm (median 0 px)",
+ "jobs": {
+  "table": {
+   "id": "wm-fb12s1-table",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "estimate": 650,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "seedream-5-pro",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "2K",
+     "aspect_ratio": "auto",
+     "image_refs": 3
+    },
+    "total_tokens": 650
+   },
+   "idempotency_key": "wm-fb12s1-table-20261125",
+   "placeholder_id": "0b3888ee-e17e-408c-bc79-bfdb207b3287",
+   "task_id": "77c8469bcc885bc337225fd489d6d6f6",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-77c8469bcc885bc337225fd489d6d6f6-0-1795629230138-6da444c4.png",
+   "raw": "raw/fb12s1-seedream.png",
+   "raw_sha256": "93a7de9a3ea6e5936fb81208c5a870276b1a08542eebea319ab81d14c1c8550e",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/e36b007e-6aae-45bb-9a94-5cc229ea3872.png",
+   "image_url_local": "inputs/fb12s1-input.png",
+   "image_sha256": "1967753fbe87052ca2a57b32287a6f5cb41c726909b09bff5a7139ff237dd96e",
+   "image_upload_verified": "GET of the public URL returned the same sha256",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/fb12s1-table.txt",
+   "seed": null,
+   "seed_note": "seedream-5-pro takes no seed in var2: the prompt, the input, the references and the settings are kept",
+   "refs": [
+    {
+     "n": 1,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/aef5bbea-09dc-4eb5-9aa3-7d5c4e0f9991.png",
+     "card": "coffee-table-idana-javorina-olia-natural",
+     "sku": "J-OF120-N",
+     "what": "the real unit in a home, natural finish (card image 2, cropped to the table)",
+     "source_image": "card images.urls[1]",
+     "crop_px": [
+      170,
+      560,
+      830,
+      930
+     ],
+     "sha256": "3437d70fac9fcd7c00f408c11afeb0f3933c9d7da5e313c8a5aaf4fc6c67c51d"
+    },
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/6c8c4dd8-50d3-4b7b-bf0f-f57703b83067.png",
+     "card": "coffee-table-idana-javorina-olia-natural",
+     "sku": "J-OF120-N",
+     "what": "the real unit, close-up of the rolled waterfall edge and the grain (card image 3)",
+     "source_image": "card images.urls[2]",
+     "crop_px": [
+      70,
+      430,
+      950,
+      1090
+     ],
+     "sha256": "844014054616dad0a59ddff2cdf8518af09939411decdecc4556b8de949b6f98"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/89c27508-9cf3-4f15-bd05-53e262645ddb.png",
+     "card": "coffee-table-idana-javorina-olia-natural",
+     "sku": "J-OF120-N",
+     "what": "the supplier's studio shot, three-quarter view (card image 1), for the shape",
+     "source_image": "card images.urls[0]",
+     "crop_px": [
+      20,
+      395,
+      920,
+      830
+     ],
+     "sha256": "e078b4118bb2c6aab83c7c0c28dac8121614ce97e9dfbaaf707019b6db4efb44"
+    }
+   ],
+   "references_policy": "supplier images are references only: downloaded and cropped in the scratchpad, uploaded to var2, never stored in the repo; no supplier pixel in a layer",
+   "result": "used: the table layer (z 57) and its shadow (z 56); its rug detail under the table also feeds the rug's leftover fix"
+  },
+  "rug": {
+   "id": "wm-fb12s1-rug",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "4K",
+   "aspect_ratio": "auto",
+   "tokens": 450,
+   "estimate": 450,
+   "estimate_call": {
+    "tool": "var2_estimate_cost",
+    "model_id": "nano-banana-2",
+    "type": "image-to-image",
+    "params": {
+     "resolution": "4K",
+     "aspect_ratio": "auto"
+    },
+    "total_tokens": 450
+   },
+   "idempotency_key": "wm-fb12s1-rug-20261125",
+   "placeholder_id": "ad683074-6301-4d2a-b1ef-6caa473f4437",
+   "task_id": "0cd8b84dcbe68bd9132185703c5858c9",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-0cd8b84dcbe68bd9132185703c5858c9-0-1795630533245-8b58be68.jpg",
+   "raw": "raw/fb12s1-rug-nano.jpg",
+   "raw_sha256": "872fd23c2ac0de083a7047a1a6b1c523f5dbf63f64bffc329a69b72070d4cdeb",
+   "returned_px": [
+    2730,
+    1536
+   ],
+   "returned_note": "asked 4K, returned 2730 x 1536 JPEG",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/93dd5cb4-2531-4bce-a872-59b0f9bb7982.png",
+   "image_local": "(scratch cache) below-fb12s1.png = base-fb12s0 + rug-fb12s0",
+   "image_sha256": "4acabcc9ae482d3419aaa953491cf78baca41b900f8fb4094d58a236b47a7384",
+   "prompt": "assets/prompts/warm-modern-phase2-2026-11-10/fb12s1-rug.txt",
+   "seed": null,
+   "refs": [],
+   "result": "REJECTED, nothing used: the model re-styled the whole rug (a regular chunky braid, peach) instead of joining its rows; the seam was fixed in code from the table's render (rug_fix)"
+  }
+ },
+ "input": {
+  "pass_": "fb12s1",
+  "below": "(scratch cache) below-fb12s1.png = plate_with_rug(); also the rug edit's input",
+  "below_is": "layers/base-fb12s0.png + rug-shadow-fb12s0 + rug-fb12s0 (the manifest's 8-bit formula); no other layer (the brief: the clean plate with the rug, without the bowl and the candle holders)",
+  "below_sha256": "4acabcc9ae482d3419aaa953491cf78baca41b900f8fb4094d58a236b47a7384",
+  "clay": {
+   "cx": 0.3,
+   "cy": 1.72,
+   "L": 1.2,
+   "D": 0.65,
+   "Hh": 0.38,
+   "t": 0.022,
+   "R": 0.035,
+   "rb": 0.03,
+   "centre": [
+    0.3,
+    1.72
+   ],
+   "angle_deg": 0,
+   "measures": {
+    "bbox_px": [
+     1327,
+     1177,
+     2138,
+     1530
+    ],
+    "bbox_frame_uv": [
+     0.4871,
+     0.8033,
+     0.7855,
+     1.0301
+    ],
+    "corners_px": {
+     "top_front_left": [
+      1326.9,
+      1260.7
+     ],
+     "top_front_right": [
+      2137.3,
+      1368.9
+     ],
+     "top_back_left": [
+      1456.8,
+      1175.3
+     ],
+     "top_back_right": [
+      2125.8,
+      1246.7
+     ],
+     "leg_left_front_bottom": [
+      1339.1,
+      1492.8
+     ],
+     "leg_right_front_bottom": [
+      2119.3,
+      1645.3
+     ],
+     "leg_left_back_bottom": [
+      1467.2,
+      1367.0
+     ],
+     "leg_right_back_bottom": [
+      2111.5,
+      1467.7
+     ]
+    },
+    "corners_frame_uv": {
+     "top_front_left": [
+      0.4871,
+      0.8435
+     ],
+     "top_front_right": [
+      0.803,
+      0.9185
+     ],
+     "top_back_left": [
+      0.5377,
+      0.7843
+     ],
+     "top_back_right": [
+      0.7986,
+      0.8338
+     ],
+     "leg_left_front_bottom": [
+      0.4919,
+      1.0043
+     ],
+     "leg_right_front_bottom": [
+      0.796,
+      1.11
+     ],
+     "leg_left_back_bottom": [
+      0.5418,
+      0.9172
+     ],
+     "leg_right_back_bottom": [
+      0.793,
+      0.9869
+     ]
+    },
+    "air_share_of_length": 0.965,
+    "alpha_px": 116311,
+    "frame_bottom_y": 1486.57
+   },
+   "how": "sphere-traced SDF on docs/house-plan.json M0 (fb12_s0.project inverted), 3 x 3 supersampled; plain clay (phase2_wm.CLAY) lit from the window side"
+  },
+  "sha256": "1967753fbe87052ca2a57b32287a6f5cb41c726909b09bff5a7139ff237dd96e"
+ },
+ "cut": {
+  "returned_px": [
+   2720,
+   1530
+  ],
+  "register_to_input": [
+   [
+    0.9954000115394592,
+    0.0003000000142492354,
+    4.9471001625061035
+   ],
+   [
+    9.999999747378752e-05,
+    0.9905999898910522,
+    6.278800010681152
+   ]
+  ],
+  "tone_gain_median": [
+   1.088,
+   1.0826,
+   1.0605
+  ],
+  "tone_zone_grow_px": 150,
+  "model_drift_outside_zone_L_after_tone": {
+   "median": 0.94,
+   "p95": 10.38
+  },
+  "alpha_px": 116536,
+  "soft_px": 7831,
+  "clay_covered": 0.972,
+  "outside_clay_px": 1884,
+  "iou_cut_vs_clay": 0.9438,
+  "shadow_px_below_0_97": 124073,
+  "shadow_min": 0.48,
+  "shadow_band_px": 200,
+  "files": {
+   "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/coffee-table/coffee-table-idana-javorina-olia-natural-shadow.png"
+  }
+ },
+ "measures": {
+  "ends_vs_clay": {
+   "left_end": {
+    "median_px": 1.0,
+    "max_abs_px": 1,
+    "median_cm": 0.18,
+    "max_abs_cm": 0.18
+   },
+   "right_end": {
+    "median_px": 5.0,
+    "max_abs_px": 9,
+    "median_cm": 0.6,
+    "max_abs_cm": 1.08
+   }
+  },
+  "length_cm": 120.8,
+  "back_edge_vs_clay": {
+   "median_px": -2.0,
+   "max_abs_px": 7,
+   "median_cm": -1.28
+  },
+  "legs_vs_clay": {
+   "left_leg_bottom": {
+    "median_px": -1.0,
+    "max_abs_px": 5,
+    "median_cm": -0.18
+   },
+   "right_leg_inner_edge": {
+    "median_px": 11.0,
+    "max_abs_px": 12,
+    "median_cm": 1.5,
+    "note": "the render shows the right leg's inner face a little wider than the clay near the floor"
+   }
+  },
+  "slab_thickness": {
+   "silhouette_bottom_vs_clay_px": {
+    "median": 0.0,
+    "min": -2,
+    "max": 3
+   },
+   "face_band_median_px": 9.0,
+   "face_band_p25_p75_px": [
+    8.0,
+    9.0
+   ],
+   "face_band_cm": 1.36,
+   "clay_cm": 2.1999999999999997,
+   "px_per_cm": 6.64,
+   "note": "the slab's silhouette (the top's surface + its edge) ends where the clay's 2.2 cm slab ends (median 0 px); the darker edge face itself reads ~1.4 cm, the rest is the hand-eased rounding that catches the light. The SKU photos read ~2 cm (1.7-2.5); the brief's 3-4 cm does not match the product"
+  },
+  "air_under_top": {
+   "plan_share_of_length": 0.965,
+   "image_share_cut": 0.807,
+   "image_share_clay": 0.817,
+   "rule": ">= 0.60",
+   "note": "plan: the length between the slab legs (clay, Z 0.19); image: the front plane's mid-height line through the picture (the left leg's inner face is seen behind it, so the image share is lower for the clay too)"
+  },
+  "iou_cut_vs_clay": 0.9438,
+  "tone": {
+   "top_Lab_median": [
+    77.6,
+    7.6,
+    23.4
+   ],
+   "top_over_rug_Y": {
+    "rug_left": 0.677,
+    "rug_right": 0.888
+   },
+   "sku_top_over_rug_Y": {
+    "real_photo_2": 0.775,
+    "real_photo_3_grazing": 0.925
+   },
+   "sku_after_white_balance": {
+    "L_lit_top": [
+     68.3,
+     69.3
+    ],
+    "hsl_S_lit": [
+     25,
+     33
+    ],
+    "hue_deg": [
+     29,
+     30
+    ],
+    "method": "the scratchpad script: white balance on the photo's own white cabinets, median of the lit top"
+   },
+   "note": "L* of a photographed surface depends on its exposure: the check is relative, oak top / the cream rug beside it"
+  }
+ },
+ "leftovers": {
+  "rug": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/rug/rug-cj-braided-wool-natural-fb12s1.png",
+   "region_px": 134915,
+   "changed_px": 134711,
+   "changed_outside_stage0_regions_px": 0,
+   "open_base_px": 133808,
+   "open_base_outside_stage0_px": 196,
+   "alpha_changed_px": 0,
+   "sigma_px": 12.0,
+   "left_leg_low_point_px": [
+    1337,
+    1490
+   ],
+   "detail_contrast_gain": 0.759,
+   "channel_slopes": [
+    0.679,
+    1.091,
+    1.511
+   ],
+   "low_freq_dE76_vs_stage0": {
+    "median": 2.1,
+    "p95": 7.98
+   },
+   "nano_pass": "rejected: re-styled the whole rug (raw/fb12s1-rug-nano.jpg); nothing of it is used"
+  },
+  "throw": {
+   "B": {
+    "changed": false
+   },
+   "A": {
+    "changed": true,
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-A-fb12s1.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-A-shadow-fb12s1.png",
+    "layer_px_cleared": 139,
+    "shadow_px_cleared": 216,
+    "bbox_px": [
+     2093,
+     1395,
+     2109,
+     1408
+    ]
+   },
+   "C": {
+    "changed": true,
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-C-fb12s1.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-C-shadow-fb12s1.png",
+    "layer_px_cleared": 236,
+    "shadow_px_cleared": 590,
+    "bbox_px": [
+     2082,
+     1387,
+     2109,
+     1404
+    ]
+   }
+  }
+ },
+ "group": {
+  "bowl": {
+   "pieces": {
+    "bowl": {
+     "plan_from": [
+      0.62,
+      1.94
+     ],
+     "plan_to": [
+      0.44,
+      1.858
+     ],
+     "anchor_px": [
+      1942.4,
+      1330.5
+     ],
+     "translate_px": [
+      -117.69,
+      -30.97
+     ],
+     "scale": 0.944,
+     "new_anchor_px": [
+      1824.72,
+      1299.53
+     ],
+     "box_before": [
+      1857,
+      1245,
+      2004,
+      1331
+     ]
+    }
+   },
+   "shadow_px_clipped_by_the_recipe_masks": 1251,
+   "files": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-matte-black-bowl-20-fb12s1.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-matte-black-bowl-20-fb12s1-shadow.png"
+   },
+   "source": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-matte-black-bowl-20-r7.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-matte-black-bowl-20-r7-shadow.png"
+   },
+   "foot_on_top_share": 1.0,
+   "shadow_off_top_px": 0
+  },
+  "candle-holders": {
+   "pieces": {
+    "A": {
+     "plan_from": [
+      0.195,
+      1.74
+     ],
+     "plan_to": [
+      -0.0050000000000000044,
+      1.74
+     ],
+     "anchor_px": [
+      1673.31,
+      1258.5
+     ],
+     "translate_px": [
+      -114.85,
+      -13.73
+     ],
+     "scale": 0.9716,
+     "new_anchor_px": [
+      1558.45,
+      1244.77
+     ],
+     "box_before": [
+      1648,
+      1148,
+      1693,
+      1259
+     ]
+    },
+    "B": {
+     "plan_from": [
+      0.355,
+      1.68
+     ],
+     "plan_to": [
+      0.15499999999999997,
+      1.68
+     ],
+     "anchor_px": [
+      1775.02,
+      1270.5
+     ],
+     "translate_px": [
+      -118.29,
+      -13.85
+     ],
+     "scale": 0.9715,
+     "new_anchor_px": [
+      1656.73,
+      1256.65
+     ],
+     "box_before": [
+      1747,
+      1166,
+      1796,
+      1271
+     ]
+    }
+   },
+   "shadow_px_clipped_by_the_recipe_masks": 0,
+   "files": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-travertine-pedestal-fb12s1.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-travertine-pedestal-fb12s1-shadow.png"
+   },
+   "source": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-travertine-pedestal-r8.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-travertine-pedestal-r8-shadow.png"
+   },
+   "foot_on_top_share": 1.0,
+   "shadow_off_top_px": 0
+  },
+  "bowl-v2": {
+   "pieces": {
+    "bowl": {
+     "plan_from": [
+      0.62,
+      1.94
+     ],
+     "plan_to": [
+      0.44,
+      1.858
+     ],
+     "anchor_px": [
+      1937.5,
+      1326.5
+     ],
+     "translate_px": [
+      -117.69,
+      -30.97
+     ],
+     "scale": 0.944,
+     "new_anchor_px": [
+      1819.81,
+      1295.53
+     ],
+     "box_before": [
+      1850,
+      1250,
+      2006,
+      1327
+     ]
+    }
+   },
+   "shadow_px_clipped_by_the_recipe_masks": 1424,
+   "files": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-glutinous-white-belly-bowl-21-fb12s1.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-glutinous-white-belly-bowl-21-fb12s1-shadow.png"
+   },
+   "source": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-glutinous-white-belly-bowl-21-r7.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-glutinous-white-belly-bowl-21-r7-shadow.png"
+   },
+   "foot_on_top_share": 1.0,
+   "shadow_off_top_px": 0
+  },
+  "candle-holders-v2": {
+   "pieces": {
+    "A": {
+     "plan_from": [
+      0.055,
+      1.74
+     ],
+     "plan_to": [
+      -0.15500000000000003,
+      1.74
+     ],
+     "anchor_px": [
+      1589.04,
+      1244.5
+     ],
+     "translate_px": [
+      -115.72,
+      -13.83
+     ],
+     "scale": 0.9708,
+     "new_anchor_px": [
+      1473.32,
+      1230.67
+     ],
+     "box_before": [
+      1533,
+      1146,
+      1636,
+      1245
+     ]
+    },
+    "B": {
+     "plan_from": [
+      0.305,
+      1.68
+     ],
+     "plan_to": [
+      0.10499999999999998,
+      1.68
+     ],
+     "anchor_px": [
+      1743.33,
+      1253.5
+     ],
+     "translate_px": [
+      -116.6,
+      -13.65
+     ],
+     "scale": 0.9717,
+     "new_anchor_px": [
+      1626.73,
+      1239.85
+     ],
+     "box_before": [
+      1688,
+      1165,
+      1780,
+      1254
+     ]
+    }
+   },
+   "shadow_px_clipped_by_the_recipe_masks": 857,
+   "files": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-ceramic-pedestal-tray-fb12s1.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-ceramic-pedestal-tray-fb12s1-shadow.png"
+   },
+   "source": {
+    "layer": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-ceramic-pedestal-tray-r7.png",
+    "shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-ceramic-pedestal-tray-r7-shadow.png"
+   },
+   "foot_on_top_share": 1.0,
+   "shadow_off_top_px": 0
+  }
+ },
+ "levers": {
+  "holders_dx": -0.2,
+  "bowl": [
+   0.44,
+   1.858
+  ],
+  "trays_A_extra": -0.01,
+  "why": "F3 < 0.02 at the brief's points on the moved layers: bowl x cushions C 0.0167 / 0.0178; trays A x B 0.0195 (a.10 section 2 levers; WM-T3 lever for the trays)"
+ },
+ "gaps": {
+  "bowl x cushions A": 0.0443,
+  "bowl x cushions B": 0.0328,
+  "bowl x cushions C": 0.0209,
+  "candle-holders x cushions A": 0.0269,
+  "candle-holders x cushions B": 0.0261,
+  "candle-holders x cushions C": 0.0249,
+  "bowl-v2 x cushions A": 0.044,
+  "bowl-v2 x cushions B": 0.0326,
+  "bowl-v2 x cushions C": 0.0221,
+  "candle-holders-v2 x cushions A": 0.0285,
+  "candle-holders-v2 x cushions B": 0.0253,
+  "candle-holders-v2 x cushions C": 0.025,
+  "candle-holders A x B": 0.0211,
+  "candle-holders B x bowl": 0.0278,
+  "candle-holders-v2 A x B": 0.0214,
+  "candle-holders-v2 B x bowl-v2": 0.0276,
+  "coffee-table x magazine-holder": 0.0456,
+  "coffee-table left edge u": 0.4867,
+  "note": "the sofa's left arm contour is u 0.466 (a.10): the table's front-left corner is clear of it by 'left edge u' - 0.466; the table group is measured on the moved rendered layers (alpha > 127)"
+ },
+ "defaults": {
+  "B": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s1-set-B-graded-v3c.png",
+   "region_px": 276644,
+   "outside_region_vs_stage0_truth_px": 0
+  },
+  "variant-bowl-v2": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/variant-fb12s1-bowl-v2-set-B-graded-v3c.png",
+   "region_px": 15225
+  },
+  "variant-candle-holders-v2": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/variant-fb12s1-candle-holders-v2-set-B-graded-v3c.png",
+   "region_px": 23339
+  },
+  "A": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s1-set-A-graded-v3c.png",
+   "region_px": 276564,
+   "outside_region_vs_stage0_truth_px": 0
+  },
+  "C": {
+   "file": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s1-set-C-graded-v3c.png",
+   "region_px": 276540,
+   "outside_region_vs_stage0_truth_px": 0
+  }
+ },
+ "files": {
+  "table": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+  "table_shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/coffee-table/coffee-table-idana-javorina-olia-natural-shadow.png",
+  "rug": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/rug/rug-cj-braided-wool-natural-fb12s1.png",
+  "bowl": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-matte-black-bowl-20-fb12s1.png",
+  "bowl-shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-matte-black-bowl-20-fb12s1-shadow.png",
+  "candle-holders": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-travertine-pedestal-fb12s1.png",
+  "candle-holders-shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-travertine-pedestal-fb12s1-shadow.png",
+  "bowl-v2": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-glutinous-white-belly-bowl-21-fb12s1.png",
+  "bowl-v2-shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/bowl/bowl-cj-glutinous-white-belly-bowl-21-fb12s1-shadow.png",
+  "candle-holders-v2": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-ceramic-pedestal-tray-fb12s1.png",
+  "candle-holders-v2-shadow": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/candle-holders/candle-holders-cj-ceramic-pedestal-tray-fb12s1-shadow.png",
+  "cushions-A": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-A-fb12s1.png",
+  "cushions-shadow-A": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-A-shadow-fb12s1.png",
+  "cushions-C": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-C-fb12s1.png",
+  "cushions-shadow-C": "assets/renders/living-room/warm-modern/phase2-2026-11-10/layers/cushions/set-C-shadow-fb12s1.png",
+  "default-B": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s1-set-B-graded-v3c.png",
+  "frame-B": "assets/renders/living-room/warm-modern/phase2-2026-11-10/default-frame-fb12s1-set-B.png",
+  "default-A": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s1-set-A-graded-v3c.png",
+  "frame-A": "assets/renders/living-room/warm-modern/phase2-2026-11-10/default-frame-fb12s1-set-A.png",
+  "default-C": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/default-scene-fb12s1-set-C-graded-v3c.png",
+  "frame-C": "assets/renders/living-room/warm-modern/phase2-2026-11-10/default-frame-fb12s1-set-C.png",
+  "variant-bowl-v2": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/variant-fb12s1-bowl-v2-set-B-graded-v3c.png",
+  "variant-candle-holders-v2": "assets/renders/living-room/warm-modern/phase2-2026-11-10/graded/variant-fb12s1-candle-holders-v2-set-B-graded-v3c.png",
+  "sheet": "assets/renders/living-room/warm-modern/phase2-2026-11-10/qa-sheet-fb12-stage1.jpg"
+ },
+ "sha256": {
+  "table": "94f76ef475b10ad637223c53015f063e9c0863fa64672fed6b91f61618697f3e",
+  "table_shadow": "ffd9c622e47e3fcd91398120a44944b158bd4c17b42417ca3478c309465bac38",
+  "rug": "659d8faa4d56173e04a0de2c1191b3ed687d9345c6f1f9a17105b4ace383ba33",
+  "bowl": "0b4f10da1ff4deba8e9f8925ced9071506e2c28c09321e17fdbd623403351309",
+  "bowl-shadow": "2a3ce504e7584dfd9bfdd7c47b5c21994ba18a4ba7359ce5f8c629abfe8a441e",
+  "candle-holders": "f39a54dfddecbb97240b806317589e48d5318a38b3c0576ed7cb4d069b9c1a7d",
+  "candle-holders-shadow": "cbd573244f46137ab05d7b00fa585c3dc233e7a6382f16f22d6d7ab08ff2c13d",
+  "bowl-v2": "9eee20bb72c64da0e89de69b700dc6843478e0223b61f76d7e669fb7fd8e2922",
+  "bowl-v2-shadow": "c708d71fc218c73164b7e54e679d1fafb0528949699629d587edce0b6f296d54",
+  "candle-holders-v2": "cf129d64e96bb287a48ab14eb4b255123deb3253818bc9db909605d484bc71bc",
+  "candle-holders-v2-shadow": "0d558dbe8310b2cad6f00a9872dbba0a0ff0d02b10d7b202eb8ff253ed5b2517",
+  "cushions-A": "2ec82a1549bb8b5471b995315061599e6581a6dd3d5f6dd4c4d0c26dc9eecc94",
+  "cushions-shadow-A": "45cab76d64112dac7c0c8ef8877f64e49a838df8863b06bb2566c0ad6f495381",
+  "cushions-C": "4c45d2a68b3c7acbaca3982bfbea6c035084f9a6ef8b3db3134b30b8c5c9eaf1",
+  "cushions-shadow-C": "1a80aa3246bf74b795c28154e3d714b7aba966e1261282cacf5bc87b3fc3f17f",
+  "default-B": "a28192f305f8047a0860208b17a8dc746d55c038ab447f7106afaec95885fdb6",
+  "frame-B": "7a15560fa5e2f6d90a5733064531511deda5e4279e660d3f40ea4d5f982c0566",
+  "default-A": "9a5fd526bdeef3c1a62282d3180443d99d684a091463f22aa821b0a10147c7a5",
+  "frame-A": "514f9a9f5517a541dbd858a176f46020a7e7ee3fe2a6ee010c575346cf440513",
+  "default-C": "b80607bebb389cd6b3b33d89128f25e4a321236dc862653119c12d2bbf829dbe",
+  "frame-C": "1ab1e4551113e05cabf830e996f1352a508e4ba59747ed84a74327fd6fa8fdc9",
+  "variant-bowl-v2": "4a899b0e7b9aac81f87d46ed8fee72ee7d3e74beae10c7fc785cdf8d4b7631d3",
+  "variant-candle-holders-v2": "8b2152a69418e5b18a86978319e4e11f71b11129b8fedaa2917d4a76223c7b0d",
+  "sheet": "f256e62d51445a59a248ae1db4519c6a07c3394e3b40f1bff5bc1458dfb446a3"
+ }
+}

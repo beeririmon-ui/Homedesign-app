@@ -1,0 +1,104 @@
+{
+ "1_table": {
+  "order_ok": true,
+  "z": [
+   56,
+   57
+  ],
+  "modes": [
+   "RGBA",
+   "RGB"
+  ],
+  "iou_cut_vs_clay": 0.9438,
+  "px_beyond_clay_5cm": 0,
+  "edges_vs_clay_cm_max": 1.5,
+  "length_cm": 120.8,
+  "air": {
+   "plan_share_of_length": 0.965,
+   "image_share_cut": 0.807,
+   "image_share_clay": 0.817,
+   "rule": ">= 0.60",
+   "note": "plan: the length between the slab legs (clay, Z 0.19); image: the front plane's mid-height line through the picture (the left leg's inner face is seen behind it, so the image share is lower for the clay too)"
+  },
+  "shadow_px_on_sofa_or_armchair": 0,
+  "pass_": true
+ },
+ "2_RND2": {
+  "rug_changed_px": 134711,
+  "rug_changed_outside_stage0_px": 0,
+  "default_B_changed_px": 276644,
+  "default_B_outside_allowed_px": 0,
+  "cushions_A_changed_px": 336,
+  "cushions_A_changed_outside_stage0_px": 0,
+  "default_A_changed_px": 276564,
+  "default_A_outside_allowed_px": 0,
+  "cushions_C_changed_px": 689,
+  "cushions_C_changed_outside_stage0_px": 0,
+  "default_C_changed_px": 276540,
+  "default_C_outside_allowed_px": 0,
+  "pass_": true
+ },
+ "3_WM_G1": {
+  "plate_sha_is_stage0": true,
+  "plate": 13.06,
+  "default_B": 11.25,
+  "default_B_stage0": 11.44,
+  "default_B_r9": 10.91,
+  "default_A": 12.07,
+  "default_A_stage0": 12.4,
+  "default_A_r9": 11.37,
+  "default_C": 9.81,
+  "default_C_stage0": 9.91,
+  "default_C_r9": 9.72,
+  "pass_": true,
+  "rule": "WM-G1: the plate's black point (L* p0.5, OpenCV Lab) 11-14; the defaults' black point is set by their products: with the black bowl back it is compared with R9's (the bowl in, accepted in R8's QA), as stage 0's own verify does; stage 0's higher values are the bowl hidden"
+ },
+ "4_stack": {
+  "B": {
+   "inside_region_px": 0,
+   "canvas_p99_9": 1.0,
+   "canvas_max": 4
+  },
+  "A": {
+   "inside_region_px": 0,
+   "canvas_p99_9": 1.0,
+   "canvas_max": 3
+  },
+  "C": {
+   "inside_region_px": 0,
+   "canvas_p99_9": 1.0,
+   "canvas_max": 4
+  },
+  "pass_": true
+ },
+ "5_group": {
+  "bowl_feet_on_top": [
+   1.0
+  ],
+  "bowl_shadow_off_top_px": 0,
+  "candle-holders_feet_on_top": [
+   1.0,
+   1.0
+  ],
+  "candle-holders_shadow_off_top_px": 0,
+  "bowl-v2_feet_on_top": [
+   1.0
+  ],
+  "bowl-v2_shadow_off_top_px": 0,
+  "candle-holders-v2_feet_on_top": [
+   1.0,
+   1.0
+  ],
+  "candle-holders-v2_shadow_off_top_px": 0,
+  "f3_min": 0.0209,
+  "bowl_rim_inside_front_edge_cm": 8.05,
+  "hidden_layers": [],
+  "pass_": true
+ },
+ "6_scope": {
+  "tracked_modified": [],
+  "pass_": true,
+  "note": "the folder's README.md is this stage's own record (a new section); allowed"
+ },
+ "all_pass": true
+}
