@@ -1,12 +1,13 @@
 {
  "version": 1,
- "updated": "2026-11-03",
- "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json). 2026-11-03 (NL1, ישיבת ההחלטות): כרית הוואבי-סאבי ₪69 → ₪89 (retail_before_nl1_ils), המחיר שלא מפסיד בכל המידות; retail_src נשאר studio (החלטת המשתמש).",
+ "updated": "2026-11-25",
+ "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json). 2026-11-03 (NL1, ישיבת ההחלטות): כרית הוואבי-סאבי ₪69 → ₪89 (retail_before_nl1_ils), המחיר שלא מפסיד בכל המידות; retail_src נשאר studio (החלטת המשתמש). 2026-11-25 (M6-L2, briefs/economics-kids-b1-2026-11-25.md): 10 שורות חדשות לחדרי הילדים ול-B1 (retail_src initial-2026-11-25, עם retail_sku): המחיר מהרשומה של הליקוט האחרון או מ-profit-fix 2026-10-11, והמשלוח רק ממה שכבר בריפו (shipping_il בכרטיס, מטמון הספק, או מק\"ט אח באותו ליסטינג ובאותו משקל, מסומן freight_from_sibling ב-freight-cj.json). כולן עוברות את scripts/economics/no_loss.py. ארבע מהן שורות של המקור שעותק mirror_of קורא (תומכי הספרים, הציפיות עם הסלסול, מנורת המשי 30 והכד השחור). הפירוט: data/leads/economics-kids-b1-2026-11-25.md.",
  "sources": [
   "data/economics/pricing/living-room-2026-10-11.json",
   "data/economics/pricing/other-rooms-2026-10-11.json",
   "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md",
-  "data/economics/no-loss-changes-2026-10-20.json"
+  "data/economics/no-loss-changes-2026-10-20.json",
+  "data/leads/economics-kids-b1-2026-11-25.md"
  ],
  "products": {
   "accent-sconces-aliexpress-indoor-stone-wall-lamp": {
@@ -18147,6 +18148,642 @@
    },
    "flags": [
     "ok"
+   ]
+  },
+  "framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJJT261357805EV",
+   "price_for_qty": 1,
+   "sale_contains": "סט 3 תמונות ממוסגרות 30x40, Type C (צלליות פרחים בפחם); שתיים תלויות בחדר הילד",
+   "il_value": {
+    "low": 195,
+    "typical": 299,
+    "high": 525,
+    "comps": [
+     {
+      "retailer": "IKEA",
+      "title": "PJÄTTERYD תמונה (ליחידה)",
+      "size": "30x40 ס\"מ",
+      "price": 75.0,
+      "url": "https://www.ikea.com/il/he/p/pjaetteryd-picture-dawn-haze-90623867/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "BLODFLÄDER תמונה ממוסגרת (ליחידה)",
+      "size": "30x40 ס\"מ",
+      "price": 175.0,
+      "url": "https://www.ikea.com/il/he/p/blodflaeder-picture-floral-simplicity-00623471/"
+     },
+     {
+      "retailer": "IKEA",
+      "title": "KNOPPÄNG סט מסגרות עם פוסטר/8 חל'",
+      "size": null,
+      "price": 195.0,
+      "url": "https://www.ikea.com/il/he/p/knoppaeng-frame-with-poster-set-of-8-folk-tales-80601998/"
+     }
+    ],
+    "basis": "הועתק מ-framed-prints-cj-flower-cutout-set-30x40 (2026-10-11): אותו ליסטינג של CJ, אותה מידה (3 × 30×40), אותה עלות ואותו מחיר; הכרטיס הזה הוא Type C"
+   },
+   "customer_total_ils": 258,
+   "vs_typical_pct": -14,
+   "margin_pct": 53.5,
+   "contribution_ils": 103.86,
+   "contribution_with_fee_ils": 125.89,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪229 לסט של 3, אותו מחיר כמו Type A באותו ליסטינג בחדר הילדה (profit-fix 2026-10-11, rest-decor.json). עלות $12.74 + CJPacket Eub $8.14 (המק\"ט שבחדר, shipping_il בכרטיס) = נחיתה ₪68.9.",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/rest-decor.json",
+    "card": "data/products/kids/framed-prints/framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: מוצג בחדר הילד 'עוד לא במכירה' כי לא היה מחיר"
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (card): המק\"ט שבחדר 12-50",
+    "units": 1,
+    "landed_ils": 68.9,
+    "contribution_ils": 103.86,
+    "margin_pct": 53.5,
+    "break_even_ils": 92.28,
+    "no_loss_room_sku_ils": 99,
+    "no_loss_all_scenarios_ils": 99,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 525.0,
+    "ratio_to_highest_comp": 0.44,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 6,
+    "variants_checked": 5
+   },
+   "flags": [
+    "ok"
+   ]
+  },
+  "bookends-cj-black-walnut-l-bookend-pair": {
+   "retail_ils": 79,
+   "retail_src": "initial-2026-11-25",
+   "price_for_qty": 1,
+   "sell_qty": 1,
+   "sale_contains": "זוג תומכי ספרים L מאגוז שחור על רגל מתכת שחורה (2 יח' של CJJT153259701AZ; העלות בכרטיס $6.72 היא כבר לזוג)",
+   "sale_cost_usd": 6.72,
+   "sale_shipping_usd": 8.77,
+   "shipping_cost_usd": 8.77,
+   "landed_ils": 51.12,
+   "cost_parts": [
+    {
+     "item": "תומך ספרים 'Medium book stand' (CJJT153259701AZ, vid 1551864920281722880)",
+     "qty": 2,
+     "cost_usd": 3.36,
+     "ship_usd": 8.77,
+     "ship_basis": "CJPacket Eub 12-50 יום, הצעת CJ ל-2 יח' של אותו vid (מטמון data/sources/cj/1551864920176865280.json, 2026-10-13); ליחידה $6.24"
+    }
+   ],
+   "customer_total_ils": 108,
+   "margin_pct": 11.5,
+   "contribution_ils": 7.7,
+   "contribution_with_fee_ils": 29.73,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "זוג ב-₪79: מחיר העמדה בליקוט (cj-zendrop-hall-work.json, work/bookends; הרשומה: 11.5% ב-₪79, 27% ב-₪99). אין בריפו השוואות ישראליות לתומכי ספרים. עלות המכירה $6.72 (הזוג) + משלוח $8.77 (הצעת CJ לזוג) = נחיתה ₪51.1. הכרטיס בעמדה work/bookends; העותק בחדרי הילדים קורא את השורה הזו (mirror_of). מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-hall-work.json",
+    "card": "data/products/work/bookends/bookends-cj-black-walnut-l-bookend-pair.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: תומכי הספרים בחדרי הילדים מוצגים 'עוד לא במכירה'; העותק קורא את הכלכלה של המקור. הסטודיו מכר 2 × $6.72 (הזוג פעמיים): כאן המכירה היא יחידה אחת (הזוג), כמו בתיקון 2026-10-18",
+    "read_by_copies": [
+     "bookends-cj-black-walnut-l-bookend-pair-kids"
+    ]
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "ידני (data/economics/products.json shipping_cost_usd)",
+    "units": 1,
+    "landed_ils": 51.12,
+    "contribution_ils": 7.7,
+    "margin_pct": 11.5,
+    "break_even_ils": 68.87,
+    "no_loss_room_sku_ils": 69,
+    "no_loss_all_scenarios_ils": 69,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 1,
+    "variants_checked": 0
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "bedding-cj-stripe-cotton-single-set-light-brown": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJJJJFCS00695-Light Brown-XS-Bed sheet",
+   "price_for_qty": 1,
+   "sale_contains": "סט מצעים ליחיד (XS, מיטה 1.2 מ'): ציפה 150×200, סדין 120×200, ציפית 48×74; פס חום בהיר",
+   "il_value": {
+    "low": 148,
+    "typical": 229,
+    "high": 266,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "ציפה ליחיד 150×200",
+      "size": "150×200",
+      "price": 266.0,
+      "list_price": 380.0,
+      "url": "https://www.foxhome.co.il/products/0331910100"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "ציפה 150×200",
+      "size": "150×200",
+      "price": 148.0,
+      "list_price": 370.0,
+      "url": "https://www.terminalx.com/catalogsearch/result?q=%D7%A6%D7%99%D7%A4%D7%94+%D7%9C%D7%9B%D7%A8%D7%99%D7%AA"
+     }
+    ],
+    "basis": "ההשוואות מהערות הכרטיס (final-round 2026-10-13); typical ₪229 הוא ההערכה של הרשומה לסט של 3 חלקים ('Israeli comps support ~₪229')",
+    "date": "2026-11-25"
+   },
+   "customer_total_ils": 228,
+   "vs_typical_pct": 0,
+   "margin_pct": 7.1,
+   "contribution_ils": 11.9,
+   "contribution_with_fee_ils": 33.93,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪199: מחיר העמדה בליקוט (cj-zendrop-kids.json, kids/bedding), 7.1%. עלות $16.42 + CJPacket Eub $25.42 (הצעה למק\"ט אח באותו ליסטינג ובאותו משקל, Dark Grey XS 1.72 ק\"ג; freight-cj.json freight_from_sibling) = נחיתה ₪138.1. הרשומה: ב-₪229 (השווי בישראל לסט 3 חלקים) 17.9%; ב-₪179 מפסיד. מתחת לרף 40% (ה.11). המידות S/M/L כבדות יותר (1.82–2.02 ק\"ג) ואין להן הצעה: האתר מתמחר אותן על משלוח ה-XS (SITE1).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-kids.json",
+    "card": "data/products/kids/bedding/bedding-cj-stripe-cotton-single-set-light-brown.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: המצעים בחדר הילד מוצגים 'עוד לא במכירה' כי לא היו מחיר ושורת משלוח"
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 138.07,
+    "contribution_ils": 11.9,
+    "margin_pct": 7.1,
+    "break_even_ils": 183.33,
+    "no_loss_room_sku_ils": 189,
+    "no_loss_all_scenarios_ils": 189,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 266.0,
+    "ratio_to_highest_comp": 0.75,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 48,
+    "variants_checked": 47
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "bedspread-cj-waffle-gauze-fringe-150x200": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJZW264585004DW",
+   "price_for_qty": 1,
+   "sale_contains": "שמיכת גזה בארוג ופל עם פרנזים 150×200 (חום פשתן בחדר הילדה, חום ערמון בחדר הילד; אותו מחיר ומשקל)",
+   "customer_total_ils": 228,
+   "margin_pct": 40.3,
+   "contribution_ils": 68.0,
+   "contribution_with_fee_ils": 90.03,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪199: מחיר העמדה בליקוט (cj-zendrop-kids.json, kids/bedspread), 40.3%. עלות $13.93 + CJPacket Eub $10.91 (המק\"ט שבחדר, shipping_il בכרטיס; 0.57 ק\"ג) = נחיתה ₪82.0. אין בריפו השוואות ישראליות לשמיכה הזו.",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-kids.json",
+    "card": "data/products/kids/bedspread/bedspread-cj-waffle-gauze-fringe-150x200.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: השמיכה המקופלת בשני חדרי הילדים מוצגת 'עוד לא במכירה' כי לא היה מחיר"
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (card): המק\"ט שבחדר 12-50",
+    "units": 1,
+    "landed_ils": 81.97,
+    "contribution_ils": 68.0,
+    "margin_pct": 40.3,
+    "break_even_ils": 109.49,
+    "no_loss_room_sku_ils": 119,
+    "no_loss_all_scenarios_ils": 139,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 24,
+    "variants_checked": 23
+   },
+   "flags": [
+    "ok"
+   ]
+  },
+  "ceiling-lights-cj-silk-pumpkin-lantern-30": {
+   "retail_ils": 219,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJYD243199105EV",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת תלייה אחת, פנס משי שטוח 30 ס\"מ, אור חם (CJYD243199105EV)",
+   "customer_total_ils": 248,
+   "margin_pct": 6.3,
+   "contribution_ils": 11.72,
+   "contribution_with_fee_ils": 33.75,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪219 ליחידה: profit-fix 2026-10-11 (rest-lighting.json, losses[4]), 6.3%. עלות $24.88 + CJPacket Eub $21.62 (המק\"ט שבחדר, shipping_il בכרטיס; 1.42 ק\"ג) = נחיתה ₪153.4. הזוג למסדרון ב-₪499 (losses[3]) לא נכתב כאן. אין בריפו השוואות ישראליות לגודל 30. העותק בחדרי הילדים קורא את השורה הזו (mirror_of) ונשאר חסום שם (אין CE).",
+   "action_he": "CE לא מוצהר ו-'≤36V' בליסטינג: לאמת CE ו-220V/E27 לפני מכירה. בחדרי הילדים חסום עד CE (kids.json).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/rest-lighting.json",
+    "card": "data/products/corridor/ceiling-lights/ceiling-lights-cj-silk-pumpkin-lantern-30.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: המנורה בחדרי הילדים בלי כלכלה (הבריף: מותר למלא; האתר ממשיך לחסום)",
+    "read_by_copies": [
+     "pendant-cj-silk-pumpkin-lantern-30"
+    ]
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (card): המק\"ט שבחדר 12-50",
+    "units": 1,
+    "landed_ils": 153.45,
+    "contribution_ils": 11.72,
+    "margin_pct": 6.3,
+    "break_even_ils": 203.58,
+    "no_loss_room_sku_ils": 209,
+    "no_loss_all_scenarios_ils": 209,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 6,
+    "variants_checked": 5
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "pillowcases-cj-washed-linen-double-ruffle-48x74": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJJT165654102BY",
+   "price_for_qty": 2,
+   "sell_qty": 2,
+   "sale_contains": "זוג ציפיות פשתן רחוץ עם סלסול כפול, 48×74, גוון פשתן (2 יח' של CJJT165654102BY)",
+   "customer_total_ils": 178,
+   "margin_pct": 28.7,
+   "contribution_ils": 36.22,
+   "contribution_with_fee_ils": 58.25,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "זוג ב-₪149: מחיר העמדה בליקוט (cj-zendrop-master-corridor.json, master/pillowcases), 28.7%; ב-₪129 19.2%. עלות 2 × $8.61 + משלוח לזוג $5.74 (CJPacket Eub $4.73 ליחידה, הצעה למק\"ט אח White באותו משקל, freight-cj.json freight_from_sibling; נוסחת החבילה של הסטודיו) = נחיתה ₪75.8. אין בריפו השוואות ישראליות. העותק בחדר הילדה קורא את השורה הזו (mirror_of). מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-master-corridor.json",
+    "card": "data/products/master/pillowcases/pillowcases-cj-washed-linen-double-ruffle-48x74.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: הציפיות בחדר הילדה מוצגות 'עוד לא במכירה' כי לא היו מחיר ושורת משלוח",
+    "read_by_copies": [
+     "pillowcase-cj-washed-linen-double-ruffle-48x74"
+    ]
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (2 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 2,
+    "landed_ils": 75.77,
+    "contribution_ils": 36.22,
+    "margin_pct": 28.7,
+    "break_even_ils": 101.32,
+    "no_loss_room_sku_ils": 109,
+    "no_loss_all_scenarios_ils": 119,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [
+     "qty-freight-estimated"
+    ],
+    "scenarios": 4,
+    "variants_checked": 1
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJYD301460604DW",
+   "price_for_qty": 3,
+   "sell_qty": 3,
+   "sale_contains": "סט 3 בקבוקי משאבה קרמיים מחורצים בגוון חול, 350 מ\"ל, משאבה שחורה (3 יח' של CJYD301460604DW)",
+   "il_value": {
+    "low": 148,
+    "high": 180,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מתקן קרמי Icon (ליחידה; 3 × ₪60 = ₪180)",
+      "size": null,
+      "price": 60.0,
+      "url": "https://www.foxhome.co.il/products/0336875800"
+     },
+     {
+      "retailer": "Terminal X",
+      "title": "ESSENTIALS Lyon מתקן + צנצנת (סט)",
+      "size": null,
+      "price": 148.0,
+      "url": null,
+      "source": "data/economics/market-prices.md"
+     }
+    ],
+    "basis": "ההשוואות מהערות הכרטיס (final-round 2026-10-13); high = 3 × ₪60 של Fox Home, למכירה של 3",
+    "date": "2026-11-25"
+   },
+   "customer_total_ils": 178,
+   "margin_pct": 27.9,
+   "contribution_ils": 35.26,
+   "contribution_with_fee_ils": 57.29,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "סט של 3 ב-₪149: מחיר הרשומה (cj-zendrop-bath.json, bath/shower-dispensers), שנגזר מ-Fox Home ₪60 ליחידה ו-Terminal X ₪148 לסט, 27.9%. עלות 3 × $2.35 + CJPacket Eub $16.21 (הצעת CJ ל-3 יח' של אותו vid; ליחידה $7.88) = נחיתה ₪76.8. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-bath.json",
+    "card": "data/products/bath/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: מוצג ב-B1 'עוד לא במכירה' כי לא היה מחיר"
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (3 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (card): המק\"ט שבחדר 12-50",
+    "units": 3,
+    "landed_ils": 76.76,
+    "contribution_ils": 35.23,
+    "margin_pct": 27.9,
+    "break_even_ils": 102.62,
+    "no_loss_room_sku_ils": 109,
+    "no_loss_all_scenarios_ils": 119,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 180.0,
+    "ratio_to_highest_comp": 0.83,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 8,
+    "variants_checked": 3
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "candle-cj-ribbed-matte-ceramic-candle-cup-9": {
+   "retail_ils": 69,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJJT120250201AZ",
+   "price_for_qty": 1,
+   "sale_contains": "כוס נר קרמית מחורצת 9×9×9.8, לבן מט (ריקה, בלי שעווה)",
+   "il_value": {
+    "low": 22,
+    "typical": 89,
+    "high": 219,
+    "comps": [
+     {
+      "retailer": "ACE",
+      "title": "פמוט / מעמד לנר (חציון הרשת)",
+      "size": null,
+      "price": 80.0,
+      "url": null
+     },
+     {
+      "retailer": "Naaman",
+      "title": "פמוט / מעמד לנר (חציון הרשת)",
+      "size": null,
+      "price": 90.0,
+      "url": null
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "פמוט / מעמד לנר (חציון הרשת)",
+      "size": null,
+      "price": 95.0,
+      "url": null
+     }
+    ],
+    "basis": "data/economics/market-prices.json, קטגוריה candle-holder (2026-10-09): P10, חציון, P90 וחציון לפי רשת; לפי הרשומה",
+    "date": "2026-11-25"
+   },
+   "customer_total_ils": 98,
+   "vs_typical_pct": 10,
+   "margin_pct": 40.4,
+   "contribution_ils": 23.63,
+   "contribution_with_fee_ils": 45.66,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪69: מחיר הרשומה (cj-zendrop-bath.json, bath/candle), שנגזר מקטגוריית הפמוטים ב-market-prices.json (חציון ₪89), 40.4%. עלות $1.36 + CJPacket Eub $7.00 (המק\"ט שבחדר, shipping_il בכרטיס) = נחיתה ₪27.6.",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-bath.json",
+    "card": "data/products/bath/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: מוצג ב-B1 'עוד לא במכירה' כי לא היה מחיר"
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (card): המק\"ט שבחדר 12-50",
+    "units": 1,
+    "landed_ils": 27.59,
+    "contribution_ils": 23.63,
+    "margin_pct": 40.4,
+    "break_even_ils": 37.9,
+    "no_loss_room_sku_ils": 39,
+    "no_loss_all_scenarios_ils": 39,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 219.0,
+    "ratio_to_highest_comp": 0.32,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 5,
+    "variants_checked": 4
+   },
+   "flags": [
+    "ok"
+   ]
+  },
+  "vase-cj-black-matte-stoneware-jar-30": {
+   "retail_ils": 199,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJJT198137605EV",
+   "price_for_qty": 1,
+   "sale_contains": "כד אבנית שחור מט במרקם חול, 30×15, פה 11 (Style4)",
+   "customer_total_ils": 228,
+   "margin_pct": 29.6,
+   "contribution_ils": 49.95,
+   "contribution_with_fee_ils": 71.98,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪199: profit-fix 2026-10-11 (decor.json, losses[8]), 29.6%. עלות $13.34 + CJPacket Eub $16.97 (המק\"ט שבחדר, shipping_il בכרטיס; 1.05 ק\"ג) = נחיתה ₪100.0. אין בריפו השוואות ישראליות לכד הזה. הכרטיס בעמדה living-room/vase; העותק ב-B1 (כד על אדן החלון) קורא את השורה הזו (mirror_of). מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/decor.json",
+    "card": "data/products/vase/vase-cj-black-matte-stoneware-jar-30.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: הכד על אדן החלון ב-B1 מוצג 'עוד לא במכירה' כי לא היה מחיר; העותק קורא את הכלכלה של המקור",
+    "read_by_copies": [
+     "window-sill-vase-cj-black-matte-stoneware-jar-30"
+    ]
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (card): המק\"ט שבחדר 12-50",
+    "units": 1,
+    "landed_ils": 100.02,
+    "contribution_ils": 49.95,
+    "margin_pct": 29.6,
+    "break_even_ils": 133.25,
+    "no_loss_room_sku_ils": 139,
+    "no_loss_all_scenarios_ils": 159,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 6,
+    "variants_checked": 5
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "toilet-brush-cj-fluted-ceramic-holder-black-handle": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-11-25",
+   "retail_sku": "CJYD254508501AZ",
+   "price_for_qty": 1,
+   "sale_contains": "מברשת אסלה עם מחזיק קרמי מחורץ וידית שחורה, טרקוטה-חום",
+   "il_value": {
+    "low": 69.9,
+    "high": 99.9,
+    "comps": [
+     {
+      "retailer": "Home Center",
+      "title": "מברשת אסלה עם מעמד (EKO)",
+      "size": null,
+      "price": 89.9,
+      "url": null
+     },
+     {
+      "retailer": "Home Center",
+      "title": "סט פח + מברשת (₪69.90–99.90)",
+      "size": null,
+      "price": 99.9,
+      "url": null
+     }
+    ],
+    "urls": [
+     "https://www.homecenter.co.il/products/1707814126422",
+     "https://www.homecenter.co.il/products/1693308095399"
+    ],
+    "basis": "ההשוואות מהערות הכרטיס (final-round 2026-10-13); הקישורים כפי שבהערות, בלי שיוך לכל השוואה",
+    "date": "2026-11-25"
+   },
+   "customer_total_ils": 118,
+   "margin_pct": 6.7,
+   "contribution_ils": 5.06,
+   "contribution_with_fee_ils": 27.09,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪89: מחיר הרשומה (cj-zendrop-bath.json, bath/toilet-brush), שנגזר מ-Home Center (מברשת עם מעמד ₪89.90), 6.7%. עלות $5.03 + CJPacket Eub $13.56 (המק\"ט שבחדר, shipping_il בכרטיס; 760 ג') = נחיתה ₪61.3. נקודת האיזון ₪83: המחיר שלא מפסיד הוא ₪89. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-bath.json",
+    "card": "data/products/bath/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle.json",
+    "added": "2026-11-25",
+    "by": "briefs/economics-kids-b1-2026-11-25.md",
+    "log": "data/leads/economics-kids-b1-2026-11-25.md",
+    "why": "M6-L2: מוצג ב-B1 'עוד לא במכירה' כי לא היה מחיר"
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-25",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (card): המק\"ט שבחדר 12-50",
+    "units": 1,
+    "landed_ils": 61.35,
+    "contribution_ils": 5.06,
+    "margin_pct": 6.7,
+    "break_even_ils": 82.34,
+    "no_loss_room_sku_ils": 89,
+    "no_loss_all_scenarios_ils": 89,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 99.9,
+    "ratio_to_highest_comp": 0.89,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 2,
+    "variants_checked": 1
+   },
+   "flags": [
+    "below-floor"
    ]
   }
  }

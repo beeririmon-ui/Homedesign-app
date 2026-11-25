@@ -563,5 +563,568 @@
     ]
    }
   }
+ },
+ "G1_2026_11_25": {
+  "rule": "FB12 ב.10.5: G1 (B05 / B04 / B06) in A / B / C; 0 tokens",
+  "stage_one_byte_identical": {
+   "boy": {
+    "layer": "assets/renders/boy/warm-modern/stage1-2026-11-24/layers/framed-prints/framed-prints-cj-charcoal-flower-silhouette-set3-30x40-boy-type-c.png",
+    "sha256_repo": "390dfa6babc6e37f58ea96addc149ddcf262a361e43e28e4c8a3e999350f8612",
+    "sha256_rebuilt": "390dfa6babc6e37f58ea96addc149ddcf262a361e43e28e4c8a3e999350f8612",
+    "identical": true,
+    "manifest_record_identical": true
+   },
+   "girl": {
+    "layer": "assets/renders/girl/warm-modern/stage1-2026-11-24/layers/framed-prints/framed-prints-cj-flower-cutout-set-30x40-type-a.png",
+    "sha256_repo": "d40ae145d4cd38ecf31b1513de721bcf106cdbf4153079672b868acf56cc1603",
+    "sha256_rebuilt": "d40ae145d4cd38ecf31b1513de721bcf106cdbf4153079672b868acf56cc1603",
+    "identical": true,
+    "manifest_record_identical": true
+   }
+  },
+  "RND2_layer": {
+   "rule": "the G1 layer against today's Type A layer: the frames, rails, shadow and alpha unchanged; change only inside the three openings (and, on the rails' side, within 2.5 px of an opening's edge: the paper's share of the rail's edge pixels)",
+   "alpha_identical": true,
+   "differing_px_outside_openings_grown": 0,
+   "differing_px_in_rim_outside_openings": 2519,
+   "differing_px_inside_openings": 111741,
+   "type_a_layer_sha256_untouched": "d40ae145d4cd38ecf31b1513de721bcf106cdbf4153079672b868acf56cc1603"
+  },
+  "frames": {
+   "K-girl-defaults-g1": {
+    "vs_plate_outside_region_px": 0,
+    "black_point_p05": 12.45,
+    "chain_reproduces_today": true,
+    "vs_today_outside_openings_grown_px": 0,
+    "vs_today_inside_px": 114260
+   },
+   "K-girl-V2-g1": {
+    "vs_plate_outside_region_px": 0,
+    "black_point_p05": 12.42,
+    "chain_reproduces_today": true,
+    "vs_today_outside_openings_grown_px": 0,
+    "vs_today_inside_px": 114260
+   },
+   "K-girl-V3-g1": {
+    "vs_plate_outside_region_px": 0,
+    "black_point_p05": 12.46,
+    "chain_reproduces_today": true,
+    "vs_today_outside_openings_grown_px": 0,
+    "vs_today_inside_px": 114260
+   }
+  },
+  "fidelity_dE00": {
+   "rule": "dE00 <= 3 per ink region against the flat file, in the same light scale (ב.6 / ב.10.5 (5)): linear means over the same area: the region is the panel cells it fills at least half of (what x1 can show); the file's light averaged over those cells, against the scene's pixels over the canvas's light, times B05's paper, the cells warped into each opening's core. file_px_only_Lab: the region's own pixels at full res, for reference",
+   "frames": {
+    "A": {
+     "design": "B05",
+     "regions": {
+      "fur": {
+       "share_of_file_pct": 5.02,
+       "cells": 5583,
+       "file_Lab": [
+        67.8,
+        3.6,
+        17.2
+       ],
+       "file_px_only_Lab": [
+        67.8,
+        3.6,
+        17.3
+       ],
+       "placed_delit_Lab": [
+        67.8,
+        3.6,
+        17.2
+       ],
+       "dE00_vs_file": 0.04,
+       "dE00_vs_same_sampling": 0.01,
+       "dE00_panel_8bit": 0.0,
+       "scene_weight_px": 2059.3
+      },
+      "flowers": {
+       "share_of_file_pct": 1.43,
+       "cells": 1606,
+       "file_Lab": [
+        58.8,
+        11.7,
+        12.1
+       ],
+       "file_px_only_Lab": [
+        58.4,
+        11.9,
+        12.2
+       ],
+       "placed_delit_Lab": [
+        59.3,
+        11.4,
+        12.0
+       ],
+       "dE00_vs_file": 0.51,
+       "dE00_vs_same_sampling": 0.02,
+       "dE00_panel_8bit": 0.0,
+       "scene_weight_px": 582.1
+      },
+      "leaves": {
+       "share_of_file_pct": 4.43,
+       "cells": 4690,
+       "file_Lab": [
+        68.4,
+        -1.5,
+        5.8
+       ],
+       "file_px_only_Lab": [
+        67.1,
+        -1.6,
+        5.8
+       ],
+       "placed_delit_Lab": [
+        68.8,
+        -1.5,
+        5.7
+       ],
+       "dE00_vs_file": 0.37,
+       "dE00_vs_same_sampling": 0.0,
+       "dE00_panel_8bit": 0.01,
+       "scene_weight_px": 1728.1
+      }
+     },
+     "max_dE00_vs_file": 0.51
+    },
+    "B": {
+     "design": "B04",
+     "regions": {
+      "basket": {
+       "share_of_file_pct": 18.88,
+       "cells": 20910,
+       "file_Lab": [
+        56.5,
+        4.7,
+        11.7
+       ],
+       "file_px_only_Lab": [
+        56.3,
+        4.7,
+        11.8
+       ],
+       "placed_delit_Lab": [
+        56.7,
+        4.7,
+        11.7
+       ],
+       "dE00_vs_file": 0.11,
+       "dE00_vs_same_sampling": 0.05,
+       "dE00_panel_8bit": 0.0,
+       "scene_weight_px": 9672.0
+      },
+      "ink": {
+       "share_of_file_pct": 6.26,
+       "cells": 6199,
+       "file_Lab": [
+        34.6,
+        6.2,
+        10.8
+       ],
+       "file_px_only_Lab": [
+        27.1,
+        7.0,
+        12.5
+       ],
+       "placed_delit_Lab": [
+        37.8,
+        5.9,
+        10.5
+       ],
+       "dE00_vs_file": 2.65,
+       "dE00_vs_same_sampling": 0.41,
+       "dE00_panel_8bit": 0.0,
+       "scene_weight_px": 2896.7
+      }
+     },
+     "max_dE00_vs_file": 2.65
+    },
+    "C": {
+     "design": "B06",
+     "regions": {
+      "body": {
+       "share_of_file_pct": 27.92,
+       "cells": 31031,
+       "file_Lab": [
+        57.4,
+        2.2,
+        12.3
+       ],
+       "file_px_only_Lab": [
+        57.3,
+        2.2,
+        12.3
+       ],
+       "placed_delit_Lab": [
+        57.5,
+        2.1,
+        12.2
+       ],
+       "dE00_vs_file": 0.07,
+       "dE00_vs_same_sampling": 0.0,
+       "dE00_panel_8bit": 0.0,
+       "scene_weight_px": 5701.0
+      }
+     },
+     "max_dE00_vs_file": 0.07
+    }
+   },
+   "max": 2.65,
+   "ok": true
+  },
+  "darkest_ink": {
+   "rule": "WM-G1: the darkest ink at L* 15 or more (ב.6); the floor L' = f + L^2 / 4f below 2f",
+   "frames": {
+    "A": {
+     "min_L": 15.82,
+     "p01_L": 35.57,
+     "file_min_L": 0.0,
+     "file_p01_L": 11.64
+    },
+    "B": {
+     "min_L": 15.57,
+     "p01_L": 17.34,
+     "file_min_L": 0.0,
+     "file_p01_L": 5.72
+    },
+    "C": {
+     "min_L": 21.2,
+     "p01_L": 31.68,
+     "file_min_L": 0.52,
+     "file_p01_L": 19.24
+    }
+   },
+   "min": 15.57,
+   "ok": true
+  },
+  "grounds": {
+   "rule": "ב.10.5 (4): one paper for the set (B05's), so B06's taupe ground is not made cream; the brief's acceptance: 'about 6-8 L* below the other two'",
+   "frames": {
+    "A": {
+     "design": "B05",
+     "file_L": 85.5,
+     "albedo_L_in_scene": 85.5,
+     "seen_L_in_frame": 80.2,
+     "lit_paper_L": 82.1
+    },
+    "B": {
+     "design": "B04",
+     "file_L": 81.9,
+     "albedo_L_in_scene": 82.0,
+     "seen_L_in_frame": 73.1,
+     "lit_paper_L": 77.0
+    },
+    "C": {
+     "design": "B06",
+     "file_L": 83.6,
+     "albedo_L_in_scene": 83.6,
+     "seen_L_in_frame": 91.2,
+     "lit_paper_L": 93.9
+    }
+   },
+   "albedo_B06_minus_B05": -1.9,
+   "albedo_B06_minus_B04": 1.6,
+   "file_B06_minus_B05": -1.9,
+   "file_B06_minus_B04": 1.7,
+   "seen_B06_minus_B05": 11.0,
+   "seen_B06_minus_B04": 18.1,
+   "note": "the files themselves carry B06's ground 1-2 L* from the others (not 6-8), and the scene lights C (on the shelf, nearer the window) about 10-16 L* brighter than A and B (the wall beside them reads so too): with one paper and the canvas's own light, B06 keeps its file's ratio to B05; it is seen lighter than A and B, not 6-8 below them",
+   "ok_as_written": false
+  },
+  "colour_shares_pct": {
+   "rule": "caramel >= 10 % (HSL H 20-35, C* >= 15); pink <= 30 % (HSL H 330-20, C* >= 8); green <= 10 % (HSL H 60-170, C* >= 5); blue <= 3 % (LCh h 180-300, C* >= 3); of the set's area",
+   "seen_in_frame": {
+    "caramel": 9.26,
+    "pink": 0.45,
+    "green": 0.03,
+    "blue": 0.0
+   },
+   "flat_panels": {
+    "caramel": 4.75,
+    "pink": 0.76,
+    "green": 0.49,
+    "blue": 0.0
+   },
+   "ok": {
+    "caramel": false,
+    "pink": true,
+    "green": true,
+    "blue": true
+   },
+   "all_ok": false
+  },
+  "V1_V3": {
+   "V1": {
+    "frame": "K-girl-defaults-g1",
+    "RND2_vs_plate_px": 0,
+    "black_point_p05": 12.45,
+    "same_as_today_outside_openings": true,
+    "prints_identical_to_V1": true,
+    "shares_seen": {
+     "caramel": 9.26,
+     "pink": 0.45,
+     "green": 0.03,
+     "blue": 0.0
+    },
+    "plaster_above_band_HSL": [
+     32.4,
+     20.4,
+     82.7
+    ],
+    "plaster_rule": "bone, HSL H 32-40 (unchanged by the prints: the plaster is outside every opening)"
+   },
+   "V2": {
+    "frame": "K-girl-V2-g1",
+    "RND2_vs_plate_px": 0,
+    "black_point_p05": 12.42,
+    "same_as_today_outside_openings": true,
+    "prints_identical_to_V1": true,
+    "shares_seen": {
+     "caramel": 9.26,
+     "pink": 0.45,
+     "green": 0.03,
+     "blue": 0.0
+    },
+    "plaster_above_band_HSL": [
+     32.4,
+     20.4,
+     82.7
+    ],
+    "plaster_rule": "bone, HSL H 32-40 (unchanged by the prints: the plaster is outside every opening)"
+   },
+   "V3": {
+    "frame": "K-girl-V3-g1",
+    "RND2_vs_plate_px": 0,
+    "black_point_p05": 12.46,
+    "same_as_today_outside_openings": true,
+    "prints_identical_to_V1": true,
+    "shares_seen": {
+     "caramel": 9.26,
+     "pink": 0.45,
+     "green": 0.03,
+     "blue": 0.0
+    },
+    "plaster_above_band_HSL": [
+     32.4,
+     20.4,
+     82.7
+    ],
+    "plaster_rule": "bone, HSL H 32-40 (unchanged by the prints: the plaster is outside every opening)",
+    "V3_rule_throw": {
+     "rule": "the girl's V3 (Pink): HSL H 10-25, S <= 40, L 62-82 (ב.4)",
+     "HSL": [
+      17.6,
+      23.5,
+      59.1
+     ],
+     "Lab": [
+      61.3,
+      10.9,
+      12.7
+     ]
+    }
+   },
+   "combinations": "ב.10.4: none to avoid. V2 (deep chestnut) gathers B04's basket; V3 (pink) echoes B05's flowers; V1 is the quietest"
+  },
+  "paper": {
+   "rule": "matte paper, no glass (ב.6): no reflection layer; the light is the blank canvas's own, blurred 6 px; nothing but the art and that light",
+   "reflection_layer": false,
+   "paper_ref": "B05 (panel A): its pixels over the 70th percentile of L*",
+   "paper_lin": [
+    0.7121,
+    0.6857,
+    0.6459
+   ]
+  },
+  "openings": {
+   "A": {
+    "quad_px": [
+     [
+      1994.42,
+      198.11
+     ],
+     [
+      2167.29,
+      171.77
+     ],
+     [
+      2167.78,
+      415.29
+     ],
+     [
+      1994.34,
+      428.53
+     ]
+    ],
+    "opening_m": [
+     0.2502,
+     0.3599
+    ],
+    "ratio_rectified": 0.6951,
+    "table_ratio": 0.75,
+    "off_table_pct": -7.3,
+    "panel_px": [
+     278,
+     400
+    ],
+    "crop": [
+     44.0,
+     0.0,
+     1455.0,
+     2030.0
+    ],
+    "table_crop": [
+     22,
+     45,
+     1477,
+     1985
+    ],
+    "subject_margins_pct": {
+     "left": 4.5,
+     "right": 6.7,
+     "top": 4.8,
+     "bottom": 5.9
+    }
+   },
+   "B": {
+    "quad_px": [
+     [
+      2235.39,
+      161.7
+     ],
+     [
+      2435.65,
+      131.81
+     ],
+     [
+      2436.12,
+      394.31
+     ],
+     [
+      2235.48,
+      409.91
+     ]
+    ],
+    "opening_m": [
+     0.2496,
+     0.3601
+    ],
+    "ratio_rectified": 0.6932,
+    "table_ratio": 0.8,
+    "off_table_pct": -13.3,
+    "panel_px": [
+     277,
+     400
+    ],
+    "crop": [
+     58.0,
+     19.0,
+     1437.0,
+     2011.0
+    ],
+    "table_crop": [
+     22,
+     108,
+     1473,
+     1922
+    ],
+    "subject_margins_pct": {
+     "left": 13.3,
+     "right": 9.4,
+     "top": 20.2,
+     "bottom": 20.2
+    }
+   },
+   "C": {
+    "quad_px": [
+     [
+      1339.49,
+      184.58
+     ],
+     [
+      1451.0,
+      161.88
+     ],
+     [
+      1442.76,
+      348.51
+     ],
+     [
+      1329.38,
+      363.75
+     ]
+    ],
+    "opening_m": [
+     0.2499,
+     0.36
+    ],
+    "ratio_rectified": 0.6942,
+    "table_ratio": 0.65,
+    "off_table_pct": 6.8,
+    "panel_px": [
+     278,
+     400
+    ],
+    "crop": [
+     90.0,
+     33.0,
+     1486.0,
+     2041.0
+    ],
+    "table_crop": [
+     143,
+     45,
+     1433,
+     2029
+    ],
+    "subject_margins_pct": {
+     "left": 17.3,
+     "right": 17.3,
+     "top": 4.5,
+     "bottom": 19.5
+    },
+    "hidden_below_lip": {
+     "left": 0.041,
+     "right": 0.027
+    },
+    "lean_deg": 10.0
+   }
+  },
+  "unmix": {
+   "A": {
+    "band_px": 2.5,
+    "rim_px": 3356,
+    "rim_with_rail_px": 3356,
+    "core_px": 39319,
+    "f_mean_rim": 0.444
+   },
+   "B": {
+    "band_px": 2.5,
+    "rim_px": 3730,
+    "rim_with_rail_px": 3604,
+    "core_px": 49225,
+    "f_mean_rim": 0.475
+   },
+   "C": {
+    "band_px": 2.5,
+    "rim_px": 1938,
+    "rim_with_rail_px": 1912,
+    "core_px": 18780,
+    "f_mean_rim": 0.401
+   }
+  },
+  "acceptance": {
+   "no seam or halo at the frame edges at x2": "by eye: qa-sheet-g1.jpg (the wall at x2); the rim is unmixed (the rails' paper share only)",
+   "paper reads as paper, matte, no glass": "no reflection layer; by eye on the sheet",
+   "B06's taupe ground about 6-8 L* below the other two": "as written: FAILS (seen: +11.0 vs B05, +18.1 vs B04; albedo -1.9 / +1.6; the files -1.9 / +1.7)",
+   "darkest ink L* >= 15": "passes (min 15.57)",
+   "RND2 0 outside the three openings": "passes",
+   "dE00 <= 3 per ink region": "passes (max 2.65)",
+   "colour shares": "FAILS"
+  }
  }
 }

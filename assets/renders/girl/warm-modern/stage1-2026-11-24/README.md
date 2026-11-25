@@ -14,6 +14,7 @@ render-agent. Brief: `briefs/wm-kids-stage1-render-2026-11-24.md`. Spec: `docs/p
   - GB2: the cushions and the bunny.
 - **The frames:** `K-girl-defaults*`, `K-girl-V2*`, `K-girl-V3*`. The throw: V1 Linen Brown, V2 Deep Chestnut, V3 Pink.
 - `checks.json`, `qa-sheet.jpg` and `jobs.json`.
+- **The prints set G1 (FB12, 2026-11-25), beside today's files:** the section "G1" below. `manifest.json` stays as it is (Type A); G1 has its own `manifest-g1.json`.
 
 ## Money
 3 sends, **1,200**: GB1, GB1b and GB2, at 400 each. The QA fixes of this room cost 0 (all code).
@@ -92,3 +93,86 @@ Before (c4b811c0) and after at x2: `kids-fixes-2.jpg` in this folder. Measured i
 5. The basket's right handle over the throw (1000–1040, 1080–1120).
 6. The duvet's back edge against the wall in the corner (880–1120, 860–950).
 7. The standing pillow placed in the corner (725–960, 735–890), not against the head board as in the clay.
+
+## G1, the prints set "painted bunnies" (FB12, 2026-11-25)
+render-agent. Brief: `briefs/wm-fb12-girl-art-g1-2026-11-25.md`. Spec: `docs/proposals/wm-fb12-2026-11-25.md` ב.10.5. All in code, **0 tokens, no var2**.
+**Status: stopped for the manager.** Two acceptance items fail in code as written (below). Nothing of today's is overwritten, and nothing is wired to the site.
+
+### Files
+- **The layer:** `layers/framed-prints/framed-prints-aliexpress-watercolour-bunny-nursery-prints-g1.png`.
+  - It holds Type A's frames, rails and alpha as they are, and shares Type A's shadow.
+  - A is B05 (colour 12), B is B04 (13) and C is B06 (11), all 30 x 42 unframed.
+- **The frames:** `K-girl-defaults-g1` (V1), `K-girl-V2-g1` and `K-girl-V3-g1`, each with its `-frame`.
+- **`manifest-g1.json`:** this room's manifest with G1 as the prints' default.
+  - **Why a second manifest and not an entry:** the site's tour (`site/tools/tour/girl.warm-modern.json`) builds from `manifest.json` and checks it against `K-girl-defaults.png`. A G1 entry there would break that check, or would open a prints wheel.
+  - **The rollback:** `manifest.json` (Type A), with every Type A file untouched.
+- **`qa-sheet-g1.jpg`:** the wall at x2 (canvas px x2), before and after; then G1 with V2, V1 and V3 at x1 (1920).
+- **`checks.json` → `G1_2026_11_25`.**
+- **The tool:** `tools/g1_prints.py` (run it with `python3.12 -I ... all`). It calls the boy's `tools/kids_art.py place()` with its new options. The supplier's flat files stay in the scratchpad.
+
+### The tool change (`kids_art.py`)
+- `place()` takes each panel's own width and height (`sizes`), instead of a fixed 300 x 400.
+- It also takes:
+  - `panels`;
+  - `paper_ref` (one paper for the set);
+  - `quads` (the re-measured openings);
+  - `edge="unmix"`;
+  - `floor_L` (WM-G1);
+  - `out` and `record`.
+- All are off by default. `place boy` and `place girl` rebuild today's layers byte for byte (sha256 equal, manifest record equal; `checks.json` → `stage_one_byte_identical`).
+
+### The method
+- **The openings, re-measured (instruction 3):**
+  - Each side is fitted to the paper's edge, subpixel (rms 0.04–0.10 px; C's right side 0.65).
+  - The openings are back-projected through the camera.
+  - **A and B are one size on the wall: 25.0 x 36.0 cm, ratio 0.695 and 0.693.**
+  - The table's 0.75 and 0.80 were the quads' pixel ratios, which carry the perspective. Off the table: −7.3 % and −13.3 %.
+  - **C:** stage one's quad was an axis-aligned box (the fallback). The frame leans about 10°, so the old box left the paper uncovered at the top right and made a seam at x 1443.
+    - Now its top and sides are fitted.
+    - Its bottom is behind the ledge's lip, so its ratio cannot be seen. It is the set's own 0.694, and 2.7–4.1 % of the opening hides under the lip (the clay: 1.5 of 36.4 cm). Off the table: +6.8 %.
+  - All three are more than 3 % off, so the crops are recomputed.
+- **The crops:**
+  - Each keeps the table's centre, takes the largest rectangle of the rectified ratio inside the art, and takes only blank paper off.
+  - A: 44, 0, 1455, 2030. B: 58, 19, 1437, 2011. C: 90, 33, 1486, 2041.
+  - The subject margins are at least 4.5 %.
+  - The panels are 278 x 400, 277 x 400 and 278 x 400, resized by area in linear light.
+- **The light (instruction 4):** one paper for the set, B05's (lin 0.716 / 0.689 / 0.649). Each opening is lit by its own blank canvas, as in stage one. There is no reflection layer: the paper is matte, with no glass.
+- **The edge:** within 2.5 px of an opening's edge, each pixel is split between the rail's colour and the lit paper, and only the paper's share takes the art. This leaves no paper line and no hard cut. Inside that rim, the pixel is the art.
+- **WM-G1:** L' = 15 + L²/60 below L* 30.
+
+### The measures (`checks.json` → `G1_2026_11_25`)
+- **RND2:**
+  - The alpha is identical to Type A's.
+  - 0 px differ outside the openings grown by their 2.5 px rim.
+  - Inside that rim, on the rails' side, 2,519 px change, by their paper share only: against the blank, dE76 p50 0.6–2.1, max 5.5. Stage one had changed 660 px outside the same openings.
+  - All three frames equal `plate.png` outside every layer (0 px), and equal today's frames outside the openings (0 px).
+  - Rebuilt without the swap, the compose chain gives today's three frames byte for byte.
+- **dE00 per ink region against the flat file, in the file's light scale:** at most 2.65.
+  - B05: fur 0.04, flowers 0.51, leaves 0.37.
+  - B04: basket 0.11, ink 2.65 (the placing itself: 0.41; the rest is x1's resolution, since a 5 px ink line is under one panel cell).
+  - B06: body 0.07.
+- **The darkest ink:** L* 15.6 (B, the sepia; the file reaches 0). A is 15.8 and C 21.2.
+- **The colour shares of the set:** see the failures below.
+  - Pink: 0.45 % as seen and 0.76 % flat (at most 30 %).
+  - Green: 0.03 / 0.49 % (at most 10 %).
+  - Blue: 0 / 0 % (at most 3 %).
+- **V1–V3:** each frame has RND2 0 against the plate and 0 against today's frame outside the openings. The black point p0.5 is 12.45, 12.42 and 12.46. The prints are identical in all three, and the plaster above the band is unchanged.
+- **The highlights:** in C, 42 px of B06's white chest reach 255. This is the bright light on the shelf. It cannot be seen at x2.
+
+### Failures (stopped here, per the brief: no var2)
+1. **B06's ground "about 6–8 L\* below the other two": fails as written.**
+   - **In the files:** the grounds are L\* 85.5 (B05), 81.9 (B04) and 83.6 (B06). So B06 is 1.9 below B05 and 1.7 above B04, not 6–8.
+   - **In the scene:** with one paper, B06 keeps exactly that albedo (−1.9 / +1.6).
+   - **As seen:** the scene lights C on the shelf about 12–17 L\* brighter than A and B, and the wall beside them reads the same way (plaster L\* about 91 by C, 78–87 by A, 74–81 by B). So B06 is seen at 91.2, against 80.2 and 73.1.
+   - Meeting the number would mean darkening the product (fidelity) or the scene's light. Neither is done in code.
+2. **Caramel at least 10 % (HSL H 20–35, C\* ≥ 15): fails.**
+   - It is 9.3 % of the set as seen (the warm light adds to it) and 4.75 % on the flat panels.
+   - Much of the set's warm brown is at H 35–45 (B05's fur, B06's body) or under C\* 15 (B04's basket, B06's body).
+   - The designer's estimate of 15–20 % does not hold under this definition. Raising it would recolour the products.
+
+### Regions for QA (canvas px)
+1. C, the leaning frame: its top-right corner and its right rail (1415–1470, 145–200), and its lip (1320–1460, 320–375). This is the old quad's seam, now covered.
+2. A's and B's rails, all four sides (1985–2175, 165–435 and 2225–2445, 125–420): no paper line, no halo.
+3. B04's darkest sepia: the eyes and the basket's shaded weave (2270–2400, 205–350), at the L\* 15 floor.
+4. B06's ground against A's and B's at x1, on the sheet (the failed item 1).
+
