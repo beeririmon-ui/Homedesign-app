@@ -129,3 +129,43 @@
    - **מה זה משנה במסמכים המחייבים:** חריג ל-Bible 1.8 ‏B6 ("בלי שמש"), ל-1.8 (‏24 מ"מ בלבד בפריים ראשי) ול-1.9 ("הכלי לא משתנה"). סיבוב מצפן לבית הנורדי בלבד בתוכנית הבית, כמו במודרני החם (ARC2).
    - **ההמלצה: כן.** אור צפוני בלי שמש, במצלמה של 24 מ"מ בגובה 1.20, הוא בדיוק מה שהפך את M0 לבנאלי (FB13 §2).
    - **איך עונים:** אפשר לענות בבחירת קונספט, A או B, כמו ב-FB15.
+
+## 7. הסלון הנורדי: רשימה לאישור 2 (נוסף ב-2026-11-26, אחרי הדירוג)
+**הדירוג שקדם לרשימה:**
+- נוספו ציונים נורדיים ל-264 כרטיסים, בפורמט `"master-designer 2026-11-26: ..."`. עכשיו לכל 520 הכרטיסים שיש להם `style_scores` יש ציון נורדי.
+- **ציון 7 ומעלה: 75 כרטיסים חדשים.** בעיקר שטיחי צמר ויוטה, וילונות רומאיים בלי חבל, אביזרי מקלחת בשחור מט, מגשי טרוורטין, פנסי נייר ואהילי קפלים.
+- **נשארו נמוכים:** כל מנורות הקיר מחבל וראטן במטבח, המטחנות הכהות והמנורות על עמוד אגוז.
+- **לא דורגו:** כרטיסים שאין בהם בכלל `style_scores`, למשל `gallery-stool-cj-cane-seat-round-stool-32x45` ו-`cutting-boards-cj-*`. הם מחוץ ל-264.
+
+**איך הרשימה בנויה:**
+- **20 מוצרים נמכרים:** 18 העמדות של `data/slots/living-room.json`, ועוד שולחן הקפה (כמו FB12-T) ומגש. הספה והכורסה קבועות ולא נמכרות (תוכנית ב').
+- **בכל עמדה:** ברירת מחדל ושתי וריאציות, וכולן בתוך הפלטה. מה שמתחת ל-7 מסומן כחריג עם נימוק, ועמדה ריקה היא משימת ליקוט.
+- **בדיקות לפני רינדור:** זכויות תמונה, CE בתאורה ומידות ייבדקו בגיליון התמונות.
+
+| עמדה | ברירת מחדל | וריאציה 2 | וריאציה 3 | מה עוד צריך |
+| --- | --- | --- | --- | --- |
+| curtains | `curtains-aliexpress-cotton-linen-curtain-look-902882` **8.0**: שקוף בשיבולת שועל עם סלאב וקפלי S | `curtains-aliexpress-linen-blend-s-fold-180502` **8.0**: אותה שפה בשיבולת שועל בהירה יותר | `curtains-aliexpress-beige-linen-sheer-curtains-554205` **7.0**: וואל בשנהב חם | שלוש מדרגות גוון. ‏`curtains-cj-japanese-linen-half-shade` ‏(7.5) לא נבחר, כי אין לו תמונה מקומית |
+| framed-art | `framed-art-aliexpress-japandi-bare-branch-70x100-776445` **7.5**: ענף דיו חשוף על שמנת | `framed-art-cj-morandi-triptych-sage` **6.5, חריג**: שלישייה במרווה שמחזירה את המרווה לקיר | — | **פער.** הטריפטיך הגאומטרי (RND3) צריך כרטיס, עם זכויות לפי PR1 |
+| wall-decor | `wall-decor-aliexpress-natural-raffia-woven-bohemian-763597` **7.0**: רפיה טבעית מט | `wall-decor-cj-macrame-dowel-50x70` **6.5, חריג**: מקרמה כותנה, חומר מותר | `wall-decor-aliexpress-woven-seagrass-leaf-662874` **6.5, חריג**: עלה קש ים | אין שלישייה של 7 ומעלה. אפשר לוותר על העמדה ב-M0-N אם המצלמה מוציאה אותה |
+| accent-sconces | `accent-sconces-aliexpress-indoor-stone-wall-lamp` **8.0**: גליל טרוורטין מעלה-מטה | `accent-sconces-cj-travertine-block-updown-8x16` **7.5**: בלוק, צורה אחרת | `accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket` **7.5**: מפוספס, טקסטורה אחרת | שער CE |
+| wall-sconce | `wall-sconce-cj-black-swing-arm-fabric` **7.0**: זרוע מתקפלת שחורה, תקע EU | `wall-sconce-cj-linen-cone-black` **7.0**: קונוס פשתן על פלטה שחורה | `wall-sconce-aliexpress-telescopic-swing-arm-wall-176890` **7.5**: זרוע עץ, מהמאגר של חדר העבודה | ‏CE ו-2700K ב-V3 |
+| vase | `vase-cj-textured-white-stoneware` **8.5**: כד לבן חם עם מרקם קמטים | `vase-aliexpress-vintage-distressed-clay-vase-589009` **8.5**: חרס מסורק בשמנת-שיבולת שועל | `vase-cj-black-matte-stoneware-jar-30` **8.0**: פחם, נשא ההדגשה | עומד ב-VR2 (כולם 8 ומעלה). בשמש של M0-N לבדוק את הצללית הכהה על האדן |
+| rug | `rug-cj-braided-wool-natural` **8.0**: צמר קלוע בשמנת ושיבולת שועל | `dining-rug-ikea-lohals-jute-200x300` **7.0**: יוטה שטוחה, טקסטורה אחרת | — | **פער:** וריאציה שלישית. **המידה:** שני המועמדים 200×300, והתוכנית 330×240 |
+| floor-lamp | `floor-lamp-aliexpress-wabi-sabi-japan-floor-217361` **7.0**: פנס בד על חצובת עץ דקה | `floor-lamp-cj-black-drum-linen` **6.5, בבדיקה בלבד**: שער החשמל לא עבר | — | **פער חוסם:** אין מנורת רגל נורדית מכורה עם CE. קדימות ראשונה בליקוט |
+| planter | `planter-cj-seagrass-belly` **7.0**: סל-עציץ מקש ים, ההיתר היחיד לקש בחדר | `planter-cj-cement-ribbed-belly` **6.0, חריג**: בטון מחורץ, וריאציה בחומר | — | **פער:** כלי קרמיקה מט או בטון בהיר שמגיעים ל-7 |
+| sofa-cover (שמיכה) | `sofa-cover-cj-cotton-muslin-fringe` **8.0**: מוסלין שכבות עם פרנזים קצרים | `throw-cj-cotton-linen-light-gray-200x230` **7.5**: כותנה-פשתן באפור ערפל | `sofa-cover-cj-washed-hemp-throw` **7.0**: קנבוס רחוץ במרווה | תמונות הסטודיו של המוסלין מהמודרני החם משמשות שוב, ב-0. **התלבטות:** R5Q1 קובע "כיסוי מלא" בנורדי, אבל כל כיסויי הספה המלאים קיבלו 6 ומטה |
+| cushions (סט) | **סט A:** `cushions-cj-boucle-teddy` 8.5, ‏`cushions-cj-knitted-chenille-bean-green` 8.0 ו-`cushions-cj-linen-look-charcoal` 7.5 | **סט B:** `cushions-cj-chenille-check-milky-white` 8.0, ‏`cushions-cj-corduroy-patchwork` 7.0 ו-boucle-teddy | **סט C:** `cushions-aliexpress-textured-boucle-throw-pillow` 7.5 (פחם), ‏`cushions-cj-wide-wale-corduroy` 7.0 ו-`cushions-cj-linen-look-ivory` 7.0 | המרווה והפחם בכל סט, ולכן ההדגשה מופיעה פעמיים בכל שילוב |
+| basket | `basket-cj-jute-rope-cylinder` **8.5**: גליל חבל ביוטה-אלון | `basket-cj-cotton-rope-white` **8.0**: אותה צללית בלבן חם | `basket-cj-seagrass-belly` **7.5**: בטן מקש ים | אם העציץ מקש ים, וריאציה 3 עדיין מותרת (קש מותר בסל) |
+| magazine-holder | `magazine-holder-cj-felt-log-basket` **7.0**: לבד פחם עם ידיות עץ | `magazine-holder-aliexpress-macrame-x-frame-rack-547915` **6.5, חריג**: מקרמה שנהב על X מאורן | — | **פער:** וריאציה שלישית |
+| table-runner | `table-runner-cj-linen-look-sage-fringe` **7.0**: מרווה, נשא ההדגשה | `zendrop-2902397` **7.0**: לבן חם, בלי פרנזים | `table-runner-aliexpress-solid-color-textured-runner-525144` **7.5**: טאופ, מהמאגר של פינת האוכל | כולם פוליאסטר במראה פשתן. אם יימצא פשתן אמיתי, הוא מחליף |
+| bowl | `bowl-cj-speckled-ivory-wide-bowl-21` **7.5**: קערה רחבה בשנהב מנוקד | `bowl-cj-glutinous-white-belly-bowl-21` **8.0**: קערת בטן חלקה בלבן חם, מהמאגר של פינת האוכל | — | **פער:** וריאציה שלישית, לא מאבן (מכסת האבן על השולחן) |
+| candle-holders | `candle-holders-cj-travertine-pedestal` **8.5**: קונוס טרוורטין | `candle-holders-aliexpress-matte-black-iron-pillar-set2` **7.0**: זוג צלחות ברזל שחור מט | — | **פער:** וריאציה שלישית, למשל זוג פליז מוברש (מותר כקבוצה) |
+| pouf | `pouf-cj-cotton-knit-ball-cover` **7.5, בבדיקה בלבד**: הגובה הממולא לא ידוע ואין מלאי | `pouf-ikea-sandared-beige-45` **7.0**: גליל Ø45 בבז' | — | **פער:** פוף נורדי שאפשר למכור. בוקלה אסורה בפוף |
+| pendant | `pendant-cj-pleated-pumpkin-lantern-40` **8.5**: פנס קפלים שטוח בלבן חם | `pendant-cj-oak-stem-fabric-drum` **8.0**: תוף בד על מוט אלון | `pendant-cj-silk-ribbed-pumpkin-40` **7.5**: פנס מצולע; יש לו תמונת סטודיו מהמודרני החם | שער CE |
+| coffee-table (חדש, כמו FB12-T) | `coffee-table-idana-javorina-olia-natural` **8.5**: אלון מלא, מפל קל | `coffee-table-idana-javorina-tintin-120` **7.0**: רגלי לוח בזווית | `coffee-table-tollmans-ethnicraft-boomerang-126` **7.0**: חלוק אורגני | עד אישור בכתב מ-IDANA: "עוד לא במכירה". גובה 38±2 לכל שולחן בגלגל |
+| tray (חדש) | `pool-cj-travertine-organic-tray-24` **7.5**: טרוורטין אורגני | — | — | עם הפמוטים יש בדיוק 2 פריטי אבן על השולחן, בגבול. **פער:** וריאציה בעץ או בקרמיקה |
+
+**בשורה התחתונה:**
+- **מלאות:** 10 עמדות מלאות בשלוש אפשרויות של 7 ומעלה. ב-10 עמדות יש פער או חריג.
+- **חוסם ראשון:** מנורת רגל. אחריה התמונה, השטיח (גם המידה), הפוף, מחזיק העיתונים, הקערה, הפמוטים, המגש והעציץ.
+- **הסצנה החזקה:** ברירות המחדל יחד הן לבן חם, שיבולת שועל ואלון. המרווה מופיעה פעמיים בכרית ובראנר, והפחם פעמיים בכרית ובמחזיק. ההדגשה בתוך 5–12%.
