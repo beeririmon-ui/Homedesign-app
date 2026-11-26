@@ -1,0 +1,113 @@
+{
+  "note": "MOCK7 (2026-11-26, the coordinator's update to briefs/site-mock7-tour-transitions-2026-11-26.md): the living room is M0-W, the new hero (FB13 stage A, FB15 / FB16: assets/renders/living-room/warm-modern/fb13-2026-11-25/, its README): 13 product layers cut from one render on plate-PW.png, their shadows (multiply) and the three lamps' light (screen, times 1 − every alpha). Built by tools/make-tour-room.ts, the rooms' tool, and gated against default-frame-m0w.png to the channel value. The camera is the manifest's own (35 mm at 1.05 m, not yet in the house plan: registration after approval 3), so the marks come from this manifest's layers (each mark is placed in its layer's alpha box). No wheel: the manifest has no variants yet (no cushion sets A and C, no second table); the cushions are set B, shown under the slot's name. The coffee table, IDANA Olia, 'עוד לא במכירה' until IDANA's written approval. No style change here: the Nordic house is the old M0's camera. Selected by tools/tour/frames.json `living_room`; the phase 2 room (tools/tour/living-room.warm-modern.json, manifest-basket.json) is the rollback, one line there. Pinned by content (tools/tour/living-room.pin.json). Behind HD_PUBLIC=0.",
+  "room": "living-room",
+  "group": "living-room",
+  "style": "warm-modern",
+  "name_he": "סלון",
+  "layers": "assets/renders/living-room/warm-modern/fb13-2026-11-25",
+  "manifest": "layers/manifest.json",
+  "truth": "default-frame-m0w.png",
+  "gate": {
+    "kind": "finish",
+    "frame_box_from": "m0w-depth.json"
+  },
+  "depth": {
+    "file": "assets/renders/living-room/warm-modern/fb13-2026-11-25/m0w-depth.png",
+    "encoding": "inv16"
+  },
+  "plate": "plate-PW.png",
+  "plan": "docs/house-plan.json",
+  "camera": "M0-W",
+  "camera_from_manifest": true,
+  "room_plan": "living",
+  "media": "M0-W",
+  "styles": false,
+  "pin": "tools/tour/living-room.pin.json",
+  "slots_file": "data/slots/living-room.json",
+  "sample": null,
+  "slots": {
+    "framed-art": {
+      "card": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+      "kind": "wall",
+      "depth_m": 5.4,
+      "anchors": [[0.5, 0.5]],
+      "hero": true
+    },
+    "accent-sconces": {
+      "card": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+      "kind": "wall",
+      "depth_m": 5.4,
+      "anchors": [
+        [0.03, 0.5],
+        [0.97, 0.5]
+      ]
+    },
+    "vase": {
+      "card": "vase-cj-textured-white-stoneware",
+      "kind": "surface",
+      "depth_m": 4.1,
+      "anchors": [[0.5, 0.6]]
+    },
+    "rug": {
+      "card": "rug-cj-braided-wool-natural",
+      "kind": "floor",
+      "depth_m": 3.3,
+      "anchors": [[0.85, 0.5]]
+    },
+    "floor-lamp": {
+      "card": "floor-lamp-cj-pleated-walnut-stem-158",
+      "kind": "floor",
+      "depth_m": 4.6,
+      "anchors": [[0.5, 0.12]]
+    },
+    "planter": {
+      "card": "planter-cj-cement-ribbed-belly",
+      "kind": "floor",
+      "depth_m": 5.2,
+      "anchors": [[0.5, 0.88]]
+    },
+    "cushions": {
+      "card": null,
+      "kind": "surface",
+      "depth_m": 4.5,
+      "anchors": [[0.33, 0.22]]
+    },
+    "coffee-table": {
+      "card": "coffee-table-idana-javorina-olia-natural",
+      "kind": "floor",
+      "depth_m": 3.7,
+      "anchors": [[0.3, 0.35]],
+      "name_he": "שולחן קפה"
+    },
+    "basket": {
+      "card": "basket-cj-jute-rope-cylinder",
+      "kind": "floor",
+      "depth_m": 4.6,
+      "anchors": [[0.5, 0.5]]
+    },
+    "magazine-holder": {
+      "card": "magazine-holder-cj-gunmetal-leather-strap",
+      "kind": "floor",
+      "depth_m": 2.9,
+      "anchors": [[0.5, 0.4]]
+    },
+    "bowl": {
+      "card": "bowl-cj-matte-black-bowl-20",
+      "kind": "surface",
+      "depth_m": 3.5,
+      "anchors": [[0.5, 0.5]]
+    },
+    "candle-holders": {
+      "card": "candle-holders-cj-travertine-pedestal",
+      "kind": "surface",
+      "depth_m": 3.8,
+      "anchors": [[0.5, 0.6]]
+    },
+    "pendant": {
+      "card": "pendant-cj-tiered-fabric-drum",
+      "kind": "hang",
+      "depth_m": 3.7,
+      "anchors": [[0.5, 0.6]]
+    }
+  }
+}

@@ -88,6 +88,13 @@ const fail = (msg: string): never => {
   console.error(`make-tour: ${msg}`);
   process.exit(1);
 };
+// MOCK7 (the coordinator's update): tools/tour/frames.json `living_room` names the config that builds the living room;
+// when it is not this one (M0-W: tools/make-tour-room.ts, through tools/make-tour-rooms.ts), nothing is built here
+const living = read<{ style: string; living_room?: string }>(sitePath('tools/tour/frames.json'));
+if (living.living_room && `tools/tour/${living.living_room}.${living.style}.json` !== MANIFEST.replace(/^\.\//, '')) {
+  console.log(`make-tour: ${MANIFEST} skipped: the living room is tools/tour/${living.living_room}.${living.style}.json (frames.json living_room)`);
+  process.exit(0);
+}
 const t = read<TourManifest>(sitePath(MANIFEST));
 const manifestPath = repoPath(t.manifest);
 const dir = dirname(manifestPath);

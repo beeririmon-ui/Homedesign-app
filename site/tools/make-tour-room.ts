@@ -58,9 +58,10 @@
  */
 import sharp, { type OverlayOptions } from 'sharp';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
-import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
+import { basename, join, relative } from 'node:path';
+import { GENERATED, MEDIA_OUT, REPO, repoPath, sitePath } from './lib/paths';
 import { nearness, type DepthCfg } from './lib/depth';
 
 type Box = [number, number, number, number];
@@ -98,6 +99,18 @@ type Cfg = {
   truth: string;
   /** MOCK7: the frame's depth for the transitions (tools/lib/depth.ts); absent: the page's fallback */
   depth?: DepthCfg;
+  /** MOCK7: the camera is the manifest's own (`camera`: loc, yaw, lens, u0, v0), not yet registered in the house plan
+   *  (M0-W, the new living room); its lens sets the projection (24 mm: kx 0.6667, ky 1.1852) */
+  camera_from_manifest?: boolean;
+  /** MOCK7: a folder of its own under tour/<room>/<style>/ (the living room's M0-W, beside the phase 2 room's M0) */
+  media?: string;
+  /** MOCK7: false: the room has no style change (the Nordic house is the old M0's, another camera) */
+  styles?: boolean;
+  /** MOCK7: the content hashes this frame is pinned to (tools/tour/living-room.pin.json); `--write-pin` writes them */
+  pin?: string;
+  /** MOCK7: a default frame the render tools' finish made (M0-W): the gate composes the layers as that finish does,
+   *  at the truth's size (tools/tour/gate_finish.py; `frame_box_from`: the folder's file with the full-precision box) */
+  gate?: { kind: 'finish'; frame_box_from?: string };
   /** MOCK5: the frame's base (default plate.png) */
   plate?: string;
   plan: string;
@@ -138,6 +151,8 @@ type MLayer = {
 type MVariant = { slot: string; product: string; default: boolean; layer: string; shadow: string; card?: string; frame?: string; retired?: unknown };
 type Manifest = {
   id: string;
+  /** MOCK7: the manifest's own camera (M0-W) */
+  camera?: { loc: [number, number, number]; yaw: number; lens?: number; u0: number; v0: number; status?: string };
   canvas: [number, number];
   frame_box: [number, number, number, number];
   compose?: unknown;
@@ -257,6 +272,7 @@ const rint = (x: number) => {
 };
 /** every default alpha of the frame, as the render tools accumulate it: 1 − Π(1 − a) */
 let aAll: Float64Array | null = null;
+let gateNote = '';
 {
   const st = new Float64Array(W * H * 3);
   const plate = await raw(PLATE, 3);
@@ -289,10 +305,19 @@ let aAll: Float64Array | null = null;
     }
     for (let i = 0; i < st.length; i++) if (Lm[i]) st[i] = (255 - rint(((255 - st[i]! * 255) * (255 - Lm[i]!)) / 255)) / 255;
   }
-  const truth = await raw(c.truth, 3);
-  let bad = 0;
-  for (let i = 0; i < st.length; i++) if (Math.min(255, Math.max(0, rint(st[i]! * 255))) !== truth[i]) bad++;
-  if (bad) fail(`the layers in this order miss ${c.truth} on ${bad} channel values`);
+  if (c.gate?.kind === 'finish') {
+    // MOCK7: the folder's own finish (its compose, its frame view), read only, against the folder's default frame
+    const args = [sitePath('tools/tour/gate_finish.py'), dir, c.manifest, c.truth, repoPath('assets/renders/tools/finish')];
+    const out = execFileSync('python3.12', ['-I', ...args, ...(c.gate.frame_box_from ? [c.gate.frame_box_from] : [])], { encoding: 'utf8' });
+    const g = JSON.parse(out) as { max: number; differing: number; size: [number, number] };
+    if (g.differing) fail(`the layers, as the finish composes them, miss ${c.truth} on ${g.differing} channel values (max ${g.max})`);
+    gateNote = `${c.truth} (${g.size.join('×')}, the finish's frame) to the value`;
+  } else {
+    const truth = await raw(c.truth, 3);
+    let bad = 0;
+    for (let i = 0; i < st.length; i++) if (Math.min(255, Math.max(0, rint(st[i]! * 255))) !== truth[i]) bad++;
+    if (bad) fail(`the layers in this order miss ${c.truth} on ${bad} channel values`);
+  }
 }
 const lights = lightEntries.map((x) => x.file);
 
@@ -381,8 +406,19 @@ const plan = read<Plan>(repoPath(c.plan));
 const shellKey = c.shell ?? c.room_plan;
 const shell = plan.style_shells_1_3_1?.[c.style]?.[shellKey];
 const shellCam = shell?.cameras?.[c.camera] as Camera | undefined;
-const cam: Camera = shellCam && Array.isArray(shellCam.loc) ? shellCam : (plan.cameras.find((x) => x.id === c.camera) ?? fail(`no camera ${c.camera}`));
-const camFrom = shellCam && Array.isArray(shellCam.loc) ? `style_shells_1_3_1.${c.style}.${shellKey}.cameras.${c.camera}` : `cameras.${c.camera}`;
+const mc = c.camera_from_manifest ? (m.camera ?? fail(`${c.manifest} has no camera`)) : null;
+const cam: Camera = mc
+  ? { id: c.camera, loc: mc.loc, yaw_deg_left: mc.yaw, u0: mc.u0, v0: mc.v0 }
+  : shellCam && Array.isArray(shellCam.loc)
+    ? shellCam
+    : (plan.cameras.find((x) => x.id === c.camera) ?? fail(`no camera ${c.camera}`));
+const camFrom = mc
+  ? `${c.manifest} camera (${mc.lens ?? 24} mm, not in the house plan yet)`
+  : shellCam && Array.isArray(shellCam.loc)
+    ? `style_shells_1_3_1.${c.style}.${shellKey}.cameras.${c.camera}`
+    : `cameras.${c.camera}`;
+/** the lens's projection: the plan's 24 mm (16:9, 36 mm wide), scaled by the focal length */
+const LENS = (mc?.lens ?? 24) / 24;
 // MOCK6: the girl's room is the boy's shifted exactly in Y (the shell's girl_offset_y): her camera must be his plus the
 // shift (checked), and the slots' plan places, which are the boy's, shift with it
 let offY = 0;
@@ -521,7 +557,7 @@ function shopName(p: Shop, product: string, card: string): string {
 }
 
 // ---------- widths, files ----------
-const REL = `tour/${c.room}/${c.style}`;
+const REL = `tour/${c.room}/${c.style}${c.media ? `/${c.media}` : ''}`;
 // MOCK6: the tool's own test (tools/test/mock6-tour-room.test.ts) writes a fixture elsewhere, never into the site's media
 const OUT = join(process.env.HD_TOUR_MEDIA ?? MEDIA_OUT, REL);
 const GEN_OUT = process.env.HD_TOUR_GENERATED ?? GENERATED;
@@ -594,6 +630,27 @@ const lightSources = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFra
 const sources = [
   ...new Set([PLATE, c.truth, ...layers.flatMap((l) => [l.layer, l.shadow]), ...sampleOpts.flatMap((o) => [o.layer, o.shadow]), ...lightSources, c.manifest]),
 ];
+// ---------- MOCK7: the pin (content hashes of every file read for this frame) ----------
+if (c.pin) {
+  const files = Object.fromEntries(
+    [...sources, ...(c.depth ? [relative(dir, repoPath(c.depth.file))] : [])].map((f) => [
+      relative(REPO, join(dir, f)),
+      createHash('sha256')
+        .update(readFileSync(join(dir, f)))
+        .digest('hex'),
+    ]),
+  );
+  if (process.argv.includes('--write-pin')) {
+    const note =
+      "MOCK7 (2026-11-26): the living room, M0-W (the coordinator's update to briefs/site-mock7-tour-transitions-2026-11-26.md): every file tools/make-tour-room.ts reads for it, by content (sha256: the folder is not in git yet, so a changed file stops the build instead of being read from git's copy). The phase 2 room's pin (git blobs, manifest-basket.json) is tools/tour/living-room-phase2.pin.json. `npx --no-install tsx tools/make-tour-room.ts tools/tour/living-room-m0w.warm-modern.json --write-pin` writes this again.";
+    writeFileSync(sitePath(c.pin), JSON.stringify({ note, manifest: relative(REPO, join(dir, c.manifest)), hash: 'sha256', files }, null, 2) + '\n');
+    console.log(`make-tour-room: pinned ${Object.keys(files).length} files → ${c.pin}`);
+  } else {
+    const pin = read<{ files: Record<string, string> }>(sitePath(c.pin));
+    const off = Object.keys({ ...files, ...pin.files }).filter((f) => files[f] !== pin.files[f]);
+    if (off.length) fail(`not the pinned files (${c.pin}): ${off.slice(0, 4).join(', ')}${off.length > 4 ? ` and ${off.length - 4} more` : ''}`);
+  }
+}
 const stamp = createHash('sha256')
   .update(
     JSON.stringify({
@@ -776,8 +833,8 @@ const camera = {
   frame: [fb[0] / W, fb[2] / W, fb[1] / H, fb[3] / H].map((x) => +x.toFixed(5)) as Box,
   u0: cam.u0,
   v0: cam.v0,
-  kx: 0.6667,
-  ky: 1.1852,
+  kx: +(0.6667 * LENS).toFixed(4),
+  ky: +(1.1852 * LENS).toFixed(4),
   loc: cam.loc,
   yaw_deg_left: cam.yaw_deg_left,
   room: { x: box.x, y: box.y, h: box.h },
@@ -922,6 +979,7 @@ const data = {
   base: { src: `${REL}/base`, widths: [WIDTHS.lo, W], placeholder, formats: ['webp'] },
   camera,
   camera_from: camFrom,
+  styles: c.styles === false ? false : undefined,
   // MOCK7: the frame's depth for the transitions (a small nearness map, near = white), or null: the page's fallback
   depth: c.depth ? (await nearness(c.depth)).uri : null,
   cover: 0,
@@ -969,7 +1027,7 @@ const held = slots.filter((s) => s.sale).map((s) => `${s.id} (${s.sale!.state})`
 const unsold = slots.filter((s) => !s.fixed).flatMap((s) => s.options.filter((o) => !o.product_id).map((o) => `${s.id} ${o.position}`));
 console.log(
   `tour ${c.room}/${c.style} (${GROUP} ${c.camera}, camera ${camFrom}, yaw ${cam.yaw_deg_left}): ${data.source}; ${slots.length} layers (${data.for_sale} for sale, ` +
-    `${slots.length - data.for_sale} fixed), ${lights.length} light${MASK_LIGHT ? ' (masked by every alpha)' : ''}; the order gives ${c.truth} to the pixel; ` +
+    `${slots.length - data.for_sale} fixed), ${lights.length} light${MASK_LIGHT ? ' (masked by every alpha)' : ''}; the order gives ${gateNote || `${c.truth} to the pixel`}; ` +
     `×1 only: ${rights.length || x1.size ? [...x1].map((id) => `${id} (${rights.find((r) => r.slot === id)?.usage_rights ?? 'config'})`).join(', ') || 'none' : 'none'}; ` +
     `a phone's first load ${loFiles.reduce((n, f) => n + kb(f), 0).toFixed(0)} KB in ${loFiles.length} files ` +
     `(atlas pages ${data.atlas[lo]!.product.length}+${data.atlas[lo]!.shadow.length}); ${unsold.length} not priced by the shop yet (${unsold.join(', ')}); ` +

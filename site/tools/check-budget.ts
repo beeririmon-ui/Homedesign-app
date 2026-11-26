@@ -153,14 +153,29 @@ if (existsSync(tourPage) && existsSync(tourData)) {
     native: number;
     widths: { lo: number; hi: number };
     card_width: number;
-    base: { src: string };
-    slots: { src: string }[];
+    base: { src: string; formats?: string[] };
+    sample?: string;
+    atlas?: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
+    slots: { id: string; src: string; shadows?: number[]; atlas_opts?: unknown; options: { card: { src: string } }[] }[];
+  };
+  /** MOCK5–7: a room built by tools/make-tour-room.ts at width `w`: its base, its atlas pages, the sample's first option
+   *  (a file of its own only for a wheel of many options), its sheet of cards (MOCK7: the living room too, M0-W) */
+  const frameMedia = (r: typeof t, w: number) => {
+    const s0 = r.slots.find((x) => x.id === r.sample && !x.atlas_opts);
+    return (
+      file(r.base.src, w, ['webp']) +
+      [...r.atlas![String(w)]!.product, ...r.atlas![String(w)]!.shadow].reduce((n, p) => n + file(p.src, w, ['webp']), 0) +
+      (s0 ? file(`${s0.src}/1.product`, w, ['webp']) + file(`${s0.src}/${s0.shadows?.[0] ?? 1}.shadow`, w, ['webp']) : 0) +
+      file(r.slots.find((x) => x.options[0]?.card.src)!.options[0]!.card.src, undefined, ['webp'])
+    );
   };
   // MOCK2: a phone composes at `lo` and loads that width's layers (web/src/tour/data.ts widthFor); the hi width is
   // what a wider screen loads, and is reported beside it
   const chunks = assets.filter((f) => /^(TourPage|stage)-.*\.(js|css)$/.test(f)).map((f) => gz(join(DIST, 'assets', f)));
   const tourMedia = (formats: Formats, w: number) =>
-    file(t.base.src, w, formats) +
+    t.atlas
+      ? frameMedia(t, w)
+      : file(t.base.src, w, formats) +
     t.slots.reduce(
       (n, sl) => n + file(`${sl.src}/1.product`, w, ['webp']) + file(`${sl.src}/1.shadow`, w, ['webp']) + file(`${sl.src}/1.card`, t.card_width, ['webp']),
       0,
@@ -200,24 +215,10 @@ if (existsSync(tourPage) && existsSync(tourData)) {
   for (const id of frameIds) {
     const f = sitePath(`.generated/tour.${id}.warm-modern.json`);
     if (!existsSync(f)) continue;
-    const r = JSON.parse(readFileSync(f, 'utf8')) as {
-      widths: { lo: number };
-      base: { src: string };
-      sample?: string;
-      frame?: string;
-      room_he?: string;
-      atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
-      slots: { id: string; src: string; shadows?: number[]; atlas_opts?: unknown; options: { card: { src: string } }[] }[];
-    };
-    const lo = r.widths.lo;
+    const r = JSON.parse(readFileSync(f, 'utf8')) as typeof t & { frame?: string; room_he?: string };
     // MOCK5: the sample's options are on the room's sample pages (in the atlas list); a file of their own before. MOCK6:
     // on the frame's own atlas pages; a wheel of many options (`lazy`) loads its chosen option's patch, a file each
-    const s0 = r.slots.find((x) => x.id === r.sample && !x.atlas_opts);
-    const media =
-      file(r.base.src, lo, ['webp']) +
-      [...r.atlas[String(lo)]!.product, ...r.atlas[String(lo)]!.shadow].reduce((n, p) => n + file(p.src, lo, ['webp']), 0) +
-      (s0 ? file(`${s0.src}/1.product`, lo, ['webp']) + file(`${s0.src}/${s0.shadows?.[0] ?? 1}.shadow`, lo, ['webp']) : 0) +
-      file(r.slots.find((x) => x.options[0]?.card.src)!.options[0]!.card.src, undefined, ['webp']);
+    const media = frameMedia(r, r.widths.lo);
     rows.push([`first load, ${id} (${r.frame ?? id}, a frame of the tour), mobile`, page + media, BUDGET.firstLoad]);
   }
 }
