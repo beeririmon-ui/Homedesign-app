@@ -1,0 +1,195 @@
+{
+ "room": "W0",
+ "frame": "W0",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+ "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+ "start": {
+  "manifest": "work/warm-modern/stage1-2026-11-20/layers/manifest-fb15.json",
+  "finish_frame": "work/warm-modern/stage1-2026-11-20/w0-defaults-fb15-finish.png"
+ },
+ "before": {
+  "plaster": [
+   87.6,
+   0.98,
+   6.09
+  ],
+  "plaster_px": 1532360,
+  "black_p05": 10.97
+ },
+ "targets": {
+  "plaster_L": [
+   72,
+   78
+  ],
+  "plaster_b": [
+   7,
+   9
+  ],
+  "aim": {
+   "L": 75.0,
+   "a": 2.0,
+   "b": 8.0
+  },
+  "black": [
+   11.0,
+   12.0
+  ]
+ },
+ "grade": {
+  "iterations": 1,
+  "plaster_in_lab": [
+   87.6,
+   0.98,
+   6.09
+  ],
+  "black_in_p05": 10.97,
+  "measured": {
+   "plaster": [
+    74.92,
+    1.97,
+    7.98
+   ],
+   "plaster_px": 1532360,
+   "black_p05": 9.44
+  },
+  "black_loop": {
+   "iteration": 2,
+   "black_target_in_fit": 9.4,
+   "p05_final": 11.52
+  }
+ },
+ "window_plane": {
+  "window_wall_ids": [
+   2
+  ],
+  "normal_in": [
+   1.0,
+   0.0,
+   0.0
+  ],
+  "rms_m": 0.0001
+ },
+ "outside_mask": {
+  "outside_ids": [
+   0,
+   15
+  ],
+  "frame_ids": [
+   13
+  ],
+  "L_old_outside": 96.7,
+  "L_frame": 87.3,
+  "px": 170414
+ },
+ "outside": {
+  "plate": "assets/renders/outside/warm-modern/fb16-2026-11-26/outside-west-fb16.jpg",
+  "mapping": "cylindrical about the window's outward normal",
+  "fp_px_per_rad": 1100.0,
+  "horizon_row": 967.7,
+  "az_offset_deg": 0.0,
+  "az_deg": [
+   51.5,
+   55.6
+  ],
+  "dof_sigma_px": 1.8,
+  "calibration": {
+   "L_p10_p90_before": [
+    5.4,
+    24.3
+   ],
+   "L_p10_p90_after": [
+    63.5,
+    93.5
+   ],
+   "sky_ab_before": [
+    -1.4,
+    12.0
+   ],
+   "target_L": 93.5,
+   "target_b": 13.5,
+   "note": "lift: the view reads several stops over the room; dark canopy to about L lo, the sky to the spec"
+  },
+  "layers_over_the_window": {}
+ },
+ "window_glow": {
+  "amp": 0.2208,
+  "color": [
+   1.0,
+   0.84,
+   0.62
+  ],
+  "dL_at_1m": 5.0,
+  "blur_px": 25
+ },
+ "lamps": [
+  {
+   "slot": "wall-sconce",
+   "how": "emitter keep",
+   "px": 3333
+  },
+  {
+   "slot": "pendant",
+   "how": "emitter keep",
+   "px": 12786
+  }
+ ],
+ "rnd2": {
+  "rule": "outside the changed regions (the window alpha, the glows): the frame = the grade of the fb15 frame, pixel for pixel; before the grade only the window changes",
+  "finish_before_grade_outside_window_px": 0,
+  "stack_outside_window_px": 0,
+  "final_vs_graded_fb15_outside_changed_px": 0,
+  "changed_region_px": 3524635,
+  "reproduced_from_files_max": 0
+ },
+ "after": {
+  "plaster": [
+   75.51,
+   1.94,
+   8.08
+  ],
+  "plaster_px": 1532360,
+  "black_p05": 11.52,
+  "outside": {
+   "L_p90": 92.9,
+   "L_p10": 63.1,
+   "light_part_ab": [
+    -1.9,
+    12.2
+   ]
+  }
+ },
+ "pasted_test": {
+  "on": "the graded stack (grade on the plate and on every layer's RGB)",
+  "score": 78.74,
+  "per_layer_mean": 4.14,
+  "lamps": {
+   "wall-sconce": "NOT lit",
+   "pendant": "looks lit, outside G1.10's H/S"
+  },
+  "worst": [
+   [
+    "bookends",
+    7.45
+   ],
+   [
+    "waste-basket",
+    6.56
+   ],
+   [
+    "desk-tray",
+    6.38
+   ]
+  ]
+ },
+ "files": [
+  "assets/renders/work/warm-modern/stage1-2026-11-20/plate-fb16.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/w0-defaults-fb16-finish.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/w0-defaults-fb16-frame.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/light/window-glow-W0-fb16.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/light/wall-sconce-cj-travertine-cube-updown-12-type-a-indoor-fb16.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/light/pendant-cj-silk-ribbed-pumpkin-40-30cm-warm-fb16.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/manifest-fb16.json"
+ ],
+ "seconds": 117.1
+}

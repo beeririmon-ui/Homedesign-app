@@ -18,7 +18,10 @@ type Slot = {
 type Tour = { native: number; cover: number; camera: { frame: number[] }; slots: Slot[] };
 const tour = JSON.parse(readFileSync(new URL('../../.generated/tour.living-room.warm-modern.json', import.meta.url), 'utf8')) as Tour;
 
-describe('MOCK1: the tour room (tools/make-tour.ts)', () => {
+// MOCK7: the living room is M0-W, a room of tools/make-tour-room.ts (web/test/mock7-tour.test.ts); these hold for the
+// phase 2 room, the rollback (tools/tour/frames.json living_room: "living-room")
+const PHASE2 = !(tour as unknown as { atlas?: unknown }).atlas;
+describe.skipIf(!PHASE2)('MOCK1: the tour room (tools/make-tour.ts)', () => {
   it('holds the phase 2 layers: 13 slots, the 12 default products and their 10 variants, and the three cushion sets', () => {
     expect(tour.slots).toHaveLength(13);
     const products = tour.slots.filter((s) => s.id !== 'cushions');

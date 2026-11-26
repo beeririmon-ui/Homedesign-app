@@ -1,5 +1,5 @@
 {
-  "note": "MOCK5 (2026-11-24): the bedroom's second frame MB1 (the foot of the bed: the bench, the rug, the right group), QA qa/reports/2026-11-19-master-mb1, approved with the room (AP3-HOUSE2 read as yes, FB11). Read by tools/make-tour-room.ts as master.warm-modern.json (its note). The bench and the wall shelf are in the plate (fixed, not sold, no layer). The two sconces are two layers of one product: one product, one mark a sconce. No wheel here (the throw's variants are MB0's). The prints are ×1 only by their cards' rights. Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated against their own default frame (mb1-defaults-fb15.png).",
+  "note": "MOCK5 (2026-11-24): the bedroom's second frame MB1 (the foot of the bed: the bench, the rug, the right group), QA qa/reports/2026-11-19-master-mb1, approved with the room (AP3-HOUSE2 read as yes, FB11). Read by tools/make-tour-room.ts as master.warm-modern.json (its note). The bench and the wall shelf are in the plate (fixed, not sold, no layer). The two sconces are two layers of one product: one product, one mark a sconce. No wheel here (the throw's variants are MB0's). The prints are ×1 only by their cards' rights. Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (mb1-defaults-fb15.png).",
   "room": "master-mb1",
   "group": "master",
   "frame_he": "מרגלי המיטה",
@@ -8,6 +8,9 @@
   "layers": "assets/renders/master/warm-modern/mb1-2026-11-19",
   "manifest": "layers/manifest-fb15.json",
   "truth": "mb1-defaults-fb15.png",
+  "gate": {
+    "kind": "finish"
+  },
   "depth": {
     "file": "assets/renders/master/warm-modern/mb1-2026-11-19/clay/MB1-depth.png",
     "encoding": "m5000"
@@ -125,5 +128,9 @@
       "card": "bench-basket-cj-two-tone-rope-jute-white-30",
       "kind": "floor"
     }
+  },
+  "light_slots": {
+    "bedside-sconces-west-pool-fb15.png": "bedside-sconces",
+    "fb15-upper-lamps-fb15.png": "(always on: the edit’s own light off the products)"
   }
 }

@@ -13,7 +13,7 @@
  *  4. the bath: B1 with its ledge planter, the room's line at 19;
  *  5. the wheel of many options with its fixture of ten (?fixture=wheel10): the counter, the keys, a swipe, and only
  *     the options it rests on asked for; the room under it unchanged;
- *  6. the living room is MOCK5's (the pin: the same generated room);
+ *  6. the living room is MOCK5's (the pin: the same generated room); MOCK7: M0-W, pinned, and MOCK5's room the rollback;
  *  7. a phone's first load of each kids' room under 3 MB;
  *  8. axe on the kids' rooms at rest (a wide screen and a phone), the throw's wheel, a held product's panel and the
  *     fixture's wheel.
@@ -23,7 +23,6 @@
 import { test, expect, devices, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import sharp from 'sharp';
-import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -237,13 +236,13 @@ test.describe('MOCK6: the kids’ rooms and the wheel of many options', () => {
       const alt = lm.layers.filter((l) => l.default === false);
       const cases = [
         { pos: 1, truth: cfg.truth, alpha: defaults.map((l) => l.layer) },
-        ...[`K-${id}-V2.png`, `K-${id}-V3.png`].map((t, i) => ({
+        // MOCK7: the rooms are FB15's now (the other products' 'pasted' fix), and the folders' V2 / V3 frames are older
+        // than it (the girl's are G1's): a variant is held to its frame under its own opaque pixels, the rest of the
+        // room by the default frame above
+        ...[2, 3].map((v, i) => ({
           pos: i + 2,
-          truth: t,
-          alpha: defaults
-            .filter((l) => l.slot !== cfg.sample)
-            .map((l) => l.layer)
-            .concat(alt[i]!.layer),
+          truth: cfg.truth.includes('-g1') ? `K-${id}-V${v}-g1.png` : `K-${id}-V${v}.png`,
+          alpha: [alt[i]!.layer],
         })),
       ];
       await page.goto(`/tour/?skip=1&room=${id}`);
@@ -364,17 +363,18 @@ test.describe('MOCK6: the kids’ rooms and the wheel of many options', () => {
     expect((await fixtureState(page)).cancelled).toBe(true);
   });
 
-  test('the living room is MOCK5’s (pinned: the same generated room)', () => {
-    const sha = createHash('sha256')
-      .update(readFileSync(resolve(SITE, '.generated/tour.living-room.warm-modern.json')))
-      .digest('hex');
-    expect(sha).toBe('fa031c4aa2c1fd168d9b2da5a1a9e3ef949abc4643a516a38e28ed3ba2f428b4');
-    const t = read<{ pin?: string; layers: string; manifest: string }>(resolve(SITE, 'tools/tour/living-room.warm-modern.json'));
-    expect(t.pin).toBe('tools/tour/living-room.pin.json');
-    expect(t.manifest).toBe('manifest-r9.json');
-    const pin = read<{ files: Record<string, string> }>(resolve(SITE, t.pin!));
-    expect(Object.keys(pin.files)).toContain(`${t.layers}/base.png`);
-    expect(Object.keys(pin.files)).toContain(`${t.layers}/${t.manifest}`);
+  // MOCK7 (2026-11-26): the living room changed on purpose (the coordinator's update to the MOCK7 brief): it is M0-W,
+  // pinned by content (e2e/mock7.spec.ts, web/test/mock7-tour.test.ts); MOCK5's room stays the rollback, pinned to
+  // its own files (tools/tour/living-room-phase2.pin.json, manifest-basket.json)
+  test('the living room: M0-W (MOCK7), pinned; the phase 2 room is the rollback, pinned to its own files', () => {
+    const f = read<{ living_room: string }>(resolve(SITE, 'tools/tour/frames.json'));
+    expect(f.living_room).toBe('living-room-m0w');
+    const m = read<{ pin: string; layers: string; manifest: string }>(resolve(SITE, `tools/tour/${f.living_room}.warm-modern.json`));
+    const pin = read<{ files: Record<string, string> }>(resolve(SITE, m.pin));
+    expect(Object.keys(pin.files)).toContain(`${m.layers}/${m.manifest}`);
+    const t = read<{ pin: string; manifest: string }>(resolve(SITE, 'tools/tour/living-room.warm-modern.json'));
+    const p2 = read<{ files: Record<string, string> }>(resolve(SITE, t.pin));
+    expect(Object.keys(p2.files)).toContain(t.manifest);
   });
 
   test('a phone’s first load of each kids’ room stays under 3 MB', async ({ browser }) => {

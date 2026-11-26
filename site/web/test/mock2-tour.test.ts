@@ -19,7 +19,10 @@ const tour = read<Tour>('../../.generated/tour.living-room.warm-modern.json');
 const studio = read<{ width: number; products: Record<string, { src: string }> }>('../../.generated/studio-images.json');
 const media = (rel: string) => new URL(`../public/media/${rel}.webp`, import.meta.url);
 
-describe('MOCK2: the tour at two widths (tools/make-tour.ts)', () => {
+// MOCK7: the living room is M0-W, a room of tools/make-tour-room.ts (web/test/mock7-tour.test.ts); these hold for the
+// phase 2 room, the rollback (tools/tour/frames.json living_room: "living-room")
+const PHASE2 = !(tour as unknown as { atlas?: unknown }).atlas;
+describe.skipIf(!PHASE2)('MOCK2: the tour at two widths (tools/make-tour.ts)', () => {
   it('has a phone width and the layers’ own width, and a file of every layer at both', () => {
     expect(tour.widths.hi).toBe(tour.native);
     expect(tour.widths.lo).toBeLessThan(tour.widths.hi);
@@ -51,7 +54,7 @@ describe('MOCK2: the tour at two widths (tools/make-tour.ts)', () => {
   });
 });
 
-describe('MOCK2: the wheel shows the product on its own (FB1)', () => {
+describe.skipIf(!PHASE2)('MOCK2: the wheel shows the product on its own (FB1)', () => {
   it('every option has a card from our own media, at the card size, and never a crop of the room', () => {
     for (const s of tour.slots)
       for (const o of s.options) {

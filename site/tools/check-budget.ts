@@ -176,10 +176,10 @@ if (existsSync(tourPage) && existsSync(tourData)) {
     t.atlas
       ? frameMedia(t, w)
       : file(t.base.src, w, formats) +
-    t.slots.reduce(
-      (n, sl) => n + file(`${sl.src}/1.product`, w, ['webp']) + file(`${sl.src}/1.shadow`, w, ['webp']) + file(`${sl.src}/1.card`, t.card_width, ['webp']),
-      0,
-    );
+        t.slots.reduce(
+          (n, sl) => n + file(`${sl.src}/1.product`, w, ['webp']) + file(`${sl.src}/1.shadow`, w, ['webp']) + file(`${sl.src}/1.card`, t.card_width, ['webp']),
+          0,
+        );
   const page = gz(tourPage) + sum(js) + sum(css) + sum(chunks) + fonts;
   // MOCK4: the door is the arrival's first frame, the page's first paint (a phone takes the 1080 one)
   const door = file('tour/arrival/d0', 1080, ['webp']);

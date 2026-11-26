@@ -142,6 +142,8 @@ export type TourData = {
   /** MOCK7: the room's depth for the push between rooms (a small nearness map, near = white, as a data URI); null or
    *  absent: the push's designed fallback */
   depth?: string | null;
+  /** MOCK7: false: no style change in this room (the living room M0-W: the Nordic house is the old M0's camera) */
+  styles?: boolean;
 };
 
 /** MOCK5: a frame of the tour (a file name); the frames of a room are `FRAMES[group]` */

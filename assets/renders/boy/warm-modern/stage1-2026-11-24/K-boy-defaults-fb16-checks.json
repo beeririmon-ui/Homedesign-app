@@ -1,0 +1,193 @@
+{
+ "room": "K-boy",
+ "frame": "K-boy",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+ "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+ "start": {
+  "manifest": "boy/warm-modern/stage1-2026-11-24/manifest-fb15.json",
+  "finish_frame": "boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb15-finish.png"
+ },
+ "before": {
+  "plaster": [
+   87.37,
+   0.55,
+   4.62
+  ],
+  "plaster_px": 514097,
+  "black_p05": 11.27
+ },
+ "targets": {
+  "plaster_L": [
+   72,
+   78
+  ],
+  "plaster_b": [
+   7,
+   9
+  ],
+  "aim": {
+   "L": 75.0,
+   "a": 2.0,
+   "b": 8.0
+  },
+  "black": [
+   11.0,
+   12.0
+  ]
+ },
+ "grade": {
+  "iterations": 8,
+  "plaster_in_lab": [
+   87.37,
+   0.55,
+   4.62
+  ],
+  "black_in_p05": 11.27,
+  "measured": {
+   "plaster": [
+    75.15,
+    2.02,
+    8.03
+   ],
+   "plaster_px": 514097,
+   "black_p05": 8.92
+  },
+  "black_loop": {
+   "iteration": 2,
+   "black_target_in_fit": 8.89,
+   "p05_final": 11.61
+  }
+ },
+ "window_plane": {
+  "window_wall_ids": [
+   2
+  ],
+  "normal_in": [
+   0.8387,
+   0.0,
+   -0.5446
+  ],
+  "rms_m": 0.0
+ },
+ "outside_mask": {
+  "outside_ids": [
+   0,
+   15
+  ],
+  "frame_ids": [
+   13
+  ],
+  "L_old_outside": 96.0,
+  "L_frame": 25.5,
+  "px": 410317
+ },
+ "outside": {
+  "plate": "assets/renders/outside/warm-modern/fb16-2026-11-26/outside-west-fb16.jpg",
+  "mapping": "cylindrical about the window's outward normal",
+  "fp_px_per_rad": 1100.0,
+  "horizon_row": 967.7,
+  "az_offset_deg": -12.0,
+  "az_deg": [
+   17.5,
+   31.1
+  ],
+  "dof_sigma_px": 1.8,
+  "calibration": {
+   "L_p10_p90_before": [
+    15.6,
+    52.0
+   ],
+   "L_p10_p90_after": [
+    63.5,
+    93.5
+   ],
+   "sky_ab_before": [
+    3.4,
+    16.5
+   ],
+   "target_L": 93.5,
+   "target_b": 13.5,
+   "note": "lift: the view reads several stops over the room; dark canopy to about L lo, the sky to the spec"
+  },
+  "layers_over_the_window": {
+   "roman-blind": {
+    "frac": 0.28,
+    "opaque_frac": 0.278
+   }
+  }
+ },
+ "window_glow": {
+  "amp": 0.2208,
+  "color": [
+   1.0,
+   0.84,
+   0.62
+  ],
+  "dL_at_1m": 5.0,
+  "blur_px": 25
+ },
+ "lamps": [
+  {
+   "slot": "pendant",
+   "how": "emitter keep",
+   "px": 7276
+  }
+ ],
+ "rnd2": {
+  "rule": "outside the changed regions (the window alpha, the glows): the frame = the grade of the fb15 frame, pixel for pixel; before the grade only the window changes",
+  "finish_before_grade_outside_window_px": 0,
+  "stack_outside_window_px": 0,
+  "final_vs_graded_fb15_outside_changed_px": 0,
+  "changed_region_px": 3782877,
+  "reproduced_from_files_max": 0
+ },
+ "after": {
+  "plaster": [
+   76.07,
+   1.94,
+   8.17
+  ],
+  "plaster_px": 514097,
+  "black_p05": 11.61,
+  "outside": {
+   "L_p90": 83.4,
+   "L_p10": 54.9,
+   "light_part_ab": [
+    1.6,
+    10.0
+   ]
+  }
+ },
+ "pasted_test": {
+  "on": "the graded stack (grade on the plate and on every layer's RGB)",
+  "score": 51.52,
+  "per_layer_mean": 3.96,
+  "lamps": {
+   "pendant": "NOT lit"
+  },
+  "worst": [
+   [
+    "bedding",
+    7.0
+   ],
+   [
+    "toy-cars",
+    6.42
+   ],
+   [
+    "bookends",
+    5.22
+   ]
+  ]
+ },
+ "files": [
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/plate-fb16.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb16-finish.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb16-frame.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/light/window-glow-K-boy-fb16.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/light/ceiling-lights-cj-silk-pumpkin-lantern-30-warm-light-fb16.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/manifest-fb16.json"
+ ],
+ "seconds": 88.0
+}

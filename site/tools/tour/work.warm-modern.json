@@ -1,5 +1,5 @@
 {
-  "note": "MOCK5 (2026-11-24): the work room W0 (the walnut niche with the desk, one-point), QA qa/reports/2026-11-20-work-w0, owner approval AP3-KW (2026-11-24). Read by tools/make-tour-room.ts. The sample slot is the art: 386242-08 (default), -01 and -02, the prints set in code on one frame layer. Both prints are 386242, whose card's rights are unclear: ×1 only, so the art's wheel opens where it is, without a close-up, and the frame has no zoom. The desk, the shelf and the chair are in the plate (fixed, not sold). Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated against their own default frame (w0-defaults-fb15.png).",
+  "note": "MOCK5 (2026-11-24): the work room W0 (the walnut niche with the desk, one-point), QA qa/reports/2026-11-20-work-w0, owner approval AP3-KW (2026-11-24). Read by tools/make-tour-room.ts. The sample slot is the art: 386242-08 (default), -01 and -02, the prints set in code on one frame layer. Both prints are 386242, whose card's rights are unclear: ×1 only, so the art's wheel opens where it is, without a close-up, and the frame has no zoom. The desk, the shelf and the chair are in the plate (fixed, not sold). Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (w0-defaults-fb15.png).",
   "room": "work",
   "group": "work",
   "style": "warm-modern",
@@ -7,6 +7,9 @@
   "layers": "assets/renders/work/warm-modern/stage1-2026-11-20",
   "manifest": "layers/manifest-fb15.json",
   "truth": "w0-defaults-fb15.png",
+  "gate": {
+    "kind": "finish"
+  },
   "depth": {
     "file": "assets/blockout/house/framing/wm-work-2026-11-20/W0-depth.png",
     "encoding": "m5000"

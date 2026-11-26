@@ -1,0 +1,154 @@
+{
+ "room": "HT2",
+ "frame": "HT2",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+ "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+ "start": {
+  "manifest": "hall/warm-modern/hall-products-2026-11-19/layers/manifest.json",
+  "finish_frame": "hall/warm-modern/hall-products-2026-11-19/ht2-products-fb13prep.png"
+ },
+ "before": {
+  "plaster": [
+   75.73,
+   3.23,
+   8.22
+  ],
+  "plaster_px": 844654,
+  "black_p05": 18.99
+ },
+ "targets": {
+  "plaster_L": [
+   67,
+   72
+  ],
+  "plaster_b": [
+   7,
+   9
+  ],
+  "aim": {
+   "L": 69.5,
+   "a": 2.0,
+   "b": 8.0
+  },
+  "black": [
+   11.0,
+   12.0
+  ]
+ },
+ "grade": {
+  "iterations": 1,
+  "plaster_in_lab": [
+   75.73,
+   3.23,
+   8.22
+  ],
+  "black_in_p05": 18.99,
+  "measured": {
+   "plaster": [
+    69.55,
+    2.02,
+    7.97
+   ],
+   "plaster_px": 844654,
+   "black_p05": 11.47
+  },
+  "black_loop": {
+   "iteration": 1,
+   "black_target_in_fit": 11.5,
+   "p05_final": 11.47
+  }
+ },
+ "window_plane": {
+  "window_wall_ids": [
+   32
+  ],
+  "normal_in": [
+   -0.0,
+   0.0,
+   -1.0
+  ],
+  "rms_m": 0.0
+ },
+ "outside_mask": {
+  "outside_ids": [
+   0
+  ],
+  "frame_ids": [
+   39
+  ],
+  "L_old_outside": 94.6,
+  "L_frame": 42.1,
+  "px": 90697
+ },
+ "outside": {
+  "plate": "assets/renders/outside/warm-modern/fb16-2026-11-26/outside-west-fb16.jpg",
+  "mapping": "cylindrical about the window's outward normal",
+  "fp_px_per_rad": 1100.0,
+  "horizon_row": 967.7,
+  "az_offset_deg": 8.0,
+  "az_deg": [
+   41.9,
+   45.1
+  ],
+  "dof_sigma_px": 1.8,
+  "calibration": {
+   "L_p10_p90_before": [
+    7.2,
+    23.0
+   ],
+   "L_p10_p90_after": [
+    63.5,
+    93.5
+   ],
+   "sky_ab_before": [
+    -1.7,
+    10.8
+   ],
+   "target_L": 93.5,
+   "target_b": 13.5,
+   "note": "lift: the view reads several stops over the room; dark canopy to about L lo, the sky to the spec"
+  },
+  "layers_over_the_window": {}
+ },
+ "lamps": [
+  {
+   "slot": "wall-sconce",
+   "how": "emitter keep",
+   "px": 205
+  }
+ ],
+ "rnd2": {
+  "rule": "outside the changed regions (the window alpha, the glows): the frame = the grade of the fb15 frame, pixel for pixel; before the grade only the window changes",
+  "finish_before_grade_outside_window_px": 0,
+  "stack_outside_window_px": 0,
+  "final_vs_graded_fb15_outside_changed_px": 0,
+  "changed_region_px": 93777,
+  "reproduced_from_files_max": 0
+ },
+ "after": {
+  "plaster": [
+   69.55,
+   2.02,
+   7.97
+  ],
+  "plaster_px": 844654,
+  "black_p05": 11.47,
+  "outside": {
+   "L_p90": 92.6,
+   "L_p10": 63.5,
+   "light_part_ab": [
+    -2.2,
+    12.2
+   ]
+  }
+ },
+ "files": [
+  "assets/renders/hall/warm-modern/hall-2026-11-18/ht2-fb16.png",
+  "assets/renders/hall/warm-modern/hall-products-2026-11-19/ht2-products-fb16-finish.png",
+  "assets/renders/hall/warm-modern/hall-products-2026-11-19/ht2-products-fb16-frame.png",
+  "assets/renders/hall/warm-modern/hall-products-2026-11-19/layers/light/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall-fb16.png",
+  "assets/renders/hall/warm-modern/hall-products-2026-11-19/layers/manifest-fb16.json"
+ ],
+ "seconds": 22.2
+}

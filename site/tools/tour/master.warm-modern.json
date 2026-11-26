@@ -1,5 +1,5 @@
 {
-  "note": "MOCK4 (2026-11-18): the warm-modern bedroom in the tour (MB0 stage one with FB10, QA qa/reports/2026-11-18-master-mb0 and 2026-11-18-master-fb10; temporary, for the owner). Read by tools/make-tour-room.ts. The layers are the render folder's own (never changed here), composed in z order exactly as layers/manifest.json says (checked against mb0-defaults.png at build). `card` names the product card each layer shows (the layer's product id is the card id and its option; the carafe's card has another name). A slot's name is data/slots/master.json's, or the one here for the FB10 slots that are not in it yet (a working name, never public). `fixed`: furniture of the room that is not sold (no mark, not counted). The sample slot carries the wheel's three variants. `prints`: the frame's prints; each one's card is read for its rights (MOCK5): 776445 and 386242 are \"unclear\", so both are ×1 only (a mark and a product page are fine; no close-up and no zoom shows them). Behind HD_PUBLIC=0. MOCK5 (2026-11-24): the frame is MB0 of the bedroom (`group` master); the FB10 slots take their own cards of registration 1.3.9 (`mirror_of` copies: framed-art-2, the shelf vases, the magazine holder). MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated against their own default frame (mb0-defaults-fb15.png).",
+  "note": "MOCK4 (2026-11-18): the warm-modern bedroom in the tour (MB0 stage one with FB10, QA qa/reports/2026-11-18-master-mb0 and 2026-11-18-master-fb10; temporary, for the owner). Read by tools/make-tour-room.ts. The layers are the render folder's own (never changed here), composed in z order exactly as layers/manifest.json says (checked against mb0-defaults.png at build). `card` names the product card each layer shows (the layer's product id is the card id and its option; the carafe's card has another name). A slot's name is data/slots/master.json's, or the one here for the FB10 slots that are not in it yet (a working name, never public). `fixed`: furniture of the room that is not sold (no mark, not counted). The sample slot carries the wheel's three variants. `prints`: the frame's prints; each one's card is read for its rights (MOCK5): 776445 and 386242 are \"unclear\", so both are ×1 only (a mark and a product page are fine; no close-up and no zoom shows them). Behind HD_PUBLIC=0. MOCK5 (2026-11-24): the frame is MB0 of the bedroom (`group` master); the FB10 slots take their own cards of registration 1.3.9 (`mirror_of` copies: framed-art-2, the shelf vases, the magazine holder). MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (mb0-defaults-fb15.png).",
   "room": "master",
   "group": "master",
   "frame_he": "קיר המיטה",
@@ -8,6 +8,9 @@
   "layers": "assets/renders/master/warm-modern/stage1-2026-11-17",
   "manifest": "layers/manifest-fb15.json",
   "truth": "mb0-defaults-fb15.png",
+  "gate": {
+    "kind": "finish"
+  },
   "depth": {
     "file": "assets/blockout/house/framing/wm-master-2026-11-17/MB0-depth.png",
     "encoding": "m5000"
@@ -126,5 +129,8 @@
       "anchors": [[0.62, 0.5]],
       "hero": true
     }
+  },
+  "light_slots": {
+    "bedside-sconces-pool-fb15.png": "bedside-sconces"
   }
 }

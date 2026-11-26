@@ -108,9 +108,16 @@ type Cfg = {
   styles?: boolean;
   /** MOCK7: the content hashes this frame is pinned to (tools/tour/living-room.pin.json); `--write-pin` writes them */
   pin?: string;
-  /** MOCK7: a default frame the render tools' finish made (M0-W): the gate composes the layers as that finish does,
-   *  at the truth's size (tools/tour/gate_finish.py; `frame_box_from`: the folder's file with the full-precision box) */
+  /** MOCK7: a default frame the render tools' finish composed (FB15's rooms, M0-W: RGB shadows, its own rounding): the
+   *  gate composes the layers as that finish does, at the truth's size (tools/tour/gate_finish.py; `frame_box_from`:
+   *  the folder's file with the full-precision box, for a 1920 frame) */
   gate?: { kind: 'finish'; frame_box_from?: string };
+  /** MOCK7: the lights on pages of their own, lossy (M0-W: three lamps whose light covers most of the frame; smooth,
+   *  so a lossy page costs a small part of a lossless one, and a phone's first load stays under 3 MB) */
+  light_pages?: 'lossy';
+  /** MOCK7: the slot of a light the manifest names no lamp for (FB15's code lights: the kitchen sconce's pool), by its
+   *  file's name */
+  light_slots?: Record<string, string>;
   /** MOCK5: the frame's base (default plate.png) */
   plate?: string;
   plan: string;
@@ -228,16 +235,19 @@ const raw = async (f: string, ch: 1 | 3 | 4): Promise<Buffer> => {
 // ---------- the lights: their slot (named, by product, or by the first lamp); masked where the formula says so ----------
 const MASK_LIGHT = /times \(1 - every alpha\)/.test(typeof m.compose === 'string' ? m.compose : JSON.stringify(m.compose ?? ''));
 const lightSlot = (x: Light): string | null => {
-  const named = x.slot ?? layers.find((l) => l.product === x.product)?.slot ?? x.lamps?.[0]?.replace(/-(east|west)$/, '');
+  const named = x.slot ?? layers.find((l) => l.product === x.product)?.slot ?? x.lamps?.[0]?.replace(/-(east|west)$/, '') ?? c.light_slots?.[basename(x.file)];
   if (!named) fail(`light ${x.file}: no slot, product or lamp`);
   // a lamp outside the frame (D2's pendant): its light is part of the room, always on. MOCK6: a lamp may be named by
   // its product (the kids' pendant, `ceiling-lights-…-warm-light`)
   const l = layers.find((y) => y.slot === named) ?? layers.find((y) => y.product === named);
   return l ? tourSlotOf(l) : null;
 };
+/** MOCK7: FB15's code lights name their file from the render root's style folder, or from the room's (`warm-modern/
+ *  <folder>/light/…`, `<folder>/light/…`) */
+const lightFile = (f: string): string => (existsSync(join(dir, f)) ? f : f.replace(new RegExp(`^(${c.style}/)?${basename(dir)}/`), ''));
 const lightEntries = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFrame).map((x) => {
   if (x.blend !== 'screen') fail(`light ${x.file} is ${x.blend}, not screen`);
-  return { file: x.file, slot: lightSlot(x) };
+  return { file: lightFile(x.file), slot: lightSlot(x) };
 });
 
 // ---------- the sample slot's options ----------
@@ -308,7 +318,8 @@ let gateNote = '';
   if (c.gate?.kind === 'finish') {
     // MOCK7: the folder's own finish (its compose, its frame view), read only, against the folder's default frame
     const args = [sitePath('tools/tour/gate_finish.py'), dir, c.manifest, c.truth, repoPath('assets/renders/tools/finish')];
-    const out = execFileSync('python3.12', ['-I', ...args, ...(c.gate.frame_box_from ? [c.gate.frame_box_from] : [])], { encoding: 'utf8' });
+    const opts = [...(c.frame_id ? ['--frame', c.frame_id] : []), '--plate', PLATE, ...(c.gate.frame_box_from ? ['--box', c.gate.frame_box_from] : [])];
+    const out = execFileSync('python3.12', ['-I', ...args, ...opts], { encoding: 'utf8' });
     const g = JSON.parse(out) as { max: number; differing: number; size: [number, number] };
     if (g.differing) fail(`the layers, as the finish composes them, miss ${c.truth} on ${g.differing} channel values (max ${g.max})`);
     gateNote = `${c.truth} (${g.size.join('×')}, the finish's frame) to the value`;
@@ -626,7 +637,7 @@ async function sheet(
 }
 
 // ---------- build (cached by a stamp of the inputs and this file) ----------
-const lightSources = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFrame).map((x) => x.file);
+const lightSources = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFrame).map((x) => lightFile(x.file));
 const sources = [
   ...new Set([PLATE, c.truth, ...layers.flatMap((l) => [l.layer, l.shadow]), ...sampleOpts.flatMap((o) => [o.layer, o.shadow]), ...lightSources, c.manifest]),
 ];
@@ -720,13 +731,12 @@ else {
     const sp = onAtlas ? await Promise.all(sampleOpts.map((o) => piece(o.layer, 'product', rects[c.sample!]!, Wt))) : [];
     const ss = onAtlas ? await Promise.all(own.map((n) => piece(sampleOpts[n]!.shadow, 'shadow', rects[c.sample!]!, Wt))) : [];
     const prods = [...(await Promise.all(others.map((id) => piece(slotPiece.get(id)!.layer, 'product', rects[id]!, Wt)))), ...sp];
-    const shads = [
-      ...(await Promise.all(others.map((id) => piece(slotPiece.get(id)!.shadow, 'shadow', rects[id]!, Wt)))),
-      ...(await Promise.all(lights.map((f, i) => piece(f, 'light', lightRects[i]!, Wt)))),
-      ...ss,
-    ];
+    const lossyLights = c.light_pages === 'lossy';
+    const lps = await Promise.all(lights.map((f, i) => piece(f, 'light', lightRects[i]!, Wt)));
+    const shads = [...(await Promise.all(others.map((id) => piece(slotPiece.get(id)!.shadow, 'shadow', rects[id]!, Wt)))), ...(lossyLights ? [] : lps), ...ss];
     const pa = pack(prods, Wt);
     const sa = pack(shads, Wt);
+    const la = lossyLights ? pack(lps, Wt) : [];
     const pages = { product: [] as [number, number][], shadow: [] as [number, number][] };
     for (let pg = 0; pg <= Math.max(...pa.map((a) => a.page)); pg++) {
       const s = await sheet(prods, pa, pg, 4);
@@ -740,6 +750,14 @@ else {
       pages.shadow.push([meta.width!, meta.height!]);
       await s.webp({ lossless: true, effort: 5 }).toFile(join(OUT, `atlas.shadow.${pg + 1}.${Wt}.webp`));
     }
+    // MOCK7: the lights' own pages after the shadows' (lossy: a light is a smooth glow, added in screen)
+    const nS = pages.shadow.length;
+    for (let pg = 0; lossyLights && pg <= Math.max(...la.map((a) => a.page)); pg++) {
+      const s = await sheet(lps, la, pg, 3);
+      const meta = await s.metadata();
+      pages.shadow.push([meta.width!, meta.height!]);
+      await s.webp({ quality: 86, effort: 5 }).toFile(join(OUT, `atlas.shadow.${nS + pg + 1}.${Wt}.webp`));
+    }
     const ref = (at: { page: number; x: number; y: number }[], pcs: { w: number; h: number }[], k: number): AtlasRef => [
       at[k]!.page + 1,
       at[k]!.x,
@@ -750,7 +768,11 @@ else {
     atlas[Wt] = {
       product: others.map((_, i) => ref(pa, prods, i)),
       shadow: others.map((_, i) => ref(sa, shads, i)),
-      light: lights.map((_, i) => ref(sa, shads, others.length + i)),
+      light: lights.map((_, i) => {
+        if (!lossyLights) return ref(sa, shads, others.length + i);
+        const r = ref(la, lps, i);
+        return [r[0] + nS, r[1], r[2], r[3], r[4]] as AtlasRef;
+      }),
       pages,
       // the sample's options (the wheel swaps them by their place on the page). MOCK4 wrote a file each, MOCK5 two pages
       // of their own; MOCK6 the frame's pages, so a frame with a wheel is two files fewer (the Artifact's 255)
@@ -758,7 +780,7 @@ else {
         ? {
             sample: {
               product: sampleOpts.map((_, n) => ref(pa, prods, others.length + n)),
-              shadow: sampleOpts.map((_, n) => ref(sa, shads, others.length + lights.length + own.indexOf(shadowOf[n]! - 1))),
+              shadow: sampleOpts.map((_, n) => ref(sa, shads, others.length + (lossyLights ? 0 : lights.length) + own.indexOf(shadowOf[n]! - 1))),
             },
           }
         : {}),

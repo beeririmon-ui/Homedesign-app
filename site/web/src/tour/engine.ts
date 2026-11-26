@@ -454,7 +454,8 @@ export class TourEngine {
     // meant a decode landing in the middle of the door's slow push (FB1: nothing happens inside a move).
     // MOCK6: a wheel of many options is never loaded ahead (data.ts behind): a patch loads when its option is chosen
     for (const [id, pos] of behind(tour.slots, this.selection)) this.later(() => void this.option(id, pos, 2).catch(() => undefined));
-    if (tour.room === 'living-room') this.later(() => void this.otherHouse().catch(() => undefined));
+    // MOCK7: a living room without the style change (M0-W: the Nordic house is the old M0's camera) loads no Nordic layers
+    if (tour.room === 'living-room' && tour.styles !== false) this.later(() => void this.otherHouse().catch(() => undefined));
   }
   /** runs `job` on the next frame where nothing is moving (the same queue the uploads wait in) */
   private later(job: () => void): void {

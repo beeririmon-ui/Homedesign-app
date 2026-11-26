@@ -1600,7 +1600,8 @@ export function TourPage() {
   const heldN = roomHeld(group);
   // "קנה את המראה": the style's own magazine page on the site; the Artifact preview has no such page, and shows the
   // list of the room's products under the tour instead. MOCK4: only the living room has a magazine page so far
-  const lookHref = __ARTIFACT__ || room !== 'living-room' ? null : `/story/${tour.room}/${house}/`;
+  // MOCK7: the story is the old living room's (the old table, the old camera): no link from M0-W
+  const lookHref = __ARTIFACT__ || room !== 'living-room' || tour.styles === false ? null : `/story/${tour.room}/${house}/`;
   const living = room === 'living-room';
   const shown = items();
   // FB13: what the chosen direction draws round the tour (design/Chrome.tsx), all of it from the tour's own data
@@ -1985,21 +1986,24 @@ export function TourPage() {
                 ))}
               </div>
             </nav>
-            <div class="tour-style" role="group" aria-label="סגנון">
-              <h2>סגנון</h2>
-              <div class="segmented">
-                {(
-                  [
-                    [NORDIC, NORDIC_NAME_HE],
-                    [WM, tour.name_he],
-                  ] as const
-                ).map(([id, name]) => (
-                  <button key={id} type="button" data-house={id} aria-pressed={house === id} disabled={!inRoom || !living} onClick={() => void switchTo(id)}>
-                    {name}
-                  </button>
-                ))}
+            {/* MOCK7: no style change in the living room M0-W (the Nordic house is the old M0's camera) */}
+            {tour.styles === false ? null : (
+              <div class="tour-style" role="group" aria-label="סגנון">
+                <h2>סגנון</h2>
+                <div class="segmented">
+                  {(
+                    [
+                      [NORDIC, NORDIC_NAME_HE],
+                      [WM, tour.name_he],
+                    ] as const
+                  ).map(([id, name]) => (
+                    <button key={id} type="button" data-house={id} aria-pressed={house === id} disabled={!inRoom || !living} onClick={() => void switchTo(id)}>
+                      {name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             <p class="tour-links">
               {lookHref ? (
                 <a class="btn btn-ghost" id="tour-look" href={lookHref}>

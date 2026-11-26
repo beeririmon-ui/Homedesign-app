@@ -118,7 +118,8 @@ describe('MOCK6: the background load', () => {
 
 describe('MOCK6: the kids’ rooms as built (tools/make-tour-room.ts)', () => {
   it('the rooms and their buttons: חדר הילד and חדר הילדה, a frame each', () => {
-    expect(d.GROUP_IDS).toEqual(['living-room', 'master', 'bath', 'dining', 'work', 'boy', 'girl']);
+    // MOCK7: the buttons follow the house route (route ch. 1); B1 is the bath's rest frame
+    expect(d.GROUP_IDS).toEqual(['living-room', 'dining', 'boy', 'girl', 'bath', 'master', 'work']);
     expect(d.GROUP_HE.boy).toBe('חדר הילד');
     expect(d.GROUP_HE.girl).toBe('חדר הילדה');
     expect(d.FRAMES.boy).toEqual(['boy']);

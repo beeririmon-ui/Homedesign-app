@@ -55,12 +55,13 @@ type Tour = {
   base: { src: string };
   slots: { src: string; options: { position: number; card: { src: string } }[] }[];
 };
-const tour = JSON.parse(readFileSync(sitePath('.generated/tour.living-room.warm-modern.json'), 'utf8')) as Tour;
+const tour = JSON.parse(readFileSync(sitePath('.generated/tour.living-room.warm-modern.json'), 'utf8')) as Tour & { atlas?: unknown };
 // MOCK2: the preview ships one width, `lo`, and the page composes there (web/src/tour/data.ts widthFor in an artifact
 // build): half the bytes of the layers' own width, and the file count stays inside the Artifact's 200
 const tw = tour.widths.lo;
-files.add(`${tour.base.src}.${tw}.webp`);
-for (const s of tour.slots)
+// MOCK7: the living room M0-W is a room of tools/make-tour-room.ts (its atlas pages: listed with the other frames below)
+if (!tour.atlas) files.add(`${tour.base.src}.${tw}.webp`);
+for (const s of tour.atlas ? [] : tour.slots)
   for (const o of s.options) {
     for (const kind of [`product.${tw}`, `shadow.${tw}`]) files.add(`${s.src}/${o.position}.${kind}.webp`);
     // the wheel's card: the product on its own (a studio picture of ours, or its layer trimmed)
@@ -80,7 +81,10 @@ type Room = {
   slots: { src: string; atlas?: unknown; atlas_opts?: unknown; shadows?: number[]; options: { position: number; card: { src: string } }[] }[];
 };
 // MOCK5: every frame of every room built from a render folder (tools/tour/frames.json)
-const tourFrames = (JSON.parse(readFileSync(sitePath('tools/tour/frames.json'), 'utf8')) as { rooms: { frames: string[] }[] }).rooms.flatMap((x) => x.frames);
+const tourFrames = [
+  ...(tour.atlas ? ['living-room'] : []),
+  ...(JSON.parse(readFileSync(sitePath('tools/tour/frames.json'), 'utf8')) as { rooms: { frames: string[] }[] }).rooms.flatMap((x) => x.frames),
+];
 for (const id of tourFrames) {
   const r = JSON.parse(readFileSync(sitePath(`.generated/tour.${id}.warm-modern.json`), 'utf8')) as Room;
   const lo = r.widths.lo;
