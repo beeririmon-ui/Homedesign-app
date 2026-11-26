@@ -121,7 +121,9 @@ def build(view='HDx2'):
         Hf = geo.plane_H(Mc, Hc, n, float(n @ P1))
         rgb, al = warp_rgba(a, Hf @ A)
         dist = float(np.linalg.norm((P1 - C)[:2]))
-        return dict(slot=slot, rgb=rgb, a=al, P=P1, dist=dist)
+        with np.errstate(divide='ignore', invalid='ignore'):
+            tp = (float(n @ P1) - float(n @ C)) / (D @ n)
+        return dict(slot=slot, rgb=rgb, a=al, P=P1, dist=dist, t=tp)
     T = bb('coffee-table', back=0.30)
     items = [bb('framed-art', P0=np.array([0, 0.03, 0]), n=(0, 1, 0)), bb('accent-sconces', P0=np.array([0, 0.06, 0]), n=(0, 1, 0)),
              bb('curtains', P0=np.array([-2.2, 0, 0]), n=(1, 0, 0)), bb('vase', P0=np.array([-2.40, 1.38, 0.0])),
@@ -130,15 +132,18 @@ def build(view='HDx2'):
              T, bb('candle-holders', P0=T['P']), bb('bowl', P0=T['P'])]
     items.sort(key=lambda it: -it['dist'])
     arm_dist = float(np.linalg.norm(np.array([-1.16, 2.7]) - C[:2]))
+    dep = np.where(np.isfinite(t_sh), t_sh, np.nan)
+    with np.errstate(divide='ignore', invalid='ignore'):
+        t_arm = (float(n @ P_arm) - float(n @ C)) / (D @ n)
     for it in items:
         if it['dist'] < arm_dist and 'arm_done' not in locals():
-            img = arm_rgb + img * (1 - arm_a); arm_done = True
-        img = it['rgb'] + img * (1 - it['a'])
-    if 'arm_done' not in locals(): img = arm_rgb + img * (1 - arm_a)
+            img = arm_rgb + img * (1 - arm_a); arm_done = True; dep = np.where(arm_a[..., 0] > 0.5, t_arm, dep)
+        img = it['rgb'] + img * (1 - it['a']); dep = np.where(it['a'][..., 0] > 0.5, it['t'], dep)
+    if 'arm_done' not in locals(): img = arm_rgb + img * (1 - arm_a); dep = np.where(arm_a[..., 0] > 0.5, t_arm, dep)
     rec = dict(anchors={it['slot']: [round(float(v), 3) for v in it['P']] for it in items}, order=[it['slot'] for it in items])
-    return dict(img=img, hd=hd, om=om, ok=ok_sh, ids=ids, rec=rec)
+    return dict(img=img, hd=hd, om=om, ok=ok_sh, ids=ids, rec=rec, depth=dep)
 
 if __name__ == '__main__':
     out = sys.argv[1]; view = sys.argv[2] if len(sys.argv) > 2 else 'HDx2'; r = build(view)
-    np.savez_compressed(out + '/refeed-%s.npz' % view, img=r['img'].clip(0, 255).astype(np.uint8), om=r['om'], ok=r['ok'], ids=r['ids'])
+    np.savez_compressed(out + '/refeed-%s.npz' % view, img=r['img'].clip(0, 255).astype(np.uint8), om=r['om'], ok=r['ok'], ids=r['ids'], depth=r['depth'].astype(np.float32))
     json.dump(r['rec'], open(out + '/refeed-anchors-%s.json' % view, 'w'), indent=1); print(r['rec']['order'])
