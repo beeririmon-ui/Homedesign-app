@@ -1,0 +1,323 @@
+{
+ "id": "wm-fb13-stage-a-concepts-2026-11-26",
+ "brief": "briefs/wm-fb13-stage-a-concepts-2026-11-26.md",
+ "source": "docs/proposals/wm-fb13-living-wow-2026-11-25.md 3.1-3.3; the clay and light maps of ../ (clay_m0w.py, clay-m0w.json)",
+ "status": "CONCEPT ONLY, not for the site: for the owner to choose the light of the new living room M0-W (FB13 / FB14); not locked, no layers",
+ "date": "2026-11-26",
+ "author": "render-agent",
+ "model": "flux-2",
+ "type": "image-to-image",
+ "resolution": "1K",
+ "aspect_ratio": "16:9",
+ "returned": "1344 x 768 JPEG (ratio 1.75), kept as returned in raw/; concept-A.png / concept-B.png = the returned file + ONE display grade in code, the same for both (grade.py k 1.5; see measured.grade)",
+ "seed": null,
+ "seed_note": "var2 exposes no seed for flux-2: the prompt, the input and the settings are kept; a re-send gives another image",
+ "references_note": "flux-2 in var2 reads image_url only (image_refs are for nano-banana, gpt-image-2, seedream-5-pro, grok): the references travel inside the input. guide.py re-projects the current default layers of phase2-2026-11-10 (manifest-fb12s1: the Olia layer, the rug, set B with the Pecan throw, the trio, the sconces, the floor lamp, the pendant, the vase, the planter's pot, the basket, the bowl, the candle holders, the magazine holder) from M0 onto their proxies in the M0-W clay",
+ "camera": {
+  "id": "M0-W",
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw_deg_left": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555,
+  "note": "v0 0.555 (the brief; the clay's finding): the pendant whole under the top edge; ../camera-m0w-proposal.json still says 0.52"
+ },
+ "clay": {
+  "script": "clay555.py (imports ../clay_m0w.py unchanged; CAM v0 0.555; 2048 wide, 32 samples; the plate without products too)",
+  "materials": "bone plaster #ECE5DA, smoked-oak planks #8B6F55, bronze-espresso glazing frame #3A322C, walnut-and-bone armchair, set B's colours on the cushion proxies; the branch filler's green cone hidden",
+  "B": {
+   "sun": "D0's azimuth 228, altitude 15, the tool compass (the flipped compass, accepted for the concept); strength 16 (2 x D0's 8: the README's finding for 92-95 in the patch over 70-78 in the shade)",
+   "exposure": -0.812,
+   "shaded_plaster_L": 73.69,
+   "sunlit_plaster_L": 90.95
+  },
+  "A": {
+   "sun": "hidden (no direct sun); sky and every lamp as B",
+   "exposure": -0.375,
+   "shaded_plaster_L": 77.92,
+   "note": "today's tool frame has the plaster at L about 89.5: L 78 is half a stop lower in linear light"
+  }
+ },
+ "estimate": {
+  "tool": "var2_estimate_cost",
+  "model_id": "flux-2",
+  "type": "image-to-image",
+  "params": {
+   "resolution": "1K",
+   "aspect_ratio": "16:9"
+  },
+  "quantity": 2,
+  "total_tokens": 500,
+  "unit": 250
+ },
+ "jobs": [
+  {
+   "id": "A-r1",
+   "concept": "A",
+   "prompt_file": "concept-A.prompt.txt",
+   "prompt_sha256": "09d3a2cdd36a2358ee3e79dbdacaf1522475ebde1adc031cd86d5330262b7f81",
+   "prompt_note": "the file's text without its final newline was sent",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7f9098f7-252e-4f9f-a9e5-25e45d768ccd.png",
+   "input_local": "concept-A-input.jpg (JPEG copy of the 1920 x 1080 PNG sent)",
+   "input_png_sha256": "aeff09ad1b5c5aeab65beb495309607a4add2b9ce9f13b081dc05658632a5029",
+   "input_upload_verified": "GET of the public URL: the same sha256",
+   "input_recipe": "guide.py A (the clay A at v0 0.555 + the M0 default layers)",
+   "idempotency_key": "wm-fb13-concept-A-flux2-1k-20261126",
+   "placeholder_id": "d3ac0a7c-180e-4cc7-9f29-c72d7e6f1d6d",
+   "task_id": "b89a41c62afdb91e78bf29f9a69e512b",
+   "tokens": 250,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-b89a41c62afdb91e78bf29f9a69e512b-0-1795685189718-4ca0cc2b.jpg",
+   "raw": {
+    "file": "raw/concept-A-flux2-r1.jpg",
+    "px": [
+     1344,
+     768
+    ],
+    "format": "JPEG",
+    "bytes": 429874,
+    "sha256": "7aa6a3b3ef7b023556024e9b36637faf8ae61d1883ce5ceaebca08b4bc3e2aba"
+   },
+   "verdict": "USED as concept-A.png (grade.py k 1.5). flux-2 invented a wall socket on the right wall above the skirting (left in A; inpainted in B's input) and a planter and gravel court outside the glass; the rug came out as a beige flat weave with a border, the lumbar cushion in white boucle"
+  },
+  {
+   "id": "B-r1",
+   "concept": "B",
+   "prompt_file": "concept-B.prompt.txt",
+   "prompt_sha256": "4c53ad74fc202978f621a0601b71e75d0a6b170675f2b739b897e18385944185",
+   "prompt_note": "the file's text without its final newline was sent",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/47410310-06e6-4157-8f13-149ffc117e27.png",
+   "input_local": "concept-B-input.jpg (JPEG copy of the 1920 x 1080 PNG sent)",
+   "input_png_sha256": "9732d8cce6214b8e28a01c84ab8a070bcd34d9060658836f754094ef2445f574",
+   "input_upload_verified": "GET of the public URL: the same sha256",
+   "input_recipe": "guide.py B (the clay B at v0 0.555 + the M0 default layers)",
+   "idempotency_key": "wm-fb13-concept-B-flux2-1k-20261126",
+   "placeholder_id": "1dd5be7b-31c7-419c-a9ed-adb2ed9324f7",
+   "task_id": "b243a7c64eb18d528c3e8ad74644246f",
+   "tokens": 250,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-b243a7c64eb18d528c3e8ad74644246f-0-1795685196385-3b5f0286.jpg",
+   "raw": {
+    "file": "raw/concept-B-flux2-r1.jpg",
+    "px": [
+     1344,
+     768
+    ],
+    "format": "JPEG",
+    "bytes": 496774,
+    "sha256": "e5f9fb894ce489141427e115a99aa698ece15db1294eecc5ba492d378975728f"
+   },
+   "verdict": "NOT USED (kept in raw/): the sun, the leaf shadow, the Olia's form and the whole pendant are right, but the sofa came out with square track arms in a flat weave (not the rounded-arm boucle sofa), the planter as a wicker basket (the Bible's rejection list), a book and a pen invented under the bowl, and the plaster as rough stucco"
+  },
+  {
+   "id": "B-retry-failed",
+   "concept": "B",
+   "prompt_file": "concept-B.retry.prompt.txt",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4809668d-a02f-4f84-814b-bd020975aad7.png",
+   "idempotency_key": "wm-fb13-concept-B-retry-flux2-1k-20261126",
+   "placeholder_id": "44f6b02f-ef50-4e30-abfa-5b85a0cdd838",
+   "task_id": "faaaa18cbce282e76c90660aaa1007a5",
+   "tokens": 0,
+   "verdict": "FAILED at the provider (provider_error), 250 charged and refunded by var2: no image"
+  },
+  {
+   "id": "B-retry",
+   "concept": "B",
+   "prompt_file": "concept-B.retry.prompt.txt",
+   "prompt_sha256": "57c4a1e37f4a244f9d0293d603655ed51c6eb4261d2a955eca576a84b07216b2",
+   "prompt_note": "the file's text without its final newline was sent",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4809668d-a02f-4f84-814b-bd020975aad7.png",
+   "input_local": "concept-B-retry-input.jpg (JPEG copy of the 1344 x 768 PNG sent)",
+   "input_png_sha256": "a73af93aac2e045ceeb2099b5770180fd3ea660dbce338ca20853665fb43297b",
+   "input_upload_verified": "GET of the public URL: the same sha256",
+   "input_recipe": "guide_b2.py: concept A's returned frame (raw/concept-A-flux2-r1.jpg) re-lit in code by the clay's light ratio (luminance of clay B / clay A at v0 0.555, power 1.2; gold where the sun falls), registered to A's frame by SIFT + RANSAC (reg.py); the plaster's trowel marks reduced by 60 %, A's invented wall socket inpainted, the Olia held no darker than A's, the view through the glass tinted pale gold, the frame moved 10 px down (plaster above the pendant)",
+   "registration": {
+    "homography_guide1344x756_to_A_r1": [
+     [
+      0.9854791969915846,
+      0.019632601678847433,
+      10.633554641123132
+     ],
+     [
+      -0.005917380191683514,
+      0.9898433759053858,
+      -7.861895604847686
+     ],
+     [
+      -1.889167366033941e-05,
+      6.256121009214648e-05,
+      1.0
+     ]
+    ],
+    "inliers": 118,
+    "matches": 211,
+    "note": "the centre (prints, sofa, olive, lamp) registers; flux-2 drew the glazing frame further right and the table higher than the clay, so the ratio is only its low frequencies left of x 300"
+   },
+   "idempotency_key": "wm-fb13-concept-B-retry-flux2-1k-20261126-b",
+   "placeholder_id": "b3b5ffc3-cbbe-4081-a782-ed4471b56ecd",
+   "task_id": "7919857d913278657bf04b26f7167735",
+   "tokens": 250,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-7919857d913278657bf04b26f7167735-0-1795685847297-a87d862e.jpg",
+   "raw": {
+    "file": "raw/concept-B-flux2-retry.jpg",
+    "px": [
+     1344,
+     768
+    ],
+    "format": "JPEG",
+    "bytes": 493586,
+    "sha256": "dc2c06bdc1d67e3692b53849bf54a4c441469f627a71f49c5f3b6d7a2991d466"
+   },
+   "verdict": "USED as concept-B.png: the same room as A (the rounded-arm boucle sofa, the Olia, the products), the light alone changed"
+  }
+ ],
+ "tokens": {
+  "A_r1": 250,
+  "B_r1": 250,
+  "B_retry_failed_refunded": 0,
+  "B_retry": 250,
+  "total": 750,
+  "cap_this_run": 750,
+  "note": "var2 charged 250 for the failed retry and refunded it (credits_refunded true): 750 net; no further job is possible in this run"
+ },
+ "files": {
+  "concept_A": {
+   "file": "concept-A.png",
+   "px": [
+    1344,
+    768
+   ],
+   "format": "PNG",
+   "bytes": 1463503,
+   "sha256": "2290e9b3a22e9beea9d11ee50088ea4ec229ae69326049455e73c05e3c5573fd"
+  },
+  "concept_B": {
+   "file": "concept-B.png",
+   "px": [
+    1344,
+    768
+   ],
+   "format": "PNG",
+   "bytes": 1569235,
+   "sha256": "0fdc9b1923ecdf170075f660290b91b49504a7d05db914993acb01b8e4276060"
+  },
+  "sheet": {
+   "file": "concepts-sheet.jpg",
+   "px": [
+    2400,
+    781
+   ],
+   "format": "JPEG",
+   "bytes": 403969,
+   "sha256": "8753785af9be64f496e0217182235dddb04e9d013076b31950a418f896e8fc80"
+  },
+  "scripts": [
+   "clay555.py",
+   "guide.py",
+   "reg.py",
+   "guide_b2.py",
+   "grade.py",
+   "measure.py",
+   "sheet.py"
+  ],
+  "scripts_note": "run from a scratch folder (their SP path): the clay renders, the passes and the guides are scratch and were deleted"
+ },
+ "measured": {
+  "grade": "grade.py k 1.5 on both returned files (one display grade: y = k x / (1 + (k - 1) x) on linear luminance; the hues stay)",
+  "concept_A": {
+   "size": [
+    1344,
+    768
+   ],
+   "L_p0_5": 8.2,
+   "L_p50": 67.3,
+   "L_p99_5": 94.2,
+   "pendant_top_row_px": 4,
+   "pendant_clearance_share_of_height": 0.0052,
+   "wall_upper_right_Lab": [
+    71.8,
+    0.8,
+    8.2
+   ],
+   "wall_left_of_prints_Lab": [
+    70.7,
+    -0.3,
+    5.6
+   ],
+   "wall_above_sofa_left_Lab": [
+    77.4,
+    0.2,
+    4.0
+   ],
+   "table_top_Lab": [
+    64.4,
+    6.6,
+    26.7
+   ],
+   "sofa_seat_Lab": [
+    68.8,
+    0.6,
+    8.8
+   ]
+  },
+  "concept_B": {
+   "size": [
+    1344,
+    768
+   ],
+   "L_p0_5": 4.5,
+   "L_p50": 49.3,
+   "L_p99_5": 98.2,
+   "pendant_top_row_px": 12,
+   "pendant_clearance_share_of_height": 0.0156,
+   "wall_upper_right_Lab": [
+    55.2,
+    2.4,
+    13.7
+   ],
+   "wall_left_of_prints_Lab": [
+    74.6,
+    1.5,
+    30.8
+   ],
+   "wall_above_sofa_left_Lab": [
+    81.4,
+    4.6,
+    30.1
+   ],
+   "table_top_Lab": [
+    47.1,
+    15.5,
+    30.5
+   ],
+   "sofa_seat_Lab": [
+    38.9,
+    0.4,
+    5.1
+   ]
+  },
+  "returned": {
+   "A": {
+    "L_p0_5": 5.5,
+    "L_p50": 60.1,
+    "L_p99_5": 91.8,
+    "plaster_shade_L": [
+     64.7,
+     63.5,
+     71.1
+    ]
+   },
+   "B": {
+    "L_p0_5": 3.1,
+    "L_p50": 42.2,
+    "L_p99_5": 97.3,
+    "plaster_shade_L": 47.8,
+    "plaster_sun_L": 75.5
+   }
+  },
+  "patches_px": "measure.py: wall_upper_right (1120-1300, 60-160), wall_left_of_prints (470-560, 230-330), wall_above_sofa_left (500-580, 400-440), table_top (640-760, 600-618), sofa_seat (600-680, 575-590)",
+  "pendant": "top row of the shade: A 4 px (0.5 % of the height) under the top edge, B 12 px (1.6 %): whole in both, tight in A"
+ }
+}
