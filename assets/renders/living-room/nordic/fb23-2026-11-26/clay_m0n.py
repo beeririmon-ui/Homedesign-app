@@ -111,6 +111,7 @@ TEX = {  # SKU photo crops (fractions x0, y0, x1, y1) used as references inside 
     "bowl": ("bowl-cj-speckled-ivory-wide-bowl-21__0.jpg", (0.30, 0.30, 0.62, 0.62), 0.22),
 }
 REG = {}                                # key -> [objects]
+BAD = {}                                # pass -> non-finite pixels found (and filled)
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -194,7 +195,7 @@ def mtex(name, key, rough=0.95, flip=False):
     return m
 
 
-def mimage_plane(name, img, flip=True, alpha_circle=False):
+def mimage_plane(name, img, flip=True, alpha_circle=False, axes="XZ"):
     """an image on a flat plane via generated coordinates (the art print, the raffia disc)"""
     if flip:
         img = img.transpose(Image.FLIP_LEFT_RIGHT)
@@ -213,7 +214,7 @@ def mimage_plane(name, img, flip=True, alpha_circle=False):
     sep, comb = N.new("ShaderNodeSeparateXYZ"), N.new("ShaderNodeCombineXYZ")
     L.new(tc.outputs["Generated"], sep.inputs[0])
     L.new(sep.outputs["X"], comb.inputs["X"])
-    L.new(sep.outputs["Z"], comb.inputs["Y"])
+    L.new(sep.outputs[axes[1]], comb.inputs["Y"])
     L.new(comb.outputs[0], it.inputs["Vector"])
     L.new(it.outputs["Color"], bsdf.inputs["Base Color"])
     if alpha_circle:
@@ -576,8 +577,10 @@ def products():
     # wall decor: raffia disc D30, centre (-1.20, 0.02, 1.20)
     raf = Image.open(os.path.join(SKU, "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597__0.jpg")).convert("RGB")
     W, H = raf.size
-    raf = raf.crop((int(0.06 * W), int(0.14 * H), int(0.90 * W), int(0.98 * H)))
-    box("wall-decor", -1.35, -1.05, 0.0, 0.02, 1.05, 1.35, mimage_plane("raffia", raf, alpha_circle=True), I["wall-decor"])
+    raf = raf.crop((int(0.09 * W), int(0.19 * H), int(0.85 * W), int(0.95 * H)))          # square, on the disc (640 x 640 photo)
+    disc = lathe("wall-decor", 0, 0, [(0.0, 0.0), (0.15, 0.0), (0.15, 0.02), (0.0, 0.02)], mimage_plane("raffia", raf, axes="XY"), I["wall-decor"], n=64)
+    disc.location = b((-1.20, 0.02, 1.20))
+    disc.rotation_euler = (math.pi / 2, 0, 0)          # the axis along -Y: the face toward the room carries the photo
     # accent sconces: travertine cylinders D6.5 x 16 on small walnut plates, up/down light
     wal = mcol("walnut", "#5E4433", 0.5)
     for x in (-0.85, 1.25):
@@ -684,8 +687,8 @@ def products():
     def cushion(sz, mat, loc, rz=0.0, tilt=16):
         ob = lbox("cushions", sz, 0.16, sz, mat, I["cushions"], loc, rot=(tilt, 0, rz), bev=0.07)
         return ob
-    cushion(0.50, mtex("boucle", "boucle", 1.0), (-0.48, 0.47, 0.67), rz=6)
-    cushion(0.45, mtex("sage", "sage", 1.0), (-0.12, 0.53, 0.645), rz=-4)
+    cushion(0.50, mcol("teddy_boucle", "#EDEAE4", 1.0, noise=0.10, nscale=(260, 260, 260), sheen=0.5), (-0.48, 0.47, 0.67), rz=6)
+    cushion(0.45, mcol("sage_chenille", "#9AA595", 1.0, noise=0.08, nscale=(180, 180, 180), sheen=0.5), (-0.12, 0.53, 0.645), rz=-4)
     cushion(0.50, mtex("charcoal", "charcoal", 1.0), (0.88, 0.47, 0.67), rz=-6)
     th = mcol("muslin_ivory", "#EEE9DF", 1.0, noise=0.06, nscale=(120, 120, 120), sheen=0.3)        # the White muslin (photo crop read grey)
     # over the right arm, across the right seat in front of the charcoal cushion, and falling down the seat front to the rug
@@ -841,7 +844,19 @@ def render_passes(tag, W, H, spp, override=None):
         img.pixels.foreach_get(a)
         a = a.reshape(h, w, 4)[::-1]
         bpy.data.images.remove(img)
-        res[g] = a[..., :3].copy() if g in GROUPS else a[..., 0].copy()
+        x = a[..., :3].copy() if g in GROUPS else a[..., 0].copy()
+        bad = ~np.isfinite(x) if x.ndim == 2 else ~np.isfinite(x).all(-1)
+        if g in GROUPS:
+            bad |= (x.max(-1) > 1e4) | (x.min(-1) < -1e-4)     # negative = the denoiser's ringing at the reveal corners
+        BAD[f"{tag}:{g}"] = int(bad.sum())
+        if bad.any():                                   # NaN / inf blocks (spread by the denoiser): filled from the neighbours, logged
+            m8 = cv2.dilate(bad.astype(np.uint8), np.ones((3, 3), np.uint8))
+            x = np.nan_to_num(x, nan=0.0, posinf=0.0, neginf=0.0)
+            if x.ndim == 2:
+                x = cv2.inpaint(x.astype(np.float32), m8, 4, cv2.INPAINT_TELEA) if g != "IndexOB" else x
+            else:
+                x = np.stack([cv2.inpaint(np.ascontiguousarray(x[..., i]).astype(np.float32), m8, 4, cv2.INPAINT_TELEA) for i in range(3)], -1)
+        res[g] = x
     shutil.rmtree(out, ignore_errors=True)
     res["index"] = np.rint(res.pop("IndexOB")).astype(np.int32)
     res["depth"] = res.pop("Depth")
@@ -906,6 +921,21 @@ def solve_k(lin, wb, target, p, W, H, lift=0.0):
         k = math.sqrt(lo * hi)
         lo, hi = (k, hi) if Lc(c, k, wb, lift) < target else (lo, k)
     return math.sqrt(lo * hi)
+
+
+def floor_fix(srgb, lift):
+    """pixels sitting on the tone floor (mixed light <= 0: negative denoiser output in the reveal corners, 2026-11-26 full run) are
+    inpainted from their neighbours; no real surface in M0-N goes that dark (A's darkest shade is about L 15). Returns (image, count)."""
+    f = lift if lift <= 0.0031308 else 1.055 * lift ** (1 / 2.4) - 0.055
+    if lift <= 0.0031308:
+        f = 12.92 * lift
+    m = (srgb <= f + 3 / 255.0).all(-1)
+    if not m.any():
+        return srgb, 0
+    m8 = cv2.dilate(m.astype(np.uint8), np.ones((7, 7), np.uint8))      # 3 px: the denoiser's soft rim around each block too
+    u8 = np.clip(np.rint(srgb * 255), 0, 255).astype(np.uint8)
+    out = cv2.inpaint(u8, m8, 5, cv2.INPAINT_TELEA).astype(np.float32) / 255.0
+    return np.where(m8[..., None] > 0, out, srgb), int(m.sum())
 
 
 def save_png(path, srgb, dither=True):
@@ -1211,9 +1241,9 @@ def main(argv):
             gw[g] = (lo + hi) / 2
         gw["wall_sconce_glow"] = gw["pendant_glow"]     # out of frame: follows the pendant
         lin = lin + sum(gw[g] * R[g] for g in GLOW_GROUPS)
-        img = tone(lin, k, mx["wb"], lift=mx["lift"])
+        img, nfix = floor_fix(tone(lin, k, mx["wb"], lift=mx["lift"]), mx["lift"])
         L = lab(img)
-        look[c] = dict(mix=dict(sky=mx["sky"], sun=mx["sun"], sun_target=mx.get("sun_target"), lamp_pools=cal, shade_glow_weights={g: round(v, 4) for g, v in gw.items()}),
+        look[c] = dict(floor_pixels_inpainted=nfix, mix=dict(sky=mx["sky"], sun=mx["sun"], sun_target=mx.get("sun_target"), lamp_pools=cal, shade_glow_weights={g: round(v, 4) for g, v in gw.items()}),
                        wb_gains=[round(g, 4) for g in mx["wb"]], wb_target_ab=mx["ab"], lift=mx["lift"], exposure_k=round(k, 4), target=mx["target"],
                        patches_Lab={n: patch(L, p, W, H) for n, p in PATCHES.items()},
                        shades_Lab={g: patch(L, p, W, H, r=3) for g, p in GLOW_CAL.items()},
@@ -1234,9 +1264,9 @@ def main(argv):
     for c, mx in mixes.items():
         lin = mx["sky"] * C["sky"] + mx["sun"] * C["sun"] + sum(wts[g] * C[g] for g in LAMP_GROUPS)
         k = solve_k(lin, (1, 1, 1), 74.0, PATCHES["back_wall_above_art (0.20,0,2.30)"], W, H)
-        img = tone(lin, k)
+        img, nfix = floor_fix(tone(lin, k), 0.0)
         save_png(os.path.join(out, "m0n-clay.png" if c == "B" else "m0n-clay-A.png"), img)
-        clay_look[c] = dict(exposure_k=round(k, 4), target="back wall above the art L 74 (the clay is grey; the shades carry no glow here)",
+        clay_look[c] = dict(floor_pixels_inpainted=nfix, exposure_k=round(k, 4), target="back wall above the art L 74 (the clay is grey; the shades carry no glow here)",
                             patches_L={n: (patch(lab(img), p, W, H) or [None])[0] for n, p in PATCHES.items()})
     # sun map: the sun group's luminance on white surfaces (direct + its own bounce), 16 bit; 'in sun' = > 25 % of p99.5
     sl = C["sun"] @ LUMW
@@ -1282,7 +1312,7 @@ def main(argv):
                camera=CAM, projection_check_px=pc, sun=dict(SUN, **sun), lamps=lamp_rec, look_material=look, look_clay=clay_look,
                v7q6=rows, v7q6_counted=f"{len(counted)} of {len([r for r in rows.values() if 'v7q6' in r])}", v7q6_counted_list=counted,
                f3=f3, f3_fails=[r for r in f3 if r.get("verdict", "").startswith("FAIL")],
-               sun_share_pct_per_item=sun_on, sky_pct_of_frame=round(100 * float(sky_px.mean()), 2), seconds=round(time.time() - t0))
+               nonfinite_pixels_filled=BAD, sun_share_pct_per_item=sun_on, sky_pct_of_frame=round(100 * float(sky_px.mean()), 2), seconds=round(time.time() - t0))
     json.dump(rec, open(os.path.join(out, "clay-m0n.json"), "w"), indent=1, ensure_ascii=False, default=float)
     print("DONE", rec["v7q6_counted"], "counted;", len(rec["f3_fails"]), "F3 fails;", rec["seconds"], "s", flush=True)
     shutil.rmtree(os.path.join(SCR, "exr"), ignore_errors=True)

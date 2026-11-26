@@ -1,0 +1,164 @@
+{
+ "id": "M0-N",
+ "status": "PROPOSAL (render-agent, 2026-11-26): not written to docs/house-plan.json; NRD2 is answered by the concept choice",
+ "source": "docs/proposals/nordic-house-plan-2026-11-26.md ch. 3 (28 mm, height 1.00, almost frontal to the sofa wall, yaw ~8 left, window in the left margin, knitted pouf cut in the right foreground, the pendant whole)",
+ "camera": {
+  "loc": [
+   0.6,
+   5.35,
+   1.0
+  ],
+  "yaw_deg_left": 8.0,
+  "lens_mm": 28,
+  "u0": 0.5,
+  "v0": 0.5,
+  "projection": "d = f.(P-C), x = r.(P-C) (plan conventions); u = u0 + 0.7778 x/d; v = v0 + 1.3827 (1.00 - Z)/d (28 mm, 16:9)",
+  "blender": "plan (x, y, z) built at (-x, y, z); camera at (-0.60, 5.35, 1.00), lens 28, sensor 36 horizontal, shift 0/0; projection check vs the plan equations: 0.0 px"
+ },
+ "replaces": {
+  "M0 1.2 (house plan 1.2, V7Q1)": {
+   "loc": [
+    0.83,
+    4.64,
+    1.2
+   ],
+   "yaw_deg_left": 25,
+   "lens_mm": 24,
+   "u0": 0.47,
+   "v0": 0.5
+  },
+  "note": "the tool camera stays as registered; M0-N is the Nordic tour hero camera, like M0-W in the warm-modern house"
+ },
+ "how_solved": "a grid over X 0.30-1.00, Y 4.80-5.80, yaw 6-10, v0 0.48-0.56 with the plan equations (constraints: pendant top margin >= 0.03; the table top inside the frame; the window's back jamb u >= 0.06; the floor-lamp shade inside the right margin; score: yaw near 8, art near u 0.55, pendant margin near 0.04, window jamb near u 0.12, v0 near 0.50). Best: (0.60, 5.35), yaw 8, v0 0.50",
+ "measured_on_the_clay": {
+  "pendant": {
+   "u": [
+    0.4792,
+    0.5677
+   ],
+   "v": [
+    0.0556,
+    0.1648
+   ],
+   "frame_pct": 0.763,
+   "visible_share": 0.986
+  },
+  "framed-art": {
+   "u": [
+    0.4995,
+    0.6021
+   ],
+   "v": [
+    0.2444,
+    0.5065
+   ],
+   "frame_pct": 2.665,
+   "visible_share": 0.991
+  },
+  "sofa": {
+   "u": [
+    0.3526,
+    0.7375
+   ],
+   "v": [
+    0.5556,
+    0.7963
+   ],
+   "frame_pct": 2.882,
+   "visible_share": 0.38
+  },
+  "armchair": {
+   "u": [
+    0.0,
+    0.2161
+   ],
+   "v": [
+    0.6463,
+    1.0
+   ],
+   "frame_pct": 4.771,
+   "visible_share": 0.727
+  },
+  "coffee-table": {
+   "u": [
+    0.3792,
+    0.6578
+   ],
+   "v": [
+    0.712,
+    0.9204
+   ],
+   "frame_pct": 1.472,
+   "visible_share": 0.657
+  },
+  "pouf": {
+   "u": [
+    0.8771,
+    1.0
+   ],
+   "v": [
+    0.8565,
+    1.0
+   ],
+   "frame_pct": 1.62,
+   "visible_share": 0.414
+  },
+  "window_note": "the window's back casement (Y 0.9-1.8) is whole at the left margin (u ~0.03-0.14); the mullion at u ~0.03; the front casement is outside the frame",
+  "sky_pct_of_frame": 3.61
+ },
+ "compass_and_sun": {
+  "rotation": "the Nordic house only: the plan's north facade (outward normal -X) faces azimuth 220 (SW), as the proposal asks",
+  "sun": {
+   "alt": 29.65,
+   "az": 214.16,
+   "dir_plan": [
+    -0.8645,
+    0.0884,
+    0.4947
+   ],
+   "lat": 41.0,
+   "decl": -12.6,
+   "hour_angle": 30.0,
+   "angle": 1.5
+  },
+  "why_lat_41": "14:00 solar time on 15 February; at latitude 41 N the altitude is the proposal's 'about 30' (29.7). At Israel's 32 N it would be 37.0 / az 217.6 (steeper, a shorter patch).",
+  "rotation_check": "analytic, through the aperture (inner face and frame plane), the seat plane of the sofa / the rug: R 215: 11 % / 67 %; R 220: 46 % / 63 %; R 225: 80 % / 53 %; R 230: 96 % / 43 %. 220 gives both halves of the hero moment (the grid on the rug, climbing onto the seat); 225-230 would put more of it on the sofa and less on the rug. Back wall: 0 % at 200-230.",
+  "sun_share_on_the_clay_pct": {
+   "rug": 30.3,
+   "curtains": 0.0,
+   "vase": 16.8,
+   "planter": 0.0,
+   "basket": 0.0,
+   "magazine-holder": 0.3,
+   "floor-lamp": 0.0,
+   "framed-art": 0.0,
+   "accent-sconces": 0.0,
+   "pendant": 0.0,
+   "bowl": 75.8,
+   "candle-holders": 88.7,
+   "coffee-table": 47.1,
+   "cushions": 0.0,
+   "sofa-cover": 46.0,
+   "wall-decor": 0.0,
+   "table-runner": 71.9,
+   "pouf": 0.1,
+   "tray": 90.8,
+   "fixed:sofa": 33.4,
+   "fixed:armchair": 1.1,
+   "shell:floor": 2.3,
+   "shell:back_wall": 0.0,
+   "shell:left_wall": 0.0,
+   "shell:window": 29.8,
+   "shell:right_wall": 0.0,
+   "shell:ceiling": 0.0,
+   "shell:outside": 100.0
+  }
+ },
+ "styling_points_used_in_the_clay (proposals, not registered)": {
+  "pouf": "(1.70, 2.75), d 50 h 35: 44 % visible in the plan solve, cut by the right and bottom edges, on the rug (slots 1.6: (1.45, 2.00) is not in the foreground in M0-N)",
+  "basket": "(2.05, 0.55), right of the floor lamp by the right wall: the slots 1.7 point (-1.70, 0.75) stands right in front of the planter in this frontal view (planter 11 % visible)",
+  "curtains": "a panel each side on a rod at 2.82; only the back panel is in the frame",
+  "rug": "330 x 230 (the card), X -1.45..1.85, Y 0.72-3.02",
+  "tray": "the new slot: under the candle holders, (0.52, 1.64)"
+ }
+}

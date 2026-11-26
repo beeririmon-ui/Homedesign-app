@@ -1,0 +1,386 @@
+{
+ "id": "nrd-fb23-stage-a-concepts-2026-11-26",
+ "date": "2026-11-26",
+ "author": "render-agent",
+ "task": "the manager's task of 2026-11-26 (NRD1, stage A step 1: the M0-N clay and two concepts, at most 750)",
+ "source": "docs/proposals/nordic-house-plan-2026-11-26.md ch. 3 and 7; the clay and light groups of ../clay_m0n.py (../clay-m0n.json)",
+ "status": "CONCEPT ONLY, not for the site: for the owner to choose the Nordic tour light (NRD2); not locked, no layers",
+ "model": "flux-2",
+ "type": "image-to-image",
+ "resolution": "1K",
+ "aspect_ratio": "16:9",
+ "returned": "1344 x 768 JPEG, kept as returned in raw/; concept-A.png / concept-B.png = the returned file as PNG, NO grade",
+ "seed": null,
+ "seed_note": "var2 exposes no seed for flux-2: the prompt, the input and the settings are kept; a re-send gives another image",
+ "references_note": "flux-2 in var2 reads image_url only: the Nordic products travel inside the input. The guides are the clay in materials with the defaults of the proposal's ch. 7 at the card sizes, textured with crops of the SKU photos where a crop was clean (rug, charcoal cushion, pouf, basket, planter, felt holder, vase, travertine, tray, bowl, the print itself, the raffia disc) and procedural where it was not (white boucle, sage chenille, sage runner, ivory muslin); the photos were fetched to the scratchpad by ../tools/fetch_sku.py and are not kept in the repo",
+ "camera": {
+  "id": "M0-N",
+  "loc": [
+   0.6,
+   5.35,
+   1.0
+  ],
+  "yaw": 8.0,
+  "lens": 28.0,
+  "u0": 0.5,
+  "v0": 0.5
+ },
+ "inputs": {
+  "A": {
+   "file": "concept-A-input.jpg (JPEG copy of the 1920 x 1080 PNG sent)",
+   "png_sha256": "5ca6fe24adc1082ec760758459132296867f7bb9391f7ce4d76edce5841cfd45",
+   "recipe": "clay_m0n.py material render, light groups sky + lamp pools + shade glows, no sun; WB on daylight (b* 7), the wall above the art at L 88; then floor_fix (1,150 px)",
+   "look": {
+    "mix": {
+     "sky": 1.0,
+     "sun": 0.0,
+     "sun_target": null,
+     "lamp_pools": {
+      "floor_lamp": {
+       "point": [
+        2.1,
+        0.0,
+        1.0
+       ],
+       "increment": 0.22,
+       "where": "back wall right of the lamp (Bible: +20-25 %)",
+       "weight": 0.04866
+      },
+      "pendant": {
+       "point": [
+        0.2,
+        1.72,
+        0.38
+       ],
+       "increment": 0.13,
+       "where": "the bare oak at the table centre (Bible: +12-15 %)",
+       "weight": 0.14372
+      },
+      "accent_sconces": {
+       "point": [
+        1.25,
+        0.0,
+        2.02
+       ],
+       "increment": 0.15,
+       "where": "the wall above the right sconce (Bible: up to +15 % locally)",
+       "weight": 0.02096
+      },
+      "wall_sconce": {
+       "point": [
+        -1.23,
+        2.73,
+        0.4
+       ],
+       "increment": 0.17,
+       "where": "the armchair seat (Bible: +15-20 %)",
+       "weight": 0.23705
+      }
+     },
+     "shade_glow_weights": {
+      "pendant_glow": 0.0376,
+      "floor_lamp_glow": 0.0261,
+      "wall_sconce_glow": 0.0376
+     }
+    },
+    "wb_gains": [
+     1.1293,
+     1.0,
+     0.8449
+    ],
+    "exposure_k": 22.0538,
+    "p0_5_L": 14.3,
+    "clipped_pct": 6.9,
+    "shades_Lab": {
+     "pendant_glow": [
+      95.1,
+      -2.3,
+      19.3
+     ],
+     "floor_lamp_glow": [
+      95.2,
+      -1.6,
+      16.1
+     ]
+    },
+    "lamp_increment_check": {
+     "floor_lamp": 0.22,
+     "pendant": 0.13,
+     "accent_sconces": 0.15,
+     "wall_sconce": 0.17
+    }
+   }
+  },
+  "B": {
+   "file": "concept-B-input.jpg (JPEG copy of the 1920 x 1080 PNG sent)",
+   "png_sha256": "ee713463202cfb419a0f1353e08d6f3709d0d18ee2ac4b2e5b68bcc16a048f4c",
+   "recipe": "the same render: sky + 0.2748 x sun + the same lamp pools + shade glows; WB on daylight (b* 3.5), the wall above the art at L 84, the sunlit rug at L 97; then floor_fix (1,227 px)",
+   "look": {
+    "mix": {
+     "sky": 1.0,
+     "sun": 0.2748,
+     "sun_target": [
+      "rug_right (1.30,1.20,0.014)",
+      97.0
+     ],
+     "lamp_pools": {
+      "floor_lamp": {
+       "point": [
+        2.1,
+        0.0,
+        1.0
+       ],
+       "increment": 0.22,
+       "where": "back wall right of the lamp (Bible: +20-25 %)",
+       "weight": 0.04866
+      },
+      "pendant": {
+       "point": [
+        0.2,
+        1.72,
+        0.38
+       ],
+       "increment": 0.13,
+       "where": "the bare oak at the table centre (Bible: +12-15 %)",
+       "weight": 0.14372
+      },
+      "accent_sconces": {
+       "point": [
+        1.25,
+        0.0,
+        2.02
+       ],
+       "increment": 0.15,
+       "where": "the wall above the right sconce (Bible: up to +15 % locally)",
+       "weight": 0.02096
+      },
+      "wall_sconce": {
+       "point": [
+        -1.23,
+        2.73,
+        0.4
+       ],
+       "increment": 0.17,
+       "where": "the armchair seat (Bible: +15-20 %)",
+       "weight": 0.23705
+      }
+     },
+     "shade_glow_weights": {
+      "pendant_glow": 0.0446,
+      "floor_lamp_glow": 0.0345,
+      "wall_sconce_glow": 0.0446
+     }
+    },
+    "wb_gains": [
+     1.0027,
+     1.0,
+     0.9913
+    ],
+    "exposure_k": 14.7737,
+    "p0_5_L": 17.1,
+    "clipped_pct": 9.46,
+    "shades_Lab": {
+     "pendant_glow": [
+      93.0,
+      -0.7,
+      15.0
+     ],
+     "floor_lamp_glow": [
+      93.1,
+      -0.3,
+      12.9
+     ]
+    },
+    "lamp_increment_check": {
+     "floor_lamp": 0.146,
+     "pendant": 0.032,
+     "accent_sconces": 0.101,
+     "wall_sconce": 0.143
+    }
+   }
+  },
+  "B-retry": {
+   "file": "concept-B-retry-input.jpg (JPEG copy of the 1344 x 768 PNG sent)",
+   "png_sha256": "03596c7576be30eb7f658efa877db046a8fd5ef70f3167bab9d4d0c6c102d230",
+   "recipe": "relight_b.py: concept A's returned frame x the clay's light ratio (guide-B / guide-A, display-linear), registered by SIFT (265 inliers, median residual 0.71 px); the side table and the dark vase with pampas that flux-2 invented in A inpainted, the floor lamp of guide-B put back (relight_b.json)"
+  }
+ },
+ "estimate": {
+  "tool": "var2_estimate_cost",
+  "model_id": "flux-2",
+  "type": "image-to-image",
+  "params": {
+   "resolution": "1K",
+   "aspect_ratio": "16:9"
+  },
+  "quantity": 2,
+  "total_tokens": 500,
+  "unit": 250,
+  "reserve": "one retry, 250"
+ },
+ "jobs": [
+  {
+   "id": "A-r1",
+   "concept": "A",
+   "prompt_file": "concept-A.prompt.txt",
+   "prompt_sha256": "ac1ad18476734e83d6183d2c7b019f425624ca75d055977dbd192add00c51e23",
+   "prompt_note": "the file's text without its final newline was sent",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/840f94c0-1913-40cc-8913-15ca46a45953.png",
+   "input_upload_verified": "GET of the public URL: the same sha256",
+   "idempotency_key": "nrd-fb23-concept-A-flux2-1k-20261126",
+   "placeholder_id": "220d2aa4-8c62-4492-a289-e89e30a0175d",
+   "task_id": "1efdfec083e419f71e0aeb701847e8b4",
+   "tokens": 250,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-1efdfec083e419f71e0aeb701847e8b4-0-1795732065059-e23b0a69.jpg",
+   "raw": {
+    "file": "raw/concept-A-flux2-r1.jpg",
+    "px": [
+     1344,
+     768
+    ],
+    "sha256": "7893a36cd1af8b595b643a6ceaaf60a378c660dc628288bf94ca82cd7befd4b7"
+   },
+   "verdict": "USED as concept-A.png. Photographic textiles (the throw knitted with a fringe, real cushions), window the brightest, black point L 14.5. Off the brief: flux-2 removed the paper floor lamp and put a small side table there, added a dark floor vase with pampas grass by the right wall, turned the charcoal cushion grey and added a blush one, gave the wall a rough stucco; the bowl came out dark; the wall falls to L 61 on the right (Bible 90-94 by the window)"
+  },
+  {
+   "id": "B-r1",
+   "concept": "B",
+   "prompt_file": "concept-B.prompt.txt",
+   "prompt_sha256": "ac68332d7c60190a2f62e6b5cef26e093efc4f72290e612bdf98361d2bf0c2ee",
+   "prompt_note": "the file's text without its final newline was sent",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4d332551-b9f0-40e2-a543-fadc85edc8f5.png",
+   "input_upload_verified": "GET of the public URL: the same sha256",
+   "idempotency_key": "nrd-fb23-concept-B-flux2-1k-20261126",
+   "placeholder_id": "21e858ad-3b2c-4c42-b76b-6137d2a9824c",
+   "task_id": "72e0e740101cc217269d5c4498e7ba27",
+   "tokens": 250,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-72e0e740101cc217269d5c4498e7ba27-0-1795732009408-70837558.jpg",
+   "raw": {
+    "file": "raw/concept-B-flux2-r1.jpg",
+    "px": [
+     1344,
+     768
+    ],
+    "sha256": "4aa6c2ed83b822bfdf5a7801ffe61693ba347c8b0b635a64c6f6eb4c40db3606"
+   },
+   "verdict": "NOT USED (kept in raw/): the prompt's 'cool, airy, blue-grey skylight shade' was read as the wall colour: slate-blue walls (L 34-53, b* -2 to -6), far outside the Bible palette; a sunbeam invented on the back wall; the products stayed CG blocks. Good: birches and snow outside, the floor lamp kept, framing kept"
+  },
+  {
+   "id": "B-retry",
+   "concept": "B",
+   "prompt_file": "concept-B.retry.prompt.txt",
+   "prompt_sha256": "88fa48888d8dcd81558762eb5d37c70b6d5e7b0ca1d6903e016f4e6a10c0159d",
+   "prompt_note": "the file's text without its final newline was sent",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/4cb58ea3-d1c0-4c0a-8005-d53fa00d4d29.png",
+   "input_upload_verified": "GET of the public URL: the same sha256",
+   "idempotency_key": "nrd-fb23-concept-B-retry-flux2-1k-20261126",
+   "placeholder_id": "a62fa530-0456-44d7-9d4d-e0b6ebb00132",
+   "task_id": "453efb8ffa604d157a47e554fea7aa78",
+   "tokens": 250,
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-453efb8ffa604d157a47e554fea7aa78-0-1795732280414-1a469b1d.jpg",
+   "raw": {
+    "file": "raw/concept-B-flux2-retry.jpg",
+    "px": [
+     1344,
+     768
+    ],
+    "sha256": "f0cdee0f2c586df17a09bce3d26b08fb56bf11e7bbc0d8b3ba5fe831d0d42cf0"
+   },
+   "verdict": "USED as concept-B.png. Warm-white walls again, the two travertine sconces and the pendant visibly lit, the floor lamp back, sun on the rug, the table top and the front of the sofa seat with real depth. Off the brief: the braided cream rug became a GREY SHAG (fidelity: fail), the wall stucco is stronger than in A, the floor lamp's tripod became an oak frame around the shade, the bar grid reads as soft patches and not as crisp lines, black point L 6.5 (proposal 12-14), 3.4 % clipped (window, sunlit seat)"
+  }
+ ],
+ "measured": {
+  "note": "Lab (D65) medians of 15 x 15 px patches on the returned 1344 x 768 frames; the wall patches are the same pixels in all three",
+  "concept-A (A-r1)": {
+   "p0.5_L": 14.5,
+   "p99.5_L": 99.7,
+   "clipped_pct": 1.21,
+   "plain wall right of the art": [
+    60.9,
+    1.0,
+    6.9
+   ],
+   "wall above the art": [
+    76.0,
+    1.9,
+    8.6
+   ],
+   "wall left of the art": [
+    83.1,
+    -0.2,
+    4.9
+   ],
+   "window glass": [
+    99.1,
+    0,
+    0
+   ],
+   "sofa seat": [
+    81.8,
+    1.5,
+    9.4
+   ]
+  },
+  "B-r1 (not used)": {
+   "p0.5_L": 10.9,
+   "plain wall right of the art": [
+    34.1,
+    -2.7,
+    -2.2
+   ],
+   "wall above the art": [
+    41.7,
+    -2.4,
+    -2.7
+   ],
+   "wall left of the art": [
+    53.4,
+    -1.9,
+    -6.1
+   ]
+  },
+  "concept-B (B-retry)": {
+   "p0.5_L": 6.5,
+   "p99.5_L": 100.0,
+   "clipped_pct": 3.44,
+   "plain wall right of the art": [
+    64.7,
+    -0.2,
+    4.1
+   ],
+   "wall above the art": [
+    76.3,
+    0.2,
+    2.9
+   ],
+   "wall left of the art": [
+    79.5,
+    -0.4,
+    1.1
+   ],
+   "window glass": [
+    100,
+    0,
+    0
+   ],
+   "sofa seat (in sun)": [
+    98.1,
+    -0.2,
+    2.0
+   ]
+  }
+ },
+ "tokens": {
+  "spent": 750,
+  "cap": 750,
+  "breakdown": "A 250, B 250, B retry 250"
+ },
+ "sheet": {
+  "file": "concepts-sheet.jpg",
+  "px": [
+   2400,
+   781
+  ],
+  "recipe": "sheet.py"
+ }
+}
