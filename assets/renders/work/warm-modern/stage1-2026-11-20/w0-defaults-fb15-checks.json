@@ -7,7 +7,7 @@
   "region_px": 1531519
  },
  "changed_vs_today": {
-  "px": 158928,
+  "px": 165625,
   "outside_the_edited_boxes_px": 0,
   "boxes": [
    {
@@ -35,6 +35,15 @@
      1180,
      1000,
      1440
+    ]
+   },
+   {
+    "label": "pendant (code)",
+    "box": [
+     1230,
+     0,
+     1490,
+     470
     ]
    }
   ]
@@ -235,19 +244,42 @@
    "max_darkening": 0.42,
    "added_px": 16243,
    "method": "a contact line, a soft pool and a short cast shadow away from the window, from the pot's own silhouette; the layer's pixels untouched"
+  },
+  "lamps": {
+   "pendant": {
+    "kind": "fabric",
+    "before": {
+     "shade_L": 97.3,
+     "H": 61.2,
+     "S": 8.0
+    },
+    "after": {
+     "shade_L": 94.5,
+     "H": 46.2,
+     "S": 19.0
+    },
+    "blend": 1.0,
+    "target_hsv": [
+     43.0,
+     27.5,
+     100
+    ]
+   }
   }
  },
  "files": [
-  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/wall-sconce/wall-sconce-cj-travertine-cube-updown-12-type-a-indoor-fb15.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/wall-sconce/wall-sconce-cj-travertine-cube-updown-12-type-a-indoor-fb15.png",
-  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/basket/basket-cj-two-tone-rope-jute-white-30-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/wall-sconce/wall-sconce-cj-travertine-cube-updown-12-type-a-indoor-fb15.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/basket/basket-cj-two-tone-rope-jute-white-30-fb15.png",
-  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/waste-basket/waste-basket-aliexpress-washable-kraft-paper-bin-25x40-brown-xl-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/basket/basket-cj-two-tone-rope-jute-white-30-fb15.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/waste-basket/waste-basket-aliexpress-washable-kraft-paper-bin-25x40-brown-xl-fb15.png",
-  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/planter/planter-cj-cement-ribbed-belly-beige-large-rhapis-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/waste-basket/waste-basket-aliexpress-washable-kraft-paper-bin-25x40-brown-xl-fb15.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/planter/planter-cj-cement-ribbed-belly-beige-large-rhapis-fb15.png",
-  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/planter/planter-cj-cement-ribbed-belly-beige-large-rhapis-fb15.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/pendant/pendant-cj-silk-ribbed-pumpkin-40-30cm-warm-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/pendant/pendant-cj-silk-ribbed-pumpkin-40-30cm-warm-fb15.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/layers/manifest-fb15.json",
   "assets/renders/work/warm-modern/stage1-2026-11-20/w0-defaults-fb15.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/w0-defaults-fb15-finish.png",
@@ -257,11 +289,11 @@
   "score_today": 86.48,
   "score_today_with_finish_fb13prep": 55.87,
   "score_fb15_before_finish": 84.05,
-  "score_fb15_with_finish": 55.18,
+  "score_fb15_with_finish": 55.36,
   "per_layer_mean": {
    "today": 4.55,
    "today_with_finish": 2.94,
-   "fb15_with_finish": 2.9
+   "fb15_with_finish": 2.91
   },
   "edited_layers": {
    "wall-sconce": {
@@ -527,13 +559,60 @@
       "below_by": 0.36
      }
     }
+   },
+   "pendant": {
+    "before": {
+     "layer": "pendant",
+     "score": 3.0,
+     "fails": [
+      "GRAIN 0.43 (smoother)",
+      "LAMP looks lit, outside G1.10's H/S"
+     ],
+     "sharp_ratio": 0.905,
+     "grain_ratio": 0.434,
+     "black": {
+      "p05_L": 62.66,
+      "plate_p05_L": 11.12,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 97.3,
+      "H": 61.2,
+      "S": 8.0,
+      "light_layer_mean": 5.13,
+      "verdict": "looks lit, outside G1.10's H/S"
+     }
+    },
+    "after": {
+     "layer": "pendant",
+     "score": 3.64,
+     "fails": [
+      "SHARP 0.80 (softer)",
+      "GRAIN 0.44 (smoother)",
+      "LAMP looks lit, outside G1.10's H/S"
+     ],
+     "sharp_ratio": 0.795,
+     "grain_ratio": 0.442,
+     "black": {
+      "p05_L": 62.52,
+      "plate_p05_L": 11.0,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 94.5,
+      "H": 46.1,
+      "S": 19.1,
+      "light_layer_mean": 5.13,
+      "verdict": "looks lit, outside G1.10's H/S"
+     }
+    }
    }
   },
   "lamps": {
    "pendant": {
-    "shade_L": 97.4,
-    "H": 60.9,
-    "S": 8.1,
+    "shade_L": 94.5,
+    "H": 46.1,
+    "S": 19.1,
     "light_layer_mean": 5.13,
     "verdict": "looks lit, outside G1.10's H/S"
    },
@@ -578,11 +657,11 @@
      ],
      [
       "pendant",
-      0.435
+      0.468
      ]
     ]
    }
   }
  },
- "runtime_s": 127.8
+ "runtime_s": 134.8
 }

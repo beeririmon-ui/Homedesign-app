@@ -709,8 +709,8 @@
    "sub": 0,
    "shadow_z": 13,
    "default": true,
-   "layer": "layers/D2/canisters/zendrop-2814530-white.png",
-   "shadow": "shadows/D2/canisters/zendrop-2814530-white.png",
+   "layer": "layers/D2/canisters/zendrop-2814530-white-fb15.png",
+   "shadow": "shadows/D2/canisters/zendrop-2814530-white-fb15.png",
    "alpha_px": 8107,
    "shadow_px": 2216,
    "bbox_px": [
@@ -723,7 +723,14 @@
    "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "F-niche",
    "toned": true,
-   "projected_from": "D2o"
+   "projected_from": "D2o",
+   "layer_before_fb15": "layers/D2/canisters/zendrop-2814530-white.png",
+   "shadow_before_fb15": "shadows/D2/canisters/zendrop-2814530-white.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "warm balance towards the niche it stands in (code)"
+   }
   },
   {
    "frame": "D2",
@@ -886,8 +893,8 @@
    "sub": 0,
    "shadow_z": 15,
    "default": true,
-   "layer": "layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
-   "shadow": "shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "layer": "layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+   "shadow": "shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
    "alpha_px": 3661,
    "shadow_px": 0,
    "bbox_px": [
@@ -900,7 +907,14 @@
    "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
    "pass_": "Ec-sconce-board",
    "toned": true,
-   "projected_from": "D2o"
+   "projected_from": "D2o",
+   "layer_before_fb15": "layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "shadow_before_fb15": "shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "lamp on: a warm rim and a pool on the wall in code"
+   }
   },
   {
    "frame": "D2",
@@ -1424,6 +1438,25 @@
    "pass_": "Ec-sconce-board"
   },
   {
+   "frame": "D1",
+   "file": "light/D1/Ec-sconce-board-lamps-from-D2o.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "kitchen-sconce"
+   ],
+   "pass_": "Ec-sconce-board",
+   "projected_from": "D2o"
+  },
+  {
+   "file": "warm-modern/stage1-2026-11-20/light/D1/kitchen-sconce-pool-fb15.png",
+   "blend": "screen",
+   "z": 90,
+   "px": 60554,
+   "fb15": "the light of the stone shade on its wall (code, screen)",
+   "frame": "D1"
+  },
+  {
    "frame": "D2",
    "file": "light/D2/A-table-lamps-from-D1.png",
    "z": 90,
@@ -1446,23 +1479,12 @@
    "projected_from": "D2o"
   },
   {
-   "frame": "D1",
-   "file": "light/D1/Ec-sconce-board-lamps-from-D2o.png",
-   "z": 90,
-   "blend": "screen",
-   "lamps": [
-    "kitchen-sconce"
-   ],
-   "pass_": "Ec-sconce-board",
-   "projected_from": "D2o"
-  },
-  {
-   "file": "warm-modern/stage1-2026-11-20/light/D1/kitchen-sconce-pool-fb15.png",
+   "file": "warm-modern/stage1-2026-11-20/light/D2/kitchen-sconce-pool-fb15.png",
    "blend": "screen",
    "z": 90,
-   "px": 60554,
+   "px": 67700,
    "fb15": "the light of the stone shade on its wall (code, screen)",
-   "frame": "D1"
+   "frame": "D2"
   }
  ],
  "status": "for QA: 10.9 'D2 takes the stage' (2026-11-24), only what changed; then the owner's approval 3. Not for the site before QA.",

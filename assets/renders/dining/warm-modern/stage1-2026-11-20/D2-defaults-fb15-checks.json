@@ -1,0 +1,282 @@
+{
+ "room": "D2",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb15-rooms-pasted-fix-2026-11-26.md",
+ "rnd2": {
+  "outside_every_alpha_shadow_light_differing_px": 0,
+  "region_px": 619204
+ },
+ "changed_vs_today": {
+  "px": 36641,
+  "outside_the_edited_boxes_px": 64,
+  "boxes": [
+   {
+    "label": "kitchen sconce (code)",
+    "box": [
+     590,
+     130,
+     950,
+     500
+    ]
+   },
+   {
+    "label": "canisters in the niche (code)",
+    "box": [
+     1860,
+     600,
+     2140,
+     800
+    ]
+   }
+  ]
+ },
+ "black_point": {
+  "rule": "WM-G1: no edited-layer pixel under L* 11",
+  "px_under": 0
+ },
+ "product_count": {
+  "before": 19,
+  "after": 19
+ },
+ "sizes": {},
+ "cuts": {},
+ "code": {
+  "lights": {
+   "kitchen-sconce-pool": "the light of the stone shade on its wall (code, screen)"
+  },
+  "lamps": {
+   "kitchen-sconce": {
+    "kind": "stone",
+    "before": {
+     "shade_L": 80.0,
+     "H": 27.2,
+     "S": 17.0
+    },
+    "after": {
+     "shade_L": 89.0,
+     "H": 34.4,
+     "S": 13.5
+    },
+    "gain": 0.8,
+    "lamps": [
+     [
+      739,
+      277,
+      65,
+      67
+     ]
+    ]
+   }
+  },
+  "canisters": {
+   "ring_rgb": [
+    93.0,
+    51.0,
+    30.0
+   ],
+   "object_rgb_before": [
+    207.0,
+    206.0,
+    204.0
+   ],
+   "gain": [
+    1.15,
+    1.0,
+    0.85
+   ]
+  }
+ },
+ "files": [
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/shadows/D2/canisters/zendrop-2814530-white-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/layers/D2/canisters/zendrop-2814530-white-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/light/D2/kitchen-sconce-pool-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/manifest-fb15.json",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D2-defaults-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D2-defaults-fb15-finish.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/qa-sheet-fb15-D2.jpg"
+ ],
+ "pasted_test": {
+  "score_today": 64.14,
+  "score_today_with_finish_fb13prep": 55.43,
+  "score_fb15_before_finish": 64.89,
+  "score_fb15_with_finish": 55.04,
+  "per_layer_mean": {
+   "today": 3.38,
+   "today_with_finish": 2.92,
+   "fb15_with_finish": 2.9
+  },
+  "edited_layers": {
+   "canisters": {
+    "before": {
+     "layer": "canisters",
+     "score": 5.46,
+     "fails": [
+      "SHARP 0.70 (softer)",
+      "GRAIN 0.47 (smoother)",
+      "LIGHT 121 deg (indicative)",
+      "CONTACT -6.1 L* (indicative)"
+     ],
+     "sharp_ratio": 0.698,
+     "grain_ratio": 0.474,
+     "light": {
+      "span_L": 10.03,
+      "angle_deg": 121.0
+     },
+     "contact": {
+      "dark_L": -6.14,
+      "band_px": 2,
+      "px_per_cm": 1.12
+     },
+     "black": {
+      "p05_L": 38.69,
+      "plate_p05_L": 11.34,
+      "below_by": 0.0
+     }
+    },
+    "after": {
+     "layer": "canisters",
+     "score": 3.65,
+     "fails": [
+      "SHARP 0.79 (softer)",
+      "GRAIN 0.61 (smoother)",
+      "LIGHT 116 deg (indicative)",
+      "CONTACT -4.2 L* (indicative)"
+     ],
+     "sharp_ratio": 0.792,
+     "grain_ratio": 0.61,
+     "light": {
+      "span_L": 11.23,
+      "angle_deg": 116.0
+     },
+     "contact": {
+      "dark_L": -4.19,
+      "band_px": 2,
+      "px_per_cm": 1.12
+     },
+     "black": {
+      "p05_L": 40.31,
+      "plate_p05_L": 11.16,
+      "below_by": 0.0
+     }
+    }
+   },
+   "kitchen-sconce": {
+    "before": {
+     "layer": "kitchen-sconce",
+     "score": 2.11,
+     "fails": [
+      "SHARP 0.87 (softer)",
+      "GRAIN 1.27 (noisier than the plate)",
+      "LAMP NOT lit"
+     ],
+     "sharp_ratio": 0.867,
+     "grain_ratio": 1.274,
+     "black": {
+      "p05_L": 48.83,
+      "plate_p05_L": 11.34,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 80.0,
+      "H": 27.2,
+      "S": 17.0,
+      "light_layer_mean": 13.07,
+      "verdict": "NOT lit"
+     }
+    },
+    "after": {
+     "layer": "kitchen-sconce",
+     "score": 2.05,
+     "fails": [
+      "SHARP 0.86 (softer)",
+      "LAMP NOT lit"
+     ],
+     "sharp_ratio": 0.864,
+     "grain_ratio": 1.036,
+     "black": {
+      "p05_L": 48.82,
+      "plate_p05_L": 11.16,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 88.9,
+      "H": 34.3,
+      "S": 13.6,
+      "light_layer_mean": 13.07,
+      "verdict": "NOT lit"
+     }
+    }
+   }
+  },
+  "lamps": {
+   "kitchen-sconce": {
+    "shade_L": 88.9,
+    "H": 34.3,
+    "S": 13.6,
+    "light_layer_mean": 13.07,
+    "verdict": "NOT lit"
+   }
+  },
+  "finish": {
+   "grain": {
+    "amplitude_8bit": 1.644,
+    "seed": 1540,
+    "grain_px": 0.6,
+    "midtone_weight": "4 l (1 - l), floor 0.25, from the plate's L*",
+    "top_up": [
+     [
+      "canisters",
+      0.229
+     ],
+     [
+      "mug-set",
+      0.373
+     ],
+     [
+      "open-shelf-ceramics",
+      0.451
+     ],
+     [
+      "serving-boards",
+      0.712
+     ],
+     [
+      "cutting-boards",
+      0.944
+     ],
+     [
+      "condiment-set",
+      1.006
+     ],
+     [
+      "condiment-set-9",
+      0.702
+     ],
+     [
+      "paper-towel-holder",
+      0.528
+     ],
+     [
+      "sink-set-13",
+      0.738
+     ],
+     [
+      "bowl",
+      0.572
+     ],
+     [
+      "floor-vase",
+      0.181
+     ],
+     [
+      "table-runner",
+      0.22
+     ]
+    ]
+   }
+  }
+ },
+ "runtime_s": 145.9
+}

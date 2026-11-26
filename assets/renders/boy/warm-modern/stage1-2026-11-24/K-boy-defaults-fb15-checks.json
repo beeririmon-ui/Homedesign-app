@@ -1,0 +1,176 @@
+{
+ "room": "K-boy",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb15-rooms-pasted-fix-2026-11-26.md",
+ "rnd2": {
+  "outside_every_alpha_shadow_light_differing_px": 0,
+  "region_px": 1210864
+ },
+ "changed_vs_today": {
+  "px": 3973,
+  "outside_the_edited_boxes_px": 0,
+  "boxes": [
+   {
+    "label": "pendant (code)",
+    "box": [
+     740,
+     0,
+     970,
+     500
+    ]
+   }
+  ]
+ },
+ "black_point": {
+  "rule": "WM-G1: no edited-layer pixel under L* 11",
+  "px_under": 0
+ },
+ "product_count": {
+  "before": 13,
+  "after": 13
+ },
+ "sizes": {},
+ "cuts": {},
+ "code": {
+  "lamps": {
+   "pendant": {
+    "kind": "fabric",
+    "before": {
+     "shade_L": 95.6,
+     "H": 40.0,
+     "S": 11.2
+    },
+    "after": {
+     "shade_L": 93.5,
+     "H": 42.8,
+     "S": 26.3
+    },
+    "blend": 1.0,
+    "target_hsv": [
+     43.0,
+     27.5,
+     100
+    ]
+   }
+  }
+ },
+ "files": [
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/shadows/pendant/ceiling-lights-cj-silk-pumpkin-lantern-30-warm-light-fb15.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/layers/pendant/ceiling-lights-cj-silk-pumpkin-lantern-30-warm-light-fb15.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/manifest-fb15.json",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb15.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb15-finish.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/qa-sheet-fb15.jpg"
+ ],
+ "pasted_test": {
+  "score_today": 56.22,
+  "score_today_with_finish_fb13prep": 42.8,
+  "score_fb15_before_finish": 55.22,
+  "score_fb15_with_finish": 43.48,
+  "per_layer_mean": {
+   "today": 4.32,
+   "today_with_finish": 3.29,
+   "fb15_with_finish": 3.34
+  },
+  "edited_layers": {
+   "pendant": {
+    "before": {
+     "layer": "pendant",
+     "score": 3.0,
+     "fails": [
+      "GRAIN 0.49 (smoother)",
+      "LAMP looks lit, outside G1.10's H/S"
+     ],
+     "sharp_ratio": 0.942,
+     "grain_ratio": 0.494,
+     "black": {
+      "p05_L": 73.7,
+      "plate_p05_L": 11.52,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 95.6,
+      "H": 40.0,
+      "S": 11.2,
+      "light_layer_mean": 7.8,
+      "verdict": "looks lit, outside G1.10's H/S"
+     }
+    },
+    "after": {
+     "layer": "pendant",
+     "score": 1.74,
+     "fails": [
+      "GRAIN 0.68 (smoother)",
+      "LAMP looks lit, outside G1.10's H/S"
+     ],
+     "sharp_ratio": 0.931,
+     "grain_ratio": 0.678,
+     "black": {
+      "p05_L": 74.01,
+      "plate_p05_L": 11.24,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 94.0,
+      "H": 43.3,
+      "S": 24.9,
+      "light_layer_mean": 7.8,
+      "verdict": "looks lit, outside G1.10's H/S"
+     }
+    }
+   }
+  },
+  "lamps": {
+   "pendant": {
+    "shade_L": 94.0,
+    "H": 43.3,
+    "S": 24.9,
+    "light_layer_mean": 7.8,
+    "verdict": "looks lit, outside G1.10's H/S"
+   }
+  },
+  "finish": {
+   "grain": {
+    "amplitude_8bit": 2.0,
+    "seed": 1540,
+    "grain_px": 0.6,
+    "midtone_weight": "4 l (1 - l), floor 0.25, from the plate's L*",
+    "top_up": [
+     [
+      "bookshelf",
+      0.405
+     ],
+     [
+      "framed-prints",
+      0.492
+     ],
+     [
+      "bookends",
+      1.314
+     ],
+     [
+      "pen-cup",
+      1.577
+     ],
+     [
+      "toy-cars",
+      1.001
+     ],
+     [
+      "bedding",
+      0.497
+     ],
+     [
+      "soft-toy",
+      0.522
+     ],
+     [
+      "pendant",
+      0.519
+     ]
+    ]
+   }
+  }
+ },
+ "runtime_s": 96.3
+}

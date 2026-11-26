@@ -1,0 +1,278 @@
+{
+ "room": "D1",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb15-rooms-pasted-fix-2026-11-26.md",
+ "rnd2": {
+  "outside_every_alpha_shadow_light_differing_px": 0,
+  "region_px": 1089197
+ },
+ "changed_vs_today": {
+  "px": 45217,
+  "outside_the_edited_boxes_px": 0,
+  "boxes": [
+   {
+    "label": "pendant (code)",
+    "box": [
+     700,
+     0,
+     1130,
+     440
+    ]
+   },
+   {
+    "label": "kitchen sconce (code)",
+    "box": [
+     1520,
+     150,
+     1880,
+     520
+    ]
+   }
+  ]
+ },
+ "black_point": {
+  "rule": "WM-G1: no edited-layer pixel under L* 11",
+  "px_under": 0
+ },
+ "product_count": {
+  "before": 20,
+  "after": 20
+ },
+ "sizes": {},
+ "cuts": {},
+ "code": {
+  "lamps": {
+   "dining-pendant": {
+    "kind": "fabric",
+    "before": {
+     "shade_L": 95.9,
+     "H": 45.2,
+     "S": 11.9
+    },
+    "after": {
+     "shade_L": 93.5,
+     "H": 42.6,
+     "S": 25.1
+    },
+    "blend": 1.0,
+    "target_hsv": [
+     43.0,
+     27.5,
+     100
+    ]
+   },
+   "kitchen-sconce": {
+    "kind": "stone",
+    "before": {
+     "shade_L": 80.1,
+     "H": 27.2,
+     "S": 17.0
+    },
+    "after": {
+     "shade_L": 88.9,
+     "H": 34.2,
+     "S": 13.5
+    },
+    "gain": 0.8,
+    "lamps": [
+     [
+      1668,
+      295,
+      59,
+      66
+     ]
+    ]
+   }
+  },
+  "lights": {
+   "kitchen-sconce-pool": "the light of the stone shade on its wall (code, screen)"
+  }
+ },
+ "files": [
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/shadows/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/layers/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/shadows/D1/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/layers/D1/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/light/D1/kitchen-sconce-pool-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/manifest-fb15.json",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D1-defaults-fb15.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D1-defaults-fb15-finish.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/qa-sheet-fb15-D1.jpg"
+ ],
+ "pasted_test": {
+  "score_today": 61.25,
+  "score_today_with_finish_fb13prep": 50.8,
+  "score_fb15_before_finish": 60.89,
+  "score_fb15_with_finish": 50.82,
+  "per_layer_mean": {
+   "today": 3.06,
+   "today_with_finish": 2.54,
+   "fb15_with_finish": 2.54
+  },
+  "edited_layers": {
+   "kitchen-sconce": {
+    "before": {
+     "layer": "kitchen-sconce",
+     "score": 2.05,
+     "fails": [
+      "GRAIN 1.26 (noisier than the plate)",
+      "LAMP NOT lit"
+     ],
+     "sharp_ratio": 0.99,
+     "grain_ratio": 1.263,
+     "black": {
+      "p05_L": 48.65,
+      "plate_p05_L": 11.34,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 80.1,
+      "H": 27.2,
+      "S": 17.0,
+      "light_layer_mean": 12.67,
+      "verdict": "NOT lit"
+     }
+    },
+    "after": {
+     "layer": "kitchen-sconce",
+     "score": 2.0,
+     "fails": [
+      "LAMP NOT lit"
+     ],
+     "sharp_ratio": 0.946,
+     "grain_ratio": 0.964,
+     "black": {
+      "p05_L": 48.77,
+      "plate_p05_L": 11.09,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 88.7,
+      "H": 34.3,
+      "S": 13.5,
+      "light_layer_mean": 12.67,
+      "verdict": "NOT lit"
+     }
+    }
+   },
+   "dining-pendant": {
+    "before": {
+     "layer": "dining-pendant",
+     "score": 2.46,
+     "fails": [
+      "SHARP 1.16 (sharper than the plate)",
+      "GRAIN 0.58 (smoother)",
+      "LAMP looks lit, outside G1.10's H/S"
+     ],
+     "sharp_ratio": 1.155,
+     "grain_ratio": 0.581,
+     "black": {
+      "p05_L": 16.64,
+      "plate_p05_L": 11.34,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 95.9,
+      "H": 45.2,
+      "S": 11.9,
+      "light_layer_mean": 2.02,
+      "verdict": "looks lit, outside G1.10's H/S"
+     }
+    },
+    "after": {
+     "layer": "dining-pendant",
+     "score": 2.26,
+     "fails": [
+      "SHARP 1.19 (sharper than the plate)",
+      "GRAIN 0.39 (smoother)"
+     ],
+     "sharp_ratio": 1.192,
+     "grain_ratio": 0.394,
+     "black": {
+      "p05_L": 16.75,
+      "plate_p05_L": 11.09,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 93.5,
+      "H": 42.8,
+      "S": 25.7,
+      "light_layer_mean": 2.02,
+      "verdict": "lit (G1.10)"
+     }
+    }
+   }
+  },
+  "lamps": {
+   "dining-pendant": {
+    "shade_L": 93.5,
+    "H": 42.8,
+    "S": 25.7,
+    "light_layer_mean": 2.02,
+    "verdict": "lit (G1.10)"
+   },
+   "kitchen-sconce": {
+    "shade_L": 88.7,
+    "H": 34.3,
+    "S": 13.5,
+    "light_layer_mean": 12.67,
+    "verdict": "NOT lit"
+   }
+  },
+  "finish": {
+   "grain": {
+    "amplitude_8bit": 1.886,
+    "seed": 1540,
+    "grain_px": 0.6,
+    "midtone_weight": "4 l (1 - l), floor 0.25, from the plate's L*",
+    "top_up": [
+     [
+      "framed-art",
+      0.501
+     ],
+     [
+      "open-shelf-ceramics",
+      0.514
+     ],
+     [
+      "serving-boards",
+      0.542
+     ],
+     [
+      "cutting-boards",
+      0.581
+     ],
+     [
+      "condiment-set",
+      0.749
+     ],
+     [
+      "condiment-set-8",
+      0.571
+     ],
+     [
+      "counter-vessel",
+      0.484
+     ],
+     [
+      "bowl",
+      0.673
+     ],
+     [
+      "table-runner",
+      0.437
+     ],
+     [
+      "candle-holders",
+      0.584
+     ],
+     [
+      "dining-pendant",
+      0.592
+     ]
+    ]
+   }
+  }
+ },
+ "runtime_s": 146.9
+}
