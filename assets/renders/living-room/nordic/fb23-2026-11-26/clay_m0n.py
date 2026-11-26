@@ -33,8 +33,8 @@ import shutil
 import sys
 import time
 
-import bmesh
-import bpy
+import bpy  # noqa: E402  (bpy first: it provides bmesh and mathutils)
+import bmesh  # noqa: E402
 import cv2
 import numpy as np
 from mathutils import Matrix, Vector
@@ -448,7 +448,7 @@ def sofa():
     for i in range(3):
         a = X0 + 0.14 + i * w
         box("sofa", a + 0.005, a + w - 0.005, 0.32, Y1 - 0.01, 0.30, 0.44, oat, P, bev=0.045)
-        lbox("sofa", w - 0.01, 0.20, 0.40, oat, P, (a + w / 2, 0.27, 0.59), rot=(-10, 0, 0), bev=0.06)
+        lbox("sofa", w - 0.01, 0.20, 0.40, oat, P, (a + w / 2, 0.27, 0.59), rot=(10, 0, 0), bev=0.06)
 
 
 def armchair():
@@ -613,13 +613,14 @@ def products():
     # magazine holder: charcoal felt sling 45 x 32 x 40 between two oak handles, long side to the camera (rotated -8)
     felt = mtex("felt", "felt", 1.0)
     mx, my = -0.54, 2.52
-    lathe("magazine-holder", mx, my, [(0.15, 0.0), (0.21, 0.30)], felt, I["magazine-holder"], n=48, sx=1.07, sy=0.53, rotz=-8, cap_top=False)
+    lathe("magazine-holder", mx, my, [(0.15, 0.0), (0.21, 0.30)], felt, I["magazine-holder"], n=48, sx=1.07, sy=0.76, rotz=-8, cap_top=False)
     for s in (-1, 1):
-        a = math.radians(-8)
-        hx, hy = mx + s * 0.215 * math.cos(a), my - s * 0.215 * math.sin(a)
-        seg("magazine-holder", (hx - 0.0 * math.sin(a), hy - 0.13, 0.40), (hx, hy + 0.13, 0.40), 0.014, oak, I["magazine-holder"])
-        seg("magazine-holder", (hx, hy - 0.11, 0.29), (hx, hy - 0.13, 0.40), 0.006, oak, I["magazine-holder"])
-        seg("magazine-holder", (hx, hy + 0.11, 0.29), (hx, hy + 0.13, 0.40), 0.006, oak, I["magazine-holder"])
+        a = math.radians(-8)                            # the long axis (cos a, sin a) = the camera's right vector
+        hx, hy = mx + s * 0.215 * math.cos(a), my + s * 0.215 * math.sin(a)
+        px, py = -math.sin(a), math.cos(a)              # across the holder
+        seg("magazine-holder", (hx - 0.13 * px, hy - 0.13 * py, 0.40), (hx + 0.13 * px, hy + 0.13 * py, 0.40), 0.014, oak, I["magazine-holder"])
+        for q in (-1, 1):
+            seg("magazine-holder", (hx + q * 0.11 * px, hy + q * 0.11 * py, 0.29), (hx + q * 0.13 * px, hy + q * 0.13 * py, 0.40), 0.006, oak, I["magazine-holder"])
     paper = mcol("paper", "#ECE8E0", 0.6)
     for k, dx in enumerate((-0.06, 0.02, 0.09)):
         lbox("magazines (filler)", 0.23, 0.012, 0.30, paper, FILLER_IDX["magazines (filler)"], (mx + dx, my + 0.02 * k - 0.02, 0.25), rot=(8 * (k - 1), 0, -8))
@@ -664,7 +665,7 @@ def products():
     lathe("bowl", 0.68, 1.92, [(0.0, 0.0), (0.05, 0.0), (0.09, 0.025), (0.1065, 0.052), (0.100, 0.052), (0.085, 0.03), (0.0, 0.012)],
           mtex("bowl", "bowl", 0.7), I["bowl"], z0=0.38, n=48, cap_bottom=False, cap_top=False)
     # cushions (set A) and the white muslin throw
-    def cushion(sz, mat, loc, rz=0.0, tilt=-16):
+    def cushion(sz, mat, loc, rz=0.0, tilt=16):
         ob = lbox("cushions", sz, 0.16, sz, mat, I["cushions"], loc, rot=(tilt, 0, rz), bev=0.07)
         return ob
     cushion(0.50, mtex("boucle", "boucle", 1.0), (-0.48, 0.47, 0.67), rz=6)
@@ -748,6 +749,7 @@ def plan_uv(X, Y, Z):
 
 def projection_check(cam, W):
     sc = bpy.context.scene
+    bpy.context.view_layer.update()
     worst = 0.0
     for p in [(-2.3, 0.0, 1.6), (2.5, 0.0, 0.5), (0.2, 1.72, 2.15), (0.2, 0.0, 1.475), (-0.9, 0.95, 0.2), (1.7, 2.75, 0.35)]:
         u, v, _ = plan_uv(*p)
@@ -1025,6 +1027,7 @@ CUT_FRONT = {"pouf"}                    # V7Q6: a cut foreground item counts fro
 
 
 def measure(idx, depth, W, H, margin):
+    bpy.context.view_layer.update()
     FA = float(W * H)
     items = {k: REG[k] for k in PROD_IDX if k in REG}
     items["fixed:sofa"] = REG["sofa"]
