@@ -1,6 +1,6 @@
 {
-  "note": "MOCK8 (2026-11-26, briefs/site-mock8-integrate-2026-11-26.md): the arrival's walk, read by tools/make-arrival.ts. `walk` picks one of `walks`, and swapping in the final sequence is that one line: \"walk\": \"ka2\" (K-A2 only, the part that is final: the door D0 to the hall HT2 fb16, then the push into the living room in code) or \"walk\": \"fb19\" (motion-agent's whole walk, D0 to M0-W fix1, its frames as they are in the folder; its last frame is the living room's own frame, and the room takes over there). The walk is played by gentle scroll impulses with inertia (web/src/tour/walk.ts); `impulse` is the share of the walk one impulse plays, `snap` the rest (in impulses) that a last impulse walks through to the end. `hall`: the hall's frame with the new living room through the opening (HDx2 fb19), the stop of the short fade under reduced motion.",
-  "walk": "ka2",
+  "note": "MOCK8 (2026-11-26, briefs/site-mock8-integrate-2026-11-26.md): the arrival's walk, read by tools/make-arrival.ts. `walk` picks one of `walks`, and swapping in the final sequence is that one line: \"walk\": \"ka2\" (K-A2 only, the part that is final: the door D0 to the hall HT2 fb16, then the push into the living room in code) or \"walk\": \"final\" (motion-agent's final walk, 2026-11-26: D0, K-A2, the walking turn and T-E0-W into M0-W fix1, 11.15 s, its frames as they are in arrival-fb19/final/; \"fb19\" is the earlier preview of the whole walk; its last frame is the living room's own frame, and the room takes over there). The walk is played by gentle scroll impulses with inertia (web/src/tour/walk.ts); `impulse` is the share of the walk one impulse plays, `snap` the rest (in impulses) that a last impulse walks through to the end. `hall`: the hall's frame with the new living room through the opening (HDx2 fb19), the stop of the short fade under reduced motion.",
+  "walk": "final",
   "walks": {
     "ka2": {
       "source": {
@@ -22,7 +22,19 @@
         "dir": "assets/video/transitions/warm-modern/arrival-fb19",
         "variant": "1920"
       },
-      "end": { "kind": "room" }
+      "end": {
+        "kind": "room"
+      }
+    },
+    "final": {
+      "source": {
+        "kind": "frames",
+        "dir": "assets/video/transitions/warm-modern/arrival-fb19/final",
+        "variant": "1920"
+      },
+      "end": {
+        "kind": "room"
+      }
     }
   },
   "impulse": 0.4,

@@ -60,6 +60,10 @@ const WALK_DIR = join(GENERATED, 'arrival-walk');
 const srcFiles = W.source.kind === 'clip' ? [W.source.clip, W.source.first, W.source.last].map((f) => repoPath(f)) : [];
 let frames = 0;
 let input: string[];
+/** the phone's walk: the folder's own 30 fps frames where it has them (its last frame is the still too), else every
+ *  other frame of the 60 fps walk */
+let phoneInput: string[] | null = null;
+let phoneFramesOwn = 0;
 if (W.source.kind === 'frames') {
   const dir = repoPath(W.source.dir);
   type FM = { path: string; variants: Record<string, { w: number; h: number; fps: number; frames: number }> };
@@ -69,6 +73,12 @@ if (W.source.kind === 'frames') {
   frames = v.frames;
   srcFiles.push(join(dir, 'manifest.json'), join(dir, W.source.variant, `${String(frames).padStart(4, '0')}.webp`));
   input = ['-framerate', String(FPS), '-start_number', '1', '-i', join(dir, W.source.variant, '%04d.webp')];
+  const p = fm.variants['1080'];
+  if (p && p.w === 1080 && p.h === 608 && p.fps === 30) {
+    phoneFramesOwn = p.frames;
+    srcFiles.push(join(dir, '1080', `${String(p.frames).padStart(4, '0')}.webp`));
+    phoneInput = ['-framerate', '30', '-start_number', '1', '-i', join(dir, '1080', '%04d.webp'), '-frames:v', String(p.frames)];
+  }
 } else {
   const master = join(WALK_DIR, `${cfg.walk}.master.mp4`);
   const rec = join(WALK_DIR, `${cfg.walk}.json`);
@@ -88,7 +98,7 @@ if (W.source.kind === 'frames') {
   input = ['-i', master];
   srcFiles.push(master);
 }
-const phoneFrames = Math.floor((frames - 1) / 2) + 1;
+const phoneFrames = phoneFramesOwn || Math.floor((frames - 1) / 2) + 1;
 
 const stamp = createHash('sha256')
   .update(
@@ -131,8 +141,8 @@ if (!fresh) {
     const tmp = join(tmpdir(), `hd-arrival-${process.pid}`);
     mkdirSync(tmp, { recursive: true });
     // two-pass H.264 High, yuv420p, faststart, no audio; a keyframe every half second (the walk's rate changes often)
-    const encode = (vf: string[], fps: number, kbps: number, max: number, level: string, out: string) => {
-      const common = [...input, ...vf, '-an', '-c:v', 'libx264', '-preset', 'slow', '-profile:v', 'high'];
+    const encode = (vf: string[], fps: number, kbps: number, max: number, level: string, out: string, from = input) => {
+      const common = [...from, ...vf, '-an', '-c:v', 'libx264', '-preset', 'slow', '-profile:v', 'high'];
       const rate = ['-level:v', level, '-pix_fmt', 'yuv420p', '-b:v', `${kbps}k`, '-maxrate', `${max}k`, '-bufsize', `${Math.round(max * 1.4)}k`, '-g', String(fps / 2)];
       const log = join(tmp, `pass-${fps}`);
       ffmpeg([...common, ...rate, '-pass', '1', '-passlogfile', log, '-f', 'mp4', '/dev/null']);
@@ -140,7 +150,8 @@ if (!fresh) {
     };
     encode(['-frames:v', String(frames)], 60, 5000, 7500, '4.2', files.desktop);
     // the phone's: every other frame (the first and, the count being odd, the last are the stills), 1080 × 608
-    encode(['-vf', 'fps=30:round=near,scale=1080:608:flags=lanczos'], 30, 1900, 2800, '4.0', files.phone);
+    if (phoneInput) encode([], 30, 1900, 2800, '4.0', files.phone, phoneInput);
+    else encode(['-vf', 'fps=30:round=near,scale=1080:608:flags=lanczos'], 30, 1900, 2800, '4.0', files.phone);
     const first = join(tmp, 'f1.png');
     ffmpeg([...input, '-frames:v', '1', first]);
     for (const [i, w] of [1080, 1920].entries()) await sharp(first).resize({ width: w }).webp({ quality: 80, effort: 6 }).toFile(files.d0[i]!);
