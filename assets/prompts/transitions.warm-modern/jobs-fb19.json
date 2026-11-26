@@ -36,13 +36,33 @@
    "tokens": 1296,
    "file": "assets/video/transitions/warm-modern/arrival-fb19/kc.kling-3-omni.take1.mp4",
    "verdict": "weak: no walking turn. The camera walks at the stone panel for about 1.7 s, then crabs right past the walnut jamb; the stone wall stays frontal while the living room appears frontal beside it, so the perpendicular corner of the plan reads as one flat wall with a column. The products and the landing hold. Retry not spent: reported first (FB18 / FB19 bar)."
+  },
+  {
+   "id": "K-A2",
+   "take": 1,
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "duration": 5,
+   "resolution": "1080p",
+   "sound": false,
+   "prompt": "fb19-ka2-d0--ht2.txt",
+   "first_frame": "D0",
+   "last_frame": "HT2 fb16",
+   "placeholder_id": "d37cdd1f-9c83-4dea-bcb4-33d48a1e842b",
+   "tokens": 1620,
+   "file": "assets/video/transitions/warm-modern/arrival-fb19/ka2.kling-3-omni.take1.mp4",
+   "verdict": "kept: the door stays closed for the first 1.5 s and opens when it fills about three quarters of the height (about 1.5 m, not quite arm's length); the leaf swings as one slab; the hall arrives with its hooks, lit wall light, towel and basket (no late pop-in); replaces K-A take 1 and clip 1a"
   }
  ],
- "spent": 2268,
+ "spent": 3888,
  "cap": 5186,
  "assembly": {
   "out": "assets/video/transitions/warm-modern/arrival-fb19/ (1920/ 529 frames at 60 fps, 1080/ 265 at 30 fps, manifest.json, walk.json, arrival-fb19.desktop.1920.60fps.mp4)",
   "play_s": 8.8,
   "state": "preview only, known defects in manifest.json"
+ },
+ "code_turn": {
+  "tool": "fb19-tools/turn_fb19.py",
+  "result": "rejected by motion-agent: from the stations HT2 and HDx2 alone, the right-hand hall (front wall, console) is seen only by HDx2 and tears under the 1.2 m translation (flat white panels, a floating console, a doubled jamb; holes up to 11 %). Stopped before T-E0-W (972 not spent), as the manager asked."
  }
 }
