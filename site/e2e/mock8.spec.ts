@@ -75,7 +75,7 @@ test.describe('MOCK8: the arrival by scroll, the cushion wheel, the studio pictu
     // the first push: a stretch, then a rest well before the end
     await page.waitForFunction(() => window.__hdTourState?.walkRest === true && (window.__hdTourState.walk ?? 0) > 10, undefined, { timeout: 90_000 });
     const first = await state(page);
-    const frames = await page.evaluate(() => Math.round(document.querySelector<HTMLVideoElement>('video.tour-video')!.duration * 60) + 1);
+    const frames = await page.evaluate(() => Math.round(document.querySelector<HTMLVideoElement>('video.tour-video')!.duration * 60));
     expect(first.phase).toBe('entering');
     expect(first.walk, 'a push plays a stretch').toBeGreaterThan(0.15 * frames);
     expect(first.walk, 'and rests before the end').toBeLessThan(0.6 * frames);
