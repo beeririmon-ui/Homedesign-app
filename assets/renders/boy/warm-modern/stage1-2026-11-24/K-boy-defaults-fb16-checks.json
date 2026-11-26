@@ -47,16 +47,16 @@
   "measured": {
    "plaster": [
     75.15,
-    1.98,
-    8.0
+    1.94,
+    8.02
    ],
    "plaster_px": 514097,
-   "black_p05": 8.73
+   "black_p05": 9.36
   },
   "black_loop": {
    "iteration": 2,
-   "black_target_in_fit": 8.73,
-   "p05_final": 11.55
+   "black_target_in_fit": 9.36,
+   "p05_final": 11.47
   }
  },
  "window_plane": {
@@ -118,13 +118,14 @@
   }
  },
  "window_glow": {
-  "amp": 0.2208,
+  "amp": 0.1455,
   "color": [
    1.0,
-   0.84,
-   0.62
+   0.87,
+   0.7
   ],
-  "dL_at_1m": 5.0,
+  "dL_full_on_plaster": 3.5,
+  "near_field": "1 / (1 + (d / 1.1 m)^4)",
   "blur_px": 25
  },
  "lamps": [
@@ -149,32 +150,37 @@
  },
  "after": {
   "plaster": [
-   76.39,
-   1.89,
-   8.19
+   75.96,
+   1.91,
+   8.03
   ],
   "plaster_px": 514097,
-  "black_p05": 11.55,
+  "black_p05": 11.47,
+  "window_zone_plaster": {
+   "px": 69303,
+   "dL_median": 1.7,
+   "b_median": 6.78
+  },
   "window_zone": {
-   "rule": "every surface where the window field is at least half its 1 m value",
-   "px": 852180,
-   "dL_median": 9.11,
-   "dL_p90": 15.48,
-   "b_median": 14.08
+   "rule": "every surface where the window field is at least half its full value",
+   "px": 852185,
+   "dL_median": 6.14,
+   "dL_p90": 10.48,
+   "b_median": 12.64
   },
   "outside": {
    "L_p90": 86.4,
-   "L_p10": 62.1,
+   "L_p10": 62.2,
    "light_part_ab": [
-    2.0,
+    1.9,
     11.6
    ]
   }
  },
  "pasted_test": {
   "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
-  "score": 49.98,
-  "per_layer_mean": 3.84,
+  "score": 50.43,
+  "per_layer_mean": 3.88,
   "lamps": {
    "pendant": "lit (G1.10)"
   },
@@ -188,8 +194,8 @@
     6.42
    ],
    [
-    "bookends",
-    5.44
+    "pen-cup",
+    5.54
    ]
   ]
  },
@@ -202,5 +208,5 @@
   "assets/renders/boy/warm-modern/stage1-2026-11-24/light/roman-blind-aliexpress-modern-beige-color-flat-868827-light-filter-136-fb16.png",
   "assets/renders/boy/warm-modern/stage1-2026-11-24/manifest-fb16.json"
  ],
- "seconds": 86.8
+ "seconds": 81.9
 }

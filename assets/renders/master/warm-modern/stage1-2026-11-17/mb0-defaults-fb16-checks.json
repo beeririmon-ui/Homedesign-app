@@ -48,15 +48,15 @@
    "plaster": [
     74.89,
     2.02,
-    7.97
+    7.98
    ],
    "plaster_px": 811142,
-   "black_p05": 8.49
+   "black_p05": 9.1
   },
   "black_loop": {
    "iteration": 2,
-   "black_target_in_fit": 8.47,
-   "p05_final": 11.43
+   "black_target_in_fit": 9.1,
+   "p05_final": 11.34
   }
  },
  "window_plane": {
@@ -113,13 +113,14 @@
   "layers_over_the_window": {}
  },
  "window_glow": {
-  "amp": 0.2208,
+  "amp": 0.1455,
   "color": [
    1.0,
-   0.84,
-   0.62
+   0.87,
+   0.7
   ],
-  "dL_at_1m": 5.0,
+  "dL_full_on_plaster": 3.5,
+  "near_field": "1 / (1 + (d / 1.1 m)^4)",
   "blur_px": 25
  },
  "lamps": [
@@ -144,18 +145,23 @@
  },
  "after": {
   "plaster": [
-   75.57,
-   1.92,
-   8.11
+   75.36,
+   1.95,
+   7.98
   ],
   "plaster_px": 811142,
-  "black_p05": 11.43,
+  "black_p05": 11.34,
+  "window_zone_plaster": {
+   "px": 171077,
+   "dL_median": 6.1,
+   "b_median": 12.39
+  },
   "window_zone": {
-   "rule": "every surface where the window field is at least half its 1 m value",
+   "rule": "every surface where the window field is at least half its full value",
    "px": 838509,
-   "dL_median": 6.03,
-   "dL_p90": 10.96,
-   "b_median": 11.59
+   "dL_median": 4.08,
+   "dL_p90": 7.37,
+   "b_median": 10.61
   },
   "outside": {
    "L_p90": 92.7,
@@ -168,8 +174,8 @@
  },
  "pasted_test": {
   "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
-  "score": 84.02,
-  "per_layer_mean": 4.2,
+  "score": 82.56,
+  "per_layer_mean": 4.13,
   "lamps": {
    "bedside-sconces": "looks lit, outside G1.10's H/S",
    "floor-lamp": "lit (G1.10)"
@@ -177,15 +183,15 @@
   "worst": [
    [
     "magazine-holder",
-    9.99
+    10.01
    ],
    [
     "bedding",
-    6.43
+    6.7
    ],
    [
     "candle-holders",
-    5.73
+    5.72
    ]
   ]
  },
@@ -198,5 +204,5 @@
   "assets/renders/master/warm-modern/stage1-2026-11-17/layers/light/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light-fb16.png",
   "assets/renders/master/warm-modern/stage1-2026-11-17/layers/manifest-fb16.json"
  ],
- "seconds": 116.5
+ "seconds": 110.9
 }
