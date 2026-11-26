@@ -1,0 +1,130 @@
+{
+ "id": "wm-m0w-fix1-pecan-2026-11-26",
+ "step": "M0-W set B fidelity fix: the Pecan throw read knitted (manifest-wheel.json fidelity_open; README step 7 open 1)",
+ "date": "2026-11-26",
+ "author": "render-agent",
+ "owner_words": "the owner approved one nano 2K edit (400); stage A cap 6,700",
+ "camera": {
+  "id": "M0-W",
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw_deg_left": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555
+ },
+ "seed": null,
+ "seed_note": "var2 exposes no seed for nano-banana-2: the prompt, the input crop (sha256), the reference and the settings are kept",
+ "estimate": {
+  "tool": "var2_estimate_cost",
+  "nano_banana_2_i2i_2K": 400
+ },
+ "tokens_total": 400,
+ "cap": 400,
+ "stage_a_tokens": {
+  "before": 6300,
+  "after": 6700,
+  "cap": 6700
+ },
+ "retry": {
+  "used": false,
+  "why": "not needed for the fabric; a retry for a tighter drape would be 7,100 > 6,700: the owner's approval first"
+ },
+ "references_policy": "supplier images are references only (cropped in the scratchpad, uploaded to var2, never stored in the repo)",
+ "jobs": [
+  {
+   "id": "wm-m0w-fix1-pecan-e1-throw",
+   "what": "set B's throw only: the stage-A knit -> the Pecan cotton muslin of the card (crinkled, fringed), same drape",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "fix1-pecan-e1-throw.txt",
+   "prompt_sha256": "9874afebcbdb29081a7f667196ecfa77046bfae35c33a0da6c5b8996fad8c0d0",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2818558c-7639-45f2-814d-c8fa34dd2875.png",
+   "image_sha256": "f2cb29eff638b1998dc80cd6faea266325076fdcf270b54b0695511867d1f366",
+   "image_source": "hero-HW-fix1.png crop, x2 Lanczos (the same upload as the wheel's two edits; sha256 checked)",
+   "crop_canvas_px": [
+    1120,
+    810,
+    2400,
+    1530
+   ],
+   "sent_px": [
+    2560,
+    1440
+   ],
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cb0ab2fb-c995-4c25-aa12-fbbd2fa5f42b.png",
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "sku": "CJYD205807508HS",
+     "what": "image 2: the throw (Pecan 150x200), the SKU photo cropped to the throw (the pilot's upload, sha256 7fb76793...)"
+    }
+   ],
+   "idempotency_key": "wm-m0w-fix1-pecan-e1-throw-nano-2k-20261126",
+   "placeholder_id": "549bc67f-42c5-4384-86a1-0f624e6b5787",
+   "task_id": "9045a1108608a14dd7447f72768aca00",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-9045a1108608a14dd7447f72768aca00-0-1795716039128-20810908.jpg",
+   "raw": "raw/fix1-pecan-nano.jpg",
+   "raw_sha256": "41faf1fd383557ca69a3507f5b17b6191aedceebcf0a2ec699d86948fbe20fcf",
+   "registration": {
+    "matches": 195,
+    "inliers": 108,
+    "residual_px_median": 0.609,
+    "residual_px_p90": 1.192,
+    "tone_gain_offset": [
+     [
+      1.0032,
+      -0.0104
+     ],
+     [
+      1.0105,
+      -0.0067
+     ],
+     [
+      1.0192,
+      -0.0147
+     ]
+    ],
+    "unchanged_share": 0.891,
+    "returned_px": [
+     2752,
+     1536
+    ],
+    "mean_abs_diff_unchanged": 7.78
+   },
+   "segment_map": {
+    "model": "grok-imagine-image-2",
+    "type": "segment-map",
+    "tokens": 0,
+    "segment_map_id": "7f719343-b119-42e1-9f63-97702468947c",
+    "used_indexes": {
+     "cushions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "throw": [
+      10
+     ],
+     "lamp": [
+      17
+     ]
+    },
+    "note": "bbox cut-outs placed in the return by masked template matching (rms 0), then carried by the registration; 1-3, 4-6 and 7-9 are the same three cushions under three names"
+   },
+   "verdict": "USED: the throw. It reads as crinkled waffle cotton muslin with a frayed fringe (not a knit), in the Pecan hue (54.8 deg against the SKU's 54.3). The drape is the same (from behind the lumbar, across the seat front, over the right arm; one fall down behind the Olia to the rug, one down the arm's outer side to the floor by the lamp base), but fuller: the front fall is wider (it covers more of the arm's front face and shows under the table top) and its fringe lies about 15 canvas px (11 frame px) further onto the rug; the outer fall sits a little left, off the lamp pole. The cushions, sofa, table and lamp were left alone by the model (their pixels are not used)"
+  }
+ ]
+}

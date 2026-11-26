@@ -1,0 +1,221 @@
+{
+ "id": "wm-m0w-pecan-checks-2026-11-26",
+ "old_stack": {
+  "stack": "layers/manifest-wheel.json (unchanged)",
+  "reproduces_default_frame_m0w_fix1": {
+   "max": 0,
+   "px_over_0": 0
+  }
+ },
+ "rnd2": {
+  "rule": "set B changes only in the throw: its layer only inside Z (the old and the new throw, 6 px, minus the cushions), its shadow only within 90 px of the throw (stage A's zone of influence), every other layer, shadow and light byte-identical",
+  "layer_changed_px": 96190,
+  "layer_changed_outside_Z_px": 0,
+  "layer_changed_in_cushions_px": 0,
+  "shadow_changed_px": 141867,
+  "shadow_changed_outside_90px_of_throw_px": 0,
+  "canvas_changed_px": 131887,
+  "canvas_changed_outside_throw_region_px": 0,
+  "frame_changed_px": 74872,
+  "frame_changed_bbox_px": [
+   1234,
+   695,
+   1665,
+   1079
+  ],
+  "hide_set_changed_outside_its_region_px": 0
+ },
+ "build": {
+  "old_throw_px": 58241,
+  "new_throw_px": 77777,
+  "cushions_px": 123364,
+  "Z_px": 101936,
+  "revealed_px": 9818,
+  "added_px": 28684,
+  "pole_patch_px": 318,
+  "over_255_scaled_px": 228,
+  "alpha_px": 221274,
+  "alpha_255_px": 203928,
+  "shadow_px": 246288,
+  "bbox_px": [
+   1202,
+   872,
+   2286,
+   1461
+  ],
+  "throw_bbox_px": [
+   1788,
+   1058,
+   2282,
+   1459
+  ],
+  "old_throw_bbox_px": [
+   1798,
+   1055,
+   2249,
+   1444
+  ]
+ },
+ "fidelity_stack_vs_edit": {
+  "throw_opaque_visible": {
+   "px": 70402,
+   "mean": 0.491,
+   "p99": 0.8
+  },
+  "revealed_where_the_knit_was": {
+   "px": 1892,
+   "mean": 34.93,
+   "p95": 111.63,
+   "note": "the plate (sofa arm, wall) and the lower layers, under the new throw's shadow, against the edit's room"
+  },
+  "pole_patch": {
+   "px": 270,
+   "mean": 4.22
+  }
+ },
+ "colour": {
+  "throw_Lab_median_core": {
+   "new_throw_in_frame": [
+    22.4,
+    12.7,
+    18.4
+   ],
+   "old_knit_in_frame": [
+    16.2,
+    7.2,
+    9.5
+   ],
+   "sku_photo": [
+    33.6,
+    11.9,
+    17.1
+   ],
+   "sku_exposure_matched_to_new": [
+    22.1,
+    9.2,
+    13.1
+   ],
+   "exposure_gain": 0.463,
+   "de00_new_vs_sku_raw": 8.46,
+   "de00_new_vs_sku_exposure_matched": 3.56,
+   "de00_old_vs_sku_exposure_matched": 0.89,
+   "note": "medians of the throw's visible core (eroded 6 px) in the stack and of the SKU photo's throw (a* > 8, b* > 12); the SKU photo is a dim lifestyle shot, so the fidelity number is the exposure-matched one (as the wheel studio's check)"
+  },
+  "same_measure_all_throws": {
+   "B_new_pecan": {
+    "px": 59062,
+    "render": [
+     21.0,
+     12.0,
+     17.0
+    ],
+    "sku": [
+     33.0,
+     11.6,
+     16.6
+    ],
+    "sku_exposure_matched": [
+     20.8,
+     8.8,
+     12.2
+    ],
+    "de00_exposure_matched": 3.44,
+    "hue_render": 54.8,
+    "hue_sku": 54.3,
+    "chroma_render": 20.9,
+    "chroma_sku_matched": 15.0
+   },
+   "B_old_knit": {
+    "px": 33692,
+    "render": [
+     14.7,
+     6.7,
+     8.5
+    ],
+    "sku": [
+     33.0,
+     11.6,
+     16.6
+    ],
+    "sku_exposure_matched": [
+     14.4,
+     7.0,
+     9.5
+    ],
+    "de00_exposure_matched": 0.79,
+    "hue_render": 51.7,
+    "hue_sku": 53.7,
+    "chroma_render": 10.8,
+    "chroma_sku_matched": 11.8
+   },
+   "A_flax": {
+    "px": 67014,
+    "render": [
+     41.7,
+     3.9,
+     12.7
+    ],
+    "sku": [
+     52.7,
+     4.0,
+     12.4
+    ],
+    "sku_exposure_matched": [
+     41.4,
+     3.3,
+     10.4
+    ],
+    "de00_exposure_matched": 1.61,
+    "hue_render": 72.9,
+    "hue_sku": 72.4,
+    "chroma_render": 13.3,
+    "chroma_sku_matched": 10.9
+   },
+   "C_clay": {
+    "px": 69419,
+    "render": [
+     14.0,
+     4.5,
+     7.0
+    ],
+    "sku": [
+     36.7,
+     5.8,
+     7.5
+    ],
+    "sku_exposure_matched": [
+     13.7,
+     2.2,
+     3.9
+    ],
+    "de00_exposure_matched": 3.44,
+    "hue_render": 57.7,
+    "hue_sku": 59.8,
+    "chroma_render": 8.3,
+    "chroma_sku_matched": 4.5
+   }
+  },
+  "note": "same measure for the three throws (lower falls, alpha 255, not under the table): Pecan (B new) dE00 3.44 = Clay (C) 3.44; Flax (A) 1.61; hue within 0.5 deg. The room keeps more chroma than the exposure-dimmed SKU photo (warm grade and lamp), as in C. The old knit scores 0.79 only because it is dark (L 14.7 against the SKU photo's 33; the new one 21.0)"
+ },
+ "F3_gap_frame_widths": {
+  "framed-art": 0.0242,
+  "rug": "overlaps (behind the set)",
+  "floor-lamp": "overlaps (behind the set)",
+  "coffee-table": "overlaps (in front of the set)",
+  "magazine-holder": 0.0304,
+  "bowl": "overlaps (in front of the set)",
+  "candle-holders": 0.0023
+ },
+ "wheel_studio": {
+  "file": "assets/renders/wheel-studio/warm-modern/living-room/cushions/set-B.png",
+  "changed": false,
+  "why": "its throw already reads as crinkled waffle muslin with a frayed fringe (checked at 1024 px): no fix, 0 tokens"
+ },
+ "notes": [
+  "RND2 regions: Z = (the old throw | the new throw, each dilated 6 px) minus the cushions (segment map); the shadow's zone = 90 px of the throw (stage A's radius). Outside: set B's stage-A layer and shadow byte for byte; every other layer, shadow and light untouched",
+  "revealed_where_the_knit_was: the large per-pixel numbers are the sofa arm's boucle (the plate's grain against the boucle nano re-drew), not missing fabric (checked at x3)",
+  "pole_patch: the floor-lamp layer had no pixels where the knit hid the lower pole; without them the pole would stop above the new throw. The edit's pole there (270 px) is carried in set B's layer, inside the old throw's region; sets A and C are not affected",
+  "open (low, x4; faint at x2): the table layer's anti-aliased underside edge was mixed against the light boucle; over the dark throw under the table it reads as a 1 px light line. Same class in A and C. The fix is in the table layer (outside this task)",
+  "open: the part of the throw behind the Olia's leg is in the layer only 4 px (as A and C); the stage-A knit had more under the table"
+ ]
+}
