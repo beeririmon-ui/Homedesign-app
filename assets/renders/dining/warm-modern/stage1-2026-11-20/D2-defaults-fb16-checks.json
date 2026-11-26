@@ -1,0 +1,119 @@
+{
+ "room": "D2",
+ "frame": "D2",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+ "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+ "start": {
+  "manifest": "dining/warm-modern/stage1-2026-11-20/manifest-fb15.json",
+  "finish_frame": "dining/warm-modern/stage1-2026-11-20/D2-defaults-fb15-finish.png"
+ },
+ "before": {
+  "plaster": [
+   87.9,
+   0.91,
+   8.16
+  ],
+  "plaster_px": 344680,
+  "black_p05": 11.07
+ },
+ "targets": {
+  "plaster_L": [
+   74,
+   79
+  ],
+  "plaster_b": [
+   5,
+   8
+  ],
+  "aim": {
+   "L": 76.5,
+   "a": 1.5,
+   "b": 6.5
+  },
+  "black": [
+   11.0,
+   12.0
+  ]
+ },
+ "grade": {
+  "iterations": 1,
+  "plaster_in_lab": [
+   87.9,
+   0.91,
+   8.16
+  ],
+  "black_in_p05": 11.07,
+  "measured": {
+   "plaster": [
+    76.49,
+    1.55,
+    6.52
+   ],
+   "plaster_px": 344680,
+   "black_p05": 11.56
+  },
+  "black_loop": {
+   "iteration": 1,
+   "black_target_in_fit": 11.5,
+   "p05_final": 11.56
+  }
+ },
+ "lamps": [
+  {
+   "slot": "kitchen-sconce",
+   "how": "sconce glow + emitter keep",
+   "center": [
+    771.3,
+    309.8
+   ],
+   "radius_px": 34.0
+  }
+ ],
+ "rnd2": {
+  "rule": "outside the changed regions (the window alpha, the glows): the frame = the grade of the fb15 frame, pixel for pixel; before the grade only the window changes",
+  "finish_before_grade_outside_window_px": 0,
+  "stack_outside_window_px": 0,
+  "final_vs_graded_fb15_outside_changed_px": 0,
+  "changed_region_px": 219434,
+  "reproduced_from_files_max": 0
+ },
+ "after": {
+  "plaster": [
+   75.59,
+   1.58,
+   6.67
+  ],
+  "plaster_px": 315234,
+  "black_p05": 11.56
+ },
+ "pasted_test": {
+  "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
+  "score": 65.23,
+  "per_layer_mean": 3.43,
+  "lamps": {
+   "kitchen-sconce": "looks lit, outside G1.10's H/S"
+  },
+  "worst": [
+   [
+    "mug-set",
+    6.05
+   ],
+   [
+    "kitchen-sconce",
+    4.96
+   ],
+   [
+    "canisters",
+    4.53
+   ]
+  ]
+ },
+ "files": [
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D2-defaults-fb16-finish.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D2-defaults-fb16-frame.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/manifest-fb16.json"
+ ],
+ "seconds": 78.5
+}

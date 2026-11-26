@@ -1,0 +1,925 @@
+{
+ "frame": "B1",
+ "room": "bath",
+ "style": "warm-modern",
+ "date": "2026-11-19",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "base": "plate.png",
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "grade": "plate-grade.json (B2's WM-G1 curve) on every file",
+ "compose": {
+  "order": [
+   "base",
+   "shower-dispensers-shadow, shower-dispensers",
+   "wall-sconce-shadow, wall-sconce",
+   "bath-mat-shadow, bath-mat",
+   "shower-curtain-shadow, shower-curtain",
+   "floor-planter-shadow, floor-planter",
+   "bin-shadow, bin",
+   "toilet-paper-stand-shadow, toilet-paper-stand",
+   "candle-shadow, candle",
+   "reed-diffuser-shadow, reed-diffuser",
+   "window-sill-vase-shadow, window-sill-vase",
+   "ledge-planter-shadow, ledge-planter",
+   "toilet-brush-shadow, toilet-brush",
+   "light (screen)"
+  ],
+  "formula": "out = round((below * shadow / 255) * (1 - a) + rgb * a), straight alpha; then the light: out = 255 - round((255 - out) * (255 - L) / 255)"
+ },
+ "layers": [
+  {
+   "slot": "shower-dispensers",
+   "product": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+   "card": "data/products/bath/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.json",
+   "sku": "CJYD301460604DW",
+   "z": 14,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow": "shadows/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "alpha_px": 9299,
+   "shadow_px": 6389
+  },
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853",
+   "card": "data/products/bath/wall-sconce/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.json",
+   "sku": "12000048654610384",
+   "z": 14,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/wall-sconce/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "shadow": "shadows/wall-sconce/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "alpha_px": 4778,
+   "shadow_px": 1607,
+   "glow_fb16": {
+    "file": "light/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
+  },
+  {
+   "slot": "bath-mat",
+   "product": "bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki",
+   "card": "data/products/bath/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60.json",
+   "sku": "CJYD289719807GT",
+   "z": 18,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki-fb15.png",
+   "shadow": "shadows/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki-fb15.png",
+   "alpha_px": 44200,
+   "shadow_px": 17624,
+   "layer_before_fb15": "layers/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki.png",
+   "shadow_before_fb15": "shadows/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-khaki.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "floor"
+   }
+  },
+  {
+   "slot": "shower-curtain",
+   "product": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+   "card": "data/products/bath/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.json",
+   "sku": "12000059196236303",
+   "z": 26,
+   "shadow_z": 25,
+   "default": true,
+   "layer": "layers/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "shadow": "shadows/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "alpha_px": 365096,
+   "shadow_px": 66823
+  },
+  {
+   "slot": "floor-planter",
+   "product": "planter-cj-cement-ribbed-belly-beige-medium",
+   "card": "data/products/planter/planter-cj-cement-ribbed-belly.json",
+   "sku": "CJJT154204208HS",
+   "z": 30,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/floor-planter/planter-cj-cement-ribbed-belly-beige-medium-fb15.png",
+   "shadow": "shadows/floor-planter/planter-cj-cement-ribbed-belly-beige-medium-fb15.png",
+   "alpha_px": 38799,
+   "shadow_px": 15060,
+   "layer_before_fb15": "layers/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "shadow_before_fb15": "shadows/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "floor"
+   }
+  },
+  {
+   "slot": "bin",
+   "product": "bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid",
+   "card": "data/products/bath/bin/bin-cj-bent-walnut-round-swing-lid.json",
+   "sku": "CJJT102413505EV",
+   "z": 42,
+   "shadow_z": 41,
+   "default": true,
+   "layer": "layers/bin/bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid-fb15.png",
+   "shadow": "shadows/bin/bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid-fb15.png",
+   "alpha_px": 23551,
+   "shadow_px": 18185,
+   "layer_before_fb15": "layers/bin/bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid.png",
+   "shadow_before_fb15": "shadows/bin/bin-cj-bent-walnut-round-swing-lid-walnut-swing-lid.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "floor"
+   }
+  },
+  {
+   "slot": "toilet-paper-stand",
+   "product": "toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black",
+   "card": "data/products/bath/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with.json",
+   "sku": "12000053061878471",
+   "z": 44,
+   "shadow_z": 43,
+   "default": true,
+   "layer": "layers/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black-fb15.png",
+   "shadow": "shadows/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black-fb15.png",
+   "alpha_px": 14673,
+   "shadow_px": 23685,
+   "layer_before_fb15": "layers/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black.png",
+   "shadow_before_fb15": "shadows/toilet-paper-stand/toilet-paper-stand-aliexpress-matte-black-freestanding-toilet-paper-stand-with-black.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "floor"
+   }
+  },
+  {
+   "slot": "candle",
+   "product": "candle-cj-ribbed-matte-ceramic-candle-cup-9-white",
+   "card": "data/products/bath/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9.json",
+   "sku": "CJJT120250201AZ",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9-white-fb15.png",
+   "shadow": "shadows/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9-white-fb15.png",
+   "alpha_px": 3625,
+   "shadow_px": 932,
+   "layer_before_fb15": "layers/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9-white.png",
+   "shadow_before_fb15": "shadows/candle/candle-cj-ribbed-matte-ceramic-candle-cup-9-white.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "sill"
+   }
+  },
+  {
+   "slot": "reed-diffuser",
+   "product": "reed-diffuser-cj-travertine-look-bamboo-lid-milktea",
+   "card": "data/products/bath/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea.json",
+   "sku": "milk-tea",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea-fb15.png",
+   "shadow": "shadows/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea-fb15.png",
+   "alpha_px": 6512,
+   "shadow_px": 4543,
+   "layer_before_fb15": "layers/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea.png",
+   "shadow_before_fb15": "shadows/reed-diffuser/reed-diffuser-cj-travertine-look-bamboo-lid-milktea.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "sill"
+   }
+  },
+  {
+   "slot": "window-sill-vase",
+   "product": "vase-cj-black-matte-stoneware-jar-30-style4",
+   "card": "data/products/vase/vase-cj-black-matte-stoneware-jar-30.json",
+   "sku": "CJJT198137605EV",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/window-sill-vase/vase-cj-black-matte-stoneware-jar-30-style4-fb15.png",
+   "shadow": "shadows/window-sill-vase/vase-cj-black-matte-stoneware-jar-30-style4-fb15.png",
+   "alpha_px": 13800,
+   "shadow_px": 1177,
+   "layer_before_fb15": "layers/window-sill-vase/vase-cj-black-matte-stoneware-jar-30-style4.png",
+   "shadow_before_fb15": "shadows/window-sill-vase/vase-cj-black-matte-stoneware-jar-30-style4.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "sill"
+   }
+  },
+  {
+   "slot": "ledge-planter",
+   "product": "ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round",
+   "card": "data/products/bath/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781.json",
+   "sku": "12000061187780577",
+   "z": 46,
+   "shadow_z": 45,
+   "default": true,
+   "layer": "layers/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round-fb15.png",
+   "shadow": "shadows/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round-fb15.png",
+   "alpha_px": 6819,
+   "shadow_px": 268,
+   "added": "2026-11-25 (briefs/wm-bath-b1-ledge-planter-2026-11-25.md)",
+   "qa_round1": "2026-11-25 (qa/reports/2026-11-25-bath-b1-planter): B1P-M1 seam, B1P-L1 light from the left, B1P-L2 hue and mottle (code, 0); B1P-L3 the plant re-made (r2, 400)",
+   "filler": "a small pothos cutting, in the floor pothos's range (the slot's fillers.plant; not sold, not counted)",
+   "layer_before_fb15": "layers/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+   "shadow_before_fb15": "shadows/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "sill"
+   }
+  },
+  {
+   "slot": "toilet-brush",
+   "product": "toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color",
+   "card": "data/products/bath/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle.json",
+   "sku": "CJYD254508501AZ",
+   "z": 48,
+   "shadow_z": 47,
+   "default": true,
+   "layer": "layers/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color-fb15.png",
+   "shadow": "shadows/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color-fb15.png",
+   "alpha_px": 7917,
+   "shadow_px": 6033,
+   "layer_before_fb15": "layers/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color.png",
+   "shadow_before_fb15": "shadows/toilet-brush/toilet-brush-cj-fluted-ceramic-holder-black-handle-light-color.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "floor"
+   }
+  }
+ ],
+ "light": {
+  "product": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853",
+  "file": "light/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853.png",
+  "z": 90,
+  "blend": "screen",
+  "px": 54901
+ },
+ "variants": [
+  {
+   "slot": "bath-mat",
+   "product": "bath-mat-cj-tufted-cotton-frame-beige-40x60-beige",
+   "card": "data/products/bath/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60.json",
+   "sku": "CJYD289719801AZ",
+   "z": 18,
+   "default": false,
+   "method": "colour-only, in code: the Khaki layer's large-scale colour x the two SKU photographs' ratio (linear, per channel, after the grade), its pile detail at the Beige photo's lower contrast (gamma), then R5 to the Beige photo; alpha and shadow the default's",
+   "ratio_linear": [
+    1.1695,
+    1.4009,
+    1.6143
+   ],
+   "clipped_px": 1304,
+   "pile_detail_gamma": 0.392,
+   "r5_gain_after": [
+    1.021,
+    1.0202,
+    0.995
+   ],
+   "layer": "layers/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-beige.png",
+   "shadow": "shadows/bath-mat/bath-mat-cj-tufted-cotton-frame-beige-40x60-beige.png",
+   "composite": "b1-variant-mat-beige.png",
+   "alpha_identical_to_default": true,
+   "shadow_identical_to_default": true,
+   "outside_differing_px_vs_plate": 0,
+   "differing_px_vs_defaults_outside_alpha": 0,
+   "readings_vs_floor": {
+    "reference": "R5 on the floor (compose_b1_defaults.mat_reading): intensity from the plate floor ring 10-40 px over the stone #D8C8AE luminance, light colour from the plaster beside it",
+    "ring_px": 18908,
+    "khaki": [
+     77.6,
+     4.3,
+     13.5
+    ],
+    "khaki_photo": [
+     77.6,
+     4.2,
+     13.6
+    ],
+    "de00_khaki": 0.15,
+    "beige": [
+     87.6,
+     -0.3,
+     6.9
+    ],
+    "beige_photo": [
+     87.5,
+     0.0,
+     6.6
+    ],
+    "de00_beige": 0.48
+   }
+  }
+ ],
+ "rnd2": {
+  "region_px": 696393,
+  "outside_differing_px": 0,
+  "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+ },
+ "gaps_left_empty": [
+  "shower-stool",
+  "wall-art"
+ ],
+ "record": {
+  "lock": {
+   "y_offset_px": 1.27,
+   "y_scale_about_row_707": -0.00729,
+   "x_offset_px": 2.345,
+   "used": {
+    "horizontal_lines": 5,
+    "vertical_lines": 2
+   }
+  },
+  "relight_p5_p50_p95": [
+   1.0,
+   1.496,
+   2.4
+  ],
+  "gain_p1_p50_p99": [
+   0.75,
+   0.997,
+   1.35
+  ],
+  "shoulder": {
+   "method": "luminance unclipped (raw x relight x tone gain) through a tanh shoulder above Y 0.6 towards 0.95 instead of the clip; a*/b* the raw's",
+   "knee_Y": 0.6,
+   "top_Y": 0.95,
+   "products": [
+    "shower-curtain",
+    "candle",
+    "reed-diffuser"
+   ],
+   "shower-curtain": {
+    "L_p5_p50_p95": [
+     55.8,
+     83.4,
+     97.6
+    ],
+    "over_1_unclipped_share": 0.258
+   },
+   "candle": {
+    "L_p5_p50_p95": [
+     70.9,
+     85.9,
+     96.1
+    ],
+    "over_1_unclipped_share": 0.083
+   },
+   "reed-diffuser": {
+    "L_p5_p50_p95": [
+     61.1,
+     81.0,
+     92.3
+    ],
+    "over_1_unclipped_share": 0.028
+   }
+  },
+  "cut": {
+   "shower-dispensers": {
+    "clay_px": 8854,
+    "alpha_px": 8068,
+    "sure_px": 3993
+   },
+   "wall-sconce": {
+    "clay_px": 4355,
+    "alpha_px": 10309,
+    "sure_px": 4385
+   },
+   "bath-mat": {
+    "clay_px": 42192,
+    "alpha_px": 39633,
+    "sure_px": 32862
+   },
+   "shower-curtain": {
+    "clay_px": 298605,
+    "alpha_px": 358709,
+    "sure_px": 273861
+   },
+   "floor-planter": {
+    "clay_px": 124886,
+    "alpha_px": 65637,
+    "sure_px": 64303,
+    "method": "the drawn pot's profile + the pothos's green, GrabCut in a band"
+   },
+   "bin": {
+    "clay_px": 20054,
+    "alpha_px": 24836,
+    "sure_px": 17544
+   },
+   "toilet-paper-stand": {
+    "clay_px": 11207,
+    "alpha_px": 13808,
+    "sure_px": 7840
+   },
+   "candle": {
+    "clay_px": 3185,
+    "alpha_px": 3153,
+    "sure_px": 2459
+   },
+   "reed-diffuser": {
+    "clay_px": 4072,
+    "alpha_px": 4956,
+    "sure_px": 2522
+   },
+   "window-sill-vase": {
+    "clay_px": 12713,
+    "alpha_px": 15868,
+    "sure_px": 11296
+   },
+   "toilet-brush": {
+    "clay_px": 7523,
+    "alpha_px": 7236,
+    "method": "the drawn cup and rod, measured at 3x"
+   }
+  },
+  "mat_quad": {
+   "corners": [
+    [
+     1320.0,
+     1379.0
+    ],
+    [
+     1532.5,
+     1349.0
+    ],
+    [
+     1703.0,
+     1477.5
+    ],
+    [
+     1452.5,
+     1524.0
+    ]
+   ],
+   "px": 37863,
+   "clay_px": 42192,
+   "area_vs_clay": 0.897,
+   "method": "the four corners of the drawn mat measured at 2x on r1; GrabCut only in a 6 px band round it (the tufts)",
+   "refit": "homography, the drawn quad onto the clay's quad (layer, alpha and shadow)",
+   "clay_corners": [
+    [
+     1315.0,
+     1368.0
+    ],
+    [
+     1522.0,
+     1334.0
+    ],
+    [
+     1697.0,
+     1476.0
+    ],
+    [
+     1453.0,
+     1526.0
+    ]
+   ],
+   "screen_h_ratio_drawn_vs_clay": 0.911
+  },
+  "curtain_side": {
+   "fit_rows": [
+    600,
+    1260
+   ],
+   "x_at_1260": 1732.9,
+   "x_at_1486": 1728.7,
+   "slope_px_per_row": -0.0183
+  },
+  "planter_wall_removed_px": 920,
+  "bin_behind_brush_px": 4016,
+  "candle_trim": "alpha cut at x 861 in rows 725-794 (the drawn window frame, 298 px in QA's count)",
+  "refit": {
+   "wall-sconce": {
+    "scale": 0.6569,
+    "drawn_anchor": [
+     1216.5,
+     427.0
+    ],
+    "clay_anchor": [
+     1221.5,
+     422.5
+    ],
+    "drawn_bbox": [
+     1177,
+     359,
+     1257,
+     496
+    ],
+    "anchor": "block centre, onto the clay block"
+   },
+   "floor-planter": {
+    "scale": 0.727,
+    "drawn_anchor": [
+     1449.0,
+     1334.0
+    ],
+    "clay_anchor": [
+     1449.0,
+     1334.0
+    ],
+    "drawn_bbox": [
+     1300,
+     1016,
+     1599,
+     1342
+    ],
+    "anchor": "its own foot centre (kept where drawn)"
+   }
+  },
+  "mat_light": {
+   "method": "the mat's large-scale colour and light (per channel, linear, sigma 30 px over its body) set to the photo's khaki in the light under it (intensity: the plate's bare floor there over the stone's luminance; colour: the plaster beside it, light_colour); the tufts, grooves and edges kept (finer than 30 px); level by R5 after",
+   "sigma_px": 30.0,
+   "light_p95_over_p5_render": 1.594,
+   "light_p95_over_p5_floor": 1.294,
+   "render_albedo_chroma_p5_p50_p95": [
+    6.7,
+    12.9,
+    20.0
+   ],
+   "gain_p1_p50_p99": [
+    [
+     0.791,
+     0.837,
+     1.137
+    ],
+    [
+     0.667,
+     0.815,
+     1.178
+    ],
+    [
+     0.582,
+     0.797,
+     1.194
+    ]
+   ]
+  },
+  "mat_recolour": {
+   "method": "R5 after the grade: mid-tone median of the mat's solid body over the light on it (intensity from the plate's floor ring 10-40 px, ids 9-10, over the stone #D8C8AE's luminance; colour from the plaster beside it); a per-channel linear gain on the whole mat, the render's shading kept",
+   "light_colour": [
+    1.0084,
+    0.9982,
+    0.9929
+   ],
+   "plaster_px": 37949,
+   "target_photo": [
+    77.6,
+    4.2,
+    13.6
+   ],
+   "ring_px": 18908,
+   "before": [
+    79.0,
+    4.0,
+    15.0
+   ],
+   "de00_before": 1.4,
+   "after": [
+    77.6,
+    4.2,
+    13.6
+   ],
+   "de00_after": 0.0,
+   "gain_linear": [
+    0.9524,
+    0.9546,
+    0.9835
+   ],
+   "clipped_px": 0
+  },
+  "planter_recolour": {
+   "level": 1.0,
+   "sku_lch": [
+    58.3,
+    4.1,
+    87.9
+   ],
+   "r5_lab_after": [
+    58.3,
+    0.15,
+    4.1
+   ],
+   "de00_after": 0.0,
+   "reference": "the plate's plaster behind the pot (ids 1-4, rows 1000-1300, cols 1260-1420, off the products, C* < 9, mid-tone), #ECE5DA",
+   "reference_px": 2670,
+   "pot_px": 31379,
+   "smooth_px": 8940
+  },
+  "jar_refit": {
+   "method": "per-row remap of the drawn jar to the clay's smoothed half-width profile at the same relative height, base kept on the drawn sill, axis kept where drawn; analytic anti-aliased alpha; shadow scaled about the axis and kept on the sill only; shoulder rounded (1 - (1 - s)^1.6); texture: detail finer than sigma 4 px at 0.5 contrast, speckle chroma out (C* <= 4), L* >= 11",
+   "drawn_rows": [
+    623,
+    796
+   ],
+   "clay_rows": [
+    624,
+    790
+   ],
+   "out_rows": [
+    630,
+    796
+   ],
+   "axis_x": 597.0,
+   "width_vs_clay_by_height": {
+    "0.1": 1.071,
+    "0.3": 1.0,
+    "0.5": 1.012,
+    "0.7": 1.014,
+    "0.9": 1.015
+   },
+   "hp_sigma2_before_after": [
+    2.35,
+    1.22
+   ],
+   "speckle_share_C_gt_8_after": 0.0,
+   "L_p50_p95_after": [
+    18.9,
+    40.8
+   ],
+   "median_lab_after": [
+    18.9,
+    1.5,
+    1.8
+   ]
+  },
+  "light_baseline_removed": 0.0,
+  "ledge_planter": {
+   "tone_gain_linear": [
+    0.9586,
+    0.9876,
+    0.9623
+   ],
+   "drawn": {
+    "outline": {
+     "xc": 1128.5,
+     "yc": 826.3330204686235,
+     "rx": 208.247943503,
+     "ry": 226.81267887926916,
+     "resid_px": 3.73,
+     "rows": 132
+    },
+    "mouth": [
+     1131.0,
+     680.0,
+     132.0,
+     50.0
+    ],
+    "foot": 1034.0,
+    "width_cm_at_clay_scale": 14.28,
+    "back_rim_to_foot_cm": 13.96
+   },
+   "clay": {
+    "xc": 1131.43,
+    "rx": 192.51,
+    "top": 690.03,
+    "foot": 1031.4
+   },
+   "scale_w": 0.9244,
+   "r1_plant_removed": {
+    "method": "colour matte: a* < -6 and C* > 8 sure; (-a* - 1) / 5 within 4 px of it",
+    "plant_px_up": 37220,
+    "core_px_up": 35038,
+    "hole_px_up": 15367,
+    "mirror_filled_px_up": 13114,
+    "inpainted_px_up": 2253
+   },
+   "body": {
+    "seam_smoothing_sigma_up_px": 12.0,
+    "texture_margin_up_px": 30.0,
+    "relight": {
+     "light_dir": [
+      -0.9,
+      0.3,
+      0.15
+     ],
+     "ambient": 0.62,
+     "key": 0.36,
+     "top_fill": 0.04,
+     "ao_cm": 2.5,
+     "hue": 71.5,
+     "chroma": 13.5,
+     "texture_sigma_canvas_px": 3.0,
+     "gain_L": 1.591,
+     "gain_C": 1.968,
+     "hp_at_x1": [
+      4.48,
+      3.04
+     ],
+     "hp_target": [
+      4.48,
+      3.04
+     ]
+    },
+    "top_rule": "front rim arc in the mouth's columns, max(outline top, the arc's end) beside it, gaussian-smoothed"
+   },
+   "colour": {
+    "method": "R5 (QA's reading) on the lit half of the pot's body (eroded 2, no plant): mid-tone median over the plaster's light right of the reveal (REF_BOX, off every product) x #ECE5DA; one per-channel linear gain on the pot (its mottle and shading kept), weighted off the plant",
+    "lit_half": "left (x < 1001.2; the window, QA B1P-L1)",
+    "sku_photo_lab": [
+     59.0,
+     4.4,
+     12.7
+    ],
+    "plaster_ref_lin": [
+     0.7529,
+     0.7011,
+     0.6445
+    ],
+    "plaster_ref_px": 14941,
+    "body_px_lit": 1955,
+    "before": [
+     64.18,
+     3.8,
+     14.51
+    ],
+    "de00_before": 4.72,
+    "gain_linear": [
+     0.8286,
+     0.8127,
+     0.8416
+    ],
+    "clipped_px": 0,
+    "after_lit": [
+     59.0,
+     4.4,
+     12.7
+    ],
+    "de00_after_lit": 0.0,
+    "after_shaded_half": [
+     52.42,
+     4.52,
+     12.78
+    ],
+    "de00_shaded_half": 6.16
+   },
+   "black_point": {
+    "rule": "WM-G1 L* 11-14: no layer pixel under 11",
+    "raised_px": 0,
+    "layer_min_L": 11.14,
+    "raised_px_plant": 15
+   },
+   "files": {
+    "layer": "layers/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+    "shadow": "shadows/ledge-planter/ledge-planter-aliexpress-retro-ceramic-flower-vase-228781-large-brown-round.png",
+    "alpha_px": 6317,
+    "shadow_px": 969
+   },
+   "plant": {
+    "matte": "colour (a* < -6, C* > 8, changed > 0.06), closed 3 px, enclosed highlights under 2,500 up-px filled; edge (-a* - 1.5) / 5",
+    "drawn": {
+     "bbox_up": [
+      584,
+      273,
+      1624,
+      1049
+     ],
+     "height_above_rim_cm": 14.4,
+     "width_cm": 35.7,
+     "median_C": 34.4
+    },
+    "colour": {
+     "chroma_gain": 0.695,
+     "gloss_knee_L": 55,
+     "gloss_slope": 0.55,
+     "level_to_floor_pothos_L": 36.2,
+     "floor_pothos_lch": [
+      36.2,
+      23.9,
+      121.3
+     ]
+    },
+    "scale_about_rim_centre": 0.3815,
+    "rim_centre_up": [
+     1131.4,
+     690.0
+    ],
+    "placed": {
+     "top_above_rim_cm": 5.4,
+     "lowest_below_rim_cm": 4.6,
+     "width_cm": 13.7,
+     "px": 2070
+    }
+   },
+   "compose": {
+    "defaults": {
+     "rnd2_outside_differing_px": 0,
+     "region_px": 696393,
+     "changed_px": 6803,
+     "changed_outside_planter_alpha_and_shadow": 0,
+     "overlap_with_other_layers_px": 0
+    },
+    "beige": {
+     "rnd2_outside_differing_px": 0,
+     "region_px": 696393,
+     "changed_px": 6803,
+     "changed_outside_planter_alpha_and_shadow": 0,
+     "overlap_with_other_layers_px": 0
+    }
+   },
+   "tool": "tools/ledge_planter_b1.py (prep, assemble, cut, finish, compose, sheet)",
+   "job": "jobs.json sent[ledge-planter-r1]",
+   "prompt": "assets/prompts/warm-modern-bath-b1-2026-11-19/ledge-planter.json"
+  }
+ },
+ "variants_note": "the sample slot has 2 variants (house-20 8.1): Khaki and Beige. The third (row 14, 8.6) is open: no other mat card has passed a photo check (Line Camel failed), so none is rendered",
+ "updated": "2026-11-25: the ledge planter added (render-agent)",
+ "fb15": {
+  "date": "2026-11-26",
+  "brief": "briefs/wm-fb15-rooms-pasted-fix-2026-11-26.md",
+  "tool": "assets/renders/tools/fb15/ (fb15.py, fb15_write.py, fb15_code.py, fb15_rooms.py)",
+  "rollback": "every edited row keeps layer_before_fb15 / shadow_before_fb15; manifest.json is untouched"
+ },
+ "fb16": {
+  "date": "2026-11-26",
+  "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+  "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+  "previous": "manifest-fb15.json",
+  "tool": "assets/renders/tools/fb16/ (run16.py, fb16.py)",
+  "compose": "the previous formula on the fb16 base; then L0: the grade (frames.<id>.grade, Lab, analytic) on the composite, then each glow screened over the whole composite (not x keep). Products are not redrawn: every layer and shadow file is the previous one",
+  "frames": {
+   "B1": {
+    "grade": {
+     "space": "CIELAB (D65, sRGB 8-bit in and out)",
+     "L_knots_in": [
+      0.0,
+      11.871,
+      90.021,
+      97.0,
+      100.0
+     ],
+     "L_knots_out": [
+      0.0,
+      10.317,
+      75.12,
+      96.0,
+      100.0
+     ],
+     "L_interp": "monotone cubic (Fritsch-Carlson)",
+     "ab": "a' = a * (L'+16)/(L+16) + da * w(L'),  b' = b * (L'+16)/(L+16) + db * w(L');  w = smoothstep(15, 30, L') * (1 - smoothstep(92, 99, L'))",
+     "da": 1.051,
+     "db": 2.657,
+     "fit": {
+      "iterations": 2,
+      "plaster_in_lab": [
+       90.02,
+       0.55,
+       5.19
+      ],
+      "black_in_p05": 11.87,
+      "measured": {
+       "plaster": [
+        75.08,
+        1.52,
+        6.98
+       ],
+       "plaster_px": 1191065,
+       "black_p05": 10.28
+      },
+      "black_loop": {
+       "iteration": 2,
+       "black_target_in_fit": 10.3,
+       "p05_final": 11.52
+      }
+     }
+    },
+    "glows": [
+     {
+      "file": "light/window-glow-B1-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(b) fluted glass: warm, +1/6 stop around the window; the glass itself to L 84 / b* 14",
+      "product": null,
+      "slot": null,
+      "px": 2630715
+     },
+     {
+      "file": "light/wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(d) wall-sconce: the emitting shade keeps its pre-grade brightness (it is the source)",
+      "product": "wall-sconce-aliexpress-wabi-sabi-yellow-marble-037853",
+      "slot": "wall-sconce",
+      "px": 2632
+     }
+    ],
+    "outside": null,
+    "base": null
+   }
+  }
+ }
+}

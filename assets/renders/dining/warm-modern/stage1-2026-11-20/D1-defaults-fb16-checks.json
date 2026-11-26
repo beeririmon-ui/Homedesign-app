@@ -1,0 +1,211 @@
+{
+ "room": "D1",
+ "frame": "D1",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+ "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+ "start": {
+  "manifest": "dining/warm-modern/stage1-2026-11-20/manifest-fb15.json",
+  "finish_frame": "dining/warm-modern/stage1-2026-11-20/D1-defaults-fb15-finish.png"
+ },
+ "before": {
+  "plaster": [
+   88.23,
+   0.33,
+   6.77
+  ],
+  "plaster_px": 371209,
+  "black_p05": 11.21
+ },
+ "targets": {
+  "plaster_L": [
+   74,
+   79
+  ],
+  "plaster_b": [
+   5,
+   8
+  ],
+  "aim": {
+   "L": 76.5,
+   "a": 1.5,
+   "b": 6.5
+  },
+  "black": [
+   11.0,
+   12.0
+  ]
+ },
+ "grade": {
+  "iterations": 3,
+  "plaster_in_lab": [
+   88.23,
+   0.33,
+   6.77
+  ],
+  "black_in_p05": 11.21,
+  "measured": {
+   "plaster": [
+    76.39,
+    1.53,
+    6.5
+   ],
+   "plaster_px": 371209,
+   "black_p05": 9.19
+  },
+  "black_loop": {
+   "iteration": 3,
+   "black_target_in_fit": 9.2,
+   "p05_final": 11.46
+  }
+ },
+ "window_plane": {
+  "window_wall_ids": [
+   1
+  ],
+  "normal_in": [
+   0.829,
+   0.0,
+   -0.5592
+  ],
+  "rms_m": 0.0001
+ },
+ "outside_mask": {
+  "outside_ids": [
+   0,
+   15
+  ],
+  "frame_ids": [
+   13
+  ],
+  "L_old_outside": 95.1,
+  "L_frame": 28.8,
+  "px": 300845
+ },
+ "outside": {
+  "plate": "assets/renders/outside/warm-modern/fb16-2026-11-26/outside-north-fb16.jpg",
+  "mapping": "cylindrical about the window's outward normal",
+  "fp_px_per_rad": 1100.0,
+  "horizon_row": 833.3,
+  "az_offset_deg": 0.0,
+  "az_deg": [
+   16.5,
+   24.9
+  ],
+  "dof_sigma_px": 1.8,
+  "calibration": {
+   "L_p10_p90_before": [
+    20.5,
+    55.0
+   ],
+   "L_p10_p90_after": [
+    59.0,
+    89.0
+   ],
+   "sky_ab_before": [
+    -2.8,
+    12.0
+   ],
+   "target_L": 89.0,
+   "target_b": 5.0,
+   "note": "lift: the view reads several stops over the room; dark canopy to about L lo, the sky to the spec"
+  },
+  "layers_over_the_window": {
+   "curtains": {
+    "frac": 0.036,
+    "opaque_frac": 0.0
+   }
+  }
+ },
+ "window_glow": {
+  "amp": 0.2401,
+  "color": [
+   1.0,
+   0.84,
+   0.62
+  ],
+  "dL_at_1m": 5.0,
+  "blur_px": 25
+ },
+ "lamps": [
+  {
+   "slot": "kitchen-sconce",
+   "how": "sconce glow + emitter keep",
+   "center": [
+    1697.1,
+    327.5
+   ],
+   "radius_px": 33.0
+  },
+  {
+   "slot": "dining-pendant",
+   "how": "emitter keep",
+   "px": 34629
+  }
+ ],
+ "rnd2": {
+  "rule": "outside the changed regions (the window alpha, the glows): the frame = the grade of the fb15 frame, pixel for pixel; before the grade only the window changes",
+  "finish_before_grade_outside_window_px": 0,
+  "stack_outside_window_px": 0,
+  "final_vs_graded_fb15_outside_changed_px": 0,
+  "changed_region_px": 3481199,
+  "reproduced_from_files_max": 0
+ },
+ "after": {
+  "plaster": [
+   75.34,
+   1.58,
+   6.77
+  ],
+  "plaster_px": 335108,
+  "black_p05": 11.46,
+  "window_zone": {
+   "rule": "every surface where the window field is at least half its 1 m value",
+   "px": 21680,
+   "dL_median": 12.73,
+   "dL_p90": 14.99,
+   "b_median": 14.06
+  },
+  "outside": {
+   "L_p90": 88.2,
+   "L_p10": 57.9,
+   "light_part_ab": [
+    -2.6,
+    6.1
+   ]
+  }
+ },
+ "pasted_test": {
+  "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
+  "score": 72.53,
+  "per_layer_mean": 3.63,
+  "lamps": {
+   "dining-pendant": "lit (G1.10)",
+   "kitchen-sconce": "looks lit, outside G1.10's H/S"
+  },
+  "worst": [
+   [
+    "centerpiece-vase",
+    6.88
+   ],
+   [
+    "candle-holders",
+    6.6
+   ],
+   [
+    "bench-pad",
+    6.0
+   ]
+  ]
+ },
+ "files": [
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/plate-D1-fb16.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D1-defaults-fb16-finish.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/D1-defaults-fb16-frame.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/light/window-glow-D1-fb16.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/light/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb16.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/manifest-fb16.json"
+ ],
+ "seconds": 119.9
+}
