@@ -1,0 +1,348 @@
+{
+ "id": "wm-m0w-wheel7-2026-11-26",
+ "step": "M0-W stage A step 7 (docs/proposals/wm-fb13-living-wow-2026-11-25.md 3.2): the sample slot's wheel",
+ "date": "2026-11-26",
+ "author": "render-agent",
+ "owner_words": "הסלון נראה מדהים (2026-11-26, the new living room approved)",
+ "camera": {
+  "id": "M0-W",
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw_deg_left": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555
+ },
+ "seed": null,
+ "seed_note": "var2 exposes no seed for nano-banana-2: the prompt, the input crop (sha256), the references and the settings are kept",
+ "estimate": {
+  "tool": "var2_estimate_cost",
+  "nano_banana_2_i2i_2K": 400
+ },
+ "tokens_total": 800,
+ "cap": 1000,
+ "stage_a_tokens": {
+  "before": 5500,
+  "after": 6300,
+  "cap": 6500
+ },
+ "not_done": {
+  "set_B_throw_muslin": "not in this pass: a third nano edit is 400, so 1,200 > the cap of 1,000; set B keeps its stage-A throw (reads knitted)"
+ },
+ "references_policy": "supplier images are references only (cropped in the scratchpad, uploaded to var2, never stored in the repo)",
+ "jobs": [
+  {
+   "id": "wm-m0w-wheel7-e1-set-A",
+   "what": "set A (three cushions and the throw) in place of set B, on the fix1 hero",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "wheel-e1-set-A.txt",
+   "prompt_sha256": "9a6d80cfdfe7816a67490c6cdc939612c6caa46093ced55d44f10b2209f4c978",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2818558c-7639-45f2-814d-c8fa34dd2875.png",
+   "image_sha256": "f2cb29eff638b1998dc80cd6faea266325076fdcf270b54b0695511867d1f366",
+   "image_source": "hero-HW-fix1.png crop, x2 Lanczos",
+   "crop_canvas_px": [
+    1120,
+    810,
+    2400,
+    1530
+   ],
+   "sent_px": [
+    2560,
+    1440
+   ],
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/3e28f153-f773-4031-887d-54a9aaff1d21.png",
+     "card": "cushions-cj-knitted-chenille-bean-green",
+     "sku": "CJYD282217003CX",
+     "what": "image 2: the left cushion (21 Camel, reads taupe), cropped to the front cushion"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9a0cb854-e70a-403f-988d-2bc0748da2b7.png",
+     "card": "cushions-cj-boucle-teddy",
+     "sku": "CJZT228600103CX",
+     "what": "image 3: the right cushion (White 50x50), cactus cropped out"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5d626e89-de85-4b9d-a2cc-df68f6120502.png",
+     "card": "cushions-cj-boucle-teddy",
+     "sku": "CJZT228600126ZA",
+     "what": "image 4: the lumbar (Milk Tea 30x50; the SKU photo shows the square)"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1e10bb8a-40bd-45b6-b9f6-55d5e8ae4e2c.png",
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "sku": "CJYD205807538LO",
+     "what": "image 5: the throw (Flax brown 150x200), the person cropped out"
+    }
+   ],
+   "idempotency_key": "wm-m0w-wheel7-e1-set-A-nano-2k-20261126",
+   "placeholder_id": "1b0120b6-241e-4b31-8bbf-bcc0a3cd2978",
+   "task_id": "9436e9f1469768300b5beacfef91dcb3",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-9436e9f1469768300b5beacfef91dcb3-0-1795708412002-61a6531c.jpg",
+   "raw": "raw/wheel-setA-nano.jpg",
+   "raw_sha256": "a6580398bd1239c3f136437cd31d03dfe7526cb85ccea573340813e0b405538a",
+   "registration": {
+    "matches": 68,
+    "inliers": 43,
+    "residual_px_median": 0.532,
+    "residual_px_p90": 1.108,
+    "tone_gain_offset": [
+     [
+      0.9841,
+      -0.0012
+     ],
+     [
+      0.9922,
+      0.0025
+     ],
+     [
+      0.9996,
+      -0.0045
+     ]
+    ],
+    "unchanged_share": 0.731,
+    "returned_px": [
+     2752,
+     1536
+    ],
+    "mean_abs_diff_unchanged": 7.36,
+    "pieces": {
+     "left": {
+      "px": 50959,
+      "bbox_canvas": [
+       1207,
+       900,
+       1475,
+       1142
+      ],
+      "w": 269,
+      "h": 243
+     },
+     "right": {
+      "px": 36292,
+      "bbox_canvas": [
+       1848,
+       883,
+       2105,
+       1139
+      ],
+      "w": 258,
+      "h": 257
+     },
+     "lumbar": {
+      "px": 37643,
+      "bbox_canvas": [
+       1665,
+       988,
+       1961,
+       1153
+      ],
+      "w": 297,
+      "h": 166
+     },
+     "throw": {
+      "px": 88853,
+      "bbox_canvas": [
+       1747,
+       1054,
+       2308,
+       1457
+      ],
+      "w": 562,
+      "h": 404
+     }
+    }
+   },
+   "segment_map": {
+    "model": "grok-imagine-image-2",
+    "type": "segment-map",
+    "tokens": 0,
+    "segment_map_id": "950bc5f0-3b7d-4474-ae7b-63eb795e571a",
+    "used_indexes": {
+     "left": [
+      4,
+      9
+     ],
+     "right": [
+      6,
+      10
+     ],
+     "lumbar": [
+      5,
+      7,
+      8
+     ],
+     "throw": [
+      3
+     ]
+    },
+    "note": "bbox cut-outs placed in the return by masked template matching (rms 0), then carried by the registration"
+   },
+   "verdict": "USED: the three cushions and the throw. True to the SKU photos in colour and weave; the throw reads as crinkled muslin with a frayed fringe (not a knit). The edit draped the throw further than set B, onto the rug in front of the arm and under the table. The left 45 x 45 cushion was drawn at the 50 x 50 width: one recorded refit in code (see the manifest)"
+  },
+  {
+   "id": "wm-m0w-wheel7-e2-set-C",
+   "what": "set C (three cushions and the throw) in place of set B, on the fix1 hero",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "wheel-e2-set-C.txt",
+   "prompt_sha256": "043e4b70dd9b9480d1b6bcd8754b11e7ee8e1fef53c8cc70fb1e4c8e99265287",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/2818558c-7639-45f2-814d-c8fa34dd2875.png",
+   "image_sha256": "f2cb29eff638b1998dc80cd6faea266325076fdcf270b54b0695511867d1f366",
+   "image_source": "hero-HW-fix1.png crop, x2 Lanczos",
+   "crop_canvas_px": [
+    1120,
+    810,
+    2400,
+    1530
+   ],
+   "sent_px": [
+    2560,
+    1440
+   ],
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/0ef9496b-0973-4fc2-89b1-a27de1b360f9.png",
+     "card": "cushions-cj-corduroy-patchwork",
+     "sku": "CJZT189401910JQ",
+     "what": "image 2: the left cushion (Dark Coffee 45x45), cropped to the cushion"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8b088655-e262-4ee5-a969-4d78178d8081.png",
+     "card": "cushions-cj-boucle-teddy",
+     "sku": "CJZT228600133GT",
+     "what": "image 3: the right cushion (Light Brown 50x50), cactus cropped out"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/64ce530b-b3bf-403b-bbdf-200194014eb6.png",
+     "card": "cushions-cj-linen-look-ivory",
+     "sku": "CJZT242978810JQ",
+     "what": "image 4: the lumbar (Light Beige Gray; the SKU photo shows squares)"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/02baa8f4-a8eb-4ef1-9740-1d3f158f5c77.png",
+     "card": "sofa-cover-cj-cotton-muslin-fringe",
+     "sku": "CJYD205807510JQ",
+     "what": "image 5: the throw (Clay 150x200)"
+    }
+   ],
+   "idempotency_key": "wm-m0w-wheel7-e2-set-C-nano-2k-20261126",
+   "placeholder_id": "e6cbf467-2c5d-47c9-9ff6-2668292cf0e9",
+   "task_id": "841d0ec80b365ea6d3021bcb765fc922",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-841d0ec80b365ea6d3021bcb765fc922-0-1795708415525-b022e073.jpg",
+   "raw": "raw/wheel-setC-nano.jpg",
+   "raw_sha256": "c31a0d5c3e9dff1a8804b85cb5463f243fdd7d2078843b0388fb893e84017f04",
+   "registration": {
+    "matches": 86,
+    "inliers": 33,
+    "residual_px_median": 0.646,
+    "residual_px_p90": 1.052,
+    "tone_gain_offset": [
+     [
+      0.9872,
+      -0.0032
+     ],
+     [
+      0.998,
+      0.0021
+     ],
+     [
+      1.007,
+      -0.0054
+     ]
+    ],
+    "unchanged_share": 0.723,
+    "returned_px": [
+     2752,
+     1536
+    ],
+    "mean_abs_diff_unchanged": 7.42,
+    "pieces": {
+     "left": {
+      "px": 52972,
+      "bbox_canvas": [
+       1202,
+       907,
+       1480,
+       1142
+      ],
+      "w": 279,
+      "h": 236
+     },
+     "right": {
+      "px": 39083,
+      "bbox_canvas": [
+       1850,
+       885,
+       2116,
+       1140
+      ],
+      "w": 267,
+      "h": 256
+     },
+     "lumbar": {
+      "px": 36018,
+      "bbox_canvas": [
+       1673,
+       994,
+       1967,
+       1154
+      ],
+      "w": 295,
+      "h": 161
+     },
+     "throw": {
+      "px": 91661,
+      "bbox_canvas": [
+       1746,
+       1053,
+       2323,
+       1453
+      ],
+      "w": 578,
+      "h": 401
+     }
+    }
+   },
+   "segment_map": {
+    "model": "grok-imagine-image-2",
+    "type": "segment-map",
+    "tokens": 0,
+    "segment_map_id": "f7bba09f-eae2-45b8-89ce-6bb866916cce",
+    "used_indexes": {
+     "left": [
+      1,
+      5,
+      8
+     ],
+     "right": [
+      2,
+      6,
+      9
+     ],
+     "lumbar": [
+      3,
+      4,
+      7
+     ],
+     "throw": [
+      10
+     ]
+    },
+    "note": "bbox cut-outs placed in the return by masked template matching (rms 0), then carried by the registration"
+   },
+   "verdict": "USED: the three cushions and the throw. True to the SKU photos in colour and weave; the throw reads as crinkled muslin with a frayed fringe (not a knit). The edit draped the throw further than set B, onto the rug in front of the arm and under the table. The left 45 x 45 cushion was drawn at the 50 x 50 width: one recorded refit in code (see the manifest)"
+  }
+ ]
+}

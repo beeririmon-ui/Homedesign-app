@@ -1,0 +1,189 @@
+{
+ "id": "wm-m0w-wheel7-checks-2026-11-26",
+ "B_default": {
+  "stack": "layers/manifest-fix1.json (unchanged)",
+  "reproduces_default_frame_m0w_fix1": {
+   "max": 0,
+   "px_over_0": 0
+  }
+ },
+ "rnd2_rule": "A and C differ from B only inside the union of the two sets' alpha and shadow; hiding a set changes its own region only; every other layer, shadow and light byte-identical to fix1",
+ "sets": {
+  "A": {
+   "canvas_changed_vs_B_px": 357281,
+   "changed_outside_A_or_B_regions_px": 0,
+   "regions_union_px": 387375,
+   "frame_changed_vs_B_px": 201766,
+   "hide_set_changed_px": 309015,
+   "hide_set_changed_outside_its_region_px": 0,
+   "stack_vs_edit_inside_set_opaque_visible": {
+    "px": 162294,
+    "mean": 0.128,
+    "p99": 1.0,
+    "note": "outside the refitted left cushion (it moved)"
+   },
+   "pieces_Lab_median": {
+    "left": [
+     51.8,
+     4.7,
+     11.4
+    ],
+    "right": [
+     79.1,
+     2.3,
+     6.7
+    ],
+    "lumbar": [
+     79.4,
+     5.9,
+     14.8
+    ],
+    "throw": [
+     46.4,
+     3.9,
+     12.8
+    ]
+   },
+   "F3_gap_frame_widths": {
+    "framed-art": 0.0269,
+    "rug": "overlaps (depth order: behind the set)",
+    "floor-lamp": "overlaps (depth order: behind the set)",
+    "coffee-table": "overlaps (depth order: in front of the set)",
+    "magazine-holder": 0.0244,
+    "bowl": "overlaps (depth order: in front of the set)",
+    "candle-holders": 0.0031
+   }
+  },
+  "C": {
+   "canvas_changed_vs_B_px": 356161,
+   "changed_outside_A_or_B_regions_px": 0,
+   "regions_union_px": 386537,
+   "frame_changed_vs_B_px": 201257,
+   "hide_set_changed_px": 314718,
+   "hide_set_changed_outside_its_region_px": 0,
+   "stack_vs_edit_inside_set_opaque_visible": {
+    "px": 166397,
+    "mean": 0.02,
+    "p99": 1.0,
+    "note": "outside the refitted left cushion (it moved)"
+   },
+   "pieces_Lab_median": {
+    "left": [
+     22.2,
+     16.1,
+     15.0
+    ],
+    "right": [
+     41.3,
+     11.7,
+     22.6
+    ],
+    "lumbar": [
+     77.3,
+     2.4,
+     10.0
+    ],
+    "throw": [
+     14.3,
+     4.7,
+     7.4
+    ]
+   },
+   "F3_gap_frame_widths": {
+    "framed-art": 0.0277,
+    "rug": "overlaps (depth order: behind the set)",
+    "floor-lamp": "overlaps (depth order: behind the set)",
+    "coffee-table": "overlaps (depth order: in front of the set)",
+    "magazine-holder": 0.0208,
+    "bowl": "overlaps (depth order: in front of the set)",
+    "candle-holders": 0.0035
+   }
+  }
+ },
+ "B_F3_gap_frame_widths": {
+  "framed-art": 0.0242,
+  "magazine-holder": 0.0417,
+  "candle-holders": 0.0023
+ },
+ "build": {
+  "A": {
+   "set": "A",
+   "zones_overlap_px": 0,
+   "over_255_scaled_px": 12308,
+   "edge_solved_px": 179,
+   "edge_weak_px": 1728,
+   "under_higher_layers_px": 3608,
+   "extended_under_higher_px": 1940,
+   "refit_left": {
+    "card_cm": 45.0,
+    "rendered_w_px": 269,
+    "target_w_px": 244.8,
+    "scale": 0.91,
+    "about": [
+     1341.0,
+     1142.0
+    ],
+    "why": "the edit drew the 45 x 45 cm left cushion at the width of set B's 50 x 50 one (269 vs 272 px)",
+    "revealed": "the sofa back of the plate, under the set's own shadow zone (moved with the cushion)"
+   },
+   "alpha_px": 223736,
+   "alpha_255_px": 206482,
+   "shadow_px": 290623,
+   "bbox_px": [
+    1215,
+    879,
+    2311,
+    1459
+   ],
+   "shadow_min": 76,
+   "pieces_px": {
+    "left": 42207,
+    "right": 36291,
+    "lumbar": 37643,
+    "throw": 88852
+   }
+  },
+  "C": {
+   "set": "C",
+   "zones_overlap_px": 0,
+   "over_255_scaled_px": 12241,
+   "edge_solved_px": 175,
+   "edge_weak_px": 1803,
+   "under_higher_layers_px": 3415,
+   "extended_under_higher_px": 1835,
+   "refit_left": {
+    "card_cm": 45.0,
+    "rendered_w_px": 279,
+    "target_w_px": 244.8,
+    "scale": 0.8774,
+    "about": [
+     1341.0,
+     1142.0
+    ],
+    "why": "the edit drew the 45 x 45 cm left cushion at the width of set B's 50 x 50 one (279 vs 272 px)",
+    "revealed": "the sofa back of the plate, under the set's own shadow zone (moved with the cushion)"
+   },
+   "alpha_px": 226253,
+   "alpha_255_px": 208976,
+   "shadow_px": 310328,
+   "bbox_px": [
+    1215,
+    881,
+    2324,
+    1455
+   ],
+   "shadow_min": 76,
+   "pieces_px": {
+    "left": 40803,
+    "right": 39083,
+    "lumbar": 36018,
+    "throw": 91658
+   }
+  }
+ },
+ "notes": [
+  "F3 in frame widths (2565 canvas px): the holder 0.0244 (A) / 0.0208 (C) against 0.0417 for B: the muslin throws reach further right; candle holders x set 0.003 as B (0.002, the table stands in front)",
+  "stack_vs_edit: the set's opaque, visible pixels against the edit (baked), outside the refitted left cushion",
+  "the sofa between the pieces is the plate in the edit's light (as stage A): its boucle grain differs from the edit's where set B's throw used to cover the right arm"
+ ]
+}
