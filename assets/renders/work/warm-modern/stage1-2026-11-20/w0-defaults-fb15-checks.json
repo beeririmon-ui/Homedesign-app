@@ -1,0 +1,588 @@
+{
+ "room": "W0",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb15-rooms-pasted-fix-2026-11-26.md",
+ "rnd2": {
+  "outside_every_alpha_shadow_light_differing_px": 0,
+  "region_px": 1531519
+ },
+ "changed_vs_today": {
+  "px": 158928,
+  "outside_the_edited_boxes_px": 0,
+  "boxes": [
+   {
+    "label": "floor (crop edit)",
+    "box": [
+     1020,
+     960,
+     2140,
+     1440
+    ]
+   },
+   {
+    "label": "wall sconce shadow (code)",
+    "box": [
+     640,
+     300,
+     1000,
+     560
+    ]
+   },
+   {
+    "label": "palm pot contact (code)",
+    "box": [
+     540,
+     1180,
+     1000,
+     1440
+    ]
+   }
+  ]
+ },
+ "black_point": {
+  "rule": "WM-G1: no edited-layer pixel under L* 11",
+  "px_under": 0
+ },
+ "product_count": {
+  "before": 19,
+  "after": 19
+ },
+ "sizes": {
+  "basket": {
+   "w_mid_ratio": 1.065,
+   "h_mid_ratio": 0.993,
+   "w_ratio": 1.071,
+   "h_ratio": 1.005,
+   "iou": 0.901,
+   "shift_xy": [
+    -5.0,
+    1.0
+   ],
+   "dE76": 1.9,
+   "dC": 0.1,
+   "lab_old": [
+    50.1,
+    3.0,
+    11.0
+   ],
+   "lab_new": [
+    48.2,
+    2.8,
+    11.1
+   ],
+   "card_cm": {
+    "width": 30,
+    "depth": 30,
+    "height": 30
+   },
+   "within_5pct_of_clay": false
+  },
+  "waste-basket": {
+   "w_mid_ratio": 1.014,
+   "h_mid_ratio": 1.0,
+   "w_ratio": 1.02,
+   "h_ratio": 1.0,
+   "iou": 0.975,
+   "shift_xy": [
+    -2.5,
+    0.0
+   ],
+   "dE76": 19.7,
+   "dC": 2.5,
+   "lab_old": [
+    57.0,
+    7.5,
+    17.8
+   ],
+   "lab_new": [
+    37.4,
+    9.0,
+    19.9
+   ],
+   "card_cm": {
+    "width": 25,
+    "depth": 25,
+    "height": 30
+   },
+   "within_5pct_of_clay": true
+  },
+  "magazine-holder": {
+   "w_mid_ratio": 1.021,
+   "h_mid_ratio": 0.969,
+   "w_ratio": 1.063,
+   "h_ratio": 1.037,
+   "iou": 0.769,
+   "shift_xy": [
+    5.0,
+    1.0
+   ],
+   "dE76": 5.6,
+   "dC": -1.7,
+   "lab_old": [
+    38.7,
+    6.8,
+    12.4
+   ],
+   "lab_new": [
+    33.6,
+    4.7,
+    11.6
+   ],
+   "card_cm": {
+    "width": 35,
+    "depth": 19,
+    "height": 27.5
+   },
+   "within_5pct_of_clay": true
+  }
+ },
+ "cuts": {
+  "floor": {
+   "room": "W0",
+   "group": "floor",
+   "harmonize": {
+    "gain_p1_p50_p99": [
+     0.852,
+     0.967,
+     1.036
+    ],
+    "stable_px": 324129
+   },
+   "black_raised_px": 5271,
+   "black_floor_L": 11.9,
+   "prep": {
+    "room": "W0",
+    "group": "floor",
+    "names": [
+     "basket",
+     "waste-basket",
+     "magazine-holder"
+    ],
+    "box": [
+     1020,
+     960,
+     2140,
+     1440
+    ],
+    "upscale": 1.8286,
+    "upload": [
+     2048,
+     878
+    ],
+    "aspect": "21:9",
+    "input": "the room's current default stack (lit, every layer and light), cropped and upscaled (Lanczos)",
+    "input_sha256": "d4008f515660074eebc63a4f85f87ed08114a90b5a67b009a96b11a0431b8646",
+    "reproduce": {
+     "max": 2,
+     "mean": 0.0114,
+     "px_over_2": 0,
+     "compared_to": "assets/renders/work/warm-modern/stage1-2026-11-20/w0-defaults.png"
+    },
+    "assemble": {
+     "feature_lock": {
+      "matches": 138,
+      "inliers": 60,
+      "affine": [
+       [
+        0.8115,
+        -0.01708,
+        331.22355
+       ],
+       [
+        0.00077,
+        0.86166,
+        118.98949
+       ]
+      ]
+     },
+     "raw": "W0-floor-r1.jpg",
+     "raw_size": [
+      3168,
+      1344
+     ],
+     "raw_sha256": "7b0a10a3695b3eff481387b7c4f90720208d8e52f4023af895fe936c475637b9",
+     "ecc": 0.831,
+     "warp": [
+      [
+       0.80448,
+       -0.01111,
+       333.31223
+      ],
+      [
+       0.00085,
+       0.86354,
+       117.68889
+      ]
+     ],
+     "stable_px": 1283554,
+     "outside_diff_p50_p99": [
+      9.41,
+      63.55
+     ]
+    }
+   }
+  }
+ },
+ "code": {
+  "wall-sconce": {
+   "old_shadow_px": 4731,
+   "new_shadow_px": 14514,
+   "max_darkening": 0.23,
+   "method": "the silhouette swept away from the window by 0.55 of its width (12 cm deep), softer and lighter with distance, plus an occlusion line"
+  },
+  "planter": {
+   "foot_row": 1343,
+   "max_darkening": 0.42,
+   "added_px": 16243,
+   "method": "a contact line, a soft pool and a short cast shadow away from the window, from the pot's own silhouette; the layer's pixels untouched"
+  }
+ },
+ "files": [
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/wall-sconce/wall-sconce-cj-travertine-cube-updown-12-type-a-indoor-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/wall-sconce/wall-sconce-cj-travertine-cube-updown-12-type-a-indoor-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/basket/basket-cj-two-tone-rope-jute-white-30-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/basket/basket-cj-two-tone-rope-jute-white-30-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/waste-basket/waste-basket-aliexpress-washable-kraft-paper-bin-25x40-brown-xl-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/waste-basket/waste-basket-aliexpress-washable-kraft-paper-bin-25x40-brown-xl-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/planter/planter-cj-cement-ribbed-belly-beige-large-rhapis-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/planter/planter-cj-cement-ribbed-belly-beige-large-rhapis-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/shadows/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/layers/manifest-fb15.json",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/w0-defaults-fb15.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/w0-defaults-fb15-finish.png",
+  "assets/renders/work/warm-modern/stage1-2026-11-20/qa-sheet-fb15.jpg"
+ ],
+ "pasted_test": {
+  "score_today": 86.48,
+  "score_today_with_finish_fb13prep": 55.87,
+  "score_fb15_before_finish": 84.05,
+  "score_fb15_with_finish": 55.18,
+  "per_layer_mean": {
+   "today": 4.55,
+   "today_with_finish": 2.94,
+   "fb15_with_finish": 2.9
+  },
+  "edited_layers": {
+   "wall-sconce": {
+    "before": {
+     "layer": "wall-sconce",
+     "score": 4.6,
+     "fails": [
+      "SHARP 0.69 (softer)",
+      "GRAIN 2.68 (noisier than the plate)",
+      "LAMP looks lit, outside G1.10's H/S"
+     ],
+     "sharp_ratio": 0.695,
+     "grain_ratio": 2.677,
+     "black": {
+      "p05_L": 46.68,
+      "plate_p05_L": 11.12,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 91.0,
+      "H": 29.6,
+      "S": 9.8,
+      "light_layer_mean": 28.2,
+      "verdict": "looks lit, outside G1.10's H/S"
+     }
+    },
+    "after": {
+     "layer": "wall-sconce",
+     "score": 3.0,
+     "fails": [
+      "GRAIN 2.50 (noisier than the plate)",
+      "LAMP looks lit, outside G1.10's H/S"
+     ],
+     "sharp_ratio": 0.927,
+     "grain_ratio": 2.5,
+     "black": {
+      "p05_L": 46.93,
+      "plate_p05_L": 11.0,
+      "below_by": 0.0
+     },
+     "lamp": {
+      "shade_L": 91.0,
+      "H": 29.7,
+      "S": 9.8,
+      "light_layer_mean": 28.2,
+      "verdict": "looks lit, outside G1.10's H/S"
+     }
+    }
+   },
+   "basket": {
+    "before": {
+     "layer": "basket",
+     "score": 3.45,
+     "fails": [
+      "SHARP 1.23 (sharper than the plate)",
+      "GRAIN 2.53 (noisier than the plate)",
+      "EDGE x1"
+     ],
+     "sharp_ratio": 1.225,
+     "grain_ratio": 2.534,
+     "light": {
+      "span_L": 40.48,
+      "angle_deg": 4.5
+     },
+     "contact": {
+      "verdict": "n/a (no free floor under it in frame)",
+      "band_px": 14,
+      "px_per_cm": 7.03
+     },
+     "black": {
+      "p05_L": 17.57,
+      "plate_p05_L": 11.12,
+      "below_by": 0.0
+     }
+    },
+    "after": {
+     "layer": "basket",
+     "score": 1.06,
+     "fails": [
+      "SHARP 1.16 (sharper than the plate)",
+      "EDGE x1"
+     ],
+     "sharp_ratio": 1.159,
+     "grain_ratio": 0.935,
+     "light": {
+      "span_L": 37.6,
+      "angle_deg": 5.4
+     },
+     "contact": {
+      "verdict": "n/a (no free floor under it in frame)",
+      "band_px": 14,
+      "px_per_cm": 7.07
+     },
+     "black": {
+      "p05_L": 11.3,
+      "plate_p05_L": 11.0,
+      "below_by": 0.0
+     }
+    }
+   },
+   "waste-basket": {
+    "before": {
+     "layer": "waste-basket",
+     "score": 6.04,
+     "fails": [
+      "SHARP 0.60 (softer)",
+      "GRAIN 0.38 (smoother)",
+      "LIGHT 40 deg (indicative)",
+      "CONTACT 6.5 L* (indicative)",
+      "SHADOW x1"
+     ],
+     "sharp_ratio": 0.601,
+     "grain_ratio": 0.376,
+     "light": {
+      "span_L": 33.81,
+      "angle_deg": 40.2
+     },
+     "contact": {
+      "dark_L": 6.5,
+      "band_px": 6,
+      "px_per_cm": 3.24
+     },
+     "black": {
+      "p05_L": 14.99,
+      "plate_p05_L": 11.12,
+      "below_by": 0.0
+     }
+    },
+    "after": {
+     "layer": "waste-basket",
+     "score": 4.85,
+     "fails": [
+      "SHARP 0.82 (softer)",
+      "GRAIN 0.49 (smoother)",
+      "LIGHT 36 deg (indicative)",
+      "CONTACT 4.4 L* (indicative)",
+      "SHADOW x2"
+     ],
+     "sharp_ratio": 0.821,
+     "grain_ratio": 0.494,
+     "light": {
+      "span_L": 20.64,
+      "angle_deg": 35.8
+     },
+     "contact": {
+      "dark_L": 4.42,
+      "band_px": 6,
+      "px_per_cm": 3.24
+     },
+     "black": {
+      "p05_L": 10.5,
+      "plate_p05_L": 11.0,
+      "below_by": 0.5
+     }
+    }
+   },
+   "planter": {
+    "before": {
+     "layer": "planter",
+     "score": 5.0,
+     "fails": [
+      "GRAIN 3.42 (noisier than the plate)",
+      "SHADOW x12"
+     ],
+     "sharp_ratio": 0.896,
+     "grain_ratio": 3.42,
+     "light": {
+      "span_L": 2.13,
+      "verdict": "n/a (flat shading)"
+     },
+     "contact": {
+      "dark_L": 24.27,
+      "band_px": 23,
+      "px_per_cm": 11.58
+     },
+     "black": {
+      "p05_L": 14.07,
+      "plate_p05_L": 11.12,
+      "below_by": 0.0
+     }
+    },
+    "after": {
+     "layer": "planter",
+     "score": 6.24,
+     "fails": [
+      "SHARP 0.84 (softer)",
+      "GRAIN 3.04 (noisier than the plate)",
+      "EDGE x1",
+      "SHADOW x13"
+     ],
+     "sharp_ratio": 0.841,
+     "grain_ratio": 3.043,
+     "light": {
+      "span_L": 2.25,
+      "verdict": "n/a (flat shading)"
+     },
+     "contact": {
+      "dark_L": 26.06,
+      "band_px": 23,
+      "px_per_cm": 11.58
+     },
+     "black": {
+      "p05_L": 13.84,
+      "plate_p05_L": 11.0,
+      "below_by": 0.0
+     }
+    }
+   },
+   "magazine-holder": {
+    "before": {
+     "layer": "magazine-holder",
+     "score": 9.75,
+     "fails": [
+      "SHARP 1.57 (sharper than the plate)",
+      "GRAIN 0.30 (smoother)",
+      "LIGHT 94 deg (indicative)",
+      "CONTACT -0.5 L* (indicative)",
+      "EDGE x1",
+      "SHADOW x6"
+     ],
+     "sharp_ratio": 1.568,
+     "grain_ratio": 0.3,
+     "light": {
+      "span_L": 45.94,
+      "angle_deg": 94.1
+     },
+     "contact": {
+      "dark_L": -0.47,
+      "band_px": 5,
+      "px_per_cm": 2.46
+     },
+     "black": {
+      "p05_L": 13.22,
+      "plate_p05_L": 11.12,
+      "below_by": 0.0
+     }
+    },
+    "after": {
+     "layer": "magazine-holder",
+     "score": 5.88,
+     "fails": [
+      "SHARP 1.19 (sharper than the plate)",
+      "GRAIN 0.78 (smoother)",
+      "LIGHT 88 deg (indicative)",
+      "CONTACT -0.2 L* (indicative)",
+      "EDGE x1",
+      "SHADOW x4"
+     ],
+     "sharp_ratio": 1.187,
+     "grain_ratio": 0.775,
+     "light": {
+      "span_L": 42.7,
+      "angle_deg": 88.2
+     },
+     "contact": {
+      "dark_L": -0.2,
+      "band_px": 5,
+      "px_per_cm": 2.55
+     },
+     "black": {
+      "p05_L": 10.63,
+      "plate_p05_L": 11.0,
+      "below_by": 0.36
+     }
+    }
+   }
+  },
+  "lamps": {
+   "pendant": {
+    "shade_L": 97.4,
+    "H": 60.9,
+    "S": 8.1,
+    "light_layer_mean": 5.13,
+    "verdict": "looks lit, outside G1.10's H/S"
+   },
+   "wall-sconce": {
+    "shade_L": 91.0,
+    "H": 29.7,
+    "S": 9.8,
+    "light_layer_mean": 28.2,
+    "verdict": "looks lit, outside G1.10's H/S"
+   }
+  },
+  "finish": {
+   "grain": {
+    "amplitude_8bit": 2.0,
+    "seed": 1540,
+    "grain_px": 0.6,
+    "midtone_weight": "4 l (1 - l), floor 0.25, from the plate's L*",
+    "top_up": [
+     [
+      "waste-basket",
+      0.981
+     ],
+     [
+      "magazine-holder",
+      0.663
+     ],
+     [
+      "bookends",
+      0.324
+     ],
+     [
+      "desk-tray",
+      0.306
+     ],
+     [
+      "shelf-object",
+      0.44
+     ],
+     [
+      "shelf-vase",
+      0.481
+     ],
+     [
+      "pendant",
+      0.435
+     ]
+    ]
+   }
+  }
+ },
+ "runtime_s": 127.8
+}

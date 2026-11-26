@@ -1,0 +1,555 @@
+{
+ "id": "wm-master-mb0-layers-2026-11-18",
+ "room": "master",
+ "style": "warm-modern",
+ "frame": "MB0",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "base": "plate.png (steps 1-4), byte for byte",
+ "color": "8-bit sRGB, no ICC profile; blending on the sRGB-encoded values",
+ "compose": {
+  "order": [
+   "base",
+   "curtains-shadow, curtains",
+   "bedside-sconces-shadow, bedside-sconces",
+   "sill-vase-shadow, sill-vase",
+   "floor-lamp-shadow, floor-lamp",
+   "nightstand-tray-shadow, nightstand-tray",
+   "nightstand-vase-shadow, nightstand-vase",
+   "candle-holders-shadow, candle-holders",
+   "pillowcases-shadow, pillowcases",
+   "bedding-shadow, bedding",
+   "cushions-shadow, cushions",
+   "throw-shadow, throw",
+   "light (screen)"
+  ],
+  "formula": "for each product in z order: out = round((below * shadow / 255) * (1 - a) + rgb * a), a = alpha / 255, straight alpha; then each light: out = 255 - round((255 - out) * (255 - L) / 255)",
+  "swap_region": "per product: alpha > 0 or shadow < 255; a product changes nothing outside its region"
+ },
+ "grade": "every layer is cut from r4 matched to plate.png (MP-I1 field); MP-I2's toe is in plate.png and r4 already",
+ "cut": "tools/compose_defaults.py (GrabCut in the slot's box, traced throw, analytic lamp base, rebuilt candle holders)",
+ "layers": [
+  {
+   "slot": "curtains",
+   "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+   "z": 10,
+   "default": true,
+   "layer": "layers/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "shadow": "shadows/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "shadow_z": 9,
+   "alpha_px": 188774,
+   "shadow_px": 49801,
+   "bbox_px": [
+    256,
+    0,
+    622,
+    1303
+   ]
+  },
+  {
+   "slot": "wall-shelf",
+   "product": "wall-shelf-walnut-180x24-fixed-not-sold",
+   "z": 11,
+   "default": true,
+   "layer": "layers/wall-shelf/wall-shelf-walnut-180x24-fixed-not-sold.png",
+   "shadow": "shadows/wall-shelf/wall-shelf-walnut-180x24-fixed-not-sold.png",
+   "shadow_z": 10,
+   "alpha_px": 36626,
+   "shadow_px": 51100,
+   "bbox_px": [
+    871,
+    463,
+    1849,
+    501
+   ],
+   "sold": false,
+   "fixed": true,
+   "source": "FB10 p1-wall: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)"
+  },
+  {
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-japandi-bare-branch-70x100-776445-50x70-walnut-float",
+   "z": 12,
+   "default": true,
+   "layer": "layers/framed-art/framed-art-aliexpress-japandi-bare-branch-70x100-776445-50x70-walnut-float-fb15.png",
+   "shadow": "shadows/framed-art/framed-art-aliexpress-japandi-bare-branch-70x100-776445-50x70-walnut-float-fb15.png",
+   "shadow_z": 11,
+   "alpha_px": 103689,
+   "shadow_px": 117203,
+   "bbox_px": [
+    1082,
+    94,
+    1363,
+    463
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p1-wall: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)",
+   "closeup": false,
+   "closeup_note": "776445: usage rights unclear; no close-up or zoom frame (FB10 instruction)",
+   "layer_before_fb15": "layers/framed-art/framed-art-aliexpress-japandi-bare-branch-70x100-776445-50x70-walnut-float.png",
+   "shadow_before_fb15": "shadows/framed-art/framed-art-aliexpress-japandi-bare-branch-70x100-776445-50x70-walnut-float.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "shelf shadow re-made from the light's direction (code)"
+   }
+  },
+  {
+   "slot": "framed-art-2",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-30x40",
+   "z": 13,
+   "default": true,
+   "layer": "layers/framed-art-2/framed-art-aliexpress-misty-landscape-386242-work-05-30x40-fb15.png",
+   "shadow": "shadows/framed-art-2/framed-art-aliexpress-misty-landscape-386242-work-05-30x40-fb15.png",
+   "shadow_z": 12,
+   "alpha_px": 37191,
+   "shadow_px": 45337,
+   "bbox_px": [
+    1391,
+    302,
+    1622,
+    463
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p1-wall: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)",
+   "layer_before_fb15": "layers/framed-art-2/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
+   "shadow_before_fb15": "shadows/framed-art-2/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "shelf shadow re-made from the light's direction (code)"
+   }
+  },
+  {
+   "slot": "bedside-sconces",
+   "product": "wall-sconce-cj-travertine-cone-walnut",
+   "z": 14,
+   "default": true,
+   "layer": "layers/bedside-sconces/wall-sconce-cj-travertine-cone-walnut-fb15.png",
+   "shadow": "shadows/bedside-sconces/wall-sconce-cj-travertine-cone-walnut-fb15.png",
+   "shadow_z": 13,
+   "alpha_px": 18944,
+   "shadow_px": 16663,
+   "bbox_px": [
+    675,
+    501,
+    2039,
+    660
+   ],
+   "layer_before_fb15": "layers/bedside-sconces/wall-sconce-cj-travertine-cone-walnut.png",
+   "shadow_before_fb15": "shadows/bedside-sconces/wall-sconce-cj-travertine-cone-walnut.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "lamp on: a warm rim and a pool on the wall in code"
+   }
+  },
+  {
+   "slot": "sill-vase",
+   "product": "sill-vase-cj-cream-fluted-column-25",
+   "z": 16,
+   "default": true,
+   "layer": "layers/sill-vase/sill-vase-cj-cream-fluted-column-25.png",
+   "shadow": "shadows/sill-vase/sill-vase-cj-cream-fluted-column-25.png",
+   "shadow_z": 15,
+   "alpha_px": 18511,
+   "shadow_px": 8489,
+   "bbox_px": [
+    183,
+    538,
+    353,
+    899
+   ]
+  },
+  {
+   "slot": "shelf-vase-left",
+   "product": "vase-cj-charcoal-carved-style-b",
+   "z": 18,
+   "default": true,
+   "layer": "layers/shelf-vase-left/vase-cj-charcoal-carved-style-b-fb15.png",
+   "shadow": "shadows/shelf-vase-left/vase-cj-charcoal-carved-style-b-fb15.png",
+   "shadow_z": 17,
+   "alpha_px": 17302,
+   "shadow_px": 30267,
+   "bbox_px": [
+    936,
+    299,
+    1055,
+    463
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p1-wall: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)",
+   "layer_before_fb15": "layers/shelf-vase-left/vase-cj-charcoal-carved-style-b.png",
+   "shadow_before_fb15": "shadows/shelf-vase-left/vase-cj-charcoal-carved-style-b.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "shelf shadow re-made from the light's direction (code)"
+   }
+  },
+  {
+   "slot": "shelf-vase-right",
+   "product": "vase-cj-white-plum-hand-thrown-m",
+   "z": 18,
+   "default": true,
+   "layer": "layers/shelf-vase-right/vase-cj-white-plum-hand-thrown-m-fb15.png",
+   "shadow": "shadows/shelf-vase-right/vase-cj-white-plum-hand-thrown-m-fb15.png",
+   "shadow_z": 17,
+   "alpha_px": 13142,
+   "shadow_px": 26161,
+   "bbox_px": [
+    1667,
+    299,
+    1786,
+    463
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p1-wall: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)",
+   "layer_before_fb15": "layers/shelf-vase-right/vase-cj-white-plum-hand-thrown-m.png",
+   "shadow_before_fb15": "shadows/shelf-vase-right/vase-cj-white-plum-hand-thrown-m.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "shelf shadow re-made from the light's direction (code)"
+   }
+  },
+  {
+   "slot": "planter",
+   "product": "planter-cj-cement-ribbed-belly-beige-large-ficus-audrey",
+   "z": 30,
+   "default": true,
+   "layer": "layers/planter/planter-cj-cement-ribbed-belly-beige-large-ficus-audrey-fb15.png",
+   "shadow": "shadows/planter/planter-cj-cement-ribbed-belly-beige-large-ficus-audrey-fb15.png",
+   "shadow_z": 29,
+   "alpha_px": 121506,
+   "shadow_px": 53605,
+   "bbox_px": [
+    2312,
+    333,
+    2720,
+    1296
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p2-corner: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)",
+   "layer_before_fb15": "layers/planter/planter-cj-cement-ribbed-belly-beige-large-ficus-audrey.png",
+   "shadow_before_fb15": "shadows/planter/planter-cj-cement-ribbed-belly-beige-large-ficus-audrey.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "right"
+   }
+  },
+  {
+   "slot": "floor-lamp",
+   "product": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light",
+   "z": 36,
+   "default": true,
+   "layer": "layers/floor-lamp/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light-fb15.png",
+   "shadow": "shadows/floor-lamp/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light-fb15.png",
+   "shadow_z": 35,
+   "alpha_px": 54481,
+   "shadow_px": 13487,
+   "bbox_px": [
+    2202,
+    421,
+    2497,
+    1299
+   ],
+   "layer_before_fb15": "layers/floor-lamp/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light.png",
+   "shadow_before_fb15": "shadows/floor-lamp/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "right",
+    "code": "lamp on: the shade's glow (G1.10) in code"
+   }
+  },
+  {
+   "slot": "magazine-holder",
+   "product": "magazine-holder-cj-gunmetal-leather-strap-orange",
+   "z": 38,
+   "default": true,
+   "layer": "layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange-fb15.png",
+   "shadow": "shadows/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange-fb15.png",
+   "shadow_z": 37,
+   "alpha_px": 49308,
+   "shadow_px": 30774,
+   "bbox_px": [
+    2394,
+    1177,
+    2669,
+    1470
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p2-corner: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)",
+   "layer_before_fb15": "layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange.png",
+   "shadow_before_fb15": "shadows/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-orange.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "crop edit",
+    "group": "right"
+   }
+  },
+  {
+   "slot": "nightstand-tray",
+   "product": "nightstand-tray-cj-black-walnut-rect-tray",
+   "z": 44,
+   "default": true,
+   "layer": "layers/nightstand-tray/nightstand-tray-cj-black-walnut-rect-tray.png",
+   "shadow": "shadows/nightstand-tray/nightstand-tray-cj-black-walnut-rect-tray.png",
+   "shadow_z": 43,
+   "alpha_px": 4385,
+   "shadow_px": 3856,
+   "bbox_px": [
+    585,
+    935,
+    800,
+    1007
+   ]
+  },
+  {
+   "slot": "nightstand-vase",
+   "product": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862-d",
+   "z": 46,
+   "default": true,
+   "layer": "layers/nightstand-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862-d.png",
+   "shadow": "shadows/nightstand-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862-d.png",
+   "shadow_z": 45,
+   "alpha_px": 8259,
+   "shadow_px": 14513,
+   "bbox_px": [
+    613,
+    684,
+    744,
+    978
+   ]
+  },
+  {
+   "slot": "candle-holders",
+   "product": "candle-holders-cj-travertine-pedestal-70x110",
+   "z": 46,
+   "default": true,
+   "layer": "layers/candle-holders/candle-holders-cj-travertine-pedestal-70x110.png",
+   "shadow": "shadows/candle-holders/candle-holders-cj-travertine-pedestal-70x110.png",
+   "shadow_z": 45,
+   "alpha_px": 4870,
+   "shadow_px": 1640,
+   "bbox_px": [
+    1958,
+    857,
+    2103,
+    986
+   ]
+  },
+  {
+   "slot": "bedside-carafe",
+   "product": "open-shelf-ceramics-cj-patina-clay-pitcher-c03d140",
+   "z": 46,
+   "default": true,
+   "layer": "layers/bedside-carafe/open-shelf-ceramics-cj-patina-clay-pitcher-c03d140.png",
+   "shadow": "shadows/bedside-carafe/open-shelf-ceramics-cj-patina-clay-pitcher-c03d140.png",
+   "shadow_z": 45,
+   "alpha_px": 8429,
+   "shadow_px": 5299,
+   "bbox_px": [
+    1867,
+    850,
+    1952,
+    985
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p3-islands: nano-banana-2 edit, cut and corrected in code (fb10_compose.py)"
+  },
+  {
+   "slot": "trinket-dish",
+   "product": "trinket-dish-cj-travertine-rough-edge-10x10",
+   "z": 46,
+   "default": true,
+   "layer": "layers/trinket-dish/trinket-dish-cj-travertine-rough-edge-10x10.png",
+   "shadow": "shadows/trinket-dish/trinket-dish-cj-travertine-rough-edge-10x10.png",
+   "shadow_z": 45,
+   "alpha_px": 692,
+   "shadow_px": 1366,
+   "bbox_px": [
+    731,
+    964,
+    806,
+    975
+   ],
+   "sold": true,
+   "fixed": false,
+   "source": "FB10 p3: in code (fb10_compose.py)"
+  },
+  {
+   "slot": "pillowcases",
+   "product": "pillowcases-cj-pure-linen-envelope-pair-48x74-caramel-pairs",
+   "z": 50,
+   "default": true,
+   "layer": "layers/pillowcases/pillowcases-cj-pure-linen-envelope-pair-48x74-caramel-pairs.png",
+   "shadow": "shadows/pillowcases/pillowcases-cj-pure-linen-envelope-pair-48x74-caramel-pairs.png",
+   "shadow_z": 49,
+   "alpha_px": 137118,
+   "shadow_px": 28159,
+   "bbox_px": [
+    892,
+    729,
+    1822,
+    941
+   ]
+  },
+  {
+   "slot": "bedding",
+   "product": "bedding-cj-washed-linen-natural-set-natural-linen-1-8m",
+   "z": 52,
+   "default": true,
+   "layer": "layers/bedding/bedding-cj-washed-linen-natural-set-natural-linen-1-8m-fb15.png",
+   "shadow": "shadows/bedding/bedding-cj-washed-linen-natural-set-natural-linen-1-8m-fb15.png",
+   "shadow_z": 51,
+   "alpha_px": 1108695,
+   "shadow_px": 41194,
+   "bbox_px": [
+    206,
+    865,
+    2481,
+    1530
+   ],
+   "layer_before_fb15": "layers/bedding/bedding-cj-washed-linen-natural-set-natural-linen-1-8m.png",
+   "shadow_before_fb15": "shadows/bedding/bedding-cj-washed-linen-natural-set-natural-linen-1-8m.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "0 detached specks removed (0 px)"
+   }
+  },
+  {
+   "slot": "cushions",
+   "product": "cushions-cj-boucle-teddy-milk-tea-30x50",
+   "z": 55,
+   "default": true,
+   "layer": "layers/cushions/cushions-cj-boucle-teddy-milk-tea-30x50.png",
+   "shadow": "shadows/cushions/cushions-cj-boucle-teddy-milk-tea-30x50.png",
+   "shadow_z": 54,
+   "alpha_px": 39308,
+   "shadow_px": 2553,
+   "bbox_px": [
+    1195,
+    762,
+    1547,
+    926
+   ]
+  },
+  {
+   "slot": "throw",
+   "product": "sofa-cover-cj-cotton-muslin-fringe-pecan-150x200",
+   "z": 58,
+   "default": true,
+   "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png",
+   "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png",
+   "shadow_z": 57,
+   "alpha_px": 147944,
+   "shadow_px": 5263,
+   "bbox_px": [
+    398,
+    980,
+    2351,
+    1263
+   ]
+  }
+ ],
+ "light": [
+  {
+   "product": "wall-sconce-cj-travertine-cone-walnut",
+   "slot": "bedside-sconces",
+   "file": "light/wall-sconce-cj-travertine-cone-walnut.png",
+   "z": 90,
+   "blend": "screen",
+   "px": 271944,
+   "note": "the light on the plate only; the light that falls on a product is in that product's own layer"
+  },
+  {
+   "product": "floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light",
+   "slot": "floor-lamp",
+   "file": "light/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light.png",
+   "z": 90,
+   "blend": "screen",
+   "px": 337187,
+   "note": "the light on the plate only; the light that falls on a product is in that product's own layer"
+  },
+  {
+   "file": "stage1-2026-11-17/light/bedside-sconces-pool-fb15.png",
+   "blend": "screen",
+   "z": 90,
+   "px": 267948,
+   "fb15": "the light of the stone shade on its wall (code, screen)"
+  }
+ ],
+ "rnd2": {
+  "region_px": 2549353,
+  "outside_differing_px": 0,
+  "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+ },
+ "variants": [
+  {
+   "slot": "throw",
+   "product": "sofa-cover-cj-cotton-muslin-fringe-pecan-150x200",
+   "default": true,
+   "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png",
+   "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png"
+  },
+  {
+   "slot": "throw",
+   "product": "sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200",
+   "default": false,
+   "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200.png",
+   "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200.png",
+   "alpha": "identical to the default's",
+   "frame": "mb0-variant-throw-flax.png"
+  },
+  {
+   "slot": "throw",
+   "product": "sofa-cover-cj-cotton-muslin-fringe-clay-150x200",
+   "default": false,
+   "layer": "layers/throw/sofa-cover-cj-cotton-muslin-fringe-clay-150x200.png",
+   "shadow": "shadows/throw/sofa-cover-cj-cotton-muslin-fringe-clay-150x200.png",
+   "alpha": "identical to the default's",
+   "frame": "mb0-variant-throw-clay.png"
+  }
+ ],
+ "fb10": {
+  "date": "2026-11-18",
+  "slots": [
+   "wall-shelf",
+   "framed-art",
+   "framed-art-2",
+   "shelf-vase-left",
+   "shelf-vase-right",
+   "planter",
+   "magazine-holder",
+   "bedside-carafe",
+   "trinket-dish"
+  ],
+  "lights_pre": "fb10/lights-pre/",
+  "tool": "tools/fb10_compose.py"
+ },
+ "fb15": {
+  "date": "2026-11-26",
+  "brief": "briefs/wm-fb15-rooms-pasted-fix-2026-11-26.md",
+  "tool": "assets/renders/tools/fb15/ (fb15.py, fb15_write.py, fb15_code.py, fb15_rooms.py)",
+  "rollback": "every edited row keeps layer_before_fb15 / shadow_before_fb15; manifest.json is untouched"
+ }
+}
