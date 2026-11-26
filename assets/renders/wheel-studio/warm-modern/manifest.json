@@ -1,0 +1,1672 @@
+{
+ "id": "wm-wheel-studio-2026-11-26",
+ "style": "warm-modern",
+ "created": "2026-11-26",
+ "decision": "FB20 / FB20-S (2026-11-26): every wheel shows the product as sold, one studio, one light, one view; cap 7,000",
+ "brief": "briefs/wm-wheel-studio-renders-2026-11-26.md",
+ "studio": {
+  "backdrop_lab_target": [
+   92,
+   1,
+   7
+  ],
+  "key": "soft, upper left",
+  "view": "3/4 from about 30 deg above",
+  "fill": 0.72,
+  "size": [
+   1024,
+   1024
+  ],
+  "webp": 512
+ },
+ "status": "not QA'd; HD_PUBLIC=0 only (rule 7)",
+ "sheet": "assets/renders/wheel-studio/warm-modern/sheet.jpg",
+ "tokens_total": 6440,
+ "post": "tools/ (post.py, final.py, fixes.py, fix_pumpkin.py, check.py, measure.py; they ran in the scratch, the raws stay on var2 by placeholder id): one global white balance per image (the lit backdrop to L* 92 / a* 1 / b* 7), the backdrop beyond about 40 px from the product replaced by a smooth field of that tone (contact shadow kept), reframed to about 72%; colour fixes toward the SKU on 4 pieces (see each variant post.colour_fix); check: dE00 of the main colour, raw and exposure-matched (the SKU photos are lifestyle shots 1-2 stops darker: de00_exposure_matched is the fidelity number)",
+ "variants": [
+  {
+   "variant": "set-B",
+   "room": "living-room",
+   "slot": "cushions",
+   "default": true,
+   "products": [
+    {
+     "card_id": "cushions-aliexpress-textured-boucle-throw-pillow",
+     "card": "data/products/cushions/cushions-aliexpress-textured-boucle-throw-pillow.json",
+     "sku": "12000058046277179",
+     "option": {
+      "color": "oatmeal",
+      "size": "50x50"
+     },
+     "role": "50 x 50 square"
+    },
+    {
+     "card_id": "cushions-cj-wide-stripe-corduroy-light-green",
+     "card": "data/products/cushions/cushions-cj-wide-stripe-corduroy-light-green.json",
+     "sku": "CJYD280011307GT",
+     "option": {
+      "color": "camel"
+     },
+     "role": "corduroy square (card 50 x 50)"
+    },
+    {
+     "card_id": "cushions-cj-linen-look-charcoal",
+     "card": "data/products/cushions/cushions-cj-linen-look-charcoal.json",
+     "sku": null,
+     "option": {
+      "color": "beige",
+      "size": "30x50"
+     },
+     "role": "30 x 50 lumbar",
+     "sku_candidates": [
+      "CJZT113551675WD",
+      "CJZT113551679AZ"
+     ]
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "sku": "CJYD205807508HS",
+     "option": {
+      "other": "pecan",
+      "size": "150x200"
+     },
+     "role": "throw 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/living-room/cushions/set-B.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/living-room/cushions/set-B.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/set-B.json",
+   "check": {
+    "pieces": [
+     {
+      "render_lab": [
+       79.5,
+       1.7999999523162842,
+       7.099999904632568
+      ],
+      "sku_lab": [
+       73.4000015258789,
+       0.20000000298023224,
+       5.5
+      ],
+      "de00": 4.99,
+      "de00_exposure_matched": 1.99,
+      "exposure_k": 0.82
+     },
+     {
+      "render_lab": [
+       58.900001525878906,
+       12.300000190734863,
+       26.899999618530273
+      ],
+      "sku_lab": [
+       53.0,
+       8.300000190734863,
+       21.799999237060547
+      ],
+      "de00": 6.41,
+      "de00_exposure_matched": 2.51,
+      "exposure_k": 0.782
+     },
+     {
+      "render_lab": [
+       78.80000305175781,
+       3.0,
+       11.100000381469727
+      ],
+      "sku_lab": [
+       67.5,
+       3.4000000953674316,
+       5.900000095367432
+      ],
+      "de00": 9.38,
+      "de00_exposure_matched": 3.22,
+      "exposure_k": 0.683
+     },
+     {
+      "render_lab": [
+       48.79999923706055,
+       19.600000381469727,
+       25.700000762939453
+      ],
+      "sku_lab": [
+       33.5,
+       12.600000381469727,
+       17.399999618530273
+      ],
+      "de00": 14.61,
+      "de00_exposure_matched": 1.86,
+      "exposure_k": 0.446
+     }
+    ],
+    "de00": 14.61,
+    "de00_exposure_matched": 3.22
+   },
+   "post": {
+    "raw": "raw/set-B-r2.jpg",
+    "size": [
+     2048,
+     2048
+    ],
+    "gain": [
+     1.048,
+     1.0392,
+     1.0181
+    ],
+    "backdrop_ref_lab": [
+     90.47,
+     1.02,
+     5.83
+    ],
+    "scale": 0.3893,
+    "bbox_raw": [
+     153,
+     429,
+     2047,
+     1800
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     511,
+     511
+    ]
+   }
+  },
+  {
+   "variant": "set-A",
+   "room": "living-room",
+   "slot": "cushions",
+   "default": false,
+   "products": [
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+     "sku": "CJZT228600103CX",
+     "option": {
+      "color": "white",
+      "size": "50x50"
+     },
+     "role": "50 x 50 square"
+    },
+    {
+     "card_id": "cushions-cj-knitted-chenille-bean-green",
+     "card": "data/products/cushions/cushions-cj-knitted-chenille-bean-green.json",
+     "sku": "CJYD282217003CX",
+     "option": {
+      "color": "21-camel-color"
+     },
+     "role": "45 x 45 square"
+    },
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+     "sku": "CJZT228600126ZA",
+     "option": {
+      "color": "milk-tea-color",
+      "size": "30x50"
+     },
+     "role": "30 x 50 lumbar"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "sku": "CJYD205807538LO",
+     "option": {
+      "other": "flax-brown",
+      "size": "150x200"
+     },
+     "role": "throw 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/living-room/cushions/set-A.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/living-room/cushions/set-A.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/set-A.json",
+   "check": {
+    "pieces": [
+     {
+      "render_lab": [
+       93.80000305175781,
+       -0.0,
+       3.4000000953674316
+      ],
+      "sku_lab": [
+       77.0999984741211,
+       1.0,
+       2.700000047683716
+      ],
+      "de00": 11.07,
+      "de00_exposure_matched": 1.25,
+      "exposure_k": 0.61
+     },
+     {
+      "render_lab": [
+       53.20000076293945,
+       4.800000190734863,
+       10.800000190734863
+      ],
+      "sku_lab": [
+       47.79999923706055,
+       3.0,
+       10.899999618530273
+      ],
+      "de00": 5.89,
+      "de00_exposure_matched": 2.0,
+      "exposure_k": 0.784
+     },
+     {
+      "render_lab": [
+       77.5,
+       1.7000000476837158,
+       4.5
+      ],
+      "sku_lab": [
+       83.0999984741211,
+       1.899999976158142,
+       3.9000000953674316
+      ],
+      "de00": 3.84,
+      "measured_on": "final image, piece mask (after the colour fix)",
+      "de00_exposure_matched": 0.82,
+      "exposure_k": 1.191
+     },
+     {
+      "render_lab": [
+       68.19999694824219,
+       8.600000381469727,
+       16.0
+      ],
+      "sku_lab": [
+       52.79999923706055,
+       4.300000190734863,
+       12.199999809265137
+      ],
+      "de00": 14.25,
+      "de00_exposure_matched": 2.87,
+      "exposure_k": 0.546
+     }
+    ],
+    "de00": 14.25,
+    "de00_exposure_matched": 2.87
+   },
+   "post": {
+    "raw": "raw/set-A-r1.jpg",
+    "size": [
+     2048,
+     2048
+    ],
+    "gain": [
+     1.0685,
+     1.0709,
+     1.0617
+    ],
+    "backdrop_ref_lab": [
+     89.47,
+     1.2,
+     6.45
+    ],
+    "scale": 0.3844,
+    "bbox_raw": [
+     129,
+     333,
+     2047,
+     1798
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.72,
+    "centre_px": [
+     511,
+     511
+    ],
+    "colour_fix": {
+     "piece": "30 x 50 lumbar (milk-tea)",
+     "fix": "a*, b* x 0.3",
+     "match_err": 0.0,
+     "px": 51675
+    }
+   }
+  },
+  {
+   "variant": "set-C",
+   "room": "living-room",
+   "slot": "cushions",
+   "default": false,
+   "products": [
+    {
+     "card_id": "cushions-cj-boucle-teddy",
+     "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+     "sku": "CJZT228600133GT",
+     "option": {
+      "color": "light-brown",
+      "size": "50x50"
+     },
+     "role": "50 x 50 square"
+    },
+    {
+     "card_id": "cushions-cj-corduroy-patchwork",
+     "card": "data/products/cushions/cushions-cj-corduroy-patchwork.json",
+     "sku": "CJZT189401910JQ",
+     "option": {
+      "color": "dark-coffee",
+      "size": "45x45"
+     },
+     "role": "45 x 45 square"
+    },
+    {
+     "card_id": "cushions-cj-linen-look-ivory",
+     "card": "data/products/cushions/cushions-cj-linen-look-ivory.json",
+     "sku": "CJZT242978810JQ",
+     "option": {
+      "color": "light-beige-gray"
+     },
+     "role": "30 x 50 lumbar"
+    },
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "sku": "CJYD205807510JQ",
+     "option": {
+      "other": "clay",
+      "size": "150x200"
+     },
+     "role": "throw 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/living-room/cushions/set-C.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/living-room/cushions/set-C.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/set-C.json",
+   "check": {
+    "pieces": [
+     {
+      "render_lab": [
+       56.70000076293945,
+       11.199999809265137,
+       19.299999237060547
+      ],
+      "sku_lab": [
+       57.599998474121094,
+       7.599999904632568,
+       15.899999618530273
+      ],
+      "de00": 3.25,
+      "de00_exposure_matched": 3.36,
+      "exposure_k": 1.038
+     },
+     {
+      "render_lab": [
+       26.899999618530273,
+       13.800000190734863,
+       13.300000190734863
+      ],
+      "sku_lab": [
+       35.20000076293945,
+       22.399999618530273,
+       19.899999618530273
+      ],
+      "de00": 8.44,
+      "measured_on": "final image, piece mask (after the colour fix)",
+      "de00_exposure_matched": 3.42,
+      "exposure_k": 1.7
+     },
+     {
+      "render_lab": [
+       77.0,
+       1.399999976158142,
+       7.699999809265137
+      ],
+      "sku_lab": [
+       72.69999694824219,
+       1.0,
+       5.099999904632568
+      ],
+      "de00": 3.75,
+      "de00_exposure_matched": 1.76,
+      "exposure_k": 0.868
+     },
+     {
+      "render_lab": [
+       38.400001525878906,
+       11.0,
+       8.300000190734863
+      ],
+      "sku_lab": [
+       22.700000762939453,
+       7.5,
+       8.100000381469727
+      ],
+      "de00": 12.73,
+      "de00_exposure_matched": 1.64,
+      "exposure_k": 0.36
+     }
+    ],
+    "de00": 12.73,
+    "de00_exposure_matched": 3.42
+   },
+   "post": {
+    "raw": "raw/set-C-r1.jpg",
+    "size": [
+     2048,
+     2048
+    ],
+    "gain": [
+     1.1222,
+     1.1269,
+     1.0961
+    ],
+    "backdrop_ref_lab": [
+     87.76,
+     1.55,
+     5.5
+    ],
+    "scale": 0.4053,
+    "bbox_raw": [
+     131,
+     415,
+     1950,
+     1890
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.749,
+    "centre_px": [
+     526,
+     511
+    ],
+    "colour_fix": {
+     "piece": "45 x 45 corduroy patchwork (dark-coffee)",
+     "fix": "x3.0 linear",
+     "match_err": 0.0,
+     "px": 71069
+    }
+   }
+  },
+  {
+   "variant": "hand-towel-aliexpress-pure-linen-towel-38x55-caramel",
+   "room": "bath",
+   "slot": "hand-towel",
+   "default": true,
+   "products": [
+    {
+     "card_id": "hand-towel-aliexpress-pure-linen-towel-38x55",
+     "card": "data/products/bath/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55.json",
+     "sku": "12000059652536005",
+     "option": {
+      "color": "caramel",
+      "set": "1pc"
+     },
+     "role": "hand towel 38 x 55"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/bath/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/bath/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.json",
+   "check": {
+    "render_lab": [
+     47.0,
+     21.899999618530273,
+     28.299999237060547
+    ],
+    "sku_lab": [
+     38.599998474121094,
+     24.0,
+     28.899999618530273
+    ],
+    "de00": 7.79,
+    "de00_exposure_matched": 2.71,
+    "exposure_k": 0.651
+   },
+   "post": {
+    "raw": "raw/towel-linen-r1.jpg (geometry) + raw/towel-caramel-r2.jpg (colour)",
+    "method": "Lab mean/std transfer on the product pixels",
+    "src_lab_mean": [
+     73.67,
+     2.65,
+     7.85
+    ],
+    "target_lab_mean": [
+     42.05,
+     22.35,
+     31.55
+    ],
+    "std_ratio": [
+     0.952,
+     2.0,
+     1.975
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.91
+    ],
+    "fill": 0.669,
+    "centre_px": [
+     535,
+     497
+    ]
+   },
+   "note": "geometry of the linen towel render, recoloured to the caramel render (both caramel returns were top-down flat lays; one retry per image)"
+  },
+  {
+   "variant": "hand-towel-aliexpress-pure-linen-towel-38x55-linen",
+   "room": "bath",
+   "slot": "hand-towel",
+   "default": false,
+   "products": [
+    {
+     "card_id": "hand-towel-aliexpress-pure-linen-towel-38x55",
+     "card": "data/products/bath/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55.json",
+     "sku": "12000059652334993",
+     "option": {
+      "color": "linen",
+      "set": "1pc"
+     },
+     "role": "hand towel 38 x 55"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/bath/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-linen.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/bath/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-linen.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/hand-towel-aliexpress-pure-linen-towel-38x55-linen.json",
+   "check": {
+    "render_lab": [
+     76.0999984741211,
+     2.700000047683716,
+     6.599999904632568
+    ],
+    "sku_lab": [
+     74.5999984741211,
+     2.0999999046325684,
+     4.599999904632568
+    ],
+    "de00": 2.02,
+    "de00_exposure_matched": 1.64,
+    "exposure_k": 0.952
+   },
+   "post": {
+    "raw": "raw/towel-linen-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.0896,
+     1.104,
+     1.1699
+    ],
+    "backdrop_ref_lab": [
+     88.35,
+     0.59,
+     9.53
+    ],
+    "scale": 0.7928,
+    "bbox_raw": [
+     0,
+     202,
+     930,
+     845
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     511
+    ]
+   }
+  },
+  {
+   "variant": "tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki",
+   "room": "bath",
+   "slot": "hand-towel",
+   "default": false,
+   "products": [
+    {
+     "card_id": "tea-towel-cj-waffle-cotton-beige-45x65-pair",
+     "card": "data/products/dining/tea-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair.json",
+     "sku": "CJYD223761707GT",
+     "option": {
+      "color": "khaki",
+      "size": "45x65"
+     },
+     "role": "towel 45 x 65"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/bath/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/bath/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.json",
+   "check": {
+    "render_lab": [
+     70.9000015258789,
+     4.5,
+     15.5
+    ],
+    "sku_lab": [
+     45.0,
+     5.400000095367432,
+     16.299999237060547
+    ],
+    "de00": 23.48,
+    "de00_exposure_matched": 3.79,
+    "exposure_k": 0.346
+   },
+   "post": {
+    "raw": "raw/teatowel-khaki-r2.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.1919,
+     1.1386,
+     1.1829
+    ],
+    "backdrop_ref_lab": [
+     86.87,
+     -1.2,
+     7.84
+    ],
+    "scale": 0.8129,
+    "bbox_raw": [
+     108,
+     292,
+     1015,
+     792
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.723,
+    "centre_px": [
+     513,
+     512
+    ]
+   }
+  },
+  {
+   "variant": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light",
+   "room": "dining",
+   "slot": "dining-pendant",
+   "default": true,
+   "products": [
+    {
+     "card_id": "pendant-cj-silk-ribbed-pumpkin-40",
+     "card": "data/products/pendant/pendant-cj-silk-ribbed-pumpkin-40.json",
+     "sku": "CJYD304604003CX",
+     "option": {
+      "size": "50",
+      "other": "warm-light"
+     },
+     "role": "pendant 50 cm"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/dining/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/dining/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light.json",
+   "check": {
+    "render_lab": [
+     92.4000015258789,
+     0.8999999761581421,
+     17.200000762939453
+    ],
+    "sku_lab": [
+     93.69999694824219,
+     0.0,
+     15.699999809265137
+    ],
+    "de00": 1.52,
+    "de00_exposure_matched": 1.39,
+    "exposure_k": 1.036
+   },
+   "post": {
+    "raw": "raw/pend-pumpkin-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.5289,
+     1.5289,
+     1.5289
+    ],
+    "backdrop_ref_lab": [
+     77.66,
+     2.31,
+     10.97
+    ],
+    "scale": 0.9844,
+    "bbox_raw": [
+     141,
+     460,
+     890,
+     838
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     359
+    ],
+    "colour_fix": {
+     "fix": "b* x0.6 on the shade (the SKU photo glows warm white, b* about 16)"
+    }
+   }
+  },
+  {
+   "variant": "pendant-cj-scalloped-pleated-bell-45",
+   "room": "dining",
+   "slot": "dining-pendant",
+   "default": false,
+   "products": [
+    {
+     "card_id": "pendant-cj-scalloped-pleated-bell",
+     "card": "data/products/pendant/pendant-cj-scalloped-pleated-bell.json",
+     "sku": "CJYD272605101AZ",
+     "option": {
+      "variant": "Warm Light Beige 45 cm",
+      "sku_note": "CJYD272605101AZ (card notes)"
+     },
+     "role": "pendant 45 cm"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/dining/dining-pendant/pendant-cj-scalloped-pleated-bell-45.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/dining/dining-pendant/pendant-cj-scalloped-pleated-bell-45.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/pendant-cj-scalloped-pleated-bell-45.json",
+   "check": {
+    "render_lab": [
+     90.9000015258789,
+     3.299999952316284,
+     28.799999237060547
+    ],
+    "sku_lab": [
+     75.69999694824219,
+     4.400000095367432,
+     28.100000381469727
+    ],
+    "de00": 10.24,
+    "de00_exposure_matched": 1.96,
+    "exposure_k": 0.632
+   },
+   "post": {
+    "raw": "raw/pend-bell-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.5083,
+     1.5083,
+     1.5083
+    ],
+    "backdrop_ref_lab": [
+     78.08,
+     2.52,
+     11.58
+    ],
+    "scale": 1.1022,
+    "bbox_raw": [
+     245,
+     204,
+     756,
+     613
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.693,
+    "centre_px": [
+     514,
+     355
+    ]
+   }
+  },
+  {
+   "variant": "bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown",
+   "room": "boy",
+   "slot": "bedspread",
+   "default": true,
+   "products": [
+    {
+     "card_id": "bedspread-cj-waffle-gauze-fringe-150x200",
+     "card": "data/products/kids/bedspread/bedspread-cj-waffle-gauze-fringe-150x200.json",
+     "sku": "CJZW264585012LO",
+     "option": {
+      "color": "deep-chestnut-brown",
+      "size": "150x200"
+     },
+     "role": "bedspread 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/boy/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/boy/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.json",
+   "check": {
+    "render_lab": [
+     37.29999923706055,
+     6.800000190734863,
+     9.300000190734863
+    ],
+    "sku_lab": [
+     23.5,
+     4.400000095367432,
+     5.599999904632568
+    ],
+    "de00": 11.26,
+    "de00_exposure_matched": 1.06,
+    "exposure_k": 0.407
+   },
+   "post": {
+    "raw": "raw/bs-chestnut-r2.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     0.8864,
+     0.8907,
+     0.9671
+    ],
+    "backdrop_ref_lab": [
+     95.95,
+     -0.08,
+     11.28
+    ],
+    "scale": 0.781,
+    "bbox_raw": [
+     59,
+     181,
+     1003,
+     681
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     512
+    ]
+   },
+   "shared_render": "one render for the boy and girl wheels (same SKU CJZW264585012LO)"
+  },
+  {
+   "variant": "bedspread-cj-waffle-gauze-fringe-150x200-coffee",
+   "room": "boy",
+   "slot": "bedspread",
+   "default": false,
+   "products": [
+    {
+     "card_id": "bedspread-cj-waffle-gauze-fringe-150x200",
+     "card": "data/products/kids/bedspread/bedspread-cj-waffle-gauze-fringe-150x200.json",
+     "sku": "CJZW264585008HS",
+     "option": {
+      "color": "coffee",
+      "size": "150x200"
+     },
+     "role": "bedspread 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/boy/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-coffee.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/boy/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-coffee.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/bedspread-cj-waffle-gauze-fringe-150x200-coffee.json",
+   "check": {
+    "render_lab": [
+     67.5999984741211,
+     5.300000190734863,
+     16.399999618530273
+    ],
+    "sku_lab": [
+     40.29999923706055,
+     5.5,
+     18.0
+    ],
+    "de00": 26.29,
+    "de00_exposure_matched": 4.39,
+    "exposure_k": 0.305
+   },
+   "post": {
+    "raw": "raw/bs-coffee-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.0582,
+     1.104,
+     1.2797
+    ],
+    "backdrop_ref_lab": [
+     88.42,
+     0.41,
+     13.83
+    ],
+    "scale": 0.7953,
+    "bbox_raw": [
+     45,
+     237,
+     972,
+     874
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.724,
+    "centre_px": [
+     512,
+     512
+    ]
+   }
+  },
+  {
+   "variant": "bedspread-cj-waffle-gauze-fringe-150x200-green",
+   "room": "boy",
+   "slot": "bedspread",
+   "default": false,
+   "products": [
+    {
+     "card_id": "bedspread-cj-waffle-gauze-fringe-150x200",
+     "card": "data/products/kids/bedspread/bedspread-cj-waffle-gauze-fringe-150x200.json",
+     "sku": "CJZW264585024XC",
+     "option": {
+      "color": "green",
+      "size": "150x200"
+     },
+     "role": "bedspread 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/boy/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-green.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/boy/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-green.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/bedspread-cj-waffle-gauze-fringe-150x200-green.json",
+   "check": {
+    "render_lab": [
+     41.20000076293945,
+     -6.800000190734863,
+     20.899999618530273
+    ],
+    "sku_lab": [
+     18.799999237060547,
+     -4.0,
+     12.800000190734863
+    ],
+    "de00": 18.06,
+    "de00_exposure_matched": 0.09,
+    "exposure_k": 0.225
+   },
+   "post": {
+    "raw": "raw/bs-green-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     0.9714,
+     0.9609,
+     0.9671
+    ],
+    "backdrop_ref_lab": [
+     93.2,
+     0.52,
+     7.23
+    ],
+    "scale": 0.7617,
+    "bbox_raw": [
+     13,
+     231,
+     981,
+     795
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     512
+    ]
+   }
+  },
+  {
+   "variant": "bedspread-cj-waffle-gauze-fringe-150x200-linen-brown",
+   "room": "girl",
+   "slot": "bedspread",
+   "default": true,
+   "products": [
+    {
+     "card_id": "bedspread-cj-waffle-gauze-fringe-150x200",
+     "card": "data/products/kids/bedspread/bedspread-cj-waffle-gauze-fringe-150x200.json",
+     "sku": "CJZW264585004DW",
+     "option": {
+      "color": "linen-brown",
+      "size": "150x200"
+     },
+     "role": "bedspread 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/girl/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-linen-brown.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/girl/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-linen-brown.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/bedspread-cj-waffle-gauze-fringe-150x200-linen-brown.json",
+   "check": {
+    "render_lab": [
+     61.29999923706055,
+     6.0,
+     15.600000381469727
+    ],
+    "sku_lab": [
+     41.0,
+     3.9000000953674316,
+     12.300000190734863
+    ],
+    "de00": 20.43,
+    "de00_exposure_matched": 1.04,
+    "exposure_k": 0.401
+   },
+   "post": {
+    "raw": "raw/bs-linenbrown-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.2679,
+     1.2386,
+     1.2945
+    ],
+    "backdrop_ref_lab": [
+     84.19,
+     -0.5,
+     8.14
+    ],
+    "scale": 0.7962,
+    "bbox_raw": [
+     97,
+     326,
+     1023,
+     823
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     512
+    ]
+   }
+  },
+  {
+   "variant": "bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown",
+   "room": "girl",
+   "slot": "bedspread",
+   "default": false,
+   "products": [
+    {
+     "card_id": "bedspread-cj-waffle-gauze-fringe-150x200",
+     "card": "data/products/kids/bedspread/bedspread-cj-waffle-gauze-fringe-150x200.json",
+     "sku": "CJZW264585012LO",
+     "option": {
+      "color": "deep-chestnut-brown",
+      "size": "150x200"
+     },
+     "role": "bedspread 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/girl/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/girl/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/bedspread-cj-waffle-gauze-fringe-150x200-deep-chestnut-brown.json",
+   "check": {
+    "render_lab": [
+     37.29999923706055,
+     6.800000190734863,
+     9.300000190734863
+    ],
+    "sku_lab": [
+     23.5,
+     4.400000095367432,
+     5.599999904632568
+    ],
+    "de00": 11.26,
+    "de00_exposure_matched": 1.06,
+    "exposure_k": 0.407
+   },
+   "post": {
+    "raw": "raw/bs-chestnut-r2.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     0.8864,
+     0.8907,
+     0.9671
+    ],
+    "backdrop_ref_lab": [
+     95.95,
+     -0.08,
+     11.28
+    ],
+    "scale": 0.781,
+    "bbox_raw": [
+     59,
+     181,
+     1003,
+     681
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     512
+    ]
+   },
+   "shared_render": "one render for the boy and girl wheels (same SKU CJZW264585012LO)"
+  },
+  {
+   "variant": "bedspread-cj-waffle-gauze-fringe-150x200-pink",
+   "room": "girl",
+   "slot": "bedspread",
+   "default": false,
+   "products": [
+    {
+     "card_id": "bedspread-cj-waffle-gauze-fringe-150x200",
+     "card": "data/products/kids/bedspread/bedspread-cj-waffle-gauze-fringe-150x200.json",
+     "sku": "CJZW264585020TG",
+     "option": {
+      "color": "pink",
+      "size": "150x200"
+     },
+     "role": "bedspread 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/girl/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-pink.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/girl/bedspread/bedspread-cj-waffle-gauze-fringe-150x200-pink.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/bedspread-cj-waffle-gauze-fringe-150x200-pink.json",
+   "check": {
+    "render_lab": [
+     72.0999984741211,
+     10.0,
+     14.5
+    ],
+    "sku_lab": [
+     46.099998474121094,
+     10.800000190734863,
+     15.800000190734863
+    ],
+    "de00": 23.18,
+    "de00_exposure_matched": 4.27,
+    "exposure_k": 0.35
+   },
+   "post": {
+    "raw": "raw/bs-pink-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     0.9806,
+     0.9426,
+     1.0181
+    ],
+    "backdrop_ref_lab": [
+     93.51,
+     -1.66,
+     10.25
+    ],
+    "scale": 0.8192,
+    "bbox_raw": [
+     102,
+     307,
+     1002,
+     750
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.746,
+    "centre_px": [
+     500,
+     499
+    ],
+    "colour_fix": {
+     "fix": "b* +4.5 (the SKU pink is warmer)"
+    }
+   }
+  },
+  {
+   "variant": "sofa-cover-cj-cotton-muslin-fringe-pecan-150x200",
+   "room": "master",
+   "slot": "throw",
+   "default": true,
+   "products": [
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "sku": "CJYD205807508HS",
+     "option": {
+      "size": "150x200",
+      "other": "pecan"
+     },
+     "role": "throw 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/master/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/master/throw/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/sofa-cover-cj-cotton-muslin-fringe-pecan-150x200.json",
+   "check": {
+    "render_lab": [
+     46.5,
+     14.100000381469727,
+     15.100000381469727
+    ],
+    "sku_lab": [
+     33.5,
+     12.600000381469727,
+     17.399999618530273
+    ],
+    "de00": 11.66,
+    "de00_exposure_matched": 3.41,
+    "exposure_k": 0.497
+   },
+   "post": {
+    "raw": "raw/throw-pecan-r2.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.1112,
+     1.0818,
+     1.1571
+    ],
+    "backdrop_ref_lab": [
+     88.72,
+     -0.98,
+     9.52
+    ],
+    "scale": 0.7539,
+    "bbox_raw": [
+     19,
+     151,
+     997,
+     863
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     511
+    ]
+   }
+  },
+  {
+   "variant": "sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200",
+   "room": "master",
+   "slot": "throw",
+   "default": false,
+   "products": [
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "sku": "CJYD205807538LO",
+     "option": {
+      "size": "150x200",
+      "other": "flax-brown"
+     },
+     "role": "throw 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/master/throw/sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/master/throw/sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/sofa-cover-cj-cotton-muslin-fringe-flax-brown-150x200.json",
+   "check": {
+    "render_lab": [
+     70.0999984741211,
+     4.800000190734863,
+     13.600000381469727
+    ],
+    "sku_lab": [
+     52.79999923706055,
+     4.300000190734863,
+     12.199999809265137
+    ],
+    "de00": 14.95,
+    "de00_exposure_matched": 0.93,
+    "exposure_k": 0.51
+   },
+   "post": {
+    "raw": "raw/throw-flax-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     1.1799,
+     1.1269,
+     1.1446
+    ],
+    "backdrop_ref_lab": [
+     87.27,
+     -0.86,
+     6.84
+    ],
+    "scale": 0.7672,
+    "bbox_raw": [
+     43,
+     315,
+     1004,
+     773
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     512
+    ]
+   }
+  },
+  {
+   "variant": "sofa-cover-cj-cotton-muslin-fringe-clay-150x200",
+   "room": "master",
+   "slot": "throw",
+   "default": false,
+   "products": [
+    {
+     "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+     "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+     "sku": "CJYD205807510JQ",
+     "option": {
+      "size": "150x200",
+      "other": "clay"
+     },
+     "role": "throw 150 x 200"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/master/throw/sofa-cover-cj-cotton-muslin-fringe-clay-150x200.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/master/throw/sofa-cover-cj-cotton-muslin-fringe-clay-150x200.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/sofa-cover-cj-cotton-muslin-fringe-clay-150x200.json",
+   "check": {
+    "render_lab": [
+     33.79999923706055,
+     11.300000190734863,
+     10.0
+    ],
+    "sku_lab": [
+     22.700000762939453,
+     7.5,
+     8.100000381469727
+    ],
+    "de00": 9.11,
+    "de00_exposure_matched": 1.47,
+    "exposure_k": 0.469
+   },
+   "post": {
+    "raw": "raw/throw-clay-r1.jpg",
+    "size": [
+     1024,
+     1024
+    ],
+    "gain": [
+     0.9624,
+     0.9426,
+     0.9573
+    ],
+    "backdrop_ref_lab": [
+     93.79,
+     0.0,
+     7.59
+    ],
+    "scale": 0.757,
+    "bbox_raw": [
+     49,
+     233,
+     1023,
+     785
+    ],
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.721,
+    "centre_px": [
+     512,
+     512
+    ]
+   }
+  },
+  {
+   "variant": "framed-art-aliexpress-misty-landscape-386242-work-08-30x40",
+   "room": "work",
+   "slot": "framed-art",
+   "default": true,
+   "products": [
+    {
+     "card_id": "framed-art-aliexpress-misty-landscape-386242-work",
+     "card": "data/products/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work.json",
+     "sku": "12000038963447938",
+     "option": {
+      "color": "08",
+      "size": "30x40-no-frame"
+     },
+     "role": "print 30 x 40, no frame"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work-08-30x40.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work-08-30x40.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/framed-art-aliexpress-misty-landscape-386242-work-08-30x40.json",
+   "check": {
+    "print": "pixels from the listing file, cover-fitted; no dE needed"
+   },
+   "post": {
+    "raw": "raw/work-frame-r2.jpg (blank frame, re-proportioned)",
+    "print": "ref/05fbf0b9.jpg",
+    "print_box": [
+     38,
+     125,
+     766,
+     668
+    ],
+    "quad": [
+     [
+      232.8000030517578,
+      321.0
+     ],
+     [
+      741.2000122070312,
+      321.0
+     ],
+     [
+      747.7999877929688,
+      692.0
+     ],
+     [
+      226.1999969482422,
+      692.0
+     ]
+    ],
+    "canvas_px": 185628,
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.782,
+    "centre_px": [
+     511,
+     523
+    ]
+   },
+   "note": "the print set in code into a blank-canvas frame render (the frame re-proportioned to landscape in code); the frame and mat are not sold (PR1: prints are sold unframed, \"ללא מסגרת\"); rights: usage_rights unclear, a close-up: not public before PR1 written rights"
+  },
+  {
+   "variant": "framed-art-aliexpress-misty-landscape-386242-work-01-30x40",
+   "room": "work",
+   "slot": "framed-art",
+   "default": false,
+   "products": [
+    {
+     "card_id": "framed-art-aliexpress-misty-landscape-386242-work",
+     "card": "data/products/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work.json",
+     "sku": "12000038963447931",
+     "option": {
+      "color": "01",
+      "size": "30x40-no-frame"
+     },
+     "role": "print 30 x 40, no frame"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work-01-30x40.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work-01-30x40.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/framed-art-aliexpress-misty-landscape-386242-work-01-30x40.json",
+   "check": {
+    "print": "pixels from the listing file, cover-fitted; no dE needed"
+   },
+   "post": {
+    "raw": "raw/work-frame-r2.jpg (blank frame, re-proportioned)",
+    "print": "ref/7f780207.jpg",
+    "print_box": [
+     38,
+     125,
+     766,
+     668
+    ],
+    "quad": [
+     [
+      232.8000030517578,
+      321.0
+     ],
+     [
+      741.2000122070312,
+      321.0
+     ],
+     [
+      747.7999877929688,
+      692.0
+     ],
+     [
+      226.1999969482422,
+      692.0
+     ]
+    ],
+    "canvas_px": 185628,
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.782,
+    "centre_px": [
+     511,
+     523
+    ]
+   },
+   "note": "the print set in code into a blank-canvas frame render (the frame re-proportioned to landscape in code); the frame and mat are not sold (PR1: prints are sold unframed, \"ללא מסגרת\"); rights: usage_rights unclear, a close-up: not public before PR1 written rights"
+  },
+  {
+   "variant": "framed-art-aliexpress-misty-landscape-386242-work-02-30x40",
+   "room": "work",
+   "slot": "framed-art",
+   "default": false,
+   "products": [
+    {
+     "card_id": "framed-art-aliexpress-misty-landscape-386242-work",
+     "card": "data/products/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work.json",
+     "sku": "12000038963447932",
+     "option": {
+      "color": "02",
+      "size": "30x40-no-frame"
+     },
+     "role": "print 30 x 40, no frame"
+    }
+   ],
+   "png": "assets/renders/wheel-studio/warm-modern/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work-02-30x40.png",
+   "webp": "assets/renders/wheel-studio/warm-modern/work/framed-art/framed-art-aliexpress-misty-landscape-386242-work-02-30x40.webp",
+   "prompt_record": "assets/prompts/wm-wheel-studio-2026-11-26/framed-art-aliexpress-misty-landscape-386242-work-02-30x40.json",
+   "check": {
+    "print": "pixels from the listing file, cover-fitted; no dE needed"
+   },
+   "post": {
+    "raw": "raw/work-frame-r2.jpg (blank frame, re-proportioned)",
+    "print": "ref/503faf62.jpg",
+    "print_box": [
+     38,
+     125,
+     766,
+     668
+    ],
+    "quad": [
+     [
+      232.8000030517578,
+      321.0
+     ],
+     [
+      741.2000122070312,
+      321.0
+     ],
+     [
+      747.7999877929688,
+      692.0
+     ],
+     [
+      226.1999969482422,
+      692.0
+     ]
+    ],
+    "canvas_px": 185628,
+    "backdrop_lab": [
+     91.9,
+     1.02,
+     6.95
+    ],
+    "fill": 0.782,
+    "centre_px": [
+     511,
+     523
+    ]
+   },
+   "note": "the print set in code into a blank-canvas frame render (the frame re-proportioned to landscape in code); the frame and mat are not sold (PR1: prints are sold unframed, \"ללא מסגרת\"); rights: usage_rights unclear, a close-up: not public before PR1 written rights"
+  }
+ ]
+}
