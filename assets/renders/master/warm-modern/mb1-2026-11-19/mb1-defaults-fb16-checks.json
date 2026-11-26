@@ -47,16 +47,16 @@
   "measured": {
    "plaster": [
     74.95,
-    2.02,
-    8.03
+    2.0,
+    8.02
    ],
    "plaster_px": 557030,
-   "black_p05": 7.95
+   "black_p05": 8.87
   },
   "black_loop": {
    "iteration": 2,
-   "black_target_in_fit": 7.96,
-   "p05_final": 11.57
+   "black_target_in_fit": 8.94,
+   "p05_final": 11.6
   }
  },
  "window_plane": {
@@ -118,13 +118,14 @@
   }
  },
  "window_glow": {
-  "amp": 0.2208,
+  "amp": 0.1455,
   "color": [
    1.0,
-   0.84,
-   0.62
+   0.87,
+   0.7
   ],
-  "dL_at_1m": 5.0,
+  "dL_full_on_plaster": 3.5,
+  "near_field": "1 / (1 + (d / 1.1 m)^4)",
   "blur_px": 25
  },
  "lamps": [
@@ -159,31 +160,36 @@
  },
  "after": {
   "plaster": [
-   75.96,
-   1.94,
-   8.08
+   75.7,
+   1.97,
+   8.0
   ],
   "plaster_px": 557030,
-  "black_p05": 11.57,
+  "black_p05": 11.6,
+  "window_zone_plaster": {
+   "px": 154576,
+   "dL_median": 4.93,
+   "b_median": 12.17
+  },
   "window_zone": {
-   "rule": "every surface where the window field is at least half its 1 m value",
-   "px": 598979,
-   "dL_median": 7.06,
-   "dL_p90": 10.97,
-   "b_median": 13.06
+   "rule": "every surface where the window field is at least half its full value",
+   "px": 613964,
+   "dL_median": 4.86,
+   "dL_p90": 7.97,
+   "b_median": 12.0
   },
   "outside": {
-   "L_p90": 92.2,
-   "L_p10": 62.8,
+   "L_p90": 92.9,
+   "L_p10": 66.9,
    "light_part_ab": [
-    -3.2,
-    12.5
+    -2.9,
+    11.9
    ]
   }
  },
  "pasted_test": {
   "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
-  "score": 94.32,
+  "score": 94.36,
   "per_layer_mean": 4.1,
   "lamps": {
    "bedside-sconces-east": "looks lit, outside G1.10's H/S",
@@ -193,15 +199,15 @@
   "worst": [
    [
     "planter",
-    8.44
+    9.39
    ],
    [
     "rug",
-    7.87
+    7.73
    ],
    [
     "magazine-holder",
-    6.96
+    7.58
    ]
   ]
  },
@@ -216,5 +222,5 @@
   "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/curtains-aliexpress-linen-blend-s-fold-180502-fb16.png",
   "assets/renders/master/warm-modern/mb1-2026-11-19/layers/manifest-fb16.json"
  ],
- "seconds": 124.8
+ "seconds": 121.8
 }
