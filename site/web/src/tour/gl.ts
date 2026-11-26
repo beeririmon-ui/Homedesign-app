@@ -24,6 +24,7 @@ import type { Decoded } from '../engine/loader';
 import { coverSize } from '../engine/camera';
 import { metrics } from './metrics';
 import type { TourCamera } from './data';
+import { GRADE_FS, type TourGrade } from './grade';
 
 export type LayerDraw = {
   key: string;
@@ -43,6 +44,8 @@ export type LayerDraw = {
   sub?: [number, number, number, number];
   /** MOCK4: a light, added in screen (the light's own layer of a render folder); `shadow` must be false */
   screen?: boolean;
+  /** MOCK8 (FB16): drawn over the graded frame (a glow), after the grade */
+  post?: boolean;
 };
 export const layer = (key: string, rect: Box, shadow: boolean, code = 0, sub?: [number, number, number, number], screen = false): LayerDraw => ({
   key,
@@ -600,6 +603,8 @@ export class TourGL {
         flags,
       );
     }
+    // MOCK8 (FB16): and the grade's program, drawn once (a room of the house is graded)
+    this.drawGrade(this.blank(), { kin: [0, 25, 50, 75, 100], kout: [0, 25, 50, 75, 100], m: [1, 1, 1, 1, 1], da: 0, db: 0 });
     gl.disable(gl.SCISSOR_TEST);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     // the warm draws left a pixel in the mask; the next composeMask clears it, and nothing reads it before that
@@ -663,7 +668,53 @@ export class TourGL {
     return gone;
   }
 
-  private drawLayers(layers: LayerDraw[], w: number, h: number, mode: 'compose' | 'mask'): void {
+  /** MOCK8 (FB16): the raw composite of a graded room (the layers before the grade), one per target, made when needed */
+  private raws: ({ tex: WebGLTexture; fb: WebGLFramebuffer; w: number; h: number } | null)[] = [null, null];
+  private gradeProg: { prog: WebGLProgram; loc: Record<string, WebGLUniformLocation | null> } | null = null;
+  private rawTarget(n: 0 | 1): { tex: WebGLTexture; fb: WebGLFramebuffer; w: number; h: number } {
+    const gl = this.gl;
+    const have = this.raws[n];
+    if (have && have.w === this.width && have.h === this.height) return have;
+    if (have) {
+      gl.deleteTexture(have.tex);
+      gl.deleteFramebuffer(have.fb);
+    }
+    const tex = this.texture(gl.NEAREST);
+    gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8, this.width, this.height);
+    const fb = gl.createFramebuffer()!;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    const r = { tex, fb, w: this.width, h: this.height };
+    this.raws[n] = r;
+    return r;
+  }
+  /** MOCK8: the grade of the raw composite into the target (texel for texel, over the bound framebuffer's scissor) */
+  private gradeProgram(): { prog: WebGLProgram; loc: Record<string, WebGLUniformLocation | null> } {
+    if (!this.gradeProg) {
+      const prog = this.program(DISPLAY_VS, GRADE_FS);
+      const loc: Record<string, WebGLUniformLocation | null> = {};
+      for (const k of ['uRaw', 'uKin', 'uKout', 'uM', 'uDab']) loc[k] = this.gl.getUniformLocation(prog, k);
+      this.gradeProg = { prog, loc };
+    }
+    return this.gradeProg;
+  }
+  private drawGrade(raw: WebGLTexture, g: TourGrade): void {
+    const gl = this.gl;
+    const { prog, loc } = this.gradeProgram();
+    gl.useProgram(prog);
+    gl.bindVertexArray(this.vao);
+    gl.disable(gl.BLEND);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, raw);
+    gl.uniform1i(loc['uRaw']!, 0);
+    gl.uniform1fv(loc['uKin']!, g.kin);
+    gl.uniform1fv(loc['uKout']!, g.kout);
+    gl.uniform1fv(loc['uM']!, g.m);
+    gl.uniform2f(loc['uDab']!, g.da, g.db);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
+  private drawLayers(layers: LayerDraw[], w: number, h: number, mode: 'compose' | 'mask', base = true): void {
     const gl = this.gl;
     gl.useProgram(this.layerProg);
     gl.bindVertexArray(this.vao);
@@ -675,7 +726,7 @@ export class TourGL {
       if (mode === 'mask') {
         if (!l.code || l.shadow) continue;
         gl.disable(gl.BLEND);
-      } else if (i === 0 && !l.shadow && l.opacity === 1) gl.disable(gl.BLEND);
+      } else if (base && i === 0 && !l.shadow && l.opacity === 1) gl.disable(gl.BLEND);
       else {
         gl.enable(gl.BLEND);
         if (l.shadow) gl.blendFuncSeparate(gl.DST_COLOR, gl.ZERO, gl.ZERO, gl.ONE);
@@ -713,9 +764,14 @@ export class TourGL {
    * Composes `layers` (the base first) into target `n`: the whole of it, or only `rects` (what changed since the last
    * call). The mip levels follow, for the same rectangles.
    */
-  compose(n: 0 | 1, layers: LayerDraw[], rects: Px[] | null, mips = true): void {
+  compose(n: 0 | 1, layers: LayerDraw[], rects: Px[] | null, mips = true, grade: TourGrade | null = null): void {
     const gl = this.gl;
     const t = this.targets[n]!;
+    // MOCK8 (FB16): a graded room: its layers into the raw composite, the grade from there into the target, and the
+    // glows over it (the render's formula: the stack, then the grade on the composite, then each glow)
+    const raw = grade ? this.rawTarget(n) : null;
+    const pre = raw ? layers.filter((l) => !l.post) : layers;
+    const post = raw ? layers.filter((l) => l.post) : [];
     // MOCK2: the mip levels are only ever read when the display pass makes the composition smaller than the screen —
     // never on a phone in portrait, where the visible part of the frame is magnified. Rebuilding five levels of every
     // rectangle on every frame was most of a phone's compose. A level left behind is remembered, and the next frame
@@ -726,20 +782,26 @@ export class TourGL {
       this.mipsStale[n] = false;
     }
     const list: Px[] = rects ?? [[0, 0, t.w, t.h]];
-    gl.bindFramebuffer(gl.FRAMEBUFFER, t.fb[0]!);
     gl.viewport(0, 0, t.w, t.h);
     this.shaded = 0;
     if (rects) gl.enable(gl.SCISSOR_TEST);
-    for (const r of list) {
-      if (rects) gl.scissor(r[0], t.h - r[3], r[2] - r[0], r[3] - r[1]);
-      // only the layers that reach the rectangle are drawn (the base always does): a draw call each, not the whole room's
-      const touch = rects
-        ? layers.filter(
+    // only the layers that reach the rectangle are drawn (the base always does): a draw call each, not the whole room's
+    const touch = (ls: LayerDraw[], r: Px) =>
+      rects
+        ? ls.filter(
             (l) =>
               l.rect[0] * t.w < r[2] && l.rect[1] * t.w > r[0] && (l.rect[2] + Math.min(0, l.dy)) * t.h < r[3] && (l.rect[3] + Math.max(0, l.dy)) * t.h > r[1],
           )
-        : layers;
-      this.drawLayers(touch, t.w, t.h, 'compose');
+        : ls;
+    for (const r of list) {
+      if (rects) gl.scissor(r[0], t.h - r[3], r[2] - r[0], r[3] - r[1]);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, raw ? raw.fb : t.fb[0]!);
+      this.drawLayers(touch(pre, r), t.w, t.h, 'compose');
+      if (raw) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, t.fb[0]!);
+        this.drawGrade(raw.tex, grade!);
+        this.drawLayers(touch(post, r), t.w, t.h, 'compose', false);
+      }
       this.shaded += (r[2] - r[0]) * (r[3] - r[1]);
     }
     gl.disable(gl.SCISSOR_TEST);
@@ -939,10 +1001,11 @@ export class TourGL {
 
   /** MOCK7: the still (the arrival's last frame, from its video element): one texture, replaced each time */
   private still: { tex: WebGLTexture; w: number; h: number } | null = null;
-  uploadStill(src: TexImageSource & { videoWidth?: number; videoHeight?: number; width?: number; height?: number }): boolean {
+  uploadStill(src: TexImageSource & { videoWidth?: number; videoHeight?: number; naturalWidth?: number; naturalHeight?: number; width?: number; height?: number }): boolean {
     const gl = this.gl;
-    const w = src.videoWidth ?? (src.width as number) ?? 0;
-    const h = src.videoHeight ?? (src.height as number) ?? 0;
+    // MOCK8: a picture (the walk's last frame as its file) as well as a video
+    const w = src.videoWidth ?? src.naturalWidth ?? (src.width as number) ?? 0;
+    const h = src.videoHeight ?? src.naturalHeight ?? (src.height as number) ?? 0;
     if (!w || !h) return false;
     const tex = this.still?.tex ?? this.texture(gl.LINEAR);
     gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -1028,6 +1091,11 @@ export class TourGL {
       for (const f of t.fb) gl.deleteFramebuffer(f);
       gl.deleteTexture(t.tex);
     }
+    for (const r of this.raws)
+      if (r) {
+        gl.deleteFramebuffer(r.fb);
+        gl.deleteTexture(r.tex);
+      }
     gl.getExtension('WEBGL_lose_context')?.loseContext();
   }
 }

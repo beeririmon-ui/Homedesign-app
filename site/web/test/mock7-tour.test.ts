@@ -24,6 +24,7 @@ type Room = {
   camera: PushCamera & { ky: number };
   atlas?: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
   lights?: unknown[];
+  grade?: { kin: number[] } | null;
   slots: { id: string; options: { product_id: string | null; price_agorot: number | null }[] }[];
 };
 const frames = read<{ living_room: string; rooms: { id: string; frames: string[] }[] }>('../../tools/tour/frames.json');
@@ -33,7 +34,8 @@ const living = room('living-room');
 describe('MOCK7: the living room is M0-W', () => {
   it('built from the new folder by the rooms’ tool, with its own camera (35 mm at 1.05 m)', () => {
     expect(frames.living_room).toBe('living-room-m0w');
-    expect(living.source).toBe('wm-living-room-m0w-fb13-stage-a-2026-11-26');
+    // MOCK8: the fix1 stack with the cushion wheel (layers/manifest-wheel.json)
+    expect(living.source).toBe('wm-living-room-m0w-fb13-wheel-2026-11-26');
     expect(living.frame).toBe('M0-W');
     expect(living.camera.loc).toEqual([0.95, 5.55, 1.05]);
     expect(living.camera.yaw_deg_left).toBe(14);
@@ -42,9 +44,11 @@ describe('MOCK7: the living room is M0-W', () => {
     expect(living.atlas).toBeTruthy();
   });
 
-  it('13 products, the coffee table among them and not sold yet; no wheel and no style change', () => {
+  // MOCK8: fix1 adds the curtain (14), and the cushion sets B, A and C are the room's wheel
+  it('14 products, the coffee table among them and not sold yet; the cushions’ wheel; no style change', () => {
     expect(living.slots.map((s) => s.id).sort()).toEqual(
       [
+        'curtains',
         'accent-sconces',
         'basket',
         'bowl',
@@ -64,14 +68,15 @@ describe('MOCK7: the living room is M0-W', () => {
     expect(table.options).toHaveLength(1);
     expect(table.options[0]!.product_id).toBeNull();
     expect(table.options[0]!.price_agorot).toBeNull();
-    expect(living.sample).toBeUndefined();
-    expect(living.slots.every((s) => s.options.length === 1)).toBe(true);
+    expect(living.sample).toBe('cushions');
+    expect(living.slots.find((s) => s.id === 'cushions')!.options).toHaveLength(3);
+    expect(living.slots.filter((s) => s.id !== 'cushions').every((s) => s.options.length === 1)).toBe(true);
     expect(living.styles).toBe(false);
   });
 
   it('nothing of the old room: no phase 2 file, and the pin is M0-W’s', () => {
     const pin = read<{ manifest: string; hash: string; files: Record<string, string> }>('../../tools/tour/living-room.pin.json');
-    expect(pin.manifest).toBe('assets/renders/living-room/warm-modern/fb13-2026-11-25/layers/manifest.json');
+    expect(pin.manifest).toBe('assets/renders/living-room/warm-modern/fb13-2026-11-25/layers/manifest-wheel.json');
     expect(pin.hash).toBe('sha256');
     expect(Object.keys(pin.files).every((f) => f.startsWith('assets/renders/living-room/warm-modern/fb13-2026-11-25/'))).toBe(true);
     const text = JSON.stringify(living);
@@ -96,12 +101,14 @@ describe('MOCK7: the rooms, their depth and their order', () => {
     }
   });
 
-  it('the FB15 rooms are built from their -fb15 manifests', () => {
-    for (const id of ['boy', 'girl', 'bath-b1', 'dining', 'dining-d2', 'master', 'master-mb1', 'work']) {
+  // MOCK8 (FB16): every room of the house (B2 too) from its fb16 manifest, graded, gated against its fb16 frame
+  it('the rooms are built from their fb16 manifests', () => {
+    for (const id of ['boy', 'girl', 'bath-b1', 'bath', 'dining', 'dining-d2', 'master', 'master-mb1', 'work']) {
       const cfg = read<{ manifest: string; truth: string; gate?: { kind: string } }>(`../../tools/tour/${id}.warm-modern.json`);
-      expect(cfg.manifest, id).toMatch(/fb15\.json$/);
-      expect(cfg.truth, id).toMatch(/fb15\.png$/);
-      expect(cfg.gate?.kind, id).toBe('finish');
+      expect(cfg.manifest, id).toMatch(/fb16\.json$/);
+      expect(cfg.truth, id).toMatch(/fb16-frame\.png$/);
+      expect(cfg.gate?.kind, id).toBe('fb16');
+      expect(room(id).grade?.kin, id).toHaveLength(5);
     }
   });
 });
@@ -138,12 +145,13 @@ describe('MOCK7: the push between rooms (web/src/tour/push.ts)', () => {
 });
 
 describe('MOCK7: the arrival stops in the hall', () => {
-  it('at frame 490 of the walk (the old table enters the opening at 493), with its camera for the push', () => {
-    const a = read<{ land: { frame: number; cam: number[] }; videos: Record<string, { frames: number }> }>('../../.generated/arrival.json');
-    expect(a.land.frame).toBe(490);
-    expect(a.land.cam).toHaveLength(6);
-    expect(a.videos.desktop!.frames).toBe(490);
-    expect(a.videos.phone!.frames).toBe(245);
+  // MOCK8 (FB19): K-A2 ends in the hall, on HT2; the push into the living room is aimed through HT's camera
+  it('at the walk’s last frame (K-A2: HT2), with its camera for the push', () => {
+    const a = read<{ walk: string; land: { frame: number; cam: number[] }; videos: Record<string, { frames: number }> }>('../../.generated/arrival.json');
+    expect(a.walk).toBe('ka2');
+    expect(a.land.frame).toBe(a.videos.desktop!.frames);
+    expect(a.land.cam).toEqual([3.6, 8.15, 1.2, 90, 0.36, 0.48]);
+    expect(a.videos.phone!.frames).toBe(Math.floor((a.videos.desktop!.frames - 1) / 2) + 1);
   });
 });
 

@@ -69,16 +69,29 @@ for (const s of tour.atlas ? [] : tour.slots)
   }
 // MOCK4: the arrival (tools/make-arrival.ts: the two walks, the door, the rest on HC) and the bedroom and the bathroom
 // (tools/make-tour-room.ts: the base, the atlas pages, the sample slot's options, the sheet of cards), at `lo`
-type Arrival = { videos: Record<string, { src: string }>; door: { src: string; widths: number[] }; hc: { src: string; width: number } };
+type Arrival = {
+  videos: Record<string, { src: string }>;
+  door: { src: string; widths: number[] };
+  hc: { src: string; width: number };
+  still?: { src: string; width: number } | null;
+};
 const arrival = JSON.parse(readFileSync(sitePath('.generated/arrival.json'), 'utf8')) as Arrival;
 for (const v of Object.values(arrival.videos)) files.add(v.src);
 for (const w of arrival.door.widths) files.add(`${arrival.door.src}.${w}.webp`);
 files.add(`${arrival.hc.src}.${arrival.hc.width}.webp`);
+// MOCK8: the walk's last frame (K-A2: the hall), where the push into the living room starts
+if (arrival.still) files.add(`${arrival.still.src}.${arrival.still.width}.webp`);
 type Room = {
   widths: { lo: number };
   base: { src: string };
   atlas: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
-  slots: { src: string; atlas?: unknown; atlas_opts?: unknown; shadows?: number[]; options: { position: number; card: { src: string } }[] }[];
+  slots: {
+    src: string;
+    atlas?: unknown;
+    atlas_opts?: unknown;
+    shadows?: number[];
+    options: { position: number; card: { src: string }; studio?: { src: string } | null }[];
+  }[];
 };
 // MOCK5: every frame of every room built from a render folder (tools/tour/frames.json)
 const tourFrames = [
@@ -93,6 +106,8 @@ for (const id of tourFrames) {
   for (const s of r.slots) {
     for (const o of s.options) {
       files.add(`${o.card.src}.webp`);
+      // MOCK8 (FB20): the option's studio picture (the room's studio sheet)
+      if (o.studio) files.add(`${o.studio.src}.webp`);
       // on the atlas pages (MOCK5: the sample's options too, on the sample pages), which are listed above
       if (s.atlas || s.atlas_opts) continue;
       files.add(`${s.src}/${o.position}.product.${lo}.webp`);

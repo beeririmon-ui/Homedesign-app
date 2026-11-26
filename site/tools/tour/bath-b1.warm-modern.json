@@ -1,15 +1,15 @@
 {
-  "note": "MOCK5 (2026-11-24): the bathroom's second frame B1 (the shower and the WC ledge), QA qa/reports/2026-11-19-bath-b1, approved with the room (FB11). Read by tools/make-tour-room.ts as bath.warm-modern.json (its note). The sample slot is the bath mat, with the two variants the folder has (Khaki, Beige; the third is open). The niche set and the sconce are the same SKUs as B2's (one product each in the room's count). MOCK6 (2026-11-25): the ledge planter 228781 (QA qa/reports/2026-11-25-bath-b1-planter, passed after the re-check; the folder's b1-defaults.png carries it), so the bath counts 19. Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (b1-defaults-fb15.png).",
+  "note": "MOCK5 (2026-11-24): the bathroom's second frame B1 (the shower and the WC ledge), QA qa/reports/2026-11-19-bath-b1, approved with the room (FB11). Read by tools/make-tour-room.ts as bath.warm-modern.json (its note). The sample slot is the bath mat, with the two variants the folder has (Khaki, Beige; the third is open). The niche set and the sconce are the same SKUs as B2's (one product each in the room's count). MOCK6 (2026-11-25): the ledge planter 228781 (QA qa/reports/2026-11-25-bath-b1-planter, passed after the re-check; the folder's b1-defaults.png carries it), so the bath counts 19. Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (b1-defaults-fb15.png). MOCK8 (2026-11-26, briefs/site-mock8-integrate-2026-11-26.md): FB16's house light: the fb16 manifest (the same layers on the fb16 base), its grade (Lab) applied by the engine on the composite and its glows over the graded frame; gated against the folder's fb16 frame within the finish's grain (tools/tour/gate_fb16.py).",
   "room": "bath-b1",
   "group": "bath",
   "frame_he": "המקלחת",
   "style": "warm-modern",
   "name_he": "חדר רחצה",
   "layers": "assets/renders/bath/warm-modern/b1-2026-11-19",
-  "manifest": "layers/manifest-fb15.json",
-  "truth": "b1-defaults-fb15.png",
+  "manifest": "layers/manifest-fb16.json",
+  "truth": "b1-defaults-fb16-frame.png",
   "gate": {
-    "kind": "finish"
+    "kind": "fb16"
   },
   "depth": {
     "file": "assets/blockout/house/framing/wm-bath-b1-2026-11-19/B1-depth.png",
@@ -79,5 +79,6 @@
       "kind": "floor",
       "anchors": [[0.5, 0.6]]
     }
-  }
+  },
+  "plate": "plate.png"
 }

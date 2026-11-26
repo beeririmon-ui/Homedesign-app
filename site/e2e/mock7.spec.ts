@@ -95,9 +95,14 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
     await ready(page);
     await page.locator('#tour-enter').click();
     await page.waitForFunction(() => (window.__hdTourState?.walk ?? 0) > 30, undefined, { timeout: 60_000 });
-    // the walk's file ends at frame 490 (the old table enters the opening at 493)
+    // the walk's file ends before the old table enters the opening (MOCK8: K-A2 ends in the hall, at HT2)
     const dur = await page.locator('video.tour-video').evaluate((v: HTMLVideoElement) => v.duration);
     expect(dur * 60).toBeLessThan(491);
+    // MOCK8 (FB19): the walk goes on by pushes ("המשך" is one)
+    for (let i = 0; i < 600 && (await page.evaluate(() => window.__hdTourState?.phase)) !== 'room'; i++) {
+      if (await page.evaluate(() => window.__hdTourState?.walkRest === true)) await page.locator('#tour-walk-next').click();
+      await page.waitForTimeout(200);
+    }
     await atRest(page);
     const fx = await page.evaluate(() => {
       const e = window.__hdTour!;
@@ -113,11 +118,12 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
     expect(asked.filter((u) => OLD.test(u))).toEqual([]);
   });
 
-  test('the living room M0-W at rest: 13 marks, the coffee table not sold yet, no wheel, no style change', async ({ page }) => {
+  // MOCK8: M0-W's fix1 stack adds the curtain (14 marks), and the cushion sets are its wheel (e2e/mock8.spec.ts)
+  test('the living room M0-W at rest: 14 marks, the coffee table not sold yet, no style change', async ({ page }) => {
     await page.goto('/tour/?skip=1');
     await ready(page);
     await atRest(page);
-    await expect(page.locator('.tour-spot')).toHaveCount(13);
+    await expect(page.locator('.tour-spot')).toHaveCount(14);
     await expect(page.locator('.tour-spot[data-slot="coffee-table"]')).toHaveAttribute('aria-label', /עוד לא במכירה/);
     await more(page);
     await expect(page.locator('.tour-style')).toHaveCount(0);

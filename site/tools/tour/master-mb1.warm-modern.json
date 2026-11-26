@@ -1,15 +1,15 @@
 {
-  "note": "MOCK5 (2026-11-24): the bedroom's second frame MB1 (the foot of the bed: the bench, the rug, the right group), QA qa/reports/2026-11-19-master-mb1, approved with the room (AP3-HOUSE2 read as yes, FB11). Read by tools/make-tour-room.ts as master.warm-modern.json (its note). The bench and the wall shelf are in the plate (fixed, not sold, no layer). The two sconces are two layers of one product: one product, one mark a sconce. No wheel here (the throw's variants are MB0's). The prints are ×1 only by their cards' rights. Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (mb1-defaults-fb15.png).",
+  "note": "MOCK5 (2026-11-24): the bedroom's second frame MB1 (the foot of the bed: the bench, the rug, the right group), QA qa/reports/2026-11-19-master-mb1, approved with the room (AP3-HOUSE2 read as yes, FB11). Read by tools/make-tour-room.ts as master.warm-modern.json (its note). The bench and the wall shelf are in the plate (fixed, not sold, no layer). The two sconces are two layers of one product: one product, one mark a sconce. No wheel here (the throw's variants are MB0's). The prints are ×1 only by their cards' rights. Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (mb1-defaults-fb15.png). MOCK8 (2026-11-26, briefs/site-mock8-integrate-2026-11-26.md): FB16's house light: the fb16 manifest (the same layers on the fb16 base), its grade (Lab) applied by the engine on the composite and its glows over the graded frame; gated against the folder's fb16 frame within the finish's grain (tools/tour/gate_fb16.py).",
   "room": "master-mb1",
   "group": "master",
   "frame_he": "מרגלי המיטה",
   "style": "warm-modern",
   "name_he": "חדר שינה",
   "layers": "assets/renders/master/warm-modern/mb1-2026-11-19",
-  "manifest": "layers/manifest-fb15.json",
-  "truth": "mb1-defaults-fb15.png",
+  "manifest": "layers/manifest-fb16.json",
+  "truth": "mb1-defaults-fb16-frame.png",
   "gate": {
-    "kind": "finish"
+    "kind": "fb16"
   },
   "depth": {
     "file": "assets/renders/master/warm-modern/mb1-2026-11-19/clay/MB1-depth.png",
@@ -132,5 +132,6 @@
   "light_slots": {
     "bedside-sconces-west-pool-fb15.png": "bedside-sconces",
     "fb15-upper-lamps-fb15.png": "(always on: the edit’s own light off the products)"
-  }
+  },
+  "plate": "plate-fb16.png"
 }

@@ -28,6 +28,7 @@ import type { Box } from '../engine/types';
 import { buildLayers } from '../engine/layers';
 import { defaultSelection, livingRoom, scene as nordicScene } from '../catalog';
 import { mediaUrl } from '../media';
+import type { TourGrade } from './grade';
 
 /** MOCK2 (FB1): what the wheel shows for an option — the product on its own, never a crop of the room */
 export type TourCard = {
@@ -39,12 +40,24 @@ export type TourCard = {
   /** MOCK4: the card's place in its room's sheet of cards ([x, y, w, h] px of a sheet [w, h]); absent: a file of its own */
   sprite?: [number, number, number, number];
   sheet?: [number, number];
+  /** MOCK8: a close-up of a print whose rights are not confirmed (PR1): the preview only, never public */
+  preview_only?: boolean;
 };
 /** MOCK4: a layer packed in an atlas page: [page (from 1), x, y, w, h] in the page's pixels */
 export type AtlasRef = [number, number, number, number, number];
 export type AtlasPage = { src: string; w: number; h: number };
 /** a light of a slot's lamp (drawn with it); MOCK5: `slot` null — a lamp outside the frame, its light always on (D2) */
-export type TourLight = { id: string; slot: string | null; rect: Box; atlas: Record<string, AtlasRef> };
+export type TourLight = {
+  id: string;
+  slot: string | null;
+  rect: Box;
+  atlas: Record<string, AtlasRef>;
+  /** MOCK8 (FB16): a glow, drawn over the graded frame (after the grade); `mul`: multiplied (B1's glass), else screen;
+   *  `pos`: only with that option of its slot (the default pendant's glow goes when another pendant is chosen) */
+  post?: boolean;
+  mul?: boolean;
+  pos?: number;
+};
 export type TourOption = {
   position: number;
   card: TourCard;
@@ -151,6 +164,9 @@ export type TourData = {
   depth?: string | null;
   /** MOCK7: false: no style change in this room (the living room M0-W: the Nordic house is the old M0's camera) */
   styles?: boolean;
+  /** MOCK8 (FB16): the frame's house grade, applied on the composite before its glows (tour/grade.ts) */
+  grade?: TourGrade | null;
+  fb16?: string;
 };
 
 /** MOCK5: a frame of the tour (a file name); the frames of a room are `FRAMES[group]` */

@@ -11,6 +11,16 @@ import { MEDIA_BASE } from '../media';
 
 export type ArrivalLabel = { id: string; name_he: string; pts: [[number, number, number], [number, number, number]]; u: [number, number] };
 export type Arrival = {
+  /** MOCK8: the walk tools/tour/arrival.json names ("ka2": the door to the hall, then the push in code; "fb19": the
+   *  whole walk to the living room), and how it ends: on a still the tour walks on from, or on the room's own frame */
+  walk: string;
+  end: 'still' | 'room';
+  frames: number;
+  /** MOCK8: the share of the walk one scroll impulse plays, and the rest (in impulses) a last push walks through */
+  impulse: number;
+  snap: number;
+  /** MOCK8: the walk's last frame as a still (end "still"), the first frame of the push into the living room */
+  still: { src: string; width: number } | null;
   land_s: number;
   land_60: number;
   hc_60: number;
@@ -35,6 +45,8 @@ export const doorUrl = (cssWidth: number): string => {
   return `${MEDIA_BASE}${arrival.door.src}.${w}.webp`;
 };
 export const hcUrl = (): string => `${MEDIA_BASE}${arrival.hc.src}.${arrival.hc.width}.webp`;
+/** MOCK8: the walk's last frame (end "still"), where the push into the living room starts */
+export const stillUrl = (): string | null => (arrival.still ? `${MEDIA_BASE}${arrival.still.src}.${arrival.still.width}.webp` : null);
 
 /** the frame of the 60 fps master on screen at a time of the walk (1-based; the phone's 30 fps file maps the same) */
 export const frameAt = (t: number): number => Math.round(t * 60) + 1;

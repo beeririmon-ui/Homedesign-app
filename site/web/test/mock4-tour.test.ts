@@ -3,7 +3,11 @@
  * the camera of a frame of the walk, the names on their doors at the rest on HC (ARR-M1), when each is on screen, and
  * the layout that keeps them apart. What the page does with them is held in the browser (e2e/mock4.spec.ts).
  */
+import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
+
+/** MOCK8 (FB19): the walk has no rest on HC and no names on the doors; these hold a walk that has them */
+const labelled = (JSON.parse(readFileSync(new URL('../../.generated/arrival.json', import.meta.url), 'utf8')) as { labels: unknown[] }).labels.length > 0;
 
 type Mod = typeof import('../src/tour/arrival');
 let m: Mod;
@@ -12,7 +16,7 @@ beforeAll(async () => {
   m = await import('../src/tour/arrival');
 });
 
-describe('MOCK4: the names on the doors at the rest on HC', () => {
+describe.skipIf(!labelled)('MOCK4: the names on the doors at the rest on HC', () => {
   it('the bath’s lintel at u 0.3944–0.4114, the bedroom’s centred at 0.496 (ARR-M1), the children’s from hc-lock', () => {
     const cam = m.camAt(m.arrival.hc_60)!;
     expect(cam).not.toBeNull();

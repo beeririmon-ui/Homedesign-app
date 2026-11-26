@@ -111,7 +111,16 @@ type Cfg = {
   /** MOCK7: a default frame the render tools' finish composed (FB15's rooms, M0-W: RGB shadows, its own rounding): the
    *  gate composes the layers as that finish does, at the truth's size (tools/tour/gate_finish.py; `frame_box_from`:
    *  the folder's file with the full-precision box, for a 1920 frame) */
-  gate?: { kind: 'finish'; frame_box_from?: string };
+  /** MOCK8: `max`: the largest difference a finish gate accepts (M0-W fix1: the render's own recompose of its stored
+   *  frame is off by 1 in about 3,300 px, checks-m0w-fix1.json) */
+  gate?: { kind: 'finish' | 'fb16'; frame_box_from?: string; max?: number };
+  /** MOCK8 (FB16): the frame of the manifest's `fb16.frames` (default: `frame_id`, else `camera`): its grade (Lab) is
+   *  applied on the composite by the engine, and its glows over the graded frame (screen; B1's glass: multiply) */
+  fb16_frame?: string;
+  /** MOCK8: the sample's options from a manifest's wheel (`<key>.wheel`: `order`, `sets`; M0-W's cushion sets) */
+  wheel_sets?: string;
+  /** MOCK8: an option's name in the wheel, by its product (the cushion sets: no card of their own) */
+  option_names_he?: Record<string, string>;
   /** MOCK7: the lights on pages of their own, lossy (M0-W: three lamps whose light covers most of the frame; smooth,
    *  so a lossy page costs a small part of a lossless one, and a phone's first load stays under 3 MB) */
   light_pages?: 'lossy';
@@ -166,7 +175,10 @@ type Manifest = {
   layers: MLayer[];
   light: Light | Light[];
   variants?: MVariant[];
-};
+  /** MOCK8 (FB16): the house light pass, per frame: the grade (Lab) and the glows over the graded frame */
+  fb16?: { frames: Record<string, { grade: Fb16Grade; glows: { file: string; blend: 'screen' | 'multiply'; slot: string | null; product?: string | null }[] }> };
+} & Record<string, unknown>;
+type Fb16Grade = { L_knots_in: number[]; L_knots_out: number[]; L_interp: string; da: number; db: number; ab: string };
 
 const CFG = process.argv[2] ?? 'tools/tour/master.warm-modern.json';
 const read = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
@@ -250,6 +262,41 @@ const lightEntries = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFra
   return { file: lightFile(x.file), slot: lightSlot(x) };
 });
 
+// ---------- MOCK8 (FB16): the frame's grade and glows ----------
+/** the gate's limits: the finish's own grain and light wrap (fb15's finish against its composite: mean about 1, p99 4–10) */
+const FB16_GATE = { mean: 1.5, p99: 10, over8: 0.02 } as const;
+const FB16_FRAME = c.fb16_frame ?? c.frame_id ?? c.camera;
+const f16 = c.gate?.kind === 'fb16' ? (m.fb16?.frames[FB16_FRAME] ?? fail(`${c.manifest} has no fb16 frame ${FB16_FRAME}`)) : null;
+if (f16 && !/monotone cubic/.test(f16.grade.L_interp)) fail(`fb16 ${FB16_FRAME}: the grade's L curve is ${f16.grade.L_interp}, not the monotone cubic the engine draws`);
+/** the fb16 tool's pchip (assets/renders/tools/fb16/fb16.py): the slopes at the knots (Fritsch–Carlson, weighted) */
+function pchipSlopes(xk: number[], yk: number[]): number[] {
+  const h = xk.slice(1).map((x, i) => x - xk[i]!);
+  const d = h.map((hi, i) => (yk[i + 1]! - yk[i]!) / hi);
+  const mm = yk.map(() => 0);
+  mm[0] = d[0]!;
+  mm[mm.length - 1] = d[d.length - 1]!;
+  for (let i = 1; i < xk.length - 1; i++)
+    if (d[i - 1]! * d[i]! > 0) {
+      const w1 = 2 * h[i]! + h[i - 1]!;
+      const w2 = h[i]! + 2 * h[i - 1]!;
+      mm[i] = (w1 + w2) / (w1 / d[i - 1]! + w2 / d[i]!);
+    }
+  return mm.map((x) => +x.toFixed(6));
+}
+const grade = f16
+  ? { kin: f16.grade.L_knots_in, kout: f16.grade.L_knots_out, m: pchipSlopes(f16.grade.L_knots_in, f16.grade.L_knots_out), da: f16.grade.da, db: f16.grade.db }
+  : null;
+if (grade && (grade.kin.length !== 5 || grade.kout.length !== 5)) fail(`fb16 ${FB16_FRAME}: the engine's grade takes 5 knots, not ${grade.kin.length}`);
+/** the glows, over the graded frame: their file (from the folder), their slot (a lamp's glow goes with it; the sample's
+ *  default lamp's only with that option), screen or multiply */
+const mdir = join(dir, c.manifest, '..');
+const glowEntries = (f16?.glows ?? []).map((g) => {
+  const file = relative(dir, join(mdir, g.file));
+  const l = g.slot ? layers.find((y) => y.slot === g.slot) : undefined;
+  const slot = l ? tourSlotOf(l) : null;
+  return { file, mul: g.blend === 'multiply', slot, pos: slot && slot === c.sample ? 1 : undefined };
+});
+
 // ---------- the sample slot's options ----------
 const sampleOpts: { product: string; layer: string; shadow: string; card: string | null }[] = [];
 if (c.sample) {
@@ -259,6 +306,17 @@ if (c.sample) {
   sampleOpts.push({ product: d.product, layer: d.layer, shadow: d.shadow, card: c.slots[c.sample]!.card });
   const fromLayers = indexed.filter((x) => x.l.default === false && x.l.slot === d.slot).map((x) => x.l as MVariant);
   const fromVariants = (m.variants ?? []).filter((x) => inFrame(x) && x.slot === d.slot && !x.default);
+  // MOCK8: a manifest's wheel of sets (M0-W's cushions: `cushions.wheel`, B the default, then A and C)
+  type Sets = { order: string[]; default: string; sets: Record<string, { layer: string; shadow: string; default?: boolean }> };
+  const wheel = c.wheel_sets ? ((m[c.wheel_sets] as { wheel?: Sets } | undefined)?.wheel ?? fail(`${c.manifest} has no ${c.wheel_sets}.wheel`)) : null;
+  if (wheel) {
+    const def = wheel.sets[wheel.default] ?? fail(`${c.wheel_sets}.wheel: no default set ${wheel.default}`);
+    if (def.layer !== d.layer || def.shadow !== d.shadow) fail(`${c.wheel_sets}.wheel: the default set is not the frame's ${d.slot} layer`);
+    for (const k of wheel.order.filter((x) => x !== wheel.default)) {
+      const v = wheel.sets[k] ?? fail(`${c.wheel_sets}.wheel: no set ${k}`);
+      fromVariants.push({ slot: d.slot, product: `set-${k}`, default: false, layer: v.layer, shadow: v.shadow });
+    }
+  }
   for (const v of [...fromLayers, ...fromVariants])
     sampleOpts.push({
       product: v.product,
@@ -315,14 +373,27 @@ let gateNote = '';
     }
     for (let i = 0; i < st.length; i++) if (Lm[i]) st[i] = (255 - rint(((255 - st[i]! * 255) * (255 - Lm[i]!)) / 255)) / 255;
   }
-  if (c.gate?.kind === 'finish') {
+  if (c.gate?.kind === 'fb16') {
+    // MOCK8 (FB16): the stack on the frame's fb16 base, graded and with its glows, against the folder's fb16 frame. The
+    // fb16 frame is the grade of the render's finished frame (its grain and light wrap: the stack never carried them,
+    // MOCK7 gated it against the composite before the finish), so this gate is a measure with limits
+    const args = [sitePath('tools/tour/gate_fb16.py'), dir, c.manifest, c.truth, repoPath('assets/renders/tools/finish'), repoPath('assets/renders/tools/fb16')];
+    const opts = ['--frame', FB16_FRAME, '--plate', PLATE, ...(c.gate.frame_box_from ? ['--box', c.gate.frame_box_from] : [])];
+    const out = execFileSync('python3.12', ['-I', ...args, ...opts], { encoding: 'utf8' });
+    const g = JSON.parse(out) as { max: number; mean: number; p99: number; over8: number; size: [number, number] };
+    if (g.mean > FB16_GATE.mean || g.p99 > FB16_GATE.p99 || g.over8 > FB16_GATE.over8)
+      fail(`the stack graded misses ${c.truth}: mean ${g.mean}, p99 ${g.p99}, ${(g.over8 * 100).toFixed(2)}% over 8 (limits ${JSON.stringify(FB16_GATE)})`);
+    gateNote = `${c.truth} (${g.size.join('×')}, fb16: the grade and the glows on the stack) within the finish's grain: mean ${g.mean}, p99 ${g.p99}, ${(g.over8 * 100).toFixed(2)}% over 8`;
+  } else if (c.gate?.kind === 'finish') {
     // MOCK7: the folder's own finish (its compose, its frame view), read only, against the folder's default frame
     const args = [sitePath('tools/tour/gate_finish.py'), dir, c.manifest, c.truth, repoPath('assets/renders/tools/finish')];
     const opts = [...(c.frame_id ? ['--frame', c.frame_id] : []), '--plate', PLATE, ...(c.gate.frame_box_from ? ['--box', c.gate.frame_box_from] : [])];
     const out = execFileSync('python3.12', ['-I', ...args, ...opts], { encoding: 'utf8' });
     const g = JSON.parse(out) as { max: number; differing: number; size: [number, number] };
-    if (g.differing) fail(`the layers, as the finish composes them, miss ${c.truth} on ${g.differing} channel values (max ${g.max})`);
-    gateNote = `${c.truth} (${g.size.join('×')}, the finish's frame) to the value`;
+    if (g.max > (c.gate.max ?? 0)) fail(`the layers, as the finish composes them, miss ${c.truth} on ${g.differing} channel values (max ${g.max})`);
+    gateNote = g.differing
+      ? `${c.truth} (${g.size.join('×')}, the finish's frame) within ${g.max} on ${g.differing} channel values, as the render's own recompose`
+      : `${c.truth} (${g.size.join('×')}, the finish's frame) to the value`;
   } else {
     const truth = await raw(c.truth, 3);
     let bad = 0;
@@ -400,6 +471,18 @@ async function lightRegion(f: string): Promise<Px> {
   const b = empty();
   for (let i = 0; i < W * H; i++) if (L[i * 3]! || L[i * 3 + 1]! || L[i * 3 + 2]!) grow(b, i % W, (i / W) | 0);
   if (b.x1 < 0) fail(`${f} adds no light`);
+  return padRect(b);
+}
+
+/** MOCK8: a glow's region: where it adds (screen), or where it darkens (multiply: B1's glass) */
+async function glowRegion(f: string, mul: boolean): Promise<Px> {
+  const L = await raw(f, 3);
+  const b = empty();
+  for (let i = 0; i < W * H; i++) {
+    const on = mul ? L[i * 3]! < 255 || L[i * 3 + 1]! < 255 || L[i * 3 + 2]! < 255 : L[i * 3]! || L[i * 3 + 1]! || L[i * 3 + 2]!;
+    if (on) grow(b, i % W, (i / W) | 0);
+  }
+  if (b.x1 < 0) fail(`${f} does nothing`);
   return padRect(b);
 }
 
@@ -636,10 +719,28 @@ async function sheet(
   return ch === 3 ? out.removeAlpha() : out;
 }
 
+// ---------- MOCK8 (FB20): the studio pictures of the sample's options (assets/renders/wheel-studio/<style>/) ----------
+type StudioRow = { variant: string; room: string; slot: string; webp: string; products: { card_id: string; sku: string | null }[] };
+const STUDIO_DIR = `assets/renders/wheel-studio/${c.style}`;
+const studioRows = existsSync(repoPath(STUDIO_DIR, 'manifest.json')) ? read<{ variants: StudioRow[] }>(repoPath(STUDIO_DIR, 'manifest.json')).variants : [];
+const sampleSlot = c.sample ? (c.slots[c.sample]!.of ?? c.sample) : null;
+/** per option (by position − 1): its studio picture's file, or null (the wheel keeps its card: D1's V2, no still yet) */
+const studioOf = sampleOpts.map((o) => studioRows.find((r) => r.room === GROUP && r.slot === sampleSlot && r.variant === o.product) ?? null);
+for (const r of studioOf) if (r && !existsSync(repoPath(r.webp))) fail(`the studio picture ${r.webp} is missing`);
+const STUDIO = 512;
+
 // ---------- build (cached by a stamp of the inputs and this file) ----------
 const lightSources = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFrame).map((x) => lightFile(x.file));
 const sources = [
-  ...new Set([PLATE, c.truth, ...layers.flatMap((l) => [l.layer, l.shadow]), ...sampleOpts.flatMap((o) => [o.layer, o.shadow]), ...lightSources, c.manifest]),
+  ...new Set([
+    PLATE,
+    c.truth,
+    ...layers.flatMap((l) => [l.layer, l.shadow]),
+    ...sampleOpts.flatMap((o) => [o.layer, o.shadow]),
+    ...lightSources,
+    ...glowEntries.map((g) => g.file),
+    c.manifest,
+  ]),
 ];
 // ---------- MOCK7: the pin (content hashes of every file read for this frame) ----------
 if (c.pin) {
@@ -668,6 +769,7 @@ const stamp = createHash('sha256')
       c,
       tool: readFileSync(new URL(import.meta.url), 'utf8'),
       sources: sources.map((f) => [f, statSync(join(dir, f)).size, statSync(join(dir, f)).mtimeMs]),
+      studio: studioOf.map((r) => (r ? [r.webp, statSync(repoPath(r.webp)).size] : null)),
     }),
   )
   .digest('hex')
@@ -685,6 +787,8 @@ type Built = {
       product: AtlasRef[];
       shadow: AtlasRef[];
       light: AtlasRef[];
+      /** MOCK8: the glows (FB16), on lossy pages after the lights' */
+      glow: AtlasRef[];
       pages: { product: [number, number][]; shadow: [number, number][] };
       /** MOCK5: the sample slot's options on a page of their own; MOCK6: on the frame's own atlas pages (a place each,
        *  [page, x, y, w, h]); a wheel of many options (MANY) has none here: a patch file each */
@@ -693,11 +797,14 @@ type Built = {
   >;
   cards: { at: Record<string, [number, number, number, number]>; sheet: [number, number] };
   shadowOf: number[];
+  /** MOCK8: the glows' regions, and the studio pictures' places on their sheet (by option, null: none) */
+  glows: Px[];
+  studio: { at: ([number, number, number, number] | null)[]; sheet: [number, number] } | null;
 };
 let built: Built;
 const others = order.filter((id) => id !== c.sample);
 const cached = existsSync(STAMP) ? read<{ stamp: string; built: Built }>(STAMP) : null;
-if (cached?.stamp === stamp && cached.built.area && (!c.sample || MANY || cached.built.atlas[WIDTHS.lo]?.sample)) built = cached.built;
+if (cached?.stamp === stamp && cached.built.area && cached.built.glows && (!c.sample || MANY || cached.built.atlas[WIDTHS.lo]?.sample)) built = cached.built;
 else {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
@@ -716,6 +823,7 @@ else {
     area[c.sample] = await alphaArea(sampleOpts[0]!.layer);
   }
   const lightRects = await Promise.all(lights.map(lightRegion));
+  const glowRects = await Promise.all(glowEntries.map((g) => glowRegion(g.file, g.mul)));
   // the sample's shadows: one file for options that share it to the byte (the throw's three, the linen towel's two)
   const shadowOf: number[] = [];
   const shaOf = sampleOpts.map((o) => sha(join(dir, o.shadow)));
@@ -758,6 +866,16 @@ else {
       pages.shadow.push([meta.width!, meta.height!]);
       await s.webp({ quality: 86, effort: 5 }).toFile(join(OUT, `atlas.shadow.${nS + pg + 1}.${Wt}.webp`));
     }
+    // MOCK8: the glows (FB16) on lossy pages of their own after those (smooth light, drawn over the graded frame)
+    const gps = await Promise.all(glowEntries.map((g, i) => piece(g.file, 'light', glowRects[i]!, Wt)));
+    const ga = gps.length ? pack(gps, Wt) : [];
+    const nG = pages.shadow.length;
+    for (let pg = 0; gps.length && pg <= Math.max(...ga.map((a) => a.page)); pg++) {
+      const s = await sheet(gps, ga, pg, 3);
+      const meta = await s.metadata();
+      pages.shadow.push([meta.width!, meta.height!]);
+      await s.webp({ quality: 86, effort: 5 }).toFile(join(OUT, `atlas.shadow.${nG + pg + 1}.${Wt}.webp`));
+    }
     const ref = (at: { page: number; x: number; y: number }[], pcs: { w: number; h: number }[], k: number): AtlasRef => [
       at[k]!.page + 1,
       at[k]!.x,
@@ -772,6 +890,10 @@ else {
         if (!lossyLights) return ref(sa, shads, others.length + i);
         const r = ref(la, lps, i);
         return [r[0] + nS, r[1], r[2], r[3], r[4]] as AtlasRef;
+      }),
+      glow: gps.map((_, i) => {
+        const r = ref(ga, gps, i);
+        return [r[0] + nG, r[1], r[2], r[3], r[4]] as AtlasRef;
       }),
       pages,
       // the sample's options (the wheel swaps them by their place on the page). MOCK4 wrote a file each, MOCK5 two pages
@@ -836,7 +958,28 @@ else {
   const cs = await sheet(cardPieces, ca, 0, 4);
   const cmeta = await cs.metadata();
   await cs.webp({ quality: 88, alphaQuality: 100, effort: 5 }).toFile(join(OUT, `cards.${CARD}.webp`));
+  // MOCK8 (FB20): the sample's studio pictures, one sheet for the room (the Artifact's 255 files)
+  let studio: Built['studio'] = null;
+  const have = studioOf.flatMap((r, n) => (r ? [{ r, n }] : []));
+  if (have.length) {
+    const pcs = await Promise.all(
+      have.map(async ({ r }) => {
+        const { data, info } = await sharp(repoPath(r.webp)).removeAlpha().resize({ width: STUDIO, height: STUDIO, fit: 'cover' }).raw().toBuffer({ resolveWithObject: true });
+        return { data, w: info.width, h: info.height, ch: 3 as const };
+      }),
+    );
+    const sa = pack(pcs, 2048);
+    if (sa.some((a) => a.page)) fail('the studio pictures do not fit one sheet');
+    const ss = await sheet(pcs, sa, 0, 3);
+    const meta = await ss.metadata();
+    await ss.webp({ quality: 88, effort: 5 }).toFile(join(OUT, `studio.${STUDIO}.webp`));
+    const at: ([number, number, number, number] | null)[] = studioOf.map(() => null);
+    have.forEach(({ n }, i) => (at[n] = [sa[i]!.x, sa[i]!.y, pcs[i]!.w, pcs[i]!.h]));
+    studio = { at, sheet: [meta.width!, meta.height!] };
+  }
   built = {
+    glows: glowRects,
+    studio,
     rects,
     alpha,
     area,
@@ -891,12 +1034,29 @@ const option = (slot: string, n: number, product: string, card: string | null) =
     box: uv({ ...a, x1: a.x1 + 1, y1: a.y1 + 1 }),
     product_id: p?.id ?? null,
     card_id: card,
-    name_he: p ? (c.names === 'slot-when-provisional' && p.name_provisional ? slotName(slot) : shopName(p, product, card!)) : null,
+    name_he:
+      c.option_names_he?.[product] ??
+      (p ? (c.names === 'slot-when-provisional' && p.name_provisional ? slotName(slot) : shopName(p, product, card!)) : null),
     price_agorot: held ? null : (p?.price_agorot ?? null),
     price_provisional: held ? false : (p?.price_provisional ?? false),
     available: !held && !!p && p.availability.status === 'available',
     dims_he: p ? dimsHe(p.dimensions_cm, c.slots[slot]!.kind) : null,
     set: false,
+    // MOCK8 (FB20): the option's studio picture (the product as sold), on the room's studio sheet; a print whose rights
+    // are not confirmed keeps its close-up in the preview only (PR1)
+    ...(slot === c.sample && built.studio?.at[n - 1]
+      ? {
+          studio: {
+            src: `${REL}/studio.${STUDIO}`,
+            w: built.studio.at[n - 1]![2],
+            h: built.studio.at[n - 1]![3],
+            source: 'studio' as const,
+            sprite: built.studio.at[n - 1]!,
+            sheet: built.studio.sheet,
+            ...(x1.has(slot) ? { preview_only: true } : {}),
+          },
+        }
+      : {}),
   };
 };
 const at = (Wt: number) => built.atlas[Wt]!;
@@ -1020,12 +1180,28 @@ const data = {
       },
     ]),
   ),
-  lights: lights.map((f, i) => ({
-    id: basename(lightSources[i] ?? f, '.png'),
-    slot: lightEntries[i]!.slot,
-    rect: uv(built.lights[i]!),
-    atlas: Object.fromEntries(Object.values(WIDTHS).map((Wt) => [Wt, at(Wt).light[i]!])),
-  })),
+  lights: [
+    ...lights.map((f, i) => ({
+      id: basename(lightSources[i] ?? f, '.png'),
+      slot: lightEntries[i]!.slot,
+      rect: uv(built.lights[i]!),
+      atlas: Object.fromEntries(Object.values(WIDTHS).map((Wt) => [Wt, at(Wt).light[i]!])),
+    })),
+    // MOCK8 (FB16): the glows, over the graded frame
+    ...glowEntries.map((g, i) => ({
+      id: basename(g.file, '.png'),
+      slot: g.slot,
+      rect: uv(built.glows[i]!),
+      atlas: Object.fromEntries(Object.values(WIDTHS).map((Wt) => [Wt, at(Wt).glow[i]!])),
+      post: true,
+      ...(g.mul ? { mul: true } : {}),
+      ...(g.pos ? { pos: g.pos } : {}),
+    })),
+  ],
+  // MOCK8 (FB16): the house grade of this frame (Lab: the L curve's knots and slopes, the shift to warm), applied by the
+  // engine on the composite, before the glows
+  grade: grade ?? undefined,
+  fb16: f16 ? FB16_FRAME : undefined,
   for_sale: slots.filter((s) => !s.fixed).length,
   slots,
 };

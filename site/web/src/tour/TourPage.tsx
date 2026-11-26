@@ -57,7 +57,8 @@ import {
   type TourOption,
   type TourSlot,
 } from './data';
-import { arrival, camAt, doorUrl, frameAt, hcUrl, labelOpacity, labelPose, layoutLabels, walkFor, walkUrl } from './arrival';
+import { arrival, camAt, doorUrl, frameAt, hcUrl, labelOpacity, labelPose, layoutLabels, stillUrl, walkFor, walkUrl } from './arrival';
+import { GESTURE, Gesture, WALK, WalkPlay } from './walk';
 import type { TourEngine } from './engine';
 import { metrics, report, statLine } from './metrics';
 import { coverMap } from './push';
@@ -81,6 +82,9 @@ declare global {
       lay: Layout;
       room: RoomId;
       walk: number;
+      /** MOCK8: the walk rests between two pushes; how many pushes it took */
+      walkRest?: boolean;
+      walkPushes?: number;
     };
     /** the effects and the page's marks, for the tests and the frame-rate evidence (they run an effect on its own) */
     __hdTourFx?: Stage & { ui: Ui };
@@ -392,6 +396,9 @@ export function TourPage() {
       lay: L.lay,
       room: L.room,
       walk: L.walk,
+      // MOCK8: the walk's rest and its pushes are kept across renders
+      walkRest: window.__hdTourState?.walkRest,
+      walkPushes: window.__hdTourState?.walkPushes,
     };
   };
   const setPhase = (p: Phase) => {
@@ -795,6 +802,41 @@ export function TourPage() {
     const noGesture = (ev: Event) => ev.preventDefault();
     w?.addEventListener('touchmove', hold, { passive: false });
     w?.addEventListener('gesturestart', noGesture);
+    // MOCK8 (FB19): at the door and on the walk, a scroll, a swipe up or ↓ walks on (the door's first one goes in)
+    const walking = () => live.current.phase === 'door' || live.current.phase === 'entering';
+    const go = (k: number, fresh: boolean) => {
+      if (live.current.phase === 'door') {
+        if (fresh && !live.current.busy) void goIn();
+      } else walkPush(k, fresh);
+    };
+    const onWheel = (ev: WheelEvent) => {
+      if (!walking()) return;
+      ev.preventDefault();
+      const px = ev.deltaMode === 1 ? ev.deltaY * 40 : ev.deltaMode === 2 ? ev.deltaY * 800 : ev.deltaY;
+      const g = gesture.current.wheel(px, ev.timeStamp);
+      if (g.k > 0) go(g.k, g.fresh);
+    };
+    let touchY: number | null = null;
+    const onTouchStart = (ev: TouchEvent) => void (touchY = ev.touches.length === 1 ? ev.touches[0]!.clientY : null);
+    const onTouchMove = (ev: TouchEvent) => {
+      if (!walking()) return;
+      if (live.current.phase === 'entering') ev.preventDefault();
+      if (touchY === null || ev.touches.length !== 1) return;
+      if (touchY - ev.touches[0]!.clientY > GESTURE.swipePx) {
+        touchY = null;
+        go(1, true);
+      }
+    };
+    const onKey = (ev: KeyboardEvent) => {
+      if (live.current.phase !== 'entering' || !walkCtl.current) return;
+      if (!['ArrowDown', 'PageDown', ' '].includes(ev.key) || ev.target instanceof HTMLButtonElement) return;
+      ev.preventDefault();
+      walkPush(1, true);
+    };
+    w?.addEventListener('wheel', onWheel, { passive: false });
+    w?.addEventListener('touchstart', onTouchStart, { passive: true });
+    w?.addEventListener('touchmove', onTouchMove, { passive: false });
+    addEventListener('keydown', onKey);
     // after the door is painted: the engine's chunk, the empty room, then the products behind it
     let idle = 0;
     const later = () => (idle = window.setTimeout(() => void ensure(), 60));
@@ -804,6 +846,10 @@ export function TourPage() {
       ro.disconnect();
       w?.removeEventListener('touchmove', hold);
       w?.removeEventListener('gesturestart', noGesture);
+      w?.removeEventListener('wheel', onWheel);
+      w?.removeEventListener('touchstart', onTouchStart);
+      w?.removeEventListener('touchmove', onTouchMove);
+      removeEventListener('keydown', onKey);
       removeEventListener('load', later);
       clearTimeout(idle);
       clearTimeout(hint.current);
@@ -993,7 +1039,13 @@ export function TourPage() {
       name.style.opacity = o.toFixed(3);
     });
   }
-  /** the walk itself: plays from the door to the landing on M0, where the room engine takes over; resolves there */
+  /**
+   * The walk itself (MOCK8, FB19): from the door it advances by gentle scroll impulses with inertia (tour/walk.ts): the
+   * press of "היכנסו" is the first push, every scroll, swipe, ↓ or "המשך" another; each plays a stretch and eases to a
+   * stop, and two or three reach the end. The video plays at the rate the impulses give it (forward only, FB8). At the
+   * end: a still (ka2: HT2, the push into the living room starts from it, pixel for pixel) or the room's own frame
+   * (fb19). Resolves there. Reduced motion: a short fade, the door to the hall (HDx2 fb19) to the room.
+   */
   function walk(e: TourEngine): Promise<void> {
     const v = video.current;
     if (!v) return Promise.resolve();
@@ -1006,73 +1058,97 @@ export function TourPage() {
         done = true;
         cancelAnimationFrame(raf);
         v.onended = null;
+        v.pause();
         walkEnd.current = null;
+        walkCtl.current = null;
         e.stop('arrival');
         walkLabels.current?.removeAttribute('data-on');
+        stage.current?.removeAttribute('data-rest');
+        if (window.__hdTourState) window.__hdTourState.walkRest = false;
         v.onplaying = null;
-        // MOCK7: the walk stops in the hall; its last frame goes on the canvas, where the video shows it, and the push
-        // into the living room starts from it (goIn) while the video gives way over the same frame
-        if (!reduce) {
+        // ka2: the walk's last frame is the hall's still; it goes on the canvas exactly where the video shows it (the
+        // same picture, the exact file), the video gives way over it, and the push into the living room starts from it
+        const img = endStill.current;
+        if (!reduce && arrival.end === 'still' && img && img.naturalWidth) {
           const pos = parseFloat(v.style.objectPosition || '50') / 100;
-          stilled.current = e.holdStill(v, coverMap(v.videoWidth, v.videoHeight, e.vp.w, e.vp.h, Number.isFinite(pos) ? pos : 0.5));
+          stilled.current = e.holdStill(img, coverMap(img.naturalWidth, img.naturalHeight, e.vp.w, e.vp.h, Number.isFinite(pos) ? pos : 0.5));
         }
-        // the walk gives the window to the room: the canvas under it is the frame the walk landed on
         offerSkip(false);
         stage.current?.removeAttribute('data-walk');
         stage.current?.removeAttribute('data-played');
         resolve();
       };
-      walkEnd.current = () => {
-        v.pause();
-        finish();
-      };
+      walkEnd.current = finish;
       stage.current?.setAttribute('data-walk', '');
       offerSkip(true);
       if (reduce) {
-        // reduced motion (route ch. 11.1): D0 → HC with the labels for 1.5 s → M0, dissolves only
+        // reduced motion: a short fade, the door → the hall with the living room through the opening → the room
         stage.current?.setAttribute('data-hc', '');
         stage.current?.setAttribute('data-played', '');
-        drawLabels(arrival.hc_60, true);
-        announce('המבואה: ' + arrival.labels.map((l) => l.name_he).join(', '));
-        window.setTimeout(finish, 1900 * timeScale());
+        announce('המבואה');
+        window.setTimeout(finish, 1100 * timeScale());
         return;
       }
-      // the walk is an effect like any other: nothing is uploaded, decoded or measured while it plays (FB1)
+      // the walk is an effect like any other: nothing is uploaded, decoded or measured while it moves (FB1)
       e.walk('arrival');
-      const tick = (t: number) => {
-        const f = frameAt(t);
+      const dur = Math.max(0.1, (arrival.frames - 1) / 60);
+      const ctl = new WalkPlay({ duration: dur, impulse: arrival.impulse, snap: arrival.snap });
+      walkCtl.current = ctl;
+      let last = performance.now();
+      let rest = true;
+      const loop = (now: number) => {
+        if (done) return;
+        const dt = Math.min(0.1, (now - last) / 1000) / timeScale();
+        last = now;
+        const t = v.currentTime;
+        const f = frameAt(Math.min(t, dur));
         live.current.walk = f;
         if (window.__hdTourState) window.__hdTourState.walk = f;
-        drawLabels(f);
-        if (f >= arrival.rest_60[0] && !announced.current) {
-          announced.current = true;
-          announce('המבואה: ' + arrival.labels.map((l) => l.name_he).join(', '));
+        // a walk with names on its doors draws them (MOCK4's; FB19's has none)
+        if (arrival.labels.length) drawLabels(f);
+        if (v.ended || t >= dur - 0.5 / 60) return finish();
+        const r = ctl.step(t, dt);
+        if (r > 0) {
+          const rate = Math.min(4, Math.max(WALK.min, r));
+          if (Math.abs(v.playbackRate - rate) > 0.01) v.playbackRate = rate;
+          if (v.paused) void v.play().catch(() => undefined);
+        } else if (!v.paused) v.pause();
+        if (r === 0 !== rest) {
+          rest = r === 0;
+          stage.current?.toggleAttribute('data-rest', rest);
+          if (window.__hdTourState) window.__hdTourState.walkRest = rest;
+          if (rest) announce('גללו כדי להמשיך');
         }
-      };
-      const rvfc = (v as HTMLVideoElement & { requestVideoFrameCallback?: (cb: (now: number, m: { mediaTime: number }) => void) => number })
-        .requestVideoFrameCallback;
-      if (rvfc) {
-        const on = (_: number, m: { mediaTime: number }) => {
-          tick(m.mediaTime);
-          if (!done) rvfc.call(v, on);
-        };
-        rvfc.call(v, on);
-      } else {
-        const loop = () => {
-          tick(v.currentTime);
-          if (!done) raf = requestAnimationFrame(loop);
-        };
         raf = requestAnimationFrame(loop);
-      }
+      };
       v.onended = finish;
       // the door's picture gives way when the walk's first frame is on screen (the same frame: D0)
       v.onplaying = () => stage.current?.setAttribute('data-played', '');
       v.currentTime = 0;
-      announced.current = false;
-      v.play().catch(finish);
+      v.playbackRate = WALK.min;
+      // the press that started the walk is its first push
+      ctl.push(0, GESTURE.first);
+      walkPushes.current = 1;
+      if (window.__hdTourState) window.__hdTourState.walkPushes = 1;
+      raf = requestAnimationFrame(loop);
     });
   }
-  const announced = useRef(false);
+  /** MOCK8: one push of the walk (a scroll, a swipe, ↓ or "המשך"), `k` impulses; a new gesture counts as a push */
+  const walkPush = (k: number, fresh: boolean) => {
+    const ctl = walkCtl.current;
+    const v = video.current;
+    if (!ctl || !v || k <= 0) return;
+    ctl.push(v.currentTime, k);
+    if (fresh) {
+      walkPushes.current++;
+      if (window.__hdTourState) window.__hdTourState.walkPushes = walkPushes.current;
+    }
+  };
+  const walkCtl = useRef<WalkPlay | null>(null);
+  const walkPushes = useRef(0);
+  const gesture = useRef(new Gesture());
+  /** MOCK8: the walk's last frame (ka2), decoded before the walk starts: the push into the living room starts from it */
+  const endStill = useRef<HTMLImageElement | null>(null);
   /** MOCK7: the walk's last frame is on the canvas (the push into the living room starts from it) */
   const stilled = useRef(false);
   /** the walk's file has enough to play through (or 6 s have passed: it plays as it comes) */
@@ -1092,6 +1168,20 @@ export function TourPage() {
           );
         });
   const skipWalk = () => walkEnd.current?.();
+  /** MOCK8: the walk's last frame as a picture (ka2), decoded; null when the walk ends on the room */
+  async function loadStill(): Promise<HTMLImageElement | null> {
+    const url = stillUrl();
+    if (!url) return null;
+    if (endStill.current?.complete && endStill.current.naturalWidth) return endStill.current;
+    const img = new Image();
+    img.src = url;
+    try {
+      await img.decode();
+      return img;
+    } catch {
+      return null;
+    }
+  }
 
   // ---------- the beats ----------
   const goIn = () =>
@@ -1101,22 +1191,33 @@ export function TourPage() {
       // nothing starts moving before the room is ready (the button is held until then; a keyboard press waits here)
       await e.whenWarm();
       if (video.current && !prefersReducedMotion()) await canPlay(video.current);
+      // MOCK8: the walk's last frame (ka2: the hall), decoded before anything moves: the push starts from it
+      endStill.current = await loadStill();
+      // MOCK8: a walk that lands on the room's own frame (fb19) lands on the room with its products in it
+      const inRoom = arrival.end === 'room';
+      if (inRoom) {
+        await e.products();
+        tour.slots.forEach((s) => e.settle(s.id, true));
+        e.mask();
+      }
       setPhase('entering');
       // a wide screen: the labels of the reveal are given their rows now, before anything moves
       await frame();
       spread();
-      // MOCK4: the arrival v2 (motion-agent, QA-passed): the door opens, the hall, the rest on HC with the names on the
-      // doors, the turn and the walk into the living room; the canvas under it already holds the empty room it lands on
+      // MOCK8 (FB19): the walk from the door, by scroll impulses; the canvas under it holds the room it lands in
       e.cam = { ...e.rest };
       e.render();
       layLabels();
       stilled.current = false;
       await walk(e);
-      // MOCK7: from the hall into the living room, walking (clip 2 shows the old table and the old camera: not used)
+      // MOCK7: from the hall into the living room, walking in code (until the rest of the FB19 walk is made)
       if (stilled.current) await e.fromStill('arrive-living', PUSH_MS.arrive, arrival.land.cam);
       stilled.current = false;
       stage.current?.removeAttribute('data-hc');
-      await m.reveal(e, ui, live.current.cfg.way === 'full' ? 'c' : live.current.cfg.fx);
+      if (inRoom) {
+        ui.spots(true);
+        ui.count(items().length, true);
+      } else await m.reveal(e, ui, live.current.cfg.way === 'full' ? 'c' : live.current.cfg.fx);
       setPhase('room');
       atRest(e);
       announce(`${items().length} פריטים בסלון`);
@@ -1932,6 +2033,13 @@ export function TourPage() {
               </div>
               {/* MOCK4 (route ch. 11.1): the first arrival has its labels and "דלג", and no other button */}
               <div class="tour-walk-act" ref={walkAct} {...off}>
+                {/* MOCK8 (FB19): the walk goes on by a scroll, a swipe or ↓; "המשך" is the same push, for every hand */}
+                <span class="tour-walk-hint" aria-hidden="true">
+                  גללו כדי להמשיך
+                </span>
+                <button type="button" class="btn btn-ghost" id="tour-walk-next" onClick={() => walkPush(1, true)}>
+                  המשך
+                </button>
                 <button type="button" class="btn btn-ghost" id="tour-skip" onClick={skipWalk}>
                   דלג
                 </button>

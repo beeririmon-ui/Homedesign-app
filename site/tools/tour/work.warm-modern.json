@@ -1,14 +1,14 @@
 {
-  "note": "MOCK5 (2026-11-24): the work room W0 (the walnut niche with the desk, one-point), QA qa/reports/2026-11-20-work-w0, owner approval AP3-KW (2026-11-24). Read by tools/make-tour-room.ts. The sample slot is the art: 386242-08 (default), -01 and -02, the prints set in code on one frame layer. Both prints are 386242, whose card's rights are unclear: ×1 only, so the art's wheel opens where it is, without a close-up, and the frame has no zoom. The desk, the shelf and the chair are in the plate (fixed, not sold). Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (w0-defaults-fb15.png).",
+  "note": "MOCK5 (2026-11-24): the work room W0 (the walnut niche with the desk, one-point), QA qa/reports/2026-11-20-work-w0, owner approval AP3-KW (2026-11-24). Read by tools/make-tour-room.ts. The sample slot is the art: 386242-08 (default), -01 and -02, the prints set in code on one frame layer. Both prints are 386242, whose card's rights are unclear: ×1 only, so the art's wheel opens where it is, without a close-up, and the frame has no zoom. The desk, the shelf and the chair are in the plate (fixed, not sold). Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (layers/manifest-fb15.json, the 'pasted' fix), gated (as the render tools' finish composes them: RGB shadows, its rounding; tools/tour/gate_finish.py) against their own default frame (w0-defaults-fb15.png). MOCK8 (2026-11-26, briefs/site-mock8-integrate-2026-11-26.md): FB16's house light: the fb16 manifest (the same layers on the fb16 base), its grade (Lab) applied by the engine on the composite and its glows over the graded frame; gated against the folder's fb16 frame within the finish's grain (tools/tour/gate_fb16.py).",
   "room": "work",
   "group": "work",
   "style": "warm-modern",
   "name_he": "חדר עבודה",
   "layers": "assets/renders/work/warm-modern/stage1-2026-11-20",
-  "manifest": "layers/manifest-fb15.json",
-  "truth": "w0-defaults-fb15.png",
+  "manifest": "layers/manifest-fb16.json",
+  "truth": "w0-defaults-fb16-frame.png",
   "gate": {
-    "kind": "finish"
+    "kind": "fb16"
   },
   "depth": {
     "file": "assets/blockout/house/framing/wm-work-2026-11-20/W0-depth.png",
@@ -104,5 +104,6 @@
       "kind": "hang",
       "anchors": [[0.5, 0.7]]
     }
-  }
+  },
+  "plate": "plate-fb16.png"
 }

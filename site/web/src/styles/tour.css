@@ -232,6 +232,20 @@
   min-width: 72px;
   min-height: 44px;
 }
+/* MOCK8 (FB19): the walk rests between two pushes; a quiet line says how it goes on (only while it rests) */
+.tour-walk-act {
+  gap: 10px;
+}
+.tour-walk-hint {
+  color: #fbf6ee;
+  font: 500 14px / 1.3 var(--f-text);
+  text-shadow: 0 1px 6px rgba(20, 16, 12, 0.55);
+  opacity: 0;
+  transition: opacity var(--tour-ui) var(--tour-appear);
+}
+.tour[data-rest] .tour-walk-hint {
+  opacity: 1;
+}
 .tour[data-walk] .tour-fold,
 .tour[data-walk] .tour-t.t-room {
   opacity: 0;

@@ -9,6 +9,7 @@ import { Loader } from '../engine/loader';
 import { camForBox, clampCam, lerpCam } from '../engine/camera';
 import { supportsAvif } from '../media';
 import { timeScale } from '../motion';
+import type { TourGrade } from './grade';
 import { FX, MASK_PER_M, TourGL, layer, restDisplay, type Display, type LayerDraw, type Px } from './gl';
 import { metrics, type EffectStat } from './metrics';
 import { pushGeometry } from './push';
@@ -255,7 +256,7 @@ export class TourEngine {
     ];
   }
   /** MOCK4: the room's lights (screen), on its shadows' atlas pages */
-  private lights(r: TourData = tour): (Draw & { slot: string | null })[] {
+  private lights(r: TourData = tour): (Draw & { slot: string | null; post?: boolean; mul?: boolean; pos?: number })[] {
     const w = this.gl.width;
     return (r.lights ?? []).map((l) => {
       const a = l.atlas[String(w)]!;
@@ -268,6 +269,10 @@ export class TourEngine {
         screen: true,
         mips: false,
         slot: l.slot,
+        // MOCK8 (FB16): a glow over the graded frame (multiplied: B1's glass), or one option's only
+        post: l.post,
+        mul: l.mul,
+        pos: l.pos,
       };
     });
   }
@@ -363,7 +368,7 @@ export class TourEngine {
    * shows it, as the first frame of the push into the room: the video can give way over it. False: no still (the
    * page dissolves instead).
    */
-  holdStill(src: HTMLVideoElement, smap: [number, number, number, number]): boolean {
+  holdStill(src: HTMLVideoElement | HTMLImageElement, smap: [number, number, number, number]): boolean {
     if (this.reduce || !this.ready || !this.gl.uploadStill(src)) return false;
     this.pushAt(0, { dir: 0, fa: [0.5, 0.5], fb: [0.5, 0.5] }, 1, true);
     this.d.smap = smap;
@@ -504,7 +509,15 @@ export class TourEngine {
       // MOCK5: a light whose lamp is outside the frame (D2's pendant) is part of the room: always on
       const p = l.slot ? this.poses.get(l.slot) : undefined;
       if (!everything && l.slot && !(p ? p.length : this.visible.has(l.slot))) continue;
-      out.push({ ...layer(l.key, l.rect, false, 0, l.sub, true), opacity: p?.[0]?.a ?? 1 });
+      let a = p?.[0]?.a ?? 1;
+      // MOCK8: a glow of one option (the default pendant's) is there with that option only, and fades with it
+      if (l.pos && l.slot) {
+        const sel = this.selection[l.slot];
+        const q = p ? p.find((x) => (x.pos ?? sel) === l.pos) : sel === l.pos ? {} : null;
+        if (!q) continue;
+        a = (q as { a?: number }).a ?? 1;
+      }
+      out.push({ ...layer(l.key, l.rect, !!l.mul, 0, l.sub, !l.mul), opacity: a, post: l.post });
     }
     return out;
   }
@@ -556,7 +569,13 @@ export class TourEngine {
   }
   private flush(): number {
     if (!this.all && !this.dirty.size) return 0;
-    this.gl.compose(this.front, this.list(), this.all ? null : [...this.dirty].flatMap((id) => this.rects(id)), this.gl.needMips(this.frameDevicePx()));
+    this.gl.compose(
+      this.front,
+      this.list(),
+      this.all ? null : [...this.dirty].flatMap((id) => this.rects(id)),
+      this.gl.needMips(this.frameDevicePx()),
+      this.gradeNow(),
+    );
     this.all = false;
     this.dirty.clear();
     return this.gl.shaded;
@@ -594,7 +613,7 @@ export class TourEngine {
     const next = (this.front ? 0 : 1) as 0 | 1;
     // the whole next frame is composed here, which is the room's own area: MOCK2 gives it a frame of its own, so the
     // first frame of the effect does not carry it
-    this.gl.compose(next, this.list(), null, this.gl.needMips(this.frameDevicePx()));
+    this.gl.compose(next, this.list(), null, this.gl.needMips(this.frameDevicePx()), this.gradeNow());
     this.all = false;
     this.dirty.clear();
     if (!this.sync) await new Promise((r) => requestAnimationFrame(() => r(null)));
@@ -602,6 +621,10 @@ export class TourEngine {
       this.front = next;
       this.resetDisplay();
     });
+  }
+  /** MOCK8 (FB16): the grade the room shown is composed with (the warm-modern house's frames; none for the Nordic) */
+  private gradeNow(): TourGrade | null {
+    return this.house === WM ? (tour.grade ?? null) : null;
   }
   /** the next house, for `between` */
   setHouse(h: HouseId): void {
