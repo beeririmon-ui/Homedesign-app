@@ -4,12 +4,52 @@
  "decision": "FB21 leg 1 approved by the owner: expected 1,620, cap 2,592",
  "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, section FB21",
  "jobs": [
-  {"id": "leg1", "take": 1, "model": "kling-3-omni", "type": "image-to-video", "duration": 4, "resolution": "1080p", "sound": false,
-   "prompt": "fb21-leg1-m0w--d1.txt", "first_frame": "default-frame-m0w-fix1-pecan.png", "last_frame": "D1-defaults-fb16-frame.png",
-   "placeholder_id": "29c4693c-24e6-40cd-8798-d28333b234ee", "tokens": 1296,
+  {
+   "id": "leg1",
+   "take": 1,
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "duration": 4,
+   "resolution": "1080p",
+   "sound": false,
+   "prompt": "fb21-leg1-m0w--d1.txt",
+   "first_frame": "default-frame-m0w-fix1-pecan.png",
+   "last_frame": "D1-defaults-fb16-frame.png",
+   "placeholder_id": "29c4693c-24e6-40cd-8798-d28333b234ee",
+   "tokens": 1296,
    "file": "assets/video/transitions/warm-modern/route-fb21/leg1/leg1.kling-3-omni.take1.mp4",
-   "verdict": "rejected: no right turn. The camera dollies straight at the sofa wall, a gap opens between the framed prints (they split apart) and the kitchen appears through the back wall: an impossible plan and a morphing product. Not assembled; retry not spent (reported first)."}
+   "verdict": "rejected: no right turn. The camera dollies straight at the sofa wall, a gap opens between the framed prints (they split apart) and the kitchen appears through the back wall: an impossible plan and a morphing product. Not assembled; retry not spent (reported first)."
+  },
+  {
+   "id": "M0x-W",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "placeholder_id": "518677d6-7f9f-46fc-b2eb-55818fc4d4f0",
+   "tokens": 650,
+   "seed": "route-fb21/leg1/stills/m0x-w.seed.png (fix1-pecan turned exactly + plan guide + D1 through the opening)",
+   "file": "route-fb21/leg1/stills/m0x-w.png",
+   "verdict": "kept after a similarity fit (x1.30, no rotation) and the exact strip pasted back; a small skirting step at the paste seam"
+  },
+  {
+   "id": "leg1b",
+   "take": 1,
+   "model": "kling-3-omni",
+   "type": "image-to-video",
+   "duration": 4,
+   "resolution": "1080p",
+   "sound": false,
+   "prompt": "fb21-leg1b-m0x--d1.txt",
+   "first_frame": "M0x-W",
+   "last_frame": "D1 fb16",
+   "placeholder_id": "82c37c1e-850e-4b0d-b893-4a157414f6bf",
+   "tokens": 1296,
+   "file": "route-fb21/leg1/leg1b.kling-3-omni.take1.mp4",
+   "verdict": "kept: walks through the opening, the walnut leaves pass both sides, lands on D1"
+  }
  ],
- "spent": 1296,
- "cap": 2592
+ "spent": 3242,
+ "cap": 3292,
+ "decision_round2": "owner 2026-11-26: option (b), leg 1 cap 3,292",
+ "code": "route-fb21/leg1: head turn M0-W -> M0x-W in code (headturn.py, 1.0 s, same point); assembly leg_fb21.py"
 }
