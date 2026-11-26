@@ -34,8 +34,8 @@ const living = room('living-room');
 describe('MOCK7: the living room is M0-W', () => {
   it('built from the new folder by the rooms’ tool, with its own camera (35 mm at 1.05 m)', () => {
     expect(frames.living_room).toBe('living-room-m0w');
-    // MOCK8: the fix1 stack with the cushion wheel (layers/manifest-wheel.json)
-    expect(living.source).toBe('wm-living-room-m0w-fb13-wheel-2026-11-26');
+    // MOCK8: the fix1 stack with the cushion wheel, set B with the muslin Pecan throw (layers/manifest-wheel-pecan.json)
+    expect(living.source).toBe('wm-living-room-m0w-fb13-wheel-pecan-2026-11-26');
     expect(living.frame).toBe('M0-W');
     expect(living.camera.loc).toEqual([0.95, 5.55, 1.05]);
     expect(living.camera.yaw_deg_left).toBe(14);
@@ -76,7 +76,7 @@ describe('MOCK7: the living room is M0-W', () => {
 
   it('nothing of the old room: no phase 2 file, and the pin is M0-W’s', () => {
     const pin = read<{ manifest: string; hash: string; files: Record<string, string> }>('../../tools/tour/living-room.pin.json');
-    expect(pin.manifest).toBe('assets/renders/living-room/warm-modern/fb13-2026-11-25/layers/manifest-wheel.json');
+    expect(pin.manifest).toBe('assets/renders/living-room/warm-modern/fb13-2026-11-25/layers/manifest-wheel-pecan.json');
     expect(pin.hash).toBe('sha256');
     expect(Object.keys(pin.files).every((f) => f.startsWith('assets/renders/living-room/warm-modern/fb13-2026-11-25/'))).toBe(true);
     const text = JSON.stringify(living);
@@ -146,12 +146,15 @@ describe('MOCK7: the push between rooms (web/src/tour/push.ts)', () => {
 
 describe('MOCK7: the arrival stops in the hall', () => {
   // MOCK8 (FB19): K-A2 ends in the hall, on HT2; the push into the living room is aimed through HT's camera
-  it('at the walk’s last frame (K-A2: HT2), with its camera for the push', () => {
-    const a = read<{ walk: string; land: { frame: number; cam: number[] }; videos: Record<string, { frames: number }> }>('../../.generated/arrival.json');
-    expect(a.walk).toBe('ka2');
+  it('at the walk’s last frame (K-A2: HT2, with its camera for the push; the final walk: the room)', () => {
+    const a = read<{ walk: string; end: string; land: { frame: number; cam: number[] }; videos: Record<string, { frames: number }> }>(
+      '../../.generated/arrival.json',
+    );
     expect(a.land.frame).toBe(a.videos.desktop!.frames);
-    expect(a.land.cam).toEqual([3.6, 8.15, 1.2, 90, 0.36, 0.48]);
-    expect(a.videos.phone!.frames).toBe(Math.floor((a.videos.desktop!.frames - 1) / 2) + 1);
+    // K-A2 ends on HT2 (the push is aimed through HT's camera); the final walk ends on the room itself
+    if (a.end === 'still') expect(a.land.cam).toEqual([3.6, 8.15, 1.2, 90, 0.36, 0.48]);
+    else expect(a.walk).toBe('final');
+    expect(a.videos.phone!.frames).toBe(Math.round((a.videos.desktop!.frames - 1) / 2) + 1);
   });
 });
 

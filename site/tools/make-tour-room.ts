@@ -176,7 +176,9 @@ type Manifest = {
   light: Light | Light[];
   variants?: MVariant[];
   /** MOCK8 (FB16): the house light pass, per frame: the grade (Lab) and the glows over the graded frame */
-  fb16?: { frames: Record<string, { grade: Fb16Grade; glows: { file: string; blend: 'screen' | 'multiply'; slot: string | null; product?: string | null }[] }> };
+  fb16?: {
+    frames: Record<string, { grade: Fb16Grade; glows: { file: string; blend: 'screen' | 'multiply'; slot: string | null; product?: string | null }[] }>;
+  };
 } & Record<string, unknown>;
 type Fb16Grade = { L_knots_in: number[]; L_knots_out: number[]; L_interp: string; da: number; db: number; ab: string };
 
@@ -267,7 +269,8 @@ const lightEntries = (Array.isArray(m.light) ? m.light : [m.light]).filter(inFra
 const FB16_GATE = { mean: 1.5, p99: 10, over8: 0.02 } as const;
 const FB16_FRAME = c.fb16_frame ?? c.frame_id ?? c.camera;
 const f16 = c.gate?.kind === 'fb16' ? (m.fb16?.frames[FB16_FRAME] ?? fail(`${c.manifest} has no fb16 frame ${FB16_FRAME}`)) : null;
-if (f16 && !/monotone cubic/.test(f16.grade.L_interp)) fail(`fb16 ${FB16_FRAME}: the grade's L curve is ${f16.grade.L_interp}, not the monotone cubic the engine draws`);
+if (f16 && !/monotone cubic/.test(f16.grade.L_interp))
+  fail(`fb16 ${FB16_FRAME}: the grade's L curve is ${f16.grade.L_interp}, not the monotone cubic the engine draws`);
 /** the fb16 tool's pchip (assets/renders/tools/fb16/fb16.py): the slopes at the knots (Fritsch–Carlson, weighted) */
 function pchipSlopes(xk: number[], yk: number[]): number[] {
   const h = xk.slice(1).map((x, i) => x - xk[i]!);
@@ -377,7 +380,14 @@ let gateNote = '';
     // MOCK8 (FB16): the stack on the frame's fb16 base, graded and with its glows, against the folder's fb16 frame. The
     // fb16 frame is the grade of the render's finished frame (its grain and light wrap: the stack never carried them,
     // MOCK7 gated it against the composite before the finish), so this gate is a measure with limits
-    const args = [sitePath('tools/tour/gate_fb16.py'), dir, c.manifest, c.truth, repoPath('assets/renders/tools/finish'), repoPath('assets/renders/tools/fb16')];
+    const args = [
+      sitePath('tools/tour/gate_fb16.py'),
+      dir,
+      c.manifest,
+      c.truth,
+      repoPath('assets/renders/tools/finish'),
+      repoPath('assets/renders/tools/fb16'),
+    ];
     const opts = ['--frame', FB16_FRAME, '--plate', PLATE, ...(c.gate.frame_box_from ? ['--box', c.gate.frame_box_from] : [])];
     const out = execFileSync('python3.12', ['-I', ...args, ...opts], { encoding: 'utf8' });
     const g = JSON.parse(out) as { max: number; mean: number; p99: number; over8: number; size: [number, number] };
@@ -964,7 +974,11 @@ else {
   if (have.length) {
     const pcs = await Promise.all(
       have.map(async ({ r }) => {
-        const { data, info } = await sharp(repoPath(r.webp)).removeAlpha().resize({ width: STUDIO, height: STUDIO, fit: 'cover' }).raw().toBuffer({ resolveWithObject: true });
+        const { data, info } = await sharp(repoPath(r.webp))
+          .removeAlpha()
+          .resize({ width: STUDIO, height: STUDIO, fit: 'cover' })
+          .raw()
+          .toBuffer({ resolveWithObject: true });
         return { data, w: info.width, h: info.height, ch: 3 as const };
       }),
     );
@@ -1035,8 +1049,7 @@ const option = (slot: string, n: number, product: string, card: string | null) =
     product_id: p?.id ?? null,
     card_id: card,
     name_he:
-      c.option_names_he?.[product] ??
-      (p ? (c.names === 'slot-when-provisional' && p.name_provisional ? slotName(slot) : shopName(p, product, card!)) : null),
+      c.option_names_he?.[product] ?? (p ? (c.names === 'slot-when-provisional' && p.name_provisional ? slotName(slot) : shopName(p, product, card!)) : null),
     price_agorot: held ? null : (p?.price_agorot ?? null),
     price_provisional: held ? false : (p?.price_provisional ?? false),
     available: !held && !!p && p.availability.status === 'available',

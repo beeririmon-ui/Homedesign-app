@@ -20,8 +20,9 @@
  * The numbers go to the evidence when HD_EVIDENCE_DIR is set.
  */
 import { test, expect, type Page } from '@playwright/test';
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const note = (name: string, data: unknown) => {
   const dir = process.env.HD_EVIDENCE_DIR;
@@ -95,9 +96,8 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
     await ready(page);
     await page.locator('#tour-enter').click();
     await page.waitForFunction(() => (window.__hdTourState?.walk ?? 0) > 30, undefined, { timeout: 60_000 });
-    // the walk's file ends before the old table enters the opening (MOCK8: K-A2 ends in the hall, at HT2)
-    const dur = await page.locator('video.tour-video').evaluate((v: HTMLVideoElement) => v.duration);
-    expect(dur * 60).toBeLessThan(491);
+    // MOCK8: the walk is FB19's (K-A2 to the hall and the push in code, or the final walk into M0-W fix1)
+    const end = (JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../.generated/arrival.json'), 'utf8')) as { end: string }).end;
     // MOCK8 (FB19): the walk goes on by pushes ("המשך" is one)
     for (let i = 0; i < 600 && (await page.evaluate(() => window.__hdTourState?.phase)) !== 'room'; i++) {
       if (await page.evaluate(() => window.__hdTourState?.walkRest === true)) await page.locator('#tour-walk-next').click();
@@ -111,8 +111,10 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
     });
     note('arrival-push.json', fx);
     expect(fx.room).toBe('living-room');
-    expect(fx.frames, 'the push from the hall ran as an effect').toBeGreaterThan(3);
-    expect(fx.ms).toBeGreaterThan(800);
+    if (end === 'still') {
+      expect(fx.frames, 'the push from the hall ran as an effect').toBeGreaterThan(3);
+      expect(fx.ms).toBeGreaterThan(800);
+    }
     // the room it lands in rests on the plain composition
     expect(await hashes(page)).toEqual(want);
     expect(asked.filter((u) => OLD.test(u))).toEqual([]);

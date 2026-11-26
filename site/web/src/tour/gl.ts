@@ -1001,7 +1001,9 @@ export class TourGL {
 
   /** MOCK7: the still (the arrival's last frame, from its video element): one texture, replaced each time */
   private still: { tex: WebGLTexture; w: number; h: number } | null = null;
-  uploadStill(src: TexImageSource & { videoWidth?: number; videoHeight?: number; naturalWidth?: number; naturalHeight?: number; width?: number; height?: number }): boolean {
+  uploadStill(
+    src: TexImageSource & { videoWidth?: number; videoHeight?: number; naturalWidth?: number; naturalHeight?: number; width?: number; height?: number },
+  ): boolean {
     const gl = this.gl;
     // MOCK8: a picture (the walk's last frame as its file) as well as a video
     const w = src.videoWidth ?? src.naturalWidth ?? (src.width as number) ?? 0;

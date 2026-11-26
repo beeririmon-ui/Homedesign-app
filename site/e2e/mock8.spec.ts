@@ -60,7 +60,10 @@ const composition = (page: Page) =>
 test.describe('MOCK8: the arrival by scroll, the cushion wheel, the studio pictures, the house light', () => {
   test.describe.configure({ timeout: 400_000 });
 
-  test('the arrival: K-A2 by scroll impulses — a push plays a stretch and rests, 2–3 reach the hall, the push walks on', async ({ page }) => {
+  /** the walk tools/tour/arrival.json picks (its end: a still the push walks on from, or the room's own frame) */
+  const walk = read<{ walk: string; end: 'still' | 'room'; frames: number }>(join(SITE, '.generated', 'arrival.json'));
+
+  test('the arrival by scroll impulses: a push plays a stretch and rests, 2–3 reach the living room, handed over to the value', async ({ page }) => {
     await page.goto('/tour/?skip=1');
     await ready(page);
     await atRest(page);
@@ -101,17 +104,35 @@ test.describe('MOCK8: the arrival by scroll, the cushion wheel, the studio pictu
     const end = await page.evaluate(() => {
       const e = window.__hdTour!;
       const f = e.frames['arrive-living'];
-      return { pushes: window.__hdTourState!.walkPushes, seams: e.seams.filter((x) => x.label === 'arrive-living'), push: f?.dt.length ?? 0, room: window.__hdTourState!.room };
+      return {
+        pushes: window.__hdTourState!.walkPushes,
+        seams: e.seams.filter((x) => x.label === 'arrive-living'),
+        push: f?.dt.length ?? 0,
+        room: window.__hdTourState!.room,
+      };
     });
-    note('arrival-mock8.json', { dur, frames, first: first.walk, pushes: end.pushes, seams: end.seams, walk: seen.filter((_, i) => i % 5 === 0) });
+    note('arrival-mock8.json', {
+      walk: walk.walk,
+      end: walk.end,
+      dur,
+      frames,
+      first: first.walk,
+      pushes: end.pushes,
+      seams: end.seams,
+      seen: seen.filter((_, i) => i % 5 === 0),
+    });
     expect(end.room).toBe('living-room');
+    expect(frames).toBe(walk.frames);
     expect(end.pushes, 'two or three pushes reach the end').toBeGreaterThanOrEqual(2);
     expect(end.pushes).toBeLessThanOrEqual(3);
-    // the push into the living room starts from exactly the walk's last frame on screen, and lands on the room
-    expect(end.seams).toHaveLength(1);
-    expect(end.seams[0]!.first.max, 'the push’s first frame is the still on screen').toBe(0);
-    expect(end.seams[0]!.last.max, 'its last frame is the room').toBe(0);
+    if (walk.end === 'still') {
+      // K-A2: the push into the living room starts from exactly the walk's last frame on screen, and lands on the room
+      expect(end.seams).toHaveLength(1);
+      expect(end.seams[0]!.first.max, 'the push’s first frame is the still on screen').toBe(0);
+      expect(end.seams[0]!.last.max, 'its last frame is the room').toBe(0);
+    } else expect(end.push, 'the final walk lands on the room itself: no push in code').toBe(0);
     await page.evaluate(() => void (window.__hdTour!.sync = false));
+    // the room it hands over to is the room at rest, with its products, to the value
     expect(await hashes(page)).toEqual(want);
   });
 
@@ -197,8 +218,14 @@ test.describe('MOCK8: the arrival by scroll, the cushion wheel, the studio pictu
     // every option has its studio picture; the work room's prints are the preview's only (rights, PR1)
     for (const [id, v] of Object.entries(seen)) {
       expect(v.length, id).toBeGreaterThanOrEqual(2);
-      expect(v.every((x) => x !== null), `${id}: every option has its studio picture`).toBe(true);
-      expect(v.every((x) => x === (id === 'work')), `${id}: preview only where the rights are not confirmed`).toBe(true);
+      expect(
+        v.every((x) => x !== null),
+        `${id}: every option has its studio picture`,
+      ).toBe(true);
+      expect(
+        v.every((x) => x === (id === 'work')),
+        `${id}: preview only where the rights are not confirmed`,
+      ).toBe(true);
     }
     // and the wheel shows them (the bedroom's throw)
     await page.goto('/tour/?skip=1&room=master');
@@ -228,7 +255,10 @@ test.describe('MOCK8: the arrival by scroll, the cushion wheel, the studio pictu
       expect(c.w, 'a wide screen composes at the layers’ own width').toBe(2720);
       const got = Buffer.from(c.b64, 'base64');
       const stat = async (f: string) => {
-        const t = await sharp(join(REPO, dir, f)).ensureAlpha().raw().toBuffer();
+        const t = await sharp(join(REPO, dir, f))
+          .ensureAlpha()
+          .raw()
+          .toBuffer();
         const hist = new Array<number>(256).fill(0);
         let sum = 0;
         for (let i = 0; i < t.length; i += 4)
@@ -240,10 +270,11 @@ test.describe('MOCK8: the arrival by scroll, the cushion wheel, the studio pictu
         const n = (t.length / 4) * 3;
         let acc = 0;
         let p99 = 0;
-        for (let d = 0; d < 256; d++) if ((acc += hist[d]!) >= 0.99 * n) {
-          p99 = d;
-          break;
-        }
+        for (let d = 0; d < 256; d++)
+          if ((acc += hist[d]!) >= 0.99 * n) {
+            p99 = d;
+            break;
+          }
         return { mean: +(sum / n).toFixed(3), p99 };
       };
       const g = await stat(fb16);

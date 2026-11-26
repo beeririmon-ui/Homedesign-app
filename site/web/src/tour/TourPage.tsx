@@ -1116,7 +1116,7 @@ export function TourPage() {
           if (Math.abs(v.playbackRate - rate) > 0.01) v.playbackRate = rate;
           if (v.paused) void v.play().catch(() => undefined);
         } else if (!v.paused) v.pause();
-        if (r === 0 !== rest) {
+        if ((r === 0) !== rest) {
           rest = r === 0;
           stage.current?.toggleAttribute('data-rest', rest);
           if (window.__hdTourState) window.__hdTourState.walkRest = rest;

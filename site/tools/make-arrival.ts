@@ -35,9 +35,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
 
-type Source =
-  | { kind: 'clip'; clip: string; tool: string; first: string; last: string }
-  | { kind: 'frames'; dir: string; variant: string };
+type Source = { kind: 'clip'; clip: string; tool: string; first: string; last: string } | { kind: 'frames'; dir: string; variant: string };
 type End = { kind: 'still'; still: string; camera: string } | { kind: 'room' };
 type Cfg = { walk: string; walks: Record<string, { source: Source; end: End }>; impulse: number; snap: number; hall: string };
 const read = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
@@ -119,7 +117,11 @@ const files = {
   end: join(OUT, 'end.1920.webp'),
 };
 const have = () =>
-  existsSync(files.desktop) && existsSync(files.phone) && files.d0.every(existsSync) && existsSync(files.hall) && (W.end.kind !== 'still' || existsSync(files.end));
+  existsSync(files.desktop) &&
+  existsSync(files.phone) &&
+  files.d0.every(existsSync) &&
+  existsSync(files.hall) &&
+  (W.end.kind !== 'still' || existsSync(files.end));
 const ffmpeg = (args: string[]) => execFileSync('ffmpeg', ['-v', 'error', '-y', ...args], { stdio: ['ignore', 'ignore', 'inherit'] });
 const hasFfmpeg = (() => {
   try {
@@ -143,7 +145,20 @@ if (!fresh) {
     // two-pass H.264 High, yuv420p, faststart, no audio; a keyframe every half second (the walk's rate changes often)
     const encode = (vf: string[], fps: number, kbps: number, max: number, level: string, out: string, from = input) => {
       const common = [...from, ...vf, '-an', '-c:v', 'libx264', '-preset', 'slow', '-profile:v', 'high'];
-      const rate = ['-level:v', level, '-pix_fmt', 'yuv420p', '-b:v', `${kbps}k`, '-maxrate', `${max}k`, '-bufsize', `${Math.round(max * 1.4)}k`, '-g', String(fps / 2)];
+      const rate = [
+        '-level:v',
+        level,
+        '-pix_fmt',
+        'yuv420p',
+        '-b:v',
+        `${kbps}k`,
+        '-maxrate',
+        `${max}k`,
+        '-bufsize',
+        `${Math.round(max * 1.4)}k`,
+        '-g',
+        String(fps / 2),
+      ];
       const log = join(tmp, `pass-${fps}`);
       ffmpeg([...common, ...rate, '-pass', '1', '-passlogfile', log, '-f', 'mp4', '/dev/null']);
       ffmpeg([...common, ...rate, '-pass', '2', '-passlogfile', log, '-movflags', '+faststart', out]);
