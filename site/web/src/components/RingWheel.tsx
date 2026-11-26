@@ -255,11 +255,11 @@ export function RingWheel({ house, slot, initial, onPreview, onChoose, onCancel,
           class="arc-ring"
           ref={ring}
           style={
-            G
-              ? { '--cw': `${G.cw.toFixed(1)}px`, left: `${G.cx.toFixed(1)}px`, top: `${G.cy.toFixed(1)}px`, transform: `rotateX(${-G.tilt}deg)` }
-              : { visibility: 'hidden' }
+            G ? { '--cw': `${G.cw.toFixed(1)}px`, left: `${G.cx.toFixed(1)}px`, top: `${G.cy.toFixed(1)}px`, transform: `rotateX(${-G.tilt}deg)` } : undefined
           }
         >
+          {/* the ring itself: a thin line round the cards' feet, lying in the ring's plane (an ellipse in perspective) */}
+          {G ? <span class="ring-track" aria-hidden="true" style={{ width: `${(2 * G.r).toFixed(0)}px`, height: `${(2 * G.r).toFixed(0)}px` }} /> : null}
           {slot.options.map((o, i) => {
             const node = house?.thumbNode?.(o.position) ?? null;
             const img = node ? null : (house?.thumb?.(o.position) ?? null);

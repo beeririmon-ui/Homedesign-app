@@ -119,7 +119,6 @@ async function audit(page: Page, label: string) {
   expect(summary, `${label}\n${summary.join('\n')}`).toEqual([]);
 }
 /** the fixture's record (tour/fixture-wheel.ts) */
-const fixtureState = (page: Page) => page.evaluate(() => window.__hdWheelFixture!);
 
 test.describe('MOCK6: the kids’ rooms and the wheel of many options', () => {
   test.describe.configure({ timeout: 400_000 });
@@ -205,16 +204,18 @@ test.describe('MOCK6: the kids’ rooms and the wheel of many options', () => {
       await ready(page);
       await atRest(page);
       await openSpot(page, 'bedspread');
-      await expect(page.locator('.arc-card')).toHaveCount(3);
-      await expect(page.locator('.snap-card')).toHaveCount(0);
+      // FB20: the 3D ring (e2e/mock7.spec.ts)
+      await expect(page.locator('.arc.ring .arc-card')).toHaveCount(3);
       const v = await view(page);
       seen[room] = v;
       expect(v.z, `${room}: the close-up comes closer`).toBeGreaterThan(v.rest * 1.2);
       for (const a of d.avoid) expect(shows(v, a), `${room}: the close-up never shows the prints`).toBe(false);
+      // FB20: turning the ring never changes the room; the choice does (e2e/mock7.spec.ts)
       for (let pos = 2; pos <= 3; pos++) {
         await page.keyboard.press('ArrowLeft');
-        await expect.poll(() => page.evaluate(() => window.__hdTour!.selection['bedspread'])).toBe(pos);
+        await expect(page.locator('.arc-card[aria-checked="true"]')).toHaveAttribute('aria-label', new RegExp(`^${pos} מתוך 3`));
       }
+      expect(await page.evaluate(() => window.__hdTour!.selection['bedspread'])).toBe(1);
       await page.keyboard.press('Escape');
       await expect(page.getByRole('dialog')).toBeHidden();
       await atRest(page);
@@ -310,58 +311,7 @@ test.describe('MOCK6: the kids’ rooms and the wheel of many options', () => {
     await expect(page.locator('.tour-sale')).toHaveText('19 מוצרים למכירה בחדר');
   });
 
-  test('the wheel of many options, a fixture of ten: the counter, the keys, a swipe; only the options it rests on are asked for', async ({ page }) => {
-    const want = await plain(page, 'boy');
-    await page.goto('/tour/?skip=1&room=boy&fixture=wheel10');
-    await ready(page);
-    await atRest(page);
-    const dialog = page.getByRole('dialog');
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole('heading')).toHaveText('הדגמה: גלגל של 10 אפשרויות');
-    await expect(page.locator('.snap-card')).toHaveCount(10);
-    await expect(page.locator('.arc-card')).toHaveCount(0);
-    const count = page.locator('.snap-count');
-    await expect(count).toHaveText('1 / 10');
-    await expect(page.locator('.snap-card[aria-checked="true"]')).toHaveAttribute('aria-label', '1 מתוך 10: דוגמה 1 (לא מוצר)');
-    // it draws the cards near the one it rests on: five of ten at most
-    expect(await page.locator('.snap-card[data-near] svg').count()).toBeLessThanOrEqual(5);
-    expect((await fixtureState(page)).loads).toEqual([]);
-    // the keys: ← the next (right to left), End the last
-    await page.keyboard.press('ArrowLeft');
-    await expect(count).toHaveText('2 / 10');
-    await expect.poll(async () => (await fixtureState(page)).loads).toEqual([2]);
-    await page.keyboard.press('End');
-    await expect(count).toHaveText('10 / 10');
-    await expect.poll(async () => (await fixtureState(page)).shown).toBe(10);
-    await page.keyboard.press('Home');
-    await expect(count).toHaveText('1 / 10');
-    await expect.poll(async () => (await fixtureState(page)).shown).toBe(1);
-    // the wheel's own move back to the first card has landed
-    await expect.poll(() => page.locator('.snap').evaluate((el) => Math.round(el.scrollLeft))).toBe(0);
-    const afterKeys = (await fixtureState(page)).loads.length;
-    // a swipe across five cards (the scroller scrolls by itself): one rest, one patch asked for
-    const step = await page
-      .locator('.snap-card')
-      .nth(1)
-      .evaluate((el) => {
-        const a = el.getBoundingClientRect();
-        const b = el.previousElementSibling!.getBoundingClientRect();
-        return Math.abs(a.left - b.left);
-      });
-    await page.locator('.snap').evaluate((el, dx) => el.scrollBy({ left: -dx, behavior: 'smooth' }), step * 5);
-    await expect(count).toHaveText('6 / 10', { timeout: 10_000 });
-    await expect.poll(async () => (await fixtureState(page)).shown).toBe(6);
-    const s = await fixtureState(page);
-    const swipe = s.loads.slice(afterKeys);
-    expect(swipe, 'the cards passed on the way are never asked for').toEqual([6]);
-    // the room under it never changed
-    expect(await hashes(page)).toEqual(want);
-    note('fixture-wheel.json', s);
-    // Escape cancels
-    await page.keyboard.press('Escape');
-    await expect(dialog).toBeHidden();
-    expect((await fixtureState(page)).cancelled).toBe(true);
-  });
+  // FB20 (2026-11-26): the wheel of many options is the 3D ring; its fixture of ten is tested in e2e/mock7.spec.ts
 
   // MOCK7 (2026-11-26): the living room changed on purpose (the coordinator's update to the MOCK7 brief): it is M0-W,
   // pinned by content (e2e/mock7.spec.ts, web/test/mock7-tour.test.ts); MOCK5's room stays the rollback, pinned to

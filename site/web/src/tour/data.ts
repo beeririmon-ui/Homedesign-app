@@ -58,6 +58,13 @@ export type TourOption = {
   dims_he: string | null;
   set: boolean;
   card_id?: string | null;
+  /**
+   * FB20 (2026-11-26): the option's studio picture — the product as sold (a folded throw, a cushion set side by side)
+   * on the studio's one uniform backdrop, one render per option, in the same studio, light and angle, true to the SKU.
+   * The wheel shows it. Absent or null until it is rendered and passes QA: the wheel falls back to `card`, today's
+   * thumbnail. See tour/pictures.ts and site/README.md ("the wheel's two pictures").
+   */
+  studio?: TourCard | null;
 };
 export type TourSlot = {
   id: string;
@@ -281,6 +288,8 @@ export const layerUrl = (slot: TourSlot, position: number, kind: 'product' | 'sh
   mediaUrl(`${slot.src}/${kind === 'shadow' ? (slot.shadows?.[position - 1] ?? position) : position}.${kind}`, width, 'webp');
 /** the wheel's card of an option: the product on its own (MOCK2); MOCK4: a room's sheet, where its cards are one file */
 export const cardUrl = (o: TourOption): string => mediaUrl(o.card.src);
+/** FB20: a card's file (the wheel's card may be the option's studio picture) */
+export const cardFileUrl = (c: TourCard): string => mediaUrl(c.src);
 /** MOCK4: an atlas page's file at a width */
 export const atlasUrl = (r: TourData, kind: 'product' | 'shadow', page: number, width: number): string =>
   mediaUrl(r.atlas![String(width)]![kind][page - 1]!.src, width, 'webp');

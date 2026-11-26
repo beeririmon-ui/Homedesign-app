@@ -31,6 +31,7 @@ import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
 import { Waitlist } from '../components/Waitlist';
 import { DIM, REVEAL_MS } from '../components/ring-wheel';
+import { wheelCard } from './pictures';
 import {
   FRAMES,
   GROUP_HE,
@@ -42,6 +43,7 @@ import {
   ROOM_IDS,
   WM,
   cardUrl,
+  cardFileUrl,
   groupOf,
   roomCount,
   roomHeld,
@@ -51,6 +53,7 @@ import {
   type GroupId,
   type HouseId,
   type RoomId,
+  type TourCard,
   type TourOption,
   type TourSlot,
 } from './data';
@@ -171,19 +174,20 @@ const FRAME_FADE_MS = 600;
 /** a card: its own file, or (MOCK4) its place on its room's sheet of cards, as an SVG that shows only that place.
  *  MOCK6: the place is clipped (an inner svg is its own viewport): a card much taller or wider than the square it is
  *  shown in (the kids' pendant on its cord) no longer shows its neighbours on the sheet beside it */
-function CardPic({ o, cls, size }: { o: TourOption; cls?: string; size?: number }) {
-  const c = o.card;
+function CardPic({ o, cls, size, card }: { o: TourOption; cls?: string; size?: number; card?: TourCard }) {
+  const c = card ?? o.card;
+  const url = card ? cardFileUrl(card) : cardUrl(o);
   if (c.sprite && c.sheet) {
     const [x, y, w, h] = c.sprite;
     return (
       <svg class={`sprite${cls ? ` ${cls}` : ''}`} viewBox={`${x} ${y} ${w} ${h}`} width={size} height={size} aria-hidden="true" focusable="false">
         <svg x={x} y={y} width={w} height={h} viewBox={`${x} ${y} ${w} ${h}`}>
-          <image href={cardUrl(o)} width={c.sheet[0]} height={c.sheet[1]} />
+          <image href={url} width={c.sheet[0]} height={c.sheet[1]} />
         </svg>
       </svg>
     );
   }
-  return <img class={cls} src={cardUrl(o)} alt="" width={size} height={size} draggable={false} loading={cls === 'thumb' ? 'lazy' : undefined} />;
+  return <img class={cls} src={url} alt="" width={size} height={size} draggable={false} loading={cls === 'thumb' ? 'lazy' : undefined} />;
 }
 /** PRE1: a product the shop has and cannot sell now says so; a card the shop does not have yet is "עוד לא במכירה".
  *  MOCK6: a product the safety rule holds says why first ("לא במכירה", "לא במכירה לחדר ילדים", "ממתין לתקן EN 71") */
@@ -211,10 +215,15 @@ function wheelHouse(s: TourSlot): House {
     sets: s.options[0]!.set,
     product: () => undefined,
     drawn: () => [],
-    // MOCK2 (FB1): the product on its own — our own studio picture where one passed QA, else its layer trimmed to it
-    thumb: (pos) => cardUrl(s.options[pos - 1]!),
+    // FB20: the product as sold — the option's studio picture (pictures().studio) where there is one, else today's card
+    // (MOCK2, FB1: its layer trimmed to it, never a crop of the room)
+    thumb: (pos) => cardFileUrl(wheelCard(s, s.options[pos - 1]!)),
     // MOCK4: a card on its room's sheet is drawn from its place there
-    thumbNode: (pos) => (s.options[pos - 1]!.card.sprite ? <CardPic o={s.options[pos - 1]!} /> : null),
+    thumbNode: (pos) => {
+      const o = s.options[pos - 1]!;
+      const c = wheelCard(s, o);
+      return c.sprite ? <CardPic o={o} card={c} /> : null;
+    },
     cardGround: s.ground,
     info: (pos) => {
       const o = s.options[pos - 1]!;
@@ -1329,7 +1338,7 @@ export function TourPage() {
     !live.current.open &&
     beat(async (e) => {
       opener.current = from ?? (document.activeElement as HTMLElement | null);
-      // FB20: every slot, 3 to 12 options, takes the 3D ring (the arc and the scroll-snap carousel are the room page's)
+      // FB20: every slot, 3 to 12 options, takes the 3D ring (the arc stays the room page's; the scroll-snap carousel is retired)
       const W = await wheelFor();
       clearTimeout(turn.current);
       if (live.current.lay !== 'desk') setEye(live.current.house);

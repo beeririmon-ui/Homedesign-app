@@ -79,7 +79,7 @@ type TourEngineT = {
   vp: { w: number; h: number };
   busy: boolean;
   dprCap: number;
-  d: { vig: number; vigBox: TourBox; door: TourBox; doorR: number; doorAmt: number };
+  d: { ev: number; vig: number; vigBox: TourBox; door: TourBox; doorR: number; doorAmt: number };
   gl: { width: number; height: number; vram: number; bytes: number; readScreen(): { w: number; h: number; data: Uint8Array } };
   read(r: TourBox): Uint8Array;
   render(): number;

@@ -11,7 +11,11 @@
  *     style change;
  *  4. the walk between rooms, in the route's order: each room button walks (a push of 0.8–1.4 s) and lands on the plain
  *     composition; its two ends are the frames before and after it, to the value;
- *  5. reduced motion: the rooms dissolve, nothing walks (no depth is ever uploaded).
+ *  5. reduced motion: the rooms dissolve, nothing walks (no depth is ever uploaded);
+ *  6. FB20 (2026-11-26, briefs/site-wheel-3d-2026-11-26.md), the 3D wheel: the bedroom's throw on a ring (the cushion
+ *     sets A and C of M0-W are not in yet), the room dimmed while it is open, turning it never changes the room, the
+ *     choice lifts the dim as the product cross-fades in (600–900 ms), a cancel changes nothing; reduced motion; a ring
+ *     of ten (the fixture) turned by the keys and the mouse's wheel, only the card it rests on asked for.
  *
  * The numbers go to the evidence when HD_EVIDENCE_DIR is set.
  */
@@ -175,5 +179,124 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
     const depth = await page.evaluate(() => (window.__hdTour!.gl as unknown as { has(k: string): boolean }).has('dining:depth'));
     expect(depth, 'no depth is uploaded: no push runs').toBe(false);
     await ctx.close();
+  });
+
+  // ---------- FB20: the 3D wheel ----------
+  const checked = (page: Page) => page.locator('.arc.ring .arc-card[aria-checked="true"]').getAttribute('aria-label');
+  async function openThrow(page: Page) {
+    await page.locator('.tour-spot[data-slot="throw"]').click({ force: true });
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await atRest(page);
+  }
+
+  test('FB20, the 3D wheel: the throw on a ring over the dimmed room; turning it never changes the room; the choice is revealed', async ({ page }) => {
+    await page.goto('/tour/?skip=1&room=master');
+    await ready(page);
+    await atRest(page);
+    await openThrow(page);
+    await expect(page.locator('.picker[data-ring] .arc.ring .arc-card')).toHaveCount(3);
+    await expect(page.locator('.ring-track')).toHaveCount(1);
+    const open = await page.evaluate(() => ({ ev: window.__hdTour!.d.ev, vig: window.__hdTour!.d.vig }));
+    expect(open.ev, 'the room is dimmed while the wheel is open').toBeLessThan(-0.5);
+    expect(open.vig).toBeGreaterThan(0);
+    // the ring closes on itself: → from the first is the last; ← the next (right to left)
+    expect(await checked(page)).toMatch(/^1 מתוך 3/);
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => checked(page)).toMatch(/^3 מתוך 3/);
+    await page.keyboard.press('ArrowLeft');
+    await page.keyboard.press('ArrowLeft');
+    await expect.poll(() => checked(page)).toMatch(/^2 מתוך 3/);
+    // a drag turns it too; the room under it stays as it was
+    const box = (await page.locator('.arc.ring').boundingBox())!;
+    await page.mouse.move(box.x + box.width * 0.35, box.y + box.height * 0.8);
+    await page.mouse.down();
+    for (let i = 1; i <= 8; i++) {
+      await page.mouse.move(box.x + box.width * 0.35 + i * 12, box.y + box.height * 0.8);
+      await page.waitForTimeout(16);
+    }
+    await page.mouse.up();
+    await page.waitForFunction(() => !window.__hdTour!.busy && document.querySelectorAll('.arc-card[aria-checked="true"]').length === 1);
+    expect(await page.evaluate(() => window.__hdTour!.selection['throw'])).toBe(1);
+    await page.locator('.arc-card[aria-checked="true"]').focus();
+    await page.keyboard.press('Home');
+    await page.keyboard.press('ArrowLeft');
+    await expect.poll(() => checked(page)).toMatch(/^2 מתוך 3/);
+    // the choice: the dim lifts as the product comes into the room
+    await page.getByRole('button', { name: 'בחירה והצגה בחדר' }).click();
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await atRest(page);
+    const chosen = await page.evaluate(() => {
+      const e = window.__hdTour!;
+      const f = e.frames['select-reveal'];
+      return { sel: e.selection['throw'], ev: e.d.ev, vig: e.d.vig, frames: f?.dt.length ?? 0, ms: f ? f.dt.reduce((a, b) => a + b, 0) : 0 };
+    });
+    note('wheel3d-reveal.json', { open, chosen });
+    expect(chosen.sel).toBe(2);
+    expect(chosen.ev).toBe(0);
+    expect(chosen.vig).toBe(0);
+    expect(chosen.frames, 'the reveal ran as an effect').toBeGreaterThan(3);
+    expect(chosen.ms, 'about 600–900 ms').toBeGreaterThan(600);
+    expect(chosen.ms, 'about 600–900 ms (and a frame’s slack)').toBeLessThan(900 + 250);
+    const after = await hashes(page);
+    // a cancel changes nothing: the room rests on the same composition
+    await openThrow(page);
+    await page.keyboard.press('ArrowLeft');
+    await expect.poll(() => checked(page)).toMatch(/^3 מתוך 3/);
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await atRest(page);
+    expect(await page.evaluate(() => [window.__hdTour!.selection['throw'], window.__hdTour!.d.ev])).toEqual([2, 0]);
+    expect(await hashes(page)).toEqual(after);
+  });
+
+  test('FB20, reduced motion: the ring turns at once, the choice lands at once', async ({ browser }) => {
+    const ctx = await browser.newContext({ reducedMotion: 'reduce', locale: 'he-IL' });
+    const page = await ctx.newPage();
+    await page.goto('/tour/?skip=1&room=master');
+    await ready(page);
+    await atRest(page);
+    await openThrow(page);
+    await page.keyboard.press('ArrowLeft');
+    expect(await checked(page)).toMatch(/^2 מתוך 3/);
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await atRest(page);
+    const r = await page.evaluate(() => ({
+      sel: window.__hdTour!.selection['throw'],
+      ev: window.__hdTour!.d.ev,
+      frames: window.__hdTour!.frames['select-reveal']?.dt.length ?? 0,
+    }));
+    expect(r).toEqual({ sel: 2, ev: 0, frames: 0 });
+    await ctx.close();
+  });
+
+  test('FB20, a ring of ten (the fixture): the keys and the mouse’s wheel turn it; only the card it rests on is asked for', async ({ page }) => {
+    const want = await plain(page, 'boy');
+    await page.goto('/tour/?skip=1&room=boy&fixture=wheel10');
+    await ready(page);
+    await atRest(page);
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.locator('.arc.ring .arc-card')).toHaveCount(10);
+    const count = page.locator('.ring-count');
+    await expect(count).toHaveText('1 / 10');
+    await page.keyboard.press('End');
+    await expect(count).toHaveText('10 / 10');
+    await expect.poll(async () => (await page.evaluate(() => window.__hdWheelFixture!)).shown).toBe(10);
+    await page.keyboard.press('Home');
+    await expect(count).toHaveText('1 / 10');
+    await expect.poll(async () => (await page.evaluate(() => window.__hdWheelFixture!)).shown).toBe(1);
+    const before = (await page.evaluate(() => window.__hdWheelFixture!)).loads.length;
+    // the mouse's wheel: a turn of a few cards, then one rest
+    const box = (await page.locator('.arc.ring').boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height * 0.7);
+    for (let i = 0; i < 6; i++) await page.mouse.wheel(0, 60);
+    await expect(count).not.toHaveText('1 / 10');
+    const at = Number((await count.textContent())!.split(' / ')[0]);
+    await expect.poll(async () => (await page.evaluate(() => window.__hdWheelFixture!)).shown).toBe(at);
+    const loads = (await page.evaluate(() => window.__hdWheelFixture!)).loads.slice(before);
+    expect(loads, 'the cards passed on the way are never asked for').toEqual([at]);
+    expect(await hashes(page)).toEqual(want);
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeHidden();
   });
 });

@@ -15,8 +15,10 @@ export const RING = {
   tilt: 36,
   /** a short cell (a phone held upright): the flatter end of the owner's range */
   tiltShort: 32,
-  /** how much a card turns with the ring (0: always square to the viewer; 1: it faces out from the ring's axis) */
+  /** how much a card turns with the ring (0: always square to the viewer; 1: it faces out from the ring's axis), and
+   *  the most it turns, degrees (a card at the back of a ring of three stays a circle, not an edge) */
   yaw: 0.35,
+  maxYaw: 22,
   /** the perspective, in ring radii */
   persp: 3.2,
   /** the chord between two neighbours, in card widths (a little air between the front three) */
@@ -24,8 +26,8 @@ export const RING = {
   /** the smallest ring, in card widths (three or four options: the back cards peek out beside the front one) */
   minRadius: 1.05,
   /** a card behind: the most it dims (the veil) and the least it shows */
-  veil: 0.55,
-  floor: 0.3,
+  veil: 0.32,
+  floor: 0.42,
 } as const;
 
 /** the room while the wheel is open: −1.1 EV, and darker still away from the product (the close-up's vignette) */
@@ -79,7 +81,7 @@ export function ringGeom(n: number, w: number, h: number, maxCw = 168): RingGeom
   const nb = at(Math.min(step, 180), k, tilt);
   const wk = Math.max(f.s, 2 * Math.abs(nb.x) + nb.s);
   const cw = Math.max(40, Math.min(maxCw, (h * 0.96) / hk, (w * 0.94) / wk));
-  return { n: count, cw, r: k * cw, p: RING.persp * k * cw, step, tilt, cx: w / 2, cy: (h - hk * cw) / 2 + (-(b.y - b.s / 2)) * cw };
+  return { n: count, cw, r: k * cw, p: RING.persp * k * cw, step, tilt, cx: w / 2, cy: (h - hk * cw) / 2 + -(b.y - b.s / 2) * cw };
 }
 
 /** the short signed distance from `pos` to card `i` round a ring of `n` (−n/2 … n/2) */
@@ -117,13 +119,14 @@ export function cardPose(i: number, pos: number, g: RingGeom): CardPose {
   const front = (1 + Math.cos(rad(a))) / 2;
   const k = Math.pow(front, 0.8);
   const back = 1 - front;
+  const turn = Math.max(-RING.maxYaw, Math.min(RING.maxYaw, a * RING.yaw));
   return {
-    transform: `rotateY(${a.toFixed(3)}deg) translateZ(${g.r.toFixed(1)}px) rotateY(${(-a * (1 - RING.yaw)).toFixed(3)}deg) rotateX(${g.tilt}deg)`,
+    transform: `rotateY(${a.toFixed(3)}deg) translateZ(${g.r.toFixed(1)}px) rotateY(${(turn - a).toFixed(3)}deg) rotateX(${g.tilt}deg)`,
     front,
     z: Math.round(front * 100),
     opacity: RING.floor + (1 - RING.floor) * k,
     veil: RING.veil * back,
-    soft: Math.min(1, Math.max(0, (0.72 - front) / 0.45)),
+    soft: Math.min(1, Math.max(0, (0.62 - front) / 0.5)),
     live: front > 0.55,
   };
 }
@@ -157,7 +160,8 @@ export class RingPhysics {
   drag(dx: number, nowMs: number): number {
     const d = dx / this.pxPerItem;
     this.pos += d;
-    const dt = Math.max(1, nowMs - this.lastT) / 1000;
+    // two moves in one frame are not a fling: at least 8 ms between them
+    const dt = Math.max(8, nowMs - this.lastT) / 1000;
     this.vel = this.vel * 0.6 + (d / dt) * 0.4;
     this.lastT = nowMs;
     this.target = null;

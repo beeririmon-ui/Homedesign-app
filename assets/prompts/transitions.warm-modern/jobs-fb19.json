@@ -1,0 +1,19 @@
+{
+ "version": "2026-11-26",
+ "author": "motion-agent",
+ "decision": "FB19 (owner, 2026-11-26, 'מאשר את שניהם'): the arrival as one first-person walk, D0 -> K-A -> 1a -> K-C -> M0-W fix1. Expected 2,835, cap 5,186 (includes T-E0-W's 1,944, now replaced).",
+ "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, section FB19",
+ "rule": "var2_estimate_cost live before each job (2026-11-26: kling-3-omni 1080p 324/s)",
+ "jobs": [
+  {"id": "K-A", "take": 1, "model": "kling-3-omni", "type": "image-to-video", "duration": 3, "resolution": "1080p", "sound": false,
+   "prompt": "fb19-ka-d0--door.txt", "first_frame": "D0 (door-2026-11-16/d0.png, frame_view 1920x1080)", "last_frame": "clip 1a at 2.00 m (arrival-v2 desktop frame 147)",
+   "placeholder_id": "d16cecdb-40ae-4b09-ad39-d1f89ac4d144", "tokens": 972, "file": "assets/video/transitions/warm-modern/arrival-fb19/ka.kling-3-omni.take1.mp4",
+   "verdict": "kept: a natural approach, the leaf swings open as one rigid slab on its left hinges, handle and flutes kept; the leaf starts to open at about 0.75 s, with the door still about 3 m away (earlier than 'right in front of the eyes')"},
+  {"id": "K-C", "take": 1, "model": "kling-3-omni", "type": "image-to-video", "duration": 4, "resolution": "1080p", "sound": false,
+   "prompt": "fb19-kc-ht2--m0w.txt", "first_frame": "HT2 fb16 (ht2-products-fb16-frame.png)", "last_frame": "M0-W fix1 (default-frame-m0w-fix1.png)",
+   "placeholder_id": "9b00b13c-252b-4ef3-a23e-567645e74737", "tokens": 1296, "file": "assets/video/transitions/warm-modern/arrival-fb19/kc.kling-3-omni.take1.mp4",
+   "verdict": "weak: no walking turn. The camera walks at the stone panel for about 1.7 s, then crabs right past the walnut jamb; the stone wall stays frontal while the living room appears frontal beside it, so the perpendicular corner of the plan reads as one flat wall with a column. The products and the landing hold. Retry not spent: reported first (FB18 / FB19 bar)."}
+ ],
+ "spent": 2268,
+ "cap": 5186
+}
