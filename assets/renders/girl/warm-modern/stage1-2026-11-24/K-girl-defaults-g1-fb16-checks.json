@@ -47,16 +47,16 @@
   "measured": {
    "plaster": [
     74.95,
-    1.98,
+    2.0,
     7.98
    ],
    "plaster_px": 514097,
-   "black_p05": 9.06
+   "black_p05": 8.92
   },
   "black_loop": {
    "iteration": 2,
-   "black_target_in_fit": 9.1,
-   "p05_final": 11.67
+   "black_target_in_fit": 8.95,
+   "p05_final": 11.65
   }
  },
  "window_plane": {
@@ -132,6 +132,11 @@
    "slot": "pendant",
    "how": "emitter keep",
    "px": 7289
+  },
+  {
+   "slot": "roman-blind",
+   "how": "fabric backlight over the glass",
+   "px": 127223
   }
  ],
  "rnd2": {
@@ -139,45 +144,52 @@
   "finish_before_grade_outside_window_px": 0,
   "stack_outside_window_px": 0,
   "final_vs_graded_fb15_outside_changed_px": 0,
-  "changed_region_px": 3782753,
+  "changed_region_px": 4161600,
   "reproduced_from_files_max": 0
  },
  "after": {
   "plaster": [
-   75.88,
-   1.92,
-   8.14
+   76.28,
+   1.91,
+   8.19
   ],
   "plaster_px": 514097,
-  "black_p05": 11.67,
+  "black_p05": 11.65,
+  "window_zone": {
+   "rule": "every surface where the window field is at least half its 1 m value",
+   "px": 850148,
+   "dL_median": 8.75,
+   "dL_p90": 14.74,
+   "b_median": 12.83
+  },
   "outside": {
-   "L_p90": 87.0,
-   "L_p10": 53.1,
+   "L_p90": 91.9,
+   "L_p10": 61.3,
    "light_part_ab": [
     0.8,
-    10.4
+    12.0
    ]
   }
  },
  "pasted_test": {
-  "on": "the graded stack (grade on the plate and on every layer's RGB)",
-  "score": 43.14,
-  "per_layer_mean": 3.6,
+  "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
+  "score": 37.89,
+  "per_layer_mean": 3.16,
   "lamps": {
-   "pendant": "NOT lit"
+   "pendant": "lit (G1.10)"
   },
   "worst": [
    [
     "bookends",
-    6.21
-   ],
-   [
-    "bedding",
-    5.45
+    6.23
    ],
    [
     "pen-cup",
-    4.18
+    4.43
+   ],
+   [
+    "bedding",
+    4.08
    ]
   ]
  },
@@ -187,7 +199,8 @@
   "assets/renders/girl/warm-modern/stage1-2026-11-24/K-girl-defaults-g1-fb16-frame.png",
   "assets/renders/girl/warm-modern/stage1-2026-11-24/light/window-glow-K-girl-fb16.png",
   "assets/renders/girl/warm-modern/stage1-2026-11-24/light/ceiling-lights-cj-silk-pumpkin-lantern-30-warm-light-fb16.png",
+  "assets/renders/girl/warm-modern/stage1-2026-11-24/light/roman-blind-aliexpress-modern-beige-color-flat-868827-light-filter-136-fb16.png",
   "assets/renders/girl/warm-modern/stage1-2026-11-24/manifest-g1-fb16.json"
  ],
- "seconds": 61.1
+ "seconds": 76.9
 }

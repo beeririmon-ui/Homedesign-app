@@ -47,16 +47,16 @@
   "measured": {
    "plaster": [
     76.39,
-    1.53,
-    6.5
+    1.5,
+    6.48
    ],
    "plaster_px": 371209,
-   "black_p05": 9.19
+   "black_p05": 10.06
   },
   "black_loop": {
-   "iteration": 3,
-   "black_target_in_fit": 9.2,
-   "p05_final": 11.46
+   "iteration": 2,
+   "black_target_in_fit": 9.99,
+   "p05_final": 11.65
   }
  },
  "window_plane": {
@@ -118,13 +118,14 @@
   }
  },
  "window_glow": {
-  "amp": 0.2401,
+  "amp": 0.1638,
   "color": [
    1.0,
-   0.84,
-   0.62
+   0.87,
+   0.7
   ],
-  "dL_at_1m": 5.0,
+  "dL_full_on_plaster": 3.5,
+  "near_field": "1 / (1 + (d / 1.1 m)^4)",
   "blur_px": 25
  },
  "lamps": [
@@ -141,6 +142,11 @@
    "slot": "dining-pendant",
    "how": "emitter keep",
    "px": 34629
+  },
+  {
+   "slot": "curtains",
+   "how": "fabric backlight over the glass",
+   "px": 19172
   }
  ],
  "rnd2": {
@@ -148,37 +154,42 @@
   "finish_before_grade_outside_window_px": 0,
   "stack_outside_window_px": 0,
   "final_vs_graded_fb15_outside_changed_px": 0,
-  "changed_region_px": 3481199,
+  "changed_region_px": 4161600,
   "reproduced_from_files_max": 0
  },
  "after": {
   "plaster": [
-   75.34,
-   1.58,
-   6.77
+   75.74,
+   1.48,
+   6.86
   ],
   "plaster_px": 335108,
-  "black_p05": 11.46,
+  "black_p05": 11.65,
+  "window_zone_plaster": {
+   "px": 44135,
+   "dL_median": 4.41,
+   "b_median": 7.53
+  },
   "window_zone": {
-   "rule": "every surface where the window field is at least half its 1 m value",
-   "px": 21680,
-   "dL_median": 12.73,
-   "dL_p90": 14.99,
-   "b_median": 14.06
+   "rule": "every surface where the window field is at least half its full value",
+   "px": 572284,
+   "dL_median": 4.97,
+   "dL_p90": 9.42,
+   "b_median": 10.34
   },
   "outside": {
    "L_p90": 88.2,
-   "L_p10": 57.9,
+   "L_p10": 58.2,
    "light_part_ab": [
-    -2.6,
+    -2.7,
     6.1
    ]
   }
  },
  "pasted_test": {
   "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
-  "score": 72.53,
-  "per_layer_mean": 3.63,
+  "score": 70.49,
+  "per_layer_mean": 3.52,
   "lamps": {
    "dining-pendant": "lit (G1.10)",
    "kitchen-sconce": "looks lit, outside G1.10's H/S"
@@ -186,11 +197,11 @@
   "worst": [
    [
     "centerpiece-vase",
-    6.88
+    6.96
    ],
    [
     "candle-holders",
-    6.6
+    6.59
    ],
    [
     "bench-pad",
@@ -205,7 +216,8 @@
   "assets/renders/dining/warm-modern/stage1-2026-11-20/light/window-glow-D1-fb16.png",
   "assets/renders/dining/warm-modern/stage1-2026-11-20/light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
   "assets/renders/dining/warm-modern/stage1-2026-11-20/light/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb16.png",
+  "assets/renders/dining/warm-modern/stage1-2026-11-20/light/curtains-aliexpress-linen-blend-s-fold-180502-fb16.png",
   "assets/renders/dining/warm-modern/stage1-2026-11-20/manifest-fb16.json"
  ],
- "seconds": 119.9
+ "seconds": 114.5
 }

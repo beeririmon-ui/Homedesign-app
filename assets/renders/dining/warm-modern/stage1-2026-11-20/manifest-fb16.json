@@ -82,7 +82,12 @@
    "sold": true,
    "source": "D1 pass B-window-front (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
    "pass_": "B-window-front",
-   "toned": true
+   "toned": true,
+   "glow_fb16": {
+    "file": "light/curtains-aliexpress-linen-blend-s-fold-180502-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
   },
   {
    "frame": "D1",
@@ -1579,15 +1584,15 @@
      ],
      "L_knots_out": [
       0.0,
-      9.223,
+      10.02,
       76.53,
       96.0,
       100.0
      ],
      "L_interp": "monotone cubic (Fritsch-Carlson)",
      "ab": "a' = a * (L'+16)/(L+16) + da * w(L'),  b' = b * (L'+16)/(L+16) + db * w(L');  w = smoothstep(15, 30, L') * (1 - smoothstep(92, 99, L'))",
-     "da": 1.209,
-     "db": 0.586,
+     "da": 1.179,
+     "db": 0.566,
      "fit": {
       "iterations": 3,
       "plaster_in_lab": [
@@ -1599,16 +1604,16 @@
       "measured": {
        "plaster": [
         76.39,
-        1.53,
-        6.5
+        1.5,
+        6.48
        ],
        "plaster_px": 371209,
-       "black_p05": 9.19
+       "black_p05": 10.06
       },
       "black_loop": {
-       "iteration": 3,
-       "black_target_in_fit": 9.2,
-       "p05_final": 11.46
+       "iteration": 2,
+       "black_target_in_fit": 9.99,
+       "p05_final": 11.65
       }
      }
     },
@@ -1617,10 +1622,10 @@
       "file": "light/window-glow-D1-fb16.png",
       "blend": "screen",
       "over": "the whole graded composite (not x keep)",
-      "note": "(b) window glow: area source from the clay, low frequency, +5 L at 1 m",
+      "note": "(b) window glow: area source from the clay (irradiance, and the near field within about 1 m), low frequency, +3.5 L on the shade plaster at full strength",
       "product": null,
       "slot": null,
-      "px": 3144597
+      "px": 3864193
      },
      {
       "file": "light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
@@ -1639,6 +1644,15 @@
       "product": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light",
       "slot": "dining-pendant",
       "px": 34682
+     },
+     {
+      "file": "light/curtains-aliexpress-linen-blend-s-fold-180502-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(b) curtains: the fabric over the glass, backlit by the window (+4 L)",
+      "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+      "slot": "curtains",
+      "px": 22351
      }
     ],
     "outside": {

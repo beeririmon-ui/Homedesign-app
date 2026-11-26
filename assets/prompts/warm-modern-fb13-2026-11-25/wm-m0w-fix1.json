@@ -1,0 +1,270 @@
+{
+ "id": "wm-m0w-fix1-2026-11-26",
+ "brief": "briefs/wm-m0w-fix-olive-curtain-holder-2026-11-26.md",
+ "date": "2026-11-26",
+ "author": "render-agent",
+ "owner_words": "העץ בעציץ נראה ממש מוזר כמו עלים מרחפים באוויר, אין ווילון, ומחזיק העיתונים חתוך",
+ "camera": {
+  "id": "M0-W",
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw_deg_left": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555
+ },
+ "seed": null,
+ "seed_note": "var2 exposes no seed for nano-banana-2: the prompt, the input crop (sha256), the references and the settings are kept",
+ "estimate": {
+  "tool": "var2_estimate_cost",
+  "nano_banana_2_i2i_2K": 400
+ },
+ "tokens_total": 1600,
+ "cap": 1600,
+ "references_policy": "supplier images are references only (cropped in the scratchpad, uploaded to var2, never stored in the repo)",
+ "jobs": [
+  {
+   "id": "wm-m0w-fix1-e1-olive",
+   "what": "E1: the olive standard in the ribbed planter (filler) and its leaf shadow on the plaster at 228/15",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "9:16",
+   "tokens": 400,
+   "prompt": "fix1-e1-olive.txt",
+   "prompt_sha256": "870d6d0fef6dad7c70e74fc90b1853dfac8caa6d2ffe2a64d520dc1612b0e952",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/aa947150-6de5-4dda-9b57-8799935b61a1.png",
+   "image_sha256": "55284e59745ae57d32c3b8c5af027e7459967da8269c3dfbbb30c89a988a34b5",
+   "crop_canvas_px": [
+    620,
+    0,
+    1432,
+    1444
+   ],
+   "sent_px": [
+    1536,
+    2731
+   ],
+   "image_refs": [],
+   "idempotency_key": "wm-m0w-fix1-e1-olive-nano-2k-20261126",
+   "placeholder_id": "eb24655d-d40c-4d92-a26a-668dfbccf896",
+   "task_id": "cf4999295bdbe7ecf2eae9199a151165",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-cf4999295bdbe7ecf2eae9199a151165-0-1795704582325-028dbb13.jpg",
+   "raw": "raw/fix1-e1-olive-nano.jpg",
+   "raw_sha256": "07e615a4e3adcd5a3d24a81039fbe07f32f20d5ff534a18737c79824a7c65b6b",
+   "registration": {
+    "matches": 230,
+    "inliers": 76,
+    "residual_px_median": 0.634,
+    "residual_px_p90": 1.254,
+    "tone_gain_offset": [
+     [
+      0.9897,
+      0.0048
+     ],
+     [
+      1.0095,
+      -0.003
+     ],
+     [
+      1.0201,
+      -0.0117
+     ]
+    ],
+    "unchanged_share": 0.828,
+    "returned_px": [
+     1536,
+     2752
+    ],
+    "mean_abs_diff_unchanged": 5.42
+   },
+   "verdict": "USED: the crown, the trunk and the leaf shadow (above the planter rim only; the pot is the stage-A layer). The crown is fuller and ~43 px taller than stage A"
+  },
+  {
+   "id": "wm-m0w-fix1-e2-curtain",
+   "what": "E2: the linen curtain (curtains-aliexpress-linen-blend-s-fold-180502) at the left glazing edge, half drawn, the sun through it",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "9:16",
+   "tokens": 400,
+   "prompt": "fix1-e2-curtain.txt",
+   "prompt_sha256": "25ef796acaa086ff05c77783f2e1f473ea8dc0c9a4080275d6df96aa388596d6",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/c5228ce6-c3f2-434b-97e7-20d8597e50d9.png",
+   "image_sha256": "6a5710180419008078eac8e5554f36e6866ea37bfe47b56fb03c629c2a0667b7",
+   "crop_canvas_px": [
+    0,
+    0,
+    812,
+    1444
+   ],
+   "sent_px": [
+    1536,
+    2731
+   ],
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f8791f8b-47ca-4fbe-81d8-7b35a34821a9.png",
+     "card": "curtains-aliexpress-linen-blend-s-fold-180502",
+     "what": "two supplier photos side by side (texture, drape), cropped above the text banners"
+    }
+   ],
+   "idempotency_key": "wm-m0w-fix1-e2-curtain-nano-2k-20261126",
+   "placeholder_id": "39cc3e6e-e216-45d4-b898-daf405bf0663",
+   "task_id": "52b4dd35f82104fe325ddd2cf16e635e",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-52b4dd35f82104fe325ddd2cf16e635e-0-1795704596704-0512f78e.jpg",
+   "raw": "raw/fix1-e2-curtain-nano.jpg",
+   "raw_sha256": "da697ffee0ed2f8b42315abefc27ad8e0f2d6e804f6191c595171911db7146f6",
+   "registration": {
+    "matches": 232,
+    "inliers": 88,
+    "residual_px_median": 0.633,
+    "residual_px_p90": 1.215,
+    "tone_gain_offset": [
+     [
+      1.0018,
+      -0.009
+     ],
+     [
+      1.0165,
+      -0.009
+     ],
+     [
+      1.0241,
+      -0.0187
+     ]
+    ],
+    "unchanged_share": 0.79,
+    "returned_px": [
+     1536,
+     2752
+    ],
+    "mean_abs_diff_unchanged": 4.9
+   },
+   "verdict": "USED: the curtain only (left of its own hem, x <= ~205-223 canvas). Nano made it wider than asked (to ~0.27 of the crop, not 0.16) and moved the vase and a window post to the right: those are NOT taken; the stage-A vase stays (z 16, in front of the curtain's leading edge)"
+  },
+  {
+   "id": "wm-m0w-fix1-e3-holder",
+   "what": "E3: the magazine holder (CJYD201631004DW, Orange small) on the floor right of the floor lamp, fully in frame",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "fix1-e3-holder.txt",
+   "prompt_sha256": "7e4e49ff081ed7036b2bc6498f741ad785073f20b78a06575a874a83d07f8bad",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/757a8a80-c934-4536-819b-5ff8e266990e.png",
+   "image_sha256": "c5e5e6a1f8dd6b14a588aa577134487f58d694cdc58cad449885a7cb01e1dffc",
+   "crop_canvas_px": [
+    1632,
+    918,
+    2720,
+    1530
+   ],
+   "sent_px": [
+    2176,
+    1224
+   ],
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5c5742e6-2d0d-4f3e-9ba5-a39405260161.png",
+     "card": "magazine-holder-cj-gunmetal-leather-strap",
+     "what": "left: the SKU photo (Orange); right: the stage-A hero's holder in this light"
+    }
+   ],
+   "idempotency_key": "wm-m0w-fix1-e3-holder-nano-2k-20261126",
+   "placeholder_id": "5e61582c-daa1-4777-b48a-4d4a945f6435",
+   "task_id": "bddf951c39f5eb897c2da58628dc99c8",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-bddf951c39f5eb897c2da58628dc99c8-0-1795704641485-7f1f2f90.jpg",
+   "raw": "raw/fix1-e3-holder-nano.jpg",
+   "raw_sha256": "31aa028a836bf2cee49ae2a16579b2726e36c7767c41374f3fee06d0b1da5280",
+   "registration": {
+    "matches": 212,
+    "inliers": 111,
+    "residual_px_median": 0.606,
+    "residual_px_p90": 1.099,
+    "tone_gain_offset": [
+     [
+      0.993,
+      -0.0063
+     ],
+     [
+      0.9966,
+      -0.0012
+     ],
+     [
+      1.003,
+      -0.0127
+     ]
+    ],
+    "unchanged_share": 0.936,
+    "returned_px": [
+     2752,
+     1536
+    ],
+    "mean_abs_diff_unchanged": 8.01
+   },
+   "verdict": "USED: the holder and its contact shadow; refit in code x0.92 about its feet (card width 35 cm; F3 with the floor lamp and the frame edge)"
+  },
+  {
+   "id": "wm-m0w-fix1-e4-holderout",
+   "what": "E4: the old holder (cut by the bottom edge) removed; the rug under it",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "fix1-e4-holderout.txt",
+   "prompt_sha256": "908d46ce04c368dc5816ead94f56324dfe8983614800812730e763e61e44c00a",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/d0ed5b4b-26b1-40cc-b797-ef03e9453ef9.png",
+   "image_sha256": "695d6e316f0835ec020a673e4078df8cf3d4fa9b804a8be42f67c7f32b28178a",
+   "crop_canvas_px": [
+    560,
+    1071,
+    1376,
+    1530
+   ],
+   "sent_px": [
+    1632,
+    918
+   ],
+   "image_refs": [],
+   "idempotency_key": "wm-m0w-fix1-e4-holderout-nano-2k-20261126",
+   "placeholder_id": "4e7b0263-50c1-4066-b655-5731bd052759",
+   "task_id": "b43feb8029ca8a69727ac785fe244f1d",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-b43feb8029ca8a69727ac785fe244f1d-0-1795705443853-513fd507.jpg",
+   "raw": "raw/fix1-e4-holderout-nano.jpg",
+   "raw_sha256": "8e8e197ea322ee17bbbf3d05fa52359e8a1907aa8c0b8631a9b5b28fb9e96e2b",
+   "registration": {
+    "matches": 767,
+    "inliers": 579,
+    "residual_px_median": 0.532,
+    "residual_px_p90": 1.088,
+    "tone_gain_offset": [
+     [
+      1.0035,
+      -0.0153
+     ],
+     [
+      1.006,
+      -0.0066
+     ],
+     [
+      1.0094,
+      -0.012
+     ]
+    ],
+    "unchanged_share": 0.899,
+    "returned_px": [
+     2752,
+     1536
+    ],
+    "mean_abs_diff_unchanged": 5.75
+   },
+   "verdict": "USED: the rug under the old holder's hull only (the stage-A rug layer was a smeared fill with the arches' outline and a few alpha holes there). This is the brief's fourth send (the \"retry\" slot): no edit needed a retry"
+  }
+ ]
+}

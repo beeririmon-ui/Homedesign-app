@@ -1,0 +1,215 @@
+{
+ "frame": "HT2",
+ "room": "hall",
+ "style": "warm-modern",
+ "date": "2026-11-19",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "base": "../hall-2026-11-18/ht2-fb16.png (accepted 12.7.2; not edited)",
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "grade": "ht2.png's own (no grade on the products beyond tone.py's WM-G1 toe in the walnut alphas, if needed: see tone)",
+ "compose": {
+  "order": [
+   "base",
+   "wall-sconce-shadow (z 13), wall-sconce (z 14)",
+   "wall-hooks-shadow (z 15), wall-hooks (z 16)",
+   "basket-shadow (z 19), basket (z 20)",
+   "bench-throw-shadow (z 21), bench-throw (z 22)",
+   "light (screen, z 90)"
+  ],
+  "formula": "per slot: out = round((below * shadow / 255) * (1 - a) + rgb * a), straight alpha, a = A / 255; then the light: out = 255 - round((255 - out) * (255 - L) / 255)"
+ },
+ "layers": [
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "card": "data/products/entrance/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.json",
+   "sku": "12000051976080270",
+   "z": 14,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "shadow": "shadows/wall-sconce/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "alpha_px": 8778,
+   "shadow_px": 10719,
+   "glow_fb16": {
+    "file": "light/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
+  },
+  {
+   "slot": "wall-hooks",
+   "product": "wall-hooks-cj-walnut-block-peg-set-of-4",
+   "card": "data/products/entrance/wall-hooks/wall-hooks-cj-walnut-block-peg-set-of-4.json",
+   "sku": "CJJJJTJT09286-Black",
+   "z": 16,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/wall-hooks/wall-hooks-cj-walnut-block-peg-set-of-4.png",
+   "shadow": "shadows/wall-hooks/wall-hooks-cj-walnut-block-peg-set-of-4.png",
+   "alpha_px": 5461,
+   "shadow_px": 3462
+  },
+  {
+   "slot": "basket",
+   "product": "basket-cj-jute-cotton-rope-cylinder-30-hall",
+   "card": "data/products/entrance/basket/basket-cj-jute-cotton-rope-cylinder-30-hall.json",
+   "sku": "CJYD195774302BY",
+   "z": 20,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/basket/basket-cj-jute-cotton-rope-cylinder-30-hall.png",
+   "shadow": "shadows/basket/basket-cj-jute-cotton-rope-cylinder-30-hall.png",
+   "alpha_px": 38671,
+   "shadow_px": 17134
+  },
+  {
+   "slot": "bench-throw",
+   "product": "bench-throw-cj-cotton-waffle-blanket-150x200",
+   "card": "data/products/entrance/bench-throw/bench-throw-cj-cotton-waffle-blanket-150x200.json",
+   "sku": "CJZW275832213MN",
+   "z": 22,
+   "shadow_z": 21,
+   "default": true,
+   "layer": "layers/bench-throw/bench-throw-cj-cotton-waffle-blanket-150x200.png",
+   "shadow": "shadows/bench-throw/bench-throw-cj-cotton-waffle-blanket-150x200.png",
+   "alpha_px": 62393,
+   "shadow_px": 6100
+  }
+ ],
+ "light": [
+  {
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "z": 90,
+   "blend": "screen",
+   "file": "light/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall.png",
+   "px": 187215
+  }
+ ],
+ "rnd2": {
+  "outside_every_alpha_shadow_light_max_diff_vs_ht2": 0,
+  "recomposed_equals_written": true
+ },
+ "tone": {
+  "wall-hooks_tone": {
+   "p2_before": 17.53,
+   "floor": 20.7,
+   "A": 14.9,
+   "p2_after": 20.11,
+   "name": "pegs"
+  },
+  "wall-sconce_block_tone": {
+   "p2_before": 25.6,
+   "floor": 20.7,
+   "A": 0.0
+  }
+ },
+ "at_rest_only": "the layers appear only at rest on HT2 (focus mode, 6.6a.4) and lift before any move; the clips are unchanged",
+ "fb16": {
+  "date": "2026-11-26",
+  "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+  "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+  "previous": "manifest.json",
+  "tool": "assets/renders/tools/fb16/ (run16.py, fb16.py)",
+  "compose": "the previous formula on the fb16 base; then L0: the grade (frames.<id>.grade, Lab, analytic) on the composite, then each glow screened over the whole composite (not x keep). Products are not redrawn: every layer and shadow file is the previous one",
+  "frames": {
+   "HT2": {
+    "grade": {
+     "space": "CIELAB (D65, sRGB 8-bit in and out)",
+     "L_knots_in": [
+      0.0,
+      18.994,
+      75.726,
+      97.0,
+      100.0
+     ],
+     "L_knots_out": [
+      0.0,
+      11.5,
+      69.5,
+      96.0,
+      100.0
+     ],
+     "L_interp": "monotone cubic (Fritsch-Carlson)",
+     "ab": "a' = a * (L'+16)/(L+16) + da * w(L'),  b' = b * (L'+16)/(L+16) + db * w(L');  w = smoothstep(15, 30, L') * (1 - smoothstep(92, 99, L'))",
+     "da": -1.015,
+     "db": 0.339,
+     "fit": {
+      "iterations": 1,
+      "plaster_in_lab": [
+       75.73,
+       3.23,
+       8.22
+      ],
+      "black_in_p05": 18.99,
+      "measured": {
+       "plaster": [
+        69.55,
+        2.02,
+        7.97
+       ],
+       "plaster_px": 844654,
+       "black_p05": 11.47
+      },
+      "black_loop": {
+       "iteration": 1,
+       "black_target_in_fit": 11.5,
+       "p05_final": 11.47
+      }
+     }
+    },
+    "glows": [
+     {
+      "file": "light/wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(d) wall-sconce: the emitting shade keeps its pre-grade brightness (it is the source)",
+      "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+      "slot": "wall-sconce",
+      "px": 209
+     }
+    ],
+    "outside": {
+     "plate": "assets/renders/outside/warm-modern/fb16-2026-11-26/outside-west-fb16.jpg",
+     "mapping": "cylindrical about the window's outward normal",
+     "fp_px_per_rad": 1100.0,
+     "horizon_row": 967.7,
+     "az_offset_deg": 8.0,
+     "az_deg": [
+      41.9,
+      45.1
+     ],
+     "dof_sigma_px": 1.8,
+     "calibration": {
+      "L_p10_p90_before": [
+       7.2,
+       23.0
+      ],
+      "L_p10_p90_after": [
+       63.5,
+       93.5
+      ],
+      "sky_ab_before": [
+       -1.7,
+       10.8
+      ],
+      "target_L": 93.5,
+      "target_b": 13.5,
+      "note": "lift: the view reads several stops over the room; dark canopy to about L lo, the sky to the spec"
+     },
+     "layers_over_the_window": {}
+    },
+    "base": "../../hall-2026-11-18/ht2-fb16.png"
+   }
+  }
+ }
+}

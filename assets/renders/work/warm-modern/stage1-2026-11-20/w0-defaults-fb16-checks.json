@@ -48,15 +48,15 @@
    "plaster": [
     74.92,
     1.97,
-    7.98
+    7.97
    ],
    "plaster_px": 1532360,
-   "black_p05": 9.44
+   "black_p05": 8.92
   },
   "black_loop": {
    "iteration": 2,
-   "black_target_in_fit": 9.4,
-   "p05_final": 11.52
+   "black_target_in_fit": 8.93,
+   "p05_final": 11.61
   }
  },
  "window_plane": {
@@ -113,13 +113,14 @@
   "layers_over_the_window": {}
  },
  "window_glow": {
-  "amp": 0.2208,
+  "amp": 0.1455,
   "color": [
    1.0,
-   0.84,
-   0.62
+   0.87,
+   0.7
   ],
-  "dL_at_1m": 5.0,
+  "dL_full_on_plaster": 3.5,
+  "near_field": "1 / (1 + (d / 1.1 m)^4)",
   "blur_px": 25
  },
  "lamps": [
@@ -139,20 +140,32 @@
   "finish_before_grade_outside_window_px": 0,
   "stack_outside_window_px": 0,
   "final_vs_graded_fb15_outside_changed_px": 0,
-  "changed_region_px": 3524635,
+  "changed_region_px": 4161600,
   "reproduced_from_files_max": 0
  },
  "after": {
   "plaster": [
-   75.51,
+   75.3,
    1.94,
-   8.08
+   7.97
   ],
   "plaster_px": 1532360,
-  "black_p05": 11.52,
+  "black_p05": 11.61,
+  "window_zone_plaster": {
+   "px": 134682,
+   "dL_median": 8.31,
+   "b_median": 14.45
+  },
+  "window_zone": {
+   "rule": "every surface where the window field is at least half its full value",
+   "px": 626970,
+   "dL_median": 5.73,
+   "dL_p90": 8.64,
+   "b_median": 10.83
+  },
   "outside": {
    "L_p90": 92.9,
-   "L_p10": 63.1,
+   "L_p10": 62.8,
    "light_part_ab": [
     -1.9,
     12.2
@@ -161,8 +174,8 @@
  },
  "pasted_test": {
   "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
-  "score": 78.47,
-  "per_layer_mean": 4.13,
+  "score": 79.4,
+  "per_layer_mean": 4.18,
   "lamps": {
    "pendant": "looks lit, outside G1.10's H/S",
    "wall-sconce": "looks lit, outside G1.10's H/S"
@@ -170,15 +183,15 @@
   "worst": [
    [
     "bookends",
-    7.45
+    7.69
    ],
    [
     "waste-basket",
-    6.56
+    6.54
    ],
    [
     "desk-tray",
-    6.38
+    6.33
    ]
   ]
  },
@@ -191,5 +204,5 @@
   "assets/renders/work/warm-modern/stage1-2026-11-20/layers/light/pendant-cj-silk-ribbed-pumpkin-40-30cm-warm-fb16.png",
   "assets/renders/work/warm-modern/stage1-2026-11-20/layers/manifest-fb16.json"
  ],
- "seconds": 104.4
+ "seconds": 98.8
 }

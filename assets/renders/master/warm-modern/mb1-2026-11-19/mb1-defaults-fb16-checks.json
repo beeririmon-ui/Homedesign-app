@@ -47,16 +47,16 @@
   "measured": {
    "plaster": [
     74.95,
-    2.0,
-    8.02
+    2.02,
+    8.03
    ],
    "plaster_px": 557030,
-   "black_p05": 8.61
+   "black_p05": 7.95
   },
   "black_loop": {
    "iteration": 2,
-   "black_target_in_fit": 8.57,
-   "p05_final": 11.65
+   "black_target_in_fit": 7.96,
+   "p05_final": 11.57
   }
  },
  "window_plane": {
@@ -131,17 +131,22 @@
   {
    "slot": "bedside-sconces",
    "how": "emitter keep",
-   "px": 2622
+   "px": 3306
   },
   {
    "slot": "bedside-sconces",
    "how": "emitter keep",
-   "px": 1336
+   "px": 1892
   },
   {
    "slot": "floor-lamp",
    "how": "emitter keep",
-   "px": 30436
+   "px": 41193
+  },
+  {
+   "slot": "curtains",
+   "how": "fabric backlight over the glass",
+   "px": 67061
   }
  ],
  "rnd2": {
@@ -149,47 +154,54 @@
   "finish_before_grade_outside_window_px": 0,
   "stack_outside_window_px": 0,
   "final_vs_graded_fb15_outside_changed_px": 0,
-  "changed_region_px": 3743119,
-  "reproduced_from_files_max": 12
+  "changed_region_px": 4161600,
+  "reproduced_from_files_max": 0
  },
  "after": {
   "plaster": [
-   75.75,
-   1.95,
-   8.06
+   75.96,
+   1.94,
+   8.08
   ],
   "plaster_px": 557030,
-  "black_p05": 11.65,
+  "black_p05": 11.57,
+  "window_zone": {
+   "rule": "every surface where the window field is at least half its 1 m value",
+   "px": 598979,
+   "dL_median": 7.06,
+   "dL_p90": 10.97,
+   "b_median": 13.06
+  },
   "outside": {
-   "L_p90": 90.7,
-   "L_p10": 60.2,
+   "L_p90": 92.2,
+   "L_p10": 62.8,
    "light_part_ab": [
-    -3.0,
-    12.0
+    -3.2,
+    12.5
    ]
   }
  },
  "pasted_test": {
-  "on": "the graded stack (grade on the plate and on every layer's RGB)",
-  "score": 95.18,
-  "per_layer_mean": 4.14,
+  "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
+  "score": 94.32,
+  "per_layer_mean": 4.1,
   "lamps": {
-   "bedside-sconces-east": "NOT lit",
-   "floor-lamp": "looks lit, outside G1.10's H/S",
-   "bedside-sconces-west": "NOT lit"
+   "bedside-sconces-east": "looks lit, outside G1.10's H/S",
+   "floor-lamp": "lit (G1.10)",
+   "bedside-sconces-west": "looks lit, outside G1.10's H/S"
   },
   "worst": [
    [
     "planter",
-    8.07
+    8.44
    ],
    [
     "rug",
-    7.91
+    7.87
    ],
    [
     "magazine-holder",
-    6.89
+    6.96
    ]
   ]
  },
@@ -198,10 +210,11 @@
   "assets/renders/master/warm-modern/mb1-2026-11-19/mb1-defaults-fb16-finish.png",
   "assets/renders/master/warm-modern/mb1-2026-11-19/mb1-defaults-fb16-frame.png",
   "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/window-glow-MB1-fb16.png",
-  "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/wall-sconce-cj-travertine-cone-walnut-fb16.png",
-  "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/wall-sconce-cj-travertine-cone-walnut-fb16.png",
+  "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/wall-sconce-cj-travertine-cone-walnut-bedside-sconces-east-fb16.png",
+  "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/wall-sconce-cj-travertine-cone-walnut-bedside-sconces-west-fb16.png",
   "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/floor-lamp-aliexpress-pleated-walnut-43x158-177278-master-a1-warm-light-fb16.png",
+  "assets/renders/master/warm-modern/mb1-2026-11-19/layers/light/curtains-aliexpress-linen-blend-s-fold-180502-fb16.png",
   "assets/renders/master/warm-modern/mb1-2026-11-19/layers/manifest-fb16.json"
  ],
- "seconds": 121.7
+ "seconds": 124.8
 }

@@ -47,16 +47,16 @@
   "measured": {
    "plaster": [
     75.15,
-    2.02,
-    8.03
+    1.98,
+    8.0
    ],
    "plaster_px": 514097,
-   "black_p05": 8.92
+   "black_p05": 8.73
   },
   "black_loop": {
    "iteration": 2,
-   "black_target_in_fit": 8.89,
-   "p05_final": 11.61
+   "black_target_in_fit": 8.73,
+   "p05_final": 11.55
   }
  },
  "window_plane": {
@@ -132,6 +132,11 @@
    "slot": "pendant",
    "how": "emitter keep",
    "px": 7276
+  },
+  {
+   "slot": "roman-blind",
+   "how": "fabric backlight over the glass",
+   "px": 127223
   }
  ],
  "rnd2": {
@@ -139,32 +144,39 @@
   "finish_before_grade_outside_window_px": 0,
   "stack_outside_window_px": 0,
   "final_vs_graded_fb15_outside_changed_px": 0,
-  "changed_region_px": 3782877,
+  "changed_region_px": 4161600,
   "reproduced_from_files_max": 0
  },
  "after": {
   "plaster": [
-   76.07,
-   1.94,
-   8.17
+   76.39,
+   1.89,
+   8.19
   ],
   "plaster_px": 514097,
-  "black_p05": 11.61,
+  "black_p05": 11.55,
+  "window_zone": {
+   "rule": "every surface where the window field is at least half its 1 m value",
+   "px": 852180,
+   "dL_median": 9.11,
+   "dL_p90": 15.48,
+   "b_median": 14.08
+  },
   "outside": {
-   "L_p90": 83.4,
-   "L_p10": 54.9,
+   "L_p90": 86.4,
+   "L_p10": 62.1,
    "light_part_ab": [
-    1.6,
-    10.0
+    2.0,
+    11.6
    ]
   }
  },
  "pasted_test": {
-  "on": "the graded stack (grade on the plate and on every layer's RGB)",
-  "score": 51.52,
-  "per_layer_mean": 3.96,
+  "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
+  "score": 49.98,
+  "per_layer_mean": 3.84,
   "lamps": {
-   "pendant": "NOT lit"
+   "pendant": "lit (G1.10)"
   },
   "worst": [
    [
@@ -177,7 +189,7 @@
    ],
    [
     "bookends",
-    5.22
+    5.44
    ]
   ]
  },
@@ -187,7 +199,8 @@
   "assets/renders/boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb16-frame.png",
   "assets/renders/boy/warm-modern/stage1-2026-11-24/light/window-glow-K-boy-fb16.png",
   "assets/renders/boy/warm-modern/stage1-2026-11-24/light/ceiling-lights-cj-silk-pumpkin-lantern-30-warm-light-fb16.png",
+  "assets/renders/boy/warm-modern/stage1-2026-11-24/light/roman-blind-aliexpress-modern-beige-color-flat-868827-light-filter-136-fb16.png",
   "assets/renders/boy/warm-modern/stage1-2026-11-24/manifest-fb16.json"
  ],
- "seconds": 88.0
+ "seconds": 86.8
 }

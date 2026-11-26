@@ -1,0 +1,487 @@
+{
+ "id": "wm-living-room-m0w-fb13-fix1-2026-11-26",
+ "room": "living-room",
+ "style": "warm-modern",
+ "frame": "M0-W",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  77.4853,
+  43.4279,
+  2642.5147,
+  1486.5721
+ ],
+ "base": "../plate-PW.png",
+ "camera": {
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555,
+  "status": "PROPOSAL (camera-m0w-proposal.json has v0 0.52; v0 0.555 by the concepts' brief)"
+ },
+ "compose": "../plate-PW.png; per layer in z order: shadow (multiply), then the layer (straight alpha); lights (screen, z 90) times (1 - every alpha)",
+ "status": "FB13 M0-W fix1 (the owner, 2026-11-26: \"the tree in the pot looks like leaves floating in the air, there is no curtain, and the newspaper holder is cut\"): the olive, the curtain and the holder. Not QA'd; HD_PUBLIC=0 only. Rollback: manifest.json + ../default-frame-m0w.png",
+ "method": "tools/extract.py: the plate is the base; every product is cut from the ONE hero render (hero-HW.png); shadows = the hero over the plate, darker (multiply); the lamps' light = the hero over the plate, brighter (screen). fix1: four nano-banana-2 2K edits of crops of hero-HW.png (E1 olive, E2 curtain, E3 holder at its new place, E4 the old holder out), registered (SIFT affine) and tone-matched, pasted into their own regions -> ../hero-HW-fix1.png; the changed layers cut from it; shadows solved against the compose formula (tools/fix1/extract_fix1.py)",
+ "grade": {
+  "name": "m0w-g2",
+  "xs": [
+   0.0,
+   3.6,
+   26.7,
+   50.0,
+   65.5,
+   77.5,
+   93.0,
+   96.0,
+   100.0
+  ],
+  "ys": [
+   4.8,
+   10.6,
+   36.0,
+   62.5,
+   76.5,
+   83.6,
+   89.6,
+   93.2,
+   98.8
+  ],
+  "a_shift": 1.0,
+  "b_shift": 2.5,
+  "warm": {
+   "L0": 80.0,
+   "L1": 92.0,
+   "a": 0.8,
+   "b": 3.5
+  },
+  "note": "ONE display grade for P-W, H-W and every edit of H-W (pointwise in Lab: commutes with the layers' compositing). The owner's note of 2026-11-26 on concept B ('a little too dramatic') and the house light spec (docs/proposals/wm-fb16-house-light-2026-11-26.md): shade plaster L about 76 (74-80), sunlit plaster about 89-90 (88-92), black point 10-11",
+  "curve_at": {
+   "3.6": 10.3,
+   "26.7": 36.0,
+   "50": 62.4,
+   "65.5": 76.3,
+   "77.5": 83.5,
+   "93": 90.0,
+   "96": 93.3
+  }
+ },
+ "layers": [
+  {
+   "slot": "curtains",
+   "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+   "z": 10,
+   "shadow_z": 9,
+   "default": true,
+   "layer": "layers/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "shadow": "shadows/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "sold": true,
+   "option": {
+    "style": "s-fold",
+    "size": "132x270"
+   },
+   "sku": "12000059196236244",
+   "source": "hero-HW-fix1.png (nano-banana-2 2K edit E2 of hero-HW.png) cut in code",
+   "note": "the sheer linen at the left glazing edge, half drawn, the sun through it; alpha by its own hem; the vase (z 16) stands in front of its leading edge; its shadow file is neutral (sheer: the sun patch on the wall is kept as it was). The stack sits in view (about Y 1.75-2.0), not at the slot's Y 2.65-2.95: for the designer",
+   "alpha_px": 228906,
+   "shadow_px": 0,
+   "bbox_px": [
+    0,
+    41,
+    225,
+    1149
+   ]
+  },
+  {
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.png",
+   "shadow": "shadows/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.png",
+   "alpha_px": 241183,
+   "shadow_px": 238570,
+   "bbox_px": [
+    1274,
+    472,
+    2018,
+    817
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "accent-sconces",
+   "product": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "shadow": "shadows/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "alpha_px": 8331,
+   "shadow_px": 11836,
+   "bbox_px": [
+    1153,
+    472,
+    2158,
+    581
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "vase",
+   "product": "vase-cj-textured-white-stoneware",
+   "z": 16,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/vase/vase-cj-textured-white-stoneware.png",
+   "shadow": "shadows/vase/vase-cj-textured-white-stoneware.png",
+   "alpha_px": 20558,
+   "shadow_px": 12307,
+   "bbox_px": [
+    146,
+    887,
+    264,
+    1150
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "rug",
+   "product": "rug-cj-braided-wool-natural",
+   "z": 20,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/rug/rug-cj-braided-wool-natural-fix1.png",
+   "shadow": "shadows/rug/rug-cj-braided-wool-natural.png",
+   "alpha_px": 271567,
+   "shadow_px": 65100,
+   "bbox_px": [
+    586,
+    1337,
+    2599,
+    1529
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code; fix1: under the old holder place, the rug from nano edit E4"
+  },
+  {
+   "slot": "floor-lamp",
+   "product": "floor-lamp-cj-pleated-walnut-stem-158",
+   "z": 30,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "shadow": "shadows/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "alpha_px": 37230,
+   "shadow_px": 50604,
+   "bbox_px": [
+    2105,
+    577,
+    2350,
+    1359
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "planter",
+   "product": "planter-cj-cement-ribbed-belly",
+   "z": 32,
+   "shadow_z": 31,
+   "default": true,
+   "layer": "layers/planter/planter-cj-cement-ribbed-belly-fix1.png",
+   "shadow": "shadows/planter/planter-cj-cement-ribbed-belly-fix1.png",
+   "alpha_px": 134300,
+   "shadow_px": 337459,
+   "bbox_px": [
+    684,
+    407,
+    1096,
+    1323
+   ],
+   "sold": true,
+   "source": "hero-HW-fix1.png: the pot is the stage-A layer below the rim, pixel for pixel; the olive (filler) and its leaf shadow from nano edit E1"
+  },
+  {
+   "slot": "cushions",
+   "product": "set-B",
+   "z": 55,
+   "shadow_z": 54,
+   "default": true,
+   "layer": "layers/cushions/set-B.png",
+   "shadow": "shadows/cushions/set-B.png",
+   "alpha_px": 197428,
+   "shadow_px": 165041,
+   "bbox_px": [
+    1202,
+    872,
+    2252,
+    1446
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "coffee-table",
+   "product": "coffee-table-idana-javorina-olia-natural",
+   "z": 57,
+   "shadow_z": 56,
+   "default": true,
+   "layer": "layers/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "shadow": "shadows/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "alpha_px": 116863,
+   "shadow_px": 45378,
+   "bbox_px": [
+    1112,
+    1143,
+    1953,
+    1528
+   ],
+   "sold": false,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "basket",
+   "product": "basket-cj-jute-rope-cylinder",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/basket/basket-cj-jute-rope-cylinder.png",
+   "shadow": "shadows/basket/basket-cj-jute-rope-cylinder.png",
+   "alpha_px": 28594,
+   "shadow_px": 51273,
+   "bbox_px": [
+    487,
+    1094,
+    674,
+    1360
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "magazine-holder",
+   "product": "magazine-holder-cj-gunmetal-leather-strap",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-fix1.png",
+   "shadow": "shadows/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-fix1.png",
+   "alpha_px": 30913,
+   "shadow_px": 26645,
+   "bbox_px": [
+    2351,
+    1188,
+    2587,
+    1384
+   ],
+   "sold": true,
+   "source": "hero-HW-fix1.png (nano edit E3: on the oak floor right of the floor lamp, between the skirting and the rug) cut in code; refit in code x0.92 about its feet line and centred between the lamp and the frame edge (F3 0.02 / edge 0.02; the card is 35 cm wide)",
+   "refit": {
+    "scale": 0.92,
+    "about": "feet line y 1400",
+    "dx_px": 8.8,
+    "matrix": [
+     [
+      0.92,
+      0.0,
+      205.5174
+     ],
+     [
+      0.0,
+      0.92,
+      112.0
+     ]
+    ]
+   }
+  },
+  {
+   "slot": "bowl",
+   "product": "bowl-cj-matte-black-bowl-20",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/bowl/bowl-cj-matte-black-bowl-20.png",
+   "shadow": "shadows/bowl/bowl-cj-matte-black-bowl-20.png",
+   "alpha_px": 10427,
+   "shadow_px": 0,
+   "bbox_px": [
+    1650,
+    1212,
+    1804,
+    1296
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "candle-holders",
+   "product": "candle-holders-cj-travertine-pedestal",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "shadow": "shadows/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "alpha_px": 11154,
+   "shadow_px": 2991,
+   "bbox_px": [
+    1406,
+    1141,
+    1566,
+    1278
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "pendant",
+   "product": "pendant-cj-tiered-fabric-drum",
+   "z": 80,
+   "shadow_z": 79,
+   "default": true,
+   "layer": "layers/pendant/pendant-cj-tiered-fabric-drum.png",
+   "shadow": "shadows/pendant/pendant-cj-tiered-fabric-drum.png",
+   "alpha_px": 62306,
+   "shadow_px": 3907,
+   "bbox_px": [
+    1317,
+    0,
+    1655,
+    306
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  }
+ ],
+ "light": [
+  {
+   "file": "light/accent-sconces-aliexpress-travertine-cylinder-walnut-choice-fix1.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "accent-sconces"
+   ],
+   "px": 2438592,
+   "note": "fix1: filled from the wall around under the old olive's floating leaves only (never seen before; now open wall)"
+  },
+  {
+   "file": "light/floor-lamp-cj-pleated-walnut-stem-158-fix1.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "floor-lamp"
+   ],
+   "px": 2714378,
+   "note": "fix1: filled from the wall around under the old olive's floating leaves only (never seen before; now open wall)"
+  },
+  {
+   "file": "light/pendant-cj-tiered-fabric-drum-fix1.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "pendant"
+   ],
+   "px": 3139254,
+   "note": "fix1: filled from the wall around under the old olive's floating leaves only (never seen before; now open wall)"
+  }
+ ],
+ "influence_radius_px": {
+  "framed-art": 34,
+  "accent-sconces": 30,
+  "vase": 70,
+  "rug": 46,
+  "floor-lamp": 80,
+  "planter": 110,
+  "cushions": 90,
+  "coffee-table": 130,
+  "basket": 70,
+  "magazine-holder": 80,
+  "bowl": 46,
+  "candle-holders": 46,
+  "pendant": 24
+ },
+ "fillers": {
+  "planter": "the olive tree (filler) is in the planter's layer; its leaf shadow on the plaster is in the planter's shadow",
+  "vase": "the dry branch (filler) is in the vase's layer",
+  "candle_holders": "the candles (filler) are in the layer",
+  "magazine_holder": "the newspapers (filler) are in the layer",
+  "framed_art": "the three prints are set in code into the frames (tools/prints.py): TL2356-1 / -2 / -3, lit by the canvas's own light in the hero"
+ },
+ "cushions": {
+  "set": "B",
+  "products": [
+   "cushions-aliexpress-textured-boucle-throw-pillow (Oatmeal 50x50)",
+   "cushions-cj-wide-stripe-corduroy-light-green (Camel)",
+   "cushions-cj-linen-look-charcoal (Beige 30x50)",
+   "sofa-cover-cj-cotton-muslin-fringe (Pecan)"
+  ]
+ },
+ "coffee_table": {
+  "note": "FB12-T: a swappable layer; the rug's layer under it comes from the hero rendered without the table group (E2) and carries no table shadow; 'not yet for sale' until IDANA's written approval"
+ },
+ "not_in_frame": [
+  "wall-sconce (window wall, out of frame)"
+ ],
+ "moved_for_the_frame": {
+  "magazine_holder": {
+   "to": "about (1.92, 0.33), right of the floor lamp on the oak floor between the skirting and the rug (estimated from the image)",
+   "was": [
+    -0.68,
+    2.25
+   ],
+   "why": "fix1: cut by the bottom edge; no place on the left passes F3 and >= 90 % visible (armchair, basket, planter and the sofa fill the floor strip)"
+  },
+  "planter": [
+   -1.34,
+   0.549
+  ],
+  "basket": [
+   -1.8,
+   1.05
+  ]
+ },
+ "rnd2": {
+  "canvas_changed_px": 578376,
+  "canvas_changed_outside_regions_px": 0,
+  "regions_px": 725173,
+  "frame_changed_px": 272081,
+  "old_stack_recomposed_vs_stored_frame": {
+   "max": 1,
+   "px_over_0": 3300
+  },
+  "swap_one_product": {
+   "planter": {
+    "changed_px": 376571,
+    "changed_outside_its_region_px": 0
+   },
+   "magazine-holder": {
+    "changed_px": 42112,
+    "changed_outside_its_region_px": 0
+   },
+   "curtains": {
+    "changed_px": 218092,
+    "changed_outside_its_region_px": 0
+   }
+  },
+  "rule": "outside the changed layers' alpha, shadow and light: the stage-A stack, pixel for pixel; hiding one product changes its own region only"
+ },
+ "files": {
+  "hero": "../hero-HW-fix1.png",
+  "default_frame": "../default-frame-m0w-fix1.png",
+  "checks": "../checks-m0w-fix1.json",
+  "sheet": "../qa-sheet-m0w-fix1.jpg",
+  "jobs": "../jobs-fix1.json",
+  "tools": "../tools/fix1/",
+  "rollback": "manifest.json"
+ }
+}

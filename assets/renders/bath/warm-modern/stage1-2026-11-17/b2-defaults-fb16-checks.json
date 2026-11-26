@@ -1,0 +1,115 @@
+{
+ "room": "B2",
+ "frame": "B2",
+ "date": "2026-11-26",
+ "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+ "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+ "start": {
+  "manifest": "bath/warm-modern/stage1-2026-11-17/layers/manifest.json",
+  "finish_frame": "bath/warm-modern/stage1-2026-11-17/b2-defaults-fb13prep.png"
+ },
+ "before": {
+  "plaster": [
+   85.83,
+   1.02,
+   5.98
+  ],
+  "plaster_px": 1007773,
+  "black_p05": 11.52
+ },
+ "targets": {
+  "plaster_L": [
+   72,
+   78
+  ],
+  "plaster_b": [
+   6,
+   8
+  ],
+  "aim": {
+   "L": 75.0,
+   "a": 1.5,
+   "b": 7.0
+  },
+  "black": [
+   11.0,
+   12.0
+  ]
+ },
+ "grade": {
+  "iterations": 8,
+  "plaster_in_lab": [
+   85.83,
+   1.02,
+   5.98
+  ],
+  "black_in_p05": 11.52,
+  "measured": {
+   "plaster": [
+    75.16,
+    1.48,
+    7.02
+   ],
+   "plaster_px": 1007773,
+   "black_p05": 11.5
+  },
+  "black_loop": {
+   "iteration": 1,
+   "black_target_in_fit": 11.5,
+   "p05_final": 11.5
+  }
+ },
+ "lamps": [
+  {
+   "slot": "vanity-sconces",
+   "how": "emitter keep",
+   "px": 5100
+  }
+ ],
+ "rnd2": {
+  "rule": "outside the changed regions (the window alpha, the glows): the frame = the grade of the fb15 frame, pixel for pixel; before the grade only the window changes",
+  "finish_before_grade_outside_window_px": 0,
+  "stack_outside_window_px": 0,
+  "final_vs_graded_fb15_outside_changed_px": 0,
+  "changed_region_px": 5328,
+  "reproduced_from_files_max": 0
+ },
+ "after": {
+  "plaster": [
+   75.16,
+   1.48,
+   7.02
+  ],
+  "plaster_px": 1007773,
+  "black_p05": 11.5
+ },
+ "pasted_test": {
+  "on": "the graded fb16 stack before the shared finish (grade on the plate and every layer, lamp glows on their layers); compare with fb15 score_fb15_before_finish",
+  "score": 48.34,
+  "per_layer_mean": 4.03,
+  "lamps": {
+   "vanity-sconces": "NOT lit"
+  },
+  "worst": [
+   [
+    "floor-planter",
+    8.07
+   ],
+   [
+    "shower-curtain",
+    5.37
+   ],
+   [
+    "vanity-vase",
+    5.24
+   ]
+  ]
+ },
+ "files": [
+  "assets/renders/bath/warm-modern/stage1-2026-11-17/b2-defaults-fb16-finish.png",
+  "assets/renders/bath/warm-modern/stage1-2026-11-17/b2-defaults-fb16-frame.png",
+  "assets/renders/bath/warm-modern/stage1-2026-11-17/layers/light/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853-fb16.png",
+  "assets/renders/bath/warm-modern/stage1-2026-11-17/layers/manifest-fb16.json"
+ ],
+ "seconds": 53.0
+}

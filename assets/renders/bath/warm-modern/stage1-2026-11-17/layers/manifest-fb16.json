@@ -1,0 +1,965 @@
+{
+ "id": "wm-bath-b2-layers-2026-11-18",
+ "room": "bath",
+ "style": "warm-modern",
+ "frame": "B2",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  77.49,
+  43.43,
+  2642.51,
+  1486.57
+ ],
+ "base": "plate.png (graded, WM-G1 round 3), byte for byte",
+ "color": "8-bit sRGB, no ICC profile; blending on the sRGB-encoded values",
+ "compose": {
+  "order": [
+   "base",
+   "shower-dispensers-shadow, shower-dispensers",
+   "vanity-sconces-shadow, vanity-sconces",
+   "shower-curtain-shadow, shower-curtain",
+   "floor-planter-shadow, floor-planter",
+   "bath-towels-shadow, bath-towels",
+   "storage-basket-shadow, storage-basket",
+   "vanity-tray-shadow, vanity-tray",
+   "soap-dispenser-shadow, soap-dispenser",
+   "toothbrush-cup-shadow, toothbrush-cup",
+   "vanity-vase-shadow, vanity-vase",
+   "towel-ring-shadow, towel-ring",
+   "hand-towel-shadow, hand-towel",
+   "light (screen)"
+  ],
+  "formula": "for each product in z order: out = round((below * shadow / 255) * (1 - a) + rgb * a), a = alpha / 255, straight alpha; then the light: out = 255 - round((255 - out) * (255 - L) / 255)",
+  "swap_region": "per product: alpha > 0 or shadow < 255; a product changes nothing outside its region"
+ },
+ "grade": "every layer is cut from the graded composite (plate-grade.json, round 3); the site applies no further grade",
+ "cut": "tools/compose_defaults.py v2 (GrabCut in the slot zone, clay-bounded shadows, clay-bounded light)",
+ "layers": [
+  {
+   "slot": "shower-dispensers",
+   "product": "shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle",
+   "z": 14,
+   "default": true,
+   "layer": "layers/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow": "shadows/shower-dispensers/shower-dispensers-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow_z": 13,
+   "alpha_px": 7949,
+   "shadow_px": 5595,
+   "bbox_px": [
+    951,
+    673,
+    1085,
+    765
+   ],
+   "refit": {
+    "41": {
+     "render_box": [
+      949,
+      666,
+      1084,
+      762
+     ],
+     "clay_box": [
+      959,
+      675,
+      1076,
+      756
+     ],
+     "scale": 0.8438,
+     "new_box": [
+      961,
+      681,
+      1074,
+      762
+     ]
+    }
+   },
+   "pass": "defaults"
+  },
+  {
+   "slot": "vanity-sconces",
+   "product": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
+   "z": 14,
+   "default": true,
+   "layer": "layers/vanity-sconces/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "shadow": "shadows/vanity-sconces/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
+   "shadow_z": 13,
+   "alpha_px": 17332,
+   "shadow_px": 5569,
+   "bbox_px": [
+    1372,
+    230,
+    2355,
+    470
+   ],
+   "refit": {
+    "42": {
+     "render_box": [
+      1355,
+      365,
+      1437,
+      506
+     ],
+     "clay_box": [
+      1372,
+      357,
+      1436,
+      462
+     ],
+     "scale": 0.7447,
+     "new_box": [
+      1373,
+      357,
+      1435,
+      462
+     ]
+    },
+    "43": {
+     "render_box": [
+      2272,
+      257,
+      2388,
+      453
+     ],
+     "clay_box": [
+      2273,
+      233,
+      2351,
+      379
+     ],
+     "scale": 0.7449,
+     "new_box": [
+      2269,
+      233,
+      2355,
+      379
+     ]
+    }
+   },
+   "pass": "defaults",
+   "glow_fb16": {
+    "file": "light/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
+  },
+  {
+   "slot": "shower-curtain",
+   "product": "shower-curtain-aliexpress-linen-blend-slub-panel-200x270",
+   "z": 26,
+   "default": true,
+   "layer": "layers/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "shadow": "shadows/shower-curtain/shower-curtain-aliexpress-linen-blend-slub-panel-200x270.png",
+   "shadow_z": 25,
+   "alpha_px": 429444,
+   "shadow_px": 66809,
+   "bbox_px": [
+    542,
+    0,
+    973,
+    1530
+   ],
+   "pass": "defaults"
+  },
+  {
+   "slot": "floor-planter",
+   "product": "planter-cj-cement-ribbed-belly-beige-medium",
+   "z": 30,
+   "default": true,
+   "layer": "layers/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "shadow": "shadows/floor-planter/planter-cj-cement-ribbed-belly-beige-medium.png",
+   "shadow_z": 29,
+   "alpha_px": 87433,
+   "shadow_px": 25452,
+   "bbox_px": [
+    0,
+    1105,
+    338,
+    1530
+   ],
+   "colour_match": {
+    "level": 1.0,
+    "sku_lch": [
+     58.3,
+     4.1,
+     87.9
+    ],
+    "r5_lab_after": [
+     58.3,
+     0.15,
+     4.1
+    ],
+    "de00_after": 0.0,
+    "reference": "the window wall's plaster beside the pot (plate ids 1-4, x < 300, y 1000-1300, mid-tone), #ECE5DA"
+   },
+   "pass": "defaults"
+  },
+  {
+   "slot": "soap-dispenser",
+   "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle",
+   "z": 46,
+   "default": true,
+   "layer": "layers/soap-dispenser/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow": "shadows/soap-dispenser/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle.png",
+   "shadow_z": 45,
+   "alpha_px": 6092,
+   "shadow_px": 3947,
+   "bbox_px": [
+    1923,
+    793,
+    1998,
+    930
+   ],
+   "colour_match": {
+    "level": 1.0,
+    "sku_lch": [
+     62.3,
+     26.3,
+     70.1
+    ],
+    "r5_lab_after": [
+     62.3,
+     8.95,
+     24.73
+    ],
+    "de00_after": 0.0,
+    "reference": "the basin's outer wall, centre-right (QA's b2_cyl.py reference), #EDE6DA"
+   },
+   "refit": {
+    "44": {
+     "render_box": [
+      1908,
+      771,
+      1991,
+      924
+     ],
+     "clay_box": [
+      1928,
+      787,
+      1988,
+      917
+     ],
+     "scale": 0.8497,
+     "new_box": [
+      1923,
+      794,
+      1993,
+      924
+     ]
+    }
+   },
+   "raised_on_tray_px": 7,
+   "pass": "defaults"
+  },
+  {
+   "slot": "toothbrush-cup",
+   "product": "toothbrush-cup-cj-silver-travertine-cup",
+   "z": 46,
+   "default": true,
+   "layer": "layers/toothbrush-cup/toothbrush-cup-cj-silver-travertine-cup.png",
+   "shadow": "shadows/toothbrush-cup/toothbrush-cup-cj-silver-travertine-cup.png",
+   "shadow_z": 45,
+   "alpha_px": 6955,
+   "shadow_px": 3857,
+   "bbox_px": [
+    1983,
+    784,
+    2067,
+    936
+   ],
+   "raised_on_tray_px": 9,
+   "pass": "defaults"
+  },
+  {
+   "slot": "vanity-vase",
+   "product": "vanity-vase-cj-matte-black-pottery-bud-vase-10",
+   "z": 46,
+   "default": true,
+   "layer": "layers/vanity-vase/vanity-vase-cj-matte-black-pottery-bud-vase-10.png",
+   "shadow": "shadows/vanity-vase/vanity-vase-cj-matte-black-pottery-bud-vase-10.png",
+   "shadow_z": 45,
+   "alpha_px": 10158,
+   "shadow_px": 9133,
+   "bbox_px": [
+    2079,
+    742,
+    2300,
+    939
+   ],
+   "refit": {
+    "47": {
+     "render_box": [
+      2082,
+      813,
+      2167,
+      933
+     ],
+     "clay_box": [
+      2090,
+      843,
+      2151,
+      927
+     ],
+     "scale": 0.7,
+     "new_box": [
+      2091,
+      849,
+      2150,
+      933
+     ]
+    }
+   },
+   "pass": "defaults"
+  },
+  {
+   "slot": "towel-ring",
+   "product": "towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3",
+   "z": 50,
+   "default": true,
+   "layer": "layers/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3.png",
+   "shadow": "shadows/towel-ring/towel-ring-aliexpress-1-2pcs-bathroom-towel-842335-a3.png",
+   "shadow_z": 49,
+   "alpha_px": 7361,
+   "shadow_px": 7699,
+   "bbox_px": [
+    2319,
+    849,
+    2497,
+    1019
+   ],
+   "refit": {
+    "49": {
+     "scale": 0.8717,
+     "outer_box_before": [
+      2318,
+      873,
+      2504,
+      1038
+     ],
+     "outer_box_after": [
+      2331,
+      874,
+      2492,
+      1017
+     ],
+     "about": "the wall base"
+    }
+   },
+   "pass": "defaults"
+  },
+  {
+   "slot": "hand-towel",
+   "product": "hand-towel-aliexpress-pure-linen-towel-38x55-caramel",
+   "z": 52,
+   "default": true,
+   "layer": "layers/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "shadow": "shadows/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "shadow_z": 51,
+   "alpha_px": 68038,
+   "shadow_px": 31184,
+   "bbox_px": [
+    2271,
+    952,
+    2529,
+    1408
+   ],
+   "colour_match": {
+    "level": 0.6036,
+    "sku_lch": [
+     38.5,
+     40.4,
+     49.8
+    ],
+    "r5_lab_after": [
+     38.58,
+     26.45,
+     27.64
+    ],
+    "de00_after": 1.91,
+    "method": "R5 after the grade: lower half, mid-tone, against the plaster round the towel (#ECE5DA); solved on the rings' geometric mean, read on each of the three rings (10-40, 25-70, 45-90 px)",
+    "rings_lab": [
+     [
+      38.09,
+      26.24,
+      27.72
+     ],
+     [
+      38.46,
+      26.41,
+      27.49
+     ],
+     [
+      39.19,
+      26.68,
+      27.71
+     ]
+    ],
+    "de00_rings": [
+     1.82,
+     1.98,
+     2.06
+    ]
+   },
+   "moved_up_px": 19,
+   "pass": "defaults"
+  },
+  {
+   "slot": "bath-towels",
+   "product": "bath-towels-cj-waffle-cotton-milky-white-70x140-brown",
+   "card": "data/products/bath/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140.json",
+   "sku": "CJYD178122205EV",
+   "z": 36,
+   "default": true,
+   "layer": "layers/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140-brown.png",
+   "shadow": "shadows/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140-brown.png",
+   "shadow_z": 35,
+   "alpha_px": 30940,
+   "shadow_px": 4764,
+   "bbox_px": [
+    1374,
+    1291,
+    1644,
+    1465
+   ],
+   "pass": "fb10-a",
+   "shifted_px": [
+    -40,
+    -10
+   ]
+  },
+  {
+   "slot": "storage-basket",
+   "product": "storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white",
+   "card": "data/products/bath/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23.json",
+   "sku": "CJYD180710801AZ",
+   "z": 38,
+   "default": true,
+   "layer": "layers/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white.png",
+   "shadow": "shadows/storage-basket/storage-basket-cj-two-tone-cotton-rope-basket-38x25x23-tan-white.png",
+   "shadow_z": 37,
+   "alpha_px": 78317,
+   "shadow_px": 9166,
+   "bbox_px": [
+    1689,
+    1264,
+    2063,
+    1530
+   ],
+   "pass": "fb10-a",
+   "shifted_px": [
+    -40,
+    0
+   ],
+   "filler": "the three rolled warm-white towels inside are filler (the designer): no hotspot; on the product page 'sold without contents'"
+  },
+  {
+   "slot": "vanity-tray",
+   "product": "pool-cj-travertine-organic-tray-24",
+   "card": "data/products/pool/tray/pool-cj-travertine-organic-tray-24.json",
+   "sku": "CJYD238979001AZ",
+   "z": 44,
+   "default": true,
+   "layer": "layers/vanity-tray/pool-cj-travertine-organic-tray-24.png",
+   "shadow": "shadows/vanity-tray/pool-cj-travertine-organic-tray-24.png",
+   "shadow_z": 43,
+   "alpha_px": 6652,
+   "shadow_px": 2469,
+   "bbox_px": [
+    1865,
+    894,
+    2091,
+    945
+   ],
+   "pass": "fb10-a"
+  }
+ ],
+ "light": {
+  "product": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
+  "file": "light/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853.png",
+  "z": 90,
+  "blend": "screen",
+  "px": 79146,
+  "note": "the beams on the plaster and the stone top only; the light that falls on a product is in that product's own layer"
+ },
+ "rnd2": {
+  "region_px": 955179,
+  "outside_differing_px": 0,
+  "rule": "outside every alpha, shadow and light: plate.png, pixel for pixel"
+ },
+ "variants": [
+  {
+   "slot": "hand-towel",
+   "product": "hand-towel-aliexpress-pure-linen-towel-38x55-linen",
+   "z": 52,
+   "default": false,
+   "method": "recolour of the default's geometry (colour variant of the same card)",
+   "layer": "layers/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-linen.png",
+   "shadow": "shadows/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-linen.png",
+   "composite": "b2-variant-linen.png",
+   "alpha_identical_to_default": true,
+   "shadow_identical_to_default": true,
+   "kY_sku": 4.5405,
+   "kY_scene": 10.9935,
+   "lab_lower_half": {
+    "recoloured": [
+     35.73,
+     2.65,
+     9.73
+    ],
+    "edit_render": [
+     43.91,
+     4.14,
+     14.24
+    ],
+    "default": [
+     10.94,
+     14.35,
+     14.44
+    ]
+   },
+   "de00_recoloured_vs_edit_lower_half": 7.84,
+   "albedo_check": {
+    "albedo_lab": [
+     74.74,
+     1.95,
+     4.67
+    ],
+    "sku_mid_lab": [
+     74.98,
+     2.14,
+     5.04
+    ],
+    "de00_vs_sku": 0.41
+   },
+   "differing_px_vs_defaults": 67935,
+   "differing_px_vs_defaults_outside_alpha": 0,
+   "outside_differing_px_vs_plate": 0,
+   "edit_render": {
+    "warp": {
+     "file": "/home/user/homedesign-app/assets/renders/bath/warm-modern/stage1-2026-11-17/raw/towel-linen-r1.jpg",
+     "y_offset_px": 0.375,
+     "y_scale_about_row_707": -0.002726,
+     "x_offset_px": 0.021,
+     "used": {
+      "horizontal_lines": 14,
+      "vertical_lines": 8
+     }
+    },
+    "gain_p1_p50_p99": [
+     0.8,
+     1.127,
+     1.25
+    ]
+   },
+   "differing_px_vs_defaults_outside_the_swap_region": 0
+  },
+  {
+   "slot": "hand-towel",
+   "product": "tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki",
+   "card": "data/products/dining/tea-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair.json",
+   "sku": "CJYD223761707GT",
+   "z": 52,
+   "default": false,
+   "method": "its own render (pass T3), own alpha and shadow",
+   "layer": "layers/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.png",
+   "shadow": "shadows/hand-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair-khaki.png",
+   "composite": "b2-variant-khaki.png",
+   "alpha_px": 92773,
+   "shadow_px": 22055,
+   "outside_differing_px_vs_plate": 0,
+   "differing_px_vs_defaults_outside_the_swap_region": 0
+  }
+ ],
+ "post_b2": {
+  "date": "2026-11-18",
+  "tool": "tools/post_b2.py",
+  "source": "docs/proposals/wm-bath-render-2026-11-17.md 0א (B2 rulings 4 and 5)",
+  "ring": {
+   "rule": "0א 4: the A3 SKU (ring 16, base 5); diameter within +-5 % of the clay; the base stays",
+   "fit": {
+    "centre": [
+     2410.9,
+     955.4
+    ],
+    "axes": [
+     154.0,
+     174.5
+    ],
+    "angle_deg": 91.2,
+    "rod_half_thickness": 6.52,
+    "wall_base": [
+     2417.2,
+     877.7
+    ]
+   },
+   "scale": 0.8717,
+   "outer_box_before": [
+    2318,
+    873,
+    2504,
+    1038
+   ],
+   "outer_box_after": [
+    2331,
+    874,
+    2492,
+    1017
+   ],
+   "clay_box": [
+    2314,
+    847,
+    2476,
+    971
+   ],
+   "width_ratio_to_clay": 0.994,
+   "height_before_after_px": [
+    166,
+    144
+   ],
+   "clay_height_note": "the clay ring's visible part (its lower arc is under the clay towel)",
+   "bar_top_before_after": [
+    1026.0,
+    1007.0
+   ],
+   "towel_rise_px": 19,
+   "towel_top_at_bar_before_after": [
+    1005,
+    986
+   ],
+   "visible_rod_pieces_touching_the_towel": [
+    1
+   ],
+   "plate_pockets_between_rod_and_fold_px": 0,
+   "towel_variants_shifted": [
+    "layers/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+    "layers/hand-towel/hand-towel-aliexpress-pure-linen-towel-38x55-linen.png"
+   ]
+  },
+  "washes": {
+   "rule": "0א 5: the left lamp's peak 0.8-1.25 of the right's (added light, linear luminance, p99.5 over the beams)",
+   "before": {
+    "left": 0.1987,
+    "right": 0.392,
+    "ratio": 0.507
+   },
+   "gain_linear_left": 2.0,
+   "gain_linear_right": 0.657,
+   "after": {
+    "left": 0.2317,
+    "right": 0.2575,
+    "ratio": 0.9
+   },
+   "note": "the left plaster takes more window light (less headroom to white), so the left gain alone could not reach 0.8",
+   "right_trim_after_colour": 0.9724,
+   "colour": {
+    "rule": "M6: the left wash's colour from the right's by intensity (3000 K as drawn on the right); luminance kept",
+    "edge_hue_deg": {
+     "left": 72.3,
+     "right": 72.4
+    },
+    "share_G0": {
+     "left": 0.543,
+     "right": 0.3
+    },
+    "burnt_white_px": {
+     "left": 0,
+     "right": 0
+    },
+    "peaks_after": {
+     "left": 0.2253,
+     "right": 0.2494,
+     "ratio": 0.903
+    }
+   }
+  }
+ },
+ "fb10": {
+  "date": "2026-11-18",
+  "tool": "tools/compose_fb10.py",
+  "source": "docs/proposals/wm-bath-render-2026-11-17.md 12.6 (HOUSE2B)",
+  "passes": [
+   "fb10-a (nano-banana-2, 400)",
+   "fb10-t3 (nano-banana-2, 400)"
+  ],
+  "rnd2_outside_differing_px": {
+   "defaults": 0,
+   "b2-variant-linen": 0,
+   "b2-variant-khaki": 0
+  },
+  "a_render": {
+   "warp": {
+    "file": "/home/user/homedesign-app/assets/renders/bath/warm-modern/stage1-2026-11-17/raw/fb10-a-r1.png",
+    "y_offset_px": 0.0,
+    "y_scale_about_row_707": 0.0,
+    "x_offset_px": 0.608,
+    "used": {
+     "horizontal_lines": 15,
+     "vertical_lines": 10
+    }
+   },
+   "gain_p1_p50_p99": [
+    0.903,
+    0.99,
+    1.044
+   ]
+  },
+  "towels_refit": {
+   "drawn_bbox": [
+    1392,
+    1257,
+    1721,
+    1467
+   ],
+   "box_bbox": [
+    1402.4,
+    1304.8,
+    1695.5,
+    1467.4
+   ],
+   "scale": 0.7745,
+   "anchor": "bottom centre",
+   "affine": [
+    [
+     0.7745,
+     0.0,
+     343.3813
+    ],
+    [
+     0.0,
+     0.7745,
+     331.1785
+    ]
+   ],
+   "new_bbox": [
+    1421.5,
+    1304.8,
+    1676.4,
+    1467.4
+   ]
+  },
+  "basket_gap_trim_px": 3704,
+  "tray_fill_under_bases_px": 323,
+  "tray_rise_px": {
+   "soap-dispenser": 7,
+   "toothbrush-cup": 9,
+   "rim_1_8cm_px": 14
+  },
+  "towels_match": {
+   "level": 1.0,
+   "sku_lch": [
+    72.0,
+    5.0,
+    47.0
+   ],
+   "r5_lab_after": [
+    72.0,
+    3.41,
+    3.66
+   ],
+   "de00_after": 0.0,
+   "method": "R5 after the grade: the stack's front faces (its lower 70 %), mid-tone, against the basket's white body beside it (its lower third, C* under 12), whose albedo is its photo's (#E9E4DE)",
+   "reference_px": 17378,
+   "r5_lab_before": [
+    64.64,
+    5.42,
+    7.29
+   ],
+   "de00_before": 6.76,
+   "de00_after_vs_qa_photo_abs": 2.43
+  },
+  "basket_band_match": {
+   "method": "the jute band (rows 10-60 % of the basket, C* over 10), mid-tone, against the basket's white body; target the photo's tan by QA's photo method",
+   "target_lab": [
+    57.3,
+    9.1,
+    19.4
+   ],
+   "gain_rgb": [
+    0.902,
+    0.7889,
+    0.7499
+   ],
+   "band_px": 33047,
+   "lab_before": [
+    62.16,
+    5.87,
+    17.88
+   ],
+   "lab_after": [
+    57.3,
+    9.1,
+    19.4
+   ],
+   "de00_before": 5.25,
+   "de00_after": 0.0
+  },
+  "tray_unshadowed_px": 1855,
+  "t3_render": {
+   "warp": {
+    "file": "/home/user/homedesign-app/assets/renders/bath/warm-modern/stage1-2026-11-17/raw/fb10-t3-r1.png",
+    "y_offset_px": 0.0,
+    "y_scale_about_row_707": 0.0,
+    "x_offset_px": 0.76,
+    "used": {
+     "horizontal_lines": 15,
+     "vertical_lines": 11
+    }
+   },
+   "gain_p1_p50_p99": [
+    0.884,
+    0.994,
+    1.25
+   ]
+  },
+  "t3_khaki_match": {
+   "level": 0.6528,
+   "sku_lch": [
+    42.8,
+    17.2,
+    70.2
+   ],
+   "r5_lab_after": [
+    42.8,
+    5.83,
+    16.17
+   ],
+   "de00_after": 0.01,
+   "method": "R5 after the grade, as the caramel (M1): lower half, mid-tone, against the plaster round the towel (#ECE5DA); target the supplier photo read by QA's photo method (b2_colour.photo)",
+   "rings_lab": [
+    [
+     41.38,
+     5.6,
+     16.25
+    ],
+    [
+     42.6,
+     5.62,
+     16.3
+    ],
+    [
+     44.46,
+     6.28,
+     15.94
+    ]
+   ],
+   "de00_rings": [
+    1.31,
+    0.32,
+    1.65
+   ],
+   "de00_rings_vs_designer_sheet": [
+    2.5,
+    1.5,
+    0.99
+   ]
+  }
+ },
+ "fb10_shift": {
+  "date": "2026-11-18",
+  "tool": "tools/shift_fb10.py",
+  "source": "qa/reports/2026-11-18-bath-fb10 (3b, B2F-L1); the designer's ruling on the right gap",
+  "shift_u": 0.01559,
+  "shift_px": {
+   "bath-towels": [
+    -40,
+    -10
+   ],
+   "storage-basket": [
+    -40,
+    0
+   ]
+  },
+  "slots": [
+   "bath-towels",
+   "storage-basket"
+  ],
+  "b2f_l1": {
+   "region": [
+    1745,
+    1472,
+    1773,
+    1495
+   ],
+   "alpha_px_before": 504,
+   "alpha_px_after": 352,
+   "px_changed": 517
+  },
+  "rnd2_outside_differing_px": {
+   "defaults": 0,
+   "b2-variant-linen": 0,
+   "b2-variant-khaki": 0
+  }
+ },
+ "fb16": {
+  "date": "2026-11-26",
+  "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+  "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+  "previous": "manifest.json",
+  "tool": "assets/renders/tools/fb16/ (run16.py, fb16.py)",
+  "compose": "the previous formula on the fb16 base; then L0: the grade (frames.<id>.grade, Lab, analytic) on the composite, then each glow screened over the whole composite (not x keep). Products are not redrawn: every layer and shadow file is the previous one",
+  "frames": {
+   "B2": {
+    "grade": {
+     "space": "CIELAB (D65, sRGB 8-bit in and out)",
+     "L_knots_in": [
+      0.0,
+      11.523,
+      85.834,
+      97.0,
+      100.0
+     ],
+     "L_knots_out": [
+      0.0,
+      11.39,
+      75.18,
+      96.0,
+      100.0
+     ],
+     "L_interp": "monotone cubic (Fritsch-Carlson)",
+     "ab": "a' = a * (L'+16)/(L+16) + da * w(L'),  b' = b * (L'+16)/(L+16) + db * w(L');  w = smoothstep(15, 30, L') * (1 - smoothstep(92, 99, L'))",
+     "da": 0.612,
+     "db": 1.632,
+     "fit": {
+      "iterations": 8,
+      "plaster_in_lab": [
+       85.83,
+       1.02,
+       5.98
+      ],
+      "black_in_p05": 11.52,
+      "measured": {
+       "plaster": [
+        75.16,
+        1.48,
+        7.02
+       ],
+       "plaster_px": 1007773,
+       "black_p05": 11.5
+      },
+      "black_loop": {
+       "iteration": 1,
+       "black_target_in_fit": 11.5,
+       "p05_final": 11.5
+      }
+     }
+    },
+    "glows": [
+     {
+      "file": "light/vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(d) vanity-sconces: the emitting shade keeps its pre-grade brightness (it is the source)",
+      "product": "vanity-sconces-aliexpress-wabi-sabi-yellow-marble-037853",
+      "slot": "vanity-sconces",
+      "px": 5328
+     }
+    ],
+    "outside": null,
+    "base": null
+   }
+  }
+ }
+}
