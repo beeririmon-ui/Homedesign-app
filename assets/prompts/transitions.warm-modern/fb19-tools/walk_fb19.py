@@ -1,4 +1,5 @@
-"""walk_fb19.py (motion-agent, 2026-11-26): the FB19 arrival as ONE walk, D0 -> K-A -> 1a -> K-C -> M0-W fix1. 0 var2 tokens.
+"""walk_fb19.py (motion-agent, 2026-11-26): the FB19 arrival as ONE walk, D0 -> K-A2 -> turn -> T-E0-W -> M0-W fix1. 0 var2 tokens.
+(round 1 used K-A -> 1a -> K-C; the docstring below describes that round, the pacing, gait and export are the same)
   sources  D0 (its 16:9 frame), K-A (kling), clip 1a from 2.00 m (arrival-v2, frames 147-219, 60 fps), HT2 after FB16, K-C (kling),
            M0-W fix1 (default-frame-m0w-fix1.png)
   locks    every seam is a still both pieces share: K-A's ends -> D0 / 1a@2.00 m; 1a's end -> HT2 fb16 (with the FB16 grade
@@ -52,24 +53,22 @@ def motion(frames):
         m.append(float(np.median(np.hypot(f[..., 0], f[..., 1]))) * 4)
     return np.array(m)
 
-def main(ka_path, kc_path, out):
+HDX2F = REPO + '/assets/renders/hall/warm-modern/hall-products-2026-11-19/hdx2-products-fb19-frame.png'
+
+def main(ka_path, turn_path, te_path, out):
+    """FB19 final: D0 -> K-A2 (kling, D0 -> HT2) -> the turn (kling, HT2 -> HDx2 fb19) -> T-E0-W (kling, HDx2 fb19 -> M0-W fix1)"""
     os.makedirs(out, exist_ok=True); rep = {}
-    d0, ht2, m0w = rd(D0F), rd(HT2), rd(M0W)
-    KA = video(ka_path); KC = video(kc_path); A1 = video(A2, 146, 218)        # 1a: 2.00 m (frame 147) .. 3.80 m (frame 219)
-    rep['frames_in'] = dict(KA=len(KA), A1=len(A1), KC=len(KC))
-    # 1a: the FB16 grade ramped in from 2.0 m (0) to 3.8 m (1); its last frames locked onto HT2 fb16
-    pre = A1[-1]; diff = np.abs(pre.astype(int) - ht2.astype(int)).max(-1)
-    lut = lut_fit(pre, ht2, cv2.erode((diff < 40).astype(np.uint8), np.ones((9, 9), np.uint8)) > 0)
-    n1 = len(A1)
-    for i in range(n1):
-        s = i / (n1 - 1); w = s * s * (3 - 2 * s); A1[i] = apply_lut(A1[i], lut, w)
-    rep['lock_1a'] = AS.end_lock(A1, None, ht2, n=24)
-    rep['lock_KA'] = AS.end_lock(KA, d0, A1[0], n=10)
-    rep['lock_KC'] = AS.end_lock(KC, ht2, m0w, n=12)
+    d0, ht2, hdx2, m0w = rd(D0F), rd(HT2), rd(HDX2F), rd(M0W)
+    KA = video(ka_path); TU = video(turn_path); KC = video(te_path)
+    rep['frames_in'] = dict(KA2=len(KA), turn=len(TU), TE0W=len(KC))
+    rep['lock_KA2'] = AS.end_lock(KA, d0, ht2, n=10)
+    rep['lock_turn'] = AS.end_lock(TU, ht2, hdx2, n=10)
+    rep['lock_TE0W'] = AS.end_lock(KC, hdx2, m0w, n=12)
+    A1 = TU
     # one source axis (shared seam frames once) with its native rate
     src = KA + A1[1:] + KC[1:]
-    rate = np.array([24.0] * (len(KA) - 1) + [60.0] * (len(A1) - 1) + [24.0] * (len(KC) - 1))
-    seg = ['K-A'] * (len(KA) - 1) + ['1a'] * (len(A1) - 1) + ['K-C'] * (len(KC) - 1)
+    rate = np.array([24.0] * (len(KA) - 1) + [24.0] * (len(A1) - 1) + [24.0] * (len(KC) - 1))
+    seg = ['K-A2'] * (len(KA) - 1) + ['turn'] * (len(A1) - 1) + ['T-E0-W'] * (len(KC) - 1)
     mag = motion(src); mag = np.maximum(mag, 0.05)
     C = np.concatenate([[0], np.cumsum(mag)])                                 # progress at each source frame (px)
     vnat = mag * rate                                                       # px per second at the native timing
@@ -79,9 +78,12 @@ def main(ka_path, kc_path, out):
     sig = 0.25 * 240; k = np.exp(-0.5 * (np.arange(-3 * sig, 3 * sig + 1) / sig) ** 2); k /= k.sum()
     vs = np.convolve(np.pad(vg, (len(k) // 2, len(k) // 2), mode='edge'), k, 'valid')
     Cg = np.interp(tg, tn, C)
-    # scrubbing wants an even flow of picture: kling's own slow start and long landing crawl are lifted, the fast jamb
-    # pass and 1a's 1.5 m/s are slowed (0.5x .. 1.6x of the median picture speed); the real ease is the one below
-    med = float(np.median(vs)); vs = np.clip(vs, 0.5 * med, 1.6 * med); rep['picture_speed_px_s'] = dict(median=round(med), lo=round(0.5 * med), hi=round(1.6 * med))
+    # scrubbing wants an even flow of picture: kling's own slow start and long landing crawl are lifted, fast passes are
+    # slowed (0.5x .. 1.6x of the median picture speed; 2.6x in the turn, where a pan moves the whole picture); the real ease is below
+    med = float(np.median(vs))
+    segg = np.array(seg)[np.clip(np.searchsorted(tn, tg, side='right') - 1, 0, len(seg) - 1)]
+    hi = np.where(segg == 'turn', 2.6 * med, 1.6 * med)
+    vs = np.clip(vs, 0.5 * med, hi); rep['picture_speed_px_s'] = dict(median=round(med), lo=round(0.5 * med), hi_walk=round(1.6 * med), hi_turn=round(2.6 * med))
     # integrate output time: dC/dt = vs(C) * ease
     T_in, T_out = 0.5, 0.7
     t, c, Cs = 0.0, 0.0, [0.0]
@@ -128,8 +130,8 @@ def main(ka_path, kc_path, out):
     rep['last_vs_M0W_max'] = int(np.abs(frames[-1].astype(int) - m0w.astype(int)).max())
     json.dump(rep, open(out + '/walk.json', 'w'), indent=1)
     return frames, rep
-    print(json.dumps({k: v for k, v in rep.items() if k not in ('lock_1a', 'lock_KA', 'lock_KC')}))
-    print('locks', {k: rep[k] for k in ('lock_1a', 'lock_KA', 'lock_KC')})
+    print(json.dumps({k: v for k, v in rep.items() if not k.startswith('lock_')}))
+    print('locks', {k: rep[k] for k in ('lock_KA2', 'lock_turn', 'lock_TE0W')})
 
 # ---------------------------------------------------------------------------------------------------------------- export
 _FR = None
@@ -165,7 +167,7 @@ def export(frames, rep, base, preview, master):
                                                  '1080': dict(avif=int(b1080[:, 0].sum()), webp=int(b1080[:, 1].sum()))})
 
 if __name__ == '__main__':
-    ka, kc, out, base, preview, master = sys.argv[1:7]
-    frames, rep = main(ka, kc, out)
+    ka, tu, te, out, base, preview, master = sys.argv[1:8]
+    frames, rep = main(ka, tu, te, out)
     ex = export(frames, rep, base, preview, master)
     rep['export'] = ex; json.dump(rep, open(out + '/walk.json', 'w'), indent=1); print(json.dumps(ex))

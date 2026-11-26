@@ -1,0 +1,113 @@
+{
+ "id": "arrival-fb19-final",
+ "title": "The arrival: D0 -> the door opens up close -> the hall -> the walking turn -> M0-W fix1",
+ "from": "D0",
+ "to": "M0-W",
+ "style": "warm-modern",
+ "date": "2026-11-26",
+ "author": "motion-agent",
+ "decision": "FB19 (owner 2026-11-26): one first-person walk, scroll-scrubbable; cap 5,832 (approved), spent 5,832",
+ "play_s": 11.15,
+ "sampling": "uniform in time at the nominal walk: frame i (1-based) of a variant is shown at (i - 1) / fps s. The picture moves at an even rate (0.5x-1.6x of the median picture speed, up to 2.6x in the turn), eased in from D0 over 0.5 s and out onto M0-W over 0.7 s, so a scroll step of N frames shows a similar amount of motion anywhere. Forward only, no hold, no cut. Reverse = the same frames from last to first.",
+ "path": "{variant}/{index:04d}.{ext}",
+ "formats": [
+  "avif",
+  "webp"
+ ],
+ "variants": {
+  "1920": {
+   "w": 1920,
+   "h": 1080,
+   "fps": 60,
+   "frames": 670,
+   "avif_quality": 55,
+   "webp_quality": 72,
+   "last_frames_quality": {
+    "frames": 8,
+    "avif": 85,
+    "webp": 92
+   },
+   "segments": {
+    "K-A2 (the approach; the door opens close, the step into the hall)": [
+     1,
+     290
+    ],
+    "turn (the walking turn to the living room)": [
+     291,
+     470
+    ],
+    "T-E0-W (into the living room, landing)": [
+     471,
+     670
+    ]
+   }
+  },
+  "1080": {
+   "w": 1080,
+   "h": 608,
+   "fps": 30,
+   "frames": 336,
+   "avif_quality": 50,
+   "webp_quality": 60,
+   "last_frames_quality": {
+    "frames": 4,
+    "avif": 85,
+    "webp": 92
+   },
+   "note": "each frame the mean of the 60 fps frames around it (0.25, 0.5, 0.25); the first and last are the stills"
+  }
+ },
+ "bytes": {
+  "1920": {
+   "avif": 31452272,
+   "webp": 31898132
+  },
+  "1080": {
+   "avif": 4876044,
+   "webp": 5114346
+  }
+ },
+ "first_frame": "D0: assets/renders/hall/warm-modern/door-2026-11-16/d0.png, its 16:9 frame (finish.frame_view) = the site's D0 rest image; 0 difference before encoding",
+ "last_frame": "M0-W fix1: assets/renders/living-room/warm-modern/fb13-2026-11-25/default-frame-m0w-fix1.png; 0 difference before encoding (AVIF 1920: mean 2.35 levels, p99 11)",
+ "stills_on_the_way": {
+  "HT2": "hall-products-2026-11-19/ht2-products-fb16-frame.png",
+  "HDx2": "hall-products-2026-11-19/hdx2-products-fb19-frame.png (the living room through the opening = M0-W fix1)"
+ },
+ "swap": {
+  "at_end": "after the last frame, the room's live layers (the same picture with the defaults); a variant the visitor chose blends in over 200 ms",
+  "at_start": "the D0 rest image is frame 1"
+ },
+ "gait": {
+  "bob_px_max": 2.88,
+  "roll_deg_max": 0.144,
+  "overscan": 0.004
+ },
+ "locks": {
+  "K-A2": "ends -> D0 / HT2 fb16",
+  "turn": "ends -> HT2 fb16 / HDx2 fb19",
+  "T-E0-W": "ends -> HDx2 fb19 / M0-W fix1 (12 frames)"
+ },
+ "checks": {
+  "brightness_up_down_flips_over_0.8L": 0,
+  "old_table_or_old_living_room": "0 (HDx2 rebuilt from fix1; K-A2 and the turn end on HT2 / HDx2 fb19; T-E0-W lands on fix1)"
+ },
+ "sources": {
+  "K-A2": "ka2.kling-3-omni.take1.mp4",
+  "turn": "turn.kling-3-omni.take1.mp4",
+  "T-E0-W": "te0w.kling-3-omni.take1.mp4",
+  "tools": "assets/prompts/transitions.warm-modern/fb19-tools/ (walk_fb19.py, manifest_fb19.py)",
+  "jobs": "assets/prompts/transitions.warm-modern/jobs-fb19.json"
+ },
+ "qa": "pending (qa-agent)",
+ "temporary": false,
+ "bytes_per_2s": {
+  "1920": {
+   "avif": 5641663,
+   "webp": 5721638
+  },
+  "1080": {
+   "avif": 874626,
+   "webp": 917371
+  }
+ }
+}
