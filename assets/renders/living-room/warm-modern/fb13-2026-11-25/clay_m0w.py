@@ -491,6 +491,42 @@ def aabb_dist(A, B):
     return float(np.sqrt((d ** 2).sum()))
 
 
+_CLOUD = {}
+
+
+def cloud(obs, n=3000):
+    """surface points: the vertices plus n area-weighted samples on the triangles (seeded), cached by object names"""
+    key = tuple(sorted(o.name for o in obs)) + tuple(round(c, 4) for o in obs for c in o.location)
+    if key in _CLOUD:
+        return _CLOUD[key]
+    V, T = tris_world(obs)
+    if not len(T):
+        return V
+    a, b, c = V[T[:, 0]], V[T[:, 1]], V[T[:, 2]]
+    area = 0.5 * np.linalg.norm(np.cross(b - a, c - a), axis=1)
+    rng = np.random.default_rng(3)
+    k = rng.choice(len(T), size=n, p=area / max(area.sum(), 1e-12))
+    r1, r2 = rng.random(n), rng.random(n)
+    s1 = np.sqrt(r1)
+    P = (1 - s1)[:, None] * a[k] + (s1 * (1 - r2))[:, None] * b[k] + (s1 * r2)[:, None] * c[k]
+    out = np.concatenate([V, P])
+    _CLOUD[key] = out
+    return out
+
+
+def near3d(obsA, obsB, boxA=None, boxB=None):
+    """the 3D distance used by F3's 'contact' skip: the box distance, and when the boxes touch, the sampled surface distance"""
+    d0 = aabb_dist(boxA or aabb(obsA), boxB or aabb(obsB))
+    if d0 >= 0.03:
+        return d0
+    A, B = cloud(obsA), cloud(obsB)
+    best = 1e9
+    for i in range(0, len(A), 2000):
+        d = np.sqrt(((A[i:i + 2000, None, :] - B[None, :, :]) ** 2).sum(-1)).min()
+        best = min(best, float(d))
+    return best
+
+
 def thickness(m):
     if not m.any():
         return 0.0
@@ -522,7 +558,7 @@ def f3_pairs(N, FW):
                 continue
             if xa.min() > xb.max() + pad or xb.min() > xa.max() + pad or ya.min() > yb.max() + pad or yb.min() > ya.max() + pad:
                 continue
-            d3 = aabb_dist(A["box"], B["box"])
+            d3 = near3d(A["obs"], B["obs"], A["box"], B["box"])
             rec = dict(a=k, b=j, dist3d_m=round(d3, 3))
             if d3 < 0.03:
                 rec.update(kind="contact", verdict="skip (physical contact / resting)")
@@ -598,7 +634,17 @@ def measure(idx, depth, cv, margin):
             r["v7q6"] = "counted" if counted else "NOT counted"
         rows[k] = r
         dd = depth[vis] if vis.any() else None
-        N[k] = dict(sil=sil_c, vis=vis_f, box=aabb(obs), dep=float(np.median(dd)) if dd is not None and len(dd) else 99.0)
+        N[k] = dict(sil=sil_c, vis=vis_f, box=aabb(obs), obs=[o for o in obs if not o.hide_render],
+                    dep=float(np.median(dd)) if dd is not None and len(dd) else 99.0)
+        if k == "rug":                                    # the rug's real-area share in the frame and unhidden (a 2 cm grid on its top)
+            gx, gy = np.meshgrid(np.arange(-1.45, 1.85, 0.02), np.arange(0.77, 3.07, 0.02))
+            uu, vv, dz = plan_uv(gx.ravel(), gy.ravel(), np.full(gx.size, 0.012))
+            px_, py_ = np.round(cv["ox"] + uu * FW).astype(int), np.round(cv["oy"] + vv * FH).astype(int)
+            inside = (px_ >= fx0) & (px_ < fx1) & (py_ >= fy0) & (py_ < fy1)
+            seen = np.zeros_like(inside)
+            seen[inside] = idx[py_[inside], px_[inside]] == pid[k]
+            r["real_area_share_in_frame"] = round(float(inside.mean()), 3)
+            r["real_area_share_seen"] = round(float(seen.mean()), 3)
     f3 = f3_pairs({k: v for k, v in N.items() if v["vis"].any()}, FW)
     # the pendant's shade alone (the cord is a filler)
     psil = silhouette(OBJS["pendant"], cv, margin)
@@ -664,8 +710,11 @@ def basket_sweep(cv, margin, planter_c):
                        visible_share=round(float(vis.sum()) / max(1, sil.sum()), 3), vs={})
             fails = []
             for k, o in nsil.items():
-                if aabb_dist(aabb([base]), nbox[k]) < 0.03:
-                    rec["vs"][k] = "contact"
+                d3 = near3d([base], nb[k], aabb([base]), nbox[k])
+                if d3 < 0.03:
+                    rec["vs"][k] = "contact %.3f" % d3
+                    if k in ("planter", "fixed:sofa", "fixed:armchair", "magazine-holder"):
+                        fails.append(f"{k} 3D {d3:.3f}")
                     continue
                 inter = sil & o
                 if not inter.any():
@@ -832,12 +881,97 @@ def overlay(path, clay, rows, cv, sunmap, oshadow, lampgeo, scale):
 
 
 # ---------------------------------------------------------------------------------------------------------------
+def beauty_only(a, out, cam, fa, target=74.0):
+    """the lit clay and the plate reading at the exposure that puts the shaded back-wall plaster (out of the sun, outside the sconce
+    pools) at L* 74; the exposure found by bisection on 680-px renders; clay-m0w.json gets the calibration"""
+    jp = os.path.join(out, "clay-m0w.json")
+    rec = json.load(open(jp))
+    bc = rec["basket_in_clay"]
+    OBJS["basket"][0].location = (bc[0], bc[1], OBJS["basket"][0].location.z)
+    bpy.context.view_layer.update()
+    tmp = tempfile.mkdtemp(prefix="m0w-b-", dir=SCR)
+    z = np.load(os.path.join(SCR, "m0w-passes.npz"))
+    idx_full = z["idx"]
+    sun_full = np.asarray(Image.open(os.path.join(out, "m0w-sun.png"))).astype(np.float32) / 255.0
+    sc_full = np.asarray(Image.open(os.path.join(out, "m0w-light-accent-sconces.png"))).astype(np.float32) / 65535.0
+    set_lamps(set(LAMPS))
+    lo, hi, tries = -4.0, 1.0, []
+    cvs = set_view(cam, 680)
+    W, H = cvs["W"], cvs["H"]
+    wall = cv2.resize((idx_full == 5).astype(np.uint8), (W, H), interpolation=cv2.INTER_NEAREST).astype(bool)
+    shade = cv2.resize(sun_full, (W, H), interpolation=cv2.INTER_AREA) < 0.02
+    quiet = cv2.resize(sc_full, (W, H), interpolation=cv2.INTER_AREA) < 0.15
+    m = wall & shade & quiet
+    sunny = wall & (cv2.resize(sun_full, (W, H), interpolation=cv2.INTER_AREA) > 0.5)
+    for _ in range(6):
+        e = (lo + hi) / 2
+        png = os.path.join(tmp, "c.png")
+        FF.render_beauty(png, os.path.join(tmp, "b"), W, H, 8, 0.30, e)
+        Lm = cv2.cvtColor(np.asarray(Image.open(png).convert("RGB")).astype(np.float32) / 255.0, cv2.COLOR_RGB2LAB)[..., 0]
+        v = float(np.median(Lm[m]))
+        tries.append(dict(exposure=round(e, 3), shaded_plaster_L=round(v, 2), sunlit_plaster_L=round(float(np.median(Lm[sunny])), 2) if sunny.any() else None))
+        if v > target:
+            hi = e
+        else:
+            lo = e
+    best = min(tries, key=lambda t: abs(t["shaded_plaster_L"] - target))
+    cv = set_view(cam, a.res)
+    png = os.path.join(out, "m0w-clay.png")
+    FF.render_beauty(png, os.path.join(tmp, "b"), cv["W"], cv["H"], a.samples, 0.30, best["exposure"])
+    Image.open(png).save(png, optimize=True)
+    Lc = cv2.cvtColor(np.asarray(Image.open(png).convert("RGB")).astype(np.float32) / 255.0, cv2.COLOR_RGB2LAB)[..., 0]
+    meas = {}
+    for k, msk in (("shaded plaster", (idx_full == 5) & (sun_full < 0.02) & (cv2.resize(sc_full, (cv["W"], cv["H"])) < 0.15)),
+                   ("sunlit plaster", (idx_full == 5) & (sun_full > 0.5)), ("pendant shade", idx_full == PROD_IDX["pendant"]),
+                   ("floor-lamp shade", (idx_full == PROD_IDX["floor-lamp"]) & (Lc > 60)), ("black p0.5", np.ones_like(sun_full, bool))):
+        if msk.any():
+            meas[k] = round(float(np.percentile(Lc[msk], 0.5 if k == "black p0.5" else 50)), 1)
+    set_lamps(set())
+    hide_products(True)
+    mh = int(round(a.map_res * CANVAS[1] / CANVAS[0]))
+    pp = os.path.join(out, "m0w-clay-plate.png")
+    set_view(cam, a.map_res)
+    FF.render_beauty(pp, os.path.join(tmp, "b"), a.map_res, mh, a.samples, 0.30, best["exposure"])
+    Image.open(pp).save(pp, optimize=True)
+    hide_products(False)
+    set_lamps(set(LAMPS))
+    cv = set_view(cam, a.res)
+    rows = rec["v7q6"]
+    sun_n = sun_full
+    # the olive's leaf shadow again (the sun map without the crown), for the overlay
+    sun = FF.LIGHTS["sun"]
+    set_lamps(set())
+    others = [o for o in bpy.data.objects if o.type == "LIGHT" and o is not sun and not o.hide_render]
+    for o in others + OBJS["olive (filler)"]:
+        o.hide_render = True
+    try:
+        sno = lum(render_linear(tmp, cv["W"], cv["H"], 8, bounces=0, sky=0.0, override=True))
+    finally:
+        for o in others + OBJS["olive (filler)"]:
+            o.hide_render = False
+        set_lamps(set(LAMPS))
+    sno = np.clip(sno / rec["sun_map"]["ref_linear"], 0, 1)
+    osh = (idx_full == 5) & (sno > 0.10) & (sun_n < 0.6 * sno)
+    osh = cv2.morphologyEx(osh.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)).astype(bool)
+    overlay(os.path.join(out, "m0w-overlay.jpg"), np.asarray(Image.open(png).convert("RGB")), rows, cv, sun_n, osh, rec["lamp_geometry"], 0.5)
+    rec["exposure_calibration"] = dict(target_shaded_plaster_L=target, tries=tries, chosen=best["exposure"], measured_full_res=meas,
+                                       note="AgX Medium High Contrast; the clay's materials are clay greys, so the lamp shades and the black point are "
+                                            "readings of the clay, not of the finished frame (G1.10 is for the render)")
+    rec["render"] = rec["render"].replace(f"exposure {fa.door_exposure}", f"exposure {best['exposure']} (calibrated, see exposure_calibration)")
+    json.dump(rec, open(jp, "w"), indent=1, ensure_ascii=False, default=str)
+    shutil.rmtree(tmp, ignore_errors=True)
+    shutil.rmtree(W4.r4.EXR_DIR, ignore_errors=True)
+    print("BEAUTY", best, meas, flush=True)
+
+
 def args(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--res", type=int, default=CANVAS[0])
     ap.add_argument("--map-res", type=int, default=1360)
     ap.add_argument("--samples", type=int, default=16)
     ap.add_argument("--quick", action="store_true", help="write to the scratchpad only")
+    ap.add_argument("--beauty-only", action="store_true", help="re-render only m0w-clay.png and m0w-clay-plate.png at a calibrated exposure "
+                    "(the shaded plaster at L* 74, the proposal's 70-78), the basket where clay-m0w.json put it")
     ap.add_argument("--out", default=HERE)
     return ap.parse_args(argv)
 
@@ -866,6 +1000,8 @@ def main(argv):
     bpy.context.view_layer.update()
     print("BUILD", round(time.time() - t0), "s", *ch, sep="\n  ", flush=True)
     cam = S["cam"]
+    if a.beauty_only:
+        return beauty_only(a, out, cam, fa)
     tmp = tempfile.mkdtemp(prefix="m0w-", dir=SCR)
     rec = dict(stage="FB13 stage 0: the M0-W clay and light map (render-agent, 2026-11-25; docs/proposals/wm-fb13-living-wow-2026-11-25.md 3.1-3.2); "
                      "0 var2 tokens", camera=CAM, canvas=dict(px=list(CANVAS), frame_box=list(FRAME_BOX)), sun=SUN, tool_compass=TOOL_COMPASS,

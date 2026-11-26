@@ -1,0 +1,167 @@
+{
+ "room": "HDx2",
+ "date": "2026-11-25",
+ "stage": "FB13 stage 0 (0 tokens): the shared finish and the pasted test on the current default frame",
+ "manifest": "assets/renders/hall/warm-modern/hall-products-2026-11-19/hdx2/manifest.json",
+ "frame": "assets/renders/hall/warm-modern/hall-products-2026-11-19/hdx2-products.png",
+ "reproduce": {
+  "max": 1,
+  "mean": 0.0001,
+  "px_over_2": 0,
+  "compared_to": "assets/renders/hall/warm-modern/hall-products-2026-11-19/hdx2-products.png"
+ },
+ "finished_frame": "assets/renders/hall/warm-modern/hall-products-2026-11-19/hdx2-products-fb13prep.png",
+ "depth": null,
+ "finish": {
+  "light_centroid": [
+   869.3928571428571,
+   686.4112793176972
+  ],
+  "layers": {
+   "wall-sconce": {
+    "slot": "wall-sconce",
+    "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+    "measured": {
+     "s_layer": 0.635,
+     "n_layer_pts": 312,
+     "s_interior": 0.587,
+     "n_interior_pts": 262,
+     "s_plate": 0.525,
+     "n_plate_pts": 34,
+     "noise_layer": 0.152,
+     "noise_plate": 0.312,
+     "reference": {
+      "edge": "frame (the ring has too few plate edges)",
+      "noise": "ring"
+     }
+    },
+    "sharp_ratio_before": 0.826,
+    "sharpness": "alpha ramp steepened x1.21",
+    "light_wrap": {
+     "max_mix": 0.082,
+     "px": 191
+    },
+    "bounce": {
+     "chroma": 21.4,
+     "tint": [
+      0.17,
+      0.011,
+      -0.182
+     ],
+     "sigma_px": 5.8
+    }
+   }
+  },
+  "plate_reference": {
+   "s_plate": 0.5247889757156372,
+   "n_plate_pts": 587,
+   "noise_plate": 0.3046520948410034
+  },
+  "grain": {
+   "amplitude_8bit": 1.2,
+   "seed": 1540,
+   "grain_px": 0.6,
+   "midtone_weight": "4 l (1 - l), floor 0.25, from the plate's L*",
+   "top_up": [
+    [
+     "wall-sconce",
+     0.273
+    ]
+   ]
+  }
+ },
+ "score_before": 4.37,
+ "score_after": 2.96,
+ "change_at_x1": {
+  "per_layer": {
+   "wall-sconce": {
+    "inside_px": 0,
+    "ring_px": 0,
+    "inside_p95": 0.69,
+    "ring_p95": 0.69
+   }
+  },
+  "visible_layers": [],
+  "frame_px_dE_2_5": 0,
+  "visible": false
+ },
+ "test_before": [
+  {
+   "layer": "wall-sconce",
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "kind": "hanging",
+   "frame_px": 20682,
+   "score": 4.37,
+   "fails": [
+    "SHARP 0.83 (softer)",
+    "GRAIN 0.49 (smoother)",
+    "LAMP NOT lit"
+   ],
+   "sharp_ratio": 0.826,
+   "interior_ratio": 0.893,
+   "grain_ratio": 0.488,
+   "black": {
+    "p05_L": 21.47,
+    "plate_p05_L": 12.94,
+    "below_by": 0.0
+   },
+   "lamp": {
+    "shade_L": 80.2,
+    "H": 34.5,
+    "S": 23.6,
+    "light_layer_mean": 38.5,
+    "verdict": "NOT lit"
+   },
+   "edge_rows_x1": 0,
+   "shadow_rows_x1": 0,
+   "edge_rows_low": 1,
+   "shadow_rows_low": 0
+  }
+ ],
+ "test_after": [
+  {
+   "layer": "wall-sconce",
+   "slot": "wall-sconce",
+   "product": "wall-sconce-aliexpress-travertine-walnut-cylinder-332886-hall",
+   "kind": "hanging",
+   "frame_px": 20682,
+   "score": 2.96,
+   "fails": [
+    "SHARP 0.86 (softer)",
+    "GRAIN 0.65 (smoother)",
+    "LAMP NOT lit"
+   ],
+   "sharp_ratio": 0.864,
+   "interior_ratio": 1.142,
+   "grain_ratio": 0.652,
+   "black": {
+    "p05_L": 21.4,
+    "plate_p05_L": 12.94,
+    "below_by": 0.0
+   },
+   "lamp": {
+    "shade_L": 80.2,
+    "H": 34.5,
+    "S": 23.6,
+    "light_layer_mean": 38.5,
+    "verdict": "NOT lit"
+   },
+   "edge_rows_x1": 0,
+   "shadow_rows_x1": 0,
+   "edge_rows_low": 1,
+   "shadow_rows_low": 0
+  }
+ ],
+ "plate_black_p05_L": 12.94,
+ "light_centroid": [
+  869.3928571428571,
+  686.4112793176972
+ ],
+ "plate_reference": {
+  "s_plate": 0.5247889757156372,
+  "n_plate_pts": 587,
+  "noise_plate": 0.3046520948410034
+ },
+ "runtime_s": 11.9
+}

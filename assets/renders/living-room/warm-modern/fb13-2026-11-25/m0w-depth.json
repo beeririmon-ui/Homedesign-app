@@ -1,0 +1,30 @@
+{
+ "file": "m0w-depth.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth, metres (as depth.json)",
+ "d_near_m": 2.871184825897217,
+ "d_far_m": 9.40474796295166,
+ "camera": {
+  "id": "M0-W",
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.52
+ },
+ "frame_box": [
+  77.4852652259332,
+  43.42794759825327,
+  2642.5147347740667,
+  1486.5720524017468
+ ],
+ "covers": "the M0-W clay with every product proxy (the depth of the finishing code's depth of field, and of motion-agent's work)",
+ "note": "clay depth, not edge-snapped to an image (no M0-W image exists yet)"
+}

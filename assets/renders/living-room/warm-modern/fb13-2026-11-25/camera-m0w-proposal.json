@@ -1,0 +1,130 @@
+{
+ "status": "PROPOSAL (FB13, render-agent 2026-11-25): not in docs/house-plan.json; for the master-designer and the owner (Q1-b)",
+ "camera": {
+  "id": "M0-W",
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw_deg_left": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.52,
+  "level": true
+ },
+ "replaces": {
+  "id": "M0",
+  "loc": [
+   0.83,
+   4.64,
+   1.2
+  ],
+  "yaw_deg_left": 25,
+  "lens": 24,
+  "u0": 0.47,
+  "v0": 0.5,
+  "source": "house-plan.json 1.2"
+ },
+ "projection": "u = u0 + 0.9722 x / d; v = v0 + 1.7284 (1.05 - z) / d (house-plan conventions.projection with 35 mm)",
+ "canvas": {
+  "px": [
+   2720,
+   1530
+  ],
+  "frame_box": [
+   77.4852652259332,
+   43.427947598253276,
+   2642.5147347740667,
+   1486.5720524017468
+  ],
+  "note": "the living-room tool canvas (base.png); the 16:9 frame inside it"
+ },
+ "sun": {
+  "az": 228.0,
+  "alt": 15.0,
+  "alt_d0": 21.0,
+  "angle": 1.5,
+  "kelvin": 4000,
+  "strength": 8.0,
+  "compass": {
+   "north": [
+    0,
+    -1,
+    0
+   ],
+   "east": [
+    1,
+    0,
+    0
+   ],
+   "south": [
+    0,
+    1,
+    0
+   ],
+   "west": [
+    -1,
+    0,
+    0
+   ],
+   "note": "proposal 3.4: the living-room glazing (outward normal -X) faces west; the house plan has north = -X"
+  },
+  "toward_sun": [
+   -0.7178,
+   0.6463,
+   0.2588
+  ]
+ },
+ "measured_on_the_clay": {
+  "sofa_u": [
+   0.3721,
+   0.8127
+  ],
+  "sofa_width_share": 0.441,
+  "table_u": [
+   0.4045,
+   0.73
+  ],
+  "art_centre_u": 0.6117,
+  "pendant": {
+   "shade_visible_share": 0.969,
+   "rule": "V7Q7 / 3.1: the pendant >= 50 % visible",
+   "top_clearance_v": -0.0154,
+   "v0_for_0.02_clearance": 0.5554
+  },
+  "armchair_u": [
+   -0.0002,
+   0.1971
+  ],
+  "glazing": {
+   "sky_px_in_frame": 102913,
+   "sky_pct_of_frame": 2.78
+  },
+  "v7q6_counted": 11,
+  "f3_fails": 8
+ },
+ "expected_by_the_proposal": {
+  "sofa_u": [
+   0.36,
+   0.82
+  ],
+  "art_centre_u": 0.6,
+  "table_u": [
+   0.43,
+   0.73
+  ],
+  "pendant": "whole under the top edge",
+  "ceiling": "out",
+  "glazing": "a third, with the bench and the vase, at the left edge"
+ },
+ "files": "clay-m0w.json (everything), m0w-clay.png, m0w-overlay.jpg",
+ "findings_for_the_designer": [
+  "pendant: at v0 0.52 the drum's top rim is 0.015 of the frame height ABOVE the top edge (cut, not 'whole'); v0 0.555 gives 0.02 clearance and moves everything 0.035 down (the table's front edge is already at the bottom edge)",
+  "V7Q6 at M0-W: 11 of 17 counted. Not counted: curtains (out of frame: the one-way stack Y 2.65-2.95 is left of the frame), rug (17.8 % of its projected silhouette in frame; 49 % of its area in frame, 34 % seen), magazine-holder (47.8 % visible, cut by the bottom edge at (-0.47, 2.57)), accent-sconces (0.163 %, height 5.75 % < 6), bowl (0.284 %, height 5.61 %), candle-holders (0.175 %, height 5.34 %)",
+  "F3 at M0-W: rug-planter 0.0023, rug-basket 0.0115, rug-floor-lamp 0.0168, vase-armchair 0.0066, planter-sofa 0.0172, floor-lamp-accent-sconces 0.0154, floor-lamp-throw 0.0118 (frame widths, all kissing < 0.02); lumbar-throw 0.0074 is an artefact of the approximate set-B boxes",
+  "compass: the proposal's tool compass (living glazing faces west) lets D0's sun (az 228) in; in the house plan's compass (north = -X) the glazing faces north and no direct sun can enter at 15:40. With the flip, the approved D0 court (faces +X) would be east-facing and in shade at the same moment: 'one house, one day' (DL1) does not hold geometrically; a decision for the designer / owner (Q1-a)",
+  "olive: for its leaf shadow to fall between the left sconce and the art, the planter moves from (-1.95, 0.42) to (-1.34, 0.55) and the olive grows to a 1.95 m tree (crown Z 1.15-1.95); at (-1.95, 0.42) its shadow falls at X -1.48, Z 1.0, left of the sconce",
+  "basket: the proposal's 'about 0.3 m left' of (-1.20, 0.30) collides with the moved planter; of 91 grid points only 3 pass F3 and V7Q6, all near the window bench's end behind the armchair; the clay uses (-1.80, 1.05) (58.7 % visible, a decisive 0.03+ overlap behind the armchair)"
+ ]
+}
