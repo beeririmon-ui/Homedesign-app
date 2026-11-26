@@ -30,7 +30,7 @@ import { IconDoor } from '../components/Icons';
 import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
 import { Waitlist } from '../components/Waitlist';
-import { MANY_FROM } from '../components/scroll-wheel';
+import { DIM, REVEAL_MS } from '../components/ring-wheel';
 import {
   FRAMES,
   GROUP_HE,
@@ -759,7 +759,7 @@ export function TourPage() {
         // and composed once, every program compiled. Until then the button says so and nothing moves: even the slow
         // push of the door starts afterwards, so the room's own decodes never land inside it. MOCK3: and the strip's
         // pictures, and the wheel's code, so nothing of them arrives inside the reveal or the first close-up.
-        void Promise.all([e.whenWarm(), stripReady(), (wheelChunk ??= import('../components/VariantWheel').then((x) => x.VariantWheel))]).then(() => {
+        void Promise.all([e.whenWarm(), stripReady(), wheelFor()]).then(() => {
           setWarm(true);
           primeRings();
           // MOCK4: the walk is fetched once the room it lands in is ready (the room first: the door waits for it)
@@ -1329,8 +1329,8 @@ export function TourPage() {
     !live.current.open &&
     beat(async (e) => {
       opener.current = from ?? (document.activeElement as HTMLElement | null);
-      // MOCK6: a slot of many options (the kids' art sets to come) takes the scroll-snap wheel; two or three, the arc
-      const W = await wheelFor(s.options.length);
+      // FB20: every slot, 3 to 12 options, takes the 3D ring (the arc and the scroll-snap carousel are the room page's)
+      const W = await wheelFor();
       clearTimeout(turn.current);
       if (live.current.lay !== 'desk') setEye(live.current.house);
       ui.label(null, false);
@@ -1347,7 +1347,9 @@ export function TourPage() {
         return e.ui('wheel-in', 320);
       };
       await e.moveCam('zoom-in', closeCam(e, s), 1000, (ease, t) => {
-        e.d.vig = 0.1 * ease;
+        // FB20: the room dims under the wheel while it is open (and darker away from the product)
+        e.d.ev = DIM.ev * ease;
+        e.d.vig = DIM.vig * ease;
         e.d.vigBox = s.rect;
         // the wheel rises 0.15 s before the camera lands
         if (t >= 0.85 && !rise) rise = show();
@@ -1355,35 +1357,48 @@ export function TourPage() {
       await (rise ?? show());
       sharpen(e);
     });
-  /** the wheel stopped on an option: the product in the room changes; a newer stop overtakes one still waiting */
-  const wanted = useRef<number | null>(null);
+  /**
+   * FB20: the ring rests on an option. The room does not change under the open wheel; the option's layer (a patch, in a
+   * wheel of many) is fetched now, so the selection's reveal starts at once.
+   */
   function preview(s: TourSlot, pos: number) {
-    const moving = wanted.current !== null;
-    wanted.current = pos;
-    if (moving) return;
-    void (async () => {
-      const e = engine.current;
-      const m = mod.current;
-      while (e && m && wanted.current !== null && wanted.current !== e.selection[s.id]) {
-        const to = wanted.current;
-        await m.swap(e, ui, s, to, to > e.selection[s.id]! ? 1 : -1, live.current.cfg.sw);
-        setSel({ ...e.selection });
-      }
-      wanted.current = null;
-    })();
+    const e = engine.current;
+    if (e && pos !== e.selection[s.id]) void e.option(s.id, pos);
   }
-  function close(chosen: boolean): void {
+  /**
+   * The wheel closes: `chosen` is the option picked (a position), or null (Escape, X, a tap outside: nothing changes).
+   * FB20, the selection moment: the wheel leaves, and the dim lifts as the chosen product's layer cross-fades into the
+   * room (fx.select, REVEAL_MS); the camera starts back to the whole frame as the reveal ends, so the product is seen
+   * in place and then in the room around it. A cancel only lifts the dim on the way back.
+   */
+  function close(chosen: number | null): void {
     const o = live.current.open;
     if (!o || closing.current) return;
     void beat(
       async (e) => {
         closing.current = true;
-        if (!chosen) preview(o.slot, o.before);
-        while (wanted.current !== null) await new Promise((r) => setTimeout(r, 30));
-        // the wheel leaves (160 ms) as the camera starts back; always to the whole frame
+        const m = mod.current;
         picker()?.removeAttribute('data-in');
         e.setDprCap(2);
-        await e.moveCam('zoom-out', e.rest, live.current.lay === 'desk' || !whole() ? 1000 : ZOOM.ms, (ease) => (e.d.vig = 0.1 * (1 - ease)));
+        // the camera back to the whole frame; a cancel lifts the dim on the way (a choice: the reveal lifts it)
+        const back = (lift: boolean) => {
+          const ev0 = e.d.ev;
+          const vig0 = e.d.vig;
+          const also = (ease: number) => {
+            e.d.ev = ev0 * (1 - ease);
+            e.d.vig = vig0 * (1 - ease);
+          };
+          return e.moveCam('zoom-out', e.rest, live.current.lay === 'desk' || !whole() ? 1000 : ZOOM.ms, lift ? also : undefined);
+        };
+        if (chosen !== null && m) {
+          // the reveal, then the camera back: its last stretch runs under the first of the move
+          const reveal = m.select(e, o.slot, chosen, REVEAL_MS);
+          await e.wait(REVEAL_MS * 0.7);
+          await Promise.all([reveal, back(false)]);
+          setSel({ ...e.selection });
+        } else await back(true);
+        e.d.ev = 0;
+        e.d.vig = 0;
         stage.current?.classList.remove('zoomed');
         setOpen(null);
         setZoomed(false);
@@ -1391,9 +1406,9 @@ export function TourPage() {
         atRest(e);
         // the strip, the counter and the folded control come back in their own cells
         void e.ui('closeup-out', 320);
-        if (chosen) announce(`${o.slot.name_he}: ${nameHe(o.slot, optionOf(o.slot, e.selection))} מוצג בחדר`);
-        const back = phoneRules() && live.current.cfg.pick === 'list' ? tiles.current.get(o.slot.id) : spots.current.get(o.slot.id);
-        void frame().then(() => (back ?? opener.current)?.focus({ preventScroll: true }));
+        if (chosen !== null) announce(`${o.slot.name_he}: ${nameHe(o.slot, optionOf(o.slot, e.selection))} מוצג בחדר`);
+        const to = phoneRules() && live.current.cfg.pick === 'list' ? tiles.current.get(o.slot.id) : spots.current.get(o.slot.id);
+        void frame().then(() => (to ?? opener.current)?.focus({ preventScroll: true }));
       },
       () => close(chosen),
     );
@@ -1533,7 +1548,7 @@ export function TourPage() {
     if (L.open) {
       // in the close-up: a tap in the window outside the product closes it (the phone; a wide screen has the wheel there)
       const b = optionOf(L.open.slot, e.selection).box;
-      if (phoneRules() && (at.u < b[0] || at.u > b[1] || at.v < b[2] || at.v > b[3])) close(false);
+      if (phoneRules() && (at.u < b[0] || at.u > b[1] || at.v < b[2] || at.v > b[3])) close(null);
       return;
     }
     if (L.house !== WM) return;
@@ -2157,8 +2172,8 @@ export function TourPage() {
               roomId={tour.room}
               initial={sel[open.slot.id] ?? 1}
               onPreview={(pos) => preview(open.slot, pos)}
-              onChoose={() => close(true)}
-              onCancel={() => close(false)}
+              onChoose={(pos) => close(pos)}
+              onCancel={() => close(null)}
               arc={wheelArc(lay, winSize, winSize.vh, cfg.frame === 'fill')}
               inline
               chooseLabel={phone ? 'בחירה' : undefined}
@@ -2232,11 +2247,7 @@ export function TourPage() {
   );
 }
 let wheelChunk: Promise<typeof WheelComponent> | null = null;
-let manyChunk: Promise<typeof WheelComponent> | null = null;
-/** MOCK6: the wheel for a slot of `n` options: the 3D arc for two or three, the scroll-snap carousel from MANY_FROM on */
-const wheelFor = (n: number): Promise<typeof WheelComponent> =>
-  n >= MANY_FROM
-    ? (manyChunk ??= import('../components/ScrollWheel').then((x) => x.ScrollWheel))
-    : (wheelChunk ??= import('../components/VariantWheel').then((x) => x.VariantWheel));
+/** FB20: the wheel of the tour for any number of options (3 to 12): the 3D ring */
+const wheelFor = (): Promise<typeof WheelComponent> => (wheelChunk ??= import('../components/RingWheel').then((x) => x.RingWheel));
 /** MOCK6: the fixture of the wheel of many options and its wheel; never in the Artifact (the build drops the import) */
-const loadFixture = __ARTIFACT__ ? null : () => Promise.all([wheelFor(10), import('./fixture-wheel')]);
+const loadFixture = __ARTIFACT__ ? null : () => Promise.all([wheelFor(), import('./fixture-wheel')]);

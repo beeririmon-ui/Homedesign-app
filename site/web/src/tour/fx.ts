@@ -361,6 +361,46 @@ export async function swap(e: TourEngine, ui: Ui, s: TourSlot, to: number, dir: 
   e.mask();
 }
 
+// ---------- FB20: the selection moment ----------
+/**
+ * The wheel's choice comes into the room: the dim of the open wheel (DIM in components/ring-wheel.ts, held in `ev` and
+ * `vig`) lifts back to the room's own light while the chosen option's layer and its shadow cross-fade in over the one
+ * that was there (a soft focus pull and a breath of light as it lands), in `ms` (the brief's 600–900 ms). The same
+ * option: only the dim lifts. At 1 the display is the room's own (ev 0, vig 0) and the slot rests on the chosen option.
+ * Reduced motion: the change and the light at once.
+ */
+export async function select(e: TourEngine, s: TourSlot, to: number, ms: number): Promise<void> {
+  const from = e.selection[s.id]!;
+  const change = from !== to;
+  if (change) await e.option(s.id, to);
+  const ev0 = e.d.ev;
+  const vig0 = e.d.vig;
+  await e.run(
+    'select-reveal',
+    e.reduce ? 0 : ms,
+    (t) => {
+      // the light comes back on the reveal's own curve; the product lands a little before the light is full
+      const light = EASE.out(t);
+      e.d.ev = ev0 * (1 - light);
+      e.d.vig = vig0 * (1 - light);
+      if (!change) return;
+      const k = EASE.camera(clamp01((t - 0.04) / 0.76));
+      e.pose(s.id, [
+        { pos: from, a: 1 - k, s: 1 - clamp01(k * 1.25) },
+        { pos: to, a: k, s: clamp01((k - 0.2) / 0.8), lod: 2.2 * (1 - k), gain: 2 ** (0.3 * bump(clamp01(t / 0.9))) },
+      ]);
+    },
+    () => {
+      e.d.ev = 0;
+      e.d.vig = 0;
+      if (!change) return;
+      e.selection = { ...e.selection, [s.id]: to };
+      e.settle(s.id, true);
+    },
+  );
+  if (change) e.mask();
+}
+
 // ---------- the style change ----------
 export async function style(e: TourEngine, ui: Ui, to: HouseId, kind: Style, how: Reveal): Promise<void> {
   if (to === e.house) return;
