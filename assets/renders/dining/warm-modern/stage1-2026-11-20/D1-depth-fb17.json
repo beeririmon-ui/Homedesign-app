@@ -1,0 +1,275 @@
+{
+ "file": "D1-depth-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.5628000497817993,
+ "d_far_m": 5.734399795532227,
+ "frame": "D1",
+ "image": "D1-defaults-fb15.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-dining-2026-11-24/D1-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-dining-2026-11-24/D1-id.png",
+  "layers": "assets/renders/dining/warm-modern/stage1-2026-11-20/manifest-fb15.json",
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the frame as rendered with its default products (shell, fixed furniture and product layers)",
+ "snap": {
+  "band_px": 248388,
+  "moved_px": 9362,
+  "to_near_px": 5137,
+  "to_far_px": 4225
+ },
+ "layers": [
+  {
+   "slot": "curtains",
+   "z": 10,
+   "proxy_ids": [
+    57
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 75789,
+   "filled_inside_px": 13723,
+   "overhang_cleared_px": 78941
+  },
+  {
+   "slot": "framed-art",
+   "z": 12,
+   "proxy_ids": [
+    67
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 29577,
+   "filled_inside_px": 137,
+   "overhang_cleared_px": 43
+  },
+  {
+   "slot": "mug-set",
+   "z": 14,
+   "proxy_ids": [
+    66
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 6314,
+   "filled_inside_px": 698,
+   "overhang_cleared_px": 253
+  },
+  {
+   "slot": "open-shelf-ceramics",
+   "z": 14,
+   "proxy_ids": [
+    69
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 6450,
+   "filled_inside_px": 220,
+   "overhang_cleared_px": 42
+  },
+  {
+   "slot": "serving-boards",
+   "z": 15,
+   "proxy_ids": [
+    79
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 14372,
+   "filled_inside_px": 28,
+   "overhang_cleared_px": 1469
+  },
+  {
+   "slot": "cutting-boards",
+   "z": 16,
+   "proxy_ids": [
+    73
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 7606,
+   "filled_inside_px": 13,
+   "overhang_cleared_px": 192
+  },
+  {
+   "slot": "kitchen-sconce",
+   "z": 16,
+   "proxy_ids": [
+    70
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 2947,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 52
+  },
+  {
+   "slot": "condiment-set",
+   "z": 18,
+   "proxy_ids": [
+    61
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 1962,
+   "filled_inside_px": 12,
+   "overhang_cleared_px": 1063
+  },
+  {
+   "slot": "condiment-set",
+   "z": 18,
+   "proxy_ids": [
+    62
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 2278,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 559
+  },
+  {
+   "slot": "counter-vessel",
+   "z": 18,
+   "proxy_ids": [
+    78,
+    75,
+    80
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 25148,
+   "filled_inside_px": 6012,
+   "overhang_cleared_px": 33536
+  },
+  {
+   "slot": "paper-towel-holder",
+   "z": 18,
+   "proxy_ids": [
+    74
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 4488,
+   "filled_inside_px": 1893,
+   "overhang_cleared_px": 70
+  },
+  {
+   "slot": "sink-set",
+   "z": 18,
+   "proxy_ids": [
+    71
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 738,
+   "filled_inside_px": 47,
+   "overhang_cleared_px": 116
+  },
+  {
+   "slot": "sink-set",
+   "z": 18,
+   "proxy_ids": [
+    72
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 928,
+   "filled_inside_px": 17,
+   "overhang_cleared_px": 1226
+  },
+  {
+   "slot": "bowl",
+   "z": 20,
+   "proxy_ids": [
+    63,
+    64
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 5869,
+   "filled_inside_px": 823,
+   "overhang_cleared_px": 158
+  },
+  {
+   "slot": "floor-vase",
+   "z": 30,
+   "proxy_ids": [
+    58
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 15260,
+   "filled_inside_px": 2866,
+   "overhang_cleared_px": 9
+  },
+  {
+   "slot": "table-runner",
+   "z": 52,
+   "proxy_ids": [
+    52,
+    56,
+    59
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 32128,
+   "filled_inside_px": 520,
+   "overhang_cleared_px": 26054
+  },
+  {
+   "slot": "candle-holders",
+   "z": 56,
+   "proxy_ids": [
+    55
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 14931,
+   "filled_inside_px": 9728,
+   "overhang_cleared_px": 0
+  },
+  {
+   "slot": "centerpiece-vase",
+   "z": 56,
+   "proxy_ids": [
+    53,
+    54
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 21994,
+   "filled_inside_px": 2608,
+   "overhang_cleared_px": 4773
+  },
+  {
+   "slot": "bench-pad",
+   "z": 72,
+   "proxy_ids": [
+    60
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 117713,
+   "filled_inside_px": 2345,
+   "overhang_cleared_px": 3
+  },
+  {
+   "slot": "dining-pendant",
+   "z": 80,
+   "proxy_ids": [
+    50
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 38264,
+   "filled_inside_px": 3089,
+   "overhang_cleared_px": 1173
+  }
+ ],
+ "crispness": {
+  "before": {
+   "step_px": 33690,
+   "between_px": 755,
+   "between_share": 0.0224102107450282
+  },
+  "after": {
+   "step_px": 64828,
+   "between_px": 4483,
+   "between_share": 0.06915221817733078
+  }
+ },
+ "product_edges": {
+  "boundary_px": 106974,
+  "with_depth_step_px": 62176,
+  "share": 0.581,
+  "share_on_the_raw_clay": 0.091
+ },
+ "no_surface_px": 297671,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 2.0404631868586875e-05
+}

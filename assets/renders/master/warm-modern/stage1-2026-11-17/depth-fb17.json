@@ -1,0 +1,231 @@
+{
+ "file": "depth-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.3747999668121338,
+ "d_far_m": 3.3878014087677,
+ "frame": "MB0",
+ "image": "mb0-defaults-fb15.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-master-2026-11-17/MB0-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-master-2026-11-17/MB0-id.png",
+  "layers": "assets/renders/master/warm-modern/stage1-2026-11-17/layers/manifest-fb15.json",
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the frame as rendered with its default products (shell, fixed furniture and product layers)",
+ "snap": {
+  "band_px": 151468,
+  "moved_px": 2567,
+  "to_near_px": 1295,
+  "to_far_px": 1272
+ },
+ "layers": [
+  {
+   "slot": "curtains",
+   "z": 10,
+   "proxy_ids": [
+    40
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 183417,
+   "filled_inside_px": 37171,
+   "overhang_cleared_px": 0
+  },
+  {
+   "slot": "wall-shelf",
+   "z": 11,
+   "proxy": "none: on its wall or surface, the clay depth (snapped) stands"
+  },
+  {
+   "slot": "framed-art",
+   "z": 12,
+   "proxy": "none: on its wall or surface, the clay depth (snapped) stands"
+  },
+  {
+   "slot": "framed-art-2",
+   "z": 13,
+   "proxy": "none: on its wall or surface, the clay depth (snapped) stands"
+  },
+  {
+   "slot": "bedside-sconces",
+   "z": 14,
+   "proxy_ids": [
+    43,
+    44
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 17300,
+   "filled_inside_px": 343,
+   "overhang_cleared_px": 524
+  },
+  {
+   "slot": "sill-vase",
+   "z": 16,
+   "proxy_ids": [
+    41,
+    42
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 10857,
+   "filled_inside_px": 2007,
+   "overhang_cleared_px": 4823
+  },
+  {
+   "slot": "shelf-vase-left",
+   "z": 18,
+   "proxy": "none: on its wall or surface, the clay depth (snapped) stands"
+  },
+  {
+   "slot": "shelf-vase-right",
+   "z": 18,
+   "proxy": "none: on its wall or surface, the clay depth (snapped) stands"
+  },
+  {
+   "slot": "planter",
+   "z": 30,
+   "proxy": "none: on its wall or surface, the clay depth (snapped) stands"
+  },
+  {
+   "slot": "floor-lamp",
+   "z": 36,
+   "proxy_ids": [
+    55
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 50252,
+   "filled_inside_px": 13704,
+   "overhang_cleared_px": 18590
+  },
+  {
+   "slot": "magazine-holder",
+   "z": 38,
+   "proxy": "none: the contact depth under its foot",
+   "contact_m": 2.403,
+   "behind_m": 2.827,
+   "set_px": 35061
+  },
+  {
+   "slot": "nightstand-tray",
+   "z": 44,
+   "proxy_ids": [
+    45
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 3500,
+   "filled_inside_px": 331,
+   "overhang_cleared_px": 910
+  },
+  {
+   "slot": "nightstand-vase",
+   "z": 46,
+   "proxy_ids": [
+    46,
+    47
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 5453,
+   "filled_inside_px": 837,
+   "overhang_cleared_px": 4541
+  },
+  {
+   "slot": "candle-holders",
+   "z": 46,
+   "proxy_ids": [
+    49,
+    50
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 4491,
+   "filled_inside_px": 39,
+   "overhang_cleared_px": 4293
+  },
+  {
+   "slot": "bedside-carafe",
+   "z": 46,
+   "proxy": "none: the contact depth under its foot",
+   "contact_m": 2.704,
+   "behind_m": 3.388,
+   "set_px": 7611
+  },
+  {
+   "slot": "trinket-dish",
+   "z": 46,
+   "proxy_ids": [
+    48
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 658,
+   "filled_inside_px": 22,
+   "overhang_cleared_px": 938
+  },
+  {
+   "slot": "pillowcases",
+   "z": 50,
+   "proxy_ids": [
+    51
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 131844,
+   "filled_inside_px": 122845,
+   "overhang_cleared_px": 33551
+  },
+  {
+   "slot": "bedding",
+   "z": 52,
+   "proxy_ids": [
+    52
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 1101483,
+   "filled_inside_px": 312176,
+   "overhang_cleared_px": 30999
+  },
+  {
+   "slot": "cushions",
+   "z": 55,
+   "proxy_ids": [
+    53
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 37552,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 1166
+  },
+  {
+   "slot": "throw",
+   "z": 58,
+   "proxy_ids": [
+    54
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 139051,
+   "filled_inside_px": 134129,
+   "overhang_cleared_px": 21605
+  }
+ ],
+ "crispness": {
+  "before": {
+   "step_px": 22251,
+   "between_px": 987,
+   "between_share": 0.04435755696373197
+  },
+  "after": {
+   "step_px": 45508,
+   "between_px": 4966,
+   "between_share": 0.10912367056341742
+  }
+ },
+ "product_edges": {
+  "boundary_px": 78051,
+  "with_depth_step_px": 47698,
+  "share": 0.611,
+  "share_on_the_raw_clay": 0.067
+ },
+ "no_surface_px": 184768,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 1.1197847015864681e-05
+}

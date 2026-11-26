@@ -1,0 +1,552 @@
+{
+ "date": "2026-11-26",
+ "author": "motion-agent",
+ "brief": "briefs/wm-transitions-house-plan-2026-11-26.md",
+ "source": "var2_estimate_cost, live (fromLiveLookup), 2026-11-26; nothing sent",
+ "unit_prices": {
+  "kling-3-omni image-to-video 1080p, no audio, a second": 324,
+  "seedream-5-pro image-to-image 2K": 650,
+  "nano-banana-2 image-to-image 2K": 400
+ },
+ "margins": {
+  "stills_expected": 1.71,
+  "clips_expected": 1.25,
+  "cap_every_job": 2.0,
+  "why": "stills: the 1.71 history margin of route-prices-2026-11-17.json; clips: 1a and clip 2 passed on take 1 with code repairs, but doorways and bends are new, so one retake in four; cap: every job run twice"
+ },
+ "pace": {
+  "cruise_m_s": 1.5,
+  "turn_peak_deg_s": 90,
+  "rule": "FB8: forward only; every return is a turn in place and a walk forward; products go down before a move and come back in the reveal, so every clip and still is the empty room"
+ },
+ "stills": {
+  "M0x-W": {
+   "price": 650,
+   "role": "M0-W point, yaw -47, 24 mm: the kitchen exit (clip start)"
+  },
+  "M0s-W": {
+   "price": 400,
+   "role": "M0-W point, yaw -98: turn only"
+  },
+  "M0b-W": {
+   "price": 650,
+   "role": "M0-W point, yaw -150: the hall exit (clip start); the spine to the bedroom door"
+  },
+  "M0m-W": {
+   "price": 400,
+   "role": "M0-W point, yaw 70: turn only"
+  },
+  "M0i-W": {
+   "price": 650,
+   "role": "M0-W point, yaw 130: arrival from the kitchen (clip end)"
+  },
+  "PD-155": {
+   "price": 400,
+   "role": "PD, yaw -155: turn only"
+  },
+  "PDx": {
+   "price": 650,
+   "role": "PD, yaw 133: the kitchen exit toward M0-W (clip start)"
+  },
+  "HW": {
+   "price": 650,
+   "role": "HX, yaw 95: toward the work-room door (clip start)"
+  },
+  "KBi": {
+   "price": 650,
+   "role": "K-boy point, yaw 90 (clip end)"
+  },
+  "KBm": {
+   "price": 400,
+   "role": "K-boy point, yaw -30: turn only"
+  },
+  "KBx": {
+   "price": 650,
+   "role": "K-boy point, yaw -90, the door (clip start)"
+  },
+  "KGi": {
+   "price": 650,
+   "role": "K-girl point, yaw 90 (clip end)"
+  },
+  "KGm": {
+   "price": 400,
+   "role": "K-girl point, yaw -30: turn only"
+  },
+  "KGx": {
+   "price": 650,
+   "role": "K-girl point, yaw -90 (clip start)"
+  },
+  "CBm": {
+   "price": 400,
+   "role": "CB, yaw 20: turn only"
+  },
+  "CBx": {
+   "price": 650,
+   "role": "CB, yaw 63, the door (clip start)"
+  },
+  "MBf": {
+   "price": 650,
+   "role": "(1.6, 21.05, 1.10), yaw 90: past the bed's foot (clip end / start)"
+  },
+  "MBx": {
+   "price": 650,
+   "role": "MB0 point, yaw -42, the door (clip start)"
+  },
+  "W0i": {
+   "price": 650,
+   "role": "W0 point, yaw 130 (clip end)"
+  },
+  "W0m": {
+   "price": 400,
+   "role": "W0 point, yaw 65: turn only"
+  },
+  "W0x": {
+   "price": 650,
+   "role": "W0 point, yaw -50, the door (clip start)"
+  }
+ },
+ "transitions": [
+  {
+   "id": "door",
+   "frm": "D0",
+   "to": "D0o",
+   "m": 0,
+   "s": 0.8,
+   "how": "reuse: code",
+   "kling_s": 0,
+   "clip": 0,
+   "stills": [],
+   "stills_list": 0,
+   "list": 0,
+   "expected": 0,
+   "cap": 0,
+   "wave": 0,
+   "note": "exists"
+  },
+  {
+   "id": "1a",
+   "frm": "D0o",
+   "to": "HT",
+   "m": 3.8,
+   "s": 2.8,
+   "how": "reuse: K (QA passed)",
+   "kling_s": 0,
+   "clip": 0,
+   "stills": [],
+   "stills_list": 0,
+   "list": 0,
+   "expected": 0,
+   "cap": 0,
+   "wave": 0,
+   "note": "the living room through the opening: code re-feed from H-W (as HT2); retake 1,296 only in the cap"
+  },
+  {
+   "id": "1b",
+   "frm": "HT",
+   "to": "HD",
+   "m": 1.14,
+   "s": 0.7,
+   "how": "reuse: code",
+   "kling_s": 0,
+   "clip": 0,
+   "stills": [],
+   "stills_list": 0,
+   "list": 0,
+   "expected": 0,
+   "cap": 0,
+   "wave": 0,
+   "note": "rebuilt from HT2 after its re-feed"
+  },
+  {
+   "id": "look",
+   "frm": "HD",
+   "to": "HC, then HDx2",
+   "m": 0,
+   "s": 4.4,
+   "how": "reuse: CT (HD2, HC130, HC, HDx2)",
+   "kling_s": 0,
+   "clip": 0,
+   "stills": [],
+   "stills_list": 0,
+   "list": 0,
+   "expected": 0,
+   "cap": 0,
+   "wave": 0,
+   "note": "90 deg left, rest 0.8 s on HC, 155 deg right"
+  },
+  {
+   "id": "T-E0-W",
+   "frm": "HDx2",
+   "to": "M0-W",
+   "m": 3.01,
+   "s": 2.4,
+   "how": "K",
+   "kling_s": 3,
+   "clip": 972,
+   "stills": [],
+   "stills_list": 0,
+   "list": 972,
+   "expected": 1215,
+   "cap": 1944,
+   "wave": 1,
+   "note": "replaces clip 2; lens 24 -> 35 mm and 1.20 -> 1.05 m inside the walk"
+  },
+  {
+   "id": "T-LD-W",
+   "frm": "M0-W",
+   "to": "D1",
+   "m": 2.55,
+   "s": 3.3,
+   "how": "CT + K",
+   "kling_s": 3,
+   "clip": 972,
+   "stills": [
+    "M0x-W"
+   ],
+   "stills_list": 650,
+   "list": 1622,
+   "expected": 2326,
+   "cap": 3244,
+   "wave": 2,
+   "note": "61 deg right in place, the walk starts in the last 20 deg; 9 deg more with the stop"
+  },
+  {
+   "id": "P-D",
+   "frm": "D1",
+   "to": "D2",
+   "m": 0,
+   "s": 1.2,
+   "how": "CT",
+   "kling_s": 0,
+   "clip": 0,
+   "stills": [],
+   "stills_list": 0,
+   "list": 0,
+   "expected": 0,
+   "cap": 0,
+   "wave": 0,
+   "note": "30 deg, both frames exist"
+  },
+  {
+   "id": "T-DL-W",
+   "frm": "D1",
+   "to": "M0-W",
+   "m": 2.55,
+   "s": 5.9,
+   "how": "CT + K + CT",
+   "kling_s": 3,
+   "clip": 972,
+   "stills": [
+    "PD-155",
+    "PDx",
+    "M0i-W",
+    "M0m-W"
+   ],
+   "stills_list": 2100,
+   "list": 3072,
+   "expected": 4806,
+   "cap": 6144,
+   "wave": 4,
+   "note": "171 deg right at PD via D2; 119 deg right at M0-W with the stop"
+  },
+  {
+   "id": "T-MH-W",
+   "frm": "M0-W",
+   "to": "HC",
+   "m": 3.01,
+   "s": 5.1,
+   "how": "CT + K",
+   "kling_s": 3,
+   "clip": 972,
+   "stills": [
+    "M0s-W",
+    "M0b-W"
+   ],
+   "stills_list": 1050,
+   "list": 2022,
+   "expected": 3010,
+   "cap": 4044,
+   "wave": 2,
+   "note": "164 deg right in place (through M0x-W, shared with T-LD-W); 30 deg bend at HX; rest on HC or flow on"
+  },
+  {
+   "id": "T-HBoy",
+   "frm": "HC",
+   "to": "K-boy",
+   "m": 5.88,
+   "s": 5.7,
+   "how": "K + CT",
+   "kling_s": 6,
+   "clip": 1944,
+   "stills": [
+    "KBi"
+   ],
+   "stills_list": 650,
+   "list": 2594,
+   "expected": 3542,
+   "cap": 5188,
+   "wave": 3,
+   "note": "90 deg right through the door at 0.8 m/s; 57 deg head turn with the stop"
+  },
+  {
+   "id": "T-BoyH",
+   "frm": "K-boy",
+   "to": "HDx2",
+   "m": 5.88,
+   "s": 7.0,
+   "how": "CT + K",
+   "kling_s": 6,
+   "clip": 1944,
+   "stills": [
+    "KBm",
+    "KBx"
+   ],
+   "stills_list": 1050,
+   "list": 2994,
+   "expected": 4226,
+   "cap": 5988,
+   "wave": 4,
+   "note": "123 deg right in place; 90 deg bend out of the door, 25 deg at HX; then T-E0-W or the turn to HC"
+  },
+  {
+   "id": "T-HGirl",
+   "frm": "HC",
+   "to": "K-girl",
+   "m": 9.51,
+   "s": 8.2,
+   "how": "K + CT",
+   "kling_s": 9,
+   "clip": 2916,
+   "stills": [
+    "KGi"
+   ],
+   "stills_list": 650,
+   "list": 3566,
+   "expected": 4756,
+   "cap": 7132,
+   "wave": 3,
+   "note": "as the boy, 3.63 m further"
+  },
+  {
+   "id": "T-GirlH",
+   "frm": "K-girl",
+   "to": "HDx2",
+   "m": 9.51,
+   "s": 9.4,
+   "how": "CT + K",
+   "kling_s": 9,
+   "clip": 2916,
+   "stills": [
+    "KGm",
+    "KGx"
+   ],
+   "stills_list": 1050,
+   "list": 3966,
+   "expected": 5440,
+   "cap": 7932,
+   "wave": 4,
+   "note": "as the boy"
+  },
+  {
+   "id": "T-HBath",
+   "frm": "HC",
+   "to": "B2",
+   "m": 5.74,
+   "s": 5.0,
+   "how": "K",
+   "kling_s": 6,
+   "clip": 1944,
+   "stills": [],
+   "stills_list": 0,
+   "list": 1944,
+   "expected": 2430,
+   "cap": 3888,
+   "wave": 3,
+   "note": "90 deg left through the door; the head leads 28 deg; ends on B2 (no arrival still)"
+  },
+  {
+   "id": "P-B",
+   "frm": "B2",
+   "to": "B1",
+   "m": 0,
+   "s": 1.2,
+   "how": "CT",
+   "kling_s": 0,
+   "clip": 0,
+   "stills": [],
+   "stills_list": 0,
+   "list": 0,
+   "expected": 0,
+   "cap": 0,
+   "wave": 0,
+   "note": "35 deg, both frames exist"
+  },
+  {
+   "id": "T-BathH",
+   "frm": "B2",
+   "to": "HDx2",
+   "m": 5.74,
+   "s": 6.9,
+   "how": "CT + K",
+   "kling_s": 6,
+   "clip": 1944,
+   "stills": [
+    "CBm",
+    "CBx"
+   ],
+   "stills_list": 1050,
+   "list": 2994,
+   "expected": 4226,
+   "cap": 5988,
+   "wave": 4,
+   "note": "120 deg left in place via B1"
+  },
+  {
+   "id": "T-HM",
+   "frm": "HC",
+   "to": "MBf",
+   "m": 13.31,
+   "s": 10.1,
+   "how": "K",
+   "kling_s": 10,
+   "clip": 3240,
+   "stills": [
+    "MBf"
+   ],
+   "stills_list": 650,
+   "list": 3890,
+   "expected": 5162,
+   "cap": 7780,
+   "wave": 3,
+   "note": "the corridor 9.43 m, the door at X 2.45, the arc round the bed's foot"
+  },
+  {
+   "id": "MBa",
+   "frm": "MBf",
+   "to": "MB0",
+   "m": 2.3,
+   "s": 2.6,
+   "how": "K",
+   "kling_s": 3,
+   "clip": 972,
+   "stills": [],
+   "stills_list": 0,
+   "list": 972,
+   "expected": 1215,
+   "cap": 1944,
+   "wave": 3,
+   "note": "slows to a stop, the head turns 90 deg to the bed wall"
+  },
+  {
+   "id": "T-MbH",
+   "frm": "MB0",
+   "to": "HDx2",
+   "m": 14.12,
+   "s": 11.4,
+   "how": "CT + K",
+   "kling_s": 10,
+   "clip": 3240,
+   "stills": [
+    "MBx"
+   ],
+   "stills_list": 650,
+   "list": 3890,
+   "expected": 5162,
+   "cap": 7780,
+   "wave": 4,
+   "note": "42 deg right in place, 42 deg bend at the door, 25 deg at HX; split at C0 only if QA fails (C0-W 650 + about 300, in the cap)"
+  },
+  {
+   "id": "T-HW",
+   "frm": "HDx2",
+   "to": "W0",
+   "m": 3.9,
+   "s": 5.8,
+   "how": "CT + K + CT",
+   "kling_s": 4,
+   "clip": 1296,
+   "stills": [
+    "HW",
+    "W0i",
+    "W0m"
+   ],
+   "stills_list": 1700,
+   "list": 2996,
+   "expected": 4527,
+   "cap": 5992,
+   "wave": 3,
+   "note": "70 deg left at HX; through the hidden leaf; 130 deg right with the stop"
+  },
+  {
+   "id": "T-WH",
+   "frm": "W0",
+   "to": "HDx2",
+   "m": 4.0,
+   "s": 4.6,
+   "how": "CT + K",
+   "kling_s": 4,
+   "clip": 1296,
+   "stills": [
+    "W0x"
+   ],
+   "stills_list": 650,
+   "list": 1946,
+   "expected": 2732,
+   "cap": 3892,
+   "wave": 4,
+   "note": "50 deg right in place, out to the junction"
+  }
+ ],
+ "waves": {
+  "0": {
+   "list": 0,
+   "expected": 0,
+   "cap": 0,
+   "clips": 0,
+   "stills": 0,
+   "kling_s": 0
+  },
+  "1": {
+   "list": 972,
+   "expected": 1215,
+   "cap": 1944,
+   "clips": 1,
+   "stills": 0,
+   "kling_s": 3
+  },
+  "2": {
+   "list": 3644,
+   "expected": 5336,
+   "cap": 7288,
+   "clips": 2,
+   "stills": 3,
+   "kling_s": 6
+  },
+  "4": {
+   "list": 18862,
+   "expected": 26592,
+   "cap": 37724,
+   "clips": 6,
+   "stills": 12,
+   "kling_s": 38
+  },
+  "3": {
+   "list": 15962,
+   "expected": 21632,
+   "cap": 31924,
+   "clips": 6,
+   "stills": 6,
+   "kling_s": 38
+  }
+ },
+ "total": {
+  "list": 39440,
+  "exp": 54775,
+  "cap": 78880
+ },
+ "not_counted": [
+  "M0-W hero and P-W / H-W (FB13)",
+  "the HT2 / HDx2 re-feed through the opening and its 2 x 400 fallback (FB16)",
+  "the house light pass L0 on every plate (FB16)"
+ ]
+}

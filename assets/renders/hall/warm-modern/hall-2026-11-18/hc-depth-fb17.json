@@ -1,0 +1,48 @@
+{
+ "file": "hc-depth-fb17.png",
+ "size": [
+  2496,
+  1664
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.431399941444397,
+ "d_far_m": 13.10200023651123,
+ "frame": "HC",
+ "image": "hc.png",
+ "canvas": "2496 x 1664, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-hall-2026-11-18/HC-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-hall-2026-11-18/HC-id.png",
+  "layers": null,
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the frame as rendered with its default products (shell, fixed furniture and product layers)",
+ "snap": {
+  "band_px": 189832,
+  "moved_px": 9261,
+  "to_near_px": 1396,
+  "to_far_px": 7865
+ },
+ "layers": [],
+ "crispness": {
+  "before": {
+   "step_px": 11096,
+   "between_px": 992,
+   "between_share": 0.08940158615717375
+  },
+  "after": {
+   "step_px": 12843,
+   "between_px": 1062,
+   "between_share": 0.08269096005606166
+  }
+ },
+ "product_edges": {
+  "boundary_px": 0,
+  "with_depth_step_px": 0,
+  "share": 0.0,
+  "share_on_the_raw_clay": 0.0
+ },
+ "no_surface_px": 48609,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 6.086749635869637e-05
+}

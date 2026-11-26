@@ -1,0 +1,176 @@
+{
+ "file": "depth-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.8320000171661377,
+ "d_far_m": 3.7320001125335693,
+ "frame": "B2",
+ "image": "b2-defaults-fb13prep.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-bath-2026-11-17/B2-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-bath-2026-11-17/B2-id.png",
+  "layers": "assets/renders/bath/warm-modern/stage1-2026-11-17/layers/manifest.json",
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the frame as rendered with its default products (shell, fixed furniture and product layers)",
+ "snap": {
+  "band_px": 110859,
+  "moved_px": 2901,
+  "to_near_px": 1169,
+  "to_far_px": 1732
+ },
+ "layers": [
+  {
+   "slot": "shower-dispensers",
+   "z": 14,
+   "proxy_ids": [
+    41
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 7049,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 1456
+  },
+  {
+   "slot": "vanity-sconces",
+   "z": 14,
+   "proxy_ids": [
+    42,
+    43
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 15755,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 2866
+  },
+  {
+   "slot": "shower-curtain",
+   "z": 26,
+   "proxy_ids": [
+    40
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 423070,
+   "filled_inside_px": 105042,
+   "overhang_cleared_px": 2072
+  },
+  {
+   "slot": "floor-planter",
+   "z": 30,
+   "proxy_ids": [
+    51,
+    52
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 82854,
+   "filled_inside_px": 23945,
+   "overhang_cleared_px": 161936
+  },
+  {
+   "slot": "bath-towels",
+   "z": 36,
+   "proxy": "none: the contact depth under its foot",
+   "contact_m": 2.299,
+   "behind_m": 2.563,
+   "set_px": 26518
+  },
+  {
+   "slot": "storage-basket",
+   "z": 38,
+   "proxy": "none: the contact depth under its foot",
+   "contact_m": 2.108,
+   "behind_m": 2.378,
+   "set_px": 64966
+  },
+  {
+   "slot": "vanity-tray",
+   "z": 44,
+   "proxy": "none: the contact depth under its foot",
+   "contact_m": 1.988,
+   "behind_m": 2.165,
+   "set_px": 4814
+  },
+  {
+   "slot": "soap-dispenser",
+   "z": 46,
+   "proxy_ids": [
+    44
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 5348,
+   "filled_inside_px": 421,
+   "overhang_cleared_px": 1888
+  },
+  {
+   "slot": "toothbrush-cup",
+   "z": 46,
+   "proxy_ids": [
+    45,
+    46
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 5932,
+   "filled_inside_px": 2294,
+   "overhang_cleared_px": 3086
+  },
+  {
+   "slot": "vanity-vase",
+   "z": 46,
+   "proxy_ids": [
+    47,
+    48
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 6267,
+   "filled_inside_px": 2135,
+   "overhang_cleared_px": 3488
+  },
+  {
+   "slot": "towel-ring",
+   "z": 50,
+   "proxy_ids": [
+    49
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 6221,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 2800
+  },
+  {
+   "slot": "hand-towel",
+   "z": 52,
+   "proxy_ids": [
+    50
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 65695,
+   "filled_inside_px": 17648,
+   "overhang_cleared_px": 11863
+  }
+ ],
+ "crispness": {
+  "before": {
+   "step_px": 16679,
+   "between_px": 109,
+   "between_share": 0.0065351639786557945
+  },
+  "after": {
+   "step_px": 25286,
+   "between_px": 796,
+   "between_share": 0.03147987028395159
+  }
+ },
+ "product_edges": {
+  "boundary_px": 31281,
+  "with_depth_step_px": 24367,
+  "share": 0.779,
+  "share_on_the_raw_clay": 0.045
+ },
+ "no_surface_px": 0,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 7.865316547395196e-06
+}

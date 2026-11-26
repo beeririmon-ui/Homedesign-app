@@ -1,0 +1,48 @@
+{
+ "file": "depth-plate-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.8300000429153442,
+ "d_far_m": 3.499001979827881,
+ "frame": "W0-plate",
+ "image": "plate.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-work-2026-11-20/W0-plate-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-work-2026-11-20/W0-plate-id.png",
+  "layers": null,
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the empty plate (shell and fixed furniture): the map for the moves, which run on the empty room",
+ "snap": {
+  "band_px": 96646,
+  "moved_px": 2087,
+  "to_near_px": 872,
+  "to_far_px": 1215
+ },
+ "layers": [],
+ "crispness": {
+  "before": {
+   "step_px": 13867,
+   "between_px": 154,
+   "between_share": 0.01110550227158001
+  },
+  "after": {
+   "step_px": 14507,
+   "between_px": 192,
+   "between_share": 0.013234990004825257
+  }
+ },
+ "product_edges": {
+  "boundary_px": 0,
+  "with_depth_step_px": 0,
+  "share": 0.0,
+  "share_on_the_raw_clay": 0.0
+ },
+ "no_surface_px": 170437,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 6.899484105815645e-06
+}

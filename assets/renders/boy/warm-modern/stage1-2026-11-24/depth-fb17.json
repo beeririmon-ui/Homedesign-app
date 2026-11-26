@@ -1,0 +1,200 @@
+{
+ "file": "depth-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.6734000444412231,
+ "d_far_m": 4.156599998474121,
+ "frame": "K-boy",
+ "image": "K-boy-defaults-fb15.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-kids-2026-11-24/K-boy-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-kids-2026-11-24/K-boy-id.png",
+  "layers": "assets/renders/boy/warm-modern/stage1-2026-11-24/manifest-fb15.json",
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the frame as rendered with its default products (shell, fixed furniture and product layers)",
+ "snap": {
+  "band_px": 181143,
+  "moved_px": 5663,
+  "to_near_px": 1887,
+  "to_far_px": 3776
+ },
+ "layers": [
+  {
+   "slot": "roman-blind",
+   "z": 10,
+   "proxy_ids": [
+    40
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 143701,
+   "filled_inside_px": 243,
+   "overhang_cleared_px": 1355
+  },
+  {
+   "slot": "bookshelf",
+   "z": 12,
+   "proxy_ids": [
+    46,
+    47
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 67542,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 1090
+  },
+  {
+   "slot": "framed-prints",
+   "z": 12,
+   "proxy_ids": [
+    42,
+    43,
+    44,
+    45
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 154401,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 483
+  },
+  {
+   "slot": "bookends",
+   "z": 46,
+   "proxy_ids": [
+    50,
+    51
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 24444,
+   "filled_inside_px": 25,
+   "overhang_cleared_px": 295
+  },
+  {
+   "slot": "pen-cup",
+   "z": 46,
+   "proxy_ids": [
+    48,
+    49
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 8929,
+   "filled_inside_px": 652,
+   "overhang_cleared_px": 24
+  },
+  {
+   "slot": "toy-cars",
+   "z": 46,
+   "proxy_ids": [
+    52
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 2699,
+   "filled_inside_px": 772,
+   "overhang_cleared_px": 3337
+  },
+  {
+   "slot": "bedding",
+   "z": 50,
+   "proxy_ids": [
+    53,
+    54
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 298108,
+   "filled_inside_px": 90879,
+   "overhang_cleared_px": 2167
+  },
+  {
+   "slot": "pillowcase",
+   "z": 51,
+   "proxy_ids": [
+    55
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 61742,
+   "filled_inside_px": 4362,
+   "overhang_cleared_px": 5316
+  },
+  {
+   "slot": "bedspread",
+   "z": 52,
+   "proxy_ids": [
+    56
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 80971,
+   "filled_inside_px": 8594,
+   "overhang_cleared_px": 7
+  },
+  {
+   "slot": "cushions",
+   "z": 55,
+   "proxy_ids": [
+    57
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 36315,
+   "filled_inside_px": 10527,
+   "overhang_cleared_px": 17987
+  },
+  {
+   "slot": "soft-toy",
+   "z": 57,
+   "proxy_ids": [
+    58
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 11546,
+   "filled_inside_px": 6895,
+   "overhang_cleared_px": 0
+  },
+  {
+   "slot": "toy-basket",
+   "z": 60,
+   "proxy_ids": [
+    59,
+    60
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 86585,
+   "filled_inside_px": 13,
+   "overhang_cleared_px": 2189
+  },
+  {
+   "slot": "pendant",
+   "z": 80,
+   "proxy_ids": [
+    41
+   ],
+   "how": "manifest clay ids",
+   "alpha_px": 8464,
+   "filled_inside_px": 482,
+   "overhang_cleared_px": 1456
+  }
+ ],
+ "crispness": {
+  "before": {
+   "step_px": 28219,
+   "between_px": 470,
+   "between_share": 0.016655444913001877
+  },
+  "after": {
+   "step_px": 34953,
+   "between_px": 2549,
+   "between_share": 0.07292650130174806
+  }
+ },
+ "product_edges": {
+  "boundary_px": 44043,
+  "with_depth_step_px": 19087,
+  "share": 0.433,
+  "share_on_the_raw_clay": 0.135
+ },
+ "no_surface_px": 287761,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 1.1186487427039538e-05
+}

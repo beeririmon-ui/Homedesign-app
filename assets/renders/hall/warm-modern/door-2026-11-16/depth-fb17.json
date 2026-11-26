@@ -1,0 +1,48 @@
+{
+ "file": "depth-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.5920000076293945,
+ "d_far_m": 3.75,
+ "frame": "D0",
+ "image": "d0.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-door-2026-11-16/D0-closed-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-door-2026-11-16/D0-closed-id.png",
+  "layers": null,
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the frame as rendered with its default products (shell, fixed furniture and product layers)",
+ "snap": {
+  "band_px": 19841,
+  "moved_px": 1101,
+  "to_near_px": 912,
+  "to_far_px": 189
+ },
+ "layers": [],
+ "crispness": {
+  "before": {
+   "step_px": 1341,
+   "between_px": 21,
+   "between_share": 0.015659955257270694
+  },
+  "after": {
+   "step_px": 1528,
+   "between_px": 27,
+   "between_share": 0.01767015706806283
+  }
+ },
+ "product_edges": {
+  "boundary_px": 0,
+  "with_depth_step_px": 0,
+  "share": 0.0,
+  "share_on_the_raw_clay": 0.0
+ },
+ "no_surface_px": 0,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 1.013435121421935e-05
+}

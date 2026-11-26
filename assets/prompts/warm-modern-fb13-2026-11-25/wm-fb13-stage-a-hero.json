@@ -1,0 +1,618 @@
+{
+ "id": "wm-fb13-stage-a-hero-2026-11-26",
+ "brief": "briefs/wm-fb13-stage-a-hero-2026-11-26.md",
+ "source": "docs/proposals/wm-fb13-living-wow-2026-11-25.md 3.2 steps 2-6; the coordinator's notes of 2026-11-26 (the owner: the sun a third calmer; docs/proposals/wm-fb16-house-light-2026-11-26.md)",
+ "date": "2026-11-26",
+ "author": "render-agent",
+ "camera": {
+  "id": "M0-W",
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw_deg_left": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555
+ },
+ "seed": null,
+ "seed_note": "var2 exposes no seed for seedream-5-pro or nano-banana-2: the prompt, the input, the references and the settings are kept",
+ "references_policy": "supplier images are references only (cropped in the scratchpad, uploaded to var2, never stored in the repo); the material references of the plate are crops of our own approved plate (phase2 base-fb12s0.png) and of the first plate return",
+ "estimate": {
+  "tool": "var2_estimate_cost",
+  "seedream_5_pro_i2i_2K": 650,
+  "nano_banana_2_i2i_2K": 400
+ },
+ "jobs": [
+  {
+   "id": "wm-fb13-pw-r1",
+   "what": "P-W, the empty-room plate (first send)",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "prompt": "pw-r1.txt",
+   "prompt_sha256": "50adb056595ad1da53a9b1851998799810ad481dedbef40656d57ace310ba341",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/22935396-2a7b-4db9-a44d-d883680329fd.png",
+   "image_sha256": "46779e7d79f837a1bcf2c040168e53474612a5f33643ad001af35dfd4ab7c016",
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1ecd0123-aaf2-4aa2-8fc8-a3e1a5906921.png",
+     "what": "our armchair (crop of phase2 base-fb12s0.png)"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/d73694dd-0e48-464c-96fc-aaf48fd2be2c.png",
+     "what": "the sofa's boucle (same)"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/c8094822-97c8-4495-b21c-4ccb8a2ff4ab.png",
+     "what": "floor and plaster (same)"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7797cccf-74e3-4bc7-a50f-181fbe474ab4.png",
+     "what": "glazing and bench (same)"
+    }
+   ],
+   "idempotency_key": "wm-fb13-pw-seedream-2k-20261126",
+   "placeholder_id": "97a4ddd8-a762-4c4a-b23f-aafcc50d812f",
+   "task_id": "75771cf5c5210eecea2e38e56a252bb7",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-75771cf5c5210eecea2e38e56a252bb7-0-1795687694115-2fc5db79.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "raw/plate-PW-seedream-r1-rejected.jpg (1360 px copy)",
+   "raw_sha256": "bac9c148f91169fc32d28d471485ba5b8a574692a3a8b75df6c83740eb35b935",
+   "verdict": "NOT USED: a fine photograph, but the camera was not kept (the clay's lines 73 px right and 88 px up, the ceiling in the frame): the prompt said 'a rough computer layout' and the sofa of the input was blurred. Its sofa is the form reference of r2"
+  },
+  {
+   "id": "wm-fb13-pw-r2",
+   "what": "P-W, the empty-room plate (the retry: the pilot's camera lock, the clay's named lines in the prompt)",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "prompt": "pw-r2.txt",
+   "prompt_sha256": "e51e4ddd503c3d5d8fe487ec1f0a5c81f0a0b5fca13e57c87ea92bc22418c3c3",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7b360e87-6c8d-4c82-ba55-619035ff9a01.png",
+   "image_sha256": "793d536fa5918bb95f3b611d2a0c2cb2b26a799cd9eda8c157ae0495a685bbf5",
+   "image_local": "raw/plate-PW-input-r2.png",
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b8869473-9b2d-4d6e-82f0-fa42a0c9823f.png",
+     "what": "the sofa of the r1 return (crop): the rounded seamless arms"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1ecd0123-aaf2-4aa2-8fc8-a3e1a5906921.png",
+     "what": "our armchair"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/c8094822-97c8-4495-b21c-4ccb8a2ff4ab.png",
+     "what": "floor and plaster"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/7797cccf-74e3-4bc7-a50f-181fbe474ab4.png",
+     "what": "glazing and bench"
+    }
+   ],
+   "idempotency_key": "wm-fb13-pw-seedream-2k-20261126-r2",
+   "placeholder_id": "571c77a5-8300-4f24-a956-9c9a80d0de80",
+   "task_id": "8061627a780923bd72f2ba4f062f37ff",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-8061627a780923bd72f2ba4f062f37ff-0-1795688144485-20b72c1b.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "raw/plate-PW-seedream-r2.png",
+   "raw_sha256": "9bf117a7a2c6c80410976cbc4e903d6fe183ce53622439e0a64d3c2d6287ea5e",
+   "verdict": "USED: the camera kept (the clay's boundaries 2-4 px median from the frame's edges, global shift 4, -3 px)"
+  },
+  {
+   "id": "wm-fb13-hw-r1",
+   "what": "H-W, the hero: every default product in one light, on the plate",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "prompt": "hw.txt",
+   "prompt_sha256": "554275698bdd6723343a428c2111cbad87879eb8bce90ce49f085c38d1434361",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/05cc5f32-54e3-46a9-8c73-c93621577ac2.png",
+   "image_sha256": "646de30426968be4ef148b77666eef6078b233c63d33666d54e0150113a16c6e",
+   "image_local": "raw/hero-HW-input.png",
+   "image_refs": [
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/3976a397-7284-4367-99c6-7f2d05398da3.png",
+     "card": "coffee-table-idana-javorina-olia-natural",
+     "what": "board: studio shot, rolled edge close-up, the unit in a home"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cd8d73bb-aeea-4d55-aa6e-7a98b72f43f3.png",
+     "card": "rug-cj-braided-wool-natural",
+     "what": "close-up of the braided weave"
+    },
+    {
+     "n": 4,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/3af0d106-21b0-4384-a661-2b0b8d30652b.png",
+     "card": "cushions-aliexpress-textured-boucle-throw-pillow (Oatmeal 50x50)"
+    },
+    {
+     "n": 5,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/58594f22-7ae3-45cd-83d6-a983aee8b480.png",
+     "card": "cushions-cj-wide-stripe-corduroy-light-green (Camel)"
+    },
+    {
+     "n": 6,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/18762c34-194d-40f0-a02b-f6c19122b3fe.png",
+     "card": "cushions-cj-linen-look-charcoal (Beige 30x50)"
+    },
+    {
+     "n": 7,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cb0ab2fb-c995-4c25-aa12-fbbd2fa5f42b.png",
+     "card": "sofa-cover-cj-cotton-muslin-fringe (Pecan)"
+    },
+    {
+     "n": 8,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/95b556a1-5ea2-4548-8133-747bd6a3470b.png",
+     "card": "magazine-holder-cj-gunmetal-leather-strap"
+    },
+    {
+     "n": 9,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/0bb7c4d0-3aa0-4470-aca7-295deec887b5.png",
+     "what": "board: accent-sconces-aliexpress-travertine-cylinder-walnut-choice, floor-lamp-cj-pleated-walnut-stem-158 (two photos), pendant-cj-tiered-fabric-drum"
+    },
+    {
+     "n": 10,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5df7017a-75c0-402c-9090-a892d30a60da.png",
+     "what": "board: vase-cj-textured-white-stoneware, planter-cj-cement-ribbed-belly, basket-cj-jute-rope-cylinder, bowl-cj-matte-black-bowl-20, candle-holders-cj-travertine-pedestal"
+    }
+   ],
+   "idempotency_key": "wm-fb13-hw-seedream-2k-20261126",
+   "placeholder_id": "9b50043d-b6ea-4935-bd72-9e8fa542318f",
+   "task_id": "81fe1034beaf19a3346f401c522c079c",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-81fe1034beaf19a3346f401c522c079c-0-1795688639921-ee16981b.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "raw/hero-HW-seedream-r1.png",
+   "raw_sha256": "650e3d520c18073779629ca2dc09328850254f53285d686823c7c0e87509024c",
+   "verdict": "USED. The gate: passed except two regions, both mended by group edits (below): the table came out with square ends (not the Olia's rolled bend) and the rug's right end with a flat band and a loose extra piece"
+  },
+  {
+   "id": "wm-fb13-e1-table",
+   "what": "group edit: the table's two ends rolled (the Olia), on a 1088 x 612 crop of the hero sent at x2",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "e1-table.txt",
+   "prompt_sha256": "71bc31f7bfd930dbf99b3c7005d6530ae70b290d22ff60dc0b8a468c38a108db",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8292589d-a63f-4b81-bb99-d2f343d6748b.png",
+   "image_sha256": "8e982d75d5d674440b513e372e756a89eaab175c4200d3a9103898b6c6222bd2",
+   "crop_canvas_px": [
+    1016,
+    918,
+    2104,
+    1530
+   ],
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/3976a397-7284-4367-99c6-7f2d05398da3.png",
+     "card": "coffee-table-idana-javorina-olia-natural"
+    }
+   ],
+   "idempotency_key": "wm-fb13-e1-table-nano-2k-20261126",
+   "placeholder_id": "618c249c-34fb-4625-94e5-539b4f948c69",
+   "task_id": "609a913c9f0a62b6ea4433723cbaeee3",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-609a913c9f0a62b6ea4433723cbaeee3-0-1795689135917-dc4a6ebb.jpg",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "raw": "raw/e1-table-nano.jpg",
+   "raw_sha256": "f3711fbec09f5b1875e5f4c46b29e7ffa266d8b0b965cc549a1caecf75eb01ee",
+   "verdict": "USED: the table group and its own shadows only (prep.py: registered by SIFT, 0.55 px; tone-matched on the pixels the edit left alone)"
+  },
+  {
+   "id": "wm-fb13-e2-notable",
+   "what": "H-W without the table group (FB12-T): what lies under and behind the table, in the hero's light; the same crop",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "e2-notable.txt",
+   "prompt_sha256": "c3fcc0aa43d17816f95a69fddbb2bbfedba2e1f85a133ea69e673f16f9e04df9",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8292589d-a63f-4b81-bb99-d2f343d6748b.png",
+   "image_sha256": "8e982d75d5d674440b513e372e756a89eaab175c4200d3a9103898b6c6222bd2",
+   "crop_canvas_px": [
+    1016,
+    918,
+    2104,
+    1530
+   ],
+   "image_refs": [],
+   "idempotency_key": "wm-fb13-e2-notable-nano-2k-20261126",
+   "placeholder_id": "ceefe833-cbc6-4270-ad22-2554798c1fc2",
+   "task_id": "fa6f5a2eb05d2f2bd57ef34b530654da",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-fa6f5a2eb05d2f2bd57ef34b530654da-0-1795689161456-873cc2c8.jpg",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "raw": "raw/e2-notable-nano.jpg",
+   "raw_sha256": "0d4bf539a0b6494b0962312ab343c1625bb84aa113240c14bcb728fc065598e9",
+   "verdict": "USED: the rug and the throw's end under the table, and the table's shadow on them (the hero over this frame)"
+  },
+  {
+   "id": "wm-fb13-e3-rugend",
+   "what": "group edit: the rug's right end plain (no band, no extra piece), on a 1088 x 612 crop sent at x2",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "e3-rugend.txt",
+   "prompt_sha256": "4eee86f25b96f5b3ae5c7a97f30df75acad3413f39e92a2c1a4fd7a1c01cadae",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/8c8a5104-69e0-4aa5-b26a-8bcc72e98b27.png",
+   "image_sha256": "fbf968ae17e171aeb0cdcbb4a58c4f09629f68ba25f5d72e58937ad2a1277e29",
+   "crop_canvas_px": [
+    1632,
+    918,
+    2720,
+    1530
+   ],
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cd8d73bb-aeea-4d55-aa6e-7a98b72f43f3.png",
+     "card": "rug-cj-braided-wool-natural"
+    }
+   ],
+   "idempotency_key": "wm-fb13-e3-rugend-nano-2k-20261126",
+   "placeholder_id": "19fc2e5a-915c-4404-9ad6-3eedc32feffb",
+   "task_id": "293475d4579d6930f91156235ed38ed5",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-293475d4579d6930f91156235ed38ed5-0-1795689176772-0e82c2d9.jpg",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "raw": "raw/e3-rugend-nano.jpg",
+   "raw_sha256": "e29d875c1babcc23f3a3f22d9c68313d5afbcb6af94a2919c04447769fff0a9f",
+   "verdict": "USED: the rug's right end only"
+  }
+ ],
+ "segment_maps": [
+  {
+   "model": "grok-imagine-image-2",
+   "type": "segment-map",
+   "tokens": 0,
+   "of": "the hero return",
+   "segment_map_id": "897974b0-18f0-41fb-b7d2-fa37b4c5ae43",
+   "segments": 35
+  },
+  {
+   "model": "grok-imagine-image-2",
+   "type": "segment-map",
+   "tokens": 0,
+   "of": "the table edit's return",
+   "segment_map_id": "c1e00ce5-ab1a-4336-be6b-25d71af17966",
+   "segments": 20
+  }
+ ],
+ "tokens": {
+  "plate_r1": 650,
+  "plate_r2": 650,
+  "hero": 650,
+  "edits": 1200,
+  "segment_maps": 0,
+  "total": 3150,
+  "cap_this_run": 3950,
+  "stage_a_before": 750,
+  "stage_a_total": 3900,
+  "stage_a_cap": 6500
+ },
+ "edits_registration": {
+  "e1": {
+   "inliers": 92,
+   "residual_px_median": 0.55,
+   "tone_gain_offset": [
+    [
+     0.9892,
+     -0.0066
+    ],
+    [
+     1.0037,
+     -0.0046
+    ],
+    [
+     1.0135,
+     -0.0147
+    ]
+   ],
+   "unchanged_share": 0.841
+  },
+  "e2": {
+   "inliers": 62,
+   "residual_px_median": 0.504,
+   "tone_gain_offset": [
+    [
+     0.9781,
+     -0.0019
+    ],
+    [
+     0.9865,
+     0.0033
+    ],
+    [
+     0.9965,
+     -0.004
+    ]
+   ],
+   "unchanged_share": 0.693
+  },
+  "e3": {
+   "inliers": 101,
+   "residual_px_median": 0.571,
+   "tone_gain_offset": [
+    [
+     0.9864,
+     -0.0057
+    ],
+    [
+     0.9915,
+     -0.0035
+    ],
+    [
+     0.9955,
+     -0.0134
+    ]
+   ],
+   "unchanged_share": 0.968
+  }
+ },
+ "plate_to_hero": {
+  "matches": 213,
+  "inliers": 78,
+  "residual_px_median": 0.74,
+  "residual_px_p90": 1.266,
+  "A": [
+   [
+    0.994876,
+    -0.000461,
+    8.776494
+   ],
+   [
+    0.000461,
+    0.994876,
+    2.549261
+   ]
+  ]
+ },
+ "tone_match": {
+  "quiet_px": 188392,
+  "ab_shift": [
+   0.55,
+   2.16
+  ],
+  "field_L_range": [
+   -0.23,
+   1.12
+  ],
+  "dLab_before": [
+   -0.34,
+   -0.55,
+   -2.16
+  ],
+  "dLab_after": [
+   0.1,
+   0.02,
+   0.0
+  ],
+  "dL_after_p10_p90": [
+   -1.81,
+   1.57
+  ],
+  "wall_dL_before_after": [
+   NaN,
+   NaN
+  ]
+ },
+ "tone_dark_anchor": {
+  "armchair_hero_L": [
+   1.7,
+   2.58,
+   6.45
+  ],
+  "armchair_plate_L": [
+   2.92,
+   3.73,
+   7.95
+  ]
+ },
+ "prints": {
+  "print-1": {
+   "file": "print-flat-1.png",
+   "canvas": {
+    "found_px": 57976,
+    "projected_px": 59265
+   },
+   "canvas_px": 58409,
+   "quad": [
+    [
+     1289.0,
+     512.2
+    ],
+    [
+     1489.0,
+     506.5
+    ],
+    [
+     1487.9,
+     800.3
+    ],
+    [
+     1290.1,
+     801.5
+    ]
+   ],
+   "canvas_Lab": [
+    82.2,
+    2.1,
+    11.2
+   ],
+   "projected_inner": [
+    [
+     1289.2,
+     511.8
+    ],
+    [
+     1489.4,
+     505.1
+    ],
+    [
+     1489.4,
+     801.7
+    ],
+    [
+     1289.2,
+     802.6
+    ]
+   ],
+   "cover_crop_px": [
+    15,
+    0,
+    574,
+    818
+   ],
+   "print_px": [
+    589,
+    818
+   ]
+  },
+  "print-2": {
+   "file": "print-flat-2.png",
+   "canvas": {
+    "found_px": 62865,
+    "projected_px": 63695
+   },
+   "canvas_px": 63406,
+   "quad": [
+    [
+     1528.0,
+     504.7
+    ],
+    [
+     1738.0,
+     497.3
+    ],
+    [
+     1739.0,
+     799.2
+    ],
+    [
+     1528.0,
+     800.6
+    ]
+   ],
+   "canvas_Lab": [
+    81.9,
+    2.4,
+    12.2
+   ],
+   "projected_inner": [
+    [
+     1529.7,
+     503.7
+    ],
+    [
+     1739.8,
+     496.7
+    ],
+    [
+     1739.8,
+     800.7
+    ],
+    [
+     1529.7,
+     801.6
+    ]
+   ],
+   "cover_crop_px": [
+    6,
+    0,
+    583,
+    818
+   ],
+   "print_px": [
+    589,
+    818
+   ]
+  },
+  "print-3": {
+   "file": "print-flat-3.png",
+   "canvas": {
+    "found_px": 67394,
+    "projected_px": 68788
+   },
+   "canvas_px": 67899,
+   "quad": [
+    [
+     1779.9,
+     495.5
+    ],
+    [
+     1999.9,
+     489.3
+    ],
+    [
+     2001.1,
+     798.1
+    ],
+    [
+     1781.0,
+     799.6
+    ]
+   ],
+   "canvas_Lab": [
+    69.4,
+    4.0,
+    15.0
+   ],
+   "projected_inner": [
+    [
+     1782.1,
+     495.3
+    ],
+    [
+     2002.9,
+     487.9
+    ],
+    [
+     2002.9,
+     799.6
+    ],
+    [
+     1782.1,
+     800.5
+    ]
+   ],
+   "cover_crop_px": [
+    1,
+    0,
+    589,
+    818
+   ],
+   "print_px": [
+    590,
+    818
+   ]
+  }
+ }
+}

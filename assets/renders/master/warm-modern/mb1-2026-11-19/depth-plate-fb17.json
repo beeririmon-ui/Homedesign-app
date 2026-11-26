@@ -1,0 +1,48 @@
+{
+ "file": "depth-plate-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.7863999605178833,
+ "d_far_m": 5.029600143432617,
+ "frame": "MB1-plate",
+ "image": "plate.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/renders/master/warm-modern/mb1-2026-11-19/clay/MB1-plate-depth.png",
+  "clay_id": "assets/renders/master/warm-modern/mb1-2026-11-19/clay/MB1-plate-id.png",
+  "layers": null,
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the empty plate (shell and fixed furniture): the map for the moves, which run on the empty room",
+ "snap": {
+  "band_px": 120984,
+  "moved_px": 1566,
+  "to_near_px": 680,
+  "to_far_px": 886
+ },
+ "layers": [],
+ "crispness": {
+  "before": {
+   "step_px": 16177,
+   "between_px": 214,
+   "between_share": 0.01322865797119367
+  },
+  "after": {
+   "step_px": 16704,
+   "between_px": 207,
+   "between_share": 0.012392241379310345
+  }
+ },
+ "product_edges": {
+  "boundary_px": 0,
+  "with_depth_step_px": 0,
+  "share": 0.0,
+  "share_on_the_raw_clay": 0.0
+ },
+ "no_surface_px": 350434,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 1.3561598279920872e-05
+}

@@ -1,0 +1,264 @@
+{
+ "file": "depth-fb17.png",
+ "size": [
+  2720,
+  1530
+ ],
+ "encoding": "uint16 grey, near = bright, linear in 1/depth: value = 1 + 65534 * (1/d - 1/d_far) / (1/d_near - 1/d_far); 0 = no surface (the view out through the glazing). d = planar depth along the optical axis, metres.",
+ "d_near_m": 1.8300000429153442,
+ "d_far_m": 3.4990010261535645,
+ "frame": "W0",
+ "image": "w0-defaults-fb15.png",
+ "canvas": "2720 x 1530, the image's own canvas (pixel for pixel)",
+ "source": {
+  "clay_depth": "assets/blockout/house/framing/wm-work-2026-11-20/W0-depth.png",
+  "clay_id": "assets/blockout/house/framing/wm-work-2026-11-20/W0-id.png",
+  "layers": "assets/renders/work/warm-modern/stage1-2026-11-20/layers/manifest-fb15.json",
+  "rule": "clay depth (every proxy), steps snapped to the image (room_depth.snap_edges), then each default product layer's alpha enforced as the depth edge (scratchpad depth_fb17.py)"
+ },
+ "covers": "the frame as rendered with its default products (shell, fixed furniture and product layers)",
+ "snap": {
+  "band_px": 158607,
+  "moved_px": 4654,
+  "to_near_px": 2464,
+  "to_far_px": 2190
+ },
+ "layers": [
+  {
+   "slot": "curtains",
+   "z": 10,
+   "proxy_ids": [
+    40
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 165753,
+   "filled_inside_px": 2737,
+   "overhang_cleared_px": 372
+  },
+  {
+   "slot": "framed-art",
+   "z": 12,
+   "proxy_ids": [
+    41,
+    42
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 71435,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 1381
+  },
+  {
+   "slot": "framed-art-2",
+   "z": 13,
+   "proxy_ids": [
+    43,
+    44
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 65282,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 905
+  },
+  {
+   "slot": "wall-sconce",
+   "z": 14,
+   "proxy_ids": [
+    45
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 6083,
+   "filled_inside_px": 0,
+   "overhang_cleared_px": 55
+  },
+  {
+   "slot": "rug",
+   "z": 20,
+   "proxy_ids": [
+    46
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 185295,
+   "filled_inside_px": 619,
+   "overhang_cleared_px": 3581
+  },
+  {
+   "slot": "basket",
+   "z": 30,
+   "proxy_ids": [
+    47
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 33259,
+   "filled_inside_px": 3095,
+   "overhang_cleared_px": 955
+  },
+  {
+   "slot": "waste-basket",
+   "z": 30,
+   "proxy_ids": [
+    48
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 28705,
+   "filled_inside_px": 2037,
+   "overhang_cleared_px": 652
+  },
+  {
+   "slot": "planter",
+   "z": 32,
+   "proxy_ids": [
+    49,
+    50
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 142706,
+   "filled_inside_px": 18119,
+   "overhang_cleared_px": 21197
+  },
+  {
+   "slot": "magazine-holder",
+   "z": 36,
+   "proxy_ids": [
+    51,
+    52
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 25268,
+   "filled_inside_px": 5812,
+   "overhang_cleared_px": 18901
+  },
+  {
+   "slot": "bookends",
+   "z": 44,
+   "proxy_ids": [
+    53,
+    54
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 24793,
+   "filled_inside_px": 5690,
+   "overhang_cleared_px": 89
+  },
+  {
+   "slot": "desk-tray",
+   "z": 44,
+   "proxy_ids": [
+    57
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 1745,
+   "filled_inside_px": 134,
+   "overhang_cleared_px": 946
+  },
+  {
+   "slot": "desk-vase",
+   "z": 44,
+   "proxy_ids": [
+    60
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 14127,
+   "filled_inside_px": 417,
+   "overhang_cleared_px": 444
+  },
+  {
+   "slot": "shelf-object",
+   "z": 44,
+   "proxy_ids": [
+    56
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 4128,
+   "filled_inside_px": 108,
+   "overhang_cleared_px": 202
+  },
+  {
+   "slot": "shelf-vase",
+   "z": 44,
+   "proxy_ids": [
+    55
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 13965,
+   "filled_inside_px": 574,
+   "overhang_cleared_px": 146
+  },
+  {
+   "slot": "desk-candle",
+   "z": 46,
+   "proxy_ids": [
+    61
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 4011,
+   "filled_inside_px": 323,
+   "overhang_cleared_px": 403
+  },
+  {
+   "slot": "desk-dish",
+   "z": 46,
+   "proxy_ids": [
+    62
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 858,
+   "filled_inside_px": 21,
+   "overhang_cleared_px": 39
+  },
+  {
+   "slot": "desk-organizer",
+   "z": 46,
+   "proxy_ids": [
+    58,
+    59
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 3009,
+   "filled_inside_px": 354,
+   "overhang_cleared_px": 718
+  },
+  {
+   "slot": "chair-throw",
+   "z": 60,
+   "proxy_ids": [
+    64
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 112339,
+   "filled_inside_px": 3385,
+   "overhang_cleared_px": 1180
+  },
+  {
+   "slot": "pendant",
+   "z": 80,
+   "proxy_ids": [
+    63
+   ],
+   "how": "clay ids by name",
+   "alpha_px": 13815,
+   "filled_inside_px": 544,
+   "overhang_cleared_px": 224
+  }
+ ],
+ "crispness": {
+  "before": {
+   "step_px": 25101,
+   "between_px": 280,
+   "between_share": 0.011154934066371858
+  },
+  "after": {
+   "step_px": 48256,
+   "between_px": 1344,
+   "between_share": 0.027851458885941646
+  }
+ },
+ "product_edges": {
+  "boundary_px": 59982,
+  "with_depth_step_px": 43364,
+  "share": 0.723,
+  "share_on_the_raw_clay": 0.16
+ },
+ "no_surface_px": 170437,
+ "note": "motion-agent, 2026-11-26 (FB17), 0 tokens. For frontend-dev's 2.5D moves (MOCK7). A variant swap changes only its own layer: re-run on that layer if its silhouette differs much from the default.",
+ "roundtrip_rel_err_max": 7.025500508461846e-06
+}

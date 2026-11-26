@@ -1,0 +1,480 @@
+{
+ "id": "wm-living-room-m0w-fb13-stage-a-2026-11-26",
+ "room": "living-room",
+ "style": "warm-modern",
+ "frame": "M0-W",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  77.4853,
+  43.4279,
+  2642.5147,
+  1486.5721
+ ],
+ "base": "../plate-PW.png",
+ "camera": {
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555,
+  "status": "PROPOSAL (camera-m0w-proposal.json has v0 0.52; v0 0.555 by the concepts' brief)"
+ },
+ "compose": "../plate-PW.png; per layer in z order: shadow (multiply), then the layer (straight alpha); lights (screen, z 90) times (1 - every alpha)",
+ "status": "FB13 stage A, steps 2-6: the default stack of M0-W. Not QA'd; HD_PUBLIC=0 only; not in data/slots or docs/house-plan (the manager, after approval 3). No cushion sets A / C yet (step 7).",
+ "method": "tools/extract.py: the plate is the base; every product is cut from the ONE hero render (hero-HW.png); shadows = the hero over the plate, darker (multiply); the lamps' light = the hero over the plate, brighter (screen)",
+ "grade": {
+  "name": "m0w-g2",
+  "xs": [
+   0.0,
+   3.6,
+   26.7,
+   50.0,
+   65.5,
+   77.5,
+   93.0,
+   96.0,
+   100.0
+  ],
+  "ys": [
+   4.8,
+   10.6,
+   36.0,
+   62.5,
+   76.5,
+   83.6,
+   89.6,
+   93.2,
+   98.8
+  ],
+  "a_shift": 1.0,
+  "b_shift": 2.5,
+  "warm": {
+   "L0": 80.0,
+   "L1": 92.0,
+   "a": 0.8,
+   "b": 3.5
+  },
+  "note": "ONE display grade for P-W, H-W and every edit of H-W (pointwise in Lab: commutes with the layers' compositing). The owner's note of 2026-11-26 on concept B ('a little too dramatic') and the house light spec (docs/proposals/wm-fb16-house-light-2026-11-26.md): shade plaster L about 76 (74-80), sunlit plaster about 89-90 (88-92), black point 10-11",
+  "curve_at": {
+   "3.6": 10.3,
+   "26.7": 36.0,
+   "50": 62.4,
+   "65.5": 76.3,
+   "77.5": 83.5,
+   "93": 90.0,
+   "96": 93.3
+  }
+ },
+ "layers": [
+  {
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.png",
+   "shadow": "shadows/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.png",
+   "alpha_px": 241183,
+   "shadow_px": 238570,
+   "bbox_px": [
+    1274,
+    472,
+    2018,
+    817
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "accent-sconces",
+   "product": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "shadow": "shadows/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "alpha_px": 8331,
+   "shadow_px": 11836,
+   "bbox_px": [
+    1153,
+    472,
+    2158,
+    581
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "vase",
+   "product": "vase-cj-textured-white-stoneware",
+   "z": 16,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/vase/vase-cj-textured-white-stoneware.png",
+   "shadow": "shadows/vase/vase-cj-textured-white-stoneware.png",
+   "alpha_px": 20558,
+   "shadow_px": 12307,
+   "bbox_px": [
+    146,
+    887,
+    264,
+    1150
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "rug",
+   "product": "rug-cj-braided-wool-natural",
+   "z": 20,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/rug/rug-cj-braided-wool-natural.png",
+   "shadow": "shadows/rug/rug-cj-braided-wool-natural.png",
+   "alpha_px": 271180,
+   "shadow_px": 65100,
+   "bbox_px": [
+    586,
+    1337,
+    2599,
+    1529
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "floor-lamp",
+   "product": "floor-lamp-cj-pleated-walnut-stem-158",
+   "z": 30,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "shadow": "shadows/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "alpha_px": 37230,
+   "shadow_px": 50604,
+   "bbox_px": [
+    2105,
+    577,
+    2350,
+    1359
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "planter",
+   "product": "planter-cj-cement-ribbed-belly",
+   "z": 32,
+   "shadow_z": 31,
+   "default": true,
+   "layer": "layers/planter/planter-cj-cement-ribbed-belly.png",
+   "shadow": "shadows/planter/planter-cj-cement-ribbed-belly.png",
+   "alpha_px": 94225,
+   "shadow_px": 332173,
+   "bbox_px": [
+    771,
+    449,
+    1019,
+    1323
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "cushions",
+   "product": "set-B",
+   "z": 55,
+   "shadow_z": 54,
+   "default": true,
+   "layer": "layers/cushions/set-B.png",
+   "shadow": "shadows/cushions/set-B.png",
+   "alpha_px": 197428,
+   "shadow_px": 165041,
+   "bbox_px": [
+    1202,
+    872,
+    2252,
+    1446
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "coffee-table",
+   "product": "coffee-table-idana-javorina-olia-natural",
+   "z": 57,
+   "shadow_z": 56,
+   "default": true,
+   "layer": "layers/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "shadow": "shadows/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "alpha_px": 116863,
+   "shadow_px": 45378,
+   "bbox_px": [
+    1112,
+    1143,
+    1953,
+    1528
+   ],
+   "sold": false,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "basket",
+   "product": "basket-cj-jute-rope-cylinder",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/basket/basket-cj-jute-rope-cylinder.png",
+   "shadow": "shadows/basket/basket-cj-jute-rope-cylinder.png",
+   "alpha_px": 28594,
+   "shadow_px": 51273,
+   "bbox_px": [
+    487,
+    1094,
+    674,
+    1360
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "magazine-holder",
+   "product": "magazine-holder-cj-gunmetal-leather-strap",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap.png",
+   "shadow": "shadows/magazine-holder/magazine-holder-cj-gunmetal-leather-strap.png",
+   "alpha_px": 37010,
+   "shadow_px": 47482,
+   "bbox_px": [
+    689,
+    1376,
+    995,
+    1529
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "bowl",
+   "product": "bowl-cj-matte-black-bowl-20",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/bowl/bowl-cj-matte-black-bowl-20.png",
+   "shadow": "shadows/bowl/bowl-cj-matte-black-bowl-20.png",
+   "alpha_px": 10427,
+   "shadow_px": 0,
+   "bbox_px": [
+    1650,
+    1212,
+    1804,
+    1296
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "candle-holders",
+   "product": "candle-holders-cj-travertine-pedestal",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "shadow": "shadows/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "alpha_px": 11154,
+   "shadow_px": 2991,
+   "bbox_px": [
+    1406,
+    1141,
+    1566,
+    1278
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "pendant",
+   "product": "pendant-cj-tiered-fabric-drum",
+   "z": 80,
+   "shadow_z": 79,
+   "default": true,
+   "layer": "layers/pendant/pendant-cj-tiered-fabric-drum.png",
+   "shadow": "shadows/pendant/pendant-cj-tiered-fabric-drum.png",
+   "alpha_px": 62306,
+   "shadow_px": 3907,
+   "bbox_px": [
+    1317,
+    0,
+    1655,
+    306
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  }
+ ],
+ "light": [
+  {
+   "file": "light/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "accent-sconces"
+   ],
+   "px": 2438592
+  },
+  {
+   "file": "light/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "floor-lamp"
+   ],
+   "px": 2714378
+  },
+  {
+   "file": "light/pendant-cj-tiered-fabric-drum.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "pendant"
+   ],
+   "px": 3139254
+  }
+ ],
+ "influence_radius_px": {
+  "framed-art": 34,
+  "accent-sconces": 30,
+  "vase": 70,
+  "rug": 46,
+  "floor-lamp": 80,
+  "planter": 110,
+  "cushions": 90,
+  "coffee-table": 130,
+  "basket": 70,
+  "magazine-holder": 80,
+  "bowl": 46,
+  "candle-holders": 46,
+  "pendant": 24
+ },
+ "fillers": {
+  "planter": "the olive tree (filler) is in the planter's layer; its leaf shadow on the plaster is in the planter's shadow",
+  "vase": "the dry branch (filler) is in the vase's layer",
+  "candle_holders": "the candles (filler) are in the layer",
+  "magazine_holder": "the newspapers (filler) are in the layer",
+  "framed_art": "the three prints are set in code into the frames (tools/prints.py): TL2356-1 / -2 / -3, lit by the canvas's own light in the hero"
+ },
+ "cushions": {
+  "set": "B",
+  "products": [
+   "cushions-aliexpress-textured-boucle-throw-pillow (Oatmeal 50x50)",
+   "cushions-cj-wide-stripe-corduroy-light-green (Camel)",
+   "cushions-cj-linen-look-charcoal (Beige 30x50)",
+   "sofa-cover-cj-cotton-muslin-fringe (Pecan)"
+  ]
+ },
+ "coffee_table": {
+  "note": "FB12-T: a swappable layer; the rug's layer under it comes from the hero rendered without the table group (E2) and carries no table shadow; 'not yet for sale' until IDANA's written approval"
+ },
+ "not_in_frame": [
+  "curtains (the stack is left of the frame)",
+  "wall-sconce (window wall, out of frame)"
+ ],
+ "moved_for_the_frame": {
+  "magazine_holder": {
+   "to": [
+    -0.68,
+    2.25
+   ],
+   "was": [
+    -0.47,
+    2.57
+   ],
+   "why": "25 % visible at v0 0.555; for the designer"
+  },
+  "planter": [
+   -1.34,
+   0.549
+  ],
+  "basket": [
+   -1.8,
+   1.05
+  ]
+ },
+ "rnd2": {
+  "outside_every_region_differing_px": 0,
+  "region_px": 3457895,
+  "swap_one_product": {
+   "framed-art": {
+    "changed_px": 267333,
+    "changed_outside_its_region_px": 0
+   },
+   "accent-sconces": {
+    "changed_px": 1570983,
+    "changed_outside_its_region_px": 0
+   },
+   "vase": {
+    "changed_px": 28685,
+    "changed_outside_its_region_px": 0
+   },
+   "rug": {
+    "changed_px": 232285,
+    "changed_outside_its_region_px": 0
+   },
+   "floor-lamp": {
+    "changed_px": 1853098,
+    "changed_outside_its_region_px": 0
+   },
+   "planter": {
+    "changed_px": 352304,
+    "changed_outside_its_region_px": 0
+   },
+   "cushions": {
+    "changed_px": 261816,
+    "changed_outside_its_region_px": 0
+   },
+   "coffee-table": {
+    "changed_px": 138329,
+    "changed_outside_its_region_px": 0
+   },
+   "basket": {
+    "changed_px": 56646,
+    "changed_outside_its_region_px": 0
+   },
+   "magazine-holder": {
+    "changed_px": 62054,
+    "changed_outside_its_region_px": 0
+   },
+   "bowl": {
+    "changed_px": 10399,
+    "changed_outside_its_region_px": 0
+   },
+   "candle-holders": {
+    "changed_px": 13967,
+    "changed_outside_its_region_px": 0
+   },
+   "pendant": {
+    "changed_px": 2395731,
+    "changed_outside_its_region_px": 0
+   }
+  },
+  "default_frame_reproduced_from_files_max_diff": 0,
+  "rule": "outside every alpha, shadow and light: plate-PW.png, pixel for pixel; hiding one product changes its own region only"
+ },
+ "files": {
+  "hero": "../hero-HW.png",
+  "default_frame": "../default-frame-m0w.png",
+  "checks": "../checks-m0w.json",
+  "sheet": "../qa-sheet-m0w.jpg",
+  "jobs": "../jobs-hero.json",
+  "tools": "../tools/"
+ }
+}
