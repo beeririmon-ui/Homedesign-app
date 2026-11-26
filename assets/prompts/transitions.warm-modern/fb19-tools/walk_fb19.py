@@ -79,8 +79,11 @@ def main(ka_path, kc_path, out):
     sig = 0.25 * 240; k = np.exp(-0.5 * (np.arange(-3 * sig, 3 * sig + 1) / sig) ** 2); k /= k.sum()
     vs = np.convolve(np.pad(vg, (len(k) // 2, len(k) // 2), mode='edge'), k, 'valid')
     Cg = np.interp(tg, tn, C)
+    # scrubbing wants an even flow of picture: kling's own slow start and long landing crawl are lifted, the fast jamb
+    # pass and 1a's 1.5 m/s are slowed (0.5x .. 1.6x of the median picture speed); the real ease is the one below
+    med = float(np.median(vs)); vs = np.clip(vs, 0.5 * med, 1.6 * med); rep['picture_speed_px_s'] = dict(median=round(med), lo=round(0.5 * med), hi=round(1.6 * med))
     # integrate output time: dC/dt = vs(C) * ease
-    T_in, T_out = 0.7, 0.9
+    T_in, T_out = 0.5, 0.7
     t, c, Cs = 0.0, 0.0, [0.0]
     while c < C[-1] - 1e-6:
         v = np.interp(c, Cg, vs)
@@ -141,14 +144,14 @@ def export(frames, rep, base, preview, master):
     import multiprocessing as mp
     os.makedirs(base + '/1920', exist_ok=True); os.makedirs(base + '/1080', exist_ok=True)
     n = len(frames)
-    jobs = [(i + 1, 1920, 1080, frames[i], 55, 72, base) for i in range(n)]
+    jobs = [(i + 1, 1920, 1080, frames[i], 55 if i < n - 8 else 85, 72 if i < n - 8 else 92, base) for i in range(n)]   # the landing frames finer
     f30 = []                                                                   # 30 fps: (0.25, 0.5, 0.25) around every 2nd frame
     for j in range(0, n, 2):
         if j == 0 or j >= n - 1: f30.append(frames[min(j, n - 1)])
         else: f30.append(np.clip(0.25 * frames[j - 1].astype(np.float32) + 0.5 * frames[j] + 0.25 * frames[j + 1] + 0.5, 0, 255).astype(np.uint8))
     if (n - 1) % 2: f30.append(frames[-1])
     f30[-1] = frames[-1]
-    jobs += [(i + 1, 1080, 608, f30[i], 50, 60, base) for i in range(len(f30))]
+    jobs += [(i + 1, 1080, 608, f30[i], 50 if i < len(f30) - 4 else 85, 60 if i < len(f30) - 4 else 92, base) for i in range(len(f30))]
     with mp.get_context('fork').Pool(4) as pool:
         sizes = pool.map(_enc, jobs, chunksize=4)
     b1920 = np.array(sizes[:n]); b1080 = np.array(sizes[n:])

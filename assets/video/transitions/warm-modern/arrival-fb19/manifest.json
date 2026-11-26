@@ -1,0 +1,114 @@
+{
+ "id": "arrival FB19: D0 -> K-A -> 1a -> K-C -> M0-W fix1",
+ "from": "D0",
+ "to": "M0-W",
+ "style": "warm-modern",
+ "date": "2026-11-26",
+ "author": "motion-agent",
+ "decision": "FB19 (owner 2026-11-26, 'מאשר את שניהם'): one first-person walk, scroll-scrubbable; replaces door-in-code, 1b, the junction look-around, clip 2 and T-E0-W",
+ "play_s": 8.8,
+ "sampling": "uniform in time at the nominal walk: frame i (1-based) of a variant is shown at (i - 1) / fps s; the picture moves at an even rate (0.5x-1.6x of the median picture speed, eased in from D0 over 0.5 s and out onto M0-W over 0.7 s), so a scroll step of N frames shows the same amount of motion anywhere; forward only, no hold, no cut",
+ "path": "{variant}/{index:04d}.{ext}",
+ "formats": [
+  "avif",
+  "webp"
+ ],
+ "variants": {
+  "1920": {
+   "w": 1920,
+   "h": 1080,
+   "fps": 60,
+   "frames": 529,
+   "avif_quality": 55,
+   "webp_quality": 72,
+   "last_frames_quality": {
+    "frames": 8,
+    "avif": 85,
+    "webp": 92
+   },
+   "segments": {
+    "K-A (approach, the door opens)": [
+     1,
+     145
+    ],
+    "1a (through the door to HT2)": [
+     146,
+     244
+    ],
+    "K-C (the walking turn into the living room, landing)": [
+     245,
+     529
+    ]
+   }
+  },
+  "1080": {
+   "w": 1080,
+   "h": 608,
+   "fps": 30,
+   "frames": 265,
+   "avif_quality": 50,
+   "webp_quality": 60,
+   "last_frames_quality": {
+    "frames": 4,
+    "avif": 85,
+    "webp": 92
+   },
+   "note": "each frame the mean of the 60 fps frames around it (0.25, 0.5, 0.25); the first and last are the stills"
+  }
+ },
+ "bytes": {
+  "1920": {
+   "avif": 21335816,
+   "webp": 21107662
+  },
+  "1080": {
+   "avif": 3398187,
+   "webp": 3407970
+  }
+ },
+ "first_frame": "D0: door-2026-11-16/d0.png, its 16:9 frame (finish.frame_view) = the site's d0 rest image; 0 difference before encoding",
+ "last_frame": "M0-W fix1: fb13-2026-11-25/default-frame-m0w-fix1.png; 0 difference before encoding (AVIF 1920 mean 2.35 levels, p99 11)",
+ "swap": {
+  "at_end": "after the last frame, the room's live layers (the same picture with the defaults); a variant the visitor chose blends in over 200 ms",
+  "at_start": "the D0 rest image is frame 1"
+ },
+ "gait": {
+  "bob_px_max": 2.42,
+  "roll_deg_max": 0.121,
+  "overscan": 0.004
+ },
+ "locks": {
+  "K-A": "ends -> D0 / 1a at 2.00 m",
+  "1a": "FB16 grade ramped in from 2.0 m to 3.8 m; end -> HT2 fb16",
+  "K-C": "ends -> HT2 fb16 / M0-W fix1 (12 frames)"
+ },
+ "checks": {
+  "flicker_max_L": 7.14,
+  "old_table_or_old_living_room": "0: 1a and HT2 see only the window wall from the hall (0 px of M0-W in HT2); K-C draws the fix1 room (Olia table)",
+  "speed_max_jump_per_frame_pct": 7.0
+ },
+ "sources": {
+  "K-A": "ka.kling-3-omni.take1.mp4 (d16cecdb, 972)",
+  "1a": "arrival-v2 desktop frames 147-219 (QA'd 1a bank r3 + the bench from HT2)",
+  "K-C": "kc.kling-3-omni.take1.mp4 (9b00b13c, 1,296)",
+  "tool": "assets/prompts/transitions.warm-modern/fb19-tools/walk_fb19.py"
+ },
+ "qa": "not for the site: preview for the owner only",
+ "temporary": true,
+ "note": "K-C take 1 is weak (a sideways glide past the jamb instead of a walking turn); a retry is proposed, not spent",
+ "bytes_per_2s": {
+  "1920": {
+   "avif": 4849049,
+   "webp": 4797195
+  },
+  "1080": {
+   "avif": 772315,
+   "webp": 774538
+  }
+ },
+ "known_defects": [
+  "K-C take 1: a sideways glide past the walnut jamb (the stone wall and the living room read as one plane), not a walking turn",
+  "1a (arrival-v2 footage, 2026-11-18) predates the hall products and FB16: the hooks, the wall light on the stone panel and the towel fade in over its last 24 frames (the lock onto HT2 fb16); the near stone reveal tears for about 3 frames where 1a is slowed (60 fps frames ~218-226)",
+  "K-A take 1: the leaf starts to open about 3 m from the door (0.75 s in), earlier than \"right in front of the eyes\"; herbs at the right edge soften during its end lock"
+ ]
+}
