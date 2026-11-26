@@ -56,8 +56,16 @@ POUF_C = (1.70, 2.75)                  # solved: 44 % visible, cut by the right 
 LAMP_RGB = (1.0, 0.55, 0.25)            # 2700 K as the 5,000 K camera sees it, scene-linear
 GLOW_RGB = (1.0, 0.80, 0.58)            # the lit fabric / paper of a shade (Bible: L 93-97, H 35-45, S 25-45)
 BASKET_C = (2.05, 0.55)                 # moved (slots 1.7 point (-1.70, 0.75) hides the planter in M0-N: 11 % visible); proposal
-GROUPS = ["sky", "sun", "pendant", "floor_lamp", "accent_sconces", "wall_sconce"]
-LAMP_GROUPS = GROUPS[2:]
+GROUPS = ["sky", "sun", "pendant", "pendant_glow", "floor_lamp", "floor_lamp_glow", "accent_sconces", "wall_sconce", "wall_sconce_glow"]
+LAMP_GROUPS = ["pendant", "floor_lamp", "accent_sconces", "wall_sconce"]          # the light the lamps throw (pools, washes)
+GLOW_GROUPS = ["pendant_glow", "floor_lamp_glow", "wall_sconce_glow"]           # the lit shades themselves (emission)
+# the Bible's light hierarchy (1.4), measured in A's daylight (no sun): the lamp's addition over daylight at a reference point
+LAMP_CAL = {"floor_lamp": ((2.10, 0.0, 1.00), 0.22, "back wall right of the lamp (Bible: +20-25 %)"),
+            "pendant": ((0.20, 1.72, 0.38), 0.13, "the bare oak at the table centre (Bible: +12-15 %)"),
+            "accent_sconces": ((1.25, 0.0, 2.02), 0.15, "the wall above the right sconce (Bible: up to +15 % locally)"),
+            "wall_sconce": ((-1.23, 2.73, 0.40), 0.17, "the armchair seat (Bible: +15-20 %)")}
+GLOW_CAL = {"pendant_glow": (0.20, 1.72, 2.02), "floor_lamp_glow": (1.52, 0.20, 0.95)}   # shade L*: A 95 (Bible 93-97), B 93
+LUMW = np.array([0.2126, 0.7152, 0.0722], np.float32)
 
 PROD_IDX = {"rug": 801, "curtains": 802, "vase": 803, "planter": 804, "basket": 805, "magazine-holder": 806, "floor-lamp": 807,
             "framed-art": 808, "accent-sconces": 809, "pendant": 810, "bowl": 811, "candle-holders": 812, "coffee-table": 813,
@@ -633,16 +641,16 @@ def products():
     for k, dx in enumerate((-0.06, 0.02, 0.09)):
         lbox("magazines (filler)", 0.23, 0.012, 0.30, paper, FILLER_IDX["magazines (filler)"], (mx + dx, my + 0.02 * k - 0.02, 0.25), rot=(8 * (k - 1), 0, -8))
     # floor lamp: paper lantern D17.5 x 85 on an oak tripod, H 128, base 29
-    shade_fl = mcol("lantern_paper", "#EAE0CF", 0.9, emit=0.28)
-    lathe("floor-lamp", 1.52, 0.20, [(0.0875, 0.43), (0.0875, 1.28)], shade_fl, I["floor-lamp"], n=48, lightgroup="floor_lamp", shadow=False)
+    shade_fl = mcol("lantern_paper", "#EAE0CF", 0.9, emit=1.0)
+    lathe("floor-lamp", 1.52, 0.20, [(0.0875, 0.43), (0.0875, 1.28)], shade_fl, I["floor-lamp"], n=48, lightgroup="floor_lamp_glow", shadow=False)
     for k in range(3):
         a = 2 * math.pi * k / 3 + 0.4
         seg("floor-lamp", (1.52 + 0.145 * math.cos(a), 0.20 + 0.145 * math.sin(a), 0.0), (1.52 + 0.05 * math.cos(a), 0.20 + 0.05 * math.sin(a), 0.47), 0.011, oak, I["floor-lamp"])
     light("floor_lamp_bulb", "POINT", (1.52, 0.20, 0.95), 3.0, "floor_lamp", size=0.05)
     # pendant: pleated pumpkin lantern D40 x 25, bottom 1.90, at (0.20, 1.72); cord to the ceiling
-    shade_pd = mcol("pleat_fabric", "#F2EEE6", 0.9, emit=0.25)
+    shade_pd = mcol("pleat_fabric", "#F2EEE6", 0.9, emit=1.0)
     pprof = [(0.06, 0.0), (0.13, 0.02), (0.185, 0.07), (0.20, 0.125), (0.185, 0.18), (0.13, 0.23), (0.05, 0.25)]
-    lathe("pendant", 0.20, 1.72, pprof, shade_pd, I["pendant"], z0=1.90, n=96, ripple=(24, 0.045), lightgroup="pendant", shadow=False)
+    lathe("pendant", 0.20, 1.72, pprof, shade_pd, I["pendant"], z0=1.90, n=96, ripple=(24, 0.045), lightgroup="pendant_glow", shadow=False)
     cyl("pendant cord", 0.20, 1.72, 0.003, 2.15, 3.0, mcol("cord", "#EDEAE4", 0.6), FILLER_IDX["pendant cord"], n=8)
     light("pendant_bulb", "POINT", (0.20, 1.72, 2.02), 3.0, "pendant", size=0.06)
     # coffee table: the Olia (120 x 65 x 38, oak, light waterfall), centre (0.20, 1.72)
@@ -658,7 +666,7 @@ def products():
     prof += [(xb, 0.0), (xb - t, 0.0), (xb - t, 0.38 - t), (xa + t, 0.38 - t), (xa + t, 0.0), (xa, 0.0)]
     extrude_profile_y("coffee-table", prof, cy - 0.325, cy + 0.325, oak_light, I["coffee-table"])
     # runner: sage linen 33 x 122 across the left third (midline 31 cm from the left end), hanging over both long edges
-    rmat = mtex("runner", "runner", 1.0)
+    rmat = mcol("runner_sage_linen", "#A7B09A", 1.0, noise=0.08, nscale=(400, 60, 400), sheen=0.2)   # the photo crop carried a plate
     rx = xa + 0.31
     box("table-runner", rx - 0.165, rx + 0.165, cy - 0.33, cy + 0.33, 0.38, 0.384, rmat, I["table-runner"])
     box("table-runner", rx - 0.165, rx + 0.165, cy + 0.329, cy + 0.333, 0.10, 0.384, rmat, I["table-runner"])
@@ -679,7 +687,7 @@ def products():
     cushion(0.50, mtex("boucle", "boucle", 1.0), (-0.48, 0.47, 0.67), rz=6)
     cushion(0.45, mtex("sage", "sage", 1.0), (-0.12, 0.53, 0.645), rz=-4)
     cushion(0.50, mtex("charcoal", "charcoal", 1.0), (0.88, 0.47, 0.67), rz=-6)
-    th = mtex("throw", "throw", 1.0)
+    th = mcol("muslin_ivory", "#EEE9DF", 1.0, noise=0.06, nscale=(120, 120, 120), sheen=0.3)        # the White muslin (photo crop read grey)
     # over the right arm, across the right seat in front of the charcoal cushion, and falling down the seat front to the rug
     box("sofa-cover", 1.13, 1.33, 0.30, 0.95, 0.60, 0.632, th, I["sofa-cover"], bev=0.012)
     sheet("sofa-cover", lambda s, t: (0.70 + 0.46 * s, 0.58 + 0.38 * t, 0.448 + 0.02 * math.sin(3 * math.pi * s) * math.sin(math.pi * t)), 24, 16, th, I["sofa-cover"])
@@ -691,8 +699,8 @@ def products():
     blk = mcol("black", "#2E2E2E", 0.5)
     box("wall-sconce", -2.30, -2.28, 3.12, 3.22, 1.40, 1.54, blk, I["wall-sconce"])
     seg("wall-sconce", (-2.28, 3.17, 1.47), (-1.95, 3.10, 1.47), 0.008, blk, I["wall-sconce"])
-    lathe("wall-sconce", -1.95, 3.10, [(0.11, 1.30), (0.07, 1.48)], mcol("linen_shade", "#E9DFCC", 0.9, emit=0.25), I["wall-sconce"], n=32,
-          cap_bottom=False, cap_top=False, lightgroup="wall_sconce", shadow=False)
+    lathe("wall-sconce", -1.95, 3.10, [(0.11, 1.30), (0.07, 1.48)], mcol("linen_shade", "#E9DFCC", 0.9, emit=1.0), I["wall-sconce"], n=32,
+          cap_bottom=False, cap_top=False, lightgroup="wall_sconce_glow", shadow=False)
     light("wall_sconce_bulb", "SPOT", (-1.95, 3.10, 1.40), 5.0, "wall_sconce", size=0.04, aim=(-1.23, 2.73, 0.40), spot=80, blend=1.0)
 
 
@@ -805,7 +813,7 @@ def render_passes(tag, W, H, spp, override=None):
     rl = nt.nodes.new("CompositorNodeRLayers")
     fo = nt.nodes.new("CompositorNodeOutputFile")
     fo.base_path = out
-    fo.format.file_format, fo.format.color_depth, fo.format.exr_codec = "OPEN_EXR", "32", "ZIP"
+    fo.format.file_format, fo.format.color_depth, fo.format.exr_codec = "OPEN_EXR", "16", "ZIP"     # half float: the disk is tight
     fo.file_slots.clear()
     for g in GROUPS:
         dn = nt.nodes.new("CompositorNodeDenoise")
@@ -870,11 +878,20 @@ PATCHES = {"back_wall_by_corner (-1.75,0,1.60)": (-1.75, 0.0, 1.60), "back_wall_
            "floor_front_right (2.2,2.9,0)": (2.2, 2.9, 0.0), "sofa_seat_mid (0.20,0.62,0.44)": (0.20, 0.62, 0.44)}
 
 
-def solve_wb(lin, ab, p, W, H, r=6):
-    """gains (G = 1) that put the patch at the target a*, b* (the wall's white balance)"""
+def crop(lin, p, W, H, r=6):
     u, v, _ = plan_uv(*p)
     x, y = int(round(u * W)), int(round(v * H))
-    c = np.median(lin[y - r:y + r + 1, x - r:x + r + 1].reshape(-1, 3), 0)
+    return lin[y - r:y + r + 1, x - r:x + r + 1]
+
+
+def Lc(c, k, wb, lift):
+    return float(np.median(lab(tone(c, k, wb, lift=lift))[..., 0]))
+
+
+def solve_wb(lin, ab, p, W, H, r=6):
+    """gains (G = 1) that put the patch at the target a*, b* (the wall's white balance); lin may be the patch crop itself"""
+    cc = lin if lin.shape[0] <= 2 * r + 1 else crop(lin, p, W, H, r)
+    c = np.median(cc.reshape(-1, 3), 0)
     Lt = float(cv2.cvtColor(np.float32([[np.clip(c / c.max() * 0.7, 0, 1) ** (1 / 2.2)]]), cv2.COLOR_RGB2Lab)[0, 0, 0])
     s = cv2.cvtColor(np.float32([[[Lt, ab[0], ab[1]]]]), cv2.COLOR_Lab2RGB)[0, 0]
     t = np.where(s <= 0.04045, s / 12.92, ((s + 0.055) / 1.055) ** 2.4)
@@ -883,11 +900,11 @@ def solve_wb(lin, ab, p, W, H, r=6):
 
 
 def solve_k(lin, wb, target, p, W, H, lift=0.0):
-    lo, hi = 0.01, 50.0
-    for _ in range(40):
+    c = lin if lin.shape[0] <= 13 else crop(lin, p, W, H)
+    lo, hi = 0.01, 400.0
+    for _ in range(50):
         k = math.sqrt(lo * hi)
-        L = patch(lab(tone(lin, k, wb, lift=lift)), p, W, H)[0]
-        lo, hi = (k, hi) if L < target else (lo, k)
+        lo, hi = (k, hi) if Lc(c, k, wb, lift) < target else (lo, k)
     return math.sqrt(lo * hi)
 
 
@@ -1145,28 +1162,66 @@ def main(argv):
 
     # ---- 1. the material render: guides A and B from the light groups -----------------------------------------------------------------
     R = render_passes("mat", W, H, spp)
-    lamps = sum(R[g] for g in LAMP_GROUPS)
-    # A: the Bible's tool light (north light, no sun; back wall by the corner L 90-94 -> 89 so the frame keeps its contrast; warm white H 32-40)
-    # B: the proposal (shaded walls L 80-86 -> the plain back wall right of the art at 83, a touch cooler than A; black point L 12-14)
-    # (the corner patch of the Bible sits behind the back curtain stack in M0-N, so both are exposed on the plain wall above the art;
-    #  the white balance is solved on the daylight alone, so the lamps keep their 2700 K)
-    mixes = {"A": dict(sky=1.0, sun=0.0, lamps=1.0, ab=(1.0, 7.0), target=("back_wall_above_art (0.20,0,2.30)", 88.0), lift=0.010),
-             "B": dict(sky=1.0, sun=1.0, lamps=1.0, ab=(0.5, 3.5), target=("back_wall_above_art (0.20,0,2.30)", 84.0), lift=0.013)}
+
+    def plum(lin, p, r=4):
+        u, v, _ = plan_uv(*p)
+        x, y = int(round(u * W)), int(round(v * H))
+        return float(np.median(lin[y - r:y + r + 1, x - r:x + r + 1].reshape(-1, 3) @ LUMW))
+
+    # the lamp pools: one physical weight per lamp, from the Bible's increments over A's daylight; the same in A and B
+    day_A = R["sky"]
+    wts, cal = {}, {}
+    for g, (p, inc, what) in LAMP_CAL.items():
+        wts[g] = inc * plum(day_A, p) / max(plum(R[g], p), 1e-12)
+        cal[g] = dict(point=p, increment=inc, where=what, weight=round(wts[g], 5))
+    pools = sum(wts[g] * R[g] for g in LAMP_GROUPS)
+    # A: the Bible's tool light (north light, no direct sun, lamps on). The Bible's corner patch sits behind the back curtain stack in
+    #    M0-N, so A and B are both exposed on the plain wall above the art; A at 88 (warm white, b* 7), lifted black L ~11.
+    # B: the proposal (14:00 February sun; shaded walls L 80-86 -> 84, a touch cooler, b* 3.5; black point L 12-14).
+    # The white balance is solved on the daylight alone (the lamps keep their 2700 K).
+    mixes = {"A": dict(sky=1.0, sun=0.0, ab=(1.0, 7.0), target=("back_wall_above_art (0.20,0,2.30)", 87.0), lift=0.006, glow_L=95.0),
+             "B": dict(sky=1.0, sun=1.0, ab=(0.5, 3.5), target=("back_wall_above_art (0.20,0,2.30)", 84.0), lift=0.013, glow_L=93.0,
+                       sun_target=("rug_right (1.30,1.20,0.014)", 97.0))}
+    # B: the sun's weight is solved (with the exposure and white balance inside the loop) so the sunlit cream rug reads L 97 (bright, still textured)
+    mxB = mixes["B"]
+    pw, pr = PATCHES[mxB["target"][0]], PATCHES[mxB["sun_target"][0]]
+    cw = {g: crop(R[g], pw, W, H) for g in ("sky", "sun")}
+    cr = {g: crop(R[g], pr, W, H) for g in ("sky", "sun")}
+    cpw, cpr = crop(pools, pw, W, H), crop(pools, pr, W, H)
+    lo, hi = 0.05, 4.0
+    for _ in range(30):
+        s_ = math.sqrt(lo * hi)
+        wb_ = solve_wb(cw["sky"] + s_ * cw["sun"], mxB["ab"], pw, W, H)
+        k_ = solve_k(cw["sky"] + s_ * cw["sun"] + cpw, wb_, mxB["target"][1], pw, W, H, mxB["lift"])
+        lo, hi = (s_, hi) if Lc(cr["sky"] + s_ * cr["sun"] + cpr, k_, wb_, mxB["lift"]) < mxB["sun_target"][1] else (lo, s_)
+    mxB["sun"] = round(math.sqrt(lo * hi), 4)
     look = {}
     for c, mx in mixes.items():
-        lin = mx["sky"] * R["sky"] + mx["sun"] * R["sun"] + mx["lamps"] * lamps
-        mx["wb"] = solve_wb(mx["sky"] * R["sky"] + mx["sun"] * R["sun"], mx["ab"], PATCHES[mx["target"][0]], W, H)
+        day = mx["sky"] * R["sky"] + mx["sun"] * R["sun"]
+        lin = day + pools
+        mx["wb"] = solve_wb(day, mx["ab"], PATCHES[mx["target"][0]], W, H)
         k = solve_k(lin, mx["wb"], mx["target"][1], PATCHES[mx["target"][0]], W, H, mx["lift"])
+        gw = {}
+        for g, p in GLOW_CAL.items():                    # the shade's own glow, to the target L* on the shade (bisection)
+            lo, hi = 0.0, 50.0
+            for _ in range(36):
+                w_ = (lo + hi) / 2
+                L_ = patch(lab(tone(lin + w_ * R[g], k, mx["wb"], lift=mx["lift"])), p, W, H, r=3)[0]
+                lo, hi = (w_, hi) if L_ < mx["glow_L"] else (lo, w_)
+            gw[g] = (lo + hi) / 2
+        gw["wall_sconce_glow"] = gw["pendant_glow"]     # out of frame: follows the pendant
+        lin = lin + sum(gw[g] * R[g] for g in GLOW_GROUPS)
         img = tone(lin, k, mx["wb"], lift=mx["lift"])
         L = lab(img)
-        look[c] = dict(mix=dict(sky=mx["sky"], sun=mx["sun"], lamps=mx["lamps"]), wb_gains=[round(g, 4) for g in mx["wb"]], wb_target_ab=mx["ab"],
-                       lift=mx["lift"], exposure_k=round(k, 4), target=mx["target"],
+        look[c] = dict(mix=dict(sky=mx["sky"], sun=mx["sun"], sun_target=mx.get("sun_target"), lamp_pools=cal, shade_glow_weights={g: round(v, 4) for g, v in gw.items()}),
+                       wb_gains=[round(g, 4) for g in mx["wb"]], wb_target_ab=mx["ab"], lift=mx["lift"], exposure_k=round(k, 4), target=mx["target"],
                        patches_Lab={n: patch(L, p, W, H) for n, p in PATCHES.items()},
+                       shades_Lab={g: patch(L, p, W, H, r=3) for g, p in GLOW_CAL.items()},
+                       lamp_increment_check={g: round(plum(wts[g] * R[g], p) / max(plum(day, p), 1e-12), 3) for g, (p, _, _) in LAMP_CAL.items()},
                        p0_5_L=round(float(np.percentile(L[..., 0], 0.5)), 1), clipped_pct=round(100 * float((img.max(-1) >= 0.995).mean()), 2))
         save_png(os.path.join(out, "concepts", f"guide-{c}.png"), img)
         Image.open(os.path.join(out, "concepts", f"guide-{c}.png")).save(os.path.join(out, "concepts", f"guide-{c}.jpg"), quality=90)
     idx, depth = R["index"], R["depth"]
-    sun_lin = R["sun"]
     del R
 
     # ---- 2. the clay (white override): B light, sun map, lamp maps ----------------------------------------------------------------------
@@ -1177,26 +1232,26 @@ def main(argv):
     C = render_passes("clay", W, H, cspp, override=wm)
     clay_look = {}
     for c, mx in mixes.items():
-        lin = mx["sky"] * C["sky"] + mx["sun"] * C["sun"] + mx["lamps"] * sum(C[g] for g in LAMP_GROUPS)
-        k = solve_k(lin, (1, 1, 1), 74.0, PATCHES["back_wall_right (1.90,0,1.60)"], W, H)
+        lin = mx["sky"] * C["sky"] + mx["sun"] * C["sun"] + sum(wts[g] * C[g] for g in LAMP_GROUPS)
+        k = solve_k(lin, (1, 1, 1), 74.0, PATCHES["back_wall_above_art (0.20,0,2.30)"], W, H)
         img = tone(lin, k)
         save_png(os.path.join(out, "m0n-clay.png" if c == "B" else "m0n-clay-A.png"), img)
-        clay_look[c] = dict(exposure_k=round(k, 4), target="back wall right L 74 (the clay is grey)",
+        clay_look[c] = dict(exposure_k=round(k, 4), target="back wall above the art L 74 (the clay is grey; the shades carry no glow here)",
                             patches_L={n: (patch(lab(img), p, W, H) or [None])[0] for n, p in PATCHES.items()})
     # sun map: the sun group's luminance on white surfaces (direct + its own bounce), 16 bit; 'in sun' = > 25 % of p99.5
-    lumf = lambda x: x @ np.array([0.2126, 0.7152, 0.0722], np.float32)
-    sl = lumf(C["sun"])
+    sl = C["sun"] @ LUMW
     ref = float(np.percentile(sl, 99.5))
     sunmask = sl > 0.25 * ref
     Image.fromarray(np.clip(np.rint(sl / ref * 65535), 0, 65535).astype(np.uint16)).save(os.path.join(out, "m0n-sun.png"), optimize=True)
     lampmask = np.zeros_like(sunmask)
     lamp_rec = {}
     for g in LAMP_GROUPS:
-        lm = lumf(C[g])
+        lm = C[g] @ LUMW
         rf = float(np.percentile(lm, 99.5))
-        Image.fromarray(np.clip(np.rint(lm / max(rf, 1e-9) * 65535), 0, 65535).astype(np.uint16)).save(os.path.join(out, f"m0n-light-{g.replace('_', '-')}.png"), optimize=True)
+        Image.fromarray(np.clip(np.rint(lm / max(rf, 1e-12) * 65535), 0, 65535).astype(np.uint16)).save(os.path.join(out, f"m0n-light-{g.replace('_', '-')}.png"), optimize=True)
         lampmask |= lm > 0.30 * rf
-        lamp_rec[g] = dict(p99_5=round(rf, 5), lit_px_pct=round(100 * float((lm > 0.30 * rf).mean()), 2))
+        lamp_rec[g] = dict(p99_5=round(rf, 6), lit_px_pct=round(100 * float((lm > 0.30 * rf).mean()), 2), weight=round(wts[g], 5),
+                           file=f"m0n-light-{g.replace('_', '-')}.png (16-bit, normalised to p99.5, white surfaces)")
     del C
 
     # ---- 3. measurements -----------------------------------------------------------------------------------------------------------------

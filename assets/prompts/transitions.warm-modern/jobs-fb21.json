@@ -51,5 +51,9 @@
  "spent": 3242,
  "cap": 3292,
  "decision_round2": "owner 2026-11-26: option (b), leg 1 cap 3,292",
- "code": "route-fb21/leg1: head turn M0-W -> M0x-W in code (headturn.py, 1.0 s, same point); assembly leg_fb21.py"
+ "code": "route-fb21/leg1: head turn M0-W -> M0x-W in code (headturn.py, 1.0 s, same point); assembly leg_fb21.py",
+ "fix_2026_11_26": {
+  "what": "code only, 0 tokens: M0x-W's corner swoop drawn as straight chords (wall and skirting moved down, floor untouched) and the seam's skirting/tone eased into the strip (m0x_straighten.py); the same chords on kling's first 40 frames (chords.py); the walk starts in the last third of the head turn (turnwalk.py: kling's first 12 frames turned back by the rest of the turn, the stills filling beyond their left edge)",
+  "result": "floor line straight through the turn and the walk's first ~1.3 s; speed jump 10.7 %/frame (was 57); ends pixel-exact; a faint wall-tone step at the strip seam remains during the turn"
+ }
 }
