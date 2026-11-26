@@ -1109,7 +1109,8 @@ export function TourPage() {
         if (v.ended || t >= dur - 0.5 / 60) return finish();
         const r = ctl.step(t, dt);
         if (r > 0) {
-          const rate = Math.min(4, Math.max(WALK.min, r));
+          // (the evidence's slow motion stretches the walk like every other duration)
+          const rate = Math.min(4, Math.max(WALK.min, r / timeScale()));
           if (Math.abs(v.playbackRate - rate) > 0.01) v.playbackRate = rate;
           if (v.paused) void v.play().catch(() => undefined);
         } else if (!v.paused) v.pause();
