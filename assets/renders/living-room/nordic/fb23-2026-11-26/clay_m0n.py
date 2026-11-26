@@ -53,14 +53,17 @@ SUN = dict(R=220.0, lat=41.0, decl=-12.6, hour_angle=30.0, angle=1.5)
 ROOM = dict(x=(-2.3, 2.5), y=(0.0, 6.2), h=3.0)
 WIN = dict(y=(0.9, 2.7), sill=0.75, head=2.7, wall_out=-2.65, frame=(-2.62, -2.55))
 POUF_C = (1.70, 2.75)                  # solved: 44 % visible, cut by the right and bottom edges, on the rug
-LAMP_RGB = (1.0, 0.40, 0.11)            # about 2700 K, scene-linear
+LAMP_RGB = (1.0, 0.55, 0.25)            # 2700 K as the 5,000 K camera sees it, scene-linear
+GLOW_RGB = (1.0, 0.80, 0.58)            # the lit fabric / paper of a shade (Bible: L 93-97, H 35-45, S 25-45)
+BASKET_C = (2.05, 0.55)                 # moved (slots 1.7 point (-1.70, 0.75) hides the planter in M0-N: 11 % visible); proposal
 GROUPS = ["sky", "sun", "pendant", "floor_lamp", "accent_sconces", "wall_sconce"]
 LAMP_GROUPS = GROUPS[2:]
 
 PROD_IDX = {"rug": 801, "curtains": 802, "vase": 803, "planter": 804, "basket": 805, "magazine-holder": 806, "floor-lamp": 807,
             "framed-art": 808, "accent-sconces": 809, "pendant": 810, "bowl": 811, "candle-holders": 812, "coffee-table": 813,
             "cushions": 814, "sofa-cover": 815, "wall-sconce": 816, "wall-decor": 817, "table-runner": 818, "pouf": 819, "tray": 820}
-FILLER_IDX = {"olive (filler)": 830, "branches (filler)": 831, "candles (filler)": 832, "magazines (filler)": 833, "pendant cord": 834}
+FILLER_IDX = {"olive (filler)": 830, "branches (filler)": 831, "candles (filler)": 832, "magazines (filler)": 833, "pendant cord": 834,
+              "curtain rod (not sold)": 835, "curtains: front panel (out of frame)": 836}
 SHELL_IDX = dict(floor=1, back_wall=2, left_wall=3, window=4, right_wall=5, ceiling=6, outside=7, front_wall=8)
 SOFA_IDX, ARMCHAIR_IDX = 11, 13
 CARD = {"rug": "rug-cj-braided-wool-natural 330 x 230 (card 230 x 330)", "curtains": "curtains-aliexpress-cotton-linen-curtain-look-902882 S-fold 100 x 275, a panel each side",
@@ -76,8 +79,8 @@ CARD = {"rug": "rug-cj-braided-wool-natural 330 x 230 (card 230 x 330)", "curtai
         "wall-sconce": "wall-sconce-cj-black-swing-arm-fabric, plate (-2.30, 3.17, 1.47) (out of frame; light only)",
         "wall-decor": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 D30", "table-runner": "table-runner-cj-linen-look-sage-fringe 33 x 122",
         "pouf": "pouf-cj-cotton-knit-ball-cover 50 (filled height assumed 35)", "tray": "pool-cj-travertine-organic-tray-24 24 x 17 x 1.8"}
-POS = {"rug": "X -1.45..1.85, Y 0.72-3.02 (slots 1.6 envelope, card depth 230)", "curtains": "rod 2.82; stacks Y 0.50-0.92 and 2.68-3.10",
-       "vase": "(-2.42, 1.35, 0.75) sill", "planter": "(-2.00, 0.47)", "basket": "(-1.70, 0.75) slots 1.7", "magazine-holder": "(-0.54, 2.52) slots 1.8",
+POS = {"rug": "X -1.45..1.85, Y 0.72-3.02 (slots 1.6 envelope, card depth 230)", "curtains": "the back panel (rod 2.82; stack Y 0.50-0.92); the front panel (Y 2.68-3.10) is out of frame and measured apart",
+       "vase": "(-2.42, 1.35, 0.75) sill", "planter": "(-2.00, 0.47)", "basket": "(2.05, 0.55): MOVED (slots 1.7 (-1.70, 0.75) hides the planter in M0-N)", "magazine-holder": "(-0.54, 2.52) slots 1.8",
        "floor-lamp": "(1.52, 0.20)", "framed-art": "centre (0.20, 0, 1.475)", "accent-sconces": "(-0.85, 0, 1.75) and (1.25, 0, 1.75)",
        "pendant": "(0.20, 1.72), shade bottom 1.90", "bowl": "(0.68, 1.92)", "candle-holders": "(0.47, 1.62) and (0.58, 1.66) on the tray",
        "coffee-table": "centre (0.20, 1.72)", "cushions": "on the sofa", "sofa-cover": "right arm", "wall-sconce": "(-2.30, 3.17, 1.47)",
@@ -146,7 +149,7 @@ def mcol(name, hexcol, rough=0.9, noise=0.0, nscale=(40, 40, 40), emit=None, alp
         L.new(nz.outputs["Fac"], mix.inputs["Factor"])
         L.new(mix.outputs[2], bsdf.inputs["Base Color"])
     if emit is not None:
-        bsdf.inputs["Emission Color"].default_value = LAMP_RGB + (1.0,)
+        bsdf.inputs["Emission Color"].default_value = GLOW_RGB + (1.0,)
         bsdf.inputs["Emission Strength"].default_value = emit
     if alpha is not None:
         bsdf.inputs["Alpha"].default_value = alpha
@@ -545,12 +548,12 @@ def products():
     # rug: braided natural wool, 330 x 230
     box("rug", -1.45, 1.85, 0.72, 3.02, 0.0, 0.014, mtex("rug", "rug", 1.0), I["rug"], bev=0.004)
     # curtains: two sheer oat S-fold panels on a slim charcoal rod at 2.82
-    sheer = mcol("sheer_oat", "#E3D9C6", 0.9, alpha=0.62)
+    sheer = mcol("sheer_oat", "#E3D9C6", 0.9, alpha=0.42)
     rod = mcol("charcoal_metal", "#3A3A3A", 0.5)
-    seg("curtains", (-2.21, 0.45, 2.82), (-2.21, 3.15, 2.82), 0.01, rod, I["curtains"])
-    for (ya, yb_) in [(0.50, 0.92), (2.68, 3.10)]:
-        sheet("curtains", lambda s, t, ya=ya, yb_=yb_: (-2.20 + 0.055 * math.sin(2 * math.pi * 5 * s), ya + (yb_ - ya) * s, 0.04 + t * 2.76),
-              90, 24, sheer, I["curtains"])
+    seg("curtain rod (not sold)", (-2.21, 0.45, 2.82), (-2.21, 3.15, 2.82), 0.01, rod, FILLER_IDX["curtain rod (not sold)"])
+    for (ya, yb_, key) in [(0.50, 0.92, "curtains"), (2.68, 3.10, "curtains: front panel (out of frame)")]:
+        sheet(key, lambda s, t, ya=ya, yb_=yb_: (-2.20 + 0.055 * math.sin(2 * math.pi * 5 * s), ya + (yb_ - ya) * s, 0.04 + t * 2.76),
+              90, 24, sheer, I["curtains"] if key == "curtains" else FILLER_IDX[key])
     # framed art: 70 x 100 print in a thin oak frame, centre (0.20, 0, 1.475)
     art = Image.open(os.path.join(SKU, "framed-art-aliexpress-japandi-bare-branch-70x100-776445__0.jpg")).convert("RGB")
     W, H = art.size
@@ -572,8 +575,8 @@ def products():
     for x in (-0.85, 1.25):
         box("accent-sconces", x - 0.02, x + 0.02, 0.0, 0.015, 1.64, 1.86, wal, I["accent-sconces"])
         cyl("accent-sconces", x, 0.0575, 0.0325, 1.67, 1.83, trav, I["accent-sconces"], n=32)
-        light(f"sconce_up_{x}", "SPOT", (x, 0.06, 1.84), 7.0, "accent_sconces", size=0.02, aim=(x, 0.0, 2.6), spot=55, blend=1.0)
-        light(f"sconce_dn_{x}", "SPOT", (x, 0.06, 1.66), 7.0, "accent_sconces", size=0.02, aim=(x, 0.0, 0.9), spot=55, blend=1.0)
+        light(f"sconce_up_{x}", "SPOT", (x, 0.06, 1.84), 1.6, "accent_sconces", size=0.02, aim=(x, 0.0, 2.6), spot=55, blend=1.0)
+        light(f"sconce_dn_{x}", "SPOT", (x, 0.06, 1.66), 1.6, "accent_sconces", size=0.02, aim=(x, 0.0, 0.9), spot=55, blend=1.0)
     # vase on the sill + eucalyptus branches (filler)
     vprof = [(0.045, 0.0), (0.062, 0.03), (0.078, 0.10), (0.080, 0.15), (0.070, 0.22), (0.048, 0.28), (0.036, 0.305), (0.040, 0.32)]
     lathe("vase", -2.42, 1.35, vprof, mtex("vase", "vase", 0.9), I["vase"], z0=WIN["sill"], cap_top=False)
@@ -602,18 +605,23 @@ def products():
             lbox("olive (filler)", 0.055, 0.004, 0.014, leaf, FILLER_IDX["olive (filler)"], p, rot=(rng.uniform(-60, 60), rng.uniform(-60, 60), rng.uniform(0, 180)))
     # basket: jute rope cylinder D35 x 39 + two rope handles
     bprof = [(0.165, 0.0), (0.175, 0.02), (0.175, 0.39)]
-    lathe("basket", -1.70, 0.75, bprof, mtex("basket", "basket", 1.0), I["basket"], cap_top=False, ripple=(60, 0.006))
+    bx_, by_ = BASKET_C
+    lathe("basket", bx_, by_, bprof, mtex("basket", "basket", 1.0), I["basket"], cap_top=False, ripple=(60, 0.006))
     jute = mcol("jute", "#B89B72", 1.0)
     for s in (-1, 1):
         for k in range(8):
             a0, a1 = math.pi * k / 8, math.pi * (k + 1) / 8
-            p0 = (-1.70 + s * 0.17, 0.75 + 0.05 * math.cos(a0), 0.39 + 0.07 * math.sin(a0))
-            p1 = (-1.70 + s * 0.17, 0.75 + 0.05 * math.cos(a1), 0.39 + 0.07 * math.sin(a1))
+            p0 = (bx_ + s * 0.17, by_ + 0.05 * math.cos(a0), 0.39 + 0.07 * math.sin(a0))
+            p1 = (bx_ + s * 0.17, by_ + 0.05 * math.cos(a1), 0.39 + 0.07 * math.sin(a1))
             seg("basket", p0, p1, 0.008, jute, I["basket"])
     # magazine holder: charcoal felt sling 45 x 32 x 40 between two oak handles, long side to the camera (rotated -8)
     felt = mtex("felt", "felt", 1.0)
     mx, my = -0.54, 2.52
-    lathe("magazine-holder", mx, my, [(0.15, 0.0), (0.21, 0.30)], felt, I["magazine-holder"], n=48, sx=1.07, sy=0.76, rotz=-8, cap_top=False)
+    mh = lathe("magazine-holder", mx, my, [(0.15, 0.0), (0.18, 0.12), (0.21, 0.30)], felt, I["magazine-holder"], n=48, sx=1.07, sy=0.76, rotz=-8, cap_top=False)
+    for v in mh.data.vertices:                          # the sling: the rim dips 8 cm in the middle of the long sides
+        if v.co.z > 0.2:
+            ph = math.atan2(v.co.y / 0.76, v.co.x / 1.07)
+            v.co.z = v.co.z - 0.08 * math.sin(ph) ** 2
     for s in (-1, 1):
         a = math.radians(-8)                            # the long axis (cos a, sin a) = the camera's right vector
         hx, hy = mx + s * 0.215 * math.cos(a), my + s * 0.215 * math.sin(a)
@@ -625,18 +633,18 @@ def products():
     for k, dx in enumerate((-0.06, 0.02, 0.09)):
         lbox("magazines (filler)", 0.23, 0.012, 0.30, paper, FILLER_IDX["magazines (filler)"], (mx + dx, my + 0.02 * k - 0.02, 0.25), rot=(8 * (k - 1), 0, -8))
     # floor lamp: paper lantern D17.5 x 85 on an oak tripod, H 128, base 29
-    shade_fl = mcol("lantern_paper", "#EAE0CF", 0.9, emit=9.0)
+    shade_fl = mcol("lantern_paper", "#EAE0CF", 0.9, emit=0.28)
     lathe("floor-lamp", 1.52, 0.20, [(0.0875, 0.43), (0.0875, 1.28)], shade_fl, I["floor-lamp"], n=48, lightgroup="floor_lamp", shadow=False)
     for k in range(3):
         a = 2 * math.pi * k / 3 + 0.4
         seg("floor-lamp", (1.52 + 0.145 * math.cos(a), 0.20 + 0.145 * math.sin(a), 0.0), (1.52 + 0.05 * math.cos(a), 0.20 + 0.05 * math.sin(a), 0.47), 0.011, oak, I["floor-lamp"])
-    light("floor_lamp_bulb", "POINT", (1.52, 0.20, 0.95), 30.0, "floor_lamp", size=0.05)
+    light("floor_lamp_bulb", "POINT", (1.52, 0.20, 0.95), 3.0, "floor_lamp", size=0.05)
     # pendant: pleated pumpkin lantern D40 x 25, bottom 1.90, at (0.20, 1.72); cord to the ceiling
-    shade_pd = mcol("pleat_fabric", "#F2EEE6", 0.9, emit=7.0)
+    shade_pd = mcol("pleat_fabric", "#F2EEE6", 0.9, emit=0.25)
     pprof = [(0.06, 0.0), (0.13, 0.02), (0.185, 0.07), (0.20, 0.125), (0.185, 0.18), (0.13, 0.23), (0.05, 0.25)]
     lathe("pendant", 0.20, 1.72, pprof, shade_pd, I["pendant"], z0=1.90, n=96, ripple=(24, 0.045), lightgroup="pendant", shadow=False)
     cyl("pendant cord", 0.20, 1.72, 0.003, 2.15, 3.0, mcol("cord", "#EDEAE4", 0.6), FILLER_IDX["pendant cord"], n=8)
-    light("pendant_bulb", "POINT", (0.20, 1.72, 2.02), 30.0, "pendant", size=0.06)
+    light("pendant_bulb", "POINT", (0.20, 1.72, 2.02), 3.0, "pendant", size=0.06)
     # coffee table: the Olia (120 x 65 x 38, oak, light waterfall), centre (0.20, 1.72)
     cx, cy = 0.20, 1.72
     xa, xb, R, t = cx - 0.60, cx + 0.60, 0.05, 0.04
@@ -672,10 +680,10 @@ def products():
     cushion(0.45, mtex("sage", "sage", 1.0), (-0.12, 0.53, 0.645), rz=-4)
     cushion(0.50, mtex("charcoal", "charcoal", 1.0), (0.88, 0.47, 0.67), rz=-6)
     th = mtex("throw", "throw", 1.0)
-    box("sofa-cover", 1.13, 1.33, 0.22, 0.86, 0.60, 0.635, th, I["sofa-cover"], bev=0.012)
-    box("sofa-cover", 1.31, 1.335, 0.22, 0.86, 0.12, 0.62, th, I["sofa-cover"], bev=0.01)
-    sheet("sofa-cover", lambda s, t: (0.78 + 0.36 * s, 0.40 + 0.52 * t, 0.445 + 0.025 * math.sin(3 * math.pi * s) * math.sin(math.pi * t)), 24, 16, th, I["sofa-cover"])
-    sheet("sofa-cover", lambda s, t: (0.80 + 0.33 * s, 0.925 + 0.02 * math.sin(2 * math.pi * s), 0.445 - 0.28 * t), 24, 10, th, I["sofa-cover"])
+    # over the right arm, across the right seat in front of the charcoal cushion, and falling down the seat front to the rug
+    box("sofa-cover", 1.13, 1.33, 0.30, 0.95, 0.60, 0.632, th, I["sofa-cover"], bev=0.012)
+    sheet("sofa-cover", lambda s, t: (0.70 + 0.46 * s, 0.58 + 0.38 * t, 0.448 + 0.02 * math.sin(3 * math.pi * s) * math.sin(math.pi * t)), 24, 16, th, I["sofa-cover"])
+    sheet("sofa-cover", lambda s, t: (0.70 + 0.62 * s, 0.965 + 0.025 * math.sin(4 * math.pi * s) * t + 0.06 * max(0.0, t - 0.92) / 0.08, 0.448 - 0.432 * min(t / 0.92, 1.0)), 32, 14, th, I["sofa-cover"])
     # pouf: chunky knit ball 50 (filled height 35), the cut foreground right
     lathe("pouf", POUF_C[0], POUF_C[1], [(0.0, 0.0), (0.19, 0.01), (0.24, 0.07), (0.25, 0.17), (0.23, 0.27), (0.16, 0.335), (0.0, 0.35)],
           mtex("pouf", "pouf", 1.0), I["pouf"], n=64, cap_bottom=False, cap_top=False)
@@ -683,9 +691,9 @@ def products():
     blk = mcol("black", "#2E2E2E", 0.5)
     box("wall-sconce", -2.30, -2.28, 3.12, 3.22, 1.40, 1.54, blk, I["wall-sconce"])
     seg("wall-sconce", (-2.28, 3.17, 1.47), (-1.95, 3.10, 1.47), 0.008, blk, I["wall-sconce"])
-    lathe("wall-sconce", -1.95, 3.10, [(0.11, 1.30), (0.07, 1.48)], mcol("linen_shade", "#E9DFCC", 0.9, emit=3.0), I["wall-sconce"], n=32,
+    lathe("wall-sconce", -1.95, 3.10, [(0.11, 1.30), (0.07, 1.48)], mcol("linen_shade", "#E9DFCC", 0.9, emit=0.25), I["wall-sconce"], n=32,
           cap_bottom=False, cap_top=False, lightgroup="wall_sconce", shadow=False)
-    light("wall_sconce_bulb", "SPOT", (-1.95, 3.10, 1.40), 22.0, "wall_sconce", size=0.04, aim=(-1.23, 2.73, 0.40), spot=80, blend=1.0)
+    light("wall_sconce_bulb", "SPOT", (-1.95, 3.10, 1.40), 5.0, "wall_sconce", size=0.04, aim=(-1.23, 2.73, 0.40), spot=80, blend=1.0)
 
 
 def world_and_sun(sky=1.0, sun=4.0):
@@ -835,10 +843,10 @@ def render_passes(tag, W, H, spp, override=None):
 # ---------------------------------------------------------------------------------------------------------------------------------------
 # the look (code, not var2): white balance, exposure by target L*, a soft shoulder, sRGB
 # ---------------------------------------------------------------------------------------------------------------------------------------
-def tone(lin, k, wb=(1, 1, 1), shoulder=0.72):
+def tone(lin, k, wb=(1, 1, 1), shoulder=0.72, lift=0.0):
     x = lin * np.array(wb, np.float32) * k
     y = np.where(x < shoulder, x, shoulder + (1 - shoulder) * (1 - np.exp(-(x - shoulder) / (1 - shoulder))))
-    y = np.clip(y, 0, 1)
+    y = lift + (1 - lift) * np.clip(y, 0, 1)
     s = np.where(y <= 0.0031308, 12.92 * y, 1.055 * np.power(y, 1 / 2.4) - 0.055)
     return np.clip(s, 0, 1)
 
@@ -862,11 +870,23 @@ PATCHES = {"back_wall_by_corner (-1.75,0,1.60)": (-1.75, 0.0, 1.60), "back_wall_
            "floor_front_right (2.2,2.9,0)": (2.2, 2.9, 0.0), "sofa_seat_mid (0.20,0.62,0.44)": (0.20, 0.62, 0.44)}
 
 
-def solve_k(lin, wb, target, p, W, H):
+def solve_wb(lin, ab, p, W, H, r=6):
+    """gains (G = 1) that put the patch at the target a*, b* (the wall's white balance)"""
+    u, v, _ = plan_uv(*p)
+    x, y = int(round(u * W)), int(round(v * H))
+    c = np.median(lin[y - r:y + r + 1, x - r:x + r + 1].reshape(-1, 3), 0)
+    Lt = float(cv2.cvtColor(np.float32([[np.clip(c / c.max() * 0.7, 0, 1) ** (1 / 2.2)]]), cv2.COLOR_RGB2Lab)[0, 0, 0])
+    s = cv2.cvtColor(np.float32([[[Lt, ab[0], ab[1]]]]), cv2.COLOR_Lab2RGB)[0, 0]
+    t = np.where(s <= 0.04045, s / 12.92, ((s + 0.055) / 1.055) ** 2.4)
+    g = (t / np.maximum(c, 1e-9))
+    return tuple(float(x) for x in g / g[1])
+
+
+def solve_k(lin, wb, target, p, W, H, lift=0.0):
     lo, hi = 0.01, 50.0
     for _ in range(40):
         k = math.sqrt(lo * hi)
-        L = patch(lab(tone(lin, k, wb)), p, W, H)[0]
+        L = patch(lab(tone(lin, k, wb, lift=lift)), p, W, H)[0]
         lo, hi = (k, hi) if L < target else (lo, k)
     return math.sqrt(lo * hi)
 
@@ -1100,8 +1120,8 @@ def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
     ap.add_argument("--res", type=int, default=1920)
-    ap.add_argument("--spp", type=int, default=160)
-    ap.add_argument("--clay-spp", type=int, default=96)
+    ap.add_argument("--spp", type=int, default=128)
+    ap.add_argument("--clay-spp", type=int, default=64)
     a = ap.parse_args(argv)
     out = os.path.join(SCR, "quick") if a.quick else HERE
     os.makedirs(out, exist_ok=True)
@@ -1126,15 +1146,21 @@ def main(argv):
     # ---- 1. the material render: guides A and B from the light groups -----------------------------------------------------------------
     R = render_passes("mat", W, H, spp)
     lamps = sum(R[g] for g in LAMP_GROUPS)
-    mixes = {"A": dict(sky=1.0, sun=0.0, lamps=1.35, wb=(1.00, 0.985, 0.90), target=("back_wall_by_corner (-1.75,0,1.60)", 89.0)),
-             "B": dict(sky=1.0, sun=1.0, lamps=1.00, wb=(1.00, 0.99, 0.95), target=("back_wall_right (1.90,0,1.60)", 83.0))}
+    # A: the Bible's tool light (north light, no sun; back wall by the corner L 90-94 -> 89 so the frame keeps its contrast; warm white H 32-40)
+    # B: the proposal (shaded walls L 80-86 -> the plain back wall right of the art at 83, a touch cooler than A; black point L 12-14)
+    # (the corner patch of the Bible sits behind the back curtain stack in M0-N, so both are exposed on the plain wall above the art;
+    #  the white balance is solved on the daylight alone, so the lamps keep their 2700 K)
+    mixes = {"A": dict(sky=1.0, sun=0.0, lamps=1.0, ab=(1.0, 7.0), target=("back_wall_above_art (0.20,0,2.30)", 88.0), lift=0.010),
+             "B": dict(sky=1.0, sun=1.0, lamps=1.0, ab=(0.5, 3.5), target=("back_wall_above_art (0.20,0,2.30)", 84.0), lift=0.013)}
     look = {}
     for c, mx in mixes.items():
         lin = mx["sky"] * R["sky"] + mx["sun"] * R["sun"] + mx["lamps"] * lamps
-        k = solve_k(lin, mx["wb"], mx["target"][1], PATCHES[mx["target"][0]], W, H)
-        img = tone(lin, k, mx["wb"])
+        mx["wb"] = solve_wb(mx["sky"] * R["sky"] + mx["sun"] * R["sun"], mx["ab"], PATCHES[mx["target"][0]], W, H)
+        k = solve_k(lin, mx["wb"], mx["target"][1], PATCHES[mx["target"][0]], W, H, mx["lift"])
+        img = tone(lin, k, mx["wb"], lift=mx["lift"])
         L = lab(img)
-        look[c] = dict(mix=dict(sky=mx["sky"], sun=mx["sun"], lamps=mx["lamps"]), wb_gains=mx["wb"], exposure_k=round(k, 4), target=mx["target"],
+        look[c] = dict(mix=dict(sky=mx["sky"], sun=mx["sun"], lamps=mx["lamps"]), wb_gains=[round(g, 4) for g in mx["wb"]], wb_target_ab=mx["ab"],
+                       lift=mx["lift"], exposure_k=round(k, 4), target=mx["target"],
                        patches_Lab={n: patch(L, p, W, H) for n, p in PATCHES.items()},
                        p0_5_L=round(float(np.percentile(L[..., 0], 0.5)), 1), clipped_pct=round(100 * float((img.max(-1) >= 0.995).mean()), 2))
         save_png(os.path.join(out, "concepts", f"guide-{c}.png"), img)
