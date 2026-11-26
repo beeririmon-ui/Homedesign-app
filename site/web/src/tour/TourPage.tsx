@@ -148,7 +148,9 @@ export { doorRect };
 /** where the camera looks from the door on a narrow screen: the window and its light (the room's rest is on the sofa) */
 export const DOOR_CU = 0.2;
 
-const optionOf = (s: TourSlot, sel: Record<string, number>): TourOption => s.options[(sel[s.id] ?? 1) - 1]!;
+// MOCK8: a choice made in another room's slot of the same name (the living room's cushion set 2, then the bedroom's
+// cushions of one option) is not this slot's: its first option until the page's selection is the room's own
+const optionOf = (s: TourSlot, sel: Record<string, number>): TourOption => s.options[(sel[s.id] ?? 1) - 1] ?? s.options[0]!;
 /** MOCK4: the products of the room the visitor is in (furniture that is not sold has no mark, no tile, no line) */
 const items = (): TourSlot[] => tour.slots.filter((s) => !s.fixed);
 /** a mark's place: a point in the window, kept 6 px inside its edges (the dot is drawn whole); `on`: in the window */
