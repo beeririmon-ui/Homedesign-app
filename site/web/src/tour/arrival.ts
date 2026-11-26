@@ -21,6 +21,9 @@ export type Arrival = {
   proj: { kx: number; ky: number };
   labels: ArrivalLabel[];
   cams: { from: number; f: [number, number, number, number, number, number][] };
+  /** MOCK7: the walk's last frame (in the hall, before the opening shows the old table) and its camera
+   *  [x, y, z, yaw, u0, v0]: the push into the living room starts there (tools/make-arrival.ts) */
+  land: { frame: number; cam: [number, number, number, number, number, number] };
 };
 export const arrival = data as unknown as Arrival;
 

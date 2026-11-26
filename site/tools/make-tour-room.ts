@@ -61,6 +61,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
+import { nearness, type DepthCfg } from './lib/depth';
 
 type Box = [number, number, number, number];
 type SlotCfg = {
@@ -95,6 +96,8 @@ type Cfg = {
   layers: string;
   manifest: string;
   truth: string;
+  /** MOCK7: the frame's depth for the transitions (tools/lib/depth.ts); absent: the page's fallback */
+  depth?: DepthCfg;
   /** MOCK5: the frame's base (default plate.png) */
   plate?: string;
   plan: string;
@@ -919,6 +922,8 @@ const data = {
   base: { src: `${REL}/base`, widths: [WIDTHS.lo, W], placeholder, formats: ['webp'] },
   camera,
   camera_from: camFrom,
+  // MOCK7: the frame's depth for the transitions (a small nearness map, near = white), or null: the page's fallback
+  depth: c.depth ? (await nearness(c.depth)).uri : null,
   cover: 0,
   sample: c.sample ?? undefined,
   // ×1 only: no zoom in a frame that shows a print whose rights are unclear

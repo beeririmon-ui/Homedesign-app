@@ -8,29 +8,31 @@
  * `?design=a|b|c` picks one for this tab (kept in sessionStorage, so the cart and the product page wear it too);
  * `?design=0` goes back to the current look. Without the flag the page has no attribute and loads none of these
  * stylesheets: the default look is unchanged. A public build (HD_PUBLIC=1) has none of it (__TOUR__ folds it away).
+ *
+ * MOCK7 (2026-11-26, briefs/site-mock7-tour-transitions-2026-11-26.md, FB17): C is the preview's default look (the
+ * recommendation; the owner can switch). `?design=a|b|c` still picks one, and `?design=0` the look before FB13 — both
+ * kept for the tab. The public build is unchanged (no attribute, no stylesheet).
  */
 export type Design = 'a' | 'b' | 'c';
 export const DESIGNS = ['a', 'b', 'c'] as const satisfies readonly Design[];
 const KEY = 'hd-design';
 const isDesign = (v: string | null): v is Design => DESIGNS.includes(v as Design);
+/** MOCK7: the preview's look without a flag */
+export const DEFAULT_DESIGN: Design = 'c';
 
 function read(): Design | null {
   if (typeof __TOUR__ === 'undefined' || !__TOUR__ || typeof location === 'undefined') return null;
   const q = new URLSearchParams(location.search).get('design');
   try {
-    if (q === '0') {
-      sessionStorage.removeItem(KEY);
-      return null;
-    }
-    if (isDesign(q)) {
+    if (q === '0' || isDesign(q)) {
       sessionStorage.setItem(KEY, q);
-      return q;
+      return q === '0' ? null : q;
     }
     const kept = sessionStorage.getItem(KEY);
-    return isDesign(kept) ? kept : null;
+    return kept === '0' ? null : isDesign(kept) ? kept : DEFAULT_DESIGN;
   } catch {
     // no storage (a private window, blocked site data): the flag holds for this page only
-    return isDesign(q) ? q : null;
+    return q === '0' ? null : isDesign(q) ? q : DEFAULT_DESIGN;
   }
 }
 

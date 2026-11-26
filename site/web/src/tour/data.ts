@@ -139,6 +139,9 @@ export type TourData = {
   lights?: TourLight[];
   /** MOCK4: how many products for sale the room shows (the owner's temporary line) */
   for_sale?: number;
+  /** MOCK7: the room's depth for the push between rooms (a small nearness map, near = white, as a data URI); null or
+   *  absent: the push's designed fallback */
+  depth?: string | null;
 };
 
 /** MOCK5: a frame of the tour (a file name); the frames of a room are `FRAMES[group]` */
@@ -169,12 +172,14 @@ export const ROOMS: Record<RoomId, TourData> = {
 };
 /** MOCK5: the house's rooms in the tour, and their frames (the first is the room's rest frame: tools/tour/frames.json) */
 export type GroupId = 'living-room' | 'master' | 'bath' | 'dining' | 'work' | 'boy' | 'girl';
-/** the house's rooms in the order of the room buttons */
-export const GROUP_IDS = ['living-room', 'master', 'bath', 'dining', 'work', 'boy', 'girl'] as const satisfies readonly GroupId[];
+/** the house's rooms in the order of the room buttons; MOCK7: the house route's order (route ch. 1), which is also the
+ *  order the transitions walk ("the next room") */
+export const GROUP_IDS = ['living-room', 'dining', 'boy', 'girl', 'bath', 'master', 'work'] as const satisfies readonly GroupId[];
 export const FRAMES: Record<GroupId, RoomId[]> = {
   'living-room': ['living-room'],
   master: ['master', 'master-mb1'],
-  bath: ['bath', 'bath-b1'],
+  // MOCK7: the route rests in the bath on B1, the approved arrival frame (route ch. 11.2), then B2
+  bath: ['bath-b1', 'bath'],
   dining: ['dining', 'dining-d2'],
   work: ['work'],
   boy: ['boy'],

@@ -10,6 +10,11 @@
  *     of the room's box, from the plan's camera), a dimmed room around the products, their outline, a tint, the swap's
  *     light line, a wipe between two houses (by depth, or along the floor), and the door's wall.
  *
+ * MOCK7 (2026-11-26): 3. the push between two rooms (PUSH): the camera walks on through the room it leaves toward the
+ *    next one, and arrives in the next room walking, slowing to its rest — 2.5D, from each room's depth (a small nearness
+ *    map, tools/lib/depth.ts): near things grow and slide more than far ones, a blur along the walk, a breath of shade
+ *    as it passes between them. The room left may be the arrival's last frame (the still): the walk goes on from it.
+ *
  * The rule the tour stands on: at rest every one of these is off, a layer at rest is copied texel for texel, and the
  * frame is exactly the composition of the layers. An effect's last frame IS that composition (the same target, the same
  * path), so nothing can jump when it ends.
@@ -57,7 +62,7 @@ export type Px = [number, number, number, number];
 /** the mask's second channel: a product's depth in metres × this (distinct per product, and a depth the shader reads) */
 export const MASK_PER_M = 40;
 
-export const FX = { none: 0, scan: 1, dim: 2, wave: 3, depth: 4 } as const;
+export const FX = { none: 0, scan: 1, dim: 2, wave: 3, depth: 4, push: 5 } as const;
 export type Display = {
   cam: Cam;
   vp: Viewport;
@@ -85,6 +90,18 @@ export type Display = {
   door: [number, number, number, number];
   doorR: number;
   doorAmt: number;
+  /** MOCK7, the push: its time (0–1), the turn (−1 left … 1 right), and where the room left is walked toward (its UV) */
+  push: [number, number, number, number];
+  /** MOCK7: the point the room reached is walked to (canvas UV), the push's strength (1 a room, less a frame of the same
+   *  room), and 1 when the room left is the still (the arrival's last frame) */
+  push2: [number, number, number, number];
+  /** MOCK7: the camera the room left was seen through: the push's first frame is exactly the frame before it */
+  camA: Cam;
+  /** MOCK7: the still as it is on screen: CSS px → its UV (scale x, scale y, offset x, offset y) */
+  smap: [number, number, number, number];
+  /** MOCK7: the depth textures of the room left and the room reached (null: the designed fallback) */
+  depthA: string | null;
+  depthB: string | null;
 };
 export const restDisplay = (cam: Cam, vp: Viewport, aspect: number): Display => ({
   cam,
@@ -104,13 +121,19 @@ export const restDisplay = (cam: Cam, vp: Viewport, aspect: number): Display => 
   door: [0, 0, 0, 0],
   doorR: 0,
   doorAmt: 0,
+  push: [0, 0, 0.5, 0.5],
+  push2: [0.5, 0.5, 1, 0],
+  camA: cam,
+  smap: [0, 0, 0, 0],
+  depthA: null,
+  depthB: null,
 });
 
 const QUAD = new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]);
 const LEVELS = 5;
 /** every display variant the tour's effects ask for: rest and camera (0), the door (1), the plane (2), the mask (4),
  *  the plane with the mask (6), a dissolve (8), and a dissolve with the mask (12, the calm reveal) */
-const WARM_FLAGS = [0, 1, 2, 4, 6, 8, 12] as const;
+const WARM_FLAGS = [0, 1, 2, 4, 6, 8, 12, 16] as const;
 
 const LAYER_VS = `#version 300 es
 in vec2 aPos;
@@ -204,6 +227,16 @@ uniform vec4 uLoc; // camera x y height
 uniform vec4 uAxes; // the camera's forward and right on the plan
 uniform vec4 uRoomXY; // x0 x1 y0 y1
 uniform float uRoomH;
+#ifdef PUSH
+uniform sampler2D uDA;
+uniform sampler2D uDB;
+uniform sampler2D uS;
+uniform vec3 uCamA;
+uniform vec4 uPush;
+uniform vec4 uPush2;
+uniform vec4 uSMap;
+uniform vec2 uDOn;
+#endif
 out vec4 o;
 const vec3 WARM = vec3(1.0, 0.86, 0.66);
 vec2 edge(vec2 uv) { return clamp(1.0 - abs(1.0 - abs(uv)), vec2(0.0005), vec2(0.9995)); }
@@ -222,6 +255,21 @@ vec3 box(vec2 uv) {
   if (D.y > 0.0001) d = min(d, (uRoomXY.w - uLoc.y) / D.y);
   return vec3(d, uLoc.xy + d * D);
 }
+#ifdef PUSH
+const vec3 STAGE = vec3(0.071, 0.067, 0.059);
+// MOCK7, the designed fallback where a frame has no depth (the walk's last frame): the floor nearer toward the bottom,
+// the walls nearer toward the sides, the far wall and the opening far
+float guess(vec2 q) { return clamp(smoothstep(0.52, 1.0, q.y) * 0.85 + pow(abs(q.x - 0.5) * 2.0, 3.0) * 0.45, 0.0, 1.0); }
+float nearA(vec2 q) { return uDOn.x > 0.5 ? texture(uDA, q).r : guess(q); }
+float nearB(vec2 q) { return uDOn.y > 0.5 ? texture(uDB, q).r : guess(q); }
+// the room left: its composition (canvas UV), or the still (its own UV)
+vec3 roomA(vec2 q) { return uPush2.w > 0.5 ? texture(uS, clamp(q, 0.0, 1.0)).rgb : texture(uA, vec2(q.x, 1.0 - q.y)).rgb; }
+// how much of a point is on the canvas: a soft edge, the stage beyond it
+float inside(vec2 q) {
+  vec2 e = smoothstep(vec2(-0.004), vec2(0.02), q) * smoothstep(vec2(-0.004), vec2(0.02), 1.0 - q);
+  return e.x * e.y;
+}
+#endif
 // a mix that IS its end at its end (a driver may compute mix as a + (b - a) * k, one level off in a pixel or two)
 vec3 blend(vec3 a, vec3 b, float k) { return k <= 0.0 ? a : k >= 1.0 ? b : mix(a, b, k); }
 void main() {
@@ -232,6 +280,53 @@ void main() {
   vec3 c = a;
 #ifdef MIX
   if (uMix > 0.0) c = blend(a, texture(uB, st).rgb, uMix);
+#endif
+#ifdef PUSH
+  if (uFx == 5) {
+    float t = uPush.x;
+    float amp = uPush2.z;
+    vec2 qa = uPush2.w > 0.5 ? px * uSMap.xy + uSMap.zw : uCamA.xy + (px - 0.5 * uViewport) / (uFrame * uCamA.z);
+    if (t <= 0.0) c = uPush2.w > 0.5 ? roomA(qa) : texture(uA, vec2(edge(qa).x, 1.0 - edge(qa).y)).rgb;
+    else if (t >= 1.0) c = texture(uB, st).rgb;
+    else {
+      // the room left: the camera walks on toward the next room, faster and faster, and turns its way; a point moves
+      // away from the point walked to by how near it is (the inverse warp, twice, reads the depth where it lands)
+      float p = clamp(t / 0.62, 0.0, 1.0);
+      float pa = p * p;
+      vec2 F = uPush.zw;
+      float fa = 0.5 * amp * pa;
+      vec2 q0 = qa + vec2(uPush.y * 0.09 * amp * pa, 0.0);
+      vec2 q = F + (q0 - F) * (1.0 - fa * mix(0.3, 1.0, nearA(q0)));
+      q = F + (q0 - F) * (1.0 - fa * mix(0.3, 1.0, nearA(q)));
+      // the blur of the walk: along the ray from the point walked to, as long as this frame's step
+      float bl = 0.08 * amp * p;
+      vec3 ca = vec3(0.0);
+      for (int i = 0; i < 5; i++) ca += roomA(F + (q - F) * (1.0 - bl * float(i) * 0.25));
+      ca *= 0.2;
+      // the room reached: the camera arrives walking, from behind its rest and a little turned, and slows to a stop
+      float s1 = clamp((t - 0.34) / 0.66, 0.0, 1.0);
+      float r = (1.0 - s1) * (1.0 - s1);
+      vec2 G = uPush2.xy;
+      float fb = 0.36 * amp * r;
+      vec2 u0 = uCam.xy + (px - 0.5 * uViewport) / (uFrame * uCam.z) - vec2(uPush.y * 0.07 * amp * r, 0.0);
+      vec2 qb = G + (u0 - G) * (1.0 + fb * mix(0.3, 1.0, nearB(u0)));
+      qb = G + (u0 - G) * (1.0 + fb * mix(0.3, 1.0, nearB(qb)));
+      float bb = 0.07 * amp * r;
+      vec3 cb = vec3(0.0);
+      for (int i = 0; i < 5; i++) {
+        vec2 qi = G + (qb - G) * (1.0 + bb * float(i) * 0.25);
+        cb += mix(STAGE, texture(uB, vec2(qi.x, 1.0 - qi.y)).rgb, inside(qi));
+      }
+      cb *= 0.2;
+      c = mix(ca, cb, smoothstep(0.36, 0.6, t));
+      // between the two rooms: a breath of shade, the edges darker while walking, a warm light through the opening
+      float mid = smoothstep(0.2, 0.48, t) * (1.0 - smoothstep(0.48, 0.8, t));
+      c *= 1.0 - 0.2 * amp * mid;
+      vec2 e = vScreen - 0.5;
+      c *= 1.0 - 0.42 * amp * sin(3.14159265 * t) * smoothstep(0.22, 0.78, length(e * vec2(1.0, 0.86)));
+      c += WARM * 0.045 * amp * mid * (1.0 - smoothstep(0.0, 0.5, length(e)));
+    }
+  }
 #endif
 #ifdef BOX
   if (uFx == 1 || uFx == 3 || uFx == 4) {
@@ -320,6 +415,14 @@ const DISPLAY_UNIFORMS = [
   'uAxes',
   'uRoomXY',
   'uRoomH',
+  'uDA',
+  'uDB',
+  'uS',
+  'uCamA',
+  'uPush',
+  'uPush2',
+  'uSMap',
+  'uDOn',
 ] as const;
 type Target = { tex: WebGLTexture; fb: WebGLFramebuffer[]; w: number; h: number };
 type Tex = { tex: WebGLTexture; w: number; h: number; mips: boolean };
@@ -455,7 +558,7 @@ export class TourGL {
     let p = this.displayProgs.get(flags);
     if (!p) {
       const gl = this.gl;
-      const defines = ['DOOR', 'BOX', 'MASK', 'MIX'].filter((_, i) => flags & (1 << i)).map((d) => `#define ${d}\n`);
+      const defines = ['DOOR', 'BOX', 'MASK', 'MIX', 'PUSH'].filter((_, i) => flags & (1 << i)).map((d) => `#define ${d}\n`);
       const prog = this.program(DISPLAY_VS, DISPLAY_FS(defines.join('')));
       const loc: Record<string, WebGLUniformLocation | null> = {};
       for (const n of DISPLAY_UNIFORMS) loc[n] = gl.getUniformLocation(prog, n);
@@ -486,7 +589,8 @@ export class TourGL {
       this.drawDisplay(
         {
           ...rest,
-          fx: flags & 2 ? FX.scan : FX.none,
+          fx: flags & 16 ? FX.push : flags & 2 ? FX.scan : FX.none,
+          push: [flags & 16 ? 0.5 : 0, 0, 0.5, 0.5],
           mix: flags & 8 ? 0.5 : 0,
           outline: flags & 4 ? 0.5 : 0,
           doorAmt: flags & 1 ? 1 : 0,
@@ -722,7 +826,8 @@ export class TourGL {
       (s.doorAmt > 0 ? 1 : 0) |
       (s.fx === FX.scan || s.fx === FX.wave || s.fx === FX.depth ? 2 : 0) |
       (s.fx === FX.scan || s.fx === FX.dim || s.outline > 0 || s.pulse[1] > 0 || s.tint > 0 ? 4 : 0) |
-      (s.mix > 0 ? 8 : 0)
+      (s.mix > 0 ? 8 : 0) |
+      (s.fx === FX.push ? 16 : 0)
     );
   }
 
@@ -809,8 +914,64 @@ export class TourGL {
     gl.uniform4f(u['uAxes']!, -Math.sin(yaw), -Math.cos(yaw), Math.cos(yaw), -Math.sin(yaw));
     gl.uniform4f(u['uRoomXY']!, c.room.x[0], c.room.x[1], c.room.y[0], c.room.y[1]);
     gl.uniform1f(u['uRoomH']!, c.room.h);
+    if (flags & 16) {
+      // MOCK7, the push: the two rooms' depth, the still, and where each is walked
+      const dA = s.depthA ? this.textures.get(s.depthA) : undefined;
+      const dB = s.depthB ? this.textures.get(s.depthB) : undefined;
+      for (const [i, tex, name] of [
+        [3, dA?.tex ?? this.blank(), 'uDA'],
+        [4, dB?.tex ?? this.blank(), 'uDB'],
+        [5, this.still?.tex ?? this.blank(), 'uS'],
+      ] as const) {
+        gl.activeTexture(gl.TEXTURE0 + i);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.uniform1i(u[name]!, i);
+      }
+      gl.uniform3f(u['uCamA']!, s.camA.cu, s.camA.cv, s.camA.z);
+      gl.uniform4f(u['uPush']!, s.push[0], s.push[1], s.push[2], s.push[3]);
+      gl.uniform4f(u['uPush2']!, s.push2[0], s.push2[1], s.push2[2], s.push2[3]);
+      gl.uniform4f(u['uSMap']!, s.smap[0], s.smap[1], s.smap[2], s.smap[3]);
+      gl.uniform2f(u['uDOn']!, dA ? 1 : 0, dB ? 1 : 0);
+    }
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     gl.activeTexture(gl.TEXTURE0);
+  }
+
+  /** MOCK7: the still (the arrival's last frame, from its video element): one texture, replaced each time */
+  private still: { tex: WebGLTexture; w: number; h: number } | null = null;
+  uploadStill(src: TexImageSource & { videoWidth?: number; videoHeight?: number; width?: number; height?: number }): boolean {
+    const gl = this.gl;
+    const w = src.videoWidth ?? (src.width as number) ?? 0;
+    const h = src.videoHeight ?? (src.height as number) ?? 0;
+    if (!w || !h) return false;
+    const tex = this.still?.tex ?? this.texture(gl.LINEAR);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    try {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
+    } catch {
+      return false;
+    }
+    if (this.still && this.still.w) this.bytes -= this.still.w * this.still.h * 4;
+    this.still = { tex, w, h };
+    this.bytes += w * h * 4;
+    metrics.count('upload');
+    return true;
+  }
+  dropStill(): void {
+    if (!this.still) return;
+    this.gl.deleteTexture(this.still.tex);
+    this.bytes -= this.still.w * this.still.h * 4;
+    this.still = null;
+  }
+  private blankTex: WebGLTexture | null = null;
+  /** a texture of one black texel, for a sampler a frame does not read */
+  private blank(): WebGLTexture {
+    if (this.blankTex) return this.blankTex;
+    const gl = this.gl;
+    const t = this.texture(gl.NEAREST);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+    return (this.blankTex = t);
   }
 
   /** the pixels on the canvas right after a display (the tests' seams), RGBA, bottom row first */

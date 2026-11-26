@@ -11,6 +11,7 @@ import { supportsAvif } from '../media';
 import { timeScale } from '../motion';
 import { FX, MASK_PER_M, TourGL, layer, restDisplay, type Display, type LayerDraw, type Px } from './gl';
 import { metrics, type EffectStat } from './metrics';
+import { pushGeometry } from './push';
 import {
   NORDIC,
   ROOMS,
@@ -287,35 +288,112 @@ export class TourEngine {
     return Promise.all(draws.map((d) => this.ensure(d, priority, d.mips ?? !d.key.endsWith(':base')))).then(() => undefined);
   }
   /**
-   * MOCK4: to another room of the house. TEMPORARY: a plain dissolve of `ms` between the two rooms at rest (rule ו.6:
-   * never a zoom-in), until the T-C* clips between the rooms exist; a clip will play here instead. The next room is
-   * loaded and on the GPU before anything moves, it comes with its default products in it (`products`: false, empty,
-   * for the arrival's reveal), and the room left behind gives its textures and its decoded pictures back (a phone
-   * holds one room at a time).
+   * MOCK7: a room's depth on the GPU (a small nearness map inlined in its data: tools/lib/depth.ts), under the key
+   * `<room>:depth`; null when the room has none (the push uses its designed fallback)
    */
-  async toRoom(id: RoomId, ms: number, products = true, label = `room-${id}`): Promise<void> {
+  depthOf(r: TourData): Promise<string | null> {
+    if (!r.depth) return Promise.resolve(null);
+    const key = `${r.room}:depth`;
+    if (this.gl.has(key)) return Promise.resolve(key);
+    const img = new Image();
+    img.src = r.depth;
+    return img
+      .decode()
+      .then(() => this.upload(() => this.gl.upload(key, img, false)))
+      .then(() => key)
+      .catch(() => null);
+  }
+  /** MOCK7: the push's state for one frame (gl.ts PUSH) */
+  private pushAt(t: number, g: { dir: number; fa: [number, number]; fb: [number, number] }, amp: number, still: boolean): void {
+    this.d.fx = FX.push;
+    this.d.push = [t, g.dir, g.fa[0], g.fa[1]];
+    this.d.push2 = [g.fb[0], g.fb[1], amp, still ? 1 : 0];
+  }
+  /**
+   * MOCK4: to another room of the house. The next room is loaded and on the GPU before anything moves, it comes with
+   * its default products in it (`products`: false, empty, for the arrival's reveal), and the room left behind gives its
+   * textures and its decoded pictures back (a phone holds one room at a time).
+   * MOCK7: `push` (its strength: 1 between rooms, less between two frames of a room) walks from one room into the other
+   * through their depth (gl.ts PUSH), in place of the dissolve; reduced motion keeps the plain dissolve of `ms`.
+   */
+  async toRoom(id: RoomId, ms: number, products = true, label = `room-${id}`, push = 0): Promise<void> {
     const next = ROOMS[id];
     const from = tour.room;
+    const prev = tour;
+    const camA = { ...this.cam };
     await this.loadRoom(next, 0);
     if (this.destroyed) return;
-    await this.between(label, ms, () => {
-      setRoom(id);
-      this.house = WM;
-      if (from !== id) {
-        this.selection = Object.fromEntries(next.slots.map((s) => [s.id, 1]));
-        this.defaults = null;
-        this.warmed = true;
-        this.warmP = Promise.resolve();
-        this.inBackground = false;
-      }
-      this.poses.clear();
-      this.visible = new Set(products ? next.slots.map((s) => s.id) : []);
-      this.gl.setCamera(next.camera);
-      this.rest = this.restCam();
-      this.cam = { ...this.rest };
-    });
+    const amp = push > 0 && !this.reduce && from !== id ? push : 0;
+    const [dA, dB] = amp ? await Promise.all([this.depthOf(prev), this.depthOf(next)]) : [null, null];
+    const g = amp ? pushGeometry(prev.camera, next.camera) : null;
+    const step = g
+      ? (t: number) => {
+          this.pushAt(t, g, amp, false);
+          this.d.camA = camA;
+          this.d.depthA = dA;
+          this.d.depthB = dB;
+        }
+      : undefined;
+    await this.between(
+      label,
+      ms,
+      () => {
+        setRoom(id);
+        this.house = WM;
+        if (from !== id) {
+          this.selection = Object.fromEntries(next.slots.map((s) => [s.id, 1]));
+          this.defaults = null;
+          this.warmed = true;
+          this.warmP = Promise.resolve();
+          this.inBackground = false;
+        }
+        this.poses.clear();
+        this.visible = new Set(products ? next.slots.map((s) => s.id) : []);
+        this.gl.setCamera(next.camera);
+        this.rest = this.restCam();
+        this.cam = { ...this.rest };
+      },
+      step,
+    );
     if (from !== id) this.release(id);
     this.mask();
+  }
+  /**
+   * MOCK7: the arrival's last frame (the walk's video, stopped in the hall) on the canvas, exactly where the video
+   * shows it, as the first frame of the push into the room: the video can give way over it. False: no still (the
+   * page dissolves instead).
+   */
+  holdStill(src: HTMLVideoElement, smap: [number, number, number, number]): boolean {
+    if (this.reduce || !this.ready || !this.gl.uploadStill(src)) return false;
+    this.pushAt(0, { dir: 0, fa: [0.5, 0.5], fb: [0.5, 0.5] }, 1, true);
+    this.d.smap = smap;
+    this.render();
+    return true;
+  }
+  /**
+   * MOCK7: from the still into the room the visitor is in (composed as it is: the living room, empty, for its reveal),
+   * walking toward where that room's camera stands in the still's camera (`cam`: x, y, z, yaw, u0, v0 of the walk's
+   * last frame, arrival.json `land`). The still's texture goes when the room is there.
+   */
+  async fromStill(label: string, ms: number, cam: readonly number[]): Promise<void> {
+    const dB = await this.depthOf(tour);
+    const g = pushGeometry(
+      { frame: [0, 1, 0, 1], u0: cam[4]!, v0: cam[5]!, kx: tour.camera.kx, loc: [cam[0]!, cam[1]!, cam[2]!], yaw_deg_left: cam[3]! },
+      tour.camera,
+    );
+    const smap = this.d.smap;
+    await this.between(
+      label,
+      ms,
+      () => undefined,
+      (t) => {
+        this.pushAt(t, g, 1, true);
+        this.d.smap = smap;
+        this.d.depthA = null;
+        this.d.depthB = dB;
+      },
+    );
+    this.gl.dropStill();
   }
   /** MOCK4: every texture that is not room `r`'s goes, with its decoded picture */
   private release(r: string): void {

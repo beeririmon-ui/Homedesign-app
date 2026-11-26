@@ -1,5 +1,5 @@
 {
-  "note": "MOCK5 (2026-11-24): the kitchen's second frame D2 after 10.9 (yaw −86 with the walnut niche, KD-15 / KD-16), QA qa/reports/2026-11-24-kitchen-d2-stage, owner approval AP3-KW. Its camera is the warm-modern one of docs/house-plan.json style_shells_1_3_1.warm-modern.kitchen-dining.cameras.D2 (−86), never the shared cameras.D2 (−91, Nordic). The pendant is not in the frame: its light on the wall is always on. No wheel here. Behind HD_PUBLIC=0.",
+  "note": "MOCK5 (2026-11-24): the kitchen's second frame D2 after 10.9 (yaw −86 with the walnut niche, KD-15 / KD-16), QA qa/reports/2026-11-24-kitchen-d2-stage, owner approval AP3-KW. Its camera is the warm-modern one of docs/house-plan.json style_shells_1_3_1.warm-modern.kitchen-dining.cameras.D2 (−86), never the shared cameras.D2 (−91, Nordic). The pendant is not in the frame: its light on the wall is always on. No wheel here. Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (manifest-fb15.json, the 'pasted' fix), gated against their own default frame (D2-defaults-fb15.png).",
   "room": "dining-d2",
   "group": "dining",
   "frame_id": "D2",
@@ -7,8 +7,12 @@
   "style": "warm-modern",
   "name_he": "מטבח",
   "layers": "assets/renders/dining/warm-modern/stage1-2026-11-20",
-  "manifest": "manifest.json",
-  "truth": "D2-defaults.png",
+  "manifest": "manifest-fb15.json",
+  "truth": "D2-defaults-fb15.png",
+  "depth": {
+    "file": "assets/blockout/house/framing/wm-dining-2026-11-20/D2-depth.png",
+    "encoding": "m5000"
+  },
   "plate": "plate-D2.png",
   "plan": "docs/house-plan.json",
   "camera": "D2",

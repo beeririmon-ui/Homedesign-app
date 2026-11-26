@@ -57,6 +57,7 @@ import {
 import { arrival, camAt, doorUrl, frameAt, hcUrl, labelOpacity, labelPose, layoutLabels, walkFor, walkUrl } from './arrival';
 import type { TourEngine } from './engine';
 import { metrics, report, statLine } from './metrics';
+import { coverMap } from './push';
 import type { Reveal, Style, Swap, Ui } from './fx';
 import { MQ, ZOOM, closeReserve, doorRect, overArc, padded, pinchZoom, rubber, tapRule, wheelArc, type Layout, type Mark } from './layout';
 import { design as DESIGN, type Design } from '../design/design';
@@ -150,10 +151,18 @@ const inWin = (p: { x: number; y: number }, vp: { w: number; h: number }) => ({
   y: Math.min(vp.h - 6, Math.max(6, p.y)),
 });
 /**
- * MOCK4, TEMPORARY: the move between two rooms is a plain dissolve of this long (rule ו.6: never a zoom-in), until the
- * T-C* clips between the rooms exist (route ch. 11.2–11.4); then a clip plays in its place (tour/engine.ts toRoom).
+ * MOCK4: the move between two rooms was a plain dissolve of this long (rule ו.6: never a zoom-in). MOCK7: it stays for
+ * reduced motion and for the way back to the door; between rooms the camera walks (PUSH_MS).
  */
 const ROOM_FADE_MS = 900;
+/**
+ * MOCK7 (briefs/site-mock7-tour-transitions-2026-11-26.md): the walk between two rooms, in code (2.5D, tour/gl.ts
+ * PUSH), until the real camera clips: 1.25 s between rooms, 0.95 s (and a shorter walk) between two frames of a room,
+ * 1.3 s from the hall into the living room. The brief's 0.8–1.4 s; always forward (FB8).
+ */
+export const PUSH_MS = { room: 1250, frame: 950, arrive: 1300 } as const;
+/** how far a walk goes: between two rooms, and between two frames of one room */
+const PUSH_AMP = { room: 1, frame: 0.55 } as const;
 /**
  * MOCK5, TEMPORARY: the move between two frames of one room (MB0 / MB1, B2 / B1, D1 / D2) is a short plain dissolve
  * (rule ו.6: never a zoom-in), like the move between rooms, until the in-room moves have clips of their own.
@@ -992,6 +1001,12 @@ export function TourPage() {
         e.stop('arrival');
         walkLabels.current?.removeAttribute('data-on');
         v.onplaying = null;
+        // MOCK7: the walk stops in the hall; its last frame goes on the canvas, where the video shows it, and the push
+        // into the living room starts from it (goIn) while the video gives way over the same frame
+        if (!reduce) {
+          const pos = parseFloat(v.style.objectPosition || '50') / 100;
+          stilled.current = e.holdStill(v, coverMap(v.videoWidth, v.videoHeight, e.vp.w, e.vp.h, Number.isFinite(pos) ? pos : 0.5));
+        }
         // the walk gives the window to the room: the canvas under it is the frame the walk landed on
         offerSkip(false);
         stage.current?.removeAttribute('data-walk');
@@ -1049,6 +1064,8 @@ export function TourPage() {
     });
   }
   const announced = useRef(false);
+  /** MOCK7: the walk's last frame is on the canvas (the push into the living room starts from it) */
+  const stilled = useRef(false);
   /** the walk's file has enough to play through (or 6 s have passed: it plays as it comes) */
   const canPlay = (v: HTMLVideoElement): Promise<void> =>
     v.readyState >= 3
@@ -1084,7 +1101,11 @@ export function TourPage() {
       e.cam = { ...e.rest };
       e.render();
       layLabels();
+      stilled.current = false;
       await walk(e);
+      // MOCK7: from the hall into the living room, walking (clip 2 shows the old table and the old camera: not used)
+      if (stilled.current) await e.fromStill('arrive-living', PUSH_MS.arrive, arrival.land.cam);
+      stilled.current = false;
       stage.current?.removeAttribute('data-hc');
       await m.reveal(e, ui, live.current.cfg.way === 'full' ? 'c' : live.current.cfg.fx);
       setPhase('room');
@@ -1139,8 +1160,16 @@ export function TourPage() {
           held.current.push(img);
           await decoded(img);
         }
-        // TEMPORARY (FB11): a dissolve, between rooms and between the frames of a room, until the clips exist
-        await e.toRoom(id, fromDoor ? 0 : inRoom ? FRAME_FADE_MS : ROOM_FADE_MS, true, inRoom ? `frame-${id}` : `room-${id}`);
+        // MOCK7: a walk between rooms and between the frames of a room (2.5D, in code, until the real clips); reduced
+        // motion keeps the dissolve
+        const walkIt = !fromDoor && !e.reduce;
+        await e.toRoom(
+          id,
+          fromDoor ? 0 : walkIt ? (inRoom ? PUSH_MS.frame : PUSH_MS.room) : inRoom ? FRAME_FADE_MS : ROOM_FADE_MS,
+          true,
+          inRoom ? `frame-${id}` : `room-${id}`,
+          walkIt ? (inRoom ? PUSH_AMP.frame : PUSH_AMP.room) : 0,
+        );
         setHouse(WM);
         setRoomUi(id);
         if (fromDoor) {

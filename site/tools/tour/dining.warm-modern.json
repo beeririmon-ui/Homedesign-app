@@ -1,5 +1,5 @@
 {
-  "note": "MOCK5 (2026-11-24): the kitchen-dining's rest frame D1 (the table under the pendant, the kitchen run behind), QA qa/reports/2026-11-20-kitchen-dining and 2026-11-24-kitchen-d2-stage (10.9: the D2 changes projected into D1), owner approval AP3-KW (2026-11-24). Read by tools/make-tour-room.ts: the manifest has two frames (`frame_id` picks D1's layers, lights and plate; retired layers never compose). The condiment set and the sink set are two products each (a config entry each: `of`, `product`). The sample slot is the pendant, V1 and V3 (V2 retired, KD-L3). The print 386242 is ×1 only by its card's rights. The table, the chairs and the bench are in the plate (fixed, not sold). Behind HD_PUBLIC=0.",
+  "note": "MOCK5 (2026-11-24): the kitchen-dining's rest frame D1 (the table under the pendant, the kitchen run behind), QA qa/reports/2026-11-20-kitchen-dining and 2026-11-24-kitchen-d2-stage (10.9: the D2 changes projected into D1), owner approval AP3-KW (2026-11-24). Read by tools/make-tour-room.ts: the manifest has two frames (`frame_id` picks D1's layers, lights and plate; retired layers never compose). The condiment set and the sink set are two products each (a config entry each: `of`, `product`). The sample slot is the pendant, V1 and V3 (V2 retired, KD-L3). The print 386242 is ×1 only by its card's rights. The table, the chairs and the bench are in the plate (fixed, not sold). Behind HD_PUBLIC=0. MOCK7 (2026-11-26): the FB15 layers (manifest-fb15.json, the 'pasted' fix), gated against their own default frame (D1-defaults-fb15.png).",
   "room": "dining",
   "group": "dining",
   "frame_id": "D1",
@@ -7,8 +7,12 @@
   "style": "warm-modern",
   "name_he": "מטבח",
   "layers": "assets/renders/dining/warm-modern/stage1-2026-11-20",
-  "manifest": "manifest.json",
-  "truth": "D1-defaults.png",
+  "manifest": "manifest-fb15.json",
+  "truth": "D1-defaults-fb15.png",
+  "depth": {
+    "file": "assets/blockout/house/framing/wm-dining-2026-11-20/D1-depth.png",
+    "encoding": "m5000"
+  },
   "plate": "plate-D1.png",
   "plan": "docs/house-plan.json",
   "camera": "D1",

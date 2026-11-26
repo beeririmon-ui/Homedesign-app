@@ -16,6 +16,13 @@
  *
  * The web files are encoded once per change of the masters or of this file (a stamp beside them). ffmpeg is a tool of
  * this machine, not of the site: a machine without it keeps the files it has, and fails only when none are there.
+ *
+ * MOCK7 (2026-11-26, briefs/site-mock7-tour-transitions-2026-11-26.md): the walk ends in the hall, at the end of the
+ * turn to HDx, and the tour walks on into the living room in code (web/src/tour/gl.ts PUSH). Clip 2 (HDx → M0) is not
+ * shipped: it shows the old walnut table and the old camera. The turn's last 15 frames are cut too: from frame 493 of
+ * the 60 fps master the old table comes into the opening (checked frame by frame), so the walk stops at frame 490
+ * (the phone's 245, the mean of 488–490), and the push starts from that very frame (`land.cam`: its camera, where the
+ * page aims the push: through the opening, at M0).
  */
 import sharp from 'sharp';
 import { execFileSync } from 'node:child_process';
@@ -31,8 +38,10 @@ const REL = 'tour/arrival';
 const OUT = join(MEDIA_OUT, REL);
 /** the brief's limits: the desktop ≤ 8 MB at 60 fps, the phone ≤ 3 MB, every file under the Artifact's 15 MB */
 const LIMIT = { desktop: 8 * 1024 * 1024, phone: 3 * 1024 * 1024 } as const;
-/** the frame of the 60 fps master the room engine takes over on (segments.json "M0 landing") */
-const LAND_60 = 702;
+/** the frame of the 60 fps master the room engine took over on in MOCK4–6 (segments.json "M0 landing"), checked */
+const M0_LANDING_60 = 702;
+/** MOCK7: the walk's last frame, before the old walnut table enters the opening (frame 493); the phone's is 490 / 2 */
+const LAND_60 = 490;
 /** the rest on HC, a frame in its middle (segments.json "rest HC": 357–404) */
 const HC_60 = 381;
 /** the labels' window: the camera of every frame from here to there is written for the page (they move with the turns) */
@@ -52,10 +61,10 @@ const dir = repoPath(SRC);
 const seg = read<Segments>(join(dir, 'segments.json'));
 const cams = read<Cam[]>(join(dir, 'camera.json'));
 const land = seg.segments.find((s) => s.segment === 'M0 landing') ?? null;
-if (!land || land.frames_60[0] !== LAND_60) throw new Error(`make-arrival: the landing on M0 is not frame ${LAND_60} of the master any more`);
-// the phone's last frame: segments.json writes the landing as the empty range 352–351; frame 352 (the mean of 701–703)
-// is the landing, before the reveal's line reaches the room (its products appear from 734)
-const LAND_30 = land.frames_30[0];
+if (!land || land.frames_60[0] !== M0_LANDING_60) throw new Error(`make-arrival: the landing on M0 is not frame ${M0_LANDING_60} of the master any more`);
+const turn = seg.segments.find((s) => s.segment === 'right turn');
+if (!turn || LAND_60 < turn.frames_60[0] || LAND_60 > turn.frames_60[1]) throw new Error(`make-arrival: frame ${LAND_60} is not in the turn to HDx any more`);
+const LAND_30 = LAND_60 / 2;
 const rest = seg.segments.find((s) => s.segment === 'rest HC')!;
 
 const tool = readFileSync(new URL(import.meta.url), 'utf8');
@@ -152,6 +161,15 @@ const data = {
   labels: LABELS.map(([id, name_he]) => ({ id, name_he, pts: pts[id]!, u: anchors[id]!.u })),
   /** [x, y, z, yaw, u0, v0] of frames cams[0]..cams[1] (60 fps, 1-based) */
   cams: { from: CAMS[0], f: window_.map((c) => [r5(c.loc[0]), r5(c.loc[1]), r5(c.loc[2]), r5(c.yaw), r5(c.u0), r5(c.v0)]) },
+  /** MOCK7: the walk's last frame and its camera [x, y, z, yaw, u0, v0]: the transition into the living room starts there */
+  land: (() => {
+    const c =
+      cams.find((x) => x.frame === LAND_60) ??
+      (() => {
+        throw new Error(`make-arrival: no camera for frame ${LAND_60}`);
+      })();
+    return { frame: LAND_60, cam: [r5(c.loc[0]), r5(c.loc[1]), r5(c.loc[2]), r5(c.yaw), r5(c.u0), r5(c.v0)] };
+  })(),
 };
 mkdirSync(GENERATED, { recursive: true });
 writeFileSync(join(GENERATED, 'arrival.json'), JSON.stringify(data));

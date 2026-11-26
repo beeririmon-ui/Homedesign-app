@@ -25,6 +25,15 @@
  * MOCK6 (2026-11-25): the living room is pinned to what MOCK5 used (`pin`: tools/tour/living-room.pin.json, the git blob
  * of every file read here), while render-agent makes the clean M0 plate in the same folder (FB12). A file whose blob
  * differs on disk is read from git's own copy of the pinned blob, so no new living-room file is picked up.
+ *
+ * MOCK7 (2026-11-26, briefs/site-mock7-tour-transitions-2026-11-26.md): the room's source is ONE line of its config,
+ * `manifest` (the layers manifest's path from the repository's root; its folder is the layers' folder). Today it is
+ * manifest-basket.json (Olia, the lfix fixes, the moved basket; the old walnut table is in none of its files). The base
+ * is the manifest's own `base` layer (base-fb12s0.png, the plate without the old table): encoded here when it is not
+ * the house's, so the house's old base never reaches the tour. The gate: the default composition of these files, in
+ * the manifest's order and by its formula, is its own default frame (truths.default, the first cushion set), to the
+ * channel value. The pin holds only for the manifest it was written for (a new `manifest` line reads the files as they
+ * are, and says so). `depth` (by manifest) is the room's depth for the transitions (tools/lib/depth.ts).
  */
 import sharp from 'sharp';
 import { createHash } from 'node:crypto';
@@ -32,14 +41,26 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { GENERATED, MEDIA_OUT, REPO, repoPath, sitePath } from './lib/paths';
+import { nearness, type DepthCfg } from './lib/depth';
 
 type Box = [number, number, number, number];
-type SlotCfg = { depth_m: number; kind: 'floor' | 'wall' | 'surface' | 'hang'; anchors: [number, number][]; order_a: number; dims?: boolean; hero?: boolean };
+type SlotCfg = {
+  depth_m: number;
+  kind: 'floor' | 'wall' | 'surface' | 'hang';
+  anchors: [number, number][];
+  order_a: number;
+  dims?: boolean;
+  hero?: boolean;
+  /** MOCK7: the slot's name where the shop has none (the coffee table: a fixed product in data/slots) */
+  name_he?: string;
+};
 type TourManifest = {
   room: string;
   style: string;
-  layers: string;
+  /** MOCK7: the layers manifest, from the repository's root (one line: the room's source) */
   manifest: string;
+  /** MOCK7: the room's depth for the transitions, by manifest */
+  depth?: Record<string, DepthCfg>;
   house: string;
   plan: string;
   camera: string;
@@ -68,14 +89,20 @@ const fail = (msg: string): never => {
   process.exit(1);
 };
 const t = read<TourManifest>(sitePath(MANIFEST));
-const dir = repoPath(t.layers);
+const manifestPath = repoPath(t.manifest);
+const dir = dirname(manifestPath);
 
 // ---------- MOCK6: the pin (every file read below is the blob MOCK5 used) ----------
-const pin = t.pin ? read<{ commit: string; files: Record<string, string> }>(sitePath(t.pin)) : null;
+const pinFile = t.pin ? read<{ commit: string; manifest?: string; files: Record<string, string> }>(sitePath(t.pin)) : null;
+// MOCK7: the pin holds for the manifest it was written for; another `manifest` line reads its files as they are
+const pin = pinFile && pinFile.manifest === t.manifest ? pinFile : null;
+if (pinFile && !pin) console.warn(`make-tour: ${t.pin} is for ${pinFile.manifest ?? 'manifest-r9.json'}, not ${t.manifest}: the files are read as they are`);
 const pinnedFrom: string[] = [];
 const checked = new Map<string, string>();
 /** the file to read for `f`: itself when its git blob is the pinned one, else git's own copy of the pinned blob */
+const touched = new Set<string>();
 const at = (f: string): string => {
+  touched.add(relative(REPO, f));
   if (!pin) return f;
   const hit = checked.get(f);
   if (hit) return hit;
@@ -94,7 +121,7 @@ const at = (f: string): string => {
   checked.set(f, use);
   return use;
 };
-const lm = read<LayersManifest>(at(join(dir, t.manifest)));
+const lm = read<LayersManifest>(at(manifestPath));
 const W = lm.size.width;
 const H = lm.size.height;
 const sha = (f: string) => createHash('sha256').update(readFileSync(f)).digest('hex');
@@ -111,8 +138,10 @@ const houseFile = join(GENERATED, `house.${t.room}.${t.style}.json`);
 if (!existsSync(houseFile)) fail(`${houseFile} is missing: tools/make-house.ts runs first (npm run story)`);
 const house = read<{ name_he: string; scene: { base: { src: string; widths: number[] }[]; aspect: number } }>(houseFile);
 const pilotBase = at(join(repoPath(hm.pilot), hm.layers_dir, 'base.png'));
-if (sha(at(join(dir, 'base.png'))) !== sha(pilotBase))
-  fail(`${t.layers}/base.png is not the house's base (${hm.pilot}/${hm.layers_dir}/base.png): encode it here first`);
+// MOCK7: the manifest's own base layer; the house's encoded base is shared only when it is that very file
+const baseLayer = lm.layers.find((l) => l.id === 'base') ?? fail(`no base layer in ${t.manifest}`);
+const baseFile = at(join(dir, baseLayer.file ?? 'base.png'));
+const ownBase = sha(baseFile) !== sha(pilotBase);
 
 // ---------- the shop's records, by card ----------
 type Shop = {
@@ -159,8 +188,53 @@ const slots = slotIds.map((id) => {
   return { id, cfg, z, options };
 });
 for (const id of Object.keys(t.slots)) if (!slotIds.includes(id)) fail(`tools/tour names slot ${id}, which ${t.manifest} does not compose`);
-const sources = slots.flatMap((s) => s.options.flatMap((o) => [at(join(dir, o.layer)), at(join(dir, o.shadow)), at(join(dir, o.truth))]));
+const sources = [baseFile, ...slots.flatMap((s) => s.options.flatMap((o) => [at(join(dir, o.layer)), at(join(dir, o.shadow)), at(join(dir, o.truth))]))];
 for (const f of sources) if (!existsSync(f)) fail(`missing ${f}`);
+
+// ---------- MOCK7, the gate: the default composition of these files is the manifest's own default frame ----------
+// (the manifest's formula, per product in its order: out = round((below × shadow / 255)(1 − a) + rgb × a), numpy's
+// rint; the cushions: the first set, its shadow and its layer together). Every channel value, or the build stops.
+const rint = (x: number) => {
+  const f = Math.floor(x);
+  const d = x - f;
+  return d > 0.5 ? f + 1 : d < 0.5 ? f : f % 2 === 0 ? f : f + 1;
+};
+const gateTruth = lm.truths.default[lm.slot_cushions.order[0]!]!;
+let gateStat = '';
+{
+  const rgb = async (f: string, ch: 3 | 4) => {
+    const img = sharp(at(join(dir, f)));
+    const { data, info } = await (ch === 4 ? img.ensureAlpha() : img.removeAlpha()).raw().toBuffer({ resolveWithObject: true });
+    if (info.width !== W || info.height !== H) fail(`${f} is ${info.width}×${info.height}, not ${W}×${H}`);
+    return data;
+  };
+  const st = Buffer.from(await rgb(baseLayer.file ?? 'base.png', 3));
+  for (const s of slots) {
+    const o = s.options[0]!;
+    const p = await rgb(o.layer, 4);
+    const sh = await rgb(o.shadow, 3);
+    for (let i = 0; i < W * H; i++) {
+      const al = p[i * 4 + 3]!;
+      if (!al && sh[i * 3] === 255 && sh[i * 3 + 1] === 255 && sh[i * 3 + 2] === 255) continue;
+      const a = al / 255;
+      for (let k = 0; k < 3; k++) st[i * 3 + k] = rint(((st[i * 3 + k]! * sh[i * 3 + k]!) / 255) * (1 - a) + p[i * 4 + k]! * a);
+    }
+  }
+  const truth = await rgb(gateTruth, 3);
+  let max = 0;
+  let over1 = 0;
+  for (let i = 0; i < st.length; i++) {
+    const d = Math.abs(st[i]! - truth[i]!);
+    if (d > max) max = d;
+    if (d > 1) over1++;
+  }
+  // the phase 2 tool's own truths are its graded composites, not its stack to the bit: render-agent's verification of
+  // this manifest (verify-layers-basket.json, 3_stack) holds the stack to them at max 4 levels and 99.9% within 1 —
+  // the same bound here (a room built by tools/make-tour-room.ts is held to 0)
+  if (max > 4 || over1 > st.length * 0.001)
+    fail(`the default layers in ${t.manifest}'s order miss ${gateTruth}: max ${max} levels, ${over1} channel values over 1`);
+  gateStat = `max ${max} levels, ${((over1 / st.length) * 100).toFixed(3)}% of the values over 1`;
+}
 
 const REL = `tour/${t.room}/${t.style}/M0`;
 const OUT = join(MEDIA_OUT, REL);
@@ -179,7 +253,7 @@ const stamp = createHash('sha256')
     JSON.stringify({
       t,
       tool: readFileSync(new URL(import.meta.url), 'utf8'),
-      manifest: sha(at(join(dir, t.manifest))),
+      manifest: sha(at(manifestPath)),
       sources: [...new Set(sources)].map((f) => [f, statSync(f).size, statSync(f).mtimeMs]),
     }),
   )
@@ -225,6 +299,13 @@ if (cached?.stamp === stamp) {
     mkdirSync(dirname(f), { recursive: true });
     return f;
   };
+  // MOCK7: the manifest's own base, at the two widths (the house's encoder's settings for a photograph, WebP only)
+  if (ownBase)
+    for (const Wt of new Set(Object.values(WIDTHS)))
+      await (Wt === W ? sharp(baseFile) : sharp(baseFile).resize(Wt))
+        .removeAlpha()
+        .webp({ quality: 90, effort: 5, smartSubsample: true })
+        .toFile(out(`base.${Wt}.webp`));
   measured = {};
   // "how much of the room they fill": the default products' alpha, inside the camera frame
   const [fx0, fy0, fx1, fy1] = lm.size.camera_frame_px;
@@ -329,13 +410,21 @@ const camera = {
 // ---------- the data ----------
 // not rounded: the engine puts a layer back on its own pixels (rect × the canvas's size is a whole number)
 const uv = (r: Px): Box => [r.x0 / W, r.x1 / W, r.y0 / H, r.y1 / H];
+const depthCfg = t.depth?.[t.manifest] ?? null;
+const depthMap = depthCfg ? await nearness(depthCfg) : null;
 const dimsHe = (d: Shop['dimensions_cm'], kind: SlotCfg['kind']): string | null => {
   if (!d) return null;
   const a = d.width;
   const b = kind === 'floor' && d.depth && !d.height ? d.depth : d.height;
   return a && b ? `${a} × ${b} ס"מ` : null;
 };
-const placeholder = `data:image/webp;base64,${(await sharp(pilotBase).removeAlpha().resize({ width: 48 }).webp({ quality: 60, effort: 6 }).toBuffer()).toString('base64')}`;
+const placeholder = `data:image/webp;base64,${(
+  await sharp(ownBase ? baseFile : pilotBase)
+    .removeAlpha()
+    .resize({ width: 48 })
+    .webp({ quality: 60, effort: 6 })
+    .toBuffer()
+).toString('base64')}`;
 const data = {
   room: t.room,
   style: t.style,
@@ -347,15 +436,19 @@ const data = {
   card_width: CARD,
   aspect: W / H,
   mobile_center_u: hm.mobile_center_u,
-  base: { src: house.scene.base[0]!.src, widths: house.scene.base[0]!.widths, placeholder },
+  base: ownBase
+    ? { src: `${REL}/base`, widths: [...new Set(Object.values(WIDTHS))], placeholder, formats: ['webp'] }
+    : { src: house.scene.base[0]!.src, widths: house.scene.base[0]!.widths, placeholder },
   camera,
+  // MOCK7: the room's depth for the transitions (a small nearness map, near = white), or null: the page's fallback
+  depth: depthCfg ? depthMap!.uri : null,
   cover: +cover.toFixed(4),
   slots: slots.map((s) => {
     const m = measured[s.id]!;
     const a0 = m.alpha[0]!;
     return {
       id: s.id,
-      name_he: (s.id === hm.slot.id ? hm.slot.name_he : null) ?? slotNames.get(s.id) ?? fail(`no name for slot ${s.id}`),
+      name_he: (s.id === hm.slot.id ? hm.slot.name_he : null) ?? slotNames.get(s.id) ?? s.cfg.name_he ?? fail(`no name for slot ${s.id}`),
       z: s.z,
       rect: uv(m.rect),
       depth_m: s.cfg.depth_m,
@@ -423,9 +516,27 @@ console.log(
     `; the default composition's ${slots.length * 2} layers ${defaults.toFixed(0)} KB of ${all.toFixed(0)} KB at ${W}` +
     `); the products fill ${(cover * 100).toFixed(1)}% of the frame; the wheel's cards: ${studioCards} our own studio pictures and ` +
     `${data.slots.reduce((n, s) => n + s.options.length, 0) - studioCards} trimmed layers, no room crops; ` +
-    `${unsold.length} options are not in the shop yet (${unsold.join(', ')})` +
+    `${unsold.length} options are not in the shop yet (${unsold.join(', ')}); the gate: the defaults against ${gateTruth}, ${gateStat}; ` +
+    `the base: ${ownBase ? `its own (${baseLayer.file})` : "the house's"}; depth: ${depthCfg ? depthCfg.file : 'none (the fallback)'}` +
     (pin
       ? `; pinned to ${t.pin} (${Object.keys(pin.files).length} files, ${pinnedFrom.length} read from git: ${pinnedFrom.join(', ') || 'none changed on disk'})`
       : '') +
     ` → ${outFile}`,
 );
+
+// ---------- MOCK7: `--write-pin` writes the pin for this manifest (every file read above, as git holds it at HEAD) ----------
+if (process.argv.includes('--write-pin') && t.pin) {
+  const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: REPO, encoding: 'utf8' }).trim();
+  const files: Record<string, string> = {};
+  for (const rel of [...touched].sort()) {
+    const staged = execFileSync('git', ['ls-files', '-s', '--', rel], { cwd: REPO, encoding: 'utf8' }).trim().split(/\s+/)[1];
+    const b = readFileSync(join(REPO, rel));
+    const blob = createHash('sha1').update(`blob ${b.length}\0`).update(b).digest('hex');
+    if (staged !== blob) fail(`${rel} is not in git as it is on disk: commit it before pinning`);
+    files[rel] = blob;
+  }
+  const note =
+    "MOCK7 (2026-11-26, briefs/site-mock7-tour-transitions-2026-11-26.md): the living room pinned to manifest-basket.json (Olia, the lfix fixes, the moved basket; the old walnut table is in none of these files). Every file tools/make-tour.ts reads for this manifest, as git holds it: the blob of each at the commit below. A file whose blob differs on disk is read from git's own copy of the pinned blob (written to .generated/pinned/), so nothing new is picked up unnoticed. The pin holds only for `manifest`; a new manifest line reads its files as they are, and `npx --no-install tsx tools/make-tour.ts tools/tour/living-room.warm-modern.json --write-pin` writes the pin again (MOCK6's pin, for manifest-r9.json, is in git's history).";
+  writeFileSync(sitePath(t.pin), JSON.stringify({ note, commit, manifest: t.manifest, files }, null, 2) + '\n');
+  console.log(`make-tour: pinned ${Object.keys(files).length} files at ${commit.slice(0, 7)} → ${t.pin}`);
+}
