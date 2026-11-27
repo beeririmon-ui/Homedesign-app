@@ -41,7 +41,10 @@ def pace_and_render(src, rate, seg, A, B, out, rep):
     sig = 0.25 * 240; k = np.exp(-0.5 * (np.arange(-3 * sig, 3 * sig + 1) / sig) ** 2); k /= k.sum()
     vs = np.convolve(np.pad(vg, (len(k) // 2, len(k) // 2), mode='edge'), k, 'valid'); Cg = np.interp(tg, tn, C)
     segg = np.array(seg)[np.clip(np.searchsorted(tn, tg, side='right') - 1, 0, len(seg) - 1)]
-    med = float(np.median(vs[segg == 'kling'])); hi = np.where(segg == 'code', 3.5 * med, 1.4 * med); lo = np.where(segg == 'code', 0.5 * med, 0.85 * med)
+    med = float(np.median(vs[segg == 'kling']))
+    if os.environ.get('LEG_MED_PX_S'):          # keep a leg's accepted pace when a fix changes its clips (leg 3, 2026-11-27)
+        rep['median_measured'] = round(med); med = float(os.environ['LEG_MED_PX_S'])
+    hi = np.where(segg == 'code', 3.5 * med, 1.4 * med); lo = np.where(segg == 'code', 0.5 * med, 0.85 * med)
     vs = np.clip(vs, lo, hi)
     vs = np.convolve(np.pad(vs, (len(k) // 2, len(k) // 2), mode='edge'), k, 'valid')        # smooth again across the clamps and the seam
     rep['picture_speed_px_s'] = dict(median_walk=round(med), walk=[round(0.85 * med), round(1.4 * med)], turn_max=round(3.5 * med))

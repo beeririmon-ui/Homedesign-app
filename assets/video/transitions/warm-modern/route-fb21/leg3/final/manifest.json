@@ -6,7 +6,7 @@
  "date": "2026-11-27",
  "author": "motion-agent",
  "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, FB21",
- "play_s": 13.183,
+ "play_s": 11.5,
  "sampling": "uniform in time at the nominal walk: frame i (1-based) is shown at (i - 1) / fps s; an even picture speed (0.5x-1.6x of the median) with a short ease in and out; forward only, no hold, no cut",
  "chain": {
   "first_frame": "assets/renders/bath/warm-modern/b1-2026-11-19/b1-defaults-fb16-frame.png",
@@ -24,12 +24,12 @@
   },
   "ease_out_frames": {
    "1920": [
-    754,
-    792
+    650,
+    691
    ],
    "1080": [
-    377,
-    397
+    326,
+    346
    ]
   },
   "fast_forward": "when chaining at x2-x3, skip the ease-in frames of every leg but the first and the ease-out frames of every leg but the last"
@@ -44,7 +44,7 @@
    "w": 1920,
    "h": 1080,
    "fps": 60,
-   "frames": 792,
+   "frames": 691,
    "avif_quality": 55,
    "webp_quality": 72,
    "last_frames_quality": {
@@ -57,7 +57,7 @@
    "w": 1080,
    "h": 608,
    "fps": 30,
-   "frames": 397,
+   "frames": 346,
    "avif_quality": 50,
    "webp_quality": 60,
    "last_frames_quality": {
@@ -69,22 +69,22 @@
  },
  "bytes": {
   "1920": {
-   "avif": 31998390,
-   "webp": 33130980
+   "avif": 28948323,
+   "webp": 29743110
   },
   "1080": {
-   "avif": 4624698,
-   "webp": 5095306
+   "avif": 4152686,
+   "webp": 4539606
   }
  },
  "bytes_per_2s": {
   "1920": {
-   "avif": 4854492,
-   "webp": 5026318
+   "avif": 5034490,
+   "webp": 5172714
   },
   "1080": {
-   "avif": 701615,
-   "webp": 773011
+   "avif": 722206,
+   "webp": 789496
   }
  },
  "ends": {
@@ -128,41 +128,48 @@
   },
   "clip3": {
    "first": {
-    "shift_px_median": 0.6373406052589417,
-    "shift_px_p95": 1.6076712608337402,
-    "colour_resid_levels_mean": 2.2793076038360596
+    "shift_px_median": 0.6519322395324707,
+    "shift_px_p95": 1.6558594703674316,
+    "colour_resid_levels_mean": 2.2771880626678467
    },
    "last": {
-    "shift_px_median": 0.6983927488327026,
-    "shift_px_p95": 3.2151951789855957,
-    "colour_resid_levels_mean": 3.0606887340545654
+    "shift_px_median": 0.700975775718689,
+    "shift_px_p95": 3.1806445121765137,
+    "colour_resid_levels_mean": 3.0593011379241943
    }
   },
   "clip4": {
    "first": {
-    "shift_px_median": 0.14959922432899475,
-    "shift_px_p95": 0.9471385478973389,
-    "colour_resid_levels_mean": 2.7828762531280518
+    "shift_px_median": 0.14823397994041443,
+    "shift_px_p95": 0.9455621838569641,
+    "colour_resid_levels_mean": 2.783811092376709
    },
    "last": {
-    "shift_px_median": 15.920295715332031,
-    "shift_px_p95": 24.82875633239746,
-    "colour_resid_levels_mean": 3.4833898544311523
+    "shift_px_median": 0.022082818672060966,
+    "shift_px_p95": 0.10445273667573929,
+    "colour_resid_levels_mean": 0.1981336772441864
    }
   },
   "clip5": {
    "first": {
-    "shift_px_median": 0.09050507843494415,
-    "shift_px_p95": 0.2581300139427185,
-    "colour_resid_levels_mean": 0.44549527764320374
+    "shift_px_median": 0.022944236174225807,
+    "shift_px_p95": 0.11469780653715134,
+    "colour_resid_levels_mean": 0.1620003879070282
    },
    "last": {
-    "shift_px_median": 0.046643130481243134,
-    "shift_px_p95": 0.16651226580142975,
-    "colour_resid_levels_mean": 1.3588690757751465
+    "shift_px_median": 0.03486587107181549,
+    "shift_px_p95": 0.11439310759305954,
+    "colour_resid_levels_mean": 0.49663516879081726
    }
   }
  },
- "speed_max_jump_pct_per_frame": 11.4,
- "qa": "pending (qa-agent)"
+ "speed_max_jump_pct_per_frame": 11.1,
+ "qa": "pending (qa-agent)",
+ "fix_2026_11_27": {
+  "door": "k3c2.earlyblend.mp4: the furnished room blends in from k3c2 frame 38 (was 50); empty north side 0.08 s before the blend starts (was 0.62 s)",
+  "md_to_mb0": "k3d cut at 48 + k3d-mb0.walkturn.mp4: the rest of the walk turned about its lens and blended over 10 frames into the exact turn from MB0's centre; blank wall >= 35% of the frame for 0.23 s (was 1.47 s); no left drift and pan back",
+  "pace_median_px_s": 410.4,
+  "pace_note": "the v1 leg's measured median, held (LEG_MED_PX_S) so the unchanged segments keep their timing",
+  "tools": "assets/prompts/transitions-tools/earlyblend.py, walkturn.py; configs in assets/prompts/transitions.warm-modern/fb21-leg3-fix/"
+ }
 }
