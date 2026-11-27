@@ -3,7 +3,8 @@
  *
  *  1. the stations are the owner's order, the same as the rooms' order (data.ts GROUP_IDS) and tools/tour/route.json;
  *  2. one leg per step; leg 1 (living → kitchen) is real, its ease frames as its manifest marks them; the others walk
- *     in code until their clips exist, and a real leg drops in with one line;
+ *     in code until their clips exist, and a real leg drops in with one line (MOCK11: legs 2, 4 and 5 are real too,
+ *     web/test/mock11-route.test.ts; which legs are real is the config's);
  *  3. a trip: one station ahead at ×1, two ×2, three ×2.5, four and more ×3; the ease frames between the legs skipped
  *     (the ease-in of every leg but the first, the ease-out of every leg but the last); back is the light, ~450 ms;
  *  4. the stretch a hop plays: the whole leg, or without the frames a chain skips, on the frames' own times;
@@ -37,7 +38,7 @@ describe('MOCK9: the guided route', () => {
     expect(nextOf('work')).toBeNull();
   });
 
-  it('one leg per step; leg 1 is the clip, with its manifest’s ease frames; the rest walk in code, one line each', () => {
+  it('one leg per step; leg 1 is the clip, with its manifest’s ease frames; a leg without one has none, one line each', () => {
     expect(LEGS.map((l) => `${l.from}>${l.to}`)).toEqual(ROUTE.slice(1).map((to, i) => `${ROUTE[i]}>${to}`));
     expect(Object.keys(cfg.legs)).toEqual(LEGS.map((l) => `${l.from}>${l.to}`));
     const l1 = LEGS[0]!;
@@ -58,15 +59,15 @@ describe('MOCK9: the guided route', () => {
       ease_in: leg1.chain.ease_in_frames['1080'],
       ease_out: leg1.chain.ease_out_frames['1080'],
     });
-    // the files the page plays stay light: a wide screen's under 6 MB, a phone's under 2.5 MB
+    // the files the page plays stay light: a wide screen's under 6 MB (MOCK11: 8 MB for a long leg), a phone's under 2.5 MB
     expect(l1.real!.desktop.bytes).toBeLessThan(6 * 1048576);
     expect(l1.real!.phone.bytes).toBeLessThan(2.5 * 1048576);
-    expect(LEGS.slice(1).every((l) => l.real === null)).toBe(true);
-    expect(Object.values(cfg.legs).filter(Boolean)).toHaveLength(1);
+    // MOCK11: the legs that are real are the config's lines, one each
+    expect(LEGS.map((l) => l.real !== null)).toEqual(Object.values(cfg.legs).map(Boolean));
     // a phone (≤ 900 CSS px) plays the 30 fps file, a wide screen the 60 fps one; a leg in code has none
     expect(legFile(l1, 400)?.fps).toBe(30);
     expect(legFile(l1, 1280)?.fps).toBe(60);
-    expect(legFile(LEGS[1]!, 1280)).toBeNull();
+    expect(legFile(LEGS.find((l) => !l.real)!, 1280)).toBeNull();
   });
 
   it('a trip: one station at the leg’s own pace; a jump chained ×2–×3, the ease frames between legs skipped; back is the light', () => {

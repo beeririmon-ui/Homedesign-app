@@ -8,7 +8,7 @@
  *  3. "הלאה" from the living room plays leg 1 (the clip) at its own pace into the kitchen, and lands on D1's own
  *     composition;
  *  4. the scroll scrubs leg 1 like the arrival: a push plays a stretch and rests, more pushes reach the kitchen;
- *  5. two stations ahead: the legs chained at ×2, leg 1 without its ease-out, leg 2 (in code) after it;
+ *  5. two stations ahead: the legs chained at ×2, leg 1 without its ease-out, leg 2 without its ease-in (MOCK11: its clip);
  *  6. back: the fade through the light, about 450 ms, no video;
  *  7. reduced motion: a plain dissolve, no leg plays.
  *
@@ -151,7 +151,7 @@ test.describe('MOCK9: the guided route, the refined interface, the logo intro', 
     expect((await state(page)).trip).toMatchObject({ to: 'dining', kind: 'ahead', rate: 1 });
   });
 
-  test('two stations ahead: chained at ×2, leg 1 without its ease-out, leg 2 in code after it', async ({ page }) => {
+  test('two stations ahead: chained at ×2, leg 1 without its ease-out, leg 2 without its ease-in', async ({ page }) => {
     await living(page);
     await page.locator('.route-rail button[data-g="bath"]').click();
     await page.waitForFunction(() => window.__hdTourState?.room === 'bath-b1', undefined, { timeout: 120_000 });
@@ -159,18 +159,13 @@ test.describe('MOCK9: the guided route, the refined interface, the logo intro', 
     const s = await state(page);
     note('jump.json', s.trip);
     expect(s.trip).toMatchObject({ to: 'bath-b1', kind: 'ahead', rate: 2 });
+    // MOCK11: leg 2 is its clip (994 frames at 60 fps, its ease-in frames 1–25), no longer the push in code
     expect(s.trip!.hops).toEqual([
       { leg: 'leg1', real: true, start: 0, end: +((296 - 2) / 60).toFixed(4) },
-      { leg: 'leg2', real: false },
+      { leg: 'leg2', real: true, start: +(25 / 60).toFixed(4), end: +(993 / 60).toFixed(4) },
     ]);
-    // leg 1's stretch at ×2 (2.45 s) and the push at ×2 (0.63 s): well under one station's own pace
-    expect(s.trip!.ms).toBeLessThan(5000);
-    const push = await page.evaluate(() => {
-      const l = window.__hdTour!.frames['route-bath-b1'];
-      return l ? l.dt.reduce((a, b) => a + b, 0) : 0;
-    });
-    expect(push).toBeGreaterThan(450);
-    expect(push).toBeLessThan(625 + 250);
+    // leg 1's stretch at ×2 (2.45 s) and leg 2's (8.07 s): well under the two legs' own pace (22 s)
+    expect(s.trip!.ms).toBeLessThan(14_000);
     await expect(page.locator('.route [data-k="here"] .nm')).toHaveText('חדר רחצה');
     await expect(page.locator('.route [data-k="past"]')).toHaveCount(2);
   });

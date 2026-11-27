@@ -229,7 +229,10 @@ for (const variant of ['1920', 'mobile']) {
   const from = repoPath(src.pan.dir, variant);
   const to = join(OUT, 'p-d', variant);
   mkdirSync(to, { recursive: true });
-  const files = readdirSync(from).filter((f) => /^\d{4}\.(avif|webp)$/.test(f));
+  // MOCK11 (2026-11-27): a checkout without the pan's frames (they are not in the repository's history) keeps building
+  // the rest; the test page's pan then has no frames, and says so here
+  if (!existsSync(from)) console.warn(`make-test-page: ${src.pan.dir}/${variant} is not on this machine; the pan has no frames`);
+  const files = existsSync(from) ? readdirSync(from).filter((f) => /^\d{4}\.(avif|webp)$/.test(f)) : [];
   for (const f of files) copyFileSync(join(from, f), join(to, f));
   const v = panManifest.variants[variant]!;
   panOut[variant] = { w: v.w, h: v.h, avif: files.filter((f) => f.endsWith('.avif')).length, webp: files.filter((f) => f.endsWith('.webp')).length };

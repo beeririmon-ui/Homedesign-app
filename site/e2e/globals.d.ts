@@ -121,7 +121,7 @@ declare global {
         to: string;
         kind: 'ahead' | 'back';
         rate: number;
-        hops: { leg: string; real: boolean; start?: number; end?: number }[];
+        hops: { leg: string; real: boolean; start?: number; end?: number; fade?: number }[];
         ms: number;
         hold?: number;
       };

@@ -9,8 +9,9 @@
  *     room is asked for (the phase 2 files, the house's old base, the story);
  *  3. the living room M0-W at rest: a mark for each of its 13 products, the coffee table "עוד לא במכירה", no wheel, no
  *     style change;
- *  4. the walk between rooms, in the route's order: each room button walks (a push of 0.8–1.4 s) and lands on the plain
- *     composition; its two ends are the frames before and after it, to the value;
+ *  4. the walk between rooms, in the route's order: each room button walks and lands on the plain composition
+ *     (MOCK11: every step is its leg's clip, or the light's fade for a leg without one — e2e/mock11.spec.ts); the push
+ *     in code stays between two frames of a room, and its two ends are the frames before and after it, to the value;
  *  5. reduced motion: the rooms dissolve, nothing walks (no depth is ever uploaded);
  *  6. FB20 (2026-11-26, briefs/site-wheel-3d-2026-11-26.md), the 3D wheel: the bedroom's throw on a ring (the cushion
  *     sets A and C of M0-W are not in yet), the room dimmed while it is open, turning it never changes the room, the
@@ -59,7 +60,7 @@ async function plain(page: Page, room: string) {
 }
 /** the route's rooms after the living room, by their buttons, and the frame each lands on (tools/tour/frames.json) */
 const ROUTE = [
-  // MOCK9 (FB21): the owner's guided route; its first leg is a clip (e2e/mock9.spec.ts), the others walk in code
+  // MOCK9 (FB21): the owner's guided route; MOCK11: each leg is its clip or the light's fade (e2e/mock11.spec.ts)
   ['dining', 'dining'],
   ['bath', 'bath-b1'],
   ['master', 'master'],
@@ -133,7 +134,9 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
     expect(await page.evaluate(() => window.__hdTourState!.room)).toBe('living-room');
   });
 
-  test('the walk between rooms, in the route’s order: a push of 0.8–1.4 s, seamless at both ends, landing on the plain composition', async ({ page }) => {
+  test('the walk between rooms, in the route’s order, landing on the plain composition; the push between two frames is seamless at both ends', async ({
+    page,
+  }) => {
     const want: Record<string, { composition: number; screen: number }> = {};
     for (const [, frame] of ROUTE) want[frame] = await plain(page, frame);
     await page.goto('/tour/?skip=1');
@@ -143,42 +146,30 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
     for (const [btn, frame] of ROUTE) {
       await more(page);
       await page.locator(`#tour-${btn}`).click();
-      await page.waitForFunction((x) => window.__hdTourState?.room === x, frame);
+      await page.waitForFunction((x) => window.__hdTourState?.room === x, frame, { timeout: 120_000 });
       await atRest(page);
-      if (btn === 'dining') {
-        // MOCK9: living → kitchen is leg 1's clip, not a push (e2e/mock9.spec.ts); it lands on the same composition
-        expect(await hashes(page), `${frame} rests on the plain composition of its layers`).toEqual(want[frame]);
-        continue;
-      }
-      const r = await page.evaluate((f) => {
-        const e = window.__hdTour!;
-        const l = e.frames[`room-${f}`];
-        return { frames: l?.dt.length ?? 0, ms: l ? l.dt.reduce((a, b) => a + b, 0) : 0 };
-      }, frame);
-      seen[frame] = r;
-      expect(r.frames, `${frame}: the walk ran`).toBeGreaterThan(3);
-      expect(r.ms, `${frame}: 0.8–1.4 s`).toBeGreaterThan(800);
-      expect(r.ms, `${frame}: 0.8–1.4 s (and a frame's slack)`).toBeLessThan(1400 + 250);
+      // MOCK11: a step is its leg's clip or, for a leg without one, the fade through the light; never the push
+      const s = await page.evaluate(() => window.__hdTourState!.trip);
+      seen[frame] = s?.hops;
+      expect(s, `${frame}: one station ahead`).toMatchObject({ to: frame, kind: 'ahead', rate: 1 });
+      expect(await page.evaluate((f) => !!window.__hdTour!.frames[`room-${f}`], frame), `${frame}: no push`).toBe(false);
       expect(await hashes(page), `${frame} rests on the plain composition of its layers`).toEqual(want[frame]);
     }
-    // the ends of a walk, to the value: the first frame is the frame before it, the last the frame after it
-    const seams = await page.evaluate(async () => {
+    // the push in code that stays: between two frames of a room (D1 → D2); its ends, to the value: the first frame is
+    // the frame before it, the last the frame after it
+    await more(page);
+    await page.locator('#tour-dining').click();
+    await page.waitForFunction(() => window.__hdTourState?.room === 'dining', undefined, { timeout: 60_000 });
+    await atRest(page);
+    await page.evaluate(() => {
       const e = window.__hdTour!;
       e.sync = true;
       e.seams = [];
-      return e.seams;
     });
-    expect(seams).toEqual([]);
-    // MOCK9: one station back (the fade through the light), then one ahead on a leg that walks in code
-    await more(page);
-    await page.locator('#tour-girl').click();
-    await page.waitForFunction(() => window.__hdTourState?.room === 'girl');
+    await page.locator('.tour-frames button[data-frame="dining-d2"]').click();
+    await page.waitForFunction(() => window.__hdTourState?.room === 'dining-d2');
     await atRest(page);
-    await more(page);
-    await page.locator('#tour-work').click();
-    await page.waitForFunction(() => window.__hdTourState?.room === 'work');
-    await atRest(page);
-    const s = await page.evaluate(() => window.__hdTour!.seams.filter((x) => x.label === 'room-work'));
+    const s = await page.evaluate(() => window.__hdTour!.seams.filter((x) => x.label === 'frame-dining-d2'));
     note('walks.json', { seen, seams: s });
     expect(s).toHaveLength(1);
     expect(s[0]!.first.max, 'the walk’s first frame is the frame before it').toBe(0);

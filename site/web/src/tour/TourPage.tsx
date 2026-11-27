@@ -95,7 +95,8 @@ declare global {
         to: string;
         kind: 'ahead' | 'back';
         rate: number;
-        hops: { leg: string; real: boolean; start?: number; end?: number }[];
+        /** a real leg's stretch (s); MOCK11: a leg without its clip, the light's fade (ms, its hold apart) */
+        hops: { leg: string; real: boolean; start?: number; end?: number; fade?: number }[];
         /** the trip's time; back: the fade's own (in and out), `hold` the room's change inside the full light */
         ms?: number;
         hold?: number;
@@ -204,7 +205,14 @@ function CardPic({ o, cls, size, card }: { o: TourOption; cls?: string; size?: n
     // MOCK10: a studio picture (FB20: a square of its own studio's paper) is marked, so the wheel can soften its corners
     const studio = /\/studio\.\d+\.webp$/.test(url);
     return (
-      <svg class={`sprite${studio ? ' studio' : ''}${cls ? ` ${cls}` : ''}`} viewBox={`${x} ${y} ${w} ${h}`} width={size} height={size} aria-hidden="true" focusable="false">
+      <svg
+        class={`sprite${studio ? ' studio' : ''}${cls ? ` ${cls}` : ''}`}
+        viewBox={`${x} ${y} ${w} ${h}`}
+        width={size}
+        height={size}
+        aria-hidden="true"
+        focusable="false"
+      >
         <svg x={x} y={y} width={w} height={h} viewBox={`${x} ${y} ${w} ${h}`}>
           <image href={url} width={c.sheet[0]} height={c.sheet[1]} />
         </svg>
@@ -1486,6 +1494,8 @@ export function TourPage() {
       };
       v.onended = finish;
       v.playbackRate = walk ? WALK.min : Math.min(16, rate / timeScale());
+      // MOCK11: played through, it starts in this task, not a frame later: at a chain's seam the next leg moves on at once
+      if (!walk) playVideo(v);
       raf = requestAnimationFrame(loop);
     });
   }
@@ -1515,7 +1525,7 @@ export function TourPage() {
           setEye(WM);
           const dest = FRAMES[g][0]!;
           let t0 = performance.now();
-          const said = (kind: 'ahead' | 'back', rate: number, hops: { leg: string; real: boolean; start?: number; end?: number }[]) =>
+          const said = (kind: 'ahead' | 'back', rate: number, hops: { leg: string; real: boolean; start?: number; end?: number; fade?: number }[]) =>
             window.__hdTourState && (window.__hdTourState.trip = { to: dest, kind, rate, hops, ms: Math.round(performance.now() - t0) });
           if (e.reduce) {
             await e.toRoom(dest, t.kind === 'back' ? BACK_MS : ROOM_FADE_MS, true, `room-${dest}`, 0);
@@ -1544,28 +1554,36 @@ export function TourPage() {
             let shown: HTMLVideoElement | null = null;
             let real = 0;
             let cued: Promise<void> | null = null;
-            const rec: { leg: string; real: boolean; start?: number; end?: number }[] = [];
+            const rec: { leg: string; real: boolean; start?: number; end?: number; fade?: number }[] = [];
+            const clip = (j: number) => (vids[0] && vids[1] && t.hops[j] ? legFile(t.hops[j].leg, w) : null);
+            /** MOCK11: the room a run of clips from hop `j` ends in (the canvas under them is seen only when they give way) */
+            const runEnd = (j: number): RoomId => {
+              while (clip(j + 1)) j++;
+              return FRAMES[t.hops[j]!.leg.to][0]!;
+            };
             for (let i = 0; i < t.hops.length; i++) {
               const h: Hop = t.hops[i]!;
-              const lv = legFile(h.leg, w);
+              const lv = clip(i);
               const to = FRAMES[h.leg.to][0]!;
               setVia(h.leg.to);
               const nx = t.hops[i + 1];
-              const nlv = nx ? legFile(nx.leg, w) : null;
-              if (lv && vids[0] && vids[1]) {
+              const nlv = clip(i + 1);
+              if (lv) {
                 const v = vids[real++ % 2]!;
                 const s = span(lv, h);
-                // the canvas holds the room this leg ends in, unless a clip follows it (the canvas is not seen then)
-                await Promise.all([cued ?? cue(v, lv, s.start), nlv ? null : e.loadRoom(ROOMS[to], 0)]);
+                // MOCK11: a run of clips starts here: the room it ends in is fetched with the first leg's frame, before
+                // anything moves, and composed under the leg's still first frame — never at a seam, mid-walk
+                const under = shown ? null : runEnd(i);
+                await Promise.all([cued ?? cue(v, lv, s.start), under ? e.loadRoom(ROOMS[under], 0) : null]);
                 cued = null;
                 // on screen: over the visitor's composition, a soft blend into the leg's first frame (the manifest's
-                // swap); over the leg before it, a cut (the same walk, mid-step); over a push's room, a short blend
+                // swap); over the leg before it, a cut (the same walk, mid-step)
                 showLeg(v, true, shown ? 0 : i === 0 ? LEG_BLEND_MS : 120);
-                if (shown) showLeg(shown, false, 0);
-                else await e.ui('leg-in', i === 0 ? LEG_BLEND_MS : 120);
+                if (shown && shown !== v) showLeg(shown, false, 0);
+                else if (!shown) await e.ui('leg-in', i === 0 ? LEG_BLEND_MS : 120);
                 shown = v;
                 // (the page names the room when the leg lands in it: its chapter card comes with the room, not mid-walk)
-                if (!nlv) await e.toRoom(to, 0, true, `leg-to-${to}`);
+                if (under) await e.toRoom(under, 0, true, `leg-to-${under}`);
                 // the next clip waits cued on the other video, so the seam is a cut between two decoded frames
                 if (nx && nlv) cued = cue(vids[real % 2]!, nlv, span(nlv, nx).start);
                 const first = i === 0 && t.stations === 1 ? scrub + (tripOn.current?.pending ?? 0) : 0;
@@ -1573,15 +1591,33 @@ export function TourPage() {
                 if (!nlv) setRoomUi(to);
                 rec.push({ leg: h.leg.id, real: true, start: +s.start.toFixed(4), end: +s.end.toFixed(4) });
               } else {
-                // a leg without its clip yet: the walk in code (MOCK7), at the trip's pace, from the room on the canvas
-                if (shown) {
-                  showLeg(shown, false, 120);
-                  await e.ui('leg-out', 120);
-                  shown = null;
+                // MOCK11 (FB26, "סתם זום ואז פייד"): a leg without its clip fades through the warm light, as the way
+                // back does (BACK_MS), never the MOCK7 push. The light comes up over what is on screen (the room, or the
+                // leg before it, still mid-step), the room changes inside the full light, and the light clears on it —
+                // or on the next leg's first frame, cued under it, when a clip follows
+                const land = nlv ? runEnd(i + 1) : to;
+                const nv = nlv ? vids[real % 2]! : null;
+                if (nx && nlv && nv) cued = cue(nv, nlv, span(nlv, nx).start);
+                // from a room at rest the next one is made ready first (as the way back); from a leg, at once with the
+                // light, so the walk runs on into it (what is not ready by then is waited for inside the light)
+                if (!shown) await e.loadRoom(ROOMS[land], 0);
+                const lit0 = performance.now();
+                stage.current?.setAttribute('data-light', '');
+                await Promise.all([e.ui('leg-light-in', BACK_MS / 2), shown ? e.loadRoom(ROOMS[land], 0) : null]);
+                const h0 = performance.now();
+                await e.toRoom(land, 0, true, `light-${land}`);
+                if (cued) {
+                  await cued;
+                  cued = null;
                 }
-                await e.toRoom(to, PUSH_MS.room / t.rate, true, t.stations === 1 ? `room-${to}` : `route-${to}`, PUSH_AMP.room);
-                setRoomUi(to);
-                rec.push({ leg: h.leg.id, real: false });
+                if (shown && shown !== nv) showLeg(shown, false, 0);
+                if (nv) showLeg(nv, true, 0);
+                shown = nv;
+                if (!nlv) setRoomUi(to);
+                const hold = performance.now() - h0;
+                stage.current?.removeAttribute('data-light');
+                await e.ui('leg-light-out', BACK_MS / 2);
+                rec.push({ leg: h.leg.id, real: false, fade: Math.round(performance.now() - lit0 - hold) });
               }
             }
             // the last frame is the room's own frame: the leg gives way to the live room in a soft blend

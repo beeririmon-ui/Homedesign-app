@@ -1,14 +1,19 @@
 /** Verifies dist-artifact/ against the Artifact page contract and limits. Exits non-zero on any violation. */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { sitePath } from './lib/paths';
+import { GENERATED, sitePath } from './lib/paths';
 
 const OUT = sitePath('dist-artifact');
 // MOCK4: the Artifact's own limits (the publish tool, 2026-11): one publish sends at most 255 files and 64 MB, and a
 // binary file is at most 15 MB (the page itself 16 MB). MOCK1–3 held themselves to 200 files and 12 MB, before videos.
-const LIMIT_BYTES = 64 * 1024 * 1024;
-const LIMIT_FILES = 255;
+// MOCK11 (2026-11-27, briefs/site-mock11-route-legs-2026-11-27.md): a version holds up to 511 files and 256 MB, sent in
+// publishes of at most 255 files and 64 MB each (later publishes to the same url add to it). Over 60 MB the files are
+// split in two: the first publish holds the page and everything but the route's new legs (legs 2 and on: their videos
+// and posters), the second only those; .generated/artifact-batches.json lists both.
+const LIMIT_BYTES = 256 * 1024 * 1024;
+const LIMIT_FILES = 511;
 const LIMIT_FILE = 15 * 1024 * 1024;
+const PUBLISH = { bytes: 64 * 1024 * 1024, files: 255, split: 60 * 1024 * 1024 } as const;
 
 const walk = (d: string): string[] => readdirSync(d).flatMap((n) => (statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)]));
 const files = walk(OUT);
@@ -48,6 +53,20 @@ for (const f of files) {
   check(/^media\/[A-Za-z0-9/._-]+\.webp$/.test(rel) || /^media\/tour\/(arrival|route)\/[A-Za-z0-9._-]+\.mp4$/.test(rel), `unexpected file: ${rel}`);
 }
 
+// the publishes: one, or the page and the rest, then the route's new legs (MOCK11)
+const size = (fs: string[]) => fs.reduce((n, f) => n + statSync(f).size, 0);
+const later = (f: string) => /^media\/tour\/route\/leg(?:[2-9]|\d\d+)\./.test(relative(OUT, f));
+const batches = bytes <= PUBLISH.split ? [files] : [files.filter((f) => !later(f)), files.filter(later)];
+batches.forEach((b, i) => {
+  check(b.length <= PUBLISH.files, `publish ${i + 1}: ${b.length} files > ${PUBLISH.files}`);
+  check(size(b) <= PUBLISH.bytes, `publish ${i + 1}: ${(size(b) / 1048576).toFixed(2)} MB > ${PUBLISH.bytes / 1048576} MB`);
+});
+mkdirSync(GENERATED, { recursive: true });
+writeFileSync(
+  join(GENERATED, 'artifact-batches.json'),
+  JSON.stringify(batches.map((b) => ({ files: b.length, mb: +(size(b) / 1048576).toFixed(2), paths: b.map((f) => relative(OUT, f)).sort() }))),
+);
+
 const biggest = files.reduce((a, f) => (statSync(f).size > statSync(a).size ? f : a));
 console.log(
   `dist-artifact: ${files.length} files, ${(bytes / 1048576).toFixed(2)} MB (index.html ${(statSync(join(OUT, 'index.html')).size / 1024).toFixed(0)} KB; ` +
@@ -57,4 +76,8 @@ if (problems.length) {
   for (const p of problems) console.error(`FAIL  ${p}`);
   process.exit(1);
 }
+if (batches.length > 1)
+  batches.forEach((b, i) =>
+    console.log(`publish ${i + 1}: ${b.length} files, ${(size(b) / 1048576).toFixed(2)} MB${i ? `: ${b.map((f) => relative(OUT, f)).join(', ')}` : ''}`),
+  );
 console.log('ok    artifact contract and limits');

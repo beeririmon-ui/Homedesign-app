@@ -5,8 +5,12 @@
  * Each real leg is encoded as tools/make-arrival.ts encodes the arrival, so the page plays it the same way (a video over
  * the canvas, its rate driven by the scroll or held by "הלאה"):
  *
- *   web/public/media/tour/route/<leg>.1920.60.mp4   the wide screen's, H.264 High, two-pass, ≤ 6 MB
+ *   web/public/media/tour/route/<leg>.1920.60.mp4   the wide screen's, H.264 High, two-pass, ≤ 8 MB
  *   web/public/media/tour/route/<leg>.1080.30.mp4   the phone's, from the folder's own 30 fps frames, ≤ 2.5 MB
+ *
+ * MOCK11 (2026-11-27, briefs/site-mock11-route-legs-2026-11-27.md): legs 2–5 are 11–17 s, not leg 1's 5.5 s. The
+ * rate is the default (5000 / 1900 kb/s) where the leg fits in it, else what fills ~94% of the limit over the leg's
+ * own length (two-pass lands within a few percent of it); the peak follows it.
  *   web/public/media/tour/route/<leg>.<w>.poster.webp  each file's first frame, the video's poster (MOCK10, FB26: a
  *                                                    web view draws a play icon on a video without one)
  *   .generated/route.json                            the stations and the legs as the page reads them (tour/route.ts)
@@ -41,7 +45,9 @@ for (const k of Object.keys(cfg.legs)) if (!pairs.includes(k)) fail(`leg "${k}" 
 
 const REL = 'tour/route';
 const OUT = join(MEDIA_OUT, REL);
-const LIMIT = { desktop: 6 * 1024 * 1024, phone: 2.5 * 1024 * 1024 } as const;
+const LIMIT = { desktop: 8 * 1024 * 1024, phone: 2.5 * 1024 * 1024 } as const;
+/** the share of the limit a long leg's rate aims at (the container and the rate's slack take the rest) */
+const FILL = 0.94;
 const want = {
   desktop: { key: '1920', w: 1920, h: 1080, fps: 60, kbps: 5000, max: 7500, level: '4.2' },
   phone: { key: '1080', w: 1080, h: 608, fps: 30, kbps: 1900, max: 2800, level: '4.0' },
@@ -117,17 +123,20 @@ const legs = pairs.map((pair, i) => {
         const input = ['-framerate', String(w.fps), '-start_number', '1', '-i', join(abs, w.key, '%04d.webp'), '-frames:v', String(real[k].frames)];
         // two-pass H.264 High, yuv420p, faststart, no audio; a keyframe every half second (the rate changes often)
         const common = [...input, '-an', '-c:v', 'libx264', '-preset', 'slow', '-profile:v', 'high'];
+        // MOCK11: a long leg's rate fills the limit over its own length; a short one keeps the default
+        const kbps = Math.min(w.kbps, Math.floor((LIMIT[k] * FILL * 8) / 1000 / (real[k].frames / w.fps)));
+        const max = Math.round(kbps * (w.max / w.kbps));
         const rate = [
           '-level:v',
           w.level,
           '-pix_fmt',
           'yuv420p',
           '-b:v',
-          `${w.kbps}k`,
+          `${kbps}k`,
           '-maxrate',
-          `${w.max}k`,
+          `${max}k`,
           '-bufsize',
-          `${Math.round(w.max * 1.4)}k`,
+          `${Math.round(max * 1.4)}k`,
           '-g',
           String(w.fps / 2),
         ];

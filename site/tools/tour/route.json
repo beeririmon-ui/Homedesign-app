@@ -1,12 +1,12 @@
 {
-  "note": "MOCK9 (2026-11-27, briefs/site-mock9-route-ui-2026-11-27.md; FB21): the guided route, read by tools/make-route.ts. `order` is the owner's order of the stations (a room's first frame is its station: tools/tour/frames.json). `legs` holds one line per leg, from a station to the next: the folder of motion-agent's frames (its manifest names the ease frames) or null, and a null leg walks in code (the MOCK7 push) until its clip exists. Dropping a real leg in is that one line.",
+  "note": "MOCK9 (2026-11-27, briefs/site-mock9-route-ui-2026-11-27.md; FB21): the guided route, read by tools/make-route.ts. `order` is the owner's order of the stations (a room's first frame is its station: tools/tour/frames.json). `legs` holds one line per leg, from a station to the next: the folder of motion-agent's frames (its manifest names the ease frames) or null, and a null leg walks in code (the MOCK7 push) until its clip exists. Dropping a real leg in is that one line. MOCK11 (2026-11-27, briefs/site-mock11-route-legs-2026-11-27.md): legs 2–5 are real (leg 3 last, after motion-agent's trim); a null leg fades through the warm light (about 450 ms, as the way back), not the MOCK7 push.",
   "order": ["living-room", "dining", "bath", "master", "boy", "girl", "work"],
   "legs": {
     "living-room>dining": "assets/video/transitions/warm-modern/route-fb21/leg1/final",
-    "dining>bath": null,
-    "bath>master": null,
-    "master>boy": null,
-    "boy>girl": null,
+    "dining>bath": "assets/video/transitions/warm-modern/route-fb21/leg2/final",
+    "bath>master": "assets/video/transitions/warm-modern/route-fb21/leg3/final",
+    "master>boy": "assets/video/transitions/warm-modern/route-fb21/leg4/final",
+    "boy>girl": "assets/video/transitions/warm-modern/route-fb21/leg5/final",
     "girl>work": null
   }
 }
