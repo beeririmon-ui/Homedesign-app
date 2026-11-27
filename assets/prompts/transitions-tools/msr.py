@@ -260,3 +260,29 @@ def src_frame(name, image, depth, cid=None, camera=None, canvas=None):
     if d.shape[:2] != img.shape[:2]:
         raise SystemExit(f'{name}: image {img.shape[:2]} and depth {d.shape[:2]} are not on one canvas')
     return dict(name=name, img=img, depth=d, ok=ok, cam=camera or plan_cam(cid), cv=cv)
+
+# ---------------------------------------------------------------------------------------------------------------
+# warm-modern corridor and rooms (FB21 legs 4-5)
+# ---------------------------------------------------------------------------------------------------------------
+COR = R + 'assets/renders/corridor/warm-modern/route-2026-11-27/'
+RN = R + 'assets/renders/'
+
+def src_corr(name):
+    """CK / CM: the still on its 2720 canvas + the clay's planar depth pass (the still is locked to the clay, 0-2 px)"""
+    cam = dict(CK=LCam((2.45, 14.20, 1.20), 0.0, 0.5, 0.5), CM=LCam((2.45, 14.40, 1.20), 180.0, 0.5, 0.5))[name]
+    img = rgb(COR + name + '.png'); d = np.load(COR + 'clay/' + name + '-passes.npz')['depth'].astype(np.float32)
+    ok = np.isfinite(d) & (d > 0.05) & (d < 60)
+    return dict(name=name, img=img, depth=np.where(ok, d, 1.0), ok=ok, cam=cam, cv=cg.Canvas.base(2720))
+
+ROOMSRC = {
+    'B1': (RN + 'bath/warm-modern/b1-2026-11-19/b1-defaults-fb16-finish.png', RN + 'bath/warm-modern/b1-2026-11-19/depth-fb17.png', 'B1', None),
+    'K-boy': (RN + 'boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb16-finish.png', RN + 'boy/warm-modern/stage1-2026-11-24/depth-fb17.png', 'K-boy', None),
+    'K-girl': (RN + 'girl/warm-modern/stage1-2026-11-24/K-girl-defaults-g1-fb16-finish.png', RN + 'girl/warm-modern/stage1-2026-11-24/depth-fb17.png', 'K-girl', None),
+    'MB0': (RN + 'master/warm-modern/stage1-2026-11-17/mb0-defaults-fb16-finish.png', RN + 'master/warm-modern/stage1-2026-11-17/depth-fb17.png', 'MB0', None),
+    'MB1': (RN + 'master/warm-modern/mb1-2026-11-19/mb1-defaults-fb16-finish.png', RN + 'master/warm-modern/mb1-2026-11-19/depth-fb17.png', None,
+            ((1.60, 21.20, 1.05), 33.7, 0.5, 0.418)),
+}
+
+def src_room(name):
+    img, dep, cid, cam = ROOMSRC[name]
+    return src_frame(name, img, dep, cid=cid, camera=LCam(*cam) if cam else None)

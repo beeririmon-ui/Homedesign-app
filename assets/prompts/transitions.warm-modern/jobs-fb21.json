@@ -262,7 +262,7 @@
     "tokens": 2600
    }
   ],
-  "spent_total": 14920,
+  "spent_total": 23026,
   "projection_2026_11_27": {
    "spent": 12002,
    "left": 19198,
@@ -289,6 +289,132 @@
    "with_usual_fix_round": "~40,000",
    "levers": "code dollies for straight corridor walks (Mo->CK, CK->hall) save ~2,000",
    "verdict": "stopped before leg 3: with the usual fix round the projection passes 38,000"
+  },
+  "leg4": {
+   "plan": "MB0 -> Mo (kling 4 s) -> CK (kling 3 s; the code dolly was tried and rejected: door linings warp, rooms show through walls) -> K-boy (kling 4 s)",
+   "jobs": [
+    {
+     "id": "Mo seedream",
+     "placeholder_id": "d95cd575-10c0-4217-8afd-cc43d49eee23",
+     "tokens": 650,
+     "file": "route-fb21/leg4/stills/mo-w.png"
+    },
+    {
+     "id": "K4a MB0->Mo",
+     "s": 4,
+     "placeholder_id": "c3edcded-5764-4e1b-8285-b217a024d4a7",
+     "tokens": 1296
+    },
+    {
+     "id": "K4b Mo->CK",
+     "s": 3,
+     "placeholder_id": "33133fea-9c3e-48d3-836a-c61480eb1236",
+     "tokens": 972
+    },
+    {
+     "id": "K4c CK->K-boy",
+     "s": 4,
+     "placeholder_id": "6e0c3c7e-d930-4748-ae87-f22008af999a",
+     "tokens": 1296
+    }
+   ],
+   "spent": 4214,
+   "final": {
+    "chain": "route-fb21/leg4/chain.json",
+    "play_s": 12.033,
+    "frames": {
+     "1920@60": 723,
+     "1080@30": 362
+    },
+    "bytes_per_2s": {
+     "1920": {
+      "avif": 4787949,
+      "webp": 4768541
+     },
+     "1080": {
+      "avif": 762473,
+      "webp": 793757
+     }
+    },
+    "ends": {
+     "first_vs_still_before_encoding_max": 0,
+     "last_vs_still_before_encoding_max": 0,
+     "last_avif_1920_mean_levels": 1.91
+    },
+    "verdict": "passes motion-agent's eye: K4a right turn out of the master past the lamp and plant, through the door; K4b straight corridor; K4c left into the boy's room, lands on K-boy; qa pending"
+   },
+   "dolly_try": "code dolly Mo->CK rejected (0 tokens): DIBR of the door reveals warps the walnut linings and lets rooms show through walls; kling used"
+  },
+  "leg5": {
+   "plan": "K-boy -> Kb-mid -> Kbx (code pan at the K-boy point, exact) -> CM (kling 4 s) -> K-girl (kling 4 s)",
+   "jobs": [
+    {
+     "id": "Kb-mid seedream",
+     "placeholder_id": "ca35fb91-5faa-48a8-bbed-f9eb8f394d66",
+     "tokens": 650
+    },
+    {
+     "id": "K5c CM->K-girl",
+     "s": 4,
+     "placeholder_id": "89c2aa04-078d-4b84-b9f8-088ccf03013d",
+     "tokens": 1296
+    },
+    {
+     "id": "Kbx seedream",
+     "placeholder_id": "b8e020fd-60a3-4b4e-ab91-40bf9e358b0d",
+     "tokens": 650
+    },
+    {
+     "id": "K5b Kbx->CM",
+     "s": 4,
+     "placeholder_id": "1566257d-dd0e-4081-8d37-20bf04057058",
+     "tokens": 1296
+    },
+    {
+     "id": "K5a code pan K-boy->Kb-mid->Kbx",
+     "tokens": 0,
+     "file": "route-fb21/leg5/k5a.code-pan.mp4"
+    }
+   ],
+   "spent": 3892,
+   "final": {
+    "chain": "route-fb21/leg5/chain.json (K5a code pan paced as a turn)",
+    "play_s": 11.133,
+    "frames": {
+     "1920@60": 669,
+     "1080@30": 335
+    },
+    "bytes_per_2s": {
+     "1920": {
+      "avif": 4020074,
+      "webp": 4046499
+     },
+     "1080": {
+      "avif": 606782,
+      "webp": 648222
+     }
+    },
+    "ends": {
+     "first_vs_still_before_encoding_max": 0,
+     "last_vs_still_before_encoding_max": 0,
+     "last_avif_1920_mean_levels": 1.76
+    },
+    "speed_max_jump_pct": 17.7,
+    "verdict": "passes except one flaw: in K5c, entering the girl's room, kling shows a tall light-wood unit left of the window for ~1.2 s, where the plan has built-in wardrobes that no frame shows",
+    "fix_offer": {
+     "Kgi still at the K-girl point, yaw 60 (wardrobes out of frame), refed from K-girl": 650,
+     "K5c again CM->Kgi 4 s": 1296,
+     "code pan Kgi->K-girl": 0,
+     "total": 1946
+    }
+   }
+  },
+  "projection_after_legs_4_5": {
+   "spent": 23026,
+   "cap": 38000,
+   "left": 14974,
+   "legs_3_6_bare": "~14,200 (leg 3 7,136 + leg 6 ~7,100)",
+   "note": "fits bare; ~16,500-18,000 with a fix round each"
   }
  }
 }

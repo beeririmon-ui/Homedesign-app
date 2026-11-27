@@ -9,11 +9,13 @@ R = '/home/user/homedesign-app/assets/renders/'
 ROOMS = {  # x, y, h, wall tone, floor tone (RGB)
  'living': ((-2.3, 2.5), (0.0, 6.2), 3.0), 'dining': ((2.65, 7.25), (0.0, 6.2), 3.0), 'hall': ((0.8, 3.6), (6.35, 9.8), 3.0),
  'corridor': ((1.7, 3.1), (9.8, 17.51), 2.7), 'bath': ((3.25, 6.25), (9.95, 13.59), 2.7), 'boy': ((-2.3, 1.55), (10.25, 13.73), 3.0),
- 'girl': ((-2.3, 1.55), (13.88, 17.36), 3.0)}
+ 'girl': ((-2.3, 1.55), (13.88, 17.36), 3.0),
+ 'master': ((-2.3, 3.1), (17.66, 21.66), 3.0), 'work': ((-2.3, 0.65), (6.35, 10.1), 3.0)}
 OPEN = [  # (axis, plane, (lo, hi) along the other axis, top z, rooms joined, lining)
  ('x', 2.575, (2.97, 4.57), 2.4, ('living', 'dining'), 'plaster'), ('y', 6.275, (0.95, 2.15), 2.4, ('living', 'hall'), 'walnut'),
  ('y', 9.8, (1.7, 3.1), 2.62, ('hall', 'corridor'), 'walnut'), ('x', 3.175, (12.39, 13.39), 2.4, ('corridor', 'bath'), 'walnut'),
- ('x', 1.625, (12.63, 13.53), 2.4, ('corridor', 'boy'), 'walnut'), ('x', 1.625, (16.26, 17.16), 2.4, ('corridor', 'girl'), 'walnut')]
+ ('x', 1.625, (12.63, 13.53), 2.4, ('corridor', 'boy'), 'walnut'), ('x', 1.625, (16.26, 17.16), 2.4, ('corridor', 'girl'), 'walnut'),
+ ('y', 17.585, (2.0, 2.9), 2.4, ('corridor', 'master'), 'walnut'), ('x', 0.725, (8.1, 9.0), 2.4, ('hall', 'work'), 'walnut')]
 TONE = {'plaster': (226, 220, 210), 'floor': (92, 74, 58), 'ceiling': (232, 228, 220), 'walnut': (78, 52, 36), 'stone': (214, 200, 176)}
 
 def cast(C, D, want_t=False):
