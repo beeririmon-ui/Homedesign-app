@@ -397,3 +397,9 @@ body:has(main .contact-block) .site-footer .site-contact {
 .notice + .order-no-access-contact {
   margin-top: var(--s-5);
 }
+
+/* MOCK10 (FB26): a prerendered tour is drawn only once its own stylesheet is in (styles/tour.css comes with the tour's
+   chunk): never a flash of its panels unstyled before the script runs */
+section.tour {
+  visibility: hidden;
+}

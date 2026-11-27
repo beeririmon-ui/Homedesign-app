@@ -1230,7 +1230,6 @@ html[data-design='c'] .tour-name {
   from {
     opacity: 0;
     transform: translateY(10px);
-    filter: blur(3px);
   }
 }
 html[data-design='c'] .tour-frames.segmented {
@@ -1464,6 +1463,15 @@ html[data-design='c'] .route-next .arr {
 }
 html[data-design='c'] .route-next:hover {
   background: var(--m10-glass-hi);
+}
+
+/* while a trip moves the picture under them, the panes are tinted and not blurred: a blur over a picture that changes
+   is drawn again every frame (the frame belongs to the walk) */
+html[data-design='c'] .route[data-busy] .route-next,
+html[data-design='c'] .tour:has(.route[data-busy]) .tour-fold {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: rgba(18, 16, 14, 0.5);
 }
 
 /* ---------- the menu: one quiet circle beside the route, the plan of the house in it ---------- */
@@ -1798,6 +1806,9 @@ html[data-design='c'] .arc.ring .ring-track {
     align-items: center;
     flex-direction: column;
     gap: 12px;
+  }
+  html[data-design='c'] .tour-door-act .btn {
+    width: min(260px, 100%);
   }
 }
 

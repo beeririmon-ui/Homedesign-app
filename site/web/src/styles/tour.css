@@ -38,6 +38,10 @@
   /* the window is sized from the stage's own box (cqw, cqh), whatever the browser's bars or an embedding frame do */
   container-type: size;
 }
+/* MOCK10: the tour's own stylesheet is in: the stage is drawn (styles/base.css holds it hidden until then) */
+section.stage.tour {
+  visibility: visible;
+}
 .tour[data-bg='dark'] {
   --tour-bg: #0e0d0c;
   --tour-fg: var(--paper);

@@ -27,7 +27,7 @@ const warm = (page: Page) =>
 type Vid = { cls: string; controls: boolean; muted: boolean; inline: boolean; src: boolean; poster: string; ready: number; shown: boolean };
 const videos = (page: Page): Promise<Vid[]> =>
   page.evaluate(() =>
-    [...document.querySelectorAll('video')].map((v) => {
+    Array.from(document.querySelectorAll('video')).map((v) => {
       const cs = getComputedStyle(v);
       return {
         cls: v.className,

@@ -32,9 +32,14 @@ html[data-intro] .site-header .brand .wordmark {
   font: 300 clamp(72px, 15vw, 156px) / 1 var(--dz-serif, 'Frank Ruhl Libre', serif);
   letter-spacing: 0.01em;
   text-shadow: 0 2px 30px rgba(0, 0, 0, 0.25);
+  /* MOCK10 (FB26): hidden until the intro's own fade brings it in — the intro waits for the serif first (up to a
+     second over the network in the preview), and the mark must not show in that wait and then blink out */
+  opacity: 0;
 }
 .intro-rule {
   display: block;
+  /* MOCK10: drawn by the intro (design/intro.ts); until its fonts are in it is not there at all */
+  transform: scaleX(0);
   width: clamp(48px, 7vw, 84px);
   height: 1px;
   background: #d8b77e;

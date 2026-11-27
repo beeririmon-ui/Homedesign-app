@@ -115,6 +115,16 @@ declare global {
       /** MOCK8: the walk rests between two pushes; how many pushes it took */
       walkRest?: boolean;
       walkPushes?: number;
+      /** MOCK9: the leg playing now (its frame, 1-based) and the last trip of the route (web/src/tour/TourPage.tsx) */
+      leg?: { id: string; frame: number; rest: boolean } | null;
+      trip?: {
+        to: string;
+        kind: 'ahead' | 'back';
+        rate: number;
+        hops: { leg: string; real: boolean; start?: number; end?: number }[];
+        ms: number;
+        hold?: number;
+      };
     };
     /** MOCK6: what the fixture of the wheel of many options asked for, chose and cancelled (web/src/tour/fixture-wheel.ts) */
     __hdWheelFixture?: { loads: number[]; shown: number; chosen: number | null; cancelled: boolean };
@@ -137,6 +147,8 @@ export {};
 
 declare global {
   interface Window {
+    /** MOCK9: the logo intro (web/src/design/intro.ts) */
+    __hdIntro?: 'playing' | 'done' | 'none';
     /** MOCK10: tour/media.ts — refused plays, videos a gesture unlocked, and the ones waiting for a gesture now */
     __hdMedia?: { refused: number; unlocked: number; waiting: number };
   }
