@@ -1,8 +1,8 @@
 /**
  * MOCK9 (2026-11-27, briefs/site-mock9-route-ui-2026-11-27.md; FB21): the guided route. The owner's order of the
  * stations (living → kitchen D1 → bath B1 → bedroom MB0 → boy → girl → work), and the legs between them as
- * tools/make-route.ts wrote them: a real leg is a clip (a video over the canvas); a leg without one walks in code (the
- * MOCK7 push) behind the same interface, so a real leg drops in with one line of tools/tour/route.json.
+ * tools/make-route.ts wrote them: a real leg is a clip (a video over the canvas); a leg without one fades through the warm
+ * light (MOCK11, FB26: no longer the MOCK7 push) behind the same interface, so a real leg drops in with one line of tools/tour/route.json.
  *
  * The rules a trip follows (FB21):
  *  - one station ahead plays its leg at the leg's own pace ("הלאה", or the scroll that scrubs it like the arrival);

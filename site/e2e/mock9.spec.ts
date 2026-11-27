@@ -121,7 +121,7 @@ test.describe('MOCK9: the guided route, the refined interface, the logo intro', 
     const s = await state(page);
     note('next.json', s.trip);
     expect(s.trip).toMatchObject({ to: 'dining', kind: 'ahead', rate: 1 });
-    expect(s.trip!.hops).toEqual([{ leg: 'leg1', real: true, start: 0, end: +(328 / 60).toFixed(4) }]);
+    expect(s.trip!.hops).toMatchObject([{ leg: 'leg1', real: true, start: 0, end: +(328 / 60).toFixed(4) }]);
     // the leg's own time (5.47 s) and its blends; not a jump
     expect(s.trip!.ms).toBeGreaterThan(5000);
     await expect(page.locator('video.tour-leg[data-on]')).toHaveCount(0);
@@ -160,7 +160,7 @@ test.describe('MOCK9: the guided route, the refined interface, the logo intro', 
     note('jump.json', s.trip);
     expect(s.trip).toMatchObject({ to: 'bath-b1', kind: 'ahead', rate: 2 });
     // MOCK11: leg 2 is its clip (994 frames at 60 fps, its ease-in frames 1–25), no longer the push in code
-    expect(s.trip!.hops).toEqual([
+    expect(s.trip!.hops).toMatchObject([
       { leg: 'leg1', real: true, start: 0, end: +((296 - 2) / 60).toFixed(4) },
       { leg: 'leg2', real: true, start: +(25 / 60).toFixed(4), end: +(993 / 60).toFixed(4) },
     ]);

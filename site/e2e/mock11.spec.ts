@@ -137,45 +137,50 @@ async function compare(a: Buffer, b: Buffer, scale: number) {
 }
 
 /**
- * a leg's frame against the room at rest, both as the window shows them (the page around the picture set aside): the
- * leg's file on the page's own video over the canvas, its first frame where it starts, its last where it ends
+ * a leg's frame against the room at rest: the room as the window shows it (the page around the picture set aside), the
+ * leg's frame as the browser decodes its file, drawn at the window's size: the file's first, or its last, reached by
+ * playing it through (the test server, like the Artifact's, sends no byte ranges: a file cannot be seeked). A screenshot
+ * of the video is not used: this GPU-less machine's compositor presents a video's frames late.
  */
 async function seam(page: Page, v: LegVideo, which: 'first' | 'last') {
-  const win = page.locator('.tour-win');
-  const box = (await win.boundingBox())!;
+  const box = (await page.locator('.tour-win').boundingBox())!;
   const room = await page.screenshot({ clip: box });
-  await page.evaluate(
-    async ({ src, last }) => {
+  const png = await page.evaluate(
+    async ({ src, last, w, h }) => {
       const el = document.querySelectorAll<HTMLVideoElement>('video.tour-leg')[1]!;
-      el.style.setProperty('--leg-ms', '0ms');
-      el.style.setProperty('visibility', 'visible', 'important');
+      const wait = (ok: () => boolean, what: string) =>
+        new Promise<void>((resolve, reject) => {
+          const t0 = performance.now();
+          const poll = () => (ok() ? resolve() : performance.now() - t0 > 30_000 ? reject(new Error(`${src}: ${what}`)) : setTimeout(poll, 50));
+          poll();
+        });
       el.preload = 'auto';
       el.src = src;
-      if (el.readyState < 2) await new Promise((r) => el.addEventListener('loadeddata', r, { once: true }));
-      el.toggleAttribute('data-on', true);
-      // the last frame: the file played through to its end, as the tour plays a leg (the test server, like the
-      // Artifact's, sends no byte ranges: a seek past what has arrived falls back to the start); its last 0.6 s slowly,
-      // so this GPU-less machine presents every frame of it and the one on screen at the end is the file's last
+      await wait(() => el.readyState >= 2, 'no frame in 30 s');
       if (last) {
-        el.playbackRate = 16;
+        // played on fast to near its end, its last second slowly so that every frame of it is decoded (fast, a decoder
+        // that cannot keep up drops frames, and the one it holds at the end need not be the last); then it ends
+        el.muted = true;
+        el.playbackRate = 4;
         const ended = new Promise((r) => el.addEventListener('ended', r, { once: true }));
         await el.play();
-        while (el.currentTime < el.duration - 0.6) await new Promise((r) => requestAnimationFrame(r));
+        // (checked every frame, so the run-up never passes the slow end)
+        while (el.currentTime < el.duration - 1 && !el.ended) await new Promise((r) => requestAnimationFrame(r));
         el.playbackRate = 0.25;
         await ended;
+        await new Promise((r) => setTimeout(r, 300));
       }
-      await new Promise((r) => setTimeout(r, 600));
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = h;
+      c.getContext('2d')!.drawImage(el, 0, 0, w, h);
+      el.removeAttribute('src');
+      el.load();
+      return c.toDataURL('image/png').split(',')[1]!;
     },
-    { src: `/media/${v.src}`, last: which === 'last' },
+    { src: `/media/${v.src}`, last: which === 'last', w: Math.round(box.width), h: Math.round(box.height) },
   );
-  const leg = await page.screenshot({ clip: box });
-  await page.evaluate(() => {
-    const el = document.querySelectorAll<HTMLVideoElement>('video.tour-leg')[1]!;
-    el.removeAttribute('data-on');
-    el.style.setProperty('visibility', 'hidden', 'important');
-    el.removeAttribute('src');
-    el.load();
-  });
+  const leg = Buffer.from(png, 'base64');
   const dir = process.env.HD_EVIDENCE_DIR;
   if (dir) {
     // the two pictures of each seam, for the evidence
@@ -212,7 +217,7 @@ test.describe('MOCK11: the real route legs', () => {
       expect(s.trip).toMatchObject({ to: ROOM[l.to], kind: 'ahead', rate: 1 });
       if (l.real) {
         const v = l.real.desktop;
-        expect(s.trip!.hops).toEqual([{ leg: l.id, real: true, start: 0, end: +((v.frames - 1) / v.fps).toFixed(4) }]);
+        expect(s.trip!.hops).toMatchObject([{ leg: l.id, real: true, start: 0, end: +((v.frames - 1) / v.fps).toFixed(4) }]);
         // the leg's own time, and its blends: a walk, not a jump
         expect(s.trip!.ms, `${l.id}: its own pace`).toBeGreaterThan(own(v) * 0.95);
       } else expect(s.trip!.hops).toMatchObject([{ leg: l.id, real: false }]);
@@ -273,6 +278,11 @@ test.describe('MOCK11: the real route legs', () => {
       const first = i > 0 ? v.ease_in[1] + 1 : 1;
       const last = i < legs.length - 1 ? v.ease_out[0] - 1 : v.frames;
       expect(s.trip!.hops[i]).toMatchObject({ start: +((first - 1) / v.fps).toFixed(4), end: +((last - 1) / v.fps).toFixed(4) });
+      // and the file was there when the leg set off, though this server (like the Artifact's) cannot seek: the skipped
+      // frames were played through unseen (a few frames past the mark at most)
+      const at = s.trip!.hops[i]!.at!;
+      expect(at, `${l.id} set off where its stretch starts`).toBeGreaterThanOrEqual((first - 1.5) / v.fps);
+      expect(at, `${l.id} set off where its stretch starts`).toBeLessThanOrEqual((first - 1 + 6) / v.fps);
     });
     // the whole jump: well under the legs' own time
     const ownAll = legs.reduce((a, l) => a + (l.real ? own(l.real.desktop) : 450), 0);
@@ -341,13 +351,10 @@ test.describe('MOCK11: the real route legs', () => {
     note('seams.json', out);
     console.log(`MOCK11 seams: ${JSON.stringify(out)}`);
     for (const [k, v] of Object.entries(out) as [string, { mean: number; p99: number; shift_px: number }][]) {
-      // the encoding, the FB16 grade against the leg's graded still, and the frame's lock (the manifests: ≤ ~5 levels).
-      // The phone's file is 1080 px wide, softer than the canvas at this 1280 window; and the end of a 30 fps file can be
-      // presented a frame late on this GPU-less machine (its frames end on the wide screen's to the pixel, checked on
-      // the files themselves), so it is held to a looser bound
-      const phone = k.includes('.phone.');
-      expect(v.mean, `${k}: mean`).toBeLessThan(phone ? 10 : 6);
-      expect(v.shift_px, `${k}: no visible jump`).toBeLessThanOrEqual(phone ? 8 : 3);
+      // the encoding, the FB16 grade against the leg's graded still, and the frame's lock (the manifests: ≤ ~5 levels);
+      // the phone's file is 1080 px wide, a little softer than the canvas at this 1280 window
+      expect(v.mean, `${k}: mean`).toBeLessThan(k.includes('.phone.') ? 7 : 6);
+      expect(v.shift_px, `${k}: no visible jump`).toBeLessThanOrEqual(3);
     }
   });
 

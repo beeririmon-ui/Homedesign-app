@@ -3,7 +3,7 @@
  *
  *  1. the stations are the owner's order, the same as the rooms' order (data.ts GROUP_IDS) and tools/tour/route.json;
  *  2. one leg per step; leg 1 (living → kitchen) is real, its ease frames as its manifest marks them; the others walk
- *     in code until their clips exist, and a real leg drops in with one line (MOCK11: legs 2, 4 and 5 are real too,
+ *     in code until their clips exist, and a real leg drops in with one line (MOCK11: legs 2–5 are real too,
  *     web/test/mock11-route.test.ts; which legs are real is the config's);
  *  3. a trip: one station ahead at ×1, two ×2, three ×2.5, four and more ×3; the ease frames between the legs skipped
  *     (the ease-in of every leg but the first, the ease-out of every leg but the last); back is the light, ~450 ms;

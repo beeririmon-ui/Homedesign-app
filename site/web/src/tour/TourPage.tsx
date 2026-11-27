@@ -95,8 +95,9 @@ declare global {
         to: string;
         kind: 'ahead' | 'back';
         rate: number;
-        /** a real leg's stretch (s); MOCK11: a leg without its clip, the light's fade (ms, its hold apart) */
-        hops: { leg: string; real: boolean; start?: number; end?: number; fade?: number }[];
+        /** a real leg's stretch (s), and where its file was when it set off (`at`); MOCK11: a leg without its clip, the
+         *  light's fade (ms, its hold apart) */
+        hops: { leg: string; real: boolean; start?: number; end?: number; at?: number; fade?: number }[];
         /** the trip's time; back: the fade's own (in and out), `hold` the room's change inside the full light */
         ms?: number;
         hold?: number;
@@ -1405,9 +1406,27 @@ export function TourPage() {
         resolve();
       };
       const t = window.setTimeout(ok, 8000);
+      // MOCK11: a server without byte ranges (the preview's; the Artifact's, MOCK10) gives a file no seekable range but
+      // its start, and a seek there falls back to 0. The frames up to `at` (a chain's skipped ease-in, under half a
+      // second) are then played through, unseen and fast, and the video stops on `at`, or a few frames past it (the
+      // chain's cut is that much longer). A refused play leaves it at its first frame: the leg starts from there.
+      const near = () => v.currentTime >= at - 0.5 / lv.fps;
+      const onward = () => {
+        if (near()) return ok();
+        v.playbackRate = 4;
+        const step = () => {
+          if (done) return;
+          if (near() || v.ended) {
+            v.pause();
+            return ok();
+          }
+          requestAnimationFrame(step);
+        };
+        v.play().then(() => requestAnimationFrame(step), ok);
+      };
       const seek = () => {
         if (Math.abs(v.currentTime - at) < 0.25 / lv.fps && v.readyState >= 2) return ok();
-        v.addEventListener('seeked', ok, { once: true });
+        v.addEventListener('seeked', onward, { once: true });
         v.currentTime = at;
       };
       v.pause();
@@ -1422,6 +1441,27 @@ export function TourPage() {
     });
   }
   /** shows a leg's video over the canvas (a soft blend of `ms`, or a cut over the leg before it), or takes it away */
+  /**
+   * MOCK11: the warm light comes up over the window (the way back, a leg without its clip): its own time, and until the
+   * browser has it full — a slow frame starts the transition late, and the room must never change under a light that is
+   * not yet full (it would be seen through it)
+   */
+  const lightUp = (e: TourEngine, label: string, ms: number): Promise<unknown> => {
+    const el = stage.current?.querySelector<HTMLElement>('.tour-light');
+    const full = new Promise<void>((resolve) => {
+      if (!el) return resolve();
+      const done = () => {
+        clearTimeout(t);
+        el.removeEventListener('transitionend', end);
+        resolve();
+      };
+      const end = (ev: TransitionEvent) => void (ev.propertyName === 'opacity' && done());
+      const t = window.setTimeout(done, ms * 2 * timeScale());
+      el.addEventListener('transitionend', end);
+    });
+    stage.current?.setAttribute('data-light', '');
+    return Promise.all([e.ui(label, ms), full]);
+  };
   const showLeg = (v: HTMLVideoElement, on: boolean, ms: number) => {
     v.style.setProperty('--leg-ms', `${Math.round(ms)}ms`);
     v.toggleAttribute('data-on', on);
@@ -1502,7 +1542,7 @@ export function TourPage() {
   /**
    * MOCK9 (FB21): to a station of the route — the banner, the panel's rooms, the scroll. Ahead: the legs, one station
    * at the leg's own pace, a jump chained and faster, the ease frames between the legs skipped (tour/route.ts); a real
-   * leg plays its clip over the canvas, a leg without one walks in code (MOCK7's push) at the same pace. Behind: a
+   * leg plays its clip over the canvas, a leg without one fades through the warm light (MOCK11: BACK_MS, no push). Behind: a
    * fade through the light, about 450 ms, never a walk backward (FB8). Reduced motion: a plain dissolve either way.
    * `scrub`: the scroll's first push, when the scroll started it (a leg of one station follows the scroll).
    */
@@ -1525,8 +1565,11 @@ export function TourPage() {
           setEye(WM);
           const dest = FRAMES[g][0]!;
           let t0 = performance.now();
-          const said = (kind: 'ahead' | 'back', rate: number, hops: { leg: string; real: boolean; start?: number; end?: number; fade?: number }[]) =>
-            window.__hdTourState && (window.__hdTourState.trip = { to: dest, kind, rate, hops, ms: Math.round(performance.now() - t0) });
+          const said = (
+            kind: 'ahead' | 'back',
+            rate: number,
+            hops: { leg: string; real: boolean; start?: number; end?: number; at?: number; fade?: number }[],
+          ) => window.__hdTourState && (window.__hdTourState.trip = { to: dest, kind, rate, hops, ms: Math.round(performance.now() - t0) });
           if (e.reduce) {
             await e.toRoom(dest, t.kind === 'back' ? BACK_MS : ROOM_FADE_MS, true, `room-${dest}`, 0);
             setRoomUi(dest);
@@ -1536,8 +1579,7 @@ export function TourPage() {
             // changes inside it, and the light clears onto the room
             await e.loadRoom(ROOMS[dest], 0);
             t0 = performance.now();
-            stage.current?.setAttribute('data-light', '');
-            await e.ui('back-in', t.ms / 2);
+            await lightUp(e, 'back-in', t.ms / 2);
             // inside the full light the room changes (its composition, a frame or two on a phone): not part of the fade
             const h0 = performance.now();
             await e.toRoom(dest, 0, true, `back-${dest}`);
@@ -1554,7 +1596,7 @@ export function TourPage() {
             let shown: HTMLVideoElement | null = null;
             let real = 0;
             let cued: Promise<void> | null = null;
-            const rec: { leg: string; real: boolean; start?: number; end?: number; fade?: number }[] = [];
+            const rec: { leg: string; real: boolean; start?: number; end?: number; at?: number; fade?: number }[] = [];
             const clip = (j: number) => (vids[0] && vids[1] && t.hops[j] ? legFile(t.hops[j].leg, w) : null);
             /** MOCK11: the room a run of clips from hop `j` ends in (the canvas under them is seen only when they give way) */
             const runEnd = (j: number): RoomId => {
@@ -1587,9 +1629,10 @@ export function TourPage() {
                 // the next clip waits cued on the other video, so the seam is a cut between two decoded frames
                 if (nx && nlv) cued = cue(vids[real % 2]!, nlv, span(nlv, nx).start);
                 const first = i === 0 && t.stations === 1 ? scrub + (tripOn.current?.pending ?? 0) : 0;
+                const at = v.currentTime;
                 await playLeg(e, v, h.leg.id, lv, s, t.rate, first);
                 if (!nlv) setRoomUi(to);
-                rec.push({ leg: h.leg.id, real: true, start: +s.start.toFixed(4), end: +s.end.toFixed(4) });
+                rec.push({ leg: h.leg.id, real: true, start: +s.start.toFixed(4), end: +s.end.toFixed(4), at: +at.toFixed(4) });
               } else {
                 // MOCK11 (FB26, "סתם זום ואז פייד"): a leg without its clip fades through the warm light, as the way
                 // back does (BACK_MS), never the MOCK7 push. The light comes up over what is on screen (the room, or the
@@ -1602,8 +1645,7 @@ export function TourPage() {
                 // light, so the walk runs on into it (what is not ready by then is waited for inside the light)
                 if (!shown) await e.loadRoom(ROOMS[land], 0);
                 const lit0 = performance.now();
-                stage.current?.setAttribute('data-light', '');
-                await Promise.all([e.ui('leg-light-in', BACK_MS / 2), shown ? e.loadRoom(ROOMS[land], 0) : null]);
+                await Promise.all([lightUp(e, 'leg-light-in', BACK_MS / 2), shown ? e.loadRoom(ROOMS[land], 0) : null]);
                 const h0 = performance.now();
                 await e.toRoom(land, 0, true, `light-${land}`);
                 if (cued) {

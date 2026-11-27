@@ -1,8 +1,8 @@
 /**
  * MOCK11 (2026-11-27, briefs/site-mock11-route-legs-2026-11-27.md): the real route legs, the pure parts.
  *
- *  1. every leg the config names is real, from its manifest: the files' sizes, rates and ease frames; the wide screen's
- *     file at most 8 MB and the phone's at most 2.5 MB; a poster for each;
+ *  1. every leg the config names is real (legs 1–5; leg 6 waits for the owner), from its manifest: the files' sizes,
+ *     rates and ease frames; the wide screen's file at most 8 MB and the phone's at most 2.5 MB; a poster for each;
  *  2. the legs chain: a leg's last frame is the next leg's first (the room's display frame), as the manifests say;
  *  3. a jump through the real legs skips the ease frames between them; a leg without its clip stays in the trip (the
  *     page fades it through the light).
@@ -21,8 +21,8 @@ const dirs = Object.values(cfg.legs);
 const manifest = (i: number) => read<Manifest>(`../../../${dirs[i]}/manifest.json`);
 
 describe('MOCK11: the real route legs', () => {
-  it('legs 2, 4 and 5 are real (and 1); each is its manifest, within the size limits, with a poster', () => {
-    expect(['leg1', 'leg2', 'leg4', 'leg5'].filter((id) => !LEGS.find((l) => l.id === id)?.real)).toEqual([]);
+  it('legs 1–5 are real; each is its manifest, within the size limits, with a poster', () => {
+    expect(['leg1', 'leg2', 'leg3', 'leg4', 'leg5'].filter((id) => !LEGS.find((l) => l.id === id)?.real)).toEqual([]);
     LEGS.forEach((l, i) => {
       if (!dirs[i]) return expect(l.real).toBeNull();
       const m = manifest(i);
