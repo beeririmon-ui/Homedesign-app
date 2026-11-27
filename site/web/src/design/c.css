@@ -1350,10 +1350,12 @@ html[data-design='c'] .tour-walk-act .btn:hover {
   background: var(--m10-glass-hi);
 }
 html[data-design='c'] .tour-walk-act #tour-skip {
-  background: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  color: var(--m10-dim);
+  background: rgba(18, 16, 14, 0.2);
+  color: rgba(247, 242, 234, 0.82);
+}
+/* a walk that waits for a touch: its own line says so, the scroll's line steps aside */
+html[data-design='c'] .tour[data-blocked] .tour-walk-hint {
+  opacity: 0;
 }
 
 /* ---------- the route: a timeline of hairlines, the station's name, the next one on a pane of glass ---------- */
@@ -1562,8 +1564,8 @@ html[data-design='c'] .tour[data-frame] .arc-card[aria-checked='true'] .disc {
   box-shadow: 0 0 44px -10px rgba(232, 207, 159, 0.45);
 }
 /* the studio picture as a soft round, its square's corners faded into the night */
-html[data-design='c'] .arc.ring .arc-card > img,
-html[data-design='c'] .arc.ring .arc-card .soft > img {
+html[data-design='c'] .arc-card svg.sprite.studio,
+html[data-design='c'] .arc-card img.studio {
   -webkit-mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
   mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
 }
@@ -1636,6 +1638,7 @@ html[data-design='c'] .arc.ring .ring-track {
   /* the door's button and the walk's line: the foot's middle */
   html[data-design='c'] .tour-cell {
     position: absolute;
+    place-self: auto;
     z-index: 3;
     bottom: var(--m10-foot);
     inset-inline: var(--wx);
@@ -1664,17 +1667,51 @@ html[data-design='c'] .arc.ring .ring-track {
   }
   html[data-design='c'] .tour-fold {
     position: absolute;
+    place-self: auto;
     z-index: 4;
     bottom: var(--m10-foot);
     inset-inline-end: calc(var(--wx) + var(--m10-in));
   }
   html[data-design='c'] .tour-more {
+    display: block;
     left: auto;
     inset-inline-end: calc(var(--wx) + var(--m10-in));
     bottom: calc(var(--m10-foot) + 62px);
-    width: min(400px, calc(var(--ww) - 2 * var(--m10-in)));
-    max-height: calc(var(--wh) - 62px - 2 * var(--m10-in));
+    width: min(380px, calc(var(--ww) - 2 * var(--m10-in)));
+    max-height: calc(var(--wh) - 62px - 2 * var(--m10-in) - var(--header-h));
+    padding: 4px 24px 22px;
     transform-origin: 0 100%;
+  }
+  /* the rooms: one calm column — the number, the name, how many products — divided by the faintest line */
+  html[data-design='c'] .tour-rooms > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html[data-design='c'] .tour-rooms button {
+    min-height: 50px;
+    padding: 10px 0;
+    grid-template-columns: 2.4em minmax(0, 1fr) auto;
+    grid-template-rows: auto;
+    align-items: baseline;
+    font-size: 19px;
+  }
+  html[data-design='c'] .tour-rooms button[aria-current='true'] {
+    background: none;
+    color: var(--m10-fg);
+  }
+  html[data-design='c'] .tour-rooms button[aria-current='true'] span {
+    color: #e8cf9f;
+  }
+  html[data-design='c'] .tour-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: var(--s-3);
+  }
+  html[data-design='c'] .tour .picker .picker-info {
+    margin: 0;
+    margin-inline-end: var(--m10-in);
+    margin-block-end: var(--m10-in);
+    background: var(--m10-glass);
+    box-shadow: var(--m10-shadow);
   }
   /* the close-up keeps the corners clear */
   html[data-design='c'] .tour[data-close] .tour-top {
@@ -1729,6 +1766,12 @@ html[data-design='c'] .arc.ring .ring-track {
   html[data-design='c'] .route-rail {
     display: none;
   }
+  /* on the night under the picture glass shows nothing: a faint fill, so the two read as one control */
+  html[data-design='c'] .route-next,
+  html[data-design='c'] .tour-fold {
+    background: rgba(247, 242, 234, 0.07);
+    box-shadow: none;
+  }
   html[data-design='c'] .route-next {
     min-height: 52px;
     padding-inline: 20px 7px;
@@ -1744,6 +1787,7 @@ html[data-design='c'] .arc.ring .ring-track {
     width: 52px;
     min-width: 52px;
     height: 52px;
+    margin: 0;
     place-self: auto;
   }
   html[data-design='c'] .tour-more {

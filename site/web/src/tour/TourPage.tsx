@@ -201,8 +201,10 @@ function CardPic({ o, cls, size, card }: { o: TourOption; cls?: string; size?: n
   const url = card ? cardFileUrl(card) : cardUrl(o);
   if (c.sprite && c.sheet) {
     const [x, y, w, h] = c.sprite;
+    // MOCK10: a studio picture (FB20: a square of its own studio's paper) is marked, so the wheel can soften its corners
+    const studio = /\/studio\.\d+\.webp$/.test(url);
     return (
-      <svg class={`sprite${cls ? ` ${cls}` : ''}`} viewBox={`${x} ${y} ${w} ${h}`} width={size} height={size} aria-hidden="true" focusable="false">
+      <svg class={`sprite${studio ? ' studio' : ''}${cls ? ` ${cls}` : ''}`} viewBox={`${x} ${y} ${w} ${h}`} width={size} height={size} aria-hidden="true" focusable="false">
         <svg x={x} y={y} width={w} height={h} viewBox={`${x} ${y} ${w} ${h}`}>
           <image href={url} width={c.sheet[0]} height={c.sheet[1]} />
         </svg>

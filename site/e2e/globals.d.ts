@@ -134,3 +134,10 @@ declare global {
   }
 }
 export {};
+
+declare global {
+  interface Window {
+    /** MOCK10: tour/media.ts — refused plays, videos a gesture unlocked, and the ones waiting for a gesture now */
+    __hdMedia?: { refused: number; unlocked: number; waiting: number };
+  }
+}
