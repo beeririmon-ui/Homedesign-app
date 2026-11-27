@@ -6,7 +6,7 @@
  "date": "2026-11-27",
  "author": "motion-agent",
  "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, FB21",
- "play_s": 15.4,
+ "play_s": 16.55,
  "sampling": "uniform in time at the nominal walk: frame i (1-based) is shown at (i - 1) / fps s; an even picture speed (0.5x-1.6x of the median) with a short ease in and out; forward only, no hold, no cut",
  "chain": {
   "first_frame": "assets/renders/dining/warm-modern/stage1-2026-11-20/D1-defaults-fb16-frame.png",
@@ -24,12 +24,12 @@
   },
   "ease_out_frames": {
    "1920": [
-    890,
-    925
+    958,
+    994
    ],
    "1080": [
-    445,
-    463
+    479,
+    498
    ]
   },
   "fast_forward": "when chaining at x2-x3, skip the ease-in frames of every leg but the first and the ease-out frames of every leg but the last"
@@ -44,7 +44,7 @@
    "w": 1920,
    "h": 1080,
    "fps": 60,
-   "frames": 925,
+   "frames": 994,
    "avif_quality": 55,
    "webp_quality": 72,
    "last_frames_quality": {
@@ -57,7 +57,7 @@
    "w": 1080,
    "h": 608,
    "fps": 30,
-   "frames": 463,
+   "frames": 498,
    "avif_quality": 50,
    "webp_quality": 60,
    "last_frames_quality": {
@@ -69,22 +69,22 @@
  },
  "bytes": {
   "1920": {
-   "avif": 33835950,
-   "webp": 32641508
+   "avif": 36847578,
+   "webp": 35642756
   },
   "1080": {
-   "avif": 5001087,
-   "webp": 5115920
+   "avif": 5669435,
+   "webp": 5788264
   }
  },
  "bytes_per_2s": {
   "1920": {
-   "avif": 4394279,
-   "webp": 4239156
+   "avif": 4452879,
+   "webp": 4307281
   },
   "1080": {
-   "avif": 649491,
-   "webp": 664405
+   "avif": 685128,
+   "webp": 699488
   }
  },
  "ends": {
@@ -104,26 +104,26 @@
  "lock": {
   "clip1": {
    "first": {
-    "shift_px_median": 0.1707771271467209,
-    "shift_px_p95": 0.7128312587738037,
-    "colour_resid_levels_mean": 3.5980117321014404
+    "shift_px_median": 0.1559976190328598,
+    "shift_px_p95": 0.6165242791175842,
+    "colour_resid_levels_mean": 3.599698781967163
    },
    "last": {
-    "shift_px_median": 3.518061637878418,
-    "shift_px_p95": 7.278205871582031,
-    "colour_resid_levels_mean": 3.716912269592285
+    "shift_px_median": 0.9405471682548523,
+    "shift_px_p95": 2.365154266357422,
+    "colour_resid_levels_mean": 2.5439651012420654
    }
   },
   "clip2": {
    "first": {
-    "shift_px_median": 0.22382616996765137,
-    "shift_px_p95": 0.6399056315422058,
-    "colour_resid_levels_mean": 3.3737168312072754
+    "shift_px_median": 0.573307991027832,
+    "shift_px_p95": 1.99611496925354,
+    "colour_resid_levels_mean": 2.463233470916748
    },
    "last": {
-    "shift_px_median": 13.79107666015625,
-    "shift_px_p95": 38.18011474609375,
-    "colour_resid_levels_mean": 3.155724048614502
+    "shift_px_median": 5.159587860107422,
+    "shift_px_p95": 10.08292293548584,
+    "colour_resid_levels_mean": 2.9553818702697754
    }
   },
   "clip3": {
@@ -151,6 +151,6 @@
    }
   }
  },
- "speed_max_jump_pct_per_frame": 11.3,
+ "speed_max_jump_pct_per_frame": 4.9,
  "qa": "pending (qa-agent)"
 }

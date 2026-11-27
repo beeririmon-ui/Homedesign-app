@@ -198,10 +198,60 @@
      },
      "open": "Dx off-plan (K1 end / K2b start): fix = Dx on the plan camera (refeed: the portal and the hall in the middle of the frame) + K1 and K2 again, 2,918; not done (beyond the approved fix)"
     }
+   },
+   "dx_rebuild_fb27": {
+    "why": "coordinator FB27: Dx/K2 showed an empty, narrow living room",
+    "finding": "from PD the living room's furnished half is at yaw <= 78 (sofa 38, coffee table 51, armchair 75, window 60-78); the view to the hall spans 113-187, so on the plan no living-room product is in view (M0-W contributes 0 px to Dx150); a plan-camera Dx shows the real wide walkway and the hall's products through the portal",
+    "jobs": [
+     {
+      "id": "Dx150 seedream",
+      "placeholder_id": "f236a5c5-f253-4de1-bdbe-13d8743092ea",
+      "tokens": 650,
+      "file": "route-fb21/leg2/stills/dx150-w.png"
+     },
+     {
+      "id": "K1c D1->Dx150",
+      "s": 4,
+      "placeholder_id": "ddd0f89c-6903-4f33-a9f2-b2c65a066aea",
+      "tokens": 1296
+     },
+     {
+      "id": "K2c Dx150->Lh2",
+      "s": 3,
+      "placeholder_id": "c25de93a-e6e5-4a26-82c3-49b36791192e",
+      "tokens": 972
+     }
+    ],
+    "spent": 2918,
+    "review": "K1c: right turn, the kitchen sweeps left, the walnut leaf and the portal with the hall come in from the right, lands on Dx150; K2c: through the opening, the living room stays wide (no window), lands on Lh2"
+   },
+   "final_fb27": {
+    "chain": "route-fb21/leg2/chain.json: K1c (paced as a turn) D1->Dx150, K2c Dx150->Lh2, K3b Lh2->HC2, K4 HC2->B1",
+    "play_s": 16.55,
+    "frames": {
+     "1920@60": 994,
+     "1080@30": 498
+    },
+    "bytes_per_2s": {
+     "1920": {
+      "avif": 4452879,
+      "webp": 4307281
+     },
+     "1080": {
+      "avif": 685128,
+      "webp": 699488
+     }
+    },
+    "ends": {
+     "first_vs_still_before_encoding_max": 0,
+     "last_vs_still_before_encoding_max": 0,
+     "last_avif_1920_mean_levels": 2.24
+    },
+    "verdict": "passes motion-agent's eye: no narrow or invented room, no invented window; the hall's products refed; qa pending"
    }
   },
   "spent": 6484,
-  "cap": 31200,
+  "cap": "38,000 (owner FB27, 2026-11-27; was 31,200)",
   "spend_log": [
    {
     "what": "route legs 2 (first round)",
@@ -212,7 +262,7 @@
     "tokens": 2600
    }
   ],
-  "spent_total": 12002,
+  "spent_total": 14920,
   "projection_2026_11_27": {
    "spent": 12002,
    "left": 19198,
@@ -225,6 +275,20 @@
    "bare": 18806,
    "with_usual_fixes": "22,000-23,000 (total about 34,000-35,000)",
    "verdict": "over the 31,200 cap: stopped before legs 3-6 for the owner's decision"
+  },
+  "projection_fb27": {
+   "cap": 38000,
+   "spent": 14920,
+   "legs_bare": {
+    "3": 7136,
+    "4": 3400,
+    "5": 3890,
+    "6": 7100
+   },
+   "bare_total": 36446,
+   "with_usual_fix_round": "~40,000",
+   "levers": "code dollies for straight corridor walks (Mo->CK, CK->hall) save ~2,000",
+   "verdict": "stopped before leg 3: with the usual fix round the projection passes 38,000"
   }
  }
 }

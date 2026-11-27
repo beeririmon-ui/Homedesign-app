@@ -1,0 +1,49 @@
+{
+ "still": "Dx150",
+ "date": "2026-11-27",
+ "author": "motion-agent",
+ "cam": {
+  "loc": [
+   2.8,
+   3.8,
+   1.1
+  ],
+  "yaw": 150,
+  "u0": 0.5,
+  "v0": 0.48,
+  "lens": 24
+ },
+ "replaces": "dx-w.png (seedream off-plan: a narrow room with a corner on the right)",
+ "how": [
+  "still.py cfg-dx150.json: the hall through the portal refed from HT2 (no sconce), HC2, HDx2, HC130 (keep y > 6.27), M0-W (keep the living room): 0 px of M0-W is in view (the sofa group is at yaw <= 78 from PD, this view spans 113-187)",
+  "plan tones for the living walkway and the dining wall, the folded walnut leaf as a plan panel (x 2.66, y 4.57-5.37), the clay bench in code",
+  "seedream-5-pro 2K i2i, no refs (650); finish.py: phase-correlation alignment (SIFT fit rejected), the refed hall pasted back exactly; the hall sconce as a billboard from its HT2 layer"
+ ],
+ "refeed": {
+  "HT2": 0.147,
+  "HC2": 0.0,
+  "HDx2": 0.002,
+  "HC130": 0.011,
+  "M0W": 0.0
+ },
+ "finish": {
+  "fallback": "phase correlation",
+  "shift": [
+   0.12,
+   -0.03
+  ],
+  "response": 0.251,
+  "sift": {
+   "matches": 50,
+   "inliers": 16,
+   "scale": 0.0,
+   "rot_deg_dropped": -47.435,
+   "resid_px_median": 0.0
+  },
+  "paste_px": 292705
+ },
+ "seedream": {
+  "placeholder_id": "f236a5c5-f253-4de1-bdbe-13d8743092ea",
+  "tokens": 650
+ }
+}
