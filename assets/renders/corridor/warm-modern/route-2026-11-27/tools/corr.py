@@ -23,7 +23,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
 CLAY = os.path.join(OUT, "clay")
 SCR = "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad"
-WORK = os.path.join(SCR, "corr")
+WORK = os.path.join(SCR, "corr")                      # scratch (r1 / r2 analyses)
+SRC = os.path.join(OUT, "sources")                    # kept: the model returns used, the refeed
+PASSES = os.path.join(CLAY, "{}-passes.npz")          # float planar depth, pass index, normals of the clay (clay_cm_ck.py)
 sys.path.insert(0, os.path.join(REPO, "site/tools/transitions"))
 import camgeo as cg  # noqa: E402
 
@@ -81,7 +83,7 @@ def lab(l):
 def clay(name):
     """clay rgb (0-1), float planar depth (scratch npz of clay_cm_ck.py, else the 16-bit pass), world points, valid."""
     img = rgb(os.path.join(CLAY, name + ".png"))
-    npz = os.path.join(SCR, "clay/passes", name + ".npz")
+    npz = PASSES.format(name)
     if os.path.exists(npz):
         d = np.load(npz)["depth"].astype(np.float64)
     else:
@@ -223,7 +225,7 @@ def heal(fill, holes, regions, img, name):
     code: the destination clay's shading per surface (floor / wall / ceiling by the clay normals) times a gain read on a ring of the refed
     pixels around the hole, then a multiplicative correction diffused in from the ring (normalised convolution, coarse to fine), so the
     hole meets the refeed without a seam. No product is drawn: the holes hold only plaster, ceiling and floor."""
-    npz = os.path.join(SCR, "clay/passes", name + ".npz")
+    npz = PASSES.format(name)
     nz = np.load(npz)["normal"][..., 2].astype(np.float32) / 127.0
     cls = np.where(nz > 0.7, 0, np.where(nz < -0.7, 2, 1))
     cl = lin(img).astype(np.float32)
@@ -254,7 +256,8 @@ def heal(fill, holes, regions, img, name):
                 bc = cv2.GaussianBlur(corr * w[..., None], (0, 0), sig)
                 okk = bw > 1e-3
                 c_est = np.where(okk[..., None], bc / np.maximum(bw, 1e-6)[..., None], c_est)
-            out[hc] = est[hc] * np.clip(c_est[hc], 0.3, 3)
+            cap = np.percentile(fl[rc], 99, axis=0) if rc.sum() > 50 else np.percentile(fl[ring], 99, axis=0)
+            out[hc] = np.minimum(est[hc] * np.clip(c_est[hc], 0.3, 3), cap[None])     # never brighter than the refed ring around it
         rec[key] = dict(hole_px=int(h.sum()), ring_px=int(ring.sum()), gain_all=[round(float(v), 3) for v in g_all])
     return np.clip(srgb(out), 0, 1).astype(np.float32), rec
 
@@ -293,10 +296,10 @@ def refeed(name):
         fill, rec["heal"] = heal(fill, HOLES, regs, img, name)
     else:
         rec["bedroom"] = "no display frame sees the bedroom's south wall (MB0 and MB1 both look -Y): drawn by the model (FB21 2)"
-    os.makedirs(WORK, exist_ok=True)
-    np.savez_compressed(os.path.join(WORK, f"refeed-{name}.npz"), fill=np.clip(fill * 255 + 0.5, 0, 255).astype(np.uint8), mask=mask, holes=HOLES)
+    os.makedirs(SRC, exist_ok=True)
+    np.savez_compressed(os.path.join(SRC, f"refeed-{name}.npz"), fill=np.clip(fill * 255 + 0.5, 0, 255).astype(np.uint8), mask=mask, holes=HOLES)
     rec["mask_px_total"] = int(mask.sum())
-    json.dump(rec, open(os.path.join(WORK, f"refeed-{name}.json"), "w"), indent=1, default=str)
+    json.dump(rec, open(os.path.join(SRC, f"refeed-{name}.json"), "w"), indent=1, default=str)
     print(json.dumps({k: (v if isinstance(v, (str, int)) else {kk: vv for kk, vv in v.items() if kk != "anchors"}) for k, v in rec.items()}, indent=0))
     return fill, mask, rec
 
@@ -305,7 +308,7 @@ def refeed(name):
 def prep(name):
     T = json.load(open(os.path.join(HERE, "hc-transfer.json")))
     img, d, P, ok = clay(name)
-    idx = np.load(os.path.join(SCR, "clay/passes", name + ".npz"))["idx"]
+    idx = np.load(PASSES.format(name))["idx"]
     G = groups(P, ok, img, idx)
     lc = lin(img)
     Yc = lc @ W709
@@ -328,7 +331,7 @@ def prep(name):
     o = srgb(out)
     sl = G["slot"]
     o[sl] = np.minimum(o[sl], 250 / 255)
-    f = os.path.join(WORK, f"refeed-{name}.npz")
+    f = os.path.join(SRC, f"refeed-{name}.npz")
     if os.path.exists(f):
         z = np.load(f)
         m = z["mask"]
@@ -415,9 +418,9 @@ def finish(name, raw_path, tag="r1"):
     raw0 = rgb(raw_path)
     raw = cv2.resize(raw0, (CV.w, CV.h), interpolation=cv2.INTER_CUBIC if raw0.shape[1] < CV.w else cv2.INTER_AREA)
     img, d, P, ok = clay(name)
-    idx = np.load(os.path.join(SCR, "clay/passes", name + ".npz"))["idx"]
+    idx = np.load(PASSES.format(name))["idx"]
     G = groups(P, ok, img, idx)
-    z = np.load(os.path.join(WORK, f"refeed-{name}.npz"))
+    z = np.load(os.path.join(SRC, f"refeed-{name}.npz"))
     fill, mask = z["fill"] / 255.0, z["mask"]
     keep = ok & ~cv2.dilate(mask.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool)
     H, cc, reg = register(raw, inp, keep)

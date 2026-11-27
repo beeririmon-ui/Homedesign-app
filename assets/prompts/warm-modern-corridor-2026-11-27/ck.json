@@ -1,0 +1,94 @@
+{
+ "asset_id": "wm-corridor-ck-route-2026-11-27",
+ "still": "CK",
+ "status": "delivered for QA and the designer (not QA-passed; HD_PUBLIC=0)",
+ "camera": {
+  "loc": [
+   2.45,
+   14.2,
+   1.2
+  ],
+  "yaw": 0,
+  "lens": 24,
+  "u0": 0.5,
+  "v0": 0.5,
+  "canvas": [
+   2720,
+   1530
+  ],
+  "frame_box": [
+   77.49,
+   43.43,
+   2642.51,
+   1486.57
+  ]
+ },
+ "files": [
+  "designer-verbatim.txt",
+  "ck-r1.txt",
+  "ck-r2.txt",
+  "edits.json"
+ ],
+ "seed": null,
+ "seed_note": "seedream-5-pro exposes no seed",
+ "jobs": [
+  {
+   "still": "CK",
+   "id": "r1",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/eaca4e7f-7fcf-4bb9-87d0-093599eedb9a.png",
+   "input_file": "assets/renders/corridor/warm-modern/route-2026-11-27/inputs/CK-input.png",
+   "input_sha256_20": "e73bd11bb4109f17982e",
+   "image_refs": [
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/30405ea8-13db-4e44-8e8e-0ddbe4db26b3.png (hall-2026-11-18/hc.png)",
+    "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/07c635a7-b7ff-438d-a316-0c86f618f0aa.png (hall-products-2026-11-19/hdx2-products-fb19-frame.png)"
+   ],
+   "prompt_file": "ck-r1.txt",
+   "idempotency_key": "wm-corridor-ck-r1-seedream-2026-11-27",
+   "placeholder_id": "34fa88f9-86ed-4fb1-b77d-21bffab90683",
+   "task_id": "1d3fafe41ad8ee6fc967bb42f115caf0",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-1d3fafe41ad8ee6fc967bb42f115caf0-0-1795779855955-b66ea74c.png",
+   "running_total": 650,
+   "verdict": "rejected: dappled leaf-light on both corridor walls and a sun streak on the hall floor (FB21 3, item 3); the side jambs moved 34-88 px (item 8: the bath jamb +83, the boy jamb -88); strike plates on two jambs (item 5). Its console (the drum console) is the grain source of CK final; kept as sources/ck-r1-model.png",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "seed": null,
+   "seed_note": "seedream-5-pro exposes no seed",
+   "estimate": 650,
+   "tokens": 650,
+   "returned_px": [
+    2720,
+    1530
+   ]
+  },
+  {
+   "still": "CK",
+   "id": "r2",
+   "input_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/eaca4e7f-7fcf-4bb9-87d0-093599eedb9a.png",
+   "input_file": "inputs/CK-input.png (the same upload)",
+   "image_refs": [],
+   "prompt_file": "ck-r2.txt",
+   "idempotency_key": "wm-corridor-ck-r2-seedream-2026-11-27",
+   "placeholder_id": "b9beeb4f-cd3d-4b15-859f-0dda67da4b5e",
+   "task_id": "7674a6386740b83fccd8af7e961c92fa",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-7674a6386740b83fccd8af7e961c92fa-0-1795780209762-34fb3b79.png",
+   "running_total": 1950,
+   "verdict": "used: every lock edge within 0-2 px horizontally and ~3 px vertically as returned; fixed in code (tools/final.py): the console (r2 drew a low bench), an invented pale wood strip on the left wall, levels and colour by region, the rooms refed. Kept as sources/ck-r2-model.png",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "seed": null,
+   "seed_note": "seedream-5-pro exposes no seed",
+   "estimate": 650,
+   "tokens": 650,
+   "returned_px": [
+    2720,
+    1530
+   ]
+  }
+ ],
+ "code": "assets/renders/corridor/warm-modern/route-2026-11-27/tools/: clay_cm_ck.py (clay), corr.py measure / refeed / prep, final.py (from the r2 model return to the delivered still), sheet.py",
+ "output": "assets/renders/corridor/warm-modern/route-2026-11-27/CK.png and CK-frame.png"
+}

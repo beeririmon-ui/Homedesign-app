@@ -30,8 +30,8 @@ hc, cm, ck = load(HC), load(os.path.join(OUT, "CM-frame.png")), load(os.path.joi
 row1 = [label(fit(hc), "HC (accepted, 2026-11-18)"), label(fit(cm), "CM"), label(fit(ck), "CK")]
 cmf, ckf = os.path.join(OUT, "CM-frame.png"), os.path.join(OUT, "CK-frame.png")
 row2 = [crop2(cmf, (740, 60, 1180, 420), "CM x2: bedroom door, leaf"), crop2(cmf, (1180, 260, 1620, 620), "CM x2: girl's door"),
-        crop2(ckf, (0, 300, 440, 660), "CK x2: boy's room (K-boy fb16)"), crop2(ckf, (700, 250, 1140, 610), "CK x2: hall, living (pecan)"),
-        crop2(ckf, (1480, 300, 1920, 660), "CK x2: bath (B1 fb16)"), crop2(ckf, (300, 0, 740, 360), "CK x2: roof-light slot")]
+        crop2(ckf, (0, 300, 440, 660), "CK x2: boy's room (K-boy fb16)"), crop2(ckf, (740, 380, 1180, 740), "CK x2: living (pecan), console"),
+        crop2(ckf, (1480, 300, 1920, 660), "CK x2: bath (B1 fb16)"), crop2(ckf, (560, 0, 1000, 360), "CK x2: roof-light slot")]
 h1 = max(i.size[1] for i in row1); h2 = max(i.size[1] for i in row2)
 sheet = Image.new("RGB", (3 * W + 40, h1 + h2 + 30), (246, 244, 240))
 for k, im in enumerate(row1):

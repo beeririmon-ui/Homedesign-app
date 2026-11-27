@@ -171,6 +171,8 @@ def main(argv):
         rec = dict(frame=fid, camera=dict(loc=f["loc"], yaw=f["yaw"], lens=24, u0=f["u0"], v0=f["v0"]), leaf=f["leaf"], canvas=cv,
                    samples=a.samples, exposure=fa.door_exposure)
         rec.update(E.save_passes(fid, png, depth, idx, normal, f, cv, IM, a.out))
+        import shutil
+        shutil.copy(rec.pop("npz"), os.path.join(a.out, fid + "-passes.npz"))   # float depth, pass index, normals (corr.py / final.py)
         rec["runtime_s"] = round(time.time() - t1)
         recs[fid] = rec
         print("FRAME", fid, rec["runtime_s"], "s", flush=True)

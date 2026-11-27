@@ -1,0 +1,208 @@
+{
+ "still": "CM",
+ "raw": "cm-r2-model.png",
+ "lock": [
+  {
+   "edge": "bedroom jamb left (X 2.90), corridor side",
+   "projected_x": 1112.1,
+   "input_x": 1112,
+   "img_x": 1111,
+   "offset_px": -1
+  },
+  {
+   "edge": "bedroom jamb right (X 2.00), corridor side",
+   "projected_x": 1606.9,
+   "input_x": 1590,
+   "img_x": 1589,
+   "offset_px": -1
+  },
+  {
+   "edge": "girl far jamb, corridor side",
+   "projected_x": 1824.2,
+   "input_x": 1824,
+   "img_x": 1822,
+   "offset_px": -2
+  },
+  {
+   "edge": "girl far jamb, room side",
+   "projected_x": 1917.1,
+   "input_x": 1919,
+   "img_x": 1919,
+   "offset_px": 0
+  },
+  {
+   "edge": "girl near jamb, corridor side",
+   "projected_x": 2049.0,
+   "input_x": 2046,
+   "img_x": 2048,
+   "offset_px": 2
+  }
+ ],
+ "vertical_fix": {
+  "control_rows_out_to_r2": [
+   [
+    0,
+    170
+   ],
+   [
+    105,
+    231
+   ],
+   [
+    140,
+    264
+   ],
+   [
+    338,
+    406
+   ],
+   [
+    369,
+    438
+   ],
+   [
+    1047,
+    1048
+   ],
+   [
+    1529,
+    1529
+   ]
+  ],
+  "sigma_rows": 12.0,
+  "residual_at_controls": {
+   "0": 0.0,
+   "105": 1.73,
+   "140": -1.08,
+   "338": 1.5,
+   "369": -0.63,
+   "1047": 0.47,
+   "1529": -4.77
+  }
+ },
+ "levels": {
+  "walls_stops_vs_HC_before": {
+   "slot_wall": -0.18818087422646423,
+   "opp_wall": -0.13792795364754665
+  },
+  "corridor_gain_stops": 0.163,
+  "bedroom_back_wall_L_before": 73.55,
+  "bedroom_gain_stops": 0.333
+ },
+ "oak": {
+  "measured_on": "every visible floor",
+  "before": [
+   54.88,
+   10.74,
+   19.92
+  ],
+  "target": [
+   "kept",
+   4.89,
+   16.79
+  ],
+  "L_gain_stops": 0.0,
+  "a_scale": 0.455,
+  "b_scale": 0.843
+ },
+ "spill_cap": {
+  "px": 108431,
+  "cap_L": 44.5,
+  "p95_L_before": 58.28,
+  "p95_L_after": 47.07
+ },
+ "wall_colour": {
+  "slot_wall": {
+   "before": [
+    57.94,
+    2.94,
+    12.45
+   ],
+   "d_a": -1.44,
+   "d_b": -2.76
+  },
+  "opp_wall": {
+   "before": [
+    72.46,
+    1.28,
+    6.87
+   ],
+   "d_a": -0.06,
+   "d_b": 1.62
+  }
+ },
+ "slot_b_shift": "none needed (the well's median b* is above HC's slot)",
+ "walnut_lift": {
+  "A": 3.68,
+  "curve": "L + A*4x(1-x), x = L/45",
+  "target_median": 21.0
+ },
+ "toe": {
+  "A": 11.04,
+  "model_p01_before": 2.56
+ },
+ "checks": {
+  "frame_p01": 11.8,
+  "frame_p05": 12.58,
+  "model_part_p01": 11.8,
+  "model_part_p05": 12.58,
+  "walls_mid_stops_vs_HC": {
+   "slot_wall": -0.025,
+   "opp_wall": 0.025
+  },
+  "walls_within_1_6": true,
+  "slot_wall_lab": [
+   57.87,
+   1.49,
+   9.67
+  ],
+  "slot_wall_lab_HC": [
+   61.09,
+   1.5,
+   9.69
+  ],
+  "opp_wall_lab": [
+   72.4,
+   1.21,
+   8.46
+  ],
+  "opp_wall_lab_HC": [
+   70.42,
+   1.22,
+   8.49
+  ],
+  "corridor_oak_lab": [
+   40.24,
+   4.72,
+   16.88
+  ],
+  "corridor_oak_lab_HC": [
+   40.02,
+   4.89,
+   13.79
+  ],
+  "walnut_L": 21.99,
+  "walnut_over_black_p05": 9.41,
+  "L_median_by_surface": {
+   "slot_wall": 58.69,
+   "opp_wall": 76.98,
+   "floor": 50.27,
+   "end_wall": 66.84,
+   "bedroom": 72.13,
+   "girl": 74.47
+  },
+  "L_median_mid_height": {
+   "slot_wall": 58.53,
+   "opp_wall": 75.66,
+   "end_wall": 68.83,
+   "girl": 77.79
+  },
+  "bedroom_back_wall_L_median": 80.47,
+  "end_brightest_by_median": {
+   "end": 80.47,
+   "max_other": 77.79,
+   "ok": true
+  },
+  "ch255_pct_of_frame": 0.0
+ }
+}
