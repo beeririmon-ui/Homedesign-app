@@ -13,7 +13,10 @@ def main(cfgp):
     S = []
     for s in C['stills']:
         c = s['cam']; img = msr.rgb(s['img'])
-        scv = cg.Canvas.frame(img.shape[1], img.shape[0]) if img.shape[1] == 1920 else cg.Canvas.base(img.shape[1])
+        if 'canvas' in s:        # an overscan canvas from still.py: [w, h, x0, y0, x1, y1] (the 1920 frame's box inside it)
+            w, h, *box = s['canvas']; scv = cg.Canvas(w, h, tuple(box))
+        else:
+            scv = cg.Canvas.frame(img.shape[1], img.shape[0]) if img.shape[1] == 1920 else cg.Canvas.base(img.shape[1])
         S.append(dict(img=img.astype(np.float32), cam=msr.LCam(c['loc'], c['yaw'], c['u0'], c['v0'], c.get('lens', 24.0)), cv=scv))
     a, b = S[0]['cam'], S[-1]['cam']; d = ((b.yaw - a.yaw + 180) % 360) - 180
     n = max(2, int(round(abs(d) / C.get('deg_per_s', 60) * 24)) + 1)
@@ -27,8 +30,9 @@ def main(cfgp):
         for s in S:
             P = np.asarray(s['cam'].loc) + D            # a point on each ray (same centre: any depth projects the same)
             u, v, dd = s['cam'].project(P); mx, my = s['cv'].px(u, v)
-            inside = (dd > 0) & (u > 0) & (u < 1) & (v > 0) & (v < 1)
-            fe = np.clip(np.minimum.reduce([u, 1 - u, v, 1 - v]) / 0.04, 0, 1); w = np.where(inside, 0.5 - 0.5 * np.cos(np.pi * fe), 0)
+            cvs = s['cv']; b0 = cvs.box; uu0, uu1 = -b0[0] / cvs.fw, (cvs.w - b0[0]) / cvs.fw; vv0, vv1 = -b0[1] / cvs.fh, (cvs.h - b0[1]) / cvs.fh
+            inside = (dd > 0) & (u > uu0 + 0.002) & (u < uu1 - 0.002) & (v > vv0 + 0.002) & (v < vv1 - 0.002)   # the whole canvas, overscan included
+            fe = np.clip(np.minimum.reduce([u - uu0, uu1 - u, v - vv0, vv1 - v]) / 0.04, 0, 1); w = np.where(inside, 0.5 - 0.5 * np.cos(np.pi * fe), 0)
             im = cv2.remap(s['img'], mx.astype(np.float32), my.astype(np.float32), cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
             acc += im * w[..., None]; wsum += w
         gaps.append(float((wsum < 1e-3).mean()))

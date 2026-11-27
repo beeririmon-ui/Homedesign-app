@@ -23,10 +23,11 @@ def align(ret, inp, mask):
 def main(ret_p, inp_p, masks_p, out_p, srcs=(0, 1)):
     ret = msr.rgb(ret_p); inp = msr.rgb(inp_p); M = np.load(masks_p)
     thru, val, hole, who, bm = M[0], M[1] > 0.5, M[2] > 0.5, M[3].astype(int), M[4] > 0.5
-    k = 1920 / ret.shape[1]; ret = cv2.resize(ret, (1920, int(round(ret.shape[0] * k))), interpolation=cv2.INTER_AREA)
-    if ret.shape[0] < 1080:  # nano-banana 2K is 2752x1536 (1.79:1): pad the short side so both paths see 1920x1080
-        ret = cv2.copyMakeBorder(ret, 0, 1080 - ret.shape[0], 0, 0, cv2.BORDER_REPLICATE)
-    ret = ret[:1080]
+    H, W = inp.shape[:2]     # 1920x1080, or a wider canvas (2720x1530)
+    k = W / ret.shape[1]; ret = cv2.resize(ret, (W, int(round(ret.shape[0] * k))), interpolation=cv2.INTER_AREA)
+    if ret.shape[0] < H:  # nano-banana 2K is 2752x1536 (1.79:1): pad the short side so both paths see the input's size
+        ret = cv2.copyMakeBorder(ret, 0, H - ret.shape[0], 0, 0, cv2.BORDER_REPLICATE)
+    ret = ret[:H]
     keep = (thru > 0.99) & val & np.isin(who, srcs) & ~bm
     keep = cv2.erode(keep.astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
     try:
@@ -37,8 +38,9 @@ def main(ret_p, inp_p, masks_p, out_p, srcs=(0, 1)):
         # seedream keeps the framing: fall back to a pure translation by phase correlation on the whole frame
         g1 = cv2.cvtColor(ret, cv2.COLOR_RGB2GRAY).astype(np.float32); g2 = cv2.cvtColor(inp, cv2.COLOR_RGB2GRAY).astype(np.float32)
         (dx, dy), resp = cv2.phaseCorrelate(g1, g2, cv2.createHanningWindow(g1.shape[::-1], cv2.CV_32F))
+        if resp < 0.1: dx = dy = 0.0   # a weak peak means flat inputs: nano/seedream kept the framing, use the identity
         A = np.array([[1, 0, dx], [0, 1, dy]], np.float64); rep = dict(fallback='phase correlation', shift=[round(dx, 2), round(dy, 2)], response=round(float(resp), 3), sift=rep)
-    reta = cv2.warpAffine(ret, A, (1920, 1080), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    reta = cv2.warpAffine(ret, A, (W, H), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
     retm = reta.astype(np.float32); L = None
     a = cv2.GaussianBlur(keep.astype(np.float32), (0, 0), 1.5)[..., None]
     out = np.clip(retm * (1 - a) + inp * a + 0.5, 0, 255).astype(np.uint8)

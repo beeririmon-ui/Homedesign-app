@@ -272,9 +272,21 @@
     "what": "leg 3 K3c kling 6 s",
     "tokens": 1944,
     "total": 29666
+   },
+   {
+    "date": "2026-11-27",
+    "what": "leg 3 Bx2 + Md nano",
+    "tokens": 800,
+    "total": 30466
+   },
+   {
+    "date": "2026-11-27",
+    "what": "leg 3 K3b + K3c2 + K3d kling",
+    "tokens": 3564,
+    "total": 34030
    }
   ],
-  "spent_total": 29666,
+  "spent_total": 34030,
   "projection_2026_11_27": {
    "spent": 12002,
    "left": 19198,
@@ -512,14 +524,54 @@
      "last": "route-fb21/leg3/stills/mw-w.png",
      "prompt": "First-person view at eye height, one continuous steady walk. The camera walks forward down the short corridor and straight through the open walnut-lined doorway at its end into a calm bedroom, and as it passes through the doorway it begins a smooth, gentle curve to the RIGHT across the room toward the window wall: the end of the bed with white linen and a rust throw slides in from the right edge, the tall window with sheer linen curtains and a small white vase on the sill comes ahead and settles right of centre, and the plain warm-white plaster wall fills the left, arriving exactly on the last frame. No pause, no zoom, no backward motion, never a sideways slide, no fast spin. Every wall, object and floor plank keeps its place, size and shape; nothing new appears on the walls; no other doors, openings, wardrobes or furniture than the frames show. Soft daylight, exposure locked. No people, no hands.",
      "file": "route-fb21/leg3/k3c.kling-3-omni.take1.mp4"
+    },
+    {
+     "id": "Bx2 nano-banana-2 2K i2i (boy door closed; lever ref from leg 5 K5c2 frame 64)",
+     "placeholder_id": "945b77b2-24fb-4d6a-9e8e-c628616c013d",
+     "tokens": 400
+    },
+    {
+     "id": "Md nano-banana-2 2K i2i (MB0 bed wall + MB1 refeed)",
+     "placeholder_id": "0742aae8-db4e-4e7e-b675-2d31082bf082",
+     "tokens": 400
+    },
+    {
+     "id": "K3b Bx2-frame -> CM-frame kling 4 s",
+     "placeholder_id": "7022bca2-4574-4c45-87d0-b990919ae0b1",
+     "tokens": 1296,
+     "first": "leg3/stills/bx2-frame.png",
+     "last": "CM-frame.png",
+     "idempotency": "fb27-leg3-k3b-take1"
+    },
+    {
+     "id": "K3c2 CM-frame -> Md kling 4 s",
+     "placeholder_id": "fdf906da-01f3-43d3-b65d-9d6d796b6425",
+     "tokens": 1296,
+     "first": "CM-frame.png",
+     "last": "leg3/stills/md-w.png",
+     "idempotency": "fb27-leg3-k3c2-take1"
+    },
+    {
+     "id": "K3d Md -> Mw kling 3 s",
+     "placeholder_id": "18b526b8-756b-48e6-8d59-eec035ed187c",
+     "tokens": 972,
+     "first": "leg3/stills/md-w.png",
+     "last": "leg3/stills/mw-w.png",
+     "idempotency": "fb27-leg3-k3d-take1"
     }
    ],
-   "spent": 4694,
+   "spent": 9058,
    "status": "paused 2026-11-27 before any retry: K3c rejected; bath exit blocked by the wardrobe line of sight. Options reported to the coordinator.",
    "blocker": "From the bath door the line of sight crosses the corridor into the open boy door and reaches the unrendered kids wardrobes (X -2.3..0.2 on Y 13.73; their end panel at X 0.2 fills ~40% of the boy-door opening seen from CB). Any natural first-person exit from the bath sweeps across it.",
    "done": {
     "Mw still": "route-fb21/leg3/stills/mw-w.png",
     "code pan Mw -> MB0": "route-fb21/leg3/k3d.code-pan.mp4 (33 frames, 60 deg, exact)"
+   },
+   "decision_2026_11_27": "coordinator: option A (boy door closed in leg 3 only, leaf as in legs 4-5: warm white, black lever, walnut frame, no leak); bedroom entry via Md + CM->Md + Md->Mw; then the code pan Mw->MB0; cap 38,000",
+   "plan_v2": "B1 -(code pan, 2720 canvases)-> Bx2 (CB yaw 68, door closed) -(kling 4 s)-> CM -(kling 4 s)-> Md (2.3, 19.6, 1.05) yaw 64 -(kling 3 s)-> Mw -(code pan)-> MB0",
+   "code": {
+    "K3a": "leg3/k3a.code-pan.mp4 B1 -> Bx2 (90 deg, 49 frames)",
+    "K3e": "leg3/k3d.code-pan.mp4 Mw -> MB0 (60 deg)"
    }
   }
  }

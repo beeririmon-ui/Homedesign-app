@@ -51,7 +51,7 @@ def main(cfgp):
         inp[m] = np.array(pan['rgb'], np.float32) * (0.9 + 0.1 * np.clip(P[..., 2][m] / 2.4, 0, 1))[:, None]
     Image.fromarray(np.clip(inp + 0.5, 0, 255).astype(np.uint8)).save(f'{out}/{nm}-input.png')
     np.save(f'{out}/{nm}-masks.npy', np.stack([np.ones(val.shape, np.float32), val.astype(np.float32), (~val).astype(np.float32),
-                                               who.astype(np.float32), bm.astype(np.float32)]))
+                                               who.astype(np.float32), bm.astype(np.float32)]).astype(np.float16))   # float16: half the disk
     np.save(f'{out}/{nm}-depth.npy', np.where(val, np.nan_to_num(Z, nan=0.0), PT).astype(np.float32))   # planar depth: refed where valid, the plan's elsewhere
     rep = dict(name=nm, cam=c, sources=exprs, valid_share=round(float(val.mean()), 3),
                by_source={s['name']: round(float((who == i).mean()), 3) for i, s in enumerate(srcs)})
