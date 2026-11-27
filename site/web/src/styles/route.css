@@ -1,0 +1,296 @@
+/* MOCK9 (2026-11-27, FB21): the guided route — its legs over the canvas, the light a way back fades through, and the
+   banner. The banner is delicate and half transparent: on a wide screen (and a phone on its side) it floats over the
+   picture's lower corner on the way ahead (the inline end: the left), a frosted capsule that stays crisp; on a phone
+   held upright it takes a row of its own under the strip, so the small picture stays whole. Opacity and transform only. */
+
+/* ---------- the legs: a video over the canvas, shown and taken away by a blend (or a cut, between two legs) ---------- */
+.tour-leg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity calc(var(--leg-ms, 180ms) * var(--tk, 1)) linear,
+    visibility 0s linear calc(var(--leg-ms, 180ms) * var(--tk, 1));
+}
+.tour-leg[data-on] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity calc(var(--leg-ms, 180ms) * var(--tk, 1)) linear;
+}
+
+/* ---------- the way back: a warm light comes up over the window, the room changes inside it, the light clears ---------- */
+.tour-light {
+  position: absolute;
+  inset: -2%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(60% 55% at 50% 44%, rgba(255, 252, 246, 1) 0%, rgba(255, 249, 239, 0.94) 42%, rgba(246, 236, 220, 0.9) 100%), #f6ecdc;
+  transform: scale(1.04);
+  /* the light clears: fast at first, settling (ease-out) */
+  transition:
+    opacity calc(225ms * var(--tk, 1)) cubic-bezier(0.2, 0.7, 0.3, 1),
+    transform calc(225ms * var(--tk, 1)) cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.tour[data-light] .tour-light {
+  opacity: 0.97;
+  transform: scale(1);
+  /* the light comes up: slow at first, gathering (ease-in) */
+  transition:
+    opacity calc(225ms * var(--tk, 1)) cubic-bezier(0.55, 0, 0.8, 0.4),
+    transform calc(225ms * var(--tk, 1)) cubic-bezier(0.55, 0, 0.8, 0.4);
+}
+
+/* ---------- the banner ---------- */
+.route {
+  --rt-fg: #f4efe7;
+  --rt-dim: rgba(244, 239, 231, 0.66);
+  --rt-past: rgba(244, 239, 231, 0.56);
+  --rt-glass: rgba(22, 20, 17, 0.44);
+  --rt-hair: rgba(255, 255, 255, 0.14);
+  --rt-accent: #e2c48f;
+  position: absolute;
+  z-index: 4;
+  top: calc(var(--wy) + var(--wh) - 16px);
+  inset-inline-end: calc(var(--wx) + 16px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(var(--ww) - 32px);
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--rt-glass);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow:
+    inset 0 0 0 1px var(--rt-hair),
+    0 10px 30px -12px rgba(0, 0, 0, 0.45);
+  color: var(--rt-fg);
+  transform: translateY(-100%);
+  transition:
+    opacity var(--tour-ui) var(--tour-appear),
+    transform var(--tour-ui) var(--tour-appear);
+}
+.route[data-off] {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(calc(-100% + 8px));
+  transition:
+    opacity var(--tour-fb) var(--tour-leave),
+    transform var(--tour-fb) var(--tour-leave),
+    visibility 0s linear var(--tour-fb);
+}
+/* the rail: every station in order; it scrolls, its ends fade */
+.route-rail {
+  display: flex;
+  margin: 0;
+  padding: 0 10px;
+  list-style: none;
+  max-width: min(300px, calc(var(--ww) - 240px));
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+  mask-image: linear-gradient(to left, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+}
+.route-rail::-webkit-scrollbar {
+  display: none;
+}
+.route-rail li {
+  flex: none;
+  scroll-snap-align: center;
+}
+.route-rail button {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  min-height: 40px;
+  padding: 0 9px;
+  border: 0;
+  background: none;
+  color: var(--rt-dim);
+  font: 400 13px / 1 var(--f-text);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--tour-ui) var(--tour-appear);
+}
+.route-rail .n {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
+.route-rail button:hover {
+  color: var(--rt-fg);
+}
+.route-rail [data-k='past'] {
+  color: var(--rt-past);
+}
+.route-rail [data-k='here'] {
+  color: var(--rt-fg);
+  cursor: default;
+}
+/* the station the visitor is at: a hairline under its name */
+.route-rail [data-k='here']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 9px;
+  bottom: 9px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+}
+.route-rail [data-k='next'] {
+  color: var(--rt-accent);
+}
+/* "הלאה": the next station, lit, with the arrow toward it */
+.route-next {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding-block: 0;
+  padding-inline: 18px 5px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(247, 243, 236, 0.92);
+  color: #17150f;
+  cursor: pointer;
+  transition:
+    background var(--tour-ui) var(--tour-appear),
+    transform var(--tour-ui) var(--tour-appear);
+}
+.route-next .k {
+  font: 500 10px / 1 var(--f-text);
+  letter-spacing: 0.1em;
+  color: rgba(23, 21, 15, 0.55);
+}
+.route-next .nm {
+  font: 400 18px / 1 var(--f-display, serif);
+  letter-spacing: 0.005em;
+}
+.route-next .arr {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #17150f;
+  color: #f7f3ec;
+  transition: transform var(--tour-ui) var(--tour-appear);
+}
+.route-next:hover {
+  background: #fff;
+}
+.route-next:hover .arr {
+  transform: translateX(-3px);
+}
+.route-next[data-end]:hover .arr {
+  transform: translateX(3px);
+}
+.route-next:active {
+  transform: scale(0.98);
+}
+.route :focus-visible {
+  outline: 2px solid var(--rt-accent);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+/* a leg that rests between two scrolls: the arrow breathes, to say "הלאה" plays it on */
+.tour[data-rest] .route-next .arr {
+  animation: route-breathe calc(1600ms * var(--tk, 1)) ease-in-out infinite;
+}
+@keyframes route-breathe {
+  50% {
+    transform: translateX(-4px);
+  }
+}
+
+/* ---------- a phone held upright: a row of its own under the strip, across the width ---------- */
+@media (max-aspect-ratio: 11/10) {
+  .tour {
+    min-height: calc(356px + var(--safe-b) + 56.25vw);
+  }
+  .tour-g {
+    --rest: max(0px, 100cqh - var(--wh) - 356px - var(--safe-b));
+  }
+  .tour-bot {
+    grid-template-rows: 44px 108px 64px minmax(68px, 1fr);
+  }
+  .route {
+    position: relative;
+    top: auto;
+    inset-inline-end: auto;
+    align-self: center;
+    justify-self: stretch;
+    margin-inline: var(--s-4);
+    min-width: 0;
+    max-width: none;
+    transform: none;
+    --rt-glass: rgba(244, 239, 231, 0.06);
+    --rt-hair: rgba(244, 239, 231, 0.12);
+    box-shadow: inset 0 0 0 1px var(--rt-hair);
+  }
+  .route[data-off] {
+    transform: translateY(6px);
+  }
+  .route-rail {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    padding-inline: 6px;
+  }
+  .route-rail button {
+    padding-inline: 8px;
+  }
+  .route-next {
+    min-height: 44px;
+    padding-inline-start: 14px;
+  }
+  .route-next .k {
+    display: none;
+  }
+}
+@media (max-aspect-ratio: 11/10) and (min-width: 700px) {
+  .tour-bot {
+    grid-template-rows: 44px 132px 64px minmax(68px, 1fr);
+  }
+}
+/* the paper look (no design direction): the upright row in ink */
+@media (max-aspect-ratio: 11/10) {
+  html:not([data-design]) .tour:not([data-bg='dark']) .route {
+    --rt-fg: var(--ink);
+    --rt-dim: rgba(23, 21, 15, 0.7);
+    --rt-past: rgba(23, 21, 15, 0.6);
+    --rt-accent: #8a6a32;
+    --rt-glass: rgba(23, 21, 15, 0.03);
+    --rt-hair: rgba(23, 21, 15, 0.12);
+  }
+}
+/* a phone on its side: the capsule over the picture, the rail folded to the next station alone */
+@media (min-aspect-ratio: 11/10) and (max-height: 500px) {
+  .route {
+    top: calc(var(--wy) + var(--wh) - 10px);
+    inset-inline-end: calc(var(--wx) + 10px);
+  }
+  .route-rail {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour[data-rest] .route-next .arr {
+    animation: none;
+  }
+  .tour-light {
+    transform: none;
+  }
+}

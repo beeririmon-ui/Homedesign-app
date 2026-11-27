@@ -1,0 +1,42 @@
+/* MOCK9 (FB19): the logo intro (design/intro.ts). While it plays, the header's wordmark waits (html[data-intro]). */
+html[data-intro] .site-header .brand .wordmark {
+  opacity: 0;
+}
+.site-header .brand .wordmark {
+  transition: opacity 200ms linear;
+}
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+.intro-veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 50%, rgba(12, 11, 10, 0.55), rgba(12, 11, 10, 0.82));
+}
+.intro-mark {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: clamp(14px, 2.4vw, 22px);
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+.intro-mark .wordmark {
+  display: block;
+  color: #f4efe7;
+  font: 300 clamp(72px, 15vw, 156px) / 1 var(--dz-serif, 'Frank Ruhl Libre', serif);
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.25);
+}
+.intro-rule {
+  display: block;
+  width: clamp(48px, 7vw, 84px);
+  height: 1px;
+  background: #d8b77e;
+  transform-origin: 50% 50%;
+}

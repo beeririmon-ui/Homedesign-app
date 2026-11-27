@@ -12,12 +12,16 @@ import { cartMounted, cartPageShown, leaveFor, loadCart } from './state/cart';
 import { preloadRoute } from './pages/lazy';
 import { loadHouse } from './house';
 import { applyDesign } from './design/design';
+import { introWanted, playIntro } from './design/intro';
 
 // The artifact has no <html> tag of its own: set language and direction here (the site's index.html has them too).
 document.documentElement.lang = 'he';
 document.documentElement.dir = 'rtl';
 // FB13: the design direction this tab wears (?design=a|b|c; none: the current look, nothing loaded)
 applyDesign();
+// MOCK9 (FB19): the logo intro, once a session (decided before the first render: the header's wordmark waits for it)
+const intro = introWanted();
+if (intro) document.documentElement.dataset.intro = '';
 initRouter();
 // S21, QA ת63: a full load to the cart or the checkout waits for a cart write on its way (S23: the cart id of a browser
 // without storage goes in window.name, never in the address)
@@ -45,6 +49,8 @@ void Promise.all([preloadRoute(first), first.name === 'room' && first.style ? lo
   else render(<App />, root);
   // S21, QA ת63: the cart is shown from here on (the first render matched the prerendered page, in its loading state)
   cartMounted();
+  if (intro) void playIntro();
+  else window.__hdIntro = 'none';
 });
 
 // the saved cart is fetched from the start, beside the page's chunk (shown once the app is mounted)

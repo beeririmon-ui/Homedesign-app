@@ -44,8 +44,8 @@ check(!/["'(]\/media\//.test(html), 'absolute /media/ path found (media must be 
 for (const f of files) {
   const rel = relative(OUT, f);
   if (rel === 'index.html') continue;
-  // WebP pictures, and (MOCK4) the arrival's two walks as H.264 MP4
-  check(/^media\/[A-Za-z0-9/._-]+\.webp$/.test(rel) || /^media\/tour\/arrival\/[A-Za-z0-9._-]+\.mp4$/.test(rel), `unexpected file: ${rel}`);
+  // WebP pictures, and (MOCK4) the arrival's two walks as H.264 MP4, (MOCK9) and the route's legs
+  check(/^media\/[A-Za-z0-9/._-]+\.webp$/.test(rel) || /^media\/tour\/(arrival|route)\/[A-Za-z0-9._-]+\.mp4$/.test(rel), `unexpected file: ${rel}`);
 }
 
 const biggest = files.reduce((a, f) => (statSync(f).size > statSync(a).size ? f : a));

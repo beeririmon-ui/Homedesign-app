@@ -4,6 +4,7 @@ import { cartCount, cartStatus } from '../state/cart';
 import { announcement } from '../state/ui';
 import type { Route } from '../router';
 import { ContactBlock } from './Contact';
+import { Wordmark } from '../design/Wordmark';
 
 export function Layout({ route, children }: { route: Route; children: ComponentChildren }) {
   const first = useRef(true);
@@ -28,9 +29,9 @@ export function Layout({ route, children }: { route: Route; children: ComponentC
       </a>
       <header class="site-header">
         <div class="wrap">
-          {/* §6.2: the wordmark's place, words only ("הבית" until a name is chosen, ART5) */}
+          {/* §6.2: the wordmark's place, words only ("הבית" until a name is chosen, ART5); MOCK9: one component */}
           <a class="brand" href="/" aria-label="דף הבית">
-            הבית
+            <Wordmark />
           </a>
           <nav class="nav" aria-label="ראשי">
             <a href="/rooms/living-room/" aria-current={route.name === 'room' ? 'page' : undefined}>

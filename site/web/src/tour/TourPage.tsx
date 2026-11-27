@@ -19,11 +19,13 @@ import type { CatalogSlot } from '@hd/shared';
 import { formatIls } from '@hd/shared/money';
 import { shopPath } from '@hd/shared/product-url';
 import '../styles/tour.css';
+import '../styles/route.css';
 import { clampCam, coverSize, frameToScreen, screenToFrame } from '../engine/camera';
 import type { Cam } from '../engine/types';
 import { product } from '../catalog';
 import type { House } from '../house';
 import { prefersReducedMotion, timeScale } from '../motion';
+import { MEDIA_BASE } from '../media';
 import { announce } from '../state/ui';
 import { NOT_FOR_SALE_HE } from '../set-copy';
 import { IconDoor } from '../components/Icons';
@@ -59,6 +61,8 @@ import {
 } from './data';
 import { arrival, camAt, doorUrl, frameAt, hcUrl, labelOpacity, labelPose, layoutLabels, stillUrl, walkFor, walkUrl } from './arrival';
 import { GESTURE, Gesture, WALK, WalkPlay } from './walk';
+import { BACK_MS, LEG_BLEND_MS, legFile, nextOf, span, trip, type Hop, type LegVideo } from './route';
+import { RouteBanner } from './RouteBanner';
 import type { TourEngine } from './engine';
 import { metrics, report, statLine } from './metrics';
 import { coverMap } from './push';
@@ -85,6 +89,17 @@ declare global {
       /** MOCK8: the walk rests between two pushes; how many pushes it took */
       walkRest?: boolean;
       walkPushes?: number;
+      /** MOCK9: the guided route: the last trip (what it played, at what pace) and the leg playing now */
+      trip?: {
+        to: string;
+        kind: 'ahead' | 'back';
+        rate: number;
+        hops: { leg: string; real: boolean; start?: number; end?: number }[];
+        /** the trip's time; back: the fade's own (in and out), `hold` the room's change inside the full light */
+        ms?: number;
+        hold?: number;
+      };
+      leg?: { id: string; frame: number; rest: boolean } | null;
     };
     /** the effects and the page's marks, for the tests and the frame-rate evidence (they run an effect on its own) */
     __hdTourFx?: Stage & { ui: Ui };
@@ -401,6 +416,9 @@ export function TourPage() {
       // MOCK8: the walk's rest and its pushes are kept across renders
       walkRest: window.__hdTourState?.walkRest,
       walkPushes: window.__hdTourState?.walkPushes,
+      // MOCK9: and the route's
+      trip: window.__hdTourState?.trip,
+      leg: window.__hdTourState?.leg,
     };
   };
   const setPhase = (p: Phase) => {
@@ -812,16 +830,34 @@ export function TourPage() {
       } else walkPush(k, fresh);
     };
     const onWheel = (ev: WheelEvent) => {
-      if (!walking()) return;
-      ev.preventDefault();
       const px = ev.deltaMode === 1 ? ev.deltaY * 40 : ev.deltaMode === 2 ? ev.deltaY * 800 : ev.deltaY;
+      if (!walking()) {
+        // MOCK9 (FB21): in a room, a scroll down over the picture walks the next leg, and scrubs it like the arrival
+        if (live.current.phase !== 'room' || ev.ctrlKey || px <= 0 || live.current.open) return;
+        if (!tripOn.current && live.current.busy) return;
+        const g = gesture.current.wheel(px, ev.timeStamp);
+        if (g.k > 0 && routeScroll(g.k, g.fresh)) ev.preventDefault();
+        else if (tripOn.current) ev.preventDefault();
+        return;
+      }
+      ev.preventDefault();
       const g = gesture.current.wheel(px, ev.timeStamp);
       if (g.k > 0) go(g.k, g.fresh);
     };
     let touchY: number | null = null;
     const onTouchStart = (ev: TouchEvent) => void (touchY = ev.touches.length === 1 ? ev.touches[0]!.clientY : null);
     const onTouchMove = (ev: TouchEvent) => {
-      if (!walking()) return;
+      if (!walking()) {
+        // MOCK9: a swipe up in a room walks the next leg too, where the page itself does not scroll
+        if (live.current.phase !== 'room' || live.current.open || touchY === null || ev.touches.length !== 1) return;
+        if (tripOn.current) ev.preventDefault();
+        else if (document.documentElement.scrollHeight > innerHeight + 1) return;
+        if (touchY - ev.touches[0]!.clientY > GESTURE.swipePx) {
+          touchY = null;
+          if (routeScroll(1, true)) ev.preventDefault();
+        }
+        return;
+      }
       if (live.current.phase === 'entering') ev.preventDefault();
       if (touchY === null || ev.touches.length !== 1) return;
       if (touchY - ev.touches[0]!.clientY > GESTURE.swipePx) {
@@ -921,6 +957,7 @@ export function TourPage() {
   function atRest(e: TourEngine) {
     e.background();
     otherCards(e);
+    preloadLeg();
     if (e.house !== WM) return;
     ui.spots(true);
     if (!e.zoomed) spread();
@@ -1299,6 +1336,273 @@ export function TourPage() {
       },
       () => goRoom(id, inRoom),
     );
+  // ---------- MOCK9 (2026-11-27, FB21): the guided route ----------
+  /** the two videos the legs play on: a chain of real legs alternates them, so the next one waits cued at the seam */
+  const legA = useRef<HTMLVideoElement>(null);
+  const legB = useRef<HTMLVideoElement>(null);
+  /** the station the banner shows while a chain passes it (null: the room's own) */
+  const [via, setVia] = useState<GroupId | null>(null);
+  /** a trip is under way: the scroll belongs to it (impulses made before its leg plays are kept for it) */
+  const tripOn = useRef<{ pending: number } | null>(null);
+  /** the leg playing now: the scroll scrubs it (`walk`, like the arrival); "הלאה" plays the rest through (`walk` null) */
+  const legNow = useRef<{ walk: WalkPlay | null; v: HTMLVideoElement; s: { start: number; end: number } } | null>(null);
+  const legPreload = useRef(0);
+  const legUrl = (lv: LegVideo) => `${MEDIA_BASE}${lv.src}`;
+  /** a leg's file on a video, at the start of its stretch, its frame decoded (or 8 s have passed: it plays as it comes) */
+  function cue(v: HTMLVideoElement, lv: LegVideo, at: number): Promise<void> {
+    return new Promise((resolve) => {
+      let done = false;
+      const ok = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(t);
+        resolve();
+      };
+      const t = window.setTimeout(ok, 8000);
+      const seek = () => {
+        if (Math.abs(v.currentTime - at) < 0.25 / lv.fps && v.readyState >= 2) return ok();
+        v.addEventListener('seeked', ok, { once: true });
+        v.currentTime = at;
+      };
+      v.pause();
+      if (v.getAttribute('src') !== legUrl(lv)) {
+        v.preload = 'auto';
+        v.src = legUrl(lv);
+      }
+      if (v.readyState >= 1) seek();
+      else v.addEventListener('loadedmetadata', seek, { once: true });
+    });
+  }
+  /** shows a leg's video over the canvas (a soft blend of `ms`, or a cut over the leg before it), or takes it away */
+  const showLeg = (v: HTMLVideoElement, on: boolean, ms: number) => {
+    v.style.setProperty('--leg-ms', `${Math.round(ms)}ms`);
+    v.toggleAttribute('data-on', on);
+  };
+  /**
+   * Plays a stretch of a leg on `v` (already cued and shown), at `rate`, or scrubbed by the scroll like the arrival
+   * (`scrub` > 0: the first push's impulses; each scroll after it is another push, and "הלאה" plays the rest through).
+   * Forward only (FB8). Resolves at the stretch's end.
+   */
+  function playLeg(
+    e: TourEngine,
+    v: HTMLVideoElement,
+    id: string,
+    lv: LegVideo,
+    s: { start: number; end: number },
+    rate: number,
+    scrub: number,
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      let done = false;
+      let raf = 0;
+      let last = performance.now();
+      let rest = false;
+      const label = `leg-${id}`;
+      const walk = scrub > 0 ? new WalkPlay({ duration: Math.max(0.05, s.end - s.start), impulse: arrival.impulse, snap: arrival.snap }) : null;
+      walk?.push(0, scrub);
+      const ctl = { walk, v, s };
+      legNow.current = ctl;
+      const tell = (frame: number) => window.__hdTourState && (window.__hdTourState.leg = { id, frame, rest });
+      const finish = () => {
+        if (done) return;
+        done = true;
+        cancelAnimationFrame(raf);
+        v.pause();
+        v.onended = null;
+        e.stop(label);
+        if (legNow.current === ctl) legNow.current = null;
+        stage.current?.removeAttribute('data-rest');
+        if (window.__hdTourState) window.__hdTourState.leg = null;
+        resolve();
+      };
+      // the leg is an effect like the walk in: nothing uploads, decodes or is measured while it plays (FB1)
+      e.walk(label);
+      const loop = (now: number) => {
+        if (done) return;
+        const dt = Math.min(0.1, (now - last) / 1000) / timeScale();
+        last = now;
+        const t = v.currentTime;
+        tell(Math.round(t * lv.fps) + 1);
+        if (v.ended || t >= s.end - 0.5 / lv.fps) return finish();
+        const r = ctl.walk ? ctl.walk.step(t - s.start, dt) : rate;
+        if (r > 0) {
+          // (the evidence's slow motion stretches the leg like every other duration)
+          const pr = Math.min(16, Math.max(WALK.min, r / timeScale()));
+          if (Math.abs(v.playbackRate - pr) > 0.01) v.playbackRate = pr;
+          if (v.paused) void v.play().catch(() => undefined);
+        } else if (!v.paused) v.pause();
+        if ((r === 0) !== rest) {
+          rest = r === 0;
+          stage.current?.toggleAttribute('data-rest', rest);
+          if (rest) announce('גללו כדי להמשיך, או הלאה');
+        }
+        raf = requestAnimationFrame(loop);
+      };
+      v.onended = finish;
+      v.playbackRate = walk ? WALK.min : Math.min(16, rate / timeScale());
+      raf = requestAnimationFrame(loop);
+    });
+  }
+  /**
+   * MOCK9 (FB21): to a station of the route — the banner, the panel's rooms, the scroll. Ahead: the legs, one station
+   * at the leg's own pace, a jump chained and faster, the ease frames between the legs skipped (tour/route.ts); a real
+   * leg plays its clip over the canvas, a leg without one walks in code (MOCK7's push) at the same pace. Behind: a
+   * fade through the light, about 450 ms, never a walk backward (FB8). Reduced motion: a plain dissolve either way.
+   * `scrub`: the scroll's first push, when the scroll started it (a leg of one station follows the scroll).
+   */
+  const travel = (g: GroupId, scrub = 0) =>
+    live.current.phase === 'room' &&
+    !live.current.open &&
+    beat(
+      async (e) => {
+        const t = trip(groupOf(live.current.room), g);
+        if (t.kind === 'stay') return;
+        tripOn.current = { pending: 0 };
+        try {
+          await shut(e);
+          await wholeFrame(e);
+          clearTimeout(turn.current);
+          clearTimeout(legPreload.current);
+          ui.spots(false);
+          ui.label(null, false);
+          ui.count(null);
+          setEye(WM);
+          const dest = FRAMES[g][0]!;
+          let t0 = performance.now();
+          const said = (kind: 'ahead' | 'back', rate: number, hops: { leg: string; real: boolean; start?: number; end?: number }[]) =>
+            window.__hdTourState && (window.__hdTourState.trip = { to: dest, kind, rate, hops, ms: Math.round(performance.now() - t0) });
+          if (e.reduce) {
+            await e.toRoom(dest, t.kind === 'back' ? BACK_MS : ROOM_FADE_MS, true, `room-${dest}`, 0);
+            setRoomUi(dest);
+            said(t.kind, 1, []);
+          } else if (t.kind === 'back') {
+            // the light: the room behind is made ready first, then the window fades up into a warm light, the room
+            // changes inside it, and the light clears onto the room
+            await e.loadRoom(ROOMS[dest], 0);
+            t0 = performance.now();
+            stage.current?.setAttribute('data-light', '');
+            await e.ui('back-in', t.ms / 2);
+            // inside the full light the room changes (its composition, a frame or two on a phone): not part of the fade
+            const h0 = performance.now();
+            await e.toRoom(dest, 0, true, `back-${dest}`);
+            setRoomUi(dest);
+            const hold = performance.now() - h0;
+            stage.current?.removeAttribute('data-light');
+            await e.ui('back-out', t.ms / 2);
+            t0 += hold;
+            said('back', 1, []);
+            if (window.__hdTourState?.trip) window.__hdTourState.trip.hold = Math.round(hold);
+          } else {
+            const w = innerWidth;
+            const vids = [legA.current, legB.current];
+            let shown: HTMLVideoElement | null = null;
+            let real = 0;
+            let cued: Promise<void> | null = null;
+            const rec: { leg: string; real: boolean; start?: number; end?: number }[] = [];
+            for (let i = 0; i < t.hops.length; i++) {
+              const h: Hop = t.hops[i]!;
+              const lv = legFile(h.leg, w);
+              const to = FRAMES[h.leg.to][0]!;
+              setVia(h.leg.to);
+              const nx = t.hops[i + 1];
+              const nlv = nx ? legFile(nx.leg, w) : null;
+              if (lv && vids[0] && vids[1]) {
+                const v = vids[real++ % 2]!;
+                const s = span(lv, h);
+                // the canvas holds the room this leg ends in, unless a clip follows it (the canvas is not seen then)
+                await Promise.all([cued ?? cue(v, lv, s.start), nlv ? null : e.loadRoom(ROOMS[to], 0)]);
+                cued = null;
+                // on screen: over the visitor's composition, a soft blend into the leg's first frame (the manifest's
+                // swap); over the leg before it, a cut (the same walk, mid-step); over a push's room, a short blend
+                showLeg(v, true, shown ? 0 : i === 0 ? LEG_BLEND_MS : 120);
+                if (shown) showLeg(shown, false, 0);
+                else await e.ui('leg-in', i === 0 ? LEG_BLEND_MS : 120);
+                shown = v;
+                // (the page names the room when the leg lands in it: its chapter card comes with the room, not mid-walk)
+                if (!nlv) await e.toRoom(to, 0, true, `leg-to-${to}`);
+                // the next clip waits cued on the other video, so the seam is a cut between two decoded frames
+                if (nx && nlv) cued = cue(vids[real % 2]!, nlv, span(nlv, nx).start);
+                const first = i === 0 && t.stations === 1 ? scrub + (tripOn.current?.pending ?? 0) : 0;
+                await playLeg(e, v, h.leg.id, lv, s, t.rate, first);
+                if (!nlv) setRoomUi(to);
+                rec.push({ leg: h.leg.id, real: true, start: +s.start.toFixed(4), end: +s.end.toFixed(4) });
+              } else {
+                // a leg without its clip yet: the walk in code (MOCK7), at the trip's pace, from the room on the canvas
+                if (shown) {
+                  showLeg(shown, false, 120);
+                  await e.ui('leg-out', 120);
+                  shown = null;
+                }
+                await e.toRoom(to, PUSH_MS.room / t.rate, true, t.stations === 1 ? `room-${to}` : `route-${to}`, PUSH_AMP.room);
+                setRoomUi(to);
+                rec.push({ leg: h.leg.id, real: false });
+              }
+            }
+            // the last frame is the room's own frame: the leg gives way to the live room in a soft blend
+            if (shown) {
+              showLeg(shown, false, LEG_BLEND_MS);
+              await e.ui('leg-out', LEG_BLEND_MS);
+            }
+            said('ahead', t.rate, rec);
+          }
+          setHouse(WM);
+          setPhase('room');
+          await frame();
+          place();
+          ui.count(items().length, true);
+          atRest(e);
+          announce(`${ROOM_HE[dest]}, ${roomCount(groupOf(dest)).total} מוצרים למכירה בחדר`);
+          title.current?.focus({ preventScroll: true });
+        } finally {
+          tripOn.current = null;
+          setVia(null);
+        }
+      },
+      () => travel(g),
+    );
+  /** "הלאה" (and a station of the banner): a leg the scroll is scrubbing plays its rest through; else the trip */
+  const goStation = (g: GroupId) => {
+    const lg = legNow.current;
+    if (lg?.walk) {
+      lg.walk = null;
+      return;
+    }
+    void travel(g);
+  };
+  /** the scroll in a room (a push of `k` impulses): it walks the next leg, and scrubs the leg it is walking */
+  const routeScroll = (k: number, fresh: boolean): boolean => {
+    const lg = legNow.current;
+    if (lg) {
+      lg.walk?.push(lg.v.currentTime - lg.s.start, k);
+      return true;
+    }
+    if (tripOn.current) {
+      tripOn.current.pending += k;
+      return true;
+    }
+    const L = live.current;
+    if (!fresh || L.phase !== 'room' || L.busy || L.open || L.more || L.zoomed || L.house !== WM) return false;
+    const n = nextOf(groupOf(L.room));
+    if (!n) return false;
+    void travel(n, k);
+    return true;
+  };
+  /** at rest: the one leg reachable from here (the next station's) is fetched, after the room's own pictures */
+  function preloadLeg() {
+    clearTimeout(legPreload.current);
+    legPreload.current = window.setTimeout(() => {
+      const L = live.current;
+      const n = nextOf(groupOf(L.room));
+      const t = n ? trip(groupOf(L.room), n) : null;
+      const lv = t?.kind === 'ahead' ? legFile(t.hops[0]!.leg, innerWidth) : null;
+      const v = legA.current;
+      // reduced motion plays no leg: nothing to fetch
+      if (!lv || !v || L.busy || engine.current?.reduce) return;
+      if (v.getAttribute('src') === legUrl(lv)) return;
+      v.preload = 'auto';
+      v.src = legUrl(lv);
+    }, 2000 * timeScale());
+  }
   const replay = (fx?: Reveal) =>
     live.current.phase === 'room' &&
     live.current.room === 'living-room' &&
@@ -1707,7 +2011,10 @@ export function TourPage() {
   // the kitchen and the work room; a room's button lands on its rest frame (FRAMES[room][0])
   const group = groupOf(room);
   const here = (g: GroupId) => inRoom && group === g;
-  const toRoomBtn = (g: GroupId) => () => void (here(g) ? setMore(false) : phase === 'door' && g === 'living-room' ? goIn() : goRoom(FRAMES[g][0]!));
+  // MOCK9 (FB21): from a room, the panel's rooms travel the route like the banner's stations (ahead: the legs; behind:
+  // the light); from the door, as before
+  const toRoomBtn = (g: GroupId) => () =>
+    void (here(g) ? setMore(false) : phase === 'door' ? (g === 'living-room' ? goIn() : goRoom(FRAMES[g][0]!)) : travel(g));
   const rooms: { id?: string; name: string; at: At; here?: boolean; go?: () => void; n?: number }[] = [
     // the room the visitor is in: its button only closes the panel
     { id: 'tour-out', name: 'כניסה', at: 'entry', here: phase === 'door', go: () => void (phase === 'door' ? setMore(false) : goOut()) },
@@ -1868,6 +2175,10 @@ export function TourPage() {
               tabIndex={-1}
             />
             <img ref={hcImg} class="tour-hc" src={hcUrl()} alt="" loading="lazy" aria-hidden="true" />
+            {/* MOCK9 (FB21): the route's legs (two videos: a chain alternates them) and the light a way back fades through */}
+            <video ref={legA} class="tour-leg" muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
+            <video ref={legB} class="tour-leg" muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
+            <div class="tour-light" aria-hidden="true" />
             <div class="tour-doors" ref={walkLabels} aria-hidden="true">
               <svg viewBox="0 0 1 1" preserveAspectRatio="none" focusable="false">
                 {arrival.labels.map((l) => (
@@ -2048,6 +2359,8 @@ export function TourPage() {
                 </button>
               </div>
             </div>
+            {/* MOCK9 (FB21): the guided route's banner */}
+            <RouteBanner at={via ?? group} off={!(inRoom && wm) || !!open || more || !!fixture} busy={busy} onGo={goStation} />
             <button
               type="button"
               id="tour-fold"

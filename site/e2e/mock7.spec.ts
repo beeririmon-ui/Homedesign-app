@@ -59,11 +59,12 @@ async function plain(page: Page, room: string) {
 }
 /** the route's rooms after the living room, by their buttons, and the frame each lands on (tools/tour/frames.json) */
 const ROUTE = [
+  // MOCK9 (FB21): the owner's guided route; its first leg is a clip (e2e/mock9.spec.ts), the others walk in code
   ['dining', 'dining'],
-  ['boy', 'boy'],
-  ['girl', 'girl'],
   ['bath', 'bath-b1'],
   ['master', 'master'],
+  ['boy', 'boy'],
+  ['girl', 'girl'],
   ['work', 'work'],
 ] as const;
 /** what the old living room is made of: none of it is ever asked for */
@@ -144,6 +145,11 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
       await page.locator(`#tour-${btn}`).click();
       await page.waitForFunction((x) => window.__hdTourState?.room === x, frame);
       await atRest(page);
+      if (btn === 'dining') {
+        // MOCK9: living → kitchen is leg 1's clip, not a push (e2e/mock9.spec.ts); it lands on the same composition
+        expect(await hashes(page), `${frame} rests on the plain composition of its layers`).toEqual(want[frame]);
+        continue;
+      }
       const r = await page.evaluate((f) => {
         const e = window.__hdTour!;
         const l = e.frames[`room-${f}`];
@@ -163,11 +169,16 @@ test.describe('MOCK7: the full tour in design C, with the walks between rooms', 
       return e.seams;
     });
     expect(seams).toEqual([]);
+    // MOCK9: one station back (the fade through the light), then one ahead on a leg that walks in code
     await more(page);
-    await page.locator('#tour-dining').click();
-    await page.waitForFunction(() => window.__hdTourState?.room === 'dining');
+    await page.locator('#tour-girl').click();
+    await page.waitForFunction(() => window.__hdTourState?.room === 'girl');
     await atRest(page);
-    const s = await page.evaluate(() => window.__hdTour!.seams.filter((x) => x.label === 'room-dining'));
+    await more(page);
+    await page.locator('#tour-work').click();
+    await page.waitForFunction(() => window.__hdTourState?.room === 'work');
+    await atRest(page);
+    const s = await page.evaluate(() => window.__hdTour!.seams.filter((x) => x.label === 'room-work'));
     note('walks.json', { seen, seams: s });
     expect(s).toHaveLength(1);
     expect(s[0]!.first.max, 'the walk’s first frame is the frame before it').toBe(0);

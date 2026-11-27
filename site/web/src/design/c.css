@@ -5,14 +5,14 @@
    Everything is scoped by html[data-design='c'] (design/design.ts); without it nothing here applies.
    NOTE for the owner's choice: the dark stage is for the tour only (the shop's pages stay paper); the current art
    direction has no dark mode at launch (ART3), and this is not a mode the visitor switches — but it is a change. */
+/* MOCK9 (FB19): the pairing is the display serif (Frank Ruhl Libre, light) and one clean sans for the interface (IBM
+   Plex Sans Hebrew); the numbers are the sans' tabular figures — the mono face is gone (heavier than the rest). */
 @import '@fontsource/ibm-plex-sans-hebrew/400.css';
 @import '@fontsource/ibm-plex-sans-hebrew/500.css';
-@import '@fontsource/ibm-plex-mono/latin-400.css';
-@import '@fontsource/ibm-plex-mono/latin-500.css';
 
 html[data-design='c'] {
   --f-text: 'IBM Plex Sans Hebrew', 'Assistant', system-ui, sans-serif;
-  --dz-mono: 'IBM Plex Mono', 'IBM Plex Sans Hebrew', ui-monospace, monospace;
+  --dz-mono: 'IBM Plex Sans Hebrew', 'Assistant', system-ui, sans-serif;
   --dz-serif: 'Frank Ruhl Libre', 'David Libre', serif;
   --dz-night: #12110f;
   --dz-night-2: #1d1b18;
@@ -729,4 +729,370 @@ html[data-design='c'] .summary .btn-primary {
   html[data-design='c'] .tour-more {
     transform: none;
   }
+}
+
+/* ================= MOCK9 (2026-11-27, FB19): the refinement pass =================
+   Everything round the picture is minimal, half transparent and delicate: frosted glass only where it stays crisp (a
+   blur behind a clean edge), hairlines instead of boxes, calm spacing. The serif speaks (names, titles), the sans
+   serves (labels, numbers: tabular figures, a little air between the letters). Overrides the rules above. */
+html[data-design='c'] {
+  --dz-brass: #d6b882;
+  --dz-hair: rgba(241, 236, 228, 0.1);
+  --dz-glass: rgba(20, 18, 16, 0.4);
+  --dz-glass-hi: rgba(20, 18, 16, 0.6);
+  --dz-blur: blur(18px) saturate(1.2);
+  --dz-label: 500 11px / 1 var(--f-text);
+  font-variant-numeric: tabular-nums;
+}
+/* a label: small, spaced, quiet */
+html[data-design='c'] :is(.dz-chap-b, .dz-chap, .tour-more h2, .picker-head .eyebrow, .tour-rooms button::before) {
+  letter-spacing: 0.14em;
+}
+
+/* the bar: the night, a fainter hairline, the wordmark light, the links quiet */
+html[data-design='c'] .site-header {
+  background: var(--dz-night);
+  border-bottom-color: rgba(241, 236, 228, 0.06);
+}
+html[data-design='c'] .brand {
+  font: 300 25px / 1 var(--dz-serif);
+  letter-spacing: 0.01em;
+}
+html[data-design='c'] .nav a {
+  color: rgba(241, 236, 228, 0.74);
+  font: 400 13px / 1 var(--f-text);
+  letter-spacing: 0.04em;
+}
+html[data-design='c'] .nav a:hover,
+html[data-design='c'] .nav a[aria-current='page'] {
+  color: var(--dz-light);
+}
+
+/* the band: the room's name in the serif, the rest in the sans, nothing outlined */
+html[data-design='c'] .tour-t .eyebrow,
+html[data-design='c'] .tour-t.t-door .eyebrow {
+  font: 400 12px / 1.3 var(--f-text);
+  letter-spacing: 0.04em;
+}
+html[data-design='c'] .tour-sale,
+html[data-design='c'] .tour-count,
+html[data-design='c'] .dz-meta {
+  font: 400 12px / 1.3 var(--f-text);
+  letter-spacing: 0.03em;
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .dz-chap-b {
+  font: var(--dz-label);
+  color: var(--dz-brass);
+}
+html[data-design='c'] .tour-fold {
+  height: 44px;
+  padding: 0 20px;
+  border: 0;
+  background: rgba(241, 236, 228, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(241, 236, 228, 0.14);
+  -webkit-backdrop-filter: var(--dz-blur);
+  backdrop-filter: var(--dz-blur);
+  font: 400 14px / 1 var(--f-text);
+  letter-spacing: 0.02em;
+  transition:
+    background var(--tour-ui) var(--tour-appear),
+    opacity var(--tour-ui) var(--tour-appear);
+}
+html[data-design='c'] .tour-fold:hover {
+  background: rgba(241, 236, 228, 0.11);
+}
+html[data-design='c'] .tour-door-act .btn,
+html[data-design='c'] .tour-walk-act .btn {
+  min-height: 46px;
+  padding-inline: 26px;
+  font: 500 15px / 1 var(--f-text);
+  letter-spacing: 0.02em;
+}
+html[data-design='c'] .tour-walk-act .btn-ghost {
+  background: rgba(241, 236, 228, 0.08);
+  color: var(--dz-light);
+  box-shadow: inset 0 0 0 1px rgba(241, 236, 228, 0.18);
+  -webkit-backdrop-filter: var(--dz-blur);
+  backdrop-filter: var(--dz-blur);
+}
+
+/* on the picture: the chapter card is lighter, its label spaced */
+html[data-design='c'] .dz-card {
+  background: linear-gradient(to top, rgba(18, 17, 15, 0.56), rgba(18, 17, 15, 0));
+}
+html[data-design='c'] .dz-chap {
+  font: 500 clamp(10px, 1cqw, 12px) / 1 var(--f-text);
+}
+
+/* the marks: a point of light with a soft halo; the name on glass */
+html[data-design='c'] .tour-spot .mark {
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 0 0 5px rgba(255, 255, 255, 0.2),
+    0 1px 8px rgba(0, 0, 0, 0.35);
+  transition: box-shadow var(--tour-ui) var(--tour-appear);
+}
+html[data-design='c'] .tour-spot:focus-visible .mark,
+html[data-design='c'] .tour-spot:hover .mark {
+  background: #fff;
+  box-shadow:
+    0 0 0 8px rgba(255, 255, 255, 0.3),
+    0 1px 10px rgba(0, 0, 0, 0.4);
+}
+html[data-design='c'] .tour-spot .tag {
+  padding: 8px 15px;
+  background: var(--dz-glass-hi);
+  -webkit-backdrop-filter: var(--dz-blur);
+  backdrop-filter: var(--dz-blur);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  font: 400 16px / 1.15 var(--dz-serif);
+}
+html[data-design='c'] .tour-spot .tag .dz-i {
+  font: var(--dz-label);
+  letter-spacing: 0.1em;
+}
+html[data-design='c'] .tour-spot .tag .num {
+  font: 400 12px / 1 var(--f-text);
+}
+html[data-design='c'] .tour-dim b {
+  background: var(--dz-glass-hi);
+  -webkit-backdrop-filter: var(--dz-blur);
+  backdrop-filter: var(--dz-blur);
+  font: 400 12px / 1.2 var(--f-text);
+}
+
+/* the rooms: glass over the picture, a calm list in columns divided by hairlines — no boxes */
+html[data-design='c'] .tour-more {
+  background: rgba(18, 17, 15, 0.64);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 rgba(241, 236, 228, 0.08),
+    0 -30px 60px -30px rgba(0, 0, 0, 0.6);
+}
+html[data-design='c'] .tour-more h2 {
+  font: var(--dz-label);
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .tour-more-x {
+  font: 400 13px / 1 var(--f-text);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .tour-rooms > div {
+  gap: 0 var(--s-4);
+  background: none;
+  border: 0;
+}
+html[data-design='c'] .tour-rooms button {
+  min-height: 78px;
+  padding: 12px 2px;
+  background: none;
+  border-top: 1px solid var(--dz-hair);
+  font: 300 21px / 1.1 var(--dz-serif);
+  transition:
+    color var(--tour-ui) var(--tour-appear),
+    border-color var(--tour-ui) var(--tour-appear);
+}
+html[data-design='c'] .tour-rooms button::before {
+  font: 500 10px / 1 var(--f-text);
+}
+html[data-design='c'] .tour-rooms small {
+  font: 400 11px / 1 var(--f-text);
+  letter-spacing: 0.03em;
+}
+html[data-design='c'] .tour-rooms button:hover {
+  background: none;
+  border-top-color: rgba(241, 236, 228, 0.4);
+}
+html[data-design='c'] .tour-rooms button[aria-current='true'] {
+  background: none;
+  color: var(--dz-light);
+  border-top: 1px solid var(--dz-brass);
+}
+html[data-design='c'] .tour-rooms button[aria-current='true']::before {
+  color: var(--dz-brass);
+}
+html[data-design='c'] .tour-rooms button[aria-current='true'] small {
+  color: var(--dz-light-2);
+}
+html[data-design='c'] .tour-links .btn,
+html[data-design='c'] .tour-style .segmented button {
+  border: 0;
+  box-shadow: inset 0 0 0 1px rgba(241, 236, 228, 0.16);
+  font: 400 14px / 1 var(--f-text);
+  letter-spacing: 0.02em;
+}
+
+/* the close-up and the wheel: the room dims under a lighter veil; the choice sits on a pane of glass */
+html[data-design='c'] .tour .picker {
+  background: linear-gradient(to top, rgba(18, 17, 15, 0.7), rgba(18, 17, 15, 0.16) 42%, rgba(18, 17, 15, 0) 66%);
+}
+html[data-design='c'] .picker-head h2 {
+  font: 300 42px / 1.02 var(--dz-serif);
+  letter-spacing: -0.005em;
+}
+html[data-design='c'] .picker-head .eyebrow {
+  font: var(--dz-label);
+  color: var(--dz-brass);
+}
+html[data-design='c'] .close-btn,
+html[data-design='c'] .arc-nav button {
+  background: rgba(241, 236, 228, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(241, 236, 228, 0.26);
+  -webkit-backdrop-filter: var(--dz-blur);
+  backdrop-filter: var(--dz-blur);
+  transition: background var(--tour-ui) var(--tour-appear);
+}
+html[data-design='c'] .close-btn:hover,
+html[data-design='c'] .arc-nav button:hover {
+  background: rgba(241, 236, 228, 0.14);
+}
+html[data-design='c'] .picker-info .name {
+  font: 300 24px / 1.15 var(--dz-serif);
+}
+html[data-design='c'] .picker-info .specs,
+html[data-design='c'] .picker .tour-info {
+  font: 400 13px / 1.45 var(--f-text);
+  letter-spacing: 0.01em;
+}
+html[data-design='c'] .pips i {
+  height: 1.5px;
+}
+html[data-design='c'] .picker-actions .btn-primary {
+  min-height: 46px;
+  padding-inline: 24px;
+  background: rgba(247, 243, 236, 0.94);
+  color: #17150f;
+  font: 500 14px / 1 var(--f-text);
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+}
+html[data-design='c'] .arc-card .disc {
+  background: radial-gradient(closest-side, rgba(29, 27, 24, 0.7), rgba(18, 17, 15, 0.5));
+  border: 1px solid rgba(241, 236, 228, 0.16);
+}
+html[data-design='c'] .arc-card[aria-checked='true'] .disc {
+  border: 1px solid var(--dz-brass);
+  box-shadow: 0 0 36px -8px rgba(214, 184, 130, 0.5);
+}
+html[data-design='c'] .arc-card .num-tag {
+  font: var(--dz-label);
+  letter-spacing: 0.1em;
+}
+@media (min-aspect-ratio: 11/10) and (min-height: 501px) {
+  html[data-design='c'] .tour .picker .picker-info {
+    margin: 0 var(--s-5) var(--s-5) 0;
+    padding: 20px 22px;
+    border-radius: 22px;
+    background: var(--dz-glass);
+    -webkit-backdrop-filter: var(--dz-blur);
+    backdrop-filter: var(--dz-blur);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 20px 40px -24px rgba(0, 0, 0, 0.6);
+  }
+  html[data-design='c'] .picker-head {
+    padding: 0 var(--s-6) var(--s-6);
+  }
+}
+
+/* a phone upright: quieter tiles and marks */
+@media (max-aspect-ratio: 11/10) {
+  html[data-design='c'] .tour-spot .mark {
+    width: 7px;
+    height: 7px;
+    margin: -3.5px 0 0 -3.5px;
+    box-shadow:
+      0 0 0 3.5px rgba(255, 255, 255, 0.22),
+      0 1px 4px rgba(0, 0, 0, 0.35);
+  }
+  html[data-design='c'] .tour-tile .pic {
+    border-radius: 14px;
+    background: rgba(241, 236, 228, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(241, 236, 228, 0.08);
+  }
+  html[data-design='c'] .tour-tile::before {
+    font: 500 9px / 1 var(--f-text);
+    letter-spacing: 0.08em;
+  }
+  html[data-design='c'] .tour-tile .nm {
+    font: 400 12px / 16px var(--f-text);
+    color: rgba(241, 236, 228, 0.86);
+  }
+  html[data-design='c'] .tour-t h1,
+  html[data-design='c'] .tour-t .h,
+  html[data-design='c'] .tour-t.t-door h1,
+  html[data-design='c'] .tour-t.t-door .h {
+    font: 300 36px / 1.05 var(--dz-serif);
+  }
+  html[data-design='c'] .tour-rooms button {
+    min-height: 60px;
+    font-size: 19px;
+  }
+  html[data-design='c'] .tour[data-frame] .picker-head h2 {
+    font: 300 34px / 1.05 var(--dz-serif);
+  }
+  html[data-design='c'] .tour[data-frame] .picker-head .eyebrow {
+    font: var(--dz-label);
+    letter-spacing: 0.12em;
+  }
+  html[data-design='c'] .tour[data-frame] .arc-card .disc {
+    background: rgba(241, 236, 228, 0.05);
+    border: 1px solid rgba(241, 236, 228, 0.12);
+  }
+  html[data-design='c'] .tour[data-frame] .arc-card[aria-checked='true'] .disc {
+    border: 1px solid var(--dz-brass);
+  }
+  html[data-design='c'] .tour[data-frame] .picker .name {
+    font: 300 18px / 20px var(--dz-serif);
+  }
+  html[data-design='c'] .tour[data-frame] .picker .tour-info {
+    font: 400 12px / 16px var(--f-text);
+  }
+  html[data-design='c'] .tour[data-frame] .picker .btn-primary {
+    min-height: 50px;
+    background: rgba(247, 243, 236, 0.94);
+    font: 500 15px / 1 var(--f-text);
+    letter-spacing: 0.02em;
+  }
+}
+
+/* the cart: paper, hairlines, the serif for names, the sans for numbers; the summary is a column, not a dark box */
+html[data-design='c'] .cart-line::before {
+  font: 500 10px / 1 var(--f-text);
+  letter-spacing: 0.1em;
+}
+html[data-design='c'] .cart-line .title {
+  font: 300 22px / 1.2 var(--dz-serif);
+}
+html[data-design='c'] .cart-line .line-total,
+html[data-design='c'] .summary .price {
+  font-family: var(--f-text);
+  font-variant-numeric: tabular-nums;
+}
+html[data-design='c'] .summary {
+  padding: var(--s-5) 0 0;
+  background: none;
+  color: var(--ink);
+  border-top: 1px solid var(--ink);
+}
+html[data-design='c'] .summary .muted,
+html[data-design='c'] .summary .small {
+  color: var(--ink-2);
+}
+html[data-design='c'] .summary .btn-primary {
+  min-height: 50px;
+  background: var(--ink);
+  color: var(--paper);
+  font: 500 15px / 1 var(--f-text);
+  letter-spacing: 0.02em;
+}
+html[data-design='c'] .btn {
+  letter-spacing: 0.01em;
 }

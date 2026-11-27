@@ -198,8 +198,9 @@ export const ROOMS: Record<RoomId, TourData> = {
 /** MOCK5: the house's rooms in the tour, and their frames (the first is the room's rest frame: tools/tour/frames.json) */
 export type GroupId = 'living-room' | 'master' | 'bath' | 'dining' | 'work' | 'boy' | 'girl';
 /** the house's rooms in the order of the room buttons; MOCK7: the house route's order (route ch. 1), which is also the
- *  order the transitions walk ("the next room") */
-export const GROUP_IDS = ['living-room', 'dining', 'boy', 'girl', 'bath', 'master', 'work'] as const satisfies readonly GroupId[];
+ *  order the transitions walk ("the next room"). MOCK9 (FB21): the owner's guided route, living → kitchen → bath →
+ *  bedroom → boy → girl → work (tools/tour/route.json holds the same order; web/test/mock9-route.test.ts checks it) */
+export const GROUP_IDS = ['living-room', 'dining', 'bath', 'master', 'boy', 'girl', 'work'] as const satisfies readonly GroupId[];
 export const FRAMES: Record<GroupId, RoomId[]> = {
   'living-room': ['living-room'],
   master: ['master', 'master-mb1'],
