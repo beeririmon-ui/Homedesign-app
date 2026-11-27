@@ -15,7 +15,18 @@
 import data from '@generated/route.json';
 import type { GroupId } from './data';
 
-export type LegVideo = { src: string; w: number; h: number; fps: number; frames: number; bytes: number; ease_in: [number, number]; ease_out: [number, number] };
+/** a real leg's file for one screen; `poster` is its first frame (MOCK10: what a web view shows before a frame) */
+export type LegVideo = {
+  src: string;
+  poster: string;
+  w: number;
+  h: number;
+  fps: number;
+  frames: number;
+  bytes: number;
+  ease_in: [number, number];
+  ease_out: [number, number];
+};
 export type Leg = { id: string; from: GroupId; to: GroupId; real: Record<'desktop' | 'phone', LegVideo> | null; qa: string | null };
 const R = data as unknown as { order: GroupId[]; legs: Leg[] };
 

@@ -82,8 +82,9 @@ files.add(`${arrival.hc.src}.${arrival.hc.width}.webp`);
 // MOCK8: the walk's last frame (K-A2: the hall), where the push into the living room starts
 if (arrival.still) files.add(`${arrival.still.src}.${arrival.still.width}.webp`);
 // MOCK9 (FB21): the route's real legs (tools/make-route.ts), both files of each
-const route = JSON.parse(readFileSync(sitePath('.generated/route.json'), 'utf8')) as { legs: { real: Record<string, { src: string }> | null }[] };
-for (const l of route.legs) for (const v of Object.values(l.real ?? {})) files.add(v.src);
+const route = JSON.parse(readFileSync(sitePath('.generated/route.json'), 'utf8')) as { legs: { real: Record<string, { src: string; poster: string }> | null }[] };
+// MOCK10: and each file's poster (its first frame)
+for (const l of route.legs) for (const v of Object.values(l.real ?? {})) files.add(v.src).add(v.poster);
 type Room = {
   widths: { lo: number };
   base: { src: string };

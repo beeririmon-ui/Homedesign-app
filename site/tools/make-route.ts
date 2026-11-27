@@ -7,6 +7,8 @@
  *
  *   web/public/media/tour/route/<leg>.1920.60.mp4   the wide screen's, H.264 High, two-pass, ≤ 6 MB
  *   web/public/media/tour/route/<leg>.1080.30.mp4   the phone's, from the folder's own 30 fps frames, ≤ 2.5 MB
+ *   web/public/media/tour/route/<leg>.<w>.poster.webp  each file's first frame, the video's poster (MOCK10, FB26: a
+ *                                                    web view draws a play icon on a video without one)
  *   .generated/route.json                            the stations and the legs as the page reads them (tour/route.ts)
  *
  * The files are encoded once per change of a leg's frames, the config or this file (a stamp beside them). ffmpeg is a
@@ -14,7 +16,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { GENERATED, MEDIA_OUT, repoPath, sitePath } from './lib/paths';
@@ -54,7 +56,7 @@ const hasFfmpeg = (() => {
   }
 })();
 
-type LegVideo = { src: string; w: number; h: number; fps: number; frames: number; bytes: number; ease_in: [number, number]; ease_out: [number, number] };
+type LegVideo = { src: string; poster: string; w: number; h: number; fps: number; frames: number; bytes: number; ease_in: [number, number]; ease_out: [number, number] };
 const legs = pairs.map((pair, i) => {
   const [from, to] = pair.split('>') as [string, string];
   const id = `leg${i + 1}`;
@@ -73,7 +75,7 @@ const legs = pairs.map((pair, i) => {
     const eout = fm.chain.ease_out_frames[w.key] ?? fail(`${dir}: no ease-out frames for ${w.key}`);
     if (!(ein[0] === 1 && ein[1] < eout[0] && eout[1] === v.frames)) fail(`${dir} ${w.key}: the ease frames ${ein} / ${eout} do not frame ${v.frames}`);
     src.push(join(abs, w.key, `${String(v.frames).padStart(4, '0')}.webp`));
-    real[k] = { src: `${REL}/${id}.${w.key}.${w.fps}.mp4`, w: v.w, h: v.h, fps: v.fps, frames: v.frames, bytes: 0, ease_in: ein, ease_out: eout };
+    real[k] = { src: `${REL}/${id}.${w.key}.${w.fps}.mp4`, poster: `${REL}/${id}.${w.key}.poster.webp`, w: v.w, h: v.h, fps: v.fps, frames: v.frames, bytes: 0, ease_in: ein, ease_out: eout };
   }
   const stamp = createHash('sha256')
     .update(JSON.stringify({ tool: readFileSync(new URL(import.meta.url), 'utf8'), dir, src: src.map((f) => [f, statSync(f).size, statSync(f).mtimeMs]) }))
@@ -116,6 +118,11 @@ const legs = pairs.map((pair, i) => {
       rmSync(tmp, { recursive: true, force: true });
       writeFileSync(STAMP, JSON.stringify({ stamp }));
     }
+  }
+  // the poster: the folder's own first frame, as it is (a WebP of the file's size)
+  for (const k of ['desktop', 'phone'] as const) {
+    mkdirSync(OUT, { recursive: true });
+    copyFileSync(join(abs, want[k].key, '0001.webp'), join(MEDIA_OUT, real[k].poster));
   }
   for (const k of ['desktop', 'phone'] as const) {
     const size = statSync(files[k]).size;

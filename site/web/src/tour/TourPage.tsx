@@ -59,6 +59,7 @@ import {
   type TourOption,
   type TourSlot,
 } from './data';
+import { blocked, onBlocked, play as playVideo, release, track } from './media';
 import { arrival, camAt, doorUrl, frameAt, hcUrl, labelOpacity, labelPose, layoutLabels, stillUrl, walkFor, walkUrl } from './arrival';
 import { GESTURE, Gesture, WALK, WalkPlay } from './walk';
 import { BACK_MS, LEG_BLEND_MS, legFile, nextOf, span, trip, type Hop, type LegVideo } from './route';
@@ -810,6 +811,9 @@ export function TourPage() {
   useEffect(() => {
     setCfg(readCfg());
     setWalkSrc(walkFor(innerWidth));
+    // MOCK10 (FB26): every video muted, inline, without a system button; a refused play waits for the next gesture
+    for (const v of [video.current, legA.current, legB.current]) track(v);
+    onBlocked((b) => stage.current?.toggleAttribute('data-blocked', b));
     measure();
     // the page's own measurement of the window: a resize or a rotation, never an animation (the window keeps its size)
     const ro = new ResizeObserver(() => measure());
@@ -1098,6 +1102,7 @@ export function TourPage() {
         cancelAnimationFrame(raf);
         v.onended = null;
         v.pause();
+        release(v);
         walkEnd.current = null;
         walkCtl.current = null;
         e.stop('arrival');
@@ -1139,6 +1144,11 @@ export function TourPage() {
         if (done) return;
         const dt = Math.min(0.1, (now - last) / 1000) / timeScale();
         last = now;
+        // MOCK10: a play the browser refused holds the walk still on its frame until the next gesture plays it
+        if (blocked(v)) {
+          raf = requestAnimationFrame(loop);
+          return;
+        }
         const t = v.currentTime;
         const f = frameAt(Math.min(t, dur));
         live.current.walk = f;
@@ -1151,7 +1161,7 @@ export function TourPage() {
           // (the evidence's slow motion stretches the walk like every other duration)
           const rate = Math.min(4, Math.max(WALK.min, r / timeScale()));
           if (Math.abs(v.playbackRate - rate) > 0.01) v.playbackRate = rate;
-          if (v.paused) void v.play().catch(() => undefined);
+          if (v.paused) playVideo(v);
         } else if (!v.paused) v.pause();
         if ((r === 0) !== rest) {
           rest = r === 0;
@@ -1367,6 +1377,8 @@ export function TourPage() {
       v.pause();
       if (v.getAttribute('src') !== legUrl(lv)) {
         v.preload = 'auto';
+        // MOCK10: the poster is the leg's first frame (what a web view shows before the first frame is decoded)
+        v.poster = `${MEDIA_BASE}${lv.poster}`;
         v.src = legUrl(lv);
       }
       if (v.readyState >= 1) seek();
@@ -1408,6 +1420,7 @@ export function TourPage() {
         done = true;
         cancelAnimationFrame(raf);
         v.pause();
+        release(v);
         v.onended = null;
         e.stop(label);
         if (legNow.current === ctl) legNow.current = null;
@@ -1421,6 +1434,11 @@ export function TourPage() {
         if (done) return;
         const dt = Math.min(0.1, (now - last) / 1000) / timeScale();
         last = now;
+        // MOCK10: a refused play holds the leg still on its frame (the room's own) until the next gesture plays it
+        if (blocked(v)) {
+          raf = requestAnimationFrame(loop);
+          return;
+        }
         const t = v.currentTime;
         tell(Math.round(t * lv.fps) + 1);
         if (v.ended || t >= s.end - 0.5 / lv.fps) return finish();
@@ -1429,7 +1447,7 @@ export function TourPage() {
           // (the evidence's slow motion stretches the leg like every other duration)
           const pr = Math.min(16, Math.max(WALK.min, r / timeScale()));
           if (Math.abs(v.playbackRate - pr) > 0.01) v.playbackRate = pr;
-          if (v.paused) void v.play().catch(() => undefined);
+          if (v.paused) playVideo(v);
         } else if (!v.paused) v.pause();
         if ((r === 0) !== rest) {
           rest = r === 0;
@@ -1600,6 +1618,7 @@ export function TourPage() {
       if (!lv || !v || L.busy || engine.current?.reduce) return;
       if (v.getAttribute('src') === legUrl(lv)) return;
       v.preload = 'auto';
+      v.poster = `${MEDIA_BASE}${lv.poster}`;
       v.src = legUrl(lv);
     }, 2000 * timeScale());
   }
@@ -2165,6 +2184,8 @@ export function TourPage() {
               ref={video}
               class="tour-video"
               src={walkSrc ? walkUrl(walkSrc) : undefined}
+              // MOCK10 (FB26): the walk's first frame is the door (DOOR2): the poster a web view shows before a frame
+              poster={walkSrc ? doorUrl(walkSrc.w <= 1080 ? 900 : 1920) : undefined}
               width={walkSrc?.w ?? 1920}
               height={walkSrc?.h ?? 1080}
               muted
@@ -2179,6 +2200,11 @@ export function TourPage() {
             <video ref={legA} class="tour-leg" muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
             <video ref={legB} class="tour-leg" muted playsInline preload="none" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
             <div class="tour-light" aria-hidden="true" />
+            {/* MOCK10: a play the browser refused waits for a touch; the picture holds still and says so, quietly */}
+            <p class="tour-tap" aria-hidden="true">
+              <i />
+              געו כדי להמשיך
+            </p>
             <div class="tour-doors" ref={walkLabels} aria-hidden="true">
               <svg viewBox="0 0 1 1" preserveAspectRatio="none" focusable="false">
                 {arrival.labels.map((l) => (
