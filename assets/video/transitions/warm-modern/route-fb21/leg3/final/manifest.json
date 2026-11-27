@@ -1,0 +1,168 @@
+{
+ "id": "fb21-leg3",
+ "from": "B1",
+ "to": "MB0",
+ "style": "warm-modern",
+ "date": "2026-11-27",
+ "author": "motion-agent",
+ "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, FB21",
+ "play_s": 13.183,
+ "sampling": "uniform in time at the nominal walk: frame i (1-based) is shown at (i - 1) / fps s; an even picture speed (0.5x-1.6x of the median) with a short ease in and out; forward only, no hold, no cut",
+ "chain": {
+  "first_frame": "assets/renders/bath/warm-modern/b1-2026-11-19/b1-defaults-fb16-frame.png",
+  "last_frame": "assets/renders/master/warm-modern/stage1-2026-11-17/mb0-defaults-fb16-frame.png",
+  "rule": "this leg's last frame is the next leg's first frame (the room's display frame): chain legs back to back",
+  "ease_in_frames": {
+   "1920": [
+    1,
+    25
+   ],
+   "1080": [
+    1,
+    13
+   ]
+  },
+  "ease_out_frames": {
+   "1920": [
+    754,
+    792
+   ],
+   "1080": [
+    377,
+    397
+   ]
+  },
+  "fast_forward": "when chaining at x2-x3, skip the ease-in frames of every leg but the first and the ease-out frames of every leg but the last"
+ },
+ "path": "{variant}/{index:04d}.{ext}",
+ "formats": [
+  "avif",
+  "webp"
+ ],
+ "variants": {
+  "1920": {
+   "w": 1920,
+   "h": 1080,
+   "fps": 60,
+   "frames": 792,
+   "avif_quality": 55,
+   "webp_quality": 72,
+   "last_frames_quality": {
+    "frames": 8,
+    "avif": 85,
+    "webp": 92
+   }
+  },
+  "1080": {
+   "w": 1080,
+   "h": 608,
+   "fps": 30,
+   "frames": 397,
+   "avif_quality": 50,
+   "webp_quality": 60,
+   "last_frames_quality": {
+    "frames": 4,
+    "avif": 85,
+    "webp": 92
+   }
+  }
+ },
+ "bytes": {
+  "1920": {
+   "avif": 31998390,
+   "webp": 33130980
+  },
+  "1080": {
+   "avif": 4624698,
+   "webp": 5095306
+  }
+ },
+ "bytes_per_2s": {
+  "1920": {
+   "avif": 4854492,
+   "webp": 5026318
+  },
+  "1080": {
+   "avif": 701615,
+   "webp": 773011
+  }
+ },
+ "ends": {
+  "first_vs_still_before_encoding_max": 0,
+  "last_vs_still_before_encoding_max": 0,
+  "last_avif_1920_mean_levels": 1.83
+ },
+ "swap": {
+  "at_start": "the room's live layers -> frame 1 (defaults): blend the visitor's variants out over 160-200 ms",
+  "at_end": "last frame (defaults) -> the room's live layers: blend in over 160-200 ms"
+ },
+ "gait": {
+  "bob_px_max": 2.88,
+  "roll_deg_max": 0.144,
+  "overscan": 0.004
+ },
+ "lock": {
+  "clip1": {
+   "first": {
+    "shift_px_median": 0.04964964836835861,
+    "shift_px_p95": 0.22915832698345184,
+    "colour_resid_levels_mean": 1.4433391094207764
+   },
+   "last": {
+    "shift_px_median": 0.23869547247886658,
+    "shift_px_p95": 0.7671436667442322,
+    "colour_resid_levels_mean": 0.5592492818832397
+   }
+  },
+  "clip2": {
+   "first": {
+    "shift_px_median": 0.9477410316467285,
+    "shift_px_p95": 2.774061679840088,
+    "colour_resid_levels_mean": 1.9784631729125977
+   },
+   "last": {
+    "shift_px_median": 7.416111946105957,
+    "shift_px_p95": 20.163984298706055,
+    "colour_resid_levels_mean": 2.2421913146972656
+   }
+  },
+  "clip3": {
+   "first": {
+    "shift_px_median": 0.6373406052589417,
+    "shift_px_p95": 1.6076712608337402,
+    "colour_resid_levels_mean": 2.2793076038360596
+   },
+   "last": {
+    "shift_px_median": 0.6983927488327026,
+    "shift_px_p95": 3.2151951789855957,
+    "colour_resid_levels_mean": 3.0606887340545654
+   }
+  },
+  "clip4": {
+   "first": {
+    "shift_px_median": 0.14959922432899475,
+    "shift_px_p95": 0.9471385478973389,
+    "colour_resid_levels_mean": 2.7828762531280518
+   },
+   "last": {
+    "shift_px_median": 15.920295715332031,
+    "shift_px_p95": 24.82875633239746,
+    "colour_resid_levels_mean": 3.4833898544311523
+   }
+  },
+  "clip5": {
+   "first": {
+    "shift_px_median": 0.09050507843494415,
+    "shift_px_p95": 0.2581300139427185,
+    "colour_resid_levels_mean": 0.44549527764320374
+   },
+   "last": {
+    "shift_px_median": 0.046643130481243134,
+    "shift_px_p95": 0.16651226580142975,
+    "colour_resid_levels_mean": 1.3588690757751465
+   }
+  }
+ },
+ "speed_max_jump_pct_per_frame": 11.4,
+ "qa": "pending (qa-agent)"
+}

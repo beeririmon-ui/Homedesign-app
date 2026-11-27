@@ -284,9 +284,15 @@
     "what": "leg 3 K3b + K3c2 + K3d kling",
     "tokens": 3564,
     "total": 34030
+   },
+   {
+    "date": "2026-11-27",
+    "what": "leg 3 retakes K3b + K3c2",
+    "tokens": 2592,
+    "total": 36622
    }
   ],
-  "spent_total": 34030,
+  "spent_total": 36622,
   "projection_2026_11_27": {
    "spent": 12002,
    "left": 19198,
@@ -536,7 +542,7 @@
      "tokens": 400
     },
     {
-     "id": "K3b Bx2-frame -> CM-frame kling 4 s",
+     "id": "K3b Bx2-frame -> CM-frame kling 4 s (REJECTED: an invented half-open door leaf in the master doorway appears mid-clip and vanishes)",
      "placeholder_id": "7022bca2-4574-4c45-87d0-b990919ae0b1",
      "tokens": 1296,
      "first": "leg3/stills/bx2-frame.png",
@@ -544,7 +550,7 @@
      "idempotency": "fb27-leg3-k3b-take1"
     },
     {
-     "id": "K3c2 CM-frame -> Md kling 4 s",
+     "id": "K3c2 CM-frame -> Md kling 4 s (REJECTED: an opening with a door frame and handle on the left wall inside the master = the en-suite)",
      "placeholder_id": "fdf906da-01f3-43d3-b65d-9d6d796b6425",
      "tokens": 1296,
      "first": "CM-frame.png",
@@ -552,16 +558,28 @@
      "idempotency": "fb27-leg3-k3c2-take1"
     },
     {
-     "id": "K3d Md -> Mw kling 3 s",
+     "id": "K3d Md -> Mw kling 3 s (USED, clean)",
      "placeholder_id": "18b526b8-756b-48e6-8d59-eec035ed187c",
      "tokens": 972,
      "first": "leg3/stills/md-w.png",
      "last": "leg3/stills/mw-w.png",
      "idempotency": "fb27-leg3-k3d-take1"
+    },
+    {
+     "id": "K3b take 2 (prompt: no door leaf in the far doorway) (USED; turns RIGHT out of the bath, mirrored vs the plan, as take 1 did)",
+     "placeholder_id": "bb23b1c3-07bc-494e-ab3e-4a664a054ca1",
+     "tokens": 1296,
+     "idempotency": "fb27-leg3-k3b-take2"
+    },
+    {
+     "id": "K3c2 take 2 (prompt: plain walls beyond the doorway, no opening) (USED for the preview; through the doorway a ~0.6 s glimpse of the bare north part with a window at its right end, a short dissolve into the bed view)",
+     "placeholder_id": "916a6290-8cad-4559-8401-2abe683d7879",
+     "tokens": 1296,
+     "idempotency": "fb27-leg3-k3c2-take2"
     }
    ],
-   "spent": 9058,
-   "status": "paused 2026-11-27 before any retry: K3c rejected; bath exit blocked by the wardrobe line of sight. Options reported to the coordinator.",
+   "spent": 11650,
+   "status": "assembled 2026-11-27 with K3b take 2 and K3c2 take 2; open points reported (mirrored turn out of the bath; doorway glimpse); 1,378 left under 38,000",
    "blocker": "From the bath door the line of sight crosses the corridor into the open boy door and reaches the unrendered kids wardrobes (X -2.3..0.2 on Y 13.73; their end panel at X 0.2 fills ~40% of the boy-door opening seen from CB). Any natural first-person exit from the bath sweeps across it.",
    "done": {
     "Mw still": "route-fb21/leg3/stills/mw-w.png",
@@ -572,6 +590,22 @@
    "code": {
     "K3a": "leg3/k3a.code-pan.mp4 B1 -> Bx2 (90 deg, 49 frames)",
     "K3e": "leg3/k3d.code-pan.mp4 Mw -> MB0 (60 deg)"
+   },
+   "assembled": {
+    "final": "route-fb21/leg3/final (manifest, 1920@60 792 frames, 1080@30 397)",
+    "master": "route-fb21/leg3/leg3.final.1920.60fps.mp4",
+    "play_s": 13.183,
+    "bytes_per_2s": {
+     "1920_avif": 4854492,
+     "1080_avif": 701615
+    },
+    "lock_p95_px": {
+     "K3b->CM": 20.2,
+     "K3d->Mw": 24.8,
+     "others": "<3.3"
+    },
+    "speed_max_jump_pct": 11.4,
+    "qa": "pending; coordinator eye check"
    }
   }
  }
