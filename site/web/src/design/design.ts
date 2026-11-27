@@ -45,9 +45,13 @@ const sheets: Record<Design, () => Promise<unknown>> = {
   c: () => import('./c.css'),
 };
 
-/** main.tsx, once: the attribute every stylesheet of the direction is scoped by, and that direction's stylesheet */
-export function applyDesign(): void {
-  if (!design) return;
+/**
+ * main.tsx, once: the attribute every stylesheet of the direction is scoped by, and that direction's stylesheet.
+ * MOCK10 (FB26): the page waits for it before its first render, so the first frame is already the direction's (never
+ * the paper look for a moment, then the night).
+ */
+export function applyDesign(): Promise<unknown> {
+  if (!design) return Promise.resolve();
   document.documentElement.dataset.design = design;
-  void sheets[design]();
+  return sheets[design]().catch(() => undefined);
 }

@@ -814,6 +814,9 @@ export function TourPage() {
     // MOCK10 (FB26): every video muted, inline, without a system button; a refused play waits for the next gesture
     for (const v of [video.current, legA.current, legB.current]) track(v);
     onBlocked((b) => stage.current?.toggleAttribute('data-blocked', b));
+    // (a door already decoded before this ran, a prerendered page's, is in at once)
+    const door = win.current?.querySelector<HTMLImageElement>('.tour-door-img');
+    if (door?.complete && door.naturalWidth) door.setAttribute('data-loaded', '');
     measure();
     // the page's own measurement of the window: a resize or a rotation, never an animation (the window keeps its size)
     const ro = new ResizeObserver(() => measure());
@@ -955,6 +958,27 @@ export function TourPage() {
     }
     setTimeout(() => setCopied(''), 4000);
   }
+  /**
+   * MOCK10 (FB26): on idle, a soft glint runs once across the marks, the far wall first (a halo that opens and fades on
+   * each, 90 ms apart): the room says what is for sale without a dot that pulses (studio rule ו.4). Opacity and
+   * transform only; none under reduced motion.
+   */
+  function glint() {
+    if (prefersReducedMotion()) return;
+    [...items()]
+      .sort((a, b) => b.depth_m - a.depth_m)
+      .forEach((s, i) => {
+        const el = spots.current.get(s.id)?.querySelector<HTMLElement>('.mark');
+        el?.animate(
+          [
+            { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(255, 250, 240, 0.55)' },
+            { transform: 'scale(1.35)', boxShadow: '0 0 0 9px rgba(255, 250, 240, 0)', offset: 0.6 },
+            { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(255, 250, 240, 0)' },
+          ],
+          { duration: 1100 * timeScale(), delay: i * 90 * timeScale(), easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+        );
+      });
+  }
   /** the room rests: its marks are on; the labels fold after a moment; one ring on the hero if nobody touches */
   const turn = useRef(0);
   const rested = useRef(false);
@@ -969,7 +993,9 @@ export function TourPage() {
     clearTimeout(hint.current);
     hint.current = window.setTimeout(() => {
       const hero = items().find((s) => s.hero);
-      if (hero && !live.current.busy && !live.current.open && live.current.phase === 'room') ui.ring(hero, 'burst');
+      if (!hero || live.current.busy || live.current.open || live.current.phase !== 'room') return;
+      ui.ring(hero, 'burst');
+      glint();
     }, 6000);
     if (rested.current) return;
     rested.current = true;
@@ -2128,7 +2154,10 @@ export function TourPage() {
                 <p class="h">{ROOM_HE[room]}</p>
               ) : (
                 <h1 id="tour-title" tabIndex={-1} ref={title}>
-                  {ROOM_HE[room]}
+                  {/* MOCK10: keyed by the room, so a new room's name comes in (a fade and a short rise, design C) */}
+                  <span class="tour-name" key={room}>
+                    {ROOM_HE[room]}
+                  </span>
                   <span class="sr-only"> · {HOUSE_HE[house]}</span>
                 </h1>
               )}
@@ -2178,7 +2207,14 @@ export function TourPage() {
                 the canvas; the rest on HC for reduced motion; the names on the doors at that rest (ARR-M1) */}
             <picture>
               <source media="(max-width: 900px)" srcset={doorUrl(900)} />
-              <img class="tour-door-img" src={doorUrl(1920)} alt="" fetchpriority="high" />
+              <img
+                class="tour-door-img"
+                src={doorUrl(1920)}
+                alt=""
+                fetchpriority="high"
+                // MOCK10: the door fades in once decoded (the night under it first), never a half-drawn picture
+                onLoad={(ev) => ev.currentTarget.setAttribute('data-loaded', '')}
+              />
             </picture>
             <video
               ref={video}
@@ -2366,6 +2402,11 @@ export function TourPage() {
                 >
                   היכנסו
                 </button>
+                {/* MOCK10: the scroll cue — a hairline that draws itself down, and a word; the scroll goes in too */}
+                <span class="tour-cue" aria-hidden="true">
+                  <i />
+                  <span>או גללו</span>
+                </span>
                 {/* MOCK2: the room is made ready before anything moves; the quiet line says so while it is (FB1) */}
                 <span class="tour-temp" role="status">
                   {ready && !warm ? 'מכינים את החדר…' : ''}

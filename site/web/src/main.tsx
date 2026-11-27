@@ -17,8 +17,9 @@ import { introWanted, playIntro } from './design/intro';
 // The artifact has no <html> tag of its own: set language and direction here (the site's index.html has them too).
 document.documentElement.lang = 'he';
 document.documentElement.dir = 'rtl';
-// FB13: the design direction this tab wears (?design=a|b|c; none: the current look, nothing loaded)
-applyDesign();
+// FB13: the design direction this tab wears (?design=a|b|c; none: the current look, nothing loaded); MOCK10: its
+// stylesheet is in before the first render
+const designed = applyDesign();
 // MOCK9 (FB19): the logo intro, once a session (decided before the first render: the header's wordmark waits for it)
 const intro = introWanted();
 if (intro) document.documentElement.dataset.intro = '';
@@ -44,7 +45,7 @@ const root = document.getElementById('app')!;
 // S13: the page's own chunk is in before the first render, so hydration meets the prerendered markup.
 // S14, QA ת29: so is the house a room's address names (its page is prerendered as that house, poster and all).
 const first = match(path.value);
-void Promise.all([preloadRoute(first), first.name === 'room' && first.style ? loadHouse(first.style) : null]).then(() => {
+void Promise.all([preloadRoute(first), first.name === 'room' && first.style ? loadHouse(first.style) : null, designed]).then(() => {
   if (root.firstElementChild && !__ARTIFACT__ && !location.pathname.startsWith('/order/')) hydrate(<App />, root);
   else render(<App />, root);
   // S21, QA ת63: the cart is shown from here on (the first render matched the prerendered page, in its loading state)

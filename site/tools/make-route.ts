@@ -56,7 +56,17 @@ const hasFfmpeg = (() => {
   }
 })();
 
-type LegVideo = { src: string; poster: string; w: number; h: number; fps: number; frames: number; bytes: number; ease_in: [number, number]; ease_out: [number, number] };
+type LegVideo = {
+  src: string;
+  poster: string;
+  w: number;
+  h: number;
+  fps: number;
+  frames: number;
+  bytes: number;
+  ease_in: [number, number];
+  ease_out: [number, number];
+};
 const legs = pairs.map((pair, i) => {
   const [from, to] = pair.split('>') as [string, string];
   const id = `leg${i + 1}`;
@@ -75,7 +85,17 @@ const legs = pairs.map((pair, i) => {
     const eout = fm.chain.ease_out_frames[w.key] ?? fail(`${dir}: no ease-out frames for ${w.key}`);
     if (!(ein[0] === 1 && ein[1] < eout[0] && eout[1] === v.frames)) fail(`${dir} ${w.key}: the ease frames ${ein} / ${eout} do not frame ${v.frames}`);
     src.push(join(abs, w.key, `${String(v.frames).padStart(4, '0')}.webp`));
-    real[k] = { src: `${REL}/${id}.${w.key}.${w.fps}.mp4`, poster: `${REL}/${id}.${w.key}.poster.webp`, w: v.w, h: v.h, fps: v.fps, frames: v.frames, bytes: 0, ease_in: ein, ease_out: eout };
+    real[k] = {
+      src: `${REL}/${id}.${w.key}.${w.fps}.mp4`,
+      poster: `${REL}/${id}.${w.key}.poster.webp`,
+      w: v.w,
+      h: v.h,
+      fps: v.fps,
+      frames: v.frames,
+      bytes: 0,
+      ease_in: ein,
+      ease_out: eout,
+    };
   }
   const stamp = createHash('sha256')
     .update(JSON.stringify({ tool: readFileSync(new URL(import.meta.url), 'utf8'), dir, src: src.map((f) => [f, statSync(f).size, statSync(f).mtimeMs]) }))

@@ -121,6 +121,51 @@
   object-fit: cover;
   pointer-events: none;
 }
+/* MOCK10 (FB26): no play icon, ever. WebKit's and Chromium's own buttons over a video are hidden, whatever the browser
+   decides (tour/media.ts holds the rest: the poster, the attributes, a refused play waiting for a gesture) */
+.tour video::-webkit-media-controls,
+.tour video::-webkit-media-controls-enclosure,
+.tour video::-webkit-media-controls-panel,
+.tour video::-webkit-media-controls-overlay-enclosure,
+.tour video::-webkit-media-controls-overlay-play-button,
+.tour video::-webkit-media-controls-play-button,
+.tour video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  opacity: 0 !important;
+}
+/* a play the browser refused: the picture holds still on its frame, and a quiet line under it asks for a touch */
+.tour-tap {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 14%;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin: 0;
+  color: rgba(251, 246, 238, 0.86);
+  font: 400 13px / 1 var(--f-text);
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 8px rgba(20, 16, 12, 0.6);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--tour-ui) var(--tour-appear),
+    transform var(--tour-ui) var(--tour-appear);
+}
+.tour-tap i {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(251, 246, 238, 0), rgba(251, 246, 238, 0.85));
+}
+.tour[data-blocked] .tour-tap {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(400ms * var(--tk, 1));
+}
 /* the door: a picture of its own (a phone takes the 1080 one), under the walk until the walk's first frame is on */
 .tour-door-img {
   opacity: 0;
@@ -142,7 +187,8 @@
     opacity calc(900ms * var(--tk, 1)) linear,
     visibility 0s linear calc(900ms * var(--tk, 1));
 }
-.tour[data-phase='door'] .tour-video,
+/* MOCK10 (FB26): not at the door any more — a video shown before it has played is what a web view draws its play icon
+   on; the door's picture is the same frame, and the walk takes over from it when its first frame plays */
 .tour[data-walk] .tour-video {
   opacity: 1;
   visibility: visible;
