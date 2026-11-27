@@ -8,8 +8,8 @@ whole house), in HC's state (the corridor portal lined in walnut flush with the 
 the hall corner and its two plaster patches in), plus, for these two stills only:
   a. every corridor door opening lined in walnut on its reveals (FB21 table 1: "ספים מצופי אגוז"): the jamb and head returns of the boy,
      girl, bath and master openings take the walnut material (#6B4A33, as the portal); the laundry stays plaster (ARR-L1, out of both frames);
-  b. the master leaf on its FB21 hinge: open 90 deg into the bedroom on X 2.90 (the 1.1 opening is X 2.00-2.90; the blockout still had it
-     on the pre-1.1 jamb X 2.78). The boy (Y 13.53), girl (Y 17.16) and bath (Y 13.39) leaves already stand on the FB21 hinges;
+  b. the four leaves in the wall colour (FB21 table 1). They already stand on the FB21 hinges, open 90 deg into the rooms: master
+     leaf_corridor_master_m1 on X 2.90 (G-M1), boy on Y 13.53, girl on Y 17.16, bath on Y 13.39 (listed in clay-meta.json);
   c. the two cameras, 24 mm, level, shift 0.50 / 0.50 on the 16:9 canvas 2720 x 1530 (HT2's):
        CM (2.45, 14.40, 1.20) yaw 180 (toward the bedroom),  CK (2.45, 14.20, 1.20) yaw 0 (toward the hall).
 The front door leaf is closed (out of both frames). Lighting, exposure (0.75), samples and passes as framing_wm_hall_2026_11_18.py.
@@ -45,7 +45,6 @@ CAMS = dict(CM=dict(loc=[2.45, 14.40, 1.20], yaw=180.0), CK=dict(loc=[2.45, 14.2
 OPENINGS = dict(boy=dict(x=(1.50, 1.75), y=(12.55, 13.62)), girl=dict(x=(1.50, 1.75), y=(16.18, 17.25)),
                 bath=dict(x=(3.05, 3.30), y=(12.30, 13.48)), master=dict(x=(1.92, 2.98), y=(17.46, 17.71)),
                 laundry=dict(x=(3.05, 3.30), y=(14.22, 15.18)))
-MASTER_HINGE_X = 2.90
 
 
 def frames():
@@ -72,28 +71,39 @@ def listing():
     return out
 
 
+LININGS = dict(  # the reveals of the four open doors (house-plan openings; the openings are plain holes in the wall boxes)
+    boy=dict(plane="x", w=(1.55, 1.70), o=(12.63, 13.53)), girl=dict(plane="x", w=(1.55, 1.70), o=(16.26, 17.16)),
+    bath=dict(plane="x", w=(3.10, 3.25), o=(12.39, 13.39)), master=dict(plane="y", w=(17.51, 17.66), o=(2.00, 2.90)))
+HEAD, T = 2.40, 0.01
+PX_WALNUT = 742
+LEAVES = ("leaf_corridor_boy", "leaf_corridor_girl", "leaf_corridor_bath", "leaf_corridor_master_m1")
+
+
 def corridor_wm():
-    """a. walnut linings on the corridor door reveals; b. the master leaf on X 2.90. Returns notes."""
+    """a. walnut linings (1 cm boxes on the two jambs and the head of each open corridor door, as framing_wm_kids / _master K-5);
+    b. the four leaves in the wall colour (FB21: "חלקות, בגוון הקיר"), checked on their FB21 hinges. Returns notes."""
     walnut = fr.mat_cache("walnut_wm", "#6B4A33", 0.85)
+    wall = FF.M["wall"]
     notes = []
-    for k in ("boy", "girl", "bath", "master"):
-        for ob in bpy.data.objects:
-            if ob.type != "MESH" or not inside(ob, OPENINGS[k]) or ob.name.startswith("leaf_"):
-                continue
-            nm = ob.name.lower()
-            if any(t in nm for t in ("lining", "jamb", "reveal", "head", "soffit")) or nm.startswith(("c" + k, "o-corridor-" + k)):
-                ob.data = ob.data.copy()
-                ob.data.materials.clear()
-                ob.data.materials.append(walnut)
-                notes.append(f"{k}: {ob.name} -> walnut")
-    lf = bpy.data.objects.get("leaf_corridor_master")
-    if lf is not None:
+    for k, L in LININGS.items():
+        (w0, w1), (o0, o1) = L["w"], L["o"]
+        if L["plane"] == "x":
+            bxs = [(w0, w1, o0, o0 + T, 0.0, HEAD), (w0, w1, o1 - T, o1, 0.0, HEAD), (w0, w1, o0, o1, HEAD - T, HEAD)]
+        else:
+            bxs = [(o0, o0 + T, w0, w1, 0.0, HEAD), (o1 - T, o1, w0, w1, 0.0, HEAD), (o0, o1, w0, w1, HEAD - T, HEAD)]
+        for j, b in enumerate(bxs):
+            FF.bx(f"corr_wm_lining_{k}_{'abh'[j]}", *b, walnut, PX_WALNUT, group="framing")
+        notes.append(f"{k}: walnut linings 1 cm on both jambs and the head ({L['plane']}-wall {w0}-{w1}, opening {o0}-{o1}, head {HEAD})")
+    for n in LEAVES:
+        lf = bpy.data.objects.get(n)
+        if lf is None:
+            notes.append(f"{n}: not in the scene")
+            continue
+        lf.data = lf.data.copy()
+        lf.data.materials.clear()
+        lf.data.materials.append(wall)
         lo, hi = H.wbb(lf)
-        dx = (MASTER_HINGE_X - 0.04) - lo[0]
-        lf.location.x += dx
-        bpy.context.view_layer.update()
-        lo2, hi2 = H.wbb(lf)
-        notes.append(f"leaf_corridor_master: X {lo[0]:.3f}-{hi[0]:.3f} -> {lo2[0]:.3f}-{hi2[0]:.3f} (hinge X {MASTER_HINGE_X}), Y {lo2[1]:.2f}-{hi2[1]:.2f}")
+        notes.append(f"{n}: wall colour; X {lo[0]:.2f}-{hi[0]:.2f}, Y {lo[1]:.2f}-{hi[1]:.2f}, Z {lo[2]:.2f}-{hi[2]:.2f}")
     bpy.context.view_layer.update()
     return notes
 
