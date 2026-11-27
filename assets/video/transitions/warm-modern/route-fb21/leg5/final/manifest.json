@@ -6,7 +6,7 @@
  "date": "2026-11-27",
  "author": "motion-agent",
  "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, FB21",
- "play_s": 11.133,
+ "play_s": 10.983,
  "sampling": "uniform in time at the nominal walk: frame i (1-based) is shown at (i - 1) / fps s; an even picture speed (0.5x-1.6x of the median) with a short ease in and out; forward only, no hold, no cut",
  "chain": {
   "first_frame": "assets/renders/boy/warm-modern/stage1-2026-11-24/K-boy-defaults-fb16-frame.png",
@@ -24,12 +24,12 @@
   },
   "ease_out_frames": {
    "1920": [
-    633,
-    669
+    627,
+    660
    ],
    "1080": [
-    317,
-    335
+    314,
+    331
    ]
   },
   "fast_forward": "when chaining at x2-x3, skip the ease-in frames of every leg but the first and the ease-out frames of every leg but the last"
@@ -44,7 +44,7 @@
    "w": 1920,
    "h": 1080,
    "fps": 60,
-   "frames": 669,
+   "frames": 660,
    "avif_quality": 55,
    "webp_quality": 72,
    "last_frames_quality": {
@@ -57,7 +57,7 @@
    "w": 1080,
    "h": 608,
    "fps": 30,
-   "frames": 335,
+   "frames": 331,
    "avif_quality": 50,
    "webp_quality": 60,
    "last_frames_quality": {
@@ -69,22 +69,22 @@
  },
  "bytes": {
   "1920": {
-   "avif": 22377747,
-   "webp": 22524840
+   "avif": 23749050,
+   "webp": 23180442
   },
   "1080": {
-   "avif": 3377654,
-   "webp": 3608330
+   "avif": 3285336,
+   "webp": 3423986
   }
  },
  "bytes_per_2s": {
   "1920": {
-   "avif": 4020074,
-   "webp": 4046499
+   "avif": 4324692,
+   "webp": 4221149
   },
   "1080": {
-   "avif": 606782,
-   "webp": 648222
+   "avif": 598258,
+   "webp": 623506
   }
  },
  "ends": {
@@ -128,17 +128,29 @@
   },
   "clip3": {
    "first": {
-    "shift_px_median": 0.7028685808181763,
-    "shift_px_p95": 1.7246546745300293,
-    "colour_resid_levels_mean": 2.279695749282837
+    "shift_px_median": 0.6188931465148926,
+    "shift_px_p95": 1.4955075979232788,
+    "colour_resid_levels_mean": 2.281442403793335
    },
    "last": {
-    "shift_px_median": 0.2805461883544922,
-    "shift_px_p95": 1.1012135744094849,
-    "colour_resid_levels_mean": 3.7272274494171143
+    "shift_px_median": 1.7586246728897095,
+    "shift_px_p95": 5.679566383361816,
+    "colour_resid_levels_mean": 3.0009593963623047
+   }
+  },
+  "clip4": {
+   "first": {
+    "shift_px_median": 0.03560387343168259,
+    "shift_px_p95": 0.13813439011573792,
+    "colour_resid_levels_mean": 0.14010962843894958
+   },
+   "last": {
+    "shift_px_median": 0.03645625710487366,
+    "shift_px_p95": 0.14599546790122986,
+    "colour_resid_levels_mean": 0.4623810350894928
    }
   }
  },
- "speed_max_jump_pct_per_frame": 17.7,
+ "speed_max_jump_pct_per_frame": 24.2,
  "qa": "pending (qa-agent)"
 }

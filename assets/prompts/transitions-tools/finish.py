@@ -24,6 +24,9 @@ def main(ret_p, inp_p, masks_p, out_p, srcs=(0, 1)):
     ret = msr.rgb(ret_p); inp = msr.rgb(inp_p); M = np.load(masks_p)
     thru, val, hole, who, bm = M[0], M[1] > 0.5, M[2] > 0.5, M[3].astype(int), M[4] > 0.5
     k = 1920 / ret.shape[1]; ret = cv2.resize(ret, (1920, int(round(ret.shape[0] * k))), interpolation=cv2.INTER_AREA)
+    if ret.shape[0] < 1080:  # nano-banana 2K is 2752x1536 (1.79:1): pad the short side so both paths see 1920x1080
+        ret = cv2.copyMakeBorder(ret, 0, 1080 - ret.shape[0], 0, 0, cv2.BORDER_REPLICATE)
+    ret = ret[:1080]
     keep = (thru > 0.99) & val & np.isin(who, srcs) & ~bm
     keep = cv2.erode(keep.astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
     try:

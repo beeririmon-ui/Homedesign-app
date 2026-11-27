@@ -260,9 +260,21 @@
    {
     "what": "corridor stills CM + CK (render-agent)",
     "tokens": 2600
+   },
+   {
+    "date": "2026-11-27",
+    "what": "leg 3 Mw + Bx nano-banana-2 2K i2i",
+    "tokens": 800,
+    "total": 27722
+   },
+   {
+    "date": "2026-11-27",
+    "what": "leg 3 K3c kling 6 s",
+    "tokens": 1944,
+    "total": 29666
    }
   ],
-  "spent_total": 23026,
+  "spent_total": 29666,
   "projection_2026_11_27": {
    "spent": 12002,
    "left": 19198,
@@ -407,6 +419,53 @@
      "code pan Kgi->K-girl": 0,
      "total": 1946
     }
+   },
+   "fix_fb27": {
+    "approved": "coordinator: 1,946",
+    "jobs": [
+     {
+      "id": "Kgi seedream",
+      "placeholder_id": "25399ede-a9e6-4ad2-a4ab-e17570904c5b",
+      "tokens": 650,
+      "file": "route-fb21/leg5/stills/kgi-w.png"
+     },
+     {
+      "id": "K5c2 CM->Kgi",
+      "s": 4,
+      "placeholder_id": "40f040c8-a20c-41f1-a39c-adfac47e355d",
+      "tokens": 1296
+     },
+     {
+      "id": "K5d code pan Kgi->K-girl",
+      "tokens": 0,
+      "file": "route-fb21/leg5/k5d.code-pan.mp4"
+     }
+    ],
+    "spent": 1946,
+    "final": {
+     "play_s": 10.983,
+     "frames": {
+      "1920@60": 660,
+      "1080@30": 331
+     },
+     "bytes_per_2s": {
+      "1920": {
+       "avif": 4324692,
+       "webp": 4221149
+      },
+      "1080": {
+       "avif": 598258,
+       "webp": 623506
+      }
+     },
+     "ends": {
+      "first_vs_still_before_encoding_max": 0,
+      "last_vs_still_before_encoding_max": 0,
+      "last_avif_1920_mean_levels": 1.76
+     },
+     "speed_max_jump_pct": 24.2
+    },
+    "verdict": "the window wall stays plain with its colour block, no cabinet; lands exactly on K-girl through the code turn; a small black lever handle shows on the girl's door leaf at the left edge for ~0.5 s"
    }
   },
   "projection_after_legs_4_5": {
@@ -415,6 +474,48 @@
    "left": 14974,
    "legs_3_6_bare": "~14,200 (leg 3 7,136 + leg 6 ~7,100)",
    "note": "fits bare; ~16,500-18,000 with a fix round each"
+  },
+  "leg3": {
+   "plan": "B1 -> Bx (kling 3 s) -> CM (kling 4 s) -> Mw at the MB0 point yaw 60 (kling 6 s) -> code pan Mw -> MB0",
+   "jobs": [
+    {
+     "id": "Bm seedream (rejected: seedream re-framed the bath, the code pan dropped)",
+     "placeholder_id": "d9841917-99b3-4e6c-b5a7-dd45826ac55f",
+     "tokens": 650
+    },
+    {
+     "id": "Bx seedream (rejected: re-framed)",
+     "placeholder_id": "234560ae-241c-4bd0-93d1-0ffb01552aa3",
+     "tokens": 650
+    },
+    {
+     "id": "Mw seedream (rejected: re-framed)",
+     "placeholder_id": "1a1728be-91f6-4420-9f7d-3e17a0933b1c",
+     "tokens": 650
+    },
+    {
+     "id": "Mw nano-banana-2 2K i2i (kept the framing; SIFT 0.48 px; needs a code seam fix; wall base drawn ~0.1-0.3 frame higher than the plan on the left)",
+     "placeholder_id": "aa72e6e7-af7e-4bec-ade7-b80b6758db7d",
+     "tokens": 400
+    },
+    {
+     "id": "Bx nano-banana-2 2K i2i (rejected: invented a doorway inside the boy's room; see blocker)",
+     "placeholder_id": "7bcd59bc-38ad-435c-ace1-da35c125eb82",
+     "tokens": 400
+    },
+    {
+     "id": "K3c CM-frame -> Mw kling-3-omni 6 s 1080p",
+     "placeholder_id": "b2e2d6b7-4cae-4a27-ab63-a4a7614c11d0",
+     "idempotency": "fb27-leg3-k3c-take1",
+     "tokens": 1944,
+     "first": "assets/renders/corridor/warm-modern/route-2026-11-27/CM-frame.png",
+     "last": "route-fb21/leg3/stills/mw-w.png",
+     "prompt": "First-person view at eye height, one continuous steady walk. The camera walks forward down the short corridor and straight through the open walnut-lined doorway at its end into a calm bedroom, and as it passes through the doorway it begins a smooth, gentle curve to the RIGHT across the room toward the window wall: the end of the bed with white linen and a rust throw slides in from the right edge, the tall window with sheer linen curtains and a small white vase on the sill comes ahead and settles right of centre, and the plain warm-white plaster wall fills the left, arriving exactly on the last frame. No pause, no zoom, no backward motion, never a sideways slide, no fast spin. Every wall, object and floor plank keeps its place, size and shape; nothing new appears on the walls; no other doors, openings, wardrobes or furniture than the frames show. Soft daylight, exposure locked. No people, no hands."
+    }
+   ],
+   "spent": 4694,
+   "status": "K3c sent; Mw done; bath exit (K3a/K3b) paused for a decision: see blocker",
+   "blocker": "From the bath door the line of sight crosses the corridor into the open boy door and reaches the unrendered kids wardrobes (X -2.3..0.2 on Y 13.73; their end panel at X 0.2 fills ~40% of the boy-door opening seen from CB). Any natural first-person exit from the bath sweeps across it."
   }
  }
 }
