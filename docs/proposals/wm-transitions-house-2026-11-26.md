@@ -313,3 +313,4 @@ master-designer, ‏2026-11-26. הצעה, ‏0 טוקנים, ולא נערך ש�
   - **ההגעה לחדר ההורים ולחדר העבודה קשה:** ‏MB0 ו-W0 פונים לקיר שממנו נכנסים, ולכן יש סיבוב בסוף. המוצרים שליד הדלת נראים מזווית שאף פריים לא ראה:
     - מוצר עגול (עציץ, מנורה, סל) נכנס כ-billboard;
     - המיטה מוזנת מ-MB1.
+- 2026-11-27 (motion-agent): leg 3 paused at 29,666 total (leg 3 4,694): K3c CM→Mw rejected (invented window on the master's plain wall, empty room); from the bath door the boy door shows the unrendered kids' wardrobes. Mw still and the code pan Mw→MB0 are ready. Decision asked.
