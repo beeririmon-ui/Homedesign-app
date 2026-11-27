@@ -373,6 +373,40 @@ def lines(img, name):
     return sorted(pk)[:14]
 
 
+EDGES = dict(  # vertical edges at eye height (Z 1.20) that lock each still: (label, X, Y)
+    CK=[("boy far jamb, room side", 1.55, 12.63), ("boy far jamb, corridor side", 1.70, 12.63), ("portal left, corridor side", 1.70, 9.95),
+        ("portal left, hall side", 1.70, 9.80), ("portal right, hall side", 3.10, 9.80), ("portal right, corridor side", 3.10, 9.95),
+        ("bath far jamb, corridor side", 3.10, 12.39), ("bath far jamb, room side", 3.25, 12.39)],
+    CM=[("bedroom jamb left (X 2.90), corridor side", 2.90, 17.51), ("bedroom jamb right (X 2.00), corridor side", 2.00, 17.51),
+        ("girl far jamb, corridor side", 1.70, 17.16), ("girl far jamb, room side", 1.55, 17.16), ("girl near jamb, corridor side", 1.70, 16.26)])
+
+
+def lock(name, ref, img, win=140):
+    """for each lock edge: its projection, the strongest luminance step near it in the input (ref) and in img, and img - ref in px"""
+    cam = CAMS[name]
+    y = int(round(CV.box[1] + 0.5 * CV.fh))
+    def prof(a):
+        g = cv2.cvtColor((np.clip(a, 0, 1) * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32)
+        r = cv2.GaussianBlur(g, (0, 0), 1.0)[y - 30:y + 31].mean(0)
+        return np.abs(np.gradient(r))
+    pr, pi = prof(ref), prof(img)
+    out = []
+    for lab_, X, Y in EDGES[name]:
+        u, v, d = cam.project(np.array([X, Y, 1.20]))
+        x = float(CV.px(u, v)[0])
+        if not (0 < x < CV.w):
+            continue
+        a, b = max(0, int(x - 30)), min(CV.w, int(x + 30))
+        xr = a + int(np.argmax(pr[a:b]))
+        a2, b2 = max(0, xr - win), min(CV.w, xr + win)
+        seg = pi[a2:b2]
+        # the step in img nearest to xr among the strong ones (>= 35 % of the window max)
+        cand = np.nonzero(seg >= 0.35 * seg.max())[0] + a2
+        xi = int(cand[np.argmin(np.abs(cand - xr))]) if len(cand) else -1
+        out.append(dict(edge=lab_, projected_x=round(x, 1), input_x=xr, img_x=xi, offset_px=xi - xr))
+    return out
+
+
 def finish(name, raw_path, tag="r1"):
     sys.path.insert(0, os.path.join(HCDIR, "tools"))
     import tone as TN  # noqa: E402  (the WM-G1 toe, not edited)
@@ -389,9 +423,17 @@ def finish(name, raw_path, tag="r1"):
     H, cc, reg = register(raw, inp, keep)
     reg["lines_input_x"] = lines(inp, name)
     reg["lines_raw_x"] = lines(raw, name)
-    warped = cv2.warpPerspective(raw, H, (CV.w, CV.h), flags=cv2.INTER_CUBIC | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REPLICATE)
-    warped = np.clip(warped, 0, 1)
+    lk = lock(name, inp, raw)
+    if max(abs(e["offset_px"]) for e in lk) <= 2:      # locked as returned: no resampling
+        warped = raw.copy()
+        reg["applied"] = "none: every lock edge within 2 px of the input as returned"
+    else:
+        warped = np.clip(cv2.warpPerspective(raw, H, (CV.w, CV.h), flags=cv2.INTER_CUBIC | cv2.WARP_INVERSE_MAP,
+                                             borderMode=cv2.BORDER_REPLICATE), 0, 1)
+        reg["applied"] = "ECC homography"
     reg["lines_registered_x"] = lines(warped, name)
+    reg["lock_raw"] = lock(name, inp, raw)
+    reg["lock_registered"] = lock(name, inp, warped)
     # the openings: the refeed, feathered 1.2 px
     a = cv2.GaussianBlur(mask.astype(np.float32), (0, 0), 1.2)[..., None]
     a = np.where(mask[..., None], np.maximum(a, 0.5), a) if mask.any() else a
