@@ -1,0 +1,210 @@
+{
+ "id": "nordic-m0n-hero-2026-11-27",
+ "brief": "briefs/nordic-m0n-hero-2026-11-27.md",
+ "author": "render-agent",
+ "date": "2026-11-27",
+ "camera": "M0-N (fb23 clay: 28 mm at (0.60, 5.35, 1.00), yaw 8)",
+ "seed": "not exposed by var2 for seedream-5-pro / nano-banana-2: each job is pinned by its idempotency key, input, references and prompt (re-sending the same key never double-bills)",
+ "references_policy": "the magazine frame nordic-A-fin2.png is the look reference (P-N and H-N); H-N carries 8 SKU boards built from the cards' photos (in-room SKU colour; the rug swatch only: the card's rendered style is \"Square\" no-tassel)",
+ "jobs": [
+  {
+   "id": "nrd-m0n-pn-r1",
+   "what": "P-N, the empty-room plate",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "prompt": "assets/prompts/nordic-m0n-hero-2026-11-27/pn.txt",
+   "prompt_sha256": "022069105a7719b22d9462ce33f4d4c177202e00fb93ae37cb97cf21fe8e058a",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9d0bfc95-0931-405f-8174-664021804148.png",
+   "image_local": "clay/guide-plate.png (the clay v2 plate guide, 1920)",
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9dc4ae00-6b5a-412f-8705-03cba8139618.jpg",
+     "what": "nordic-A-fin2.png, the look"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/f1cbfde9-b6fc-43f8-b93c-1021b9a5d439.jpg",
+     "what": "its window and window seat (crop 0,0,600,1100)"
+    }
+   ],
+   "idempotency_key": "nrd-m0n-pn-seedream-2k-20261127-r1",
+   "placeholder_id": "1152f227-27bd-42d5-8dc3-0fd4d0ed9c0c",
+   "task_id": "ea34b6609af3616b0387449ea88e9f5f",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-ea34b6609af3616b0387449ea88e9f5f-0-1795740074506-ab8687f9.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "raw/pn-r1-seedream.jpg",
+   "verdict": "USED, first send: the camera kept (back-wall corner, floor line and sofa within ~5 px at 1360; ECC to the hero 0.98, shift -3.4/-5.7 px); the armchair sits a little lower-left than the clay's"
+  },
+  {
+   "id": "nrd-m0n-hn-r1",
+   "what": "H-N, the hero: every default product in one light, on the plate",
+   "model": "seedream-5-pro",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "auto",
+   "tokens": 650,
+   "prompt": "assets/prompts/nordic-m0n-hero-2026-11-27/hn.txt",
+   "prompt_sha256": "1441e66251c2de44c423c6fc1a801d61d1f7fd682610ac772b24e1896b1eb381",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/493b5607-f575-4ce7-900e-0d9e9b1c8b0f.jpg",
+   "image_local": "raw/hn-input.jpg (tools/hero_input.py: the P-N photo + the clay's products, tone-matched)",
+   "image_refs": [
+    {
+     "n": 2,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9dc4ae00-6b5a-412f-8705-03cba8139618.jpg",
+     "what": "the look"
+    },
+    {
+     "n": 3,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/02b22ec3-cd06-4d85-bbc1-8bd58c03de3b.jpg",
+     "card": "rug-cj-braided-wool-natural"
+    },
+    {
+     "n": 4,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/46772aa2-9347-428f-be0c-3788867be247.jpg",
+     "card": "coffee-table-idana-javorina-olia-natural"
+    },
+    {
+     "n": 5,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/33a14793-279a-4489-9837-694100eb454e.jpg",
+     "card": "cushions-cj-boucle-teddy, cushions-cj-knitted-chenille-bean-green, cushions-cj-linen-look-charcoal"
+    },
+    {
+     "n": 6,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/c0543292-2ce1-49df-a8fc-f8c0bbe0e672.jpg",
+     "card": "candle-holders-cj-travertine-pedestal, pool-cj-travertine-organic-tray-24, bowl-cj-speckled-ivory-wide-bowl-21, table-runner-cj-linen-look-sage-fringe"
+    },
+    {
+     "n": 7,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/a2046c9c-b305-4b6c-a2fc-aa9393842e0b.jpg",
+     "card": "sofa-cover-cj-cotton-muslin-fringe (White)"
+    },
+    {
+     "n": 8,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/759109ab-7c80-48ed-939a-1fcb07480872.jpg",
+     "card": "pendant-cj-pleated-pumpkin-lantern-40, accent-sconces-aliexpress-indoor-stone-wall-lamp, floor-lamp-cj-black-drum-linen"
+    },
+    {
+     "n": 9,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/d6664cf9-2c4b-4130-930e-dbb7ce206054.jpg",
+     "card": "planter-cj-seagrass-belly, basket-cj-jute-rope-cylinder, magazine-holder-cj-felt-log-basket, pouf-cj-cotton-knit-ball-cover"
+    },
+    {
+     "n": 10,
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/47a8a14f-d76f-4c7e-aa2f-ec2cbf095d3a.jpg",
+     "card": "vase-cj-textured-white-stoneware, curtains-cj-japanese-linen-half-shade, wall-decor-aliexpress-natural-raffia-woven-bohemian-763597"
+    }
+   ],
+   "idempotency_key": "nrd-m0n-hn-seedream-2k-20261127-r1",
+   "placeholder_id": "e844b936-3dc2-4053-b312-8c6af188fee6",
+   "task_id": "313959bc3b208df048d821bb3d38667f",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/seedream5p-313959bc3b208df048d821bb3d38667f-0-1795740360720-24a1f4bf.png",
+   "returned_px": [
+    2720,
+    1530
+   ],
+   "raw": "raw/hn-r1-seedream.jpg",
+   "verdict": "USED, first send. Gate: passed after E1 and E2 (candles came lit, the bowl deep and plain, the charcoal cushion a stiff block, the newspapers printed). Rug flat braided (no shag), the floor lamp true (black pole, linen drum), the pendant whole"
+  },
+  {
+   "id": "nrd-m0n-e1-table",
+   "what": "group edit: candles not lit (10 / 15), the bowl as the SKU, the charcoal cushion soft",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "assets/prompts/nordic-m0n-hero-2026-11-27/e1-table.txt",
+   "prompt_sha256": "c4e0f6beb9fb799135c77d3fb03e01b92fc37bd63db27ac04bc494291f979ae3",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/9ba264ea-e0fa-45fd-bd5d-01a09c794d9c.png",
+   "crop_canvas_px": [
+    1300,
+    720,
+    2388,
+    1332
+   ],
+   "sent": "x2 (2176 x 1224)",
+   "image_refs": [
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/28d5403c-382d-4dbe-acf3-430010fbce67.jpg",
+     "card": "bowl-cj-speckled-ivory-wide-bowl-21"
+    },
+    {
+     "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/cdebdf07-1215-4685-a027-238c4a917a66.jpg",
+     "card": "cushions-cj-linen-look-charcoal"
+    }
+   ],
+   "idempotency_key": "nrd-m0n-e1-table-nano-2k-20261127",
+   "placeholder_id": "e127a9eb-d763-4866-8704-6bb68a078447",
+   "task_id": "98ef00613be16fbda0a652c04d41b13f",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-98ef00613be16fbda0a652c04d41b13f-0-1795740552500-191c6fc3.jpg",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "raw": "raw/e1-table-nano.jpg",
+   "verdict": "USED: tools/place_edit.py, SIFT affine (residual 0.78 px at x2), tone-matched, pasted only in its three zones (80,183 px)"
+  },
+  {
+   "id": "nrd-m0n-e2-holder",
+   "what": "group edit: the papers in the felt holder plain, no print; the label off",
+   "model": "nano-banana-2",
+   "type": "image-to-image",
+   "resolution": "2K",
+   "aspect_ratio": "16:9",
+   "tokens": 400,
+   "prompt": "assets/prompts/nordic-m0n-hero-2026-11-27/e2-holder.txt",
+   "prompt_sha256": "e165497182750e378d1b2fb01b653240a647bc784928dd12c388c9f9aa89646e",
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/28a4e71c-f485-46c6-a296-a5600c2d6827.png",
+   "crop_canvas_px": [
+    400,
+    918,
+    1488,
+    1530
+   ],
+   "sent": "x2 (2176 x 1224)",
+   "image_refs": [],
+   "idempotency_key": "nrd-m0n-e2-holder-nano-2k-20261127",
+   "placeholder_id": "6541984b-bbbc-4873-a55b-08a5596d4bd1",
+   "task_id": "f640277e8da33e44a517f54353e848e0",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-f640277e8da33e44a517f54353e848e0-0-1795740657879-22e51232.jpg",
+   "returned_px": [
+    2752,
+    1536
+   ],
+   "raw": "raw/e2-holder-nano.jpg",
+   "verdict": "USED: same placement (residual 0.76 px at x2), its zone only (43,262 px). A code-only removal of the print was tried first and rejected (it smeared the rug)"
+  },
+  {
+   "id": "nrd-m0n-segmap",
+   "what": "grok segment map of the final hero (free): 35 segments -> tools/masks.py",
+   "model": "grok-imagine-image-2",
+   "type": "segment-map",
+   "tokens": 0,
+   "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/b5ff84e8-ff44-4089-997d-1995af804a51.jpg",
+   "segment_map_id": "b34afc43-cd13-44f7-b4a4-6f318a1e8077",
+   "verdict": "USED (no segment for the holder or the pouf: colour + the E2 region, and the clay silhouette)"
+  }
+ ],
+ "tokens": {
+  "spent": 2100,
+  "cap": 3950,
+  "items": {
+   "P-N": 650,
+   "H-N": 650,
+   "E1": 400,
+   "E2": 400,
+   "segment map": 0,
+   "clay v2": 0
+  },
+  "stage_A": {
+   "before": 750,
+   "after": 2850,
+   "cap": 6700
+  }
+ }
+}

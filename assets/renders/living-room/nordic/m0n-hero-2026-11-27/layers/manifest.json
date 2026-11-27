@@ -1,0 +1,509 @@
+{
+ "id": "nordic-living-room-m0n-2026-11-27",
+ "room": "living-room",
+ "style": "nordic",
+ "frame": "M0-N",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  0,
+  0,
+  2720,
+  1530
+ ],
+ "base": "../plate-PN.png",
+ "camera": {
+  "loc": [
+   0.6,
+   5.35,
+   1.0
+  ],
+  "yaw": 8.0,
+  "lens": 28.0,
+  "u0": 0.5,
+  "v0": 0.5,
+  "status": "PROPOSAL (fb23 camera-m0n-proposal.json)"
+ },
+ "compose": "../plate-PN.png; per layer in z order: shadow (multiply), then the layer (straight alpha); lights (screen, z 90) times (1 - every alpha)",
+ "status": "M0-N hero (brief nordic-m0n-hero-2026-11-27, FB24). Not QA'd; HD_PUBLIC=0 only.",
+ "method": "clay v2 (tools/clay_m0n_v2.py) -> P-N seedream 2K -> H-N seedream 2K (9 refs) -> E1, E2 nano 2K group edits -> prints in code -> grade.py -> grok segment map (0) + masks.py -> split.py -> finalize.py (shared finish grain, 0.15 stop vignette)",
+ "grade": {
+  "file": "tools/grade.py",
+  "xs": [
+   0.0,
+   4.5,
+   25.0,
+   50.0,
+   69.0,
+   87.0,
+   96.0,
+   100.0
+  ],
+  "ys": [
+   7.0,
+   10.5,
+   27.5,
+   49.0,
+   66.5,
+   86.5,
+   95.5,
+   99.0
+  ],
+  "a_shift": 1.6,
+  "b_shift": 4.5
+ },
+ "layers": [
+  {
+   "slot": "curtains",
+   "product": "curtains-cj-japanese-linen-half-shade",
+   "z": 10,
+   "shadow_z": 9,
+   "default": true,
+   "layer": "layers/curtains/curtains-cj-japanese-linen-half-shade.png",
+   "shadow": "shadows/curtains/curtains-cj-japanese-linen-half-shade.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "slot/engine rendered default (ch.7 had curtains-aliexpress-cotton-linen-curtain-look-902882)",
+   "alpha_px": 152893,
+   "shadow_px": 10096,
+   "bbox_px": [
+    370,
+    0,
+    543,
+    1030
+   ]
+  },
+  {
+   "slot": "framed-art",
+   "product": "framed-art-cj-morandi-triptych-sage",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/framed-art/framed-art-cj-morandi-triptych-sage.png",
+   "shadow": "shadows/framed-art/framed-art-cj-morandi-triptych-sage.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "the three style-D prints inserted in code from the in-room SKU photo (prints.py), lit by the canvas the model drew",
+   "alpha_px": 176242,
+   "shadow_px": 20185,
+   "bbox_px": [
+    1183,
+    433,
+    1844,
+    734
+   ]
+  },
+  {
+   "slot": "wall-decor",
+   "product": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.png",
+   "shadow": "shadows/wall-decor/wall-decor-aliexpress-natural-raffia-woven-bohemian-763597.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "",
+   "alpha_px": 10946,
+   "shadow_px": 1211,
+   "bbox_px": [
+    907,
+    635,
+    1031,
+    762
+   ]
+  },
+  {
+   "slot": "accent-sconces",
+   "product": "accent-sconces-aliexpress-indoor-stone-wall-lamp",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/accent-sconces/accent-sconces-aliexpress-indoor-stone-wall-lamp.png",
+   "shadow": "shadows/accent-sconces/accent-sconces-aliexpress-indoor-stone-wall-lamp.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "",
+   "alpha_px": 7563,
+   "shadow_px": 7734,
+   "bbox_px": [
+    1071,
+    417,
+    1965,
+    532
+   ]
+  },
+  {
+   "slot": "vase",
+   "product": "vase-cj-textured-white-stoneware",
+   "z": 16,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/vase/vase-cj-textured-white-stoneware.png",
+   "shadow": "shadows/vase/vase-cj-textured-white-stoneware.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "with the eucalyptus stems (filler), on the window seat",
+   "alpha_px": 33735,
+   "shadow_px": 16171,
+   "bbox_px": [
+    185,
+    595,
+    346,
+    1020
+   ]
+  },
+  {
+   "slot": "rug",
+   "product": "rug-cj-braided-wool-natural",
+   "z": 20,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/rug/rug-cj-braided-wool-natural.png",
+   "shadow": "shadows/rug/rug-cj-braided-wool-natural.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "the table's and the throw's shadows on it are baked in the rug layer (they are product-on-product)",
+   "alpha_px": 339413,
+   "shadow_px": 3212,
+   "bbox_px": [
+    781,
+    1213,
+    2432,
+    1530
+   ]
+  },
+  {
+   "slot": "floor-lamp",
+   "product": "floor-lamp-cj-black-drum-linen",
+   "z": 30,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/floor-lamp/floor-lamp-cj-black-drum-linen.png",
+   "shadow": "shadows/floor-lamp/floor-lamp-cj-black-drum-linen.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "slot/engine rendered default, 'test only, not approved for sale' in the slot file (ch.7 had the wabi-sabi 217361)",
+   "alpha_px": 39995,
+   "shadow_px": 23075,
+   "bbox_px": [
+    1974,
+    522,
+    2171,
+    1240
+   ]
+  },
+  {
+   "slot": "planter",
+   "product": "planter-cj-seagrass-belly",
+   "z": 32,
+   "shadow_z": 31,
+   "default": true,
+   "layer": "layers/planter/planter-cj-seagrass-belly.png",
+   "shadow": "shadows/planter/planter-cj-seagrass-belly.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "with the olive (filler); the wall seen between its branches comes with the layer",
+   "alpha_px": 80870,
+   "shadow_px": 29659,
+   "bbox_px": [
+    474,
+    428,
+    815,
+    1193
+   ]
+  },
+  {
+   "slot": "sofa-cover",
+   "product": "sofa-cover-cj-cotton-muslin-fringe",
+   "z": 50,
+   "shadow_z": 49,
+   "default": true,
+   "layer": "layers/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.png",
+   "shadow": "shadows/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "",
+   "alpha_px": 66946,
+   "shadow_px": 9098,
+   "bbox_px": [
+    1681,
+    937,
+    2047,
+    1304
+   ]
+  },
+  {
+   "slot": "cushions",
+   "product": "set-A",
+   "z": 55,
+   "shadow_z": 54,
+   "default": true,
+   "layer": "layers/cushions/set-A.png",
+   "shadow": "shadows/cushions/set-A.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "set A: cushions-cj-boucle-teddy (white, 50), cushions-cj-knitted-chenille-bean-green (45), cushions-cj-linen-look-charcoal (50; E1 edit)",
+   "alpha_px": 103882,
+   "shadow_px": 28726,
+   "bbox_px": [
+    1068,
+    813,
+    1920,
+    1038
+   ]
+  },
+  {
+   "slot": "coffee-table",
+   "product": "coffee-table-idana-javorina-olia-natural",
+   "z": 57,
+   "shadow_z": 56,
+   "default": true,
+   "layer": "layers/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "shadow": "shadows/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "sold": false,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "new slot (ch.7, FB12-T): not for sale until IDANA confirms in writing",
+   "alpha_px": 66811,
+   "shadow_px": 11900,
+   "bbox_px": [
+    1027,
+    1106,
+    1803,
+    1440
+   ]
+  },
+  {
+   "slot": "basket",
+   "product": "basket-cj-jute-rope-cylinder",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/basket/basket-cj-jute-rope-cylinder.png",
+   "shadow": "shadows/basket/basket-cj-jute-rope-cylinder.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "",
+   "alpha_px": 58396,
+   "shadow_px": 13867,
+   "bbox_px": [
+    531,
+    1027,
+    2454,
+    1278
+   ]
+  },
+  {
+   "slot": "magazine-holder",
+   "product": "magazine-holder-cj-felt-log-basket",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/magazine-holder/magazine-holder-cj-felt-log-basket.png",
+   "shadow": "shadows/magazine-holder/magazine-holder-cj-felt-log-basket.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "with plain folded paper (filler, no print: E2 edit)",
+   "alpha_px": 88743,
+   "shadow_px": 16893,
+   "bbox_px": [
+    694,
+    1180,
+    1025,
+    1530
+   ]
+  },
+  {
+   "slot": "table-runner",
+   "product": "table-runner-cj-linen-look-sage-fringe",
+   "z": 62,
+   "shadow_z": 61,
+   "default": true,
+   "layer": "layers/table-runner/table-runner-cj-linen-look-sage-fringe.png",
+   "shadow": "shadows/table-runner/table-runner-cj-linen-look-sage-fringe.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "",
+   "alpha_px": 52736,
+   "shadow_px": 674,
+   "bbox_px": [
+    1122,
+    1104,
+    1388,
+    1369
+   ]
+  },
+  {
+   "slot": "tray",
+   "product": "pool-cj-travertine-organic-tray-24",
+   "z": 64,
+   "shadow_z": 63,
+   "default": true,
+   "layer": "layers/tray/pool-cj-travertine-organic-tray-24.png",
+   "shadow": "shadows/tray/pool-cj-travertine-organic-tray-24.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "new slot (ch.7)",
+   "alpha_px": 4493,
+   "shadow_px": 11,
+   "bbox_px": [
+    1515,
+    1061,
+    1645,
+    1163
+   ]
+  },
+  {
+   "slot": "bowl",
+   "product": "bowl-cj-speckled-ivory-wide-bowl-21",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/bowl/bowl-cj-speckled-ivory-wide-bowl-21.png",
+   "shadow": "shadows/bowl/bowl-cj-speckled-ivory-wide-bowl-21.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "",
+   "alpha_px": 9138,
+   "shadow_px": 60,
+   "bbox_px": [
+    1628,
+    1111,
+    1801,
+    1189
+   ]
+  },
+  {
+   "slot": "candle-holders",
+   "product": "candle-holders-cj-travertine-pedestal",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "shadow": "shadows/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "with the two pillar candles (filler, 10 and 15, not lit: E1 edit)",
+   "alpha_px": 10522,
+   "shadow_px": 2069,
+   "bbox_px": [
+    1563,
+    988,
+    1680,
+    1137
+   ]
+  },
+  {
+   "slot": "pouf",
+   "product": "pouf-cj-cotton-knit-ball-cover",
+   "z": 70,
+   "shadow_z": 69,
+   "default": true,
+   "layer": "layers/pouf/pouf-cj-cotton-knit-ball-cover.png",
+   "shadow": "shadows/pouf/pouf-cj-cotton-knit-ball-cover.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "mask = the clay silhouette (grok gave no pouf segment)",
+   "alpha_px": 58029,
+   "shadow_px": 3894,
+   "bbox_px": [
+    2391,
+    1330,
+    2720,
+    1530
+   ]
+  },
+  {
+   "slot": "pendant",
+   "product": "pendant-cj-pleated-pumpkin-lantern-40",
+   "z": 80,
+   "shadow_z": 79,
+   "default": true,
+   "layer": "layers/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+   "shadow": "shadows/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+   "sold": true,
+   "source": "hero-HN.png cut in code (tools/masks.py + split.py)",
+   "note": "",
+   "alpha_px": 34754,
+   "shadow_px": 1782,
+   "bbox_px": [
+    1305,
+    0,
+    1557,
+    261
+   ]
+  }
+ ],
+ "light": [
+  {
+   "file": "light/accent-sconces-aliexpress-indoor-stone-wall-lamp.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "accent-sconces"
+   ],
+   "px": 69138,
+   "reach_px": 160
+  },
+  {
+   "file": "light/floor-lamp-cj-black-drum-linen.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "floor-lamp"
+   ],
+   "px": 186222,
+   "reach_px": 220
+  },
+  {
+   "file": "light/pendant-cj-pleated-pumpkin-lantern-40.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "pendant"
+   ],
+   "px": 95657,
+   "reach_px": 200
+  }
+ ],
+ "influence_radius_px": {
+  "curtains": 30,
+  "framed-art": 30,
+  "wall-decor": 26,
+  "accent-sconces": 26,
+  "vase": 50,
+  "rug": 40,
+  "floor-lamp": 70,
+  "planter": 90,
+  "sofa-cover": 70,
+  "cushions": 70,
+  "coffee-table": 120,
+  "basket": 70,
+  "magazine-holder": 80,
+  "table-runner": 40,
+  "tray": 30,
+  "bowl": 40,
+  "candle-holders": 40,
+  "pouf": 80,
+  "pendant": 24
+ },
+ "not_in_frame": [
+  "wall-sconce (its light only: on the armchair, in the hero)"
+ ],
+ "fillers": [
+  "olive (planter)",
+  "eucalyptus stems (vase)",
+  "pillar candles 10 and 15, not lit (candle-holders)",
+  "plain folded paper (magazine-holder)"
+ ],
+ "files": {
+  "hero": "../hero-HN.png",
+  "plate": "../plate-PN.png",
+  "default_frame": "../default-frame-m0n.png",
+  "checks": "../checks-m0n.json",
+  "sheet": "../qa-sheet-m0n.jpg",
+  "jobs": "../jobs-m0n.json"
+ }
+}

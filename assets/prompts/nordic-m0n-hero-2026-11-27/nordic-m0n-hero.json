@@ -1,0 +1,17 @@
+{
+ "id": "nordic-m0n-hero-2026-11-27",
+ "asset_ids": [
+  "nrd-m0n-plate-PN",
+  "nrd-m0n-hero-HN",
+  "nrd-m0n-default-frame"
+ ],
+ "record": "assets/renders/living-room/nordic/m0n-hero-2026-11-27/jobs-m0n.json (every send: model, prompt, input, references, ids, tokens, verdict)",
+ "prompts": {
+  "pn.txt": "P-N (seedream-5-pro 2K)",
+  "hn.txt": "H-N (seedream-5-pro 2K, 9 refs)",
+  "e1-table.txt": "E1 (nano-banana-2 2K)",
+  "e2-holder.txt": "E2 (nano-banana-2 2K)"
+ },
+ "code": "assets/renders/living-room/nordic/m0n-hero-2026-11-27/tools/ (clay_m0n_v2 -> hero_input -> place_edit -> prints -> grade -> masks -> split -> finalize)",
+ "seed": "not exposed by var2 for seedream-5-pro / nano-banana-2: each job is pinned by its idempotency key, input, references and prompt (re-sending the same key never double-bills)"
+}

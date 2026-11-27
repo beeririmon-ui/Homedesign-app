@@ -1,0 +1,813 @@
+{
+ "id": "m0n-clay-v2-2026-11-27",
+ "author": "render-agent",
+ "var2_tokens": 0,
+ "script": "tools/clay_m0n_v2.py (imports fb23-2026-11-26/clay_m0n.py)",
+ "size": [
+  1920,
+  1080
+ ],
+ "spp": 64,
+ "camera": {
+  "id": "M0-N",
+  "loc": [
+   0.6,
+   5.35,
+   1.0
+  ],
+  "yaw": 8.0,
+  "lens": 28.0,
+  "u0": 0.5,
+  "v0": 0.5
+ },
+ "projection_check_px": 0.0,
+ "sun": {
+  "R": 220.0,
+  "lat": 60.0,
+  "decl": -12.6,
+  "hour_angle": 15.0,
+  "angle": 1.2,
+  "alt": 16.4,
+  "az": 195.27,
+  "color": [
+   1.0,
+   0.88,
+   0.72
+  ],
+  "dir_plan": [
+   -0.8713,
+   0.4014,
+   0.2824
+  ],
+  "solar_time": "13.00 h, 15 February, 60 N"
+ },
+ "look": {
+  "sun_weight": 0.2001,
+  "wb": [
+   1.1421,
+   1.0,
+   0.8213
+  ],
+  "k": 8.8742,
+  "lift": 0.004,
+  "glow": {
+   "pendant_glow": 0.09966399920813274,
+   "floor_lamp_glow": 0.08686660621606279,
+   "wall_sconce_glow": 0.09966399920813274
+  },
+  "lamp_weights": {
+   "floor_lamp": 0.06255,
+   "pendant": 0.17502,
+   "accent_sconces": 0.0287,
+   "wall_sconce": 0.29226
+  },
+  "shade_wall_L": 79.2,
+  "sun_wall_L": 96.8,
+  "p0_5_L": 10.6,
+  "floor_px_fixed": 1178
+ },
+ "sun_share_pct": {
+  "rug": 18.2,
+  "curtains": 10.2,
+  "vase": 28.7,
+  "planter": 68.4,
+  "basket": 18.2,
+  "magazine-holder": 2.0,
+  "floor-lamp": 47.1,
+  "framed-art": 56.7,
+  "accent-sconces": 2.5,
+  "pendant": 9.7,
+  "bowl": 1.3,
+  "candle-holders": 5.8,
+  "coffee-table": 26.4,
+  "cushions": 81.4,
+  "sofa-cover": 39.5,
+  "wall-decor": 6.0,
+  "table-runner": 8.0,
+  "pouf": 0.0,
+  "tray": 8.6,
+  "floor": 45.1,
+  "back_wall": 22.0,
+  "left_wall": 8.5,
+  "window": 0.1,
+  "right_wall": 17.1,
+  "ceiling": 0.2,
+  "outside": 0.0,
+  "window_seat": 40.9
+ },
+ "v7q6": {
+  "rug": {
+   "card": "rug-cj-braided-wool-natural 330 x 230 (card 230 x 330)",
+   "position": "X -1.45..1.85, Y 0.72-3.02 (slots 1.6 envelope, card depth 230)",
+   "visible_px": 229190,
+   "frame_pct": 11.053,
+   "silhouette_px": 509513,
+   "visible_share": 0.45,
+   "u": [
+    0.0203,
+    0.8885
+   ],
+   "v": [
+    0.7852,
+    1.0
+   ],
+   "height_pct": 21.48,
+   "edge_margins": {
+    "left": 0.0203,
+    "right": 0.1115,
+    "top": 0.7852,
+    "bottom": 0.0
+   },
+   "edge_tangent": {},
+   "v7q6": "NOT counted"
+  },
+  "curtains": {
+   "card": "curtains-cj-japanese-linen-half-shade Linen W200 x H260, rod 2.84, hem 0.22 (slot/engine rendered default)",
+   "position": "the back panel, stack Y 0.46-0.88 beside the window seat",
+   "visible_px": 65126,
+   "frame_pct": 3.141,
+   "silhouette_px": 74274,
+   "visible_share": 0.877,
+   "u": [
+    0.1464,
+    0.1953
+   ],
+   "v": [
+    0.0,
+    0.6602
+   ],
+   "height_pct": 66.02,
+   "edge_margins": {
+    "left": 0.1464,
+    "right": 0.8047,
+    "top": 0.0,
+    "bottom": 0.3398
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "vase": {
+   "card": "vase-cj-textured-white-stoneware D16 x H32, on the window seat",
+   "position": "(-2.40, 1.10, 0.45) window seat",
+   "visible_px": 4376,
+   "frame_pct": 0.211,
+   "silhouette_px": 5076,
+   "visible_share": 0.862,
+   "u": [
+    0.0849,
+    0.1151
+   ],
+   "v": [
+    0.5685,
+    0.6528
+   ],
+   "height_pct": 8.43,
+   "edge_margins": {
+    "left": 0.0849,
+    "right": 0.8849,
+    "top": 0.5685,
+    "bottom": 0.3472
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "planter": {
+   "card": "planter-cj-seagrass-belly D35 x H37",
+   "position": "(-2.00, 0.47)",
+   "visible_px": 6419,
+   "frame_pct": 0.31,
+   "silhouette_px": 11092,
+   "visible_share": 0.579,
+   "u": [
+    0.1979,
+    0.2438
+   ],
+   "v": [
+    0.663,
+    0.7713
+   ],
+   "height_pct": 10.83,
+   "edge_margins": {
+    "left": 0.1979,
+    "right": 0.7562,
+    "top": 0.663,
+    "bottom": 0.2287
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "basket": {
+   "card": "basket-cj-jute-rope-cylinder D35 x H39",
+   "position": "(2.05, 0.55): MOVED (slots 1.7 (-1.70, 0.75) hides the planter in M0-N)",
+   "visible_px": 18398,
+   "frame_pct": 0.887,
+   "silhouette_px": 18754,
+   "visible_share": 0.981,
+   "u": [
+    0.8255,
+    0.8948
+   ],
+   "v": [
+    0.6611,
+    0.8148
+   ],
+   "height_pct": 15.37,
+   "edge_margins": {
+    "left": 0.8255,
+    "right": 0.1052,
+    "top": 0.6611,
+    "bottom": 0.1852
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "magazine-holder": {
+   "card": "magazine-holder-cj-felt-log-basket 45 x 32 x 40",
+   "position": "(-0.54, 2.52) slots 1.8",
+   "visible_px": 24783,
+   "frame_pct": 1.195,
+   "silhouette_px": 33574,
+   "visible_share": 0.738,
+   "u": [
+    0.2359,
+    0.3724
+   ],
+   "v": [
+    0.762,
+    0.9796
+   ],
+   "height_pct": 21.76,
+   "edge_margins": {
+    "left": 0.2359,
+    "right": 0.6276,
+    "top": 0.762,
+    "bottom": 0.0204
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "floor-lamp": {
+   "card": "floor-lamp-cj-black-drum-linen (card has no size: H ~155, drum D40 x 28, base D26) (slot/engine rendered default)",
+   "position": "(1.52, 0.26) (6 cm off the slots point: the D40 drum)",
+   "visible_px": 15832,
+   "frame_pct": 0.764,
+   "silhouette_px": 16737,
+   "visible_share": 0.946,
+   "u": [
+    0.7234,
+    0.7901
+   ],
+   "v": [
+    0.3389,
+    0.7889
+   ],
+   "height_pct": 45.0,
+   "edge_margins": {
+    "left": 0.7234,
+    "right": 0.2099,
+    "top": 0.3389,
+    "bottom": 0.2111
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "framed-art": {
+   "card": "framed-art-cj-morandi-triptych-sage style D, 3 x 50 x 70, gap 6 (slot/engine rendered default)",
+   "position": "centres X -0.36, 0.20, 0.76, Z 1.475",
+   "visible_px": 83001,
+   "frame_pct": 4.003,
+   "silhouette_px": 84275,
+   "visible_share": 0.985,
+   "u": [
+    0.4344,
+    0.6714
+   ],
+   "v": [
+    0.2815,
+    0.4685
+   ],
+   "height_pct": 18.61,
+   "edge_margins": {
+    "left": 0.4344,
+    "right": 0.3286,
+    "top": 0.2815,
+    "bottom": 0.5315
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "accent-sconces": {
+   "card": "accent-sconces-aliexpress-indoor-stone-wall-lamp D6.5 x H16, projection 9, a pair",
+   "position": "(-0.85, 0, 1.75) and (1.25, 0, 1.75)",
+   "visible_px": 2197,
+   "frame_pct": 0.106,
+   "silhouette_px": 2308,
+   "visible_share": 0.952,
+   "u": [
+    0.3953,
+    0.7135
+   ],
+   "v": [
+    0.2713,
+    0.3389
+   ],
+   "height_pct": 5.93,
+   "edge_margins": {
+    "left": 0.3953,
+    "right": 0.2865,
+    "top": 0.2713,
+    "bottom": 0.6611
+   },
+   "edge_tangent": {},
+   "v7q6": "NOT counted"
+  },
+  "pendant": {
+   "card": "pendant-cj-pleated-pumpkin-lantern-40 D40 x H25",
+   "position": "(0.20, 1.72), shade bottom 1.90",
+   "visible_px": 15829,
+   "frame_pct": 0.763,
+   "silhouette_px": 16046,
+   "visible_share": 0.986,
+   "u": [
+    0.4792,
+    0.5677
+   ],
+   "v": [
+    0.0556,
+    0.1648
+   ],
+   "height_pct": 10.93,
+   "edge_margins": {
+    "left": 0.4792,
+    "right": 0.4323,
+    "top": 0.0556,
+    "bottom": 0.8352
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "bowl": {
+   "card": "bowl-cj-speckled-ivory-wide-bowl-21 D21.3 x H5.2",
+   "position": "(0.68, 1.92)",
+   "visible_px": 2478,
+   "frame_pct": 0.12,
+   "silhouette_px": 2596,
+   "visible_share": 0.955,
+   "u": [
+    0.6031,
+    0.6526
+   ],
+   "v": [
+    0.725,
+    0.7574
+   ],
+   "height_pct": 3.24,
+   "edge_margins": {
+    "left": 0.6031,
+    "right": 0.3474,
+    "top": 0.725,
+    "bottom": 0.2426
+   },
+   "edge_tangent": {},
+   "v7q6": "NOT counted"
+  },
+  "candle-holders": {
+   "card": "candle-holders-cj-travertine-pedestal 7 x 11, a pair",
+   "position": "(0.47, 1.62) and (0.58, 1.66) on the tray",
+   "visible_px": 1864,
+   "frame_pct": 0.09,
+   "silhouette_px": 2191,
+   "visible_share": 0.851,
+   "u": [
+    0.5745,
+    0.6125
+   ],
+   "v": [
+    0.6824,
+    0.7296
+   ],
+   "height_pct": 4.44,
+   "edge_margins": {
+    "left": 0.5745,
+    "right": 0.3875,
+    "top": 0.6824,
+    "bottom": 0.2704
+   },
+   "edge_tangent": {},
+   "v7q6": "NOT counted"
+  },
+  "coffee-table": {
+   "card": "coffee-table-idana-javorina-olia-natural 120 x 65 x 38",
+   "position": "centre (0.20, 1.72)",
+   "visible_px": 30531,
+   "frame_pct": 1.472,
+   "silhouette_px": 46498,
+   "visible_share": 0.657,
+   "u": [
+    0.3792,
+    0.6578
+   ],
+   "v": [
+    0.712,
+    0.9204
+   ],
+   "height_pct": 20.56,
+   "edge_margins": {
+    "left": 0.3792,
+    "right": 0.3422,
+    "top": 0.712,
+    "bottom": 0.0796
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "cushions": {
+   "card": "set A: cushions-cj-boucle-teddy 50, cushions-cj-knitted-chenille-bean-green 45, cushions-cj-linen-look-charcoal 50",
+   "position": "on the sofa",
+   "visible_px": 57423,
+   "frame_pct": 2.769,
+   "silhouette_px": 59315,
+   "visible_share": 0.968,
+   "u": [
+    0.3984,
+    0.6984
+   ],
+   "v": [
+    0.5241,
+    0.6648
+   ],
+   "height_pct": 14.07,
+   "edge_margins": {
+    "left": 0.3984,
+    "right": 0.3016,
+    "top": 0.5241,
+    "bottom": 0.3352
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "sofa-cover": {
+   "card": "sofa-cover-cj-cotton-muslin-fringe White 150 x 200 (approximate drape on the right arm)",
+   "position": "right arm",
+   "visible_px": 33919,
+   "frame_pct": 1.636,
+   "silhouette_px": 39291,
+   "visible_share": 0.863,
+   "u": [
+    0.626,
+    0.7443
+   ],
+   "v": [
+    0.6037,
+    0.825
+   ],
+   "height_pct": 16.39,
+   "edge_margins": {
+    "left": 0.626,
+    "right": 0.2557,
+    "top": 0.6037,
+    "bottom": 0.175
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "wall-sconce": {
+   "card": "wall-sconce-cj-black-swing-arm-fabric, plate (-2.30, 3.17, 1.47) (out of frame; light only)",
+   "position": "(-2.30, 3.17, 1.47)",
+   "visible_px": 0,
+   "frame_pct": 0.0,
+   "silhouette_px": 23222,
+   "visible_share": 0.0
+  },
+  "wall-decor": {
+   "card": "wall-decor-aliexpress-natural-raffia-woven-bohemian-763597 D30",
+   "position": "(-1.20, 0.02, 1.20)",
+   "visible_px": 5085,
+   "frame_pct": 0.245,
+   "silhouette_px": 5208,
+   "visible_share": 0.976,
+   "u": [
+    0.3333,
+    0.375
+   ],
+   "v": [
+    0.412,
+    0.488
+   ],
+   "height_pct": 7.59,
+   "edge_margins": {
+    "left": 0.3333,
+    "right": 0.625,
+    "top": 0.412,
+    "bottom": 0.512
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "table-runner": {
+   "card": "table-runner-cj-linen-look-sage-fringe 33 x 122",
+   "position": "midline 31 cm from the left end",
+   "visible_px": 25921,
+   "frame_pct": 1.25,
+   "silhouette_px": 27880,
+   "visible_share": 0.93,
+   "u": [
+    0.4109,
+    0.5062
+   ],
+   "v": [
+    0.7111,
+    0.8731
+   ],
+   "height_pct": 16.2,
+   "edge_margins": {
+    "left": 0.4109,
+    "right": 0.4938,
+    "top": 0.7111,
+    "bottom": 0.1269
+   },
+   "edge_tangent": {},
+   "v7q6": "counted"
+  },
+  "pouf": {
+   "card": "pouf-cj-cotton-knit-ball-cover 50 (filled height assumed 35)",
+   "position": "(1.7, 2.75) (new: solved for M0-N)",
+   "visible_px": 33599,
+   "frame_pct": 1.62,
+   "silhouette_px": 81207,
+   "visible_share": 0.414,
+   "u": [
+    0.8771,
+    1.0
+   ],
+   "v": [
+    0.8565,
+    1.0
+   ],
+   "height_pct": 14.35,
+   "edge_margins": {
+    "left": 0.8771,
+    "right": 0.0,
+    "top": 0.8565,
+    "bottom": 0.0
+   },
+   "edge_tangent": {},
+   "v7q6": "counted (cut front: 25 %)"
+  },
+  "tray": {
+   "card": "pool-cj-travertine-organic-tray-24 24 x 17 x 1.8",
+   "position": "(0.52, 1.64) (new slot; placed under the candle holders)",
+   "visible_px": 859,
+   "frame_pct": 0.041,
+   "silhouette_px": 1522,
+   "visible_share": 0.564,
+   "u": [
+    0.5667,
+    0.6151
+   ],
+   "v": [
+    0.7213,
+    0.737
+   ],
+   "height_pct": 1.57,
+   "edge_margins": {
+    "left": 0.5667,
+    "right": 0.3849,
+    "top": 0.7213,
+    "bottom": 0.263
+   },
+   "edge_tangent": {},
+   "v7q6": "NOT counted"
+  },
+  "fixed:sofa": {
+   "card": "fixed (not sold)",
+   "position": "",
+   "visible_px": 59762,
+   "frame_pct": 2.882,
+   "silhouette_px": 157370,
+   "visible_share": 0.38,
+   "u": [
+    0.3526,
+    0.7375
+   ],
+   "v": [
+    0.5556,
+    0.7963
+   ],
+   "height_pct": 22.41,
+   "edge_margins": {
+    "left": 0.3526,
+    "right": 0.2625,
+    "top": 0.5556,
+    "bottom": 0.2037
+   },
+   "edge_tangent": {}
+  },
+  "fixed:armchair": {
+   "card": "fixed (not sold)",
+   "position": "",
+   "visible_px": 98924,
+   "frame_pct": 4.771,
+   "silhouette_px": 136144,
+   "visible_share": 0.727,
+   "u": [
+    0.0,
+    0.2161
+   ],
+   "v": [
+    0.6463,
+    1.0
+   ],
+   "height_pct": 35.37,
+   "edge_margins": {
+    "left": 0.0,
+    "right": 0.7839,
+    "top": 0.6463,
+    "bottom": 0.0
+   },
+   "edge_tangent": {}
+  }
+ },
+ "v7q6_counted": "14 of 19",
+ "v7q6_counted_list": [
+  "curtains",
+  "vase",
+  "planter",
+  "basket",
+  "magazine-holder",
+  "floor-lamp",
+  "framed-art",
+  "pendant",
+  "coffee-table",
+  "cushions",
+  "sofa-cover",
+  "wall-decor",
+  "table-runner",
+  "pouf"
+ ],
+ "f3_fails": [
+  {
+   "a": "rug",
+   "b": "basket",
+   "dist3d_m": 0.091,
+   "kind": "gap",
+   "gap_frame": 0.003,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "rug",
+   "b": "floor-lamp",
+   "dist3d_m": 0.26,
+   "kind": "gap",
+   "gap_frame": 0.0099,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "vase",
+   "b": "fixed:armchair",
+   "dist3d_m": 1.202,
+   "kind": "gap",
+   "gap_frame": 0.0172,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "planter",
+   "b": "magazine-holder",
+   "dist3d_m": 2.003,
+   "kind": "gap",
+   "gap_frame": 0.0131,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "planter",
+   "b": "fixed:armchair",
+   "dist3d_m": 1.612,
+   "front": "fixed:armchair",
+   "overlap_thickness": 0.024,
+   "cover_of_back": 0.352,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "magazine-holder",
+   "b": "coffee-table",
+   "dist3d_m": 0.312,
+   "kind": "gap",
+   "gap_frame": 0.0073,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "magazine-holder",
+   "b": "fixed:sofa",
+   "dist3d_m": 1.407,
+   "front": "magazine-holder",
+   "overlap_thickness": 0.0063,
+   "cover_of_back": 0.001,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "floor-lamp",
+   "b": "accent-sconces",
+   "dist3d_m": 0.097,
+   "kind": "gap",
+   "gap_frame": 0.0163,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "floor-lamp",
+   "b": "sofa-cover",
+   "dist3d_m": 0.187,
+   "front": "sofa-cover",
+   "overlap_thickness": 0.0083,
+   "cover_of_back": 0.016,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "bowl",
+   "b": "candle-holders",
+   "dist3d_m": 0.118,
+   "front": "bowl",
+   "overlap_thickness": 0.0023,
+   "cover_of_back": 0.026,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "bowl",
+   "b": "sofa-cover",
+   "dist3d_m": 0.764,
+   "front": "bowl",
+   "overlap_thickness": 0.0175,
+   "cover_of_back": 0.034,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "bowl",
+   "b": "tray",
+   "dist3d_m": 0.088,
+   "front": "bowl",
+   "overlap_thickness": 0.0063,
+   "cover_of_back": 0.181,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "candle-holders",
+   "b": "cushions",
+   "dist3d_m": 0.924,
+   "kind": "gap",
+   "gap_frame": 0.0156,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "candle-holders",
+   "b": "sofa-cover",
+   "dist3d_m": 0.542,
+   "kind": "gap",
+   "gap_frame": 0.0156,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "coffee-table",
+   "b": "sofa-cover",
+   "dist3d_m": 0.345,
+   "front": "coffee-table",
+   "overlap_thickness": 0.026,
+   "cover_of_back": 0.116,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "coffee-table",
+   "b": "fixed:sofa",
+   "dist3d_m": 0.445,
+   "front": "coffee-table",
+   "overlap_thickness": 0.0289,
+   "cover_of_back": 0.162,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  },
+  {
+   "a": "sofa-cover",
+   "b": "tray",
+   "dist3d_m": 0.508,
+   "kind": "gap",
+   "gap_frame": 0.0137,
+   "verdict": "FAIL (kissing, < 0.02)"
+  },
+  {
+   "a": "table-runner",
+   "b": "fixed:sofa",
+   "dist3d_m": 0.437,
+   "front": "table-runner",
+   "overlap_thickness": 0.0292,
+   "cover_of_back": 0.055,
+   "kind": "overlap",
+   "verdict": "FAIL (overlap < 0.03 and < 60 % of the back item)"
+  }
+ ],
+ "seconds": 547
+}
