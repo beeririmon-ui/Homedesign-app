@@ -129,9 +129,102 @@
     },
     "preview": "scratchpad route-leg2/preview.mp4 (review only, K1 paced as a turn)",
     "var2": "needs re-auth on 2026-11-27; stopped, no call made"
+   },
+   "fix_2026_11_27": {
+    "approved": "owner via coordinator: full option, 3,892",
+    "jobs": [
+     {
+      "id": "Lh2 seedream",
+      "placeholder_id": "3a3fb7fe-9ec9-469f-bd82-7855b90a5719",
+      "tokens": 650,
+      "file": "route-fb21/leg2/stills/lh2-w.png"
+     },
+     {
+      "id": "K2b Dx->Lh2",
+      "s": 3,
+      "placeholder_id": "c29193fa-020e-4088-be72-3628c25b6559",
+      "tokens": 972
+     },
+     {
+      "id": "K3b Lh2->HC2",
+      "s": 4,
+      "placeholder_id": "8773a4b4-4c3b-4770-a3c2-981d0b2d6927",
+      "tokens": 1296
+     }
+    ],
+    "spent": 2918,
+    "note": "Hn and the two-part K3 held back: Lh2 is exact and shows the hall, so one clip to HC2; Hn only if K3b fails",
+    "review": {
+     "K2b": "usable: through the opening, left turn, lands on Lh2 (last frame within a few px of Lh2 in the portal); inherits Dx's off-plan living room: a narrow room with a corner on the right and a transient window at the right edge (~0.4 s)",
+     "K3b": "passes: through the portal, the bench with the throw, the travertine with the sconce and the pegs pass on the right as in Lh2/HT2, the front door on the left (plan side), lands on HC2",
+     "assembled": {
+      "final": "route-fb21/leg2/final/ (manifest.json)",
+      "play_s": 15.4,
+      "frames": {
+       "1920@60": 925,
+       "1080@30": 463
+      },
+      "bytes_per_2s": {
+       "1920": {
+        "avif": 4394279,
+        "webp": 4239156
+       },
+       "1080": {
+        "avif": 649491,
+        "webp": 664405
+       }
+      },
+      "ease_in_frames": {
+       "1920": [
+        1,
+        25
+       ],
+       "1080": [
+        1,
+        13
+       ]
+      },
+      "ease_out_frames": {
+       "1920": [
+        890,
+        925
+       ],
+       "1080": [
+        445,
+        463
+       ]
+      },
+      "pacing": "K1 paced as a turn (up to 3.5x), the rest as a walk"
+     },
+     "open": "Dx off-plan (K1 end / K2b start): fix = Dx on the plan camera (refeed: the portal and the hall in the middle of the frame) + K1 and K2 again, 2,918; not done (beyond the approved fix)"
+    }
    }
   },
   "spent": 6484,
-  "cap": 31200
+  "cap": 31200,
+  "spend_log": [
+   {
+    "what": "route legs 2 (first round)",
+    "tokens": 6484
+   },
+   {
+    "what": "corridor stills CM + CK (render-agent)",
+    "tokens": 2600
+   }
+  ],
+  "spent_total": 12002,
+  "projection_2026_11_27": {
+   "spent": 12002,
+   "left": 19198,
+   "legs": {
+    "3": 5838,
+    "4": 3242,
+    "5": 3890,
+    "6": 5836
+   },
+   "bare": 18806,
+   "with_usual_fixes": "22,000-23,000 (total about 34,000-35,000)",
+   "verdict": "over the 31,200 cap: stopped before legs 3-6 for the owner's decision"
+  }
  }
 }

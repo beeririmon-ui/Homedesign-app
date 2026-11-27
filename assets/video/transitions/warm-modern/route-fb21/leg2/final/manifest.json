@@ -1,0 +1,156 @@
+{
+ "id": "fb21-leg2",
+ "from": "D1",
+ "to": "B1",
+ "style": "warm-modern",
+ "date": "2026-11-27",
+ "author": "motion-agent",
+ "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, FB21",
+ "play_s": 15.4,
+ "sampling": "uniform in time at the nominal walk: frame i (1-based) is shown at (i - 1) / fps s; an even picture speed (0.5x-1.6x of the median) with a short ease in and out; forward only, no hold, no cut",
+ "chain": {
+  "first_frame": "assets/renders/dining/warm-modern/stage1-2026-11-20/D1-defaults-fb16-frame.png",
+  "last_frame": "assets/renders/bath/warm-modern/b1-2026-11-19/b1-defaults-fb16-frame.png",
+  "rule": "this leg's last frame is the next leg's first frame (the room's display frame): chain legs back to back",
+  "ease_in_frames": {
+   "1920": [
+    1,
+    25
+   ],
+   "1080": [
+    1,
+    13
+   ]
+  },
+  "ease_out_frames": {
+   "1920": [
+    890,
+    925
+   ],
+   "1080": [
+    445,
+    463
+   ]
+  },
+  "fast_forward": "when chaining at x2-x3, skip the ease-in frames of every leg but the first and the ease-out frames of every leg but the last"
+ },
+ "path": "{variant}/{index:04d}.{ext}",
+ "formats": [
+  "avif",
+  "webp"
+ ],
+ "variants": {
+  "1920": {
+   "w": 1920,
+   "h": 1080,
+   "fps": 60,
+   "frames": 925,
+   "avif_quality": 55,
+   "webp_quality": 72,
+   "last_frames_quality": {
+    "frames": 8,
+    "avif": 85,
+    "webp": 92
+   }
+  },
+  "1080": {
+   "w": 1080,
+   "h": 608,
+   "fps": 30,
+   "frames": 463,
+   "avif_quality": 50,
+   "webp_quality": 60,
+   "last_frames_quality": {
+    "frames": 4,
+    "avif": 85,
+    "webp": 92
+   }
+  }
+ },
+ "bytes": {
+  "1920": {
+   "avif": 33835950,
+   "webp": 32641508
+  },
+  "1080": {
+   "avif": 5001087,
+   "webp": 5115920
+  }
+ },
+ "bytes_per_2s": {
+  "1920": {
+   "avif": 4394279,
+   "webp": 4239156
+  },
+  "1080": {
+   "avif": 649491,
+   "webp": 664405
+  }
+ },
+ "ends": {
+  "first_vs_still_before_encoding_max": 0,
+  "last_vs_still_before_encoding_max": 0,
+  "last_avif_1920_mean_levels": 2.24
+ },
+ "swap": {
+  "at_start": "the room's live layers -> frame 1 (defaults): blend the visitor's variants out over 160-200 ms",
+  "at_end": "last frame (defaults) -> the room's live layers: blend in over 160-200 ms"
+ },
+ "gait": {
+  "bob_px_max": 2.88,
+  "roll_deg_max": 0.144,
+  "overscan": 0.004
+ },
+ "lock": {
+  "clip1": {
+   "first": {
+    "shift_px_median": 0.1707771271467209,
+    "shift_px_p95": 0.7128312587738037,
+    "colour_resid_levels_mean": 3.5980117321014404
+   },
+   "last": {
+    "shift_px_median": 3.518061637878418,
+    "shift_px_p95": 7.278205871582031,
+    "colour_resid_levels_mean": 3.716912269592285
+   }
+  },
+  "clip2": {
+   "first": {
+    "shift_px_median": 0.22382616996765137,
+    "shift_px_p95": 0.6399056315422058,
+    "colour_resid_levels_mean": 3.3737168312072754
+   },
+   "last": {
+    "shift_px_median": 13.79107666015625,
+    "shift_px_p95": 38.18011474609375,
+    "colour_resid_levels_mean": 3.155724048614502
+   }
+  },
+  "clip3": {
+   "first": {
+    "shift_px_median": 0.2507176995277405,
+    "shift_px_p95": 0.7354171276092529,
+    "colour_resid_levels_mean": 2.506474018096924
+   },
+   "last": {
+    "shift_px_median": 12.641427040100098,
+    "shift_px_p95": 23.10797882080078,
+    "colour_resid_levels_mean": 2.9447994232177734
+   }
+  },
+  "clip4": {
+   "first": {
+    "shift_px_median": 0.2849106192588806,
+    "shift_px_p95": 0.8264504075050354,
+    "colour_resid_levels_mean": 2.7612416744232178
+   },
+   "last": {
+    "shift_px_median": 0.20926254987716675,
+    "shift_px_p95": 0.874729573726654,
+    "colour_resid_levels_mean": 4.382574081420898
+   }
+  }
+ },
+ "speed_max_jump_pct_per_frame": 11.3,
+ "qa": "pending (qa-agent)"
+}

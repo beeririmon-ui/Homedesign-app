@@ -10,6 +10,16 @@ import walk_fb19 as W
 AS = W.AS; FPS = 60
 T_IN, T_OUT = 0.4, 0.6
 
+def build_multi(chain, out):
+    """chain: [(clip.mp4, first_still.png, last_still.png), ...]; consecutive clips share their waypoint still (locked onto it)"""
+    rep = {'frames_in': [], 'lock': {}}; src = []; rate = []; seg = []
+    for i, e in enumerate(chain):                 # an optional 4th entry: 'kling' (a walk, 0.85-1.4x) or 'code' (paced as a turn, up to 3.5x)
+        clip, f, l = e[:3]; st = e[3] if len(e) > 3 else 'kling'
+        K = W.video(clip); rep['lock']['clip%d' % (i + 1)] = AS.end_lock(K, W.rd(f), W.rd(l), n=12); rep['frames_in'].append(len(K))
+        src += K if i == 0 else K[1:]; rate += [24.0] * (len(K) - 1); seg += [st] * (len(K) - 1)
+    rep['pacing'] = [e[3] if len(e) > 3 else 'kling' for e in chain]
+    return pace_and_render(src, np.array(rate), seg, W.rd(chain[0][1]), W.rd(chain[-1][2]), out, rep)
+
 def build(clip, first, last, out, prefix=None, mid=None):
     """prefix: an optional code move at 60 fps that ends on `mid` (the kling clip's first frame); then the kling clip -> last"""
     rep = {}; A = W.rd(first); B = W.rd(last)
@@ -22,6 +32,9 @@ def build(clip, first, last, out, prefix=None, mid=None):
     else:
         rep['lock'] = AS.end_lock(K, A, B, n=12); src = K
         rate = np.full(len(K) - 1, 24.0); seg = ['kling'] * (len(K) - 1); rep['frames_in'] = len(K)
+    return pace_and_render(src, rate, seg, A, B, out, rep)
+
+def pace_and_render(src, rate, seg, A, B, out, rep):
     mag = np.maximum(W.motion(src), 0.05); C = np.concatenate([[0], np.cumsum(mag)])
     tn = np.concatenate([[0], np.cumsum(1 / rate)]); vnat = mag * rate
     tg = np.arange(0, tn[-1], 1 / 240); vg = np.interp(tg, tn[:-1], vnat)
@@ -63,18 +76,25 @@ def build(clip, first, last, out, prefix=None, mid=None):
     rep.update(out_frames=n, play_s=round((n - 1) / FPS, 3), ease_in_frames_1920=[1, ease_in], ease_out_frames_1920=[ease_out, n],
                first_max_diff=int(np.abs(frames[0].astype(int) - A.astype(int)).max()), last_max_diff=int(np.abs(frames[-1].astype(int) - B.astype(int)).max()),
                speed_max_jump_pct=round(float(100 * np.max(np.abs(np.diff(sp))) / np.median(sp)), 1))
-    json.dump(rep, open(out + '/leg.json', 'w'), indent=1)
+    json.dump(rep, open(out + '/leg.json', 'w'), indent=1, default=str)
     return frames, rep
 
 if __name__ == '__main__':
-    clip, first, last, out, base, preview, master, lid, frm, to = sys.argv[1:11]
-    prefix = sys.argv[11] if len(sys.argv) > 11 else None; mid = sys.argv[12] if len(sys.argv) > 12 else None
-    os.makedirs(out, exist_ok=True); os.makedirs(base, exist_ok=True)
-    frames, rep = build(clip, first, last, out, prefix, mid)
+    if sys.argv[1] == '--chain':                                       # --chain CHAIN.json OUT BASE PREVIEW MASTER ID FROM TO
+        import json as _j
+        ch = _j.load(open(sys.argv[2])); out, base, preview, master, lid, frm, to = sys.argv[3:10]
+        first, last = ch[0][1], ch[-1][2]
+        os.makedirs(out, exist_ok=True); os.makedirs(base, exist_ok=True)
+        frames, rep = build_multi(ch, out)
+    else:
+        clip, first, last, out, base, preview, master, lid, frm, to = sys.argv[1:11]
+        prefix = sys.argv[11] if len(sys.argv) > 11 else None; mid = sys.argv[12] if len(sys.argv) > 12 else None
+        os.makedirs(out, exist_ok=True); os.makedirs(base, exist_ok=True)
+        frames, rep = build(clip, first, last, out, prefix, mid)
     ex = W.export(frames, rep, base, preview, master)
     n = rep['out_frames']; n2 = ex['n1080']; play = rep['play_s']
     lastenc = np.array(Image.open(base + '/1920/%04d.avif' % n).convert('RGB')).astype(int); B = W.rd(last).astype(int)
-    man = {"id": lid, "from": frm, "to": to, "style": "warm-modern", "date": "2026-11-26", "author": "motion-agent", "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, FB21",
+    man = {"id": lid, "from": frm, "to": to, "style": "warm-modern", "date": __import__("time").strftime("%Y-%m-%d"), "author": "motion-agent", "plan": "docs/proposals/wm-transitions-house-2026-11-26.md, FB21",
            "play_s": play, "sampling": "uniform in time at the nominal walk: frame i (1-based) is shown at (i - 1) / fps s; an even picture speed (0.5x-1.6x of the median) with a short ease in and out; forward only, no hold, no cut",
            "chain": {"first_frame": first.replace('/home/user/homedesign-app/', ''), "last_frame": last.replace('/home/user/homedesign-app/', ''),
                      "rule": "this leg's last frame is the next leg's first frame (the room's display frame): chain legs back to back",
@@ -88,7 +108,7 @@ if __name__ == '__main__':
            "ends": {"first_vs_still_before_encoding_max": rep['first_max_diff'], "last_vs_still_before_encoding_max": rep['last_max_diff'],
                     "last_avif_1920_mean_levels": round(float(np.abs(lastenc - B).mean()), 2)},
            "swap": {"at_start": "the room's live layers -> frame 1 (defaults): blend the visitor's variants out over 160-200 ms", "at_end": "last frame (defaults) -> the room's live layers: blend in over 160-200 ms"},
-           "gait": rep['gait'], "lock": {k: {kk: round(vv, 2) for kk, vv in v.items()} for k, v in rep['lock'].items()},
+           "gait": rep['gait'], "lock": rep['lock'],
            "speed_max_jump_pct_per_frame": rep['speed_max_jump_pct'], "qa": "pending (qa-agent)"}
     json.dump(man, open(base + '/manifest.json', 'w'), indent=1, ensure_ascii=False)
     print(json.dumps({k: man[k] for k in ('play_s', 'bytes_per_2s', 'ends', 'lock', 'speed_max_jump_pct_per_frame')}), json.dumps(man['chain']['ease_in_frames']), json.dumps(man['chain']['ease_out_frames']))
