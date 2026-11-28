@@ -92,6 +92,8 @@ type TourEngineT = {
   stat: TourStat | null;
   otherHouse(): Promise<void>;
   option(slot: string, pos: number): Promise<void>;
+  /** MOCK12: to another frame (the tests: a room's choices go with it between its frames) */
+  toRoom(id: string, ms: number): Promise<void>;
   camFor(box: TourBox, reserve: number): TourCamT;
   moveCam(label: string, to: TourCamT, ms: number, also?: (e: number, t: number) => void): Promise<void>;
   wait(ms: number): Promise<void>;
@@ -110,7 +112,7 @@ declare global {
       lay: 'portrait' | 'rails' | 'desk';
       /** MOCK4: the room the visitor is in, and the frame of the arrival's walk on screen (60 fps, 1-based); MOCK5: the
        *  frame of the room (web/src/tour/data.ts RoomId); MOCK6: and the kids' rooms */
-      room: 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work' | 'boy' | 'girl';
+      room: 'living-room' | 'master' | 'master-mb1' | 'bath' | 'bath-b1' | 'dining' | 'dining-d2' | 'work' | 'boy' | 'girl' | 'fixture-wheels2';
       walk: number;
       /** MOCK8: the walk rests between two pushes; how many pushes it took */
       walkRest?: boolean;

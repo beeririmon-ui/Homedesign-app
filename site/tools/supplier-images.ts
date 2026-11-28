@@ -37,7 +37,8 @@ import { publicManifest, withheld, type Rights } from './lib/image-rights';
 import { LEDGER_SHOP, sha256, writeLedger, type LedgerEntry } from './lib/rights-content';
 
 const WIDTH = 800;
-const OFFLINE = process.argv.includes('--offline');
+// MOCK12: HD_OFFLINE=1 does the same from npm scripts (a build with no network downloads: `HD_OFFLINE=1 npm run build`)
+const OFFLINE = process.argv.includes('--offline') || process.env.HD_OFFLINE === '1';
 const FORCE = process.argv.includes('--force');
 const CACHE = sitePath('.cache/supplier-images');
 const MANIFEST = join(GENERATED, 'supplier-images.json');

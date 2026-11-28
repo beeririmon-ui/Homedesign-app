@@ -63,6 +63,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, wri
 import { basename, isAbsolute, join, relative } from 'node:path';
 import { GENERATED, MEDIA_OUT, REPO, repoPath, sitePath } from './lib/paths';
 import { nearness, type DepthCfg } from './lib/depth';
+import { CUT, hardenRim, rimCut } from './lib/cards';
 
 type Box = [number, number, number, number];
 type SlotCfg = {
@@ -223,6 +224,16 @@ for (const l of layers) {
   pieces.set(id, [...(pieces.get(id) ?? []), l]);
 }
 for (const id of Object.keys(c.slots)) if (!pieces.has(id)) fail(`${CFG} names slot ${id}, which the frame does not compose`);
+// MOCK12 (master-designer, 2026-11-28): a print is the one its manifest draws. The girl's G1 manifest draws the bunny
+// set while her config still named the flower cut-outs, so the strip, the wheel and the room disagreed: for every print
+// slot the manifest's card wins (its rights, its name, its price), and the change is said
+for (const id of c.prints ?? []) {
+  const l = pieces.get(id)?.[0];
+  const mc = l?.card ? basename(l.card, '.json') : null;
+  if (!mc || mc === c.slots[id]?.card) continue;
+  console.log(`make-tour-room ${CFG}: the print ${id} is the manifest's ${mc}, not the config's ${c.slots[id]?.card ?? 'none'}`);
+  c.slots[id]!.card = mc;
+}
 /** the tour's slots in the order of their first layer */
 const order = [...pieces.keys()];
 const zOf = (id: string) => pieces.get(id)![0]!.z;
@@ -323,7 +334,9 @@ const isSpec = (w: unknown): w is WheelSpec => {
 /** a manifest's wheels in the M0-W format: every `<key>.wheel` with a slot, sets and an order (and `wheels`, a list or a
  *  map of them, should a manifest hold several that way) */
 function wheelSpecs(mm: Record<string, unknown>): WheelSpec[] {
-  const list = Object.values(mm).flatMap((v) => (v && typeof v === 'object' && isSpec((v as { wheel?: unknown }).wheel) ? [(v as { wheel: WheelSpec }).wheel] : []));
+  const list = Object.values(mm).flatMap((v) =>
+    v && typeof v === 'object' && isSpec((v as { wheel?: unknown }).wheel) ? [(v as { wheel: WheelSpec }).wheel] : [],
+  );
   const more = mm.wheels;
   for (const w of Array.isArray(more) ? more : more && typeof more === 'object' ? Object.values(more) : []) if (isSpec(w)) list.push(w);
   return list;
@@ -335,7 +348,7 @@ function extras(mm: Manifest, ms: string, tourId: string, def: MLayer, from: str
   const cardOf = (product: string, card?: string): string | null =>
     c.variant_cards?.[product] ?? (card ? basename(card, '.json') : (c.slots[tourId]?.card ?? null));
   const out: Opt[] = [];
-  for (const l of mm.layers.filter((x) => inFrame(x) && x.default === false && x.slot === ms)) out.push({ ...l, card: cardOf(l.product, l.card) });
+  for (const l of (mm.layers ?? []).filter((x) => inFrame(x) && x.default === false && x.slot === ms)) out.push({ ...l, card: cardOf(l.product, l.card) });
   for (const v of (mm.variants ?? []).filter((x) => !!x && typeof x === 'object' && inFrame(x) && x.slot === ms && !x.default))
     out.push({ ...v, card: cardOf(v.product, v.card) });
   // MOCK8: a wheel of sets (M0-W's cushions: `cushions.wheel`, B the default, then A and C); MOCK12: render-agent's
@@ -781,122 +794,6 @@ async function sheet(
 /** MOCK12: a sheet's file name, page `n` (from 1): `cards`, `cards-2`, … (the first keeps MOCK4's name) */
 const pageName = (kind: 'cards' | 'studio', n: number) => (n === 1 ? kind : `${kind}-${n}`);
 
-/**
- * MOCK12 (FB29): how much of a product's rim the room cuts, as shares of its rim (alpha ≥ 0.5, 4-connected):
- *  - `occluded`: where the rim meets a layer drawn above it (within 2 px): a sofa's arm over the throw, a cushion on the
- *    bedding. The layers are cut from one hero render, so a rim that meets an upper layer is that layer's outline;
- *  - `frame`: where the rim runs straight along the frame's lines (the hero covers the frame: a product it ended stops
- *    there) or the canvas's edge. A cord that leaves the frame is a few pixels of it.
- * Over `CUT`, the card is not shown outside the room (FB29: "משהו מסתיר אותו, אז הוא חתוך"): the page names the product.
- */
-const CUT = { occluded: 0.03, frame: 0.015 } as const;
-function rimCut(p: Buffer, top: Int16Array, k: number, fbx: [number, number, number, number]): { occluded: number; frame: number } {
-  const on = (x: number, y: number) => x >= 0 && y >= 0 && x < W && y < H && p[(y * W + x) * 4 + 3]! >= 128;
-  let x0 = W;
-  let y0 = H;
-  let x1 = -1;
-  let y1 = -1;
-  for (let i = 0; i < W * H; i++)
-    if (p[i * 4 + 3]! >= 128) {
-      const x = i % W;
-      const y = (i / W) | 0;
-      if (x < x0) x0 = x;
-      if (x > x1) x1 = x;
-      if (y < y0) y0 = y;
-      if (y > y1) y1 = y;
-    }
-  if (x1 < 0) return { occluded: 0, frame: 0 };
-  let rim = 0;
-  let occ = 0;
-  for (let y = y0; y <= y1; y++)
-    for (let x = x0; x <= x1; x++) {
-      if (!on(x, y) || (on(x - 1, y) && on(x + 1, y) && on(x, y - 1) && on(x, y + 1))) continue;
-      rim++;
-      let hit = false;
-      for (let dy = -2; dy <= 2 && !hit; dy++)
-        for (let dx = -2; dx <= 2; dx++) {
-          const X = x + dx;
-          const Y = y + dy;
-          if (X < 0 || Y < 0 || X >= W || Y >= H || on(X, Y)) continue;
-          if (top[Y * W + X]! > k) {
-            hit = true;
-            break;
-          }
-        }
-      if (hit) occ++;
-    }
-  const X0 = Math.round(fbx[0]);
-  const Y0 = Math.round(fbx[1]);
-  const X1 = Math.round(fbx[2]) - 1;
-  const Y1 = Math.round(fbx[3]) - 1;
-  let cut = 0;
-  for (let x = Math.max(x0, X0); x <= Math.min(x1, X1); x++)
-    for (const [Y, d] of [
-      [Y1, 1],
-      [Y0, -1],
-    ] as const)
-      for (let r = Y - 2; r <= Y + 2; r++)
-        if (on(x, r) && !on(x, r + d)) {
-          cut++;
-          break;
-        }
-  for (let y = Math.max(y0, Y0); y <= Math.min(y1, Y1); y++)
-    for (const [X, d] of [
-      [X1, 1],
-      [X0, -1],
-    ] as const)
-      for (let r = X - 2; r <= X + 2; r++)
-        if (on(r, y) && !on(r + d, y)) {
-          cut++;
-          break;
-        }
-  for (let x = x0; x <= x1; x++) cut += (on(x, 0) ? 1 : 0) + (on(x, H - 1) ? 1 : 0);
-  for (let y = y0; y <= y1; y++) cut += (on(0, y) ? 1 : 0) + (on(W - 1, y) ? 1 : 0);
-  return { occluded: rim ? +(occ / rim).toFixed(4) : 0, frame: rim ? +(cut / rim).toFixed(4) : 0 };
-}
-
-/**
- * MOCK12 (FB29: "עם פדר, חיתוך פדר מסביב"): a card's rim without the room it was cut from. The layer's matte fades over
- * about 4 px of the room's own pixels; here it becomes a one-pixel anti-aliased edge (alpha 0.35 → 0, 0.75 → 1, smooth
- * between), and every pixel of the edge takes its colour from the product's solid pixels nearest it (within 3 px), not
- * from the wall behind it. Nothing is eroded, so a cord or a branch keeps its core.
- */
-function hardenRim(px: Buffer, w: number, h: number): Buffer {
-  const out = Buffer.from(px);
-  for (let i = 0; i < w * h; i++) {
-    const a = px[i * 4 + 3]! / 255;
-    const t = Math.min(1, Math.max(0, (a - 0.35) / 0.4));
-    const s = t * t * (3 - 2 * t);
-    out[i * 4 + 3] = Math.round(s * 255);
-    if (a >= 0.98 || s === 0) continue;
-    const x = i % w;
-    const y = (i / w) | 0;
-    let r = 0;
-    let g = 0;
-    let b = 0;
-    let n = 0;
-    for (let rad = 1; rad <= 3 && !n; rad++)
-      for (let dy = -rad; dy <= rad; dy++)
-        for (let dx = -rad; dx <= rad; dx++) {
-          const X = x + dx;
-          const Y = y + dy;
-          if (X < 0 || Y < 0 || X >= w || Y >= h) continue;
-          const j = Y * w + X;
-          if (px[j * 4 + 3]! < 250) continue;
-          r += px[j * 4]!;
-          g += px[j * 4 + 1]!;
-          b += px[j * 4 + 2]!;
-          n++;
-        }
-    if (n) {
-      out[i * 4] = Math.round(r / n);
-      out[i * 4 + 1] = Math.round(g / n);
-      out[i * 4 + 2] = Math.round(b / n);
-    }
-  }
-  return out;
-}
-
 // ---------- MOCK8 (FB20), MOCK12 (FB29): the studio pictures (assets/renders/wheel-studio/<style>/), of every product ----------
 type StudioRow = { variant: string; room: string; slot: string; webp: string; products: { card_id: string; sku: string | null }[] };
 // the tool's own test names a studio of its own (tools/test/mock12-wheels.test.ts), never the render folder's
@@ -1165,7 +1062,7 @@ else {
   const cut: Built['cut'] = {};
   const cutPct: Built['cutPct'] = {};
   for (const s of shownList) {
-    const r = rimCut(await raw(s.layer, 4), top, lastIndex(s.slot), m.frame_box);
+    const r = rimCut(await raw(s.layer, 4), W, H, top, lastIndex(s.slot), m.frame_box);
     cutPct[s.key] = [r.occluded, r.frame];
     if (r.occluded > CUT.occluded) cut[s.key] = 'occluded';
     else if (r.frame > CUT.frame) cut[s.key] = 'frame';
@@ -1301,7 +1198,9 @@ const option = (slot: string, n: number, product: string, card: string | null) =
     set: false,
     // MOCK8 (FB20): the option's studio picture (the product as sold), on the room's studio sheets; MOCK12 (FB29): every
     // product's, not the wheel's only. A print whose rights are not confirmed keeps its close-up in the preview (PR1)
-    ...(st ? { studio: { ...onSheet('studio', STUDIO, st, built.studio.sheets), source: 'studio' as const, ...(x1.has(slot) ? { preview_only: true } : {}) } } : {}),
+    ...(st
+      ? { studio: { ...onSheet('studio', STUDIO, st, built.studio.sheets), source: 'studio' as const, ...(x1.has(slot) ? { preview_only: true } : {}) } }
+      : {}),
   };
 };
 const at = (Wt: number) => built.atlas[Wt]!;
@@ -1370,7 +1269,14 @@ const slots = await Promise.all(
         ? [
             {
               position: 1,
-              card: { src: `${REL}/${pageName('cards', 1)}.${CARD}`, w: 1, h: 1, source: 'layer' as const, sprite: [0, 0, 1, 1], sheet: built.cards.sheets[0]! },
+              card: {
+                src: `${REL}/${pageName('cards', 1)}.${CARD}`,
+                w: 1,
+                h: 1,
+                source: 'layer' as const,
+                sprite: [0, 0, 1, 1],
+                sheet: built.cards.sheets[0]!,
+              },
               box: uv({ ...a0, x1: a0.x1 + 1, y1: a0.y1 + 1 }),
               product_id: null,
               card_id: null,
@@ -1479,5 +1385,10 @@ console.log(
     `(atlas pages ${data.atlas[lo]!.product.length}+${data.atlas[lo]!.shadow.length}); ${unsold.length} not priced by the shop yet (${unsold.join(', ')}); ` +
     `held for safety: ${held.join(', ') || 'none'}; wheels: ${WHEELS.map((id) => `${id} (${wheelOpts.get(id)!.length})`).join(', ') || 'none'}; ` +
     `outside the room (FB29): ${shownList.filter((s) => studioOf.get(s.key)).length} studio, ${shownList.filter((s) => !studioOf.get(s.key) && !built.cut[s.key]).length} cut clean, ` +
-    `${shownList.filter((s) => !studioOf.get(s.key) && built.cut[s.key]).length} by name (cut by the room: ${shownList.filter((s) => built.cut[s.key]).map((s) => `${s.key} ${built.cut[s.key]}`).join(', ') || 'none'}) → ${outFile}`,
+    `${shownList.filter((s) => !studioOf.get(s.key) && built.cut[s.key]).length} by name (cut by the room: ${
+      shownList
+        .filter((s) => built.cut[s.key])
+        .map((s) => `${s.key} ${built.cut[s.key]}`)
+        .join(', ') || 'none'
+    }) → ${outFile}`,
 );

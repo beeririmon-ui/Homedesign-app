@@ -156,17 +156,32 @@ if (existsSync(tourPage) && existsSync(tourData)) {
     base: { src: string; formats?: string[] };
     sample?: string;
     atlas?: Record<string, { product: { src: string }[]; shadow: { src: string }[] }>;
-    slots: { id: string; src: string; shadows?: number[]; atlas_opts?: unknown; options: { card: { src: string } }[] }[];
+    slots: {
+      id: string;
+      src: string;
+      fixed?: boolean;
+      shadows?: number[];
+      atlas_opts?: unknown;
+      options: { card: { src: string }; studio?: { src: string } | null; cut?: string }[];
+    }[];
   };
   /** MOCK5–7: a room built by tools/make-tour-room.ts at width `w`: its base, its atlas pages, the sample's first option
    *  (a file of its own only for a wheel of many options), its sheet of cards (MOCK7: the living room too, M0-W) */
   const frameMedia = (r: typeof t, w: number) => {
-    const s0 = r.slots.find((x) => x.id === r.sample && !x.atlas_opts);
+    // MOCK12: every wheel of many options (a patch each: the first, at rest), and the strip's pictures — each default
+    // product's studio sheet, else its sheet of cards (a product the room cuts is named: no picture)
+    const lazy = r.slots.filter((x) => x.options.length > 1 && !x.atlas_opts);
+    const sheets = new Set(
+      r.slots.flatMap((x) => {
+        const o = x.fixed ? null : x.options[0];
+        return o ? (o.studio ? [o.studio.src] : o.cut ? [] : [o.card.src]) : [];
+      }),
+    );
     return (
       file(r.base.src, w, ['webp']) +
       [...r.atlas![String(w)]!.product, ...r.atlas![String(w)]!.shadow].reduce((n, p) => n + file(p.src, w, ['webp']), 0) +
-      (s0 ? file(`${s0.src}/1.product`, w, ['webp']) + file(`${s0.src}/${s0.shadows?.[0] ?? 1}.shadow`, w, ['webp']) : 0) +
-      file(r.slots.find((x) => x.options[0]?.card.src)!.options[0]!.card.src, undefined, ['webp'])
+      lazy.reduce((n, s0) => n + file(`${s0.src}/1.product`, w, ['webp']) + file(`${s0.src}/${s0.shadows?.[0] ?? 1}.shadow`, w, ['webp']), 0) +
+      [...sheets].reduce((n, src) => n + file(src, undefined, ['webp']), 0)
     );
   };
   // MOCK2: a phone composes at `lo` and loads that width's layers (web/src/tour/data.ts widthFor); the hi width is

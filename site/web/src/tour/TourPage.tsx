@@ -125,7 +125,7 @@ type Cfg = {
   room: RoomId;
   /** MOCK6: ?fixture=wheel10 opens the fixture of the wheel of many options over the room at rest (never in the
    *  Artifact; numbered swatches said to be a demo, no product and no art: tour/fixture-wheel.ts) */
-  fixture: 'wheel10' | null;
+  fixture: 'wheel10' | 'wheels2' | null;
 };
 const DEFAULTS: Cfg = {
   fx: 'b',
@@ -156,7 +156,8 @@ function readCfg(): Cfg {
     bg: pick(q.get('bg'), ['paper', 'dark'] as const, DEFAULTS.bg),
     sharp: q.get('sharp') === '1',
     room: pick(q.get('room'), ROOM_IDS, DEFAULTS.room),
-    fixture: !__ARTIFACT__ && q.get('fixture') === 'wheel10' ? 'wheel10' : null,
+    // MOCK12: ?fixture=wheels2 goes to the fixture frame of two wheels (tour/fixture-wheels2.ts), never in the Artifact
+    fixture: !__ARTIFACT__ && (q.get('fixture') === 'wheel10' || q.get('fixture') === 'wheels2') ? (q.get('fixture') as 'wheel10' | 'wheels2') : null,
   };
 }
 
@@ -427,6 +428,13 @@ export function TourPage() {
     if (!loadFixture || cfg.fixture !== 'wheel10' || fixtureDone.current || phase !== 'room' || busy) return;
     fixtureDone.current = true;
     void loadFixture().then(([W, mod]) => setFixture({ W, mod, load: mod.fixtureLoader() }));
+  }, [cfg.fixture, phase, busy]);
+  /** MOCK12: the fixture frame of two wheels (?fixture=wheels2), gone to once the room rests, as a frame of its room */
+  const wheels2Done = useRef(false);
+  useEffect(() => {
+    if (!loadWheels2 || cfg.fixture !== 'wheels2' || wheels2Done.current || phase !== 'room' || busy) return;
+    wheels2Done.current = true;
+    void loadWheels2().then((mod) => void goRoom(mod.registerFixtureFrame(), true));
   }, [cfg.fixture, phase, busy]);
   const countEl = useRef<HTMLParagraphElement>(null);
   const [stat, setStat] = useState('');
@@ -2880,3 +2888,5 @@ let wheelChunk: Promise<typeof WheelComponent> | null = null;
 const wheelFor = (): Promise<typeof WheelComponent> => (wheelChunk ??= import('../components/RingWheel').then((x) => x.RingWheel));
 /** MOCK6: the fixture of the wheel of many options and its wheel; never in the Artifact (the build drops the import) */
 const loadFixture = __ARTIFACT__ ? null : () => Promise.all([wheelFor(), import('./fixture-wheel')]);
+/** MOCK12: the fixture frame of two wheels; never in the Artifact (the build drops the import) */
+const loadWheels2 = __ARTIFACT__ ? null : () => import('./fixture-wheels2');

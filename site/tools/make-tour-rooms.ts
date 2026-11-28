@@ -60,8 +60,7 @@ writeFileSync(
   join(GENERATED, 'studio-missing.json'),
   JSON.stringify(
     {
-      note:
-        'MOCK12 (FB29): the tour products shown outside the room (the strip, the wheel, the product card) without a studio still in assets/renders/wheel-studio/<style>/manifest.json. Until one is rendered and passes QA, the page shows the product\'s card (its layer trimmed, its rim hardened: no feathered rim) or, where the room cuts it (an occluder over it: `cut` "occluded"; the frame\'s edge: "frame"), its name. One row a product (its layer\'s `variant` and its card), with every frame it is seen in. Written by tools/make-tour-rooms.ts.',
+      note: 'MOCK12 (FB29): the tour products shown outside the room (the strip, the wheel, the product card) without a studio still in assets/renders/wheel-studio/<style>/manifest.json. Until one is rendered and passes QA, the page shows the product\'s card (its layer trimmed, its rim hardened: no feathered rim) or, where the room cuts it (an occluder over it: `cut` "occluded"; the frame\'s edge: "frame"), its name. One row a product (its layer\'s `variant` and its card), with every frame it is seen in. Written by tools/make-tour-rooms.ts.',
       generated_at: new Date().toISOString(),
       style: index.style,
       count: products.length,
