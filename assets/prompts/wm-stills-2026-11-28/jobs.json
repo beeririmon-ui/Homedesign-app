@@ -1,0 +1,35 @@
+{
+ "id": "wm-stills-2026-11-28",
+ "brief": "briefs/wm-studio-stills-batch-2026-11-28.md",
+ "plan": "docs/proposals/wm-studio-stills-all-2026-11-28.md",
+ "decision": "FB31 (2026-11-28): 72 stills, expected 23,040, cap 28,800",
+ "estimate_tool": "var2_estimate_cost (2026-11-28): flux-2 1K i2i/t2i 250, flux-2 2K 480, nano-banana-2 1K i2i 350, nano-banana-2 2K i2i 400, remove-background 50",
+ "cap": 28800,
+ "tokens_total": 0,
+ "by_room": {"living": 0},
+ "status": "blocked: var2 STORAGE_LIMIT_EXCEEDED (5GB of 5GB used) on the first send; nothing generated, nothing billed. Needs the owner to add var2 storage (or a decision on what may be deleted there); the agent deleted nothing.",
+ "jobs": [
+  {"key": "wm-st-lv-curtains-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "4f2bbc5c-5b77-4618-aff5-fb53d0e0547f"},
+  {"key": "wm-st-lv-floor-lamp-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "6313edc2-b48e-4c63-8211-3d0a5a6b92d1"},
+  {"key": "wm-st-lv-planter-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "a6b1a732-f9c4-41ed-8373-7ddfa18e81c4"},
+  {"key": "wm-st-lv-coffee-table-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "3dcaefcc-6188-46aa-9412-488c66f217a2"},
+  {"key": "wm-st-lv-basket-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "a58864a1-d15d-4cde-8f0f-5a0e36bcfcd8"},
+  {"key": "wm-st-lv-magazine-holder-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "5891c336-d893-4009-a10d-627b5c7d28dd"},
+  {"key": "wm-st-lv-bowl-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "8112f6b1-1774-4381-84ad-585675919c83"},
+  {"key": "wm-st-lv-candle-holders-r1", "room": "living", "model": "flux-2 1K i2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "e9efeb5f-4013-4119-ae62-a446ec7da2de"},
+  {"key": "wm-st-lv-framed-art-blank-r1", "room": "living", "model": "flux-2 1K t2i", "tokens": 0, "error": "STORAGE_LIMIT_EXCEEDED", "mcp_error_id": "c4e68bef-6cc0-420e-82b2-8f1a17480d26"}
+ ],
+ "ready_to_resend": "the 9 living prompts are written (scratch: stills/prompts/living.json, built by stills/tools/prompts.py); the same idempotency keys can be resent once storage is free",
+ "faithfulness_checked": {
+  "curtains-aliexpress-linen-blend-s-fold-180502": "S-fold 132x270, sold as a pair (card notes): two folded panels stacked; the S-fold tape shown, the glider hooks left out (not stated as included)",
+  "candle-holders-cj-travertine-pedestal": "set of 2 identical 70x110 holders (shop pack set_qty 2)",
+  "framed-art-aliexpress-frameless-minimalist-wall-art-631735": "three prints TL2356-1/2/3, 50x70, sold without a frame; the still is three blank frames in the M0-W walnut finish (no mat)",
+  "floor-lamp-cj-pleated-walnut-stem-158": "one lamp, price per piece",
+  "planter-cj-cement-ribbed-belly": "Beige Large, the pot only",
+  "coffee-table-idana-javorina-olia-natural": "solid natural oak, 120x65x38 (not on sale yet, flag 6)",
+  "basket-cj-jute-rope-cylinder": "Large, one basket",
+  "magazine-holder-cj-gunmetal-leather-strap": "Orange small: gunmetal tubes, cognac straps",
+  "bowl-cj-matte-black-bowl-20": "12style, one 8 in bowl"
+ },
+ "open": "framed-art: the proposal (2.3) sets the TL2356 prints into the blank frames in code from the SKU images, but this brief says supplier pixels never go in a still; needs the manager's call before that still is written"
+}
