@@ -1,0 +1,112 @@
+{
+ "asset_id": "wm-wr1-living-pendant-pendant-cj-pleated-pumpkin-lantern-40",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "plan": "docs/proposals/wm-wheels-plan-2026-11-28.md",
+ "room": "living",
+ "frame": "M0-W",
+ "slot": "pendant",
+ "product": "pendant-cj-pleated-pumpkin-lantern-40",
+ "job": {
+  "model": "nano-banana-2",
+  "type": "image-to-image",
+  "resolution": "2K",
+  "aspect_ratio": "16:9",
+  "idempotency_key": "wm-wr1-lv-pend-lantern-e2-20261128",
+  "pid": "a15a9a11-854a-4998-98e6-99b05747f8fd",
+  "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/ef4ed8c1-fd60-4cea-86aa-490d3f12a7e6.png",
+  "image_refs": [
+   "https://oss-cf.cjdropshipping.com/product/2026/01/13/02/24c1901a-8dff-4184-a4bb-a4d5a066924b_trans.jpeg"
+  ],
+  "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nano2-d22fcf718f5ea32da2381f027b931e42-0-1795872581660-9197e65e.jpg",
+  "earlier": [
+   {
+    "pid": "65ca58a7-3df3-4489-911d-de4c22f846d0",
+    "tokens": 400,
+    "verdict": "rejected: returned the reference photo, not the room (an 800 x 450 crop of plaster, sent x3.2)"
+   }
+  ],
+  "prompt": "Image 1 is the photograph to edit: a living-room wall with three framed prints, two small wall sconces and a tiered fabric drum pendant lamp hanging at the top centre. Image 2 is a product reference only. Edit image 1: change ONLY the pendant lamp; nothing else changes. The tiered fabric drum becomes the pendant lamp in image 2: a pumpkin-shaped lantern of fine white pleated paper fabric, 40 cm in diameter and 25 cm tall, a flattened sphere made of many soft vertical pleated gores that gather at the top and at the small bottom opening. It is smaller than the drum (40 cm wide against the drum's 50 cm) and hangs from the same thin cord at the same point, its centre at the same height as the drum's centre now. It is switched on and glows a warm 2700 K from within, the pleats evenly luminous, as bright as the drum glows now. Where the larger drum was and the lantern is not, the plain plastered wall continues exactly as it is around it. Keep everything else in image 1 exactly as it is, pixel for pixel: the prints, the sconces, the wall, the sun patches and leaf shadows, the floor lamp, the sofa, the camera and the framing. Do not add anything else. Ignore image 2's background, text and dimension marks."
+ },
+ "crop": [
+  850,
+  0,
+  2130,
+  720
+ ],
+ "sent_px": [
+  2560,
+  1440
+ ],
+ "sent_sha256": "13fde16c231bb6e316eb19a33a8b8113148affc79c51c53ce24393b89361b406",
+ "registration": {
+  "matches": 711,
+  "inliers": 401,
+  "residual_px_median": 0.651,
+  "residual_px_p90": 1.265,
+  "A": [
+   [
+    0.930314,
+    -4.1e-05,
+    -0.145014
+   ],
+   [
+    1.9e-05,
+    0.928664,
+    6.401391
+   ]
+  ],
+  "tone_gain_offset": [
+   [
+    1.0042,
+    -0.0169
+   ],
+   [
+    1.0091,
+    -0.0077
+   ],
+   [
+    1.0169,
+    -0.0146
+   ]
+  ],
+  "unchanged_share": 0.926,
+  "returned_px": [
+   2752,
+   1536
+  ],
+  "mean_abs_diff_unchanged": 3.95
+ },
+ "cut": {
+  "row": 13,
+  "refit": [],
+  "core_px": 35605,
+  "core_bbox_canvas": [
+   1366,
+   141,
+   1611,
+   317
+  ],
+  "alpha_px": 65029,
+  "alpha_255_px": 61062,
+  "shadow_px": 24,
+  "opts": {
+   "zone": [
+    1250,
+    0,
+    1750,
+    420
+   ],
+   "influence": 30,
+   "shadow_min": 0.85,
+   "fringe": [
+    1,
+    4
+   ],
+   "reveal": true,
+   "mask_file": "/tmp/claude-0/-home-user-homedesign-app/1b393486-20a3-508a-a0b0-d78a98b7d2b6/scratchpad/wr1/rooms/living/opt/lv-pend-lantern2-pmask.png"
+  }
+ },
+ "seed": "not seedable (nano-banana-2): the prompt, the input crop (sha256), the references and the settings are kept",
+ "references_policy": "supplier photos are references only (var2 fetches the card URL); no supplier pixel is in a layer or a committed file"
+}

@@ -1,0 +1,31 @@
+{
+ "asset_id": "wm-wheel-studio-pendant-cj-pleated-pumpkin-lantern-40",
+ "variant": "pendant-cj-pleated-pumpkin-lantern-40",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "jobs": [
+  {
+   "model": "flux-2 1K i2i",
+   "tokens": 250,
+   "pid": "c3762edd-10d7-48c2-b55f-44181deb58fa",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-bdbd629d3cc36530c31910807a343ee3-0-1795872698810-d656f6d9.jpg",
+   "input": "https://oss-cf.cjdropshipping.com/product/2026/01/13/02/24c1901a-8dff-4184-a4bb-a4d5a066924b_trans.jpeg (SKU 40)",
+   "idempotency_key": "wm-wr1-studio-pendant-lantern40-r1",
+   "matte": {
+    "model": "remove-background",
+    "tokens": 50,
+    "pid": "8153313f-c4f2-4f90-a21a-14655979bd93",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-a3f083227ca5e94645cd20b92f60246f-1795873002490-194d57cb.png"
+   },
+   "earlier": []
+  }
+ ],
+ "prompt": "Studio product photograph of one pendant lamp exactly as in the reference image: a pumpkin-shaped lantern 40 cm in diameter and 25 cm tall, of fine white pleated paper fabric, a flattened sphere made of many soft vertical pleated gores that gather at the top and at the small bottom opening, hanging from a thin black cord that runs straight up out of the top of the frame. The lamp is switched on and glows a warm 2700 K from within, the pleats evenly luminous. Shot on a seamless warm off-white paper backdrop in one even very light warm off-white tone (about #F0E7DB, neither yellow nor grey), no horizon line, no texture, evenly lit with no bright glow or halo on the backdrop around the lamp. One large soft key light from the upper left with gentle fill; a faint soft shadow of the lamp on the backdrop below and behind it. Camera: a three-quarter view from about 30 degrees above the shade's equator, so the top of the shade and its form are visible; the shade centred, filling about 70 percent of the frame's width, the cord running straight up out of the top of the frame, clear empty backdrop margins at the sides and below, the whole shade in frame. Premium interior catalogue product photograph, photorealistic, crisp true-to-life texture, accurate colours, neutral white balance. No props, no furniture, no people, no text, no logos.",
+ "seed": "not seedable (flux-2)",
+ "settings": {
+  "aspect_ratio": "1:1",
+  "resolution": "1K"
+ },
+ "post": "wr1 tools/studio.py from_matte: one global white balance (the lit backdrop to L* 92 / a* 1 / b* 7; lamps: exposure only), the backdrop rebuilt from its own low-pass darker-only (contact shadow, no light rim), the edge un-mixed with the matte, reframed to the FB20 square",
+ "references": "the card SKU photo (supplier URL, or rehosted on var2); the supplier pixels stay out of the output"
+}

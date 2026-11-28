@@ -58,7 +58,7 @@ describe.skipIf(!shop)('MOCK12: two wheels in a frame, the room’s cuts and the
       expect(s.options.map((o) => o.variant)).toEqual([1, 2, 3].map((k) => `${id}-${k}`));
       expect(s.atlas).toBeUndefined();
       // a place each on the frame's own atlas pages, three distinct places
-      const places = s.atlas_opts!['1280']!.map((p) => p.product.join(','));
+      const places = s.atlas_opts!['1920']!.map((p) => p.product.join(','));
       expect(new Set(places).size).toBe(3);
       expect(s.shadows).toEqual([1, 1, 1]);
     }

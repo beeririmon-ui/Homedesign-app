@@ -1,0 +1,40 @@
+{
+ "asset_id": "wm-wheel-studio-accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+ "variant": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "jobs": [
+  {
+   "model": "flux-2 1K i2i",
+   "tokens": 250,
+   "pid": "3f54f655-a822-4b5a-9580-2bd743d2c4e9",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-a475146a25f1a72aa3d6081d80923e82-0-1795873302461-08343eb2.jpg",
+   "input": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/1200edd4-6956-468d-a865-28f7a5b53cc5.jpg (the SKU photo Round X Walnut, rehosted)",
+   "idempotency_key": "wm-wr1-studio-sconce-cylinder-walnut-r1c",
+   "matte": {
+    "model": "remove-background",
+    "tokens": 50,
+    "pid": "6df6ee22-f125-4ae2-ae27-f9835060f97f",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-38df1c001d3c9b8c9823de85fadba37e-1795873329085-5a8a292e.png"
+   },
+   "earlier": [
+    {
+     "pid": "935bb722-ff10-408e-aa6a-6274700e4270",
+     "state": "provider error, refunded"
+    },
+    {
+     "pid": "03a08288-16ec-4b80-9bc6-454c8835a294",
+     "state": "provider error, refunded"
+    }
+   ]
+  }
+ ],
+ "prompt": "Studio product photograph of one wall light exactly as in the reference image: a round cylinder of natural travertine stone, 16 cm tall and 6.5 cm across, warm beige with its pitted porous texture, set in front of a flat walnut wood back plate of the same height; light opening at its bottom. It is mounted at the centre of the upright wall of a seamless warm off-white paper backdrop in one even very light warm off-white tone (about #F0E7DB, neither yellow nor grey), no texture. It is switched on with a small soft warm 2700 K glow only at its own light openings, the backdrop evenly lit with no bright wash, glow or halo spreading on it. One large soft key light from the upper left with gentle fill; a soft, short contact shadow of the lamp on the wall. Camera: a three-quarter view from the front-left, slightly above the lamp, so its front, its side and its depth from the wall are visible; the lamp centred and filling about 60 percent of the frame's height, the whole lamp in frame with clear empty backdrop margins on all sides. Premium interior catalogue product photograph, photorealistic, crisp true-to-life stone and wood texture, accurate colours, neutral white balance. No props, no plants, no furniture, no people, no text, no logos.",
+ "seed": "not seedable (flux-2)",
+ "settings": {
+  "aspect_ratio": "1:1",
+  "resolution": "1K"
+ },
+ "post": "wr1 tools/studio.py from_matte: one global white balance (the lit backdrop to L* 92 / a* 1 / b* 7; lamps: exposure only), the backdrop rebuilt from its own low-pass darker-only (contact shadow, no light rim), the edge un-mixed with the matte, reframed to the FB20 square",
+ "references": "the card SKU photo (supplier URL, or rehosted on var2); the supplier pixels stay out of the output"
+}

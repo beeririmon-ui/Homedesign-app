@@ -1,0 +1,2467 @@
+{
+ "id": "wm-living-room-m0w-fb13-wheel-pecan-2026-11-26-wheels-r1",
+ "room": "living-room",
+ "style": "warm-modern",
+ "frame": "M0-W",
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  77.4853,
+  43.4279,
+  2642.5147,
+  1486.5721
+ ],
+ "base": "../plate-PW.png",
+ "camera": {
+  "loc": [
+   0.95,
+   5.55,
+   1.05
+  ],
+  "yaw": 14.0,
+  "lens": 35.0,
+  "u0": 0.5,
+  "v0": 0.555,
+  "status": "PROPOSAL (camera-m0w-proposal.json has v0 0.52; v0 0.555 by the concepts' brief)"
+ },
+ "compose": "../plate-PW.png; per layer in z order: shadow (multiply), then the layer (straight alpha); lights (screen, z 90) times (1 - every alpha)",
+ "status": "FB13 M0-W fix1-pecan: set B's throw re-cut as the Pecan muslin (the cushions untouched). Not QA'd; HD_PUBLIC=0 only. Rollback: manifest-wheel.json (set B = layers/cushions/set-B.png, the stage-A knit)",
+ "method": "tools/extract.py: the plate is the base; every product is cut from the ONE hero render (hero-HW.png); shadows = the hero over the plate, darker (multiply); the lamps' light = the hero over the plate, brighter (screen). fix1: four nano-banana-2 2K edits of crops of hero-HW.png (E1 olive, E2 curtain, E3 holder at its new place, E4 the old holder out), registered (SIFT affine) and tone-matched, pasted into their own regions -> ../hero-HW-fix1.png; the changed layers cut from it; shadows solved against the compose formula (tools/fix1/extract_fix1.py)",
+ "grade": {
+  "name": "m0w-g2",
+  "xs": [
+   0.0,
+   3.6,
+   26.7,
+   50.0,
+   65.5,
+   77.5,
+   93.0,
+   96.0,
+   100.0
+  ],
+  "ys": [
+   4.8,
+   10.6,
+   36.0,
+   62.5,
+   76.5,
+   83.6,
+   89.6,
+   93.2,
+   98.8
+  ],
+  "a_shift": 1.0,
+  "b_shift": 2.5,
+  "warm": {
+   "L0": 80.0,
+   "L1": 92.0,
+   "a": 0.8,
+   "b": 3.5
+  },
+  "note": "ONE display grade for P-W, H-W and every edit of H-W (pointwise in Lab: commutes with the layers' compositing). The owner's note of 2026-11-26 on concept B ('a little too dramatic') and the house light spec (docs/proposals/wm-fb16-house-light-2026-11-26.md): shade plaster L about 76 (74-80), sunlit plaster about 89-90 (88-92), black point 10-11",
+  "curve_at": {
+   "3.6": 10.3,
+   "26.7": 36.0,
+   "50": 62.4,
+   "65.5": 76.3,
+   "77.5": 83.5,
+   "93": 90.0,
+   "96": 93.3
+  }
+ },
+ "layers": [
+  {
+   "slot": "curtains",
+   "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+   "z": 10,
+   "shadow_z": 9,
+   "default": true,
+   "layer": "layers/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "shadow": "shadows/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "sold": true,
+   "option": {
+    "style": "s-fold",
+    "size": "132x270"
+   },
+   "sku": "12000059196236244",
+   "source": "hero-HW-fix1.png (nano-banana-2 2K edit E2 of hero-HW.png) cut in code",
+   "note": "the sheer linen at the left glazing edge, half drawn, the sun through it; alpha by its own hem; the vase (z 16) stands in front of its leading edge; its shadow file is neutral (sheer: the sun patch on the wall is kept as it was). The stack sits in view (about Y 1.75-2.0), not at the slot's Y 2.65-2.95: for the designer",
+   "alpha_px": 228906,
+   "shadow_px": 0,
+   "bbox_px": [
+    0,
+    41,
+    225,
+    1149
+   ]
+  },
+  {
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-frameless-minimalist-wall-art-631735",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.png",
+   "shadow": "shadows/framed-art/framed-art-aliexpress-frameless-minimalist-wall-art-631735.png",
+   "alpha_px": 241183,
+   "shadow_px": 238570,
+   "bbox_px": [
+    1274,
+    472,
+    2018,
+    817
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "accent-sconces",
+   "product": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+   "z": 12,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "shadow": "shadows/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+   "alpha_px": 8331,
+   "shadow_px": 11836,
+   "bbox_px": [
+    1153,
+    472,
+    2158,
+    581
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "vase",
+   "product": "vase-cj-textured-white-stoneware",
+   "z": 16,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/vase/vase-cj-textured-white-stoneware.png",
+   "shadow": "shadows/vase/vase-cj-textured-white-stoneware.png",
+   "alpha_px": 20558,
+   "shadow_px": 12307,
+   "bbox_px": [
+    146,
+    887,
+    264,
+    1150
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "rug",
+   "product": "rug-cj-braided-wool-natural",
+   "z": 20,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/rug/rug-cj-braided-wool-natural-fix1.png",
+   "shadow": "shadows/rug/rug-cj-braided-wool-natural.png",
+   "alpha_px": 271567,
+   "shadow_px": 65100,
+   "bbox_px": [
+    586,
+    1337,
+    2599,
+    1529
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code; fix1: under the old holder place, the rug from nano edit E4"
+  },
+  {
+   "slot": "floor-lamp",
+   "product": "floor-lamp-cj-pleated-walnut-stem-158",
+   "z": 30,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "shadow": "shadows/floor-lamp/floor-lamp-cj-pleated-walnut-stem-158.png",
+   "alpha_px": 37230,
+   "shadow_px": 50604,
+   "bbox_px": [
+    2105,
+    577,
+    2350,
+    1359
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "planter",
+   "product": "planter-cj-cement-ribbed-belly",
+   "z": 32,
+   "shadow_z": 31,
+   "default": true,
+   "layer": "layers/planter/planter-cj-cement-ribbed-belly-fix1.png",
+   "shadow": "shadows/planter/planter-cj-cement-ribbed-belly-fix1.png",
+   "alpha_px": 134300,
+   "shadow_px": 337459,
+   "bbox_px": [
+    684,
+    407,
+    1096,
+    1323
+   ],
+   "sold": true,
+   "source": "hero-HW-fix1.png: the pot is the stage-A layer below the rim, pixel for pixel; the olive (filler) and its leaf shadow from nano edit E1"
+  },
+  {
+   "slot": "cushions",
+   "product": "set-B",
+   "z": 55,
+   "shadow_z": 54,
+   "default": true,
+   "layer": "layers/cushions/set-B-fix1-pecan.png",
+   "shadow": "shadows/cushions/set-B-fix1-pecan.png",
+   "alpha_px": 221274,
+   "shadow_px": 246288,
+   "bbox_px": [
+    1202,
+    872,
+    2286,
+    1461
+   ],
+   "sold": true,
+   "source": "nano-banana-2 2K edit of hero-HW-fix1.png (raw/fix1-pecan-nano.jpg, jobs-pecan.json) cut in code (tools/pecan/pbuild.py), the throw only; the cushions are set-B.png's"
+  },
+  {
+   "slot": "coffee-table",
+   "product": "coffee-table-idana-javorina-olia-natural",
+   "z": 57,
+   "shadow_z": 56,
+   "default": true,
+   "layer": "layers/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "shadow": "shadows/coffee-table/coffee-table-idana-javorina-olia-natural.png",
+   "alpha_px": 116863,
+   "shadow_px": 45378,
+   "bbox_px": [
+    1112,
+    1143,
+    1953,
+    1528
+   ],
+   "sold": false,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "basket",
+   "product": "basket-cj-jute-rope-cylinder",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/basket/basket-cj-jute-rope-cylinder.png",
+   "shadow": "shadows/basket/basket-cj-jute-rope-cylinder.png",
+   "alpha_px": 28594,
+   "shadow_px": 51273,
+   "bbox_px": [
+    487,
+    1094,
+    674,
+    1360
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "magazine-holder",
+   "product": "magazine-holder-cj-gunmetal-leather-strap",
+   "z": 60,
+   "shadow_z": 59,
+   "default": true,
+   "layer": "layers/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-fix1.png",
+   "shadow": "shadows/magazine-holder/magazine-holder-cj-gunmetal-leather-strap-fix1.png",
+   "alpha_px": 30913,
+   "shadow_px": 26645,
+   "bbox_px": [
+    2351,
+    1188,
+    2587,
+    1384
+   ],
+   "sold": true,
+   "source": "hero-HW-fix1.png (nano edit E3: on the oak floor right of the floor lamp, between the skirting and the rug) cut in code; refit in code x0.92 about its feet line and centred between the lamp and the frame edge (F3 0.02 / edge 0.02; the card is 35 cm wide)",
+   "refit": {
+    "scale": 0.92,
+    "about": "feet line y 1400",
+    "dx_px": 8.8,
+    "matrix": [
+     [
+      0.92,
+      0.0,
+      205.5174
+     ],
+     [
+      0.0,
+      0.92,
+      112.0
+     ]
+    ]
+   }
+  },
+  {
+   "slot": "bowl",
+   "product": "bowl-cj-matte-black-bowl-20",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/bowl/bowl-cj-matte-black-bowl-20.png",
+   "shadow": "shadows/bowl/bowl-cj-matte-black-bowl-20.png",
+   "alpha_px": 10427,
+   "shadow_px": 0,
+   "bbox_px": [
+    1650,
+    1212,
+    1804,
+    1296
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "candle-holders",
+   "product": "candle-holders-cj-travertine-pedestal",
+   "z": 65,
+   "shadow_z": 64,
+   "default": true,
+   "layer": "layers/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "shadow": "shadows/candle-holders/candle-holders-cj-travertine-pedestal.png",
+   "alpha_px": 11154,
+   "shadow_px": 2991,
+   "bbox_px": [
+    1406,
+    1141,
+    1566,
+    1278
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  },
+  {
+   "slot": "pendant",
+   "product": "pendant-cj-tiered-fabric-drum",
+   "z": 80,
+   "shadow_z": 79,
+   "default": true,
+   "layer": "layers/pendant/pendant-cj-tiered-fabric-drum.png",
+   "shadow": "shadows/pendant/pendant-cj-tiered-fabric-drum.png",
+   "alpha_px": 62306,
+   "shadow_px": 3907,
+   "bbox_px": [
+    1317,
+    0,
+    1655,
+    306
+   ],
+   "sold": true,
+   "source": "hero-HW.png (seedream-5-pro 2K, one render) cut in code"
+  }
+ ],
+ "light": [
+  {
+   "file": "light/accent-sconces-aliexpress-travertine-cylinder-walnut-choice-fix1.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "accent-sconces"
+   ],
+   "px": 2438592,
+   "note": "fix1: filled from the wall around under the old olive's floating leaves only (never seen before; now open wall)"
+  },
+  {
+   "file": "light/floor-lamp-cj-pleated-walnut-stem-158-fix1.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "floor-lamp"
+   ],
+   "px": 2714378,
+   "note": "fix1: filled from the wall around under the old olive's floating leaves only (never seen before; now open wall)"
+  },
+  {
+   "file": "light/pendant-cj-tiered-fabric-drum-fix1.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "pendant"
+   ],
+   "px": 3139254,
+   "note": "fix1: filled from the wall around under the old olive's floating leaves only (never seen before; now open wall)"
+  }
+ ],
+ "influence_radius_px": {
+  "framed-art": 34,
+  "accent-sconces": 30,
+  "vase": 70,
+  "rug": 46,
+  "floor-lamp": 80,
+  "planter": 110,
+  "cushions": 90,
+  "coffee-table": 130,
+  "basket": 70,
+  "magazine-holder": 80,
+  "bowl": 46,
+  "candle-holders": 46,
+  "pendant": 24
+ },
+ "fillers": {
+  "planter": "the olive tree (filler) is in the planter's layer; its leaf shadow on the plaster is in the planter's shadow",
+  "vase": "the dry branch (filler) is in the vase's layer",
+  "candle_holders": "the candles (filler) are in the layer",
+  "magazine_holder": "the newspapers (filler) are in the layer",
+  "framed_art": "the three prints are set in code into the frames (tools/prints.py): TL2356-1 / -2 / -3, lit by the canvas's own light in the hero"
+ },
+ "cushions": {
+  "set": "B",
+  "wheel": {
+   "slot": "cushions",
+   "z": 55,
+   "shadow_z": 54,
+   "default": "B",
+   "order": [
+    "B",
+    "A",
+    "C"
+   ],
+   "sets": {
+    "B": {
+     "layer": "layers/cushions/set-B-fix1-pecan.png",
+     "shadow": "shadows/cushions/set-B-fix1-pecan.png",
+     "default": true,
+     "products": [
+      {
+       "card_id": "cushions-aliexpress-textured-boucle-throw-pillow",
+       "card": "data/products/cushions/cushions-aliexpress-textured-boucle-throw-pillow.json",
+       "role": "50 x 50 square",
+       "option": {
+        "color": "oatmeal",
+        "size": "50x50"
+       },
+       "sku": "12000058046277179"
+      },
+      {
+       "card_id": "cushions-cj-wide-stripe-corduroy-light-green",
+       "card": "data/products/cushions/cushions-cj-wide-stripe-corduroy-light-green.json",
+       "role": "corduroy square (card 50 x 50)",
+       "option": {
+        "color": "camel"
+       },
+       "sku": "CJYD280011307GT"
+      },
+      {
+       "card_id": "cushions-cj-linen-look-charcoal",
+       "card": "data/products/cushions/cushions-cj-linen-look-charcoal.json",
+       "role": "30 x 50 lumbar",
+       "option": {
+        "color": "beige",
+        "size": "30x50"
+       },
+       "sku": null,
+       "sku_candidates": [
+        "CJZT113551675WD",
+        "CJZT113551679AZ"
+       ]
+      },
+      {
+       "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+       "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+       "role": "throw 150 x 200",
+       "option": {
+        "other": "pecan",
+        "size": "150x200"
+       },
+       "sku": "CJYD205807508HS"
+      }
+     ],
+     "alpha_px": 221274,
+     "shadow_px": 246288,
+     "bbox_px": [
+      1202,
+      872,
+      2286,
+      1461
+     ],
+     "source": "nano-banana-2 2K edit of hero-HW-fix1.png (raw/fix1-pecan-nano.jpg, jobs-pecan.json) cut in code (tools/pecan/pbuild.py), the throw only; the cushions are set-B.png's",
+     "default_frame": "../default-frame-m0w-fix1-pecan.png",
+     "alpha_255_px": 203928,
+     "fidelity": "the Pecan throw reads as crinkled cotton muslin with a frayed fringe, as the card (was: knitted, stage A). Drape kept, a little fuller (jobs-pecan.json verdict)",
+     "patch": {
+      "what": "the floor lamp's lower pole, 270 px, from the edit",
+      "where": "where the stage-A knit hid it and the new throw does not (the floor-lamp layer has no pixels there)",
+      "why": "without it the pole would stop short above the throw",
+      "note": "inside the old throw's region; sets A and C are not affected"
+     },
+     "rollback": {
+      "layer": "layers/cushions/set-B.png",
+      "shadow": "shadows/cushions/set-B.png",
+      "default_frame": "../default-frame-m0w-fix1.png",
+      "manifest": "manifest-wheel.json"
+     }
+    },
+    "A": {
+     "layer": "layers/cushions/set-A.png",
+     "shadow": "shadows/cushions/set-A.png",
+     "default": false,
+     "products": [
+      {
+       "card_id": "cushions-cj-boucle-teddy",
+       "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+       "role": "50 x 50 square",
+       "option": {
+        "color": "white",
+        "size": "50x50"
+       },
+       "sku": "CJZT228600103CX"
+      },
+      {
+       "card_id": "cushions-cj-knitted-chenille-bean-green",
+       "card": "data/products/cushions/cushions-cj-knitted-chenille-bean-green.json",
+       "role": "45 x 45 square",
+       "option": {
+        "color": "21-camel-color"
+       },
+       "sku": "CJYD282217003CX",
+       "note": "customer-facing colour name: taupe (טאופ), not camel; the SKU photo reads taupe (selection, cushions picks A note_2026_11_07)"
+      },
+      {
+       "card_id": "cushions-cj-boucle-teddy",
+       "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+       "role": "30 x 50 lumbar",
+       "option": {
+        "color": "milk-tea-color",
+        "size": "30x50"
+       },
+       "sku": "CJZT228600126ZA"
+      },
+      {
+       "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+       "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+       "role": "throw 150 x 200",
+       "option": {
+        "other": "flax-brown",
+        "size": "150x200"
+       },
+       "sku": "CJYD205807538LO"
+      }
+     ],
+     "alpha_px": 223736,
+     "alpha_255_px": 206482,
+     "shadow_px": 290623,
+     "bbox_px": [
+      1215,
+      879,
+      2311,
+      1459
+     ],
+     "source": "nano-banana-2 2K edit of hero-HW-fix1.png (raw/wheel-setA-nano.jpg, jobs-wheel.json e1) cut in code (tools/wheel/w7build.py)",
+     "refit": {
+      "card_cm": 45.0,
+      "rendered_w_px": 269,
+      "target_w_px": 244.8,
+      "scale": 0.91,
+      "about": [
+       1341.0,
+       1142.0
+      ],
+      "why": "the edit drew the 45 x 45 cm left cushion at the width of set B's 50 x 50 one (269 vs 272 px)",
+      "revealed": "the sofa back of the plate, under the set's own shadow zone (moved with the cushion)"
+     },
+     "default_frame": "../default-frame-m0w-wheel-A.png"
+    },
+    "C": {
+     "layer": "layers/cushions/set-C.png",
+     "shadow": "shadows/cushions/set-C.png",
+     "default": false,
+     "products": [
+      {
+       "card_id": "cushions-cj-boucle-teddy",
+       "card": "data/products/cushions/cushions-cj-boucle-teddy.json",
+       "role": "50 x 50 square",
+       "option": {
+        "color": "light-brown",
+        "size": "50x50"
+       },
+       "sku": "CJZT228600133GT"
+      },
+      {
+       "card_id": "cushions-cj-corduroy-patchwork",
+       "card": "data/products/cushions/cushions-cj-corduroy-patchwork.json",
+       "role": "45 x 45 square",
+       "option": {
+        "color": "dark-coffee",
+        "size": "45x45"
+       },
+       "sku": "CJZT189401910JQ"
+      },
+      {
+       "card_id": "cushions-cj-linen-look-ivory",
+       "card": "data/products/cushions/cushions-cj-linen-look-ivory.json",
+       "role": "30 x 50 lumbar",
+       "option": {
+        "color": "light-beige-gray"
+       },
+       "sku": "CJZT242978810JQ"
+      },
+      {
+       "card_id": "sofa-cover-cj-cotton-muslin-fringe",
+       "card": "data/products/sofa-cover/sofa-cover-cj-cotton-muslin-fringe.json",
+       "role": "throw 150 x 200",
+       "option": {
+        "other": "clay",
+        "size": "150x200"
+       },
+       "sku": "CJYD205807510JQ"
+      }
+     ],
+     "alpha_px": 226253,
+     "alpha_255_px": 208976,
+     "shadow_px": 310328,
+     "bbox_px": [
+      1215,
+      881,
+      2324,
+      1455
+     ],
+     "source": "nano-banana-2 2K edit of hero-HW-fix1.png (raw/wheel-setC-nano.jpg, jobs-wheel.json e2) cut in code (tools/wheel/w7build.py)",
+     "refit": {
+      "card_cm": 45.0,
+      "rendered_w_px": 279,
+      "target_w_px": 244.8,
+      "scale": 0.8774,
+      "about": [
+       1341.0,
+       1142.0
+      ],
+      "why": "the edit drew the 45 x 45 cm left cushion at the width of set B's 50 x 50 one (279 vs 272 px)",
+      "revealed": "the sofa back of the plate, under the set's own shadow zone (moved with the cushion)"
+     },
+     "default_frame": "../default-frame-m0w-wheel-C.png",
+     "fidelity_open": "the lumbar: the selection names Light Beige Gray 30x50 (as rendered, as the approved pilot), but the card lists 45x45 only (with insert): sourcing to confirm a 30x50 exists"
+    }
+   },
+   "swap": "replace the cushions entry's layer and shadow with the set's; nothing else changes (RND2: checks-m0w-wheel.json)"
+  },
+  "products": [
+   "cushions-aliexpress-textured-boucle-throw-pillow (Oatmeal 50x50)",
+   "cushions-cj-wide-stripe-corduroy-light-green (Camel)",
+   "cushions-cj-linen-look-charcoal (Beige 30x50)",
+   "sofa-cover-cj-cotton-muslin-fringe (Pecan)"
+  ]
+ },
+ "coffee_table": {
+  "note": "FB12-T: a swappable layer; the rug's layer under it comes from the hero rendered without the table group (E2) and carries no table shadow; 'not yet for sale' until IDANA's written approval"
+ },
+ "not_in_frame": [
+  "wall-sconce (window wall, out of frame)"
+ ],
+ "moved_for_the_frame": {
+  "magazine_holder": {
+   "to": "about (1.92, 0.33), right of the floor lamp on the oak floor between the skirting and the rug (estimated from the image)",
+   "was": [
+    -0.68,
+    2.25
+   ],
+   "why": "fix1: cut by the bottom edge; no place on the left passes F3 and >= 90 % visible (armchair, basket, planter and the sofa fill the floor strip)"
+  },
+  "planter": [
+   -1.34,
+   0.549
+  ],
+  "basket": [
+   -1.8,
+   1.05
+  ]
+ },
+ "rnd2": {
+  "canvas_changed_px": 578376,
+  "canvas_changed_outside_regions_px": 0,
+  "regions_px": 725173,
+  "frame_changed_px": 272081,
+  "old_stack_recomposed_vs_stored_frame": {
+   "max": 1,
+   "px_over_0": 3300
+  },
+  "swap_one_product": {
+   "planter": {
+    "changed_px": 376571,
+    "changed_outside_its_region_px": 0
+   },
+   "magazine-holder": {
+    "changed_px": 42112,
+    "changed_outside_its_region_px": 0
+   },
+   "curtains": {
+    "changed_px": 218092,
+    "changed_outside_its_region_px": 0
+   }
+  },
+  "rule": "outside the changed layers' alpha, shadow and light: the stage-A stack, pixel for pixel; hiding one product changes its own region only"
+ },
+ "files": {
+  "hero": "../hero-HW-fix1.png",
+  "default_frame": "../default-frame-m0w-fix1.png",
+  "checks": "../checks-m0w-fix1.json",
+  "sheet": "../qa-sheet-m0w-fix1.jpg",
+  "jobs": "../jobs-fix1.json",
+  "tools": "../tools/fix1/",
+  "rollback": "manifest.json",
+  "wheel": {
+   "default_frames": {
+    "B": "../default-frame-m0w-fix1-pecan.png",
+    "A": "../default-frame-m0w-wheel-A.png",
+    "C": "../default-frame-m0w-wheel-C.png"
+   },
+   "sheet": "../qa-sheet-m0w-wheel.jpg",
+   "checks": "../checks-m0w-wheel.json",
+   "jobs": "../jobs-wheel.json",
+   "tools": "../tools/wheel/"
+  },
+  "pecan": {
+   "default_frame": "../default-frame-m0w-fix1-pecan.png",
+   "sheet": "../qa-sheet-pecan.jpg",
+   "checks": "../checks-m0w-pecan.json",
+   "jobs": "../jobs-pecan.json",
+   "tools": "../tools/pecan/",
+   "rollback": "manifest-wheel.json"
+  }
+ },
+ "method_wheel": "tools/wheel/: each set = one nano-banana-2 2K edit of a 1280 x 720 crop of hero-HW-fix1.png (sent x2), registered (SIFT affine, prep.py) and tone-fitted; the pieces' masks from grok segment-map (0 tokens); alpha as stage A (4 px fringe of the edit's room, anti-aliased against another product, 4 px on under the table); the set's pixels = the edit baked with the stage-A finish, the lamps' screen solved out and the higher layers' (the table's) shadow divided out; its shadow = low-pass luma(edit) / luma(the stack without the cushions), darker only, in a 90 px zone of influence (stage A's radius); one recorded refit (the left cushion to 45/50)",
+ "rnd2_wheel": {
+  "A": {
+   "canvas_changed_vs_B_px": 357281,
+   "changed_outside_A_or_B_regions_px": 0,
+   "hide_set_changed_outside_its_region_px": 0
+  },
+  "C": {
+   "canvas_changed_vs_B_px": 356161,
+   "changed_outside_A_or_B_regions_px": 0,
+   "hide_set_changed_outside_its_region_px": 0
+  }
+ },
+ "method_pecan": "tools/pecan/: one nano-banana-2 2K edit of the wheel's crop of hero-HW-fix1.png (the same upload), the throw only; registered (SIFT affine, prep.py) and tone-fitted; masks from grok segment-map (0 tokens). Cut as tools/wheel/w7build.py, but only inside Z = (old throw | new throw, 6 px) minus the cushions: there the edit's alpha (4 px fringe of the room, anti-aliased against another product, 4 px on under the table) and pixels (the stage-A finish baked, the lamps' screen solved out, the table's shadow divided out); elsewhere set-B.png byte for byte. The shadow: set B's beyond 90 px of the throw, the new low-pass luma ratio within 45 px, a log blend between, set B's under the cushions. One patch: the lamp's pole where the knit hid it",
+ "rnd2_pecan": {
+  "layer_changed_px": 96190,
+  "layer_changed_outside_Z_px": 0,
+  "layer_changed_in_cushions_px": 0,
+  "shadow_changed_px": 141867,
+  "shadow_changed_outside_90px_of_throw_px": 0,
+  "canvas_changed_px": 131887,
+  "canvas_changed_outside_throw_region_px": 0,
+  "frame_changed_px": 74872,
+  "hide_set_changed_outside_its_region_px": 0
+ },
+ "wheels": {
+  "pendant": {
+   "slot": "pendant",
+   "z": 80,
+   "shadow_z": 79,
+   "default": "pendant-cj-tiered-fabric-drum",
+   "order": [
+    "pendant-cj-tiered-fabric-drum",
+    "pendant-cj-pleated-pumpkin-lantern-40",
+    "pendant-cj-scalloped-pleated-bell"
+   ],
+   "sets": {
+    "pendant-cj-tiered-fabric-drum": {
+     "products": [
+      {
+       "card_id": "pendant-cj-tiered-fabric-drum",
+       "card": "data/products/pendant/pendant-cj-tiered-fabric-drum.json",
+       "sku": "CJYD247032902BY",
+       "option": {},
+       "role": "pendant 50 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/pendant/pendant-cj-tiered-fabric-drum.png",
+     "layer": "layers/pendant/pendant-cj-tiered-fabric-drum.png",
+     "shadow": "shadows/pendant/pendant-cj-tiered-fabric-drum.png",
+     "alpha_px": 62306,
+     "shadow_px": 3907,
+     "bbox_px": [
+      1317,
+      0,
+      1655,
+      306
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "pendant-cj-pleated-pumpkin-lantern-40": {
+     "products": [
+      {
+       "card_id": "pendant-cj-pleated-pumpkin-lantern-40",
+       "card": "data/products/pendant/pendant-cj-pleated-pumpkin-lantern-40.json",
+       "sku": "CJYD272646801AZ",
+       "option": {
+        "size": "40"
+       },
+       "role": "pendant 40 x 25 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+     "layer": "layers/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+     "shadow": "shadows/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+     "alpha_px": 65029,
+     "alpha_255_px": 61062,
+     "shadow_px": 24,
+     "bbox_px": [
+      1317,
+      0,
+      1655,
+      320
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [850, 0, 2130, 720], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-pendant-pendant-cj-pleated-pumpkin-lantern-40.json",
+     "registration": {
+      "matches": 711,
+      "inliers": 401,
+      "residual_px_median": 0.651,
+      "residual_px_p90": 1.265,
+      "A": [
+       [
+        0.930314,
+        -4.1e-05,
+        -0.145014
+       ],
+       [
+        1.9e-05,
+        0.928664,
+        6.401391
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        1.0042,
+        -0.0169
+       ],
+       [
+        1.0091,
+        -0.0077
+       ],
+       [
+        1.0169,
+        -0.0146
+       ]
+      ],
+      "unchanged_share": 0.926,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.95
+     },
+     "rnd2": {
+      "pre_changed_px": 64830,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 64830,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 33905,
+      "mean": 0.38,
+      "p99": 0.5
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.888,
+      "grain_ratio": 1.25,
+      "score": 1.0,
+      "fails": [
+       "LAMP looks lit, outside G1.10's H/S"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 35605,
+      "core_bbox_canvas": [
+       1366,
+       141,
+       1611,
+       317
+      ]
+     },
+     "light": "the pendant light layer of the frame (light/pendant-cj-tiered-fabric-drum-fix1.png, screen, x (1 - every alpha)) is kept for every option: the lamp hangs at the same point and the wash on the wall and ceiling is the room light, in code; the shade glow is in the option layer"
+    },
+    "pendant-cj-scalloped-pleated-bell": {
+     "products": [
+      {
+       "card_id": "pendant-cj-scalloped-pleated-bell",
+       "card": "data/products/pendant/pendant-cj-scalloped-pleated-bell.json",
+       "sku": "CJYD272605101AZ",
+       "option": {},
+       "role": "pendant 45 x 30 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/dining-pendant/pendant-cj-scalloped-pleated-bell-45.png",
+     "layer": "layers/pendant/pendant-cj-scalloped-pleated-bell.png",
+     "shadow": "shadows/pendant/pendant-cj-scalloped-pleated-bell.png",
+     "alpha_px": 76955,
+     "alpha_255_px": 72967,
+     "shadow_px": 271,
+     "bbox_px": [
+      1317,
+      0,
+      1655,
+      340
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [850, 0, 2130, 720], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-pendant-pendant-cj-scalloped-pleated-bell.json",
+     "registration": {
+      "matches": 748,
+      "inliers": 432,
+      "residual_px_median": 0.652,
+      "residual_px_p90": 1.152,
+      "A": [
+       [
+        0.930741,
+        0.000729,
+        -1.141984
+       ],
+       [
+        -0.000564,
+        0.929038,
+        5.822045
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        1.0091,
+        -0.0262
+       ],
+       [
+        1.0098,
+        -0.0105
+       ],
+       [
+        1.016,
+        -0.0159
+       ]
+      ],
+      "unchanged_share": 0.907,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.84
+     },
+     "rnd2": {
+      "pre_changed_px": 76793,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 76793,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 53698,
+      "mean": 0.38,
+      "p99": 0.5
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 1.193,
+      "grain_ratio": 1.164,
+      "score": 1.26,
+      "fails": [
+       "SHARP 1.19 (sharper than the plate)",
+       "LAMP looks lit, outside G1.10's H/S"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 56064,
+      "core_bbox_canvas": [
+       1334,
+       71,
+       1645,
+       337
+      ]
+     },
+     "light": "the pendant light layer of the frame (light/pendant-cj-tiered-fabric-drum-fix1.png, screen, x (1 - every alpha)) is kept for every option: the lamp hangs at the same point and the wash on the wall and ceiling is the room light, in code; the shade glow is in the option layer",
+     "note": "card status rejected (chrome, nordic); plan V3; 3rd take (1st: the reference returned; 2nd: no ceramic ball, hung low)"
+    }
+   },
+   "note": null
+  },
+  "vase": {
+   "slot": "vase",
+   "z": 16,
+   "shadow_z": 15,
+   "default": "vase-cj-textured-white-stoneware",
+   "order": [
+    "vase-cj-textured-white-stoneware",
+    "vase-cj-charcoal-carved",
+    "vase-cj-white-plum-hand-thrown"
+   ],
+   "sets": {
+    "vase-cj-textured-white-stoneware": {
+     "products": [
+      {
+       "card_id": "vase-cj-textured-white-stoneware",
+       "card": "data/products/vase/vase-cj-textured-white-stoneware.json",
+       "sku": "CJJT312391803CX",
+       "option": {
+        "size": "large"
+       },
+       "role": "vase 32 x 16 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/vase/vase-cj-textured-white-stoneware.png",
+     "layer": "layers/vase/vase-cj-textured-white-stoneware.png",
+     "shadow": "shadows/vase/vase-cj-textured-white-stoneware.png",
+     "alpha_px": 20558,
+     "shadow_px": 12307,
+     "bbox_px": [
+      146,
+      887,
+      264,
+      1150
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "vase-cj-charcoal-carved": {
+     "products": [
+      {
+       "card_id": "vase-cj-charcoal-carved",
+       "card": "data/products/vase/vase-cj-charcoal-carved.json",
+       "sku": "CJJT276474102BY",
+       "option": {
+        "style": "style-b"
+       },
+       "role": "vase 32 x 22 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/vase/vase-cj-charcoal-carved.png",
+     "layer": "layers/vase/vase-cj-charcoal-carved.png",
+     "shadow": "shadows/vase/vase-cj-charcoal-carved.png",
+     "alpha_px": 29953,
+     "alpha_255_px": 24399,
+     "shadow_px": 7862,
+     "bbox_px": [
+      140,
+      882,
+      303,
+      1152
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [0, 700, 960, 1240], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-vase-vase-cj-charcoal-carved.json",
+     "registration": {
+      "matches": 567,
+      "inliers": 278,
+      "residual_px_median": 0.729,
+      "residual_px_p90": 1.256,
+      "A": [
+       [
+        0.930279,
+        0.000139,
+        -0.24312
+       ],
+       [
+        -0.000282,
+        0.928504,
+        6.554609
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9964,
+        -0.0164
+       ],
+       [
+        1.0033,
+        -0.0062
+       ],
+       [
+        1.0069,
+        -0.0094
+       ]
+      ],
+      "unchanged_share": 0.947,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.28
+     },
+     "rnd2": {
+      "pre_changed_px": 37396,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 37396,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 22004,
+      "mean": 0.46,
+      "p99": 4.1
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 1.105,
+      "grain_ratio": 2.959,
+      "score": 4.0,
+      "fails": [
+       "GRAIN 2.96 (noisier than the plate)",
+       "LIGHT 121 deg (indicative)",
+       "CONTACT -11.9 L* (indicative)"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 24018,
+      "core_bbox_canvas": [
+       147,
+       889,
+       296,
+       1145
+      ]
+     },
+     "note": "the dry branch (filler) is in the layer; black toe to the plate p0.5; far shadow capped (pasted test)"
+    },
+    "vase-cj-white-plum-hand-thrown": {
+     "products": [
+      {
+       "card_id": "vase-cj-white-plum-hand-thrown",
+       "card": "data/products/vase/vase-cj-white-plum-hand-thrown.json",
+       "sku": "CJJT281811802BY",
+       "option": {
+        "size": "m"
+       },
+       "role": "vase 33 x 22.4 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/vase/vase-cj-white-plum-hand-thrown.png",
+     "layer": "layers/vase/vase-cj-white-plum-hand-thrown.png",
+     "shadow": "shadows/vase/vase-cj-white-plum-hand-thrown.png",
+     "alpha_px": 23962,
+     "alpha_255_px": 21074,
+     "shadow_px": 4859,
+     "bbox_px": [
+      142,
+      884,
+      279,
+      1151
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [0, 700, 960, 1240], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-vase-vase-cj-white-plum-hand-thrown.json",
+     "registration": {
+      "matches": 633,
+      "inliers": 323,
+      "residual_px_median": 0.739,
+      "residual_px_p90": 1.269,
+      "A": [
+       [
+        0.930438,
+        -0.000344,
+        0.012978
+       ],
+       [
+        -0.000141,
+        0.929362,
+        5.31798
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9988,
+        -0.0195
+       ],
+       [
+        1.0041,
+        -0.0074
+       ],
+       [
+        1.0059,
+        -0.0089
+       ]
+      ],
+      "unchanged_share": 0.968,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.33
+     },
+     "rnd2": {
+      "pre_changed_px": 34251,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 34251,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 17177,
+      "mean": 0.37,
+      "p99": 0.5
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.988,
+      "grain_ratio": 0.973,
+      "score": 2.0,
+      "fails": [
+       "LIGHT 170 deg (indicative)",
+       "CONTACT -15.6 L* (indicative)"
+      ]
+     },
+     "cut": {
+      "core_px": 19258,
+      "core_bbox_canvas": [
+       147,
+       889,
+       274,
+       1146
+      ]
+     },
+     "note": "the dry branch (filler) is in the layer"
+    }
+   },
+   "note": null
+  },
+  "accent-sconces": {
+   "slot": "accent-sconces",
+   "z": 12,
+   "shadow_z": 11,
+   "default": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+   "order": [
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+    "accent-sconces-cj-travertine-block-updown-8x16",
+    "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket"
+   ],
+   "sets": {
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": {
+     "products": [
+      {
+       "card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+       "card": "data/products/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.json",
+       "sku": "12000047535430431",
+       "option": {
+        "style": "round-walnut"
+       },
+       "role": "pair, 16 x 6.5 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+     "layer": "layers/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+     "shadow": "shadows/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+     "alpha_px": 8331,
+     "shadow_px": 11836,
+     "bbox_px": [
+      1153,
+      472,
+      2158,
+      581
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "accent-sconces-cj-travertine-block-updown-8x16": {
+     "products": [
+      {
+       "card_id": "accent-sconces-cj-travertine-block-updown-8x16",
+       "card": "data/products/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.json",
+       "sku": "CJYD254545505EV",
+       "option": {
+        "style": "type-b",
+        "other": "indoor"
+       },
+       "role": "pair, 16 x 8 x 8 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.png",
+     "layer": "layers/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.png",
+     "shadow": "shadows/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.png",
+     "alpha_px": 7163,
+     "alpha_255_px": 6619,
+     "shadow_px": 2665,
+     "bbox_px": [
+      1156,
+      474,
+      2154,
+      580
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [1016, 200, 2296, 920], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-accent-sconces-accent-sconces-cj-travertine-block-updown-8x16.json",
+     "registration": {
+      "matches": 470,
+      "inliers": 294,
+      "residual_px_median": 0.679,
+      "residual_px_p90": 1.309,
+      "A": [
+       [
+        0.930219,
+        0.000358,
+        -0.325559
+       ],
+       [
+        8.9e-05,
+        0.928875,
+        5.633377
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9973,
+        -0.0117
+       ],
+       [
+        1.0003,
+        0.0004
+       ],
+       [
+        1.0044,
+        -0.0058
+       ]
+      ],
+      "unchanged_share": 0.917,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.23
+     },
+     "rnd2": {
+      "pre_changed_px": 14046,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 14046,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 5225,
+      "mean": 32.9,
+      "p99": 104.7
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.95,
+      "grain_ratio": 2.291,
+      "score": 4.0,
+      "fails": [
+       "GRAIN 2.29 (noisier than the plate)",
+       "LAMP NOT lit"
+      ]
+     },
+     "cut": {
+      "refit": [
+       {
+        "piece_bbox": [
+         1155,
+         503,
+         1218,
+         608
+        ],
+        "scale": 0.7358,
+        "from_centre": [
+         1186.5,
+         555.5
+        ],
+        "to_centre": [
+         1180,
+         540
+        ],
+        "matrix_canvas": [
+         [
+          0.7358,
+          0.0,
+          306.92
+         ],
+         [
+          0.0,
+          0.7358,
+          131.24
+         ]
+        ]
+       },
+       {
+        "piece_bbox": [
+         2098,
+         468,
+         2152,
+         578
+        ],
+        "scale": 0.7387,
+        "from_centre": [
+         2125.0,
+         523.0
+        ],
+        "to_centre": [
+         2133,
+         516
+        ],
+        "matrix_canvas": [
+         [
+          0.7387,
+          0.0,
+          563.18
+         ],
+         [
+          0.0,
+          0.7387,
+          129.64
+         ]
+        ]
+       }
+      ],
+      "core_px": 6159,
+      "core_bbox_canvas": [
+       1158,
+       476,
+       2152,
+       578
+      ]
+     },
+     "light": "the accent-sconces light layer of the frame (light/accent-sconces-...-fix1.png: the up and down washes, screen, x (1 - every alpha)) is kept for every option: each option is mounted at the default's mounting point at the default's height (refit, recorded), so the wash on the wall is the room light, in code",
+     "note": "refit in code before the cut: x0.736 / x0.739 to the card's 16 cm (the edit drew them about 1.35x), centred on the default's mounting points"
+    },
+    "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket": {
+     "products": [
+      {
+       "card_id": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket",
+       "card": "data/products/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.json",
+       "sku": "CJYD320857702BY",
+       "option": {
+        "other": "type-b"
+       },
+       "role": "pair (card: no dimensions; drawn at 16 cm)"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.png",
+     "layer": "layers/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.png",
+     "shadow": "shadows/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.png",
+     "alpha_px": 13573,
+     "alpha_255_px": 12802,
+     "shadow_px": 4466,
+     "bbox_px": [
+      1142,
+      474,
+      2181,
+      580
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [1016, 200, 2296, 920], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-accent-sconces-accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.json",
+     "registration": {
+      "matches": 463,
+      "inliers": 268,
+      "residual_px_median": 0.637,
+      "residual_px_p90": 1.214,
+      "A": [
+       [
+        0.930141,
+        0.000109,
+        -0.131817
+       ],
+       [
+        4.1e-05,
+        0.928881,
+        5.7664
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9961,
+        -0.0124
+       ],
+       [
+        1.001,
+        -0.0021
+       ],
+       [
+        1.0062,
+        -0.0086
+       ]
+      ],
+      "unchanged_share": 0.88,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.33
+     },
+     "rnd2": {
+      "pre_changed_px": 17281,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 17281,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 10924,
+      "mean": 28.71,
+      "p99": 116.6
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.941,
+      "grain_ratio": 1.102,
+      "score": 2.0,
+      "fails": [
+       "LAMP NOT lit"
+      ]
+     },
+     "cut": {
+      "refit": [
+       {
+        "piece_bbox": [
+         1133,
+         488,
+         1218,
+         576
+        ],
+        "scale": 0.8764,
+        "from_centre": [
+         1175.5,
+         532.0
+        ],
+        "to_centre": [
+         1180,
+         540
+        ],
+        "matrix_canvas": [
+         [
+          0.8764,
+          0.0,
+          149.79
+         ],
+         [
+          0.0,
+          0.8764,
+          73.75
+         ]
+        ]
+       },
+       {
+        "piece_bbox": [
+         2084,
+         459,
+         2198,
+         558
+        ],
+        "scale": 0.82,
+        "from_centre": [
+         2141.0,
+         508.5
+        ],
+        "to_centre": [
+         2133,
+         516
+        ],
+        "matrix_canvas": [
+         [
+          0.82,
+          0.0,
+          377.38
+         ],
+         [
+          0.0,
+          0.82,
+          99.03
+         ]
+        ]
+       }
+      ],
+      "core_px": 12209,
+      "core_bbox_canvas": [
+       1144,
+       476,
+       2179,
+       578
+      ]
+     },
+     "light": "the accent-sconces light layer of the frame (light/accent-sconces-...-fix1.png: the up and down washes, screen, x (1 - every alpha)) is kept for every option: each option is mounted at the default's mounting point at the default's height (refit, recorded), so the wash on the wall is the room light, in code",
+     "note": "refit in code: x0.876 / x0.82 to the default's height, centred on the default's mounting points"
+    }
+   },
+   "note": "a pair: one layer holds both lamps"
+  }
+ },
+ "pendant": {
+  "wheel": {
+   "slot": "pendant",
+   "z": 80,
+   "shadow_z": 79,
+   "default": "pendant-cj-tiered-fabric-drum",
+   "order": [
+    "pendant-cj-tiered-fabric-drum",
+    "pendant-cj-pleated-pumpkin-lantern-40",
+    "pendant-cj-scalloped-pleated-bell"
+   ],
+   "sets": {
+    "pendant-cj-tiered-fabric-drum": {
+     "products": [
+      {
+       "card_id": "pendant-cj-tiered-fabric-drum",
+       "card": "data/products/pendant/pendant-cj-tiered-fabric-drum.json",
+       "sku": "CJYD247032902BY",
+       "option": {},
+       "role": "pendant 50 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/pendant/pendant-cj-tiered-fabric-drum.png",
+     "layer": "layers/pendant/pendant-cj-tiered-fabric-drum.png",
+     "shadow": "shadows/pendant/pendant-cj-tiered-fabric-drum.png",
+     "alpha_px": 62306,
+     "shadow_px": 3907,
+     "bbox_px": [
+      1317,
+      0,
+      1655,
+      306
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "pendant-cj-pleated-pumpkin-lantern-40": {
+     "products": [
+      {
+       "card_id": "pendant-cj-pleated-pumpkin-lantern-40",
+       "card": "data/products/pendant/pendant-cj-pleated-pumpkin-lantern-40.json",
+       "sku": "CJYD272646801AZ",
+       "option": {
+        "size": "40"
+       },
+       "role": "pendant 40 x 25 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+     "layer": "layers/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+     "shadow": "shadows/pendant/pendant-cj-pleated-pumpkin-lantern-40.png",
+     "alpha_px": 65029,
+     "alpha_255_px": 61062,
+     "shadow_px": 24,
+     "bbox_px": [
+      1317,
+      0,
+      1655,
+      320
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [850, 0, 2130, 720], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-pendant-pendant-cj-pleated-pumpkin-lantern-40.json",
+     "registration": {
+      "matches": 711,
+      "inliers": 401,
+      "residual_px_median": 0.651,
+      "residual_px_p90": 1.265,
+      "A": [
+       [
+        0.930314,
+        -4.1e-05,
+        -0.145014
+       ],
+       [
+        1.9e-05,
+        0.928664,
+        6.401391
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        1.0042,
+        -0.0169
+       ],
+       [
+        1.0091,
+        -0.0077
+       ],
+       [
+        1.0169,
+        -0.0146
+       ]
+      ],
+      "unchanged_share": 0.926,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.95
+     },
+     "rnd2": {
+      "pre_changed_px": 64830,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 64830,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 33905,
+      "mean": 0.38,
+      "p99": 0.5
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.888,
+      "grain_ratio": 1.25,
+      "score": 1.0,
+      "fails": [
+       "LAMP looks lit, outside G1.10's H/S"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 35605,
+      "core_bbox_canvas": [
+       1366,
+       141,
+       1611,
+       317
+      ]
+     },
+     "light": "the pendant light layer of the frame (light/pendant-cj-tiered-fabric-drum-fix1.png, screen, x (1 - every alpha)) is kept for every option: the lamp hangs at the same point and the wash on the wall and ceiling is the room light, in code; the shade glow is in the option layer"
+    },
+    "pendant-cj-scalloped-pleated-bell": {
+     "products": [
+      {
+       "card_id": "pendant-cj-scalloped-pleated-bell",
+       "card": "data/products/pendant/pendant-cj-scalloped-pleated-bell.json",
+       "sku": "CJYD272605101AZ",
+       "option": {},
+       "role": "pendant 45 x 30 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/dining-pendant/pendant-cj-scalloped-pleated-bell-45.png",
+     "layer": "layers/pendant/pendant-cj-scalloped-pleated-bell.png",
+     "shadow": "shadows/pendant/pendant-cj-scalloped-pleated-bell.png",
+     "alpha_px": 76955,
+     "alpha_255_px": 72967,
+     "shadow_px": 271,
+     "bbox_px": [
+      1317,
+      0,
+      1655,
+      340
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [850, 0, 2130, 720], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-pendant-pendant-cj-scalloped-pleated-bell.json",
+     "registration": {
+      "matches": 748,
+      "inliers": 432,
+      "residual_px_median": 0.652,
+      "residual_px_p90": 1.152,
+      "A": [
+       [
+        0.930741,
+        0.000729,
+        -1.141984
+       ],
+       [
+        -0.000564,
+        0.929038,
+        5.822045
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        1.0091,
+        -0.0262
+       ],
+       [
+        1.0098,
+        -0.0105
+       ],
+       [
+        1.016,
+        -0.0159
+       ]
+      ],
+      "unchanged_share": 0.907,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.84
+     },
+     "rnd2": {
+      "pre_changed_px": 76793,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 76793,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 53698,
+      "mean": 0.38,
+      "p99": 0.5
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 1.193,
+      "grain_ratio": 1.164,
+      "score": 1.26,
+      "fails": [
+       "SHARP 1.19 (sharper than the plate)",
+       "LAMP looks lit, outside G1.10's H/S"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 56064,
+      "core_bbox_canvas": [
+       1334,
+       71,
+       1645,
+       337
+      ]
+     },
+     "light": "the pendant light layer of the frame (light/pendant-cj-tiered-fabric-drum-fix1.png, screen, x (1 - every alpha)) is kept for every option: the lamp hangs at the same point and the wash on the wall and ceiling is the room light, in code; the shade glow is in the option layer",
+     "note": "card status rejected (chrome, nordic); plan V3; 3rd take (1st: the reference returned; 2nd: no ceramic ball, hung low)"
+    }
+   },
+   "note": null
+  }
+ },
+ "vase": {
+  "wheel": {
+   "slot": "vase",
+   "z": 16,
+   "shadow_z": 15,
+   "default": "vase-cj-textured-white-stoneware",
+   "order": [
+    "vase-cj-textured-white-stoneware",
+    "vase-cj-charcoal-carved",
+    "vase-cj-white-plum-hand-thrown"
+   ],
+   "sets": {
+    "vase-cj-textured-white-stoneware": {
+     "products": [
+      {
+       "card_id": "vase-cj-textured-white-stoneware",
+       "card": "data/products/vase/vase-cj-textured-white-stoneware.json",
+       "sku": "CJJT312391803CX",
+       "option": {
+        "size": "large"
+       },
+       "role": "vase 32 x 16 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/vase/vase-cj-textured-white-stoneware.png",
+     "layer": "layers/vase/vase-cj-textured-white-stoneware.png",
+     "shadow": "shadows/vase/vase-cj-textured-white-stoneware.png",
+     "alpha_px": 20558,
+     "shadow_px": 12307,
+     "bbox_px": [
+      146,
+      887,
+      264,
+      1150
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "vase-cj-charcoal-carved": {
+     "products": [
+      {
+       "card_id": "vase-cj-charcoal-carved",
+       "card": "data/products/vase/vase-cj-charcoal-carved.json",
+       "sku": "CJJT276474102BY",
+       "option": {
+        "style": "style-b"
+       },
+       "role": "vase 32 x 22 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/vase/vase-cj-charcoal-carved.png",
+     "layer": "layers/vase/vase-cj-charcoal-carved.png",
+     "shadow": "shadows/vase/vase-cj-charcoal-carved.png",
+     "alpha_px": 29953,
+     "alpha_255_px": 24399,
+     "shadow_px": 7862,
+     "bbox_px": [
+      140,
+      882,
+      303,
+      1152
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [0, 700, 960, 1240], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-vase-vase-cj-charcoal-carved.json",
+     "registration": {
+      "matches": 567,
+      "inliers": 278,
+      "residual_px_median": 0.729,
+      "residual_px_p90": 1.256,
+      "A": [
+       [
+        0.930279,
+        0.000139,
+        -0.24312
+       ],
+       [
+        -0.000282,
+        0.928504,
+        6.554609
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9964,
+        -0.0164
+       ],
+       [
+        1.0033,
+        -0.0062
+       ],
+       [
+        1.0069,
+        -0.0094
+       ]
+      ],
+      "unchanged_share": 0.947,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.28
+     },
+     "rnd2": {
+      "pre_changed_px": 37396,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 37396,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 22004,
+      "mean": 0.46,
+      "p99": 4.1
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 1.105,
+      "grain_ratio": 2.959,
+      "score": 4.0,
+      "fails": [
+       "GRAIN 2.96 (noisier than the plate)",
+       "LIGHT 121 deg (indicative)",
+       "CONTACT -11.9 L* (indicative)"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 24018,
+      "core_bbox_canvas": [
+       147,
+       889,
+       296,
+       1145
+      ]
+     },
+     "note": "the dry branch (filler) is in the layer; black toe to the plate p0.5; far shadow capped (pasted test)"
+    },
+    "vase-cj-white-plum-hand-thrown": {
+     "products": [
+      {
+       "card_id": "vase-cj-white-plum-hand-thrown",
+       "card": "data/products/vase/vase-cj-white-plum-hand-thrown.json",
+       "sku": "CJJT281811802BY",
+       "option": {
+        "size": "m"
+       },
+       "role": "vase 33 x 22.4 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/vase/vase-cj-white-plum-hand-thrown.png",
+     "layer": "layers/vase/vase-cj-white-plum-hand-thrown.png",
+     "shadow": "shadows/vase/vase-cj-white-plum-hand-thrown.png",
+     "alpha_px": 23962,
+     "alpha_255_px": 21074,
+     "shadow_px": 4859,
+     "bbox_px": [
+      142,
+      884,
+      279,
+      1151
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [0, 700, 960, 1240], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-vase-vase-cj-white-plum-hand-thrown.json",
+     "registration": {
+      "matches": 633,
+      "inliers": 323,
+      "residual_px_median": 0.739,
+      "residual_px_p90": 1.269,
+      "A": [
+       [
+        0.930438,
+        -0.000344,
+        0.012978
+       ],
+       [
+        -0.000141,
+        0.929362,
+        5.31798
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9988,
+        -0.0195
+       ],
+       [
+        1.0041,
+        -0.0074
+       ],
+       [
+        1.0059,
+        -0.0089
+       ]
+      ],
+      "unchanged_share": 0.968,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.33
+     },
+     "rnd2": {
+      "pre_changed_px": 34251,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 34251,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 17177,
+      "mean": 0.37,
+      "p99": 0.5
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.988,
+      "grain_ratio": 0.973,
+      "score": 2.0,
+      "fails": [
+       "LIGHT 170 deg (indicative)",
+       "CONTACT -15.6 L* (indicative)"
+      ]
+     },
+     "cut": {
+      "core_px": 19258,
+      "core_bbox_canvas": [
+       147,
+       889,
+       274,
+       1146
+      ]
+     },
+     "note": "the dry branch (filler) is in the layer"
+    }
+   },
+   "note": null
+  }
+ },
+ "accent-sconces": {
+  "wheel": {
+   "slot": "accent-sconces",
+   "z": 12,
+   "shadow_z": 11,
+   "default": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+   "order": [
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+    "accent-sconces-cj-travertine-block-updown-8x16",
+    "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket"
+   ],
+   "sets": {
+    "accent-sconces-aliexpress-travertine-cylinder-walnut-choice": {
+     "products": [
+      {
+       "card_id": "accent-sconces-aliexpress-travertine-cylinder-walnut-choice",
+       "card": "data/products/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.json",
+       "sku": "12000047535430431",
+       "option": {
+        "style": "round-walnut"
+       },
+       "role": "pair, 16 x 6.5 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+     "layer": "layers/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+     "shadow": "shadows/accent-sconces/accent-sconces-aliexpress-travertine-cylinder-walnut-choice.png",
+     "alpha_px": 8331,
+     "shadow_px": 11836,
+     "bbox_px": [
+      1153,
+      472,
+      2158,
+      581
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "accent-sconces-cj-travertine-block-updown-8x16": {
+     "products": [
+      {
+       "card_id": "accent-sconces-cj-travertine-block-updown-8x16",
+       "card": "data/products/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.json",
+       "sku": "CJYD254545505EV",
+       "option": {
+        "style": "type-b",
+        "other": "indoor"
+       },
+       "role": "pair, 16 x 8 x 8 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.png",
+     "layer": "layers/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.png",
+     "shadow": "shadows/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.png",
+     "alpha_px": 7163,
+     "alpha_255_px": 6619,
+     "shadow_px": 2665,
+     "bbox_px": [
+      1156,
+      474,
+      2154,
+      580
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [1016, 200, 2296, 920], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-accent-sconces-accent-sconces-cj-travertine-block-updown-8x16.json",
+     "registration": {
+      "matches": 470,
+      "inliers": 294,
+      "residual_px_median": 0.679,
+      "residual_px_p90": 1.309,
+      "A": [
+       [
+        0.930219,
+        0.000358,
+        -0.325559
+       ],
+       [
+        8.9e-05,
+        0.928875,
+        5.633377
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9973,
+        -0.0117
+       ],
+       [
+        1.0003,
+        0.0004
+       ],
+       [
+        1.0044,
+        -0.0058
+       ]
+      ],
+      "unchanged_share": 0.917,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.23
+     },
+     "rnd2": {
+      "pre_changed_px": 14046,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 14046,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 5225,
+      "mean": 32.9,
+      "p99": 104.7
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.95,
+      "grain_ratio": 2.291,
+      "score": 4.0,
+      "fails": [
+       "GRAIN 2.29 (noisier than the plate)",
+       "LAMP NOT lit"
+      ]
+     },
+     "cut": {
+      "refit": [
+       {
+        "piece_bbox": [
+         1155,
+         503,
+         1218,
+         608
+        ],
+        "scale": 0.7358,
+        "from_centre": [
+         1186.5,
+         555.5
+        ],
+        "to_centre": [
+         1180,
+         540
+        ],
+        "matrix_canvas": [
+         [
+          0.7358,
+          0.0,
+          306.92
+         ],
+         [
+          0.0,
+          0.7358,
+          131.24
+         ]
+        ]
+       },
+       {
+        "piece_bbox": [
+         2098,
+         468,
+         2152,
+         578
+        ],
+        "scale": 0.7387,
+        "from_centre": [
+         2125.0,
+         523.0
+        ],
+        "to_centre": [
+         2133,
+         516
+        ],
+        "matrix_canvas": [
+         [
+          0.7387,
+          0.0,
+          563.18
+         ],
+         [
+          0.0,
+          0.7387,
+          129.64
+         ]
+        ]
+       }
+      ],
+      "core_px": 6159,
+      "core_bbox_canvas": [
+       1158,
+       476,
+       2152,
+       578
+      ]
+     },
+     "light": "the accent-sconces light layer of the frame (light/accent-sconces-...-fix1.png: the up and down washes, screen, x (1 - every alpha)) is kept for every option: each option is mounted at the default's mounting point at the default's height (refit, recorded), so the wash on the wall is the room light, in code",
+     "note": "refit in code before the cut: x0.736 / x0.739 to the card's 16 cm (the edit drew them about 1.35x), centred on the default's mounting points"
+    },
+    "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket": {
+     "products": [
+      {
+       "card_id": "accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket",
+       "card": "data/products/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.json",
+       "sku": "CJYD320857702BY",
+       "option": {
+        "other": "type-b"
+       },
+       "role": "pair (card: no dimensions; drawn at 16 cm)"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/living-room/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.png",
+     "layer": "layers/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.png",
+     "shadow": "shadows/accent-sconces/accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.png",
+     "alpha_px": 13573,
+     "alpha_255_px": 12802,
+     "shadow_px": 4466,
+     "bbox_px": [
+      1142,
+      474,
+      2181,
+      580
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 1280 x 720 crop of the room display composite (canvas [1016, 200, 2296, 920], sent x2.0), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-living-accent-sconces-accent-sconces-cj-ribbed-travertine-half-cylinder-wood-bracket.json",
+     "registration": {
+      "matches": 463,
+      "inliers": 268,
+      "residual_px_median": 0.637,
+      "residual_px_p90": 1.214,
+      "A": [
+       [
+        0.930141,
+        0.000109,
+        -0.131817
+       ],
+       [
+        4.1e-05,
+        0.928881,
+        5.7664
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9961,
+        -0.0124
+       ],
+       [
+        1.001,
+        -0.0021
+       ],
+       [
+        1.0062,
+        -0.0086
+       ]
+      ],
+      "unchanged_share": 0.88,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.33
+     },
+     "rnd2": {
+      "pre_changed_px": 17281,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 17281,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 10924,
+      "mean": 28.71,
+      "p99": 116.6
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 0.941,
+      "grain_ratio": 1.102,
+      "score": 2.0,
+      "fails": [
+       "LAMP NOT lit"
+      ]
+     },
+     "cut": {
+      "refit": [
+       {
+        "piece_bbox": [
+         1133,
+         488,
+         1218,
+         576
+        ],
+        "scale": 0.8764,
+        "from_centre": [
+         1175.5,
+         532.0
+        ],
+        "to_centre": [
+         1180,
+         540
+        ],
+        "matrix_canvas": [
+         [
+          0.8764,
+          0.0,
+          149.79
+         ],
+         [
+          0.0,
+          0.8764,
+          73.75
+         ]
+        ]
+       },
+       {
+        "piece_bbox": [
+         2084,
+         459,
+         2198,
+         558
+        ],
+        "scale": 0.82,
+        "from_centre": [
+         2141.0,
+         508.5
+        ],
+        "to_centre": [
+         2133,
+         516
+        ],
+        "matrix_canvas": [
+         [
+          0.82,
+          0.0,
+          377.38
+         ],
+         [
+          0.0,
+          0.82,
+          99.03
+         ]
+        ]
+       }
+      ],
+      "core_px": 12209,
+      "core_bbox_canvas": [
+       1144,
+       476,
+       2179,
+       578
+      ]
+     },
+     "light": "the accent-sconces light layer of the frame (light/accent-sconces-...-fix1.png: the up and down washes, screen, x (1 - every alpha)) is kept for every option: each option is mounted at the default's mounting point at the default's height (refit, recorded), so the wash on the wall is the room light, in code",
+     "note": "refit in code: x0.876 / x0.82 to the default's height, centred on the default's mounting points"
+    }
+   },
+   "note": "a pair: one layer holds both lamps"
+  }
+ },
+ "wheels_r1": {
+  "date": "2026-11-28",
+  "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+  "plan": "docs/proposals/wm-wheels-plan-2026-11-28.md",
+  "status": "not QA'd; HD_PUBLIC=0 only (rule 7)",
+  "previous": "manifest-wheel-pecan.json",
+  "how": "per slot: `<slot>.wheel` (order, default, sets: layer, shadow; M0-W's cushions.wheel format) and the same under `wheels.<slot>`; the defaults are the frame's own rows (unchanged); several wheels compose together (each option changes only its own slot's region, RND2)",
+  "lights": {
+   "pendant": "the pendant light layer of the frame (light/pendant-cj-tiered-fabric-drum-fix1.png, screen, x (1 - every alpha)) is kept for every option: the lamp hangs at the same point and the wash on the wall and ceiling is the room light, in code; the shade glow is in the option layer",
+   "accent-sconces": "the accent-sconces light layer of the frame (light/accent-sconces-...-fix1.png: the up and down washes, screen, x (1 - every alpha)) is kept for every option: each option is mounted at the default's mounting point at the default's height (refit, recorded), so the wash on the wall is the room light, in code"
+  },
+  "grade": "M0-W: every layer carries the room display grade m0w-g2 (baked, as all M0-W layers); the edits were sent from the display composite and tone-fitted to it",
+  "jobs": "assets/prompts/wm-wheels-r1-2026-11-28/jobs.json",
+  "qa_sheet": "scratch only (render-agent scratchpad wr1/rooms/living/qa-sheet-living-r1.jpg)",
+  "studio": "assets/renders/wheel-studio/warm-modern/manifest.json",
+  "dropped": [
+   {
+    "slot": "framed-art (conditional, plan 3.1 #4)",
+    "option": "framed-art-aliexpress-misty-landscape-386242-work portrait triptych",
+    "why": "contact sheet 0 tokens: portrait designs are 03, 06, 07, 09 only (04 and 05 landscape); darks L* 15-35 pass in 03 (31.9) and 09 (32.8) only, 06 is 37.7 and 07 is 59.8; none is a landscape (a building and florals): fewer than three pass. The +320 is not spent; the slot goes to the plan's gap 5"
+   }
+  ],
+  "notes": [
+   "pendant V3 pendant-cj-scalloped-pleated-bell: the card status is rejected (chrome dome and bead, nordic); kept as the plan's V3 (it is the kitchen wheel's V3 too); its collar is drawn brushed-silver as in the FB20 still",
+   "accent-sconces V3 card has no dimensions: drawn at the default's height (16 cm); sourcing to confirm",
+   "vase V3 (plum M): in the room its foot reads a little fuller than the SKU photo's (about 55 % of the shoulder against about 42 %): low, for the designer"
+  ]
+ }
+}

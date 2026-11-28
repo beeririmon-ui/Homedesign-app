@@ -1,0 +1,31 @@
+{
+ "asset_id": "wm-wheel-studio-vase-cj-white-plum-hand-thrown",
+ "variant": "vase-cj-white-plum-hand-thrown",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "jobs": [
+  {
+   "model": "flux-2 1K i2i",
+   "tokens": 250,
+   "pid": "ea49a8b1-87e4-44e1-831c-1d628f3b2114",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-4fe6ba17cb55b6c6499c20fec5984366-0-1795872706057-18cfdb79.jpg",
+   "input": "https://oss-cf.cjdropshipping.com/product/2026/04/03/06/6a045c32-af57-4e53-80dd-211b74b54df8_trans.jpeg (SKU M)",
+   "idempotency_key": "wm-wr1-studio-vase-plum-m-r1",
+   "matte": {
+    "model": "remove-background",
+    "tokens": 50,
+    "pid": "35380c02-5a82-453c-816b-681531deffe1",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-285435fd05571881e9154dafc1c51b29-1795873001606-60d1ccb2.png"
+   },
+   "earlier": []
+  }
+ ],
+ "prompt": "Studio product photograph of one vase exactly as in the reference image (same shape, colour, glaze and surface): a hand-thrown matte white stoneware vase in the meiping (plum vase) shape, 33 cm tall and 22 cm wide (size M): a small narrow rolled mouth on a very short neck, a broad high rounded shoulder and a long smooth taper to a narrower foot; a smooth, soft matte warm-white glaze. It stands upright on the floor of the backdrop, empty: no branches, no flowers. Only the vase, nothing else. Shot on a seamless warm off-white paper backdrop that sweeps from wall to floor in one even very light warm off-white tone (about #F0E7DB, neither yellow nor grey), no horizon line, no texture, evenly lit everywhere with no bright glow or halo around the product. One large soft key light from the upper left with gentle fill; a soft, gentle contact shadow under the product, falling slightly to the lower right. Camera: a three-quarter view from the front-left, the lens about 30 degrees above the floor plane looking down at the product at an angle, not a top-down flat lay, so the front, the thickness and the sides of the product and the backdrop sweep behind it are visible; the product centred and filling about 70 percent of the square frame, the whole product in frame with clear empty backdrop margins on all sides, nothing cropped or hidden. Premium interior catalogue product photograph, photorealistic, crisp true-to-life texture, accurate colours, neutral white balance. No props, no plants, no flowers, no furniture, no people, no text, no logos.",
+ "seed": "not seedable (flux-2)",
+ "settings": {
+  "aspect_ratio": "1:1",
+  "resolution": "1K"
+ },
+ "post": "wr1 tools/studio.py from_matte: one global white balance (the lit backdrop to L* 92 / a* 1 / b* 7; lamps: exposure only), the backdrop rebuilt from its own low-pass darker-only (contact shadow, no light rim), the edge un-mixed with the matte, reframed to the FB20 square",
+ "references": "the card SKU photo (supplier URL, or rehosted on var2); the supplier pixels stay out of the output"
+}

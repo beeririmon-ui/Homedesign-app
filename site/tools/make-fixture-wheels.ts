@@ -19,14 +19,25 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { GENERATED, sitePath } from './lib/paths';
 
-const W = 1280;
-const H = 720;
+// the tour's own canvas (2720 × 1530): the engine composes every frame at the width it chose for the first (1920 or 2720)
+const W = 2720;
+const H = 1530;
+/** the shapes are laid out on 1280 × 720 and scaled to the canvas */
+const K = W / 1280;
 const DIR = join(GENERATED, 'fixtures/wheels2');
 const FOLDER = join(DIR, 'folder');
 mkdirSync(join(FOLDER, 'layers'), { recursive: true });
 
 type RGB = [number, number, number];
 type Shape = { kind: 'rect' | 'disc'; x: number; y: number; w: number; h: number; rgb: RGB };
+const at = (kind: Shape['kind'], x: number, y: number, w: number, h: number, rgb: RGB): Shape => ({
+  kind,
+  x: Math.round(x * K),
+  y: Math.round(y * K),
+  w: Math.round(w * K),
+  h: Math.round(h * K),
+  rgb,
+});
 const inside = (s: Shape, x: number, y: number): boolean => {
   if (s.kind === 'rect') return x >= s.x && x < s.x + s.w && y >= s.y && y < s.y + s.h;
   const rx = s.w / 2;
@@ -66,10 +77,10 @@ const plate = new Uint8Array(W * H * 3);
 for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) plate.set(y < H * 0.62 ? [214, 203, 189] : [168, 140, 112], (y * W + x) * 3);
 await savePng('plate.png', plate, 3);
 
-const A = (rgb: RGB): Shape => ({ kind: 'rect', x: 250, y: 360, w: 220, h: 150, rgb });
-const B = (rgb: RGB): Shape => ({ kind: 'disc', x: 920, y: 300, w: 170, h: 210, rgb });
-const C: Shape = { kind: 'rect', x: 520, y: 120, w: 240, h: 180, rgb: [120, 132, 118] };
-const D: Shape = { kind: 'rect', x: 600, y: 230, w: 260, h: 260, rgb: [92, 74, 60] };
+const A = (rgb: RGB): Shape => at('rect', 250, 360, 220, 150, rgb);
+const B = (rgb: RGB): Shape => at('disc', 920, 300, 170, 210, rgb);
+const C: Shape = at('rect', 520, 120, 240, 180, [120, 132, 118]);
+const D: Shape = at('rect', 600, 230, 260, 260, [92, 74, 60]);
 const aTones: RGB[] = [
   [196, 127, 90],
   [127, 143, 106],

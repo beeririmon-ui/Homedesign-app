@@ -63,7 +63,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, wri
 import { basename, isAbsolute, join, relative } from 'node:path';
 import { GENERATED, MEDIA_OUT, REPO, repoPath, sitePath } from './lib/paths';
 import { nearness, type DepthCfg } from './lib/depth';
-import { CUT, hardenRim, rimCut } from './lib/cards';
+import { CUT, hardenRim, mainPiece, rimCut } from './lib/cards';
 
 type Box = [number, number, number, number];
 type SlotCfg = {
@@ -1071,7 +1071,9 @@ else {
   // taken from inside it, so no room is left round it), on sheets of 2048
   const cardPieces: { data: Buffer; w: number; h: number; ch: 4 }[] = [];
   for (const s of shownList) {
-    const a = await alphaBox(s.layer);
+    // a product drawn twice far apart (a pair of sconces: its config marks both, or its two layers) is shown by one
+    const twice = (c.slots[s.slot]!.anchors?.length ?? 0) > 1 || pieces.get(s.slot)!.length > 1;
+    const a = twice ? mainPiece(await raw(s.layer, 4), W, await alphaBox(s.layer)) : await alphaBox(s.layer);
     const pad = Math.round(Math.max(a.x1 - a.x0, a.y1 - a.y0) * 0.03) + 2;
     const left = Math.max(0, a.x0 - pad);
     const top0 = Math.max(0, a.y0 - pad);

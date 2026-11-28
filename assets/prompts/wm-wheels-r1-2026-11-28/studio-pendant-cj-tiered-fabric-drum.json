@@ -1,0 +1,40 @@
+{
+ "asset_id": "wm-wheel-studio-pendant-cj-tiered-fabric-drum",
+ "variant": "pendant-cj-tiered-fabric-drum",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "jobs": [
+  {
+   "model": "flux-2 1K i2i",
+   "tokens": 250,
+   "pid": "9e42b140-c93e-4727-90d2-f819020cb5e9",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-076ce87f2140ea3777989dab741aad85-0-1795873297755-3292435f.jpg",
+   "input": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/ac84102f-cb6a-4ad7-8610-5fec54c2015d.jpg (the SKU gallery photo, rehosted on var2)",
+   "idempotency_key": "wm-wr1-studio-pendant-drum-r1c",
+   "matte": {
+    "model": "remove-background",
+    "tokens": 50,
+    "pid": "d950ef02-df33-450b-8d55-60d2e6773099",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-eb8434e4426577e8a56c91bc7a824119-1795873323525-8956ffd6.png"
+   },
+   "earlier": [
+    {
+     "pid": "b7147330-5819-44e7-ba02-2de51f012f54",
+     "state": "provider error, refunded"
+    },
+    {
+     "pid": "68d3defd-5129-4ea9-9fab-3b190caaf0d5",
+     "state": "provider error, refunded"
+    }
+   ]
+  }
+ ],
+ "prompt": "Studio product photograph of one pendant lamp exactly as in the reference image: a tiered drum shade about 50 cm in diameter made of five stacked rings of fine off-white linen-look fabric, the rings widening towards the middle and narrowing again to the bottom ring, with a white bottom diffuser, hanging from a thin white cord that runs straight up out of the top of the frame. The lamp is switched on and glows a warm 2700 K from within, the fabric evenly luminous. Shot on a seamless warm off-white paper backdrop in one even very light warm off-white tone (about #F0E7DB, neither yellow nor grey), no horizon line, no texture, evenly lit with no bright glow or halo on the backdrop around the lamp. One large soft key light from the upper left with gentle fill; a faint soft shadow of the lamp on the backdrop below and behind it. Camera: a three-quarter view from about 30 degrees above the shade's equator, so the top of the shade and its form are visible; the shade centred, filling about 70 percent of the frame's width, the cord running straight up out of the top of the frame, clear empty backdrop margins at the sides and below, the whole shade in frame. Premium interior catalogue product photograph, photorealistic, crisp true-to-life texture, accurate colours, neutral white balance. No props, no furniture, no people, no text, no logos.",
+ "seed": "not seedable (flux-2)",
+ "settings": {
+  "aspect_ratio": "1:1",
+  "resolution": "1K"
+ },
+ "post": "wr1 tools/studio.py from_matte: one global white balance (the lit backdrop to L* 92 / a* 1 / b* 7; lamps: exposure only), the backdrop rebuilt from its own low-pass darker-only (contact shadow, no light rim), the edge un-mixed with the matte, reframed to the FB20 square",
+ "references": "the card SKU photo (supplier URL, or rehosted on var2); the supplier pixels stay out of the output"
+}

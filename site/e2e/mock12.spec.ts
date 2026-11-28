@@ -7,7 +7,7 @@
  *     choices go with it to its other frame and back;
  *  2. FB29: the strip under the room shows a product as sold — its studio picture where one exists (the bedroom's throw,
  *     the bath's towel), else its card with a clean rim, else, where the room cuts the card, its name; never a cut card;
- *  3. no feathered crop: no mask on a picture outside the room; the wheel's studio round is a clean circle.
+ *  3. no feathered crop: no soft mask on a picture outside the room; the wheel's studio round is a hard-edged circle.
  *
  * The numbers go to the evidence when HD_EVIDENCE_DIR is set; the screens when HD_SHOTS_DIR is set.
  */
@@ -142,6 +142,9 @@ test.describe('MOCK12: several wheels in a frame, and the studio pictures outsid
       expect(await tile.locator('image').getAttribute('href')).toMatch(/studio(-\d+)?\.512\.webp$/);
       expect(await tile.evaluate((e) => getComputedStyle(e).backgroundImage)).toContain('241, 232, 220');
       await page.locator('.tour-strip').scrollIntoViewIfNeeded();
+      // the door's own controls fade out after the room is at rest: the screen waits for them
+      await page.waitForFunction(() => getComputedStyle(document.querySelector('.tour-door-act')!).opacity === '0', undefined, { timeout: 20_000 });
+      await page.waitForTimeout(800);
       await shot(page, `mock12-strip-${room}-400.png`);
     }
     note('strip-mock12.json', seen);
@@ -153,7 +156,7 @@ test.describe('MOCK12: several wheels in a frame, and the studio pictures outsid
     await ctx.close();
   });
 
-  test('no feathered crop: no mask on a picture outside the room, and the wheel’s studio round is a clean circle', async ({ page }) => {
+  test('no feathered crop: no soft mask on a picture outside the room, and the wheel’s studio round is a clean circle', async ({ page }) => {
     await noIntro(page);
     await page.goto('/tour/?skip=1&room=master');
     await atRest(page);
@@ -169,8 +172,9 @@ test.describe('MOCK12: several wheels in a frame, and the studio pictures outsid
     expect(styles.length).toBe(3);
     for (const s of styles) {
       expect(s.studio).toBe(true);
-      expect(s.mask).toBe('none');
-      expect(s.clip).toContain('circle');
+      // a clean circle: a hard mask whose edge is 1.5 px, never MOCK10's fade from 74 %
+      expect(s.mask).toMatch(/radial-gradient\(circle closest-side/);
+      expect(s.mask).toMatch(/calc\(100% - 1\.5px\)/);
     }
     await shot(page, 'mock12-wheel-master-1280.png');
     await page.keyboard.press('Escape');

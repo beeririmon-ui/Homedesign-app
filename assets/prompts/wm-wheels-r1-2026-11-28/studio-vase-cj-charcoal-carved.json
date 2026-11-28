@@ -1,0 +1,31 @@
+{
+ "asset_id": "wm-wheel-studio-vase-cj-charcoal-carved",
+ "variant": "vase-cj-charcoal-carved",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "jobs": [
+  {
+   "model": "flux-2 1K i2i",
+   "tokens": 250,
+   "pid": "6de5c8eb-0579-4ce8-b035-7d21bce66791",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-3ef24058af1933c71218fafb4e47b52a-0-1795872698714-69a71f4a.jpg",
+   "input": "https://oss-cf.cjdropshipping.com/product/2026/02/22/00/b3a612e6-5115-4823-9a62-531484d9db5f_trans.jpeg (SKU Style B)",
+   "idempotency_key": "wm-wr1-studio-vase-charcoal-b-r1",
+   "matte": {
+    "model": "remove-background",
+    "tokens": 50,
+    "pid": "df53f6ce-9396-46d8-9c6f-14cd03a74f36",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-9ac8edc6895bcf794025c09be6d4337d-1795873010908-ff397fc1.png"
+   },
+   "earlier": []
+  }
+ ],
+ "prompt": "Studio product photograph of one vase exactly as in the reference image (same shape, colour, glaze and surface): a hand-thrown charcoal-black stoneware vase 32 cm tall and 22 cm wide (Style B): a broad rounded shoulder that tapers down to a narrower foot, a small irregular slanted mouth, and fine vertical carved lines over its whole matte, slightly rough surface. It stands upright on the floor of the backdrop, empty: no branches, no flowers. Only the vase, nothing else. Shot on a seamless warm off-white paper backdrop that sweeps from wall to floor in one even very light warm off-white tone (about #F0E7DB, neither yellow nor grey), no horizon line, no texture, evenly lit everywhere with no bright glow or halo around the product. One large soft key light from the upper left with gentle fill; a soft, gentle contact shadow under the product, falling slightly to the lower right. Camera: a three-quarter view from the front-left, the lens about 30 degrees above the floor plane looking down at the product at an angle, not a top-down flat lay, so the front, the thickness and the sides of the product and the backdrop sweep behind it are visible; the product centred and filling about 70 percent of the square frame, the whole product in frame with clear empty backdrop margins on all sides, nothing cropped or hidden. Premium interior catalogue product photograph, photorealistic, crisp true-to-life texture, accurate colours, neutral white balance. No props, no plants, no flowers, no furniture, no people, no text, no logos.",
+ "seed": "not seedable (flux-2)",
+ "settings": {
+  "aspect_ratio": "1:1",
+  "resolution": "1K"
+ },
+ "post": "wr1 tools/studio.py from_matte: one global white balance (the lit backdrop to L* 92 / a* 1 / b* 7; lamps: exposure only), the backdrop rebuilt from its own low-pass darker-only (contact shadow, no light rim), the edge un-mixed with the matte, reframed to the FB20 square",
+ "references": "the card SKU photo (supplier URL, or rehosted on var2); the supplier pixels stay out of the output"
+}

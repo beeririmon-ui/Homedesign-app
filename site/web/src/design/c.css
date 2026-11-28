@@ -1889,8 +1889,9 @@ html[data-design='c'] .slot-item .pic-name.thumb {
   font-size: 10px;
   padding: 4px;
 }
-/* the wheel: every card a round of the cream (the disc), lifted from the night; the studio picture fills it and is cut
-   by the round itself (a clean anti-aliased circle, never a faded rim: MOCK10's mask is gone) */
+/* the wheel: every card a round of the cream (the disc), lifted from the night; the studio picture fills it, cut by a
+   clean circle: a hard mask with a 1.5 px anti-aliased edge, never a faded rim (MOCK10's soft mask is gone). A mask and
+   not a clip-path: inside the ring's 3D a clip-path is not drawn */
 html[data-design='c'] .arc-card:has(> [data-pic]) .disc,
 html[data-design='c'] .tour[data-frame] .arc-card:has(> [data-pic]) .disc {
   background: radial-gradient(120% 120% at 34% 26%, #f7f0e6 0%, var(--m12-cream) 55%, #e6dbcc 100%);
@@ -1908,12 +1909,11 @@ html[data-design='c'] .tour[data-frame] .arc-card[aria-checked='true']:has(> [da
 html[data-design='c'] .arc-card svg.sprite.studio,
 html[data-design='c'] .arc-card img.studio,
 html[data-design='c'] .arc.ring .arc-card .soft > svg.sprite.studio {
-  -webkit-mask-image: none;
-  mask-image: none;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 calc(100% - 1.5px), transparent 100%);
+  mask-image: radial-gradient(circle closest-side, #000 calc(100% - 1.5px), transparent 100%);
   inset: 3%;
   width: 94%;
   height: 94%;
-  clip-path: circle(50% at 50% 50%);
   filter: none;
 }
 html[data-design='c'] .arc.ring .arc-card .soft > svg.sprite.studio {

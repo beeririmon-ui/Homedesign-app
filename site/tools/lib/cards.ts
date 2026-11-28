@@ -125,3 +125,61 @@ export function hardenRim(px: Buffer, w: number, h: number): Buffer {
   }
   return out;
 }
+
+export type Box4 = { x0: number; y0: number; x1: number; y1: number };
+/**
+ * MOCK12: the card of a product drawn twice, far apart (a pair of sconces either side of a bed or a mirror), shows one
+ * of them, not two specks in a wide empty card: the heaviest run of columns (then of rows) with alpha, where runs more
+ * than 15 % of the box (at least 24 px) apart are pieces of their own. A product of one piece keeps its box.
+ */
+export function mainPiece(p: Buffer, W: number, box: Box4): Box4 {
+  const on = (x: number, y: number) => p[(y * W + x) * 4 + 3]! >= 128;
+  const split = (lo: number, hi: number, mass: (i: number) => number): [number, number] => {
+    const gap = Math.max(24, 0.15 * (hi - lo + 1));
+    const segs: { a: number; b: number; m: number }[] = [];
+    let empty = Infinity;
+    for (let i = lo; i <= hi; i++) {
+      const m = mass(i);
+      if (!m) {
+        empty++;
+        continue;
+      }
+      const last = segs[segs.length - 1];
+      if (last && empty < gap) {
+        last.b = i;
+        last.m += m;
+      } else segs.push({ a: i, b: i, m });
+      empty = 0;
+    }
+    if (segs.length < 2) return [lo, hi];
+    const best = segs.reduce((x, y) => (y.m > x.m ? y : x));
+    return [best.a, best.b];
+  };
+  let b = { ...box };
+  const [xa, xb] = split(b.x0, b.x1, (x) => {
+    let n = 0;
+    for (let y = b.y0; y <= b.y1; y++) if (on(x, y)) n++;
+    return n;
+  });
+  b = { ...b, x0: xa, x1: xb };
+  const [ya, yb] = split(b.y0, b.y1, (y) => {
+    let n = 0;
+    for (let x = b.x0; x <= b.x1; x++) if (on(x, y)) n++;
+    return n;
+  });
+  b = { ...b, y0: ya, y1: yb };
+  // the box tight round what is left
+  let x0 = b.x1;
+  let x1 = b.x0;
+  let y0 = b.y1;
+  let y1 = b.y0;
+  for (let y = b.y0; y <= b.y1; y++)
+    for (let x = b.x0; x <= b.x1; x++)
+      if (on(x, y)) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+  return x1 < x0 ? box : { x0, y0, x1, y1 };
+}
