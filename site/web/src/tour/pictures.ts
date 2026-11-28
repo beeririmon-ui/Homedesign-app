@@ -18,5 +18,23 @@ export const pictures = (s: TourSlot, o: TourOption): OptionPictures => ({
   studio: o.studio ?? (o.card.source === 'studio' ? o.card : null),
   in_room: { kind: s.lazy ? 'patch' : 'layer', slot: s.id, position: o.position },
 });
-/** FB20: the wheel's card of an option: its studio picture where there is one, else today's thumbnail */
-export const wheelCard = (s: TourSlot, o: TourOption): TourCard => pictures(s, o).studio ?? o.card;
+/**
+ * MOCK12 (FB29, "בדף שמחוץ לתצוגה בחדר... תמונה שהיא לא חתוכה"): what a product is shown by outside the room — the strip
+ * under the room, the wheel and the product's card — in this order:
+ *  - `studio`: its studio picture (the product as sold, on the studio's cream), wherever one exists;
+ *  - `card`: until then, its layer trimmed to it, with its rim hardened (no feathered rim: tools/make-tour-room.ts);
+ *  - `name`: where the room cuts that layer (an occluder over it, the frame's edge), the slot's name on the same cream.
+ * Never a crop of the room, never a feathered one, never one an occluder cuts.
+ */
+export type Outside = { kind: 'studio'; card: TourCard } | { kind: 'card'; card: TourCard } | { kind: 'name'; text: string };
+export function outside(s: TourSlot, o: TourOption): Outside {
+  const studio = pictures(s, o).studio;
+  if (studio) return { kind: 'studio', card: studio };
+  return o.cut ? { kind: 'name', text: s.name_he } : { kind: 'card', card: o.card };
+}
+/** FB20: the wheel's card of an option: its studio picture where there is one, else today's thumbnail; MOCK12: none
+ *  where the room cuts it (the wheel names it) */
+export const wheelCard = (s: TourSlot, o: TourOption): TourCard | null => {
+  const p = outside(s, o);
+  return p.kind === 'name' ? null : p.card;
+};

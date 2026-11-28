@@ -78,6 +78,12 @@ export type TourOption = {
    * thumbnail. See tour/pictures.ts and site/README.md ("the wheel's two pictures").
    */
   studio?: TourCard | null;
+  /** MOCK12: the option's product as its render folder names it (its layer's product; a set: `set-<key>`): the choice a
+   *  room remembers between its frames */
+  variant?: string;
+  /** MOCK12 (FB29): the room cuts this option's `card` (an occluder over it, "occluded", or the frame's edge, "frame"):
+   *  until it has a studio picture, outside the room it is named, never shown cut */
+  cut?: 'occluded' | 'frame';
 };
 export type TourSlot = {
   id: string;
@@ -144,8 +150,11 @@ export type TourData = {
   slots: TourSlot[];
   /** MOCK4: the room's name in the tour ("חדר שינה"); absent: the living room */
   room_he?: string;
-  /** MOCK4: the slot whose three variants the wheel shows (the bedroom's throw, the bathroom's hand towel) */
+  /** MOCK4: the slot whose three variants the wheel shows (the bedroom's throw, the bathroom's hand towel); MOCK12: the
+   *  first of `wheels` */
   sample?: string;
+  /** MOCK12 (plan wm-wheels 7.2): the frame's wheels, a ring each; their choices compose together on the stack */
+  wheels?: string[];
   /** MOCK4: false: the visitor does not zoom here (the bedroom: the art's rights, ×1 only) */
   zoom?: boolean;
   /** MOCK4: the boxes of the frame no close-up and no zoom may show (canvas UV); MOCK5: one a print whose rights are

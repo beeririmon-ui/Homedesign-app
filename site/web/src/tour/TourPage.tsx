@@ -33,7 +33,7 @@ import { Price } from '../components/Media';
 import type { VariantWheel as WheelComponent } from '../components/VariantWheel';
 import { Waitlist } from '../components/Waitlist';
 import { DIM, REVEAL_MS } from '../components/ring-wheel';
-import { wheelCard } from './pictures';
+import { outside, wheelCard, type Outside } from './pictures';
 import {
   FRAMES,
   GROUP_HE,
@@ -44,7 +44,6 @@ import {
   ROOM_HE,
   ROOM_IDS,
   WM,
-  cardUrl,
   cardFileUrl,
   groupOf,
   roomCount,
@@ -55,7 +54,7 @@ import {
   type GroupId,
   type HouseId,
   type RoomId,
-  type TourCard,
+  type TourData,
   type TourOption,
   type TourSlot,
 } from './data';
@@ -197,20 +196,32 @@ const PUSH_AMP = { room: 1, frame: 0.55 } as const;
 const FRAME_FADE_MS = 600;
 /** a card: its own file, or (MOCK4) its place on its room's sheet of cards, as an SVG that shows only that place.
  *  MOCK6: the place is clipped (an inner svg is its own viewport): a card much taller or wider than the square it is
- *  shown in (the kids' pendant on its cord) no longer shows its neighbours on the sheet beside it */
-function CardPic({ o, cls, size, card }: { o: TourOption; cls?: string; size?: number; card?: TourCard }) {
-  const c = card ?? o.card;
-  const url = card ? cardFileUrl(card) : cardUrl(o);
+ *  shown in (the kids' pendant on its cord) no longer shows its neighbours on the sheet beside it.
+ *  MOCK12 (FB29): what it shows is the product outside the room (tour/pictures.ts `outside`): its studio picture (the
+ *  square of the studio's cream, filling its tile), else its card with a clean rim, else, where the room cuts the card,
+ *  the slot's name on the same cream. `pic` is passed where the caller already chose (the wheel) */
+function CardPic({ s, o, cls, size, pic }: { s: TourSlot; o: TourOption; cls?: string; size?: number; pic?: Outside }) {
+  const p = pic ?? outside(s, o);
+  if (p.kind === 'name')
+    return (
+      <span class={`pic-name${cls ? ` ${cls}` : ''}`} data-pic="name" aria-hidden="true">
+        <span>{p.text}</span>
+      </span>
+    );
+  const c = p.card;
+  const url = cardFileUrl(c);
   if (c.sprite && c.sheet) {
     const [x, y, w, h] = c.sprite;
-    // MOCK10: a studio picture (FB20: a square of its own studio's paper) is marked, so the wheel can soften its corners
-    const studio = /\/studio\.\d+\.webp$/.test(url);
+    // MOCK10: a studio picture is marked; MOCK12: it fills its round or its tile (slice), a card sits in it (meet)
+    const studio = p.kind === 'studio';
     return (
       <svg
-        class={`sprite${studio ? ' studio' : ''}${cls ? ` ${cls}` : ''}`}
+        class={`sprite${studio ? ' studio' : ' cut'}${cls ? ` ${cls}` : ''}`}
+        data-pic={p.kind}
         viewBox={`${x} ${y} ${w} ${h}`}
         width={size}
         height={size}
+        preserveAspectRatio={studio ? 'xMidYMid slice' : undefined}
         aria-hidden="true"
         focusable="false"
       >
@@ -220,8 +231,30 @@ function CardPic({ o, cls, size, card }: { o: TourOption; cls?: string; size?: n
       </svg>
     );
   }
-  return <img class={cls} src={url} alt="" width={size} height={size} draggable={false} loading={cls === 'thumb' ? 'lazy' : undefined} />;
+  return (
+    <img
+      class={`${p.kind === 'studio' ? 'studio' : 'cut'}${cls ? ` ${cls}` : ''}`}
+      data-pic={p.kind}
+      src={url}
+      alt=""
+      width={size}
+      height={size}
+      draggable={false}
+      loading={cls === 'thumb' ? 'lazy' : undefined}
+    />
+  );
 }
+/** MOCK12: the files a room's strip shows (its products' pictures outside the room), fetched before the room is entered */
+const stripFiles = (r: TourData): string[] => [
+  ...new Set(
+    r.slots
+      .filter((x) => !x.fixed && x.options[0])
+      .flatMap((x) => {
+        const p = outside(x, x.options[0]!);
+        return p.kind === 'name' ? [] : [cardFileUrl(p.card)];
+      }),
+  ),
+];
 /** PRE1: a product the shop has and cannot sell now says so; a card the shop does not have yet is "עוד לא במכירה".
  *  MOCK6: a product the safety rule holds says why first ("לא במכירה", "לא במכירה לחדר ילדים", "ממתין לתקן EN 71") */
 const OUT_HE = 'המלאי אינו זמין כעת';
@@ -249,13 +282,16 @@ function wheelHouse(s: TourSlot): House {
     product: () => undefined,
     drawn: () => [],
     // FB20: the product as sold — the option's studio picture (pictures().studio) where there is one, else today's card
-    // (MOCK2, FB1: its layer trimmed to it, never a crop of the room)
-    thumb: (pos) => cardFileUrl(wheelCard(s, s.options[pos - 1]!)),
-    // MOCK4: a card on its room's sheet is drawn from its place there
+    // (MOCK2, FB1: its layer trimmed to it, never a crop of the room); MOCK12: its name where the room cuts the card
+    thumb: (pos) => {
+      const c = wheelCard(s, s.options[pos - 1]!);
+      return c ? cardFileUrl(c) : null;
+    },
+    // MOCK4: a card on its room's sheet is drawn from its place there; MOCK12: the name on the studio's cream
     thumbNode: (pos) => {
       const o = s.options[pos - 1]!;
-      const c = wheelCard(s, o);
-      return c.sprite ? <CardPic o={o} card={c} /> : null;
+      const p = outside(s, o);
+      return p.kind === 'name' || p.card.sprite ? <CardPic s={s} o={o} pic={p} /> : null;
     },
     cardGround: s.ground,
     info: (pos) => {
@@ -456,6 +492,8 @@ export function TourPage() {
   const setRoomUi = (r: RoomId) => {
     live.current.room = r;
     setRoomState(r);
+    // MOCK12: the strip and the marks read the frame's own selection (several wheels; a choice kept between two frames)
+    if (engine.current) setSel({ ...engine.current.selection });
     tell();
   };
   const setCfg = (c: Partial<Cfg>) => {
@@ -741,7 +779,16 @@ export function TourPage() {
   function otherCards(e: TourEngine) {
     if (cardsStarted.current) return;
     cardsStarted.current = true;
-    const urls = [...new Set(tour.slots.flatMap((s) => s.options.slice(1).map(cardUrl)))];
+    const urls = [
+      ...new Set(
+        tour.slots.flatMap((s) =>
+          s.options.slice(1).flatMap((o) => {
+            const c = wheelCard(s, o);
+            return c ? [cardFileUrl(c)] : [];
+          }),
+        ),
+      ),
+    ];
     const next = () => {
       const url = urls.shift();
       if (!url || !engine.current) return;
@@ -1349,14 +1396,16 @@ export function TourPage() {
         ui.label(null, false);
         ui.count(null);
         setEye(WM);
-        // the next room's sheet of cards (its strip, its wheel) is fetched and decoded before anything moves
-        const sheet = ROOMS[id].slots.find((x) => x.options[0]?.card.sprite)?.options[0];
-        if (sheet) {
-          const img = new Image();
-          img.src = cardUrl(sheet);
-          held.current.push(img);
-          await decoded(img);
-        }
+        // the next room's sheets of pictures (its strip, its wheel: MOCK12, the studio's and the cards') are fetched and
+        // decoded before anything moves
+        await Promise.all(
+          stripFiles(ROOMS[id]).map((url) => {
+            const img = new Image();
+            img.src = url;
+            held.current.push(img);
+            return decoded(img);
+          }),
+        );
         // MOCK7: a walk between rooms and between the frames of a room (2.5D, in code, until the real clips); reduced
         // motion keeps the dissolve
         const walkIt = !fromDoor && !e.reduce;
@@ -2459,8 +2508,8 @@ export function TourPage() {
                         onPointerDown={() => !live.current.busy && ui.ring(s, 'tile')}
                         onClick={(ev) => void openSlot(s, ev.currentTarget)}
                       >
-                        <span class="pic">
-                          <CardPic o={o} size={72} />
+                        <span class="pic" data-pic={outside(s, o).kind}>
+                          <CardPic s={s} o={o} size={72} />
                         </span>
                         <span class="nm">{nameHe(s, o)}</span>
                       </button>
@@ -2802,7 +2851,7 @@ export function TourPage() {
             const o = optionOf(s, sel);
             return (
               <li key={s.id} class="card slot-item">
-                <CardPic o={o} cls="thumb" size={64} />
+                <CardPic s={s} o={o} cls="thumb" size={64} />
                 <div class="meta">
                   <strong>{s.name_he}</strong>
                   <span class="small">{o.name_he ?? <span class="muted">{s.sale ? s.sale.label_he : NOT_FOR_SALE_HE}</span>}</span>

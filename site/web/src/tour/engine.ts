@@ -284,11 +284,41 @@ export class TourEngine {
   slot(id: string): TourSlot {
     return tour.slots.find((s) => s.id === id)!;
   }
-  /** MOCK4: the textures of room `r` on the GPU: its base, every slot's option (the selection's, in the room shown),
-   *  and its lights */
+  /**
+   * MOCK12 (plan wm-wheels 7.2): the visitor's choices in the room they are in, by its frames' wheels: the option's
+   * `variant` (its product). A room's other frame shows the same choice where it has that option, else its default (MB1
+   * and B1 have no layers of their own yet); back in the first frame, the choice is there again. A room left for another
+   * is forgotten, as before (every room opens on its defaults).
+   */
+  private chosen = new Map<string, Map<string, string>>();
+  private remember(): void {
+    const g = tour.group ?? tour.room;
+    const m = this.chosen.get(g) ?? new Map<string, string>();
+    for (const s of tour.slots) {
+      if (s.options.length < 2) continue;
+      const v = s.options[(this.selection[s.id] ?? 1) - 1]?.variant;
+      if (v) m.set(s.id, v);
+    }
+    this.chosen.set(g, m);
+  }
+  /** MOCK12: the selection a frame opens with (the frame shown: its own) */
+  selectionFor(r: TourData): Record<string, number> {
+    if (r === tour) return this.selection;
+    const m = this.chosen.get(r.group ?? r.room);
+    return Object.fromEntries(
+      r.slots.map((s) => {
+        const v = m?.get(s.id);
+        const i = v ? s.options.findIndex((o) => o.variant === v) : -1;
+        return [s.id, i >= 0 ? i + 1 : 1];
+      }),
+    );
+  }
+  /** MOCK4: the textures of room `r` on the GPU: its base, every slot's option (the selection's, in the room shown;
+   *  MOCK12: in another frame of it, the choice it opens with), and its lights */
   loadRoom(r: TourData, priority = 0): Promise<void> {
     const w = this.gl.width;
-    const pos = (s: TourSlot) => (r === tour ? (this.selection[s.id] ?? 1) : 1);
+    const sel = this.selectionFor(r);
+    const pos = (s: TourSlot) => sel[s.id] ?? 1;
     const draws = [baseOf(WM, this.ext, w, r), ...r.slots.flatMap((s) => this.keys(s, pos(s), r)), ...this.lights(r)];
     return Promise.all(draws.map((d) => this.ensure(d, priority, d.mips ?? !d.key.endsWith(':base')))).then(() => undefined);
   }
@@ -326,6 +356,10 @@ export class TourEngine {
     const from = tour.room;
     const prev = tour;
     const camA = { ...this.cam };
+    // MOCK12: the choices of the room the visitor is in go with them to its other frame; another room forgets them
+    this.remember();
+    for (const g of [...this.chosen.keys()]) if (g !== (next.group ?? next.room)) this.chosen.delete(g);
+    const nextSel = this.selectionFor(next);
     await this.loadRoom(next, 0);
     if (this.destroyed) return;
     const amp = push > 0 && !this.reduce && from !== id ? push : 0;
@@ -346,7 +380,7 @@ export class TourEngine {
         setRoom(id);
         this.house = WM;
         if (from !== id) {
-          this.selection = Object.fromEntries(next.slots.map((s) => [s.id, 1]));
+          this.selection = { ...nextSel };
           this.defaults = null;
           this.warmed = true;
           this.warmP = Promise.resolve();

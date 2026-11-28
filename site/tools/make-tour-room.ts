@@ -60,7 +60,7 @@ import sharp, { type OverlayOptions } from 'sharp';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { basename, join, relative } from 'node:path';
+import { basename, isAbsolute, join, relative } from 'node:path';
 import { GENERATED, MEDIA_OUT, REPO, repoPath, sitePath } from './lib/paths';
 import { nearness, type DepthCfg } from './lib/depth';
 
@@ -139,6 +139,13 @@ type Cfg = {
   offset?: { key: string; from_camera: string };
   slots_file: string;
   sample: string | null;
+  /** MOCK12 (plan wm-wheels 7.2): the frame's wheels, a ring each, by the tour's slot id (absent: `sample` and every
+   *  slot the manifests give options to). Naming them keeps a wheel out until it is wanted */
+  wheels?: string[];
+  /** MOCK12: render-agent's per-room wheel manifest next to the room's (the M0-W `manifest-wheel*.json` format: every
+   *  `<key>.wheel` = { slot, default, order, sets }, its `variants` and its `default: false` layers). The one line a
+   *  room's new wheels take: every wheel in it becomes a wheel of this frame */
+  wheel_manifest?: string;
   avoid?: string | null;
   /** MOCK5: the prints of the frame: each one's card is read for its rights (×1 only unless "confirmed") */
   prints?: string[];
@@ -297,42 +304,84 @@ const glowEntries = (f16?.glows ?? []).map((g) => {
   const file = relative(dir, join(mdir, g.file));
   const l = g.slot ? layers.find((y) => y.slot === g.slot) : undefined;
   const slot = l ? tourSlotOf(l) : null;
-  return { file, mul: g.blend === 'multiply', slot, pos: slot && slot === c.sample ? 1 : undefined };
+  // a lamp's glow goes with its default option only (MOCK8: the kitchen's pendant; MOCK12: any wheel's)
+  return { file, mul: g.blend === 'multiply', slot, pos: undefined as number | undefined };
 });
 
-// ---------- the sample slot's options ----------
-const sampleOpts: { product: string; layer: string; shadow: string; card: string | null }[] = [];
-if (c.sample) {
-  const ps = pieces.get(c.sample) ?? fail(`no sample slot ${c.sample}`);
-  if (ps.length !== 1) fail(`the sample slot ${c.sample} has ${ps.length} layers`);
-  const d = ps[0]!;
-  sampleOpts.push({ product: d.product, layer: d.layer, shadow: d.shadow, card: c.slots[c.sample]!.card });
-  const fromLayers = indexed.filter((x) => x.l.default === false && x.l.slot === d.slot).map((x) => x.l as MVariant);
-  const fromVariants = (m.variants ?? []).filter((x) => inFrame(x) && x.slot === d.slot && !x.default);
-  // MOCK8: a manifest's wheel of sets (M0-W's cushions: `cushions.wheel`, B the default, then A and C)
-  type Sets = { order: string[]; default: string; sets: Record<string, { layer: string; shadow: string; default?: boolean }> };
-  const wheel = c.wheel_sets ? ((m[c.wheel_sets] as { wheel?: Sets } | undefined)?.wheel ?? fail(`${c.manifest} has no ${c.wheel_sets}.wheel`)) : null;
-  if (wheel) {
-    const def = wheel.sets[wheel.default] ?? fail(`${c.wheel_sets}.wheel: no default set ${wheel.default}`);
-    if (def.layer !== d.layer || def.shadow !== d.shadow) fail(`${c.wheel_sets}.wheel: the default set is not the frame's ${d.slot} layer`);
-    for (const k of wheel.order.filter((x) => x !== wheel.default)) {
-      const v = wheel.sets[k] ?? fail(`${c.wheel_sets}.wheel: no set ${k}`);
-      fromVariants.push({ slot: d.slot, product: `set-${k}`, default: false, layer: v.layer, shadow: v.shadow });
+// ---------- MOCK12: the frame's wheels (MOCK4–11: one, the sample slot), and every wheel slot's options ----------
+type Opt = { product: string; layer: string; shadow: string; card: string | null };
+type WheelSpec = {
+  slot: string;
+  default: string;
+  order: string[];
+  sets: Record<string, { layer: string; shadow: string; default?: boolean; products?: { card_id?: string }[] }>;
+};
+const isSpec = (w: unknown): w is WheelSpec => {
+  const x = w as Partial<WheelSpec> | null;
+  return !!x && typeof x === 'object' && typeof x.slot === 'string' && !!x.sets && typeof x.sets === 'object' && Array.isArray(x.order);
+};
+/** a manifest's wheels in the M0-W format: every `<key>.wheel` with a slot, sets and an order (and `wheels`, a list or a
+ *  map of them, should a manifest hold several that way) */
+function wheelSpecs(mm: Record<string, unknown>): WheelSpec[] {
+  const list = Object.values(mm).flatMap((v) => (v && typeof v === 'object' && isSpec((v as { wheel?: unknown }).wheel) ? [(v as { wheel: WheelSpec }).wheel] : []));
+  const more = mm.wheels;
+  for (const w of Array.isArray(more) ? more : more && typeof more === 'object' ? Object.values(more) : []) if (isSpec(w)) list.push(w);
+  return list;
+}
+if (c.wheel_sets && !isSpec((m[c.wheel_sets] as { wheel?: unknown } | undefined)?.wheel)) fail(`${c.manifest} has no ${c.wheel_sets}.wheel`);
+const wm = c.wheel_manifest ? read<Manifest>(join(dir, c.wheel_manifest)) : null;
+/** a manifest's extra options of a manifest slot: its `default: false` layers, its variants and its wheels' other sets */
+function extras(mm: Manifest, ms: string, tourId: string, def: MLayer, from: string): Opt[] {
+  const cardOf = (product: string, card?: string): string | null =>
+    c.variant_cards?.[product] ?? (card ? basename(card, '.json') : (c.slots[tourId]?.card ?? null));
+  const out: Opt[] = [];
+  for (const l of mm.layers.filter((x) => inFrame(x) && x.default === false && x.slot === ms)) out.push({ ...l, card: cardOf(l.product, l.card) });
+  for (const v of (mm.variants ?? []).filter((x) => !!x && typeof x === 'object' && inFrame(x) && x.slot === ms && !x.default))
+    out.push({ ...v, card: cardOf(v.product, v.card) });
+  // MOCK8: a wheel of sets (M0-W's cushions: `cushions.wheel`, B the default, then A and C); MOCK12: render-agent's
+  for (const w of wheelSpecs(mm).filter((x) => x.slot === ms)) {
+    const d = w.sets[w.default] ?? fail(`${from} ${ms}.wheel: no default set ${w.default}`);
+    if (d.layer !== def.layer || d.shadow !== def.shadow) fail(`${from} ${ms}.wheel: the default set is not the frame's ${ms} layer`);
+    for (const k of w.order.filter((x) => x !== w.default)) {
+      const v = w.sets[k] ?? fail(`${from} ${ms}.wheel: no set ${k}`);
+      // a set of one product is that product (its card); a set of several (the cushions) is `set-<key>`, without a card
+      const one = v.products?.length === 1 ? (v.products[0]!.card_id ?? null) : null;
+      const product = one ? k : k.startsWith('set-') ? k : `set-${k}`;
+      out.push({ product, layer: v.layer, shadow: v.shadow, card: one ?? cardOf(product) });
     }
   }
-  for (const v of [...fromLayers, ...fromVariants])
-    sampleOpts.push({
-      product: v.product,
-      layer: v.layer,
-      shadow: v.shadow,
-      card: c.variant_cards?.[v.product] ?? (v.card ? basename(v.card, '.json') : c.slots[c.sample]!.card),
-    });
-  if (sampleOpts.length < 2 || sampleOpts.length > 12) fail(`the sample slot ${c.sample} has ${sampleOpts.length} options, not 2 to 12`);
+  return out;
 }
+/** every tour slot's options beyond its default: from the room's manifest and (MOCK12) its wheel manifest */
+const optsOf = new Map<string, Opt[]>();
+for (const [id, ps] of pieces) {
+  const ms = c.slots[id]!.of ?? id;
+  const more = [...extras(m, ms, id, ps[0]!, c.manifest), ...(wm ? extras(wm, ms, id, ps[0]!, c.wheel_manifest!) : [])];
+  // an option both manifests list is one option
+  const seen = new Set([ps[0]!.layer]);
+  const uniq = more.filter((o) => !seen.has(o.layer) && !!seen.add(o.layer));
+  if (!uniq.length) continue;
+  if (ps.length !== 1) fail(`the wheel slot ${id} has ${ps.length} layers`);
+  optsOf.set(id, [{ product: ps[0]!.product, layer: ps[0]!.layer, shadow: ps[0]!.shadow, card: c.slots[id]!.card }, ...uniq]);
+}
+/** the frame's wheels in order: the config's, else the sample first and then every slot with options */
+function wheelIds(): string[] {
+  return c.wheels ?? [...new Set([...(c.sample ? [c.sample] : []), ...optsOf.keys()])];
+}
+const WHEELS = wheelIds();
+for (const id of WHEELS) {
+  if (!c.slots[id]) fail(`the wheel ${id} is not a slot of ${CFG}`);
+  const n = optsOf.get(id)?.length ?? 0;
+  if (n < 2 || n > 12) fail(`the wheel slot ${id} has ${n} options, not 2 to 12`);
+}
+const wheelOpts = new Map(WHEELS.map((id) => [id, optsOf.get(id)!]));
+const isWheel = (id: string) => wheelOpts.has(id);
 /** MOCK6: a wheel of many options (4–12): a patch file each, loaded only when chosen; two or three sit on the atlas */
-const MANY = sampleOpts.length > 3;
-const strays = indexed.filter((x) => x.l.default === false && (!c.sample || x.l.slot !== (c.slots[c.sample]!.of ?? c.sample)));
-if (strays.length) fail(`variant layers outside the sample slot: ${strays.map((x) => x.l.product).join(', ')}`);
+const many = (id: string) => wheelOpts.get(id)!.length > 3;
+// options a config's own `wheels` leaves out (a wheel not wanted yet) are said and never composed
+const leftOut = [...optsOf.keys()].filter((id) => !isWheel(id));
+if (leftOut.length) console.log(`make-tour-room ${CFG}: options left out of the wheels: ${leftOut.join(', ')}`);
+for (const g of glowEntries) if (g.slot && isWheel(g.slot)) g.pos = 1;
 
 // ---------- the gate: the source layers in this order give the approved composite, to the pixel ----------
 /** numpy's rint: half to even (the render tools' compose_one and light_one round with it) */
@@ -729,14 +778,149 @@ async function sheet(
   return ch === 3 ? out.removeAlpha() : out;
 }
 
-// ---------- MOCK8 (FB20): the studio pictures of the sample's options (assets/renders/wheel-studio/<style>/) ----------
+/** MOCK12: a sheet's file name, page `n` (from 1): `cards`, `cards-2`, … (the first keeps MOCK4's name) */
+const pageName = (kind: 'cards' | 'studio', n: number) => (n === 1 ? kind : `${kind}-${n}`);
+
+/**
+ * MOCK12 (FB29): how much of a product's rim the room cuts, as shares of its rim (alpha ≥ 0.5, 4-connected):
+ *  - `occluded`: where the rim meets a layer drawn above it (within 2 px): a sofa's arm over the throw, a cushion on the
+ *    bedding. The layers are cut from one hero render, so a rim that meets an upper layer is that layer's outline;
+ *  - `frame`: where the rim runs straight along the frame's lines (the hero covers the frame: a product it ended stops
+ *    there) or the canvas's edge. A cord that leaves the frame is a few pixels of it.
+ * Over `CUT`, the card is not shown outside the room (FB29: "משהו מסתיר אותו, אז הוא חתוך"): the page names the product.
+ */
+const CUT = { occluded: 0.03, frame: 0.015 } as const;
+function rimCut(p: Buffer, top: Int16Array, k: number, fbx: [number, number, number, number]): { occluded: number; frame: number } {
+  const on = (x: number, y: number) => x >= 0 && y >= 0 && x < W && y < H && p[(y * W + x) * 4 + 3]! >= 128;
+  let x0 = W;
+  let y0 = H;
+  let x1 = -1;
+  let y1 = -1;
+  for (let i = 0; i < W * H; i++)
+    if (p[i * 4 + 3]! >= 128) {
+      const x = i % W;
+      const y = (i / W) | 0;
+      if (x < x0) x0 = x;
+      if (x > x1) x1 = x;
+      if (y < y0) y0 = y;
+      if (y > y1) y1 = y;
+    }
+  if (x1 < 0) return { occluded: 0, frame: 0 };
+  let rim = 0;
+  let occ = 0;
+  for (let y = y0; y <= y1; y++)
+    for (let x = x0; x <= x1; x++) {
+      if (!on(x, y) || (on(x - 1, y) && on(x + 1, y) && on(x, y - 1) && on(x, y + 1))) continue;
+      rim++;
+      let hit = false;
+      for (let dy = -2; dy <= 2 && !hit; dy++)
+        for (let dx = -2; dx <= 2; dx++) {
+          const X = x + dx;
+          const Y = y + dy;
+          if (X < 0 || Y < 0 || X >= W || Y >= H || on(X, Y)) continue;
+          if (top[Y * W + X]! > k) {
+            hit = true;
+            break;
+          }
+        }
+      if (hit) occ++;
+    }
+  const X0 = Math.round(fbx[0]);
+  const Y0 = Math.round(fbx[1]);
+  const X1 = Math.round(fbx[2]) - 1;
+  const Y1 = Math.round(fbx[3]) - 1;
+  let cut = 0;
+  for (let x = Math.max(x0, X0); x <= Math.min(x1, X1); x++)
+    for (const [Y, d] of [
+      [Y1, 1],
+      [Y0, -1],
+    ] as const)
+      for (let r = Y - 2; r <= Y + 2; r++)
+        if (on(x, r) && !on(x, r + d)) {
+          cut++;
+          break;
+        }
+  for (let y = Math.max(y0, Y0); y <= Math.min(y1, Y1); y++)
+    for (const [X, d] of [
+      [X1, 1],
+      [X0, -1],
+    ] as const)
+      for (let r = X - 2; r <= X + 2; r++)
+        if (on(r, y) && !on(r + d, y)) {
+          cut++;
+          break;
+        }
+  for (let x = x0; x <= x1; x++) cut += (on(x, 0) ? 1 : 0) + (on(x, H - 1) ? 1 : 0);
+  for (let y = y0; y <= y1; y++) cut += (on(0, y) ? 1 : 0) + (on(W - 1, y) ? 1 : 0);
+  return { occluded: rim ? +(occ / rim).toFixed(4) : 0, frame: rim ? +(cut / rim).toFixed(4) : 0 };
+}
+
+/**
+ * MOCK12 (FB29: "עם פדר, חיתוך פדר מסביב"): a card's rim without the room it was cut from. The layer's matte fades over
+ * about 4 px of the room's own pixels; here it becomes a one-pixel anti-aliased edge (alpha 0.35 → 0, 0.75 → 1, smooth
+ * between), and every pixel of the edge takes its colour from the product's solid pixels nearest it (within 3 px), not
+ * from the wall behind it. Nothing is eroded, so a cord or a branch keeps its core.
+ */
+function hardenRim(px: Buffer, w: number, h: number): Buffer {
+  const out = Buffer.from(px);
+  for (let i = 0; i < w * h; i++) {
+    const a = px[i * 4 + 3]! / 255;
+    const t = Math.min(1, Math.max(0, (a - 0.35) / 0.4));
+    const s = t * t * (3 - 2 * t);
+    out[i * 4 + 3] = Math.round(s * 255);
+    if (a >= 0.98 || s === 0) continue;
+    const x = i % w;
+    const y = (i / w) | 0;
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    let n = 0;
+    for (let rad = 1; rad <= 3 && !n; rad++)
+      for (let dy = -rad; dy <= rad; dy++)
+        for (let dx = -rad; dx <= rad; dx++) {
+          const X = x + dx;
+          const Y = y + dy;
+          if (X < 0 || Y < 0 || X >= w || Y >= h) continue;
+          const j = Y * w + X;
+          if (px[j * 4 + 3]! < 250) continue;
+          r += px[j * 4]!;
+          g += px[j * 4 + 1]!;
+          b += px[j * 4 + 2]!;
+          n++;
+        }
+    if (n) {
+      out[i * 4] = Math.round(r / n);
+      out[i * 4 + 1] = Math.round(g / n);
+      out[i * 4 + 2] = Math.round(b / n);
+    }
+  }
+  return out;
+}
+
+// ---------- MOCK8 (FB20), MOCK12 (FB29): the studio pictures (assets/renders/wheel-studio/<style>/), of every product ----------
 type StudioRow = { variant: string; room: string; slot: string; webp: string; products: { card_id: string; sku: string | null }[] };
-const STUDIO_DIR = `assets/renders/wheel-studio/${c.style}`;
-const studioRows = existsSync(repoPath(STUDIO_DIR, 'manifest.json')) ? read<{ variants: StudioRow[] }>(repoPath(STUDIO_DIR, 'manifest.json')).variants : [];
-const sampleSlot = c.sample ? (c.slots[c.sample]!.of ?? c.sample) : null;
-/** per option (by position − 1): its studio picture's file, or null (the wheel keeps its card: D1's V2, no still yet) */
-const studioOf = sampleOpts.map((o) => studioRows.find((r) => r.room === GROUP && r.slot === sampleSlot && r.variant === o.product) ?? null);
-for (const r of studioOf) if (r && !existsSync(repoPath(r.webp))) fail(`the studio picture ${r.webp} is missing`);
+// the tool's own test names a studio of its own (tools/test/mock12-wheels.test.ts), never the render folder's
+const STUDIO_MANIFEST = process.env.HD_WHEEL_STUDIO ?? repoPath(`assets/renders/wheel-studio/${c.style}`, 'manifest.json');
+const studioRows = existsSync(STUDIO_MANIFEST) ? read<{ variants: StudioRow[] }>(STUDIO_MANIFEST).variants : [];
+const studioFile = (r: StudioRow) => (isAbsolute(r.webp) ? r.webp : repoPath(r.webp));
+/** MOCK12: every picture a product of this frame is shown by outside the room (the strip, the wheel, the card): one for
+ *  a product that does not change, one an option for a wheel */
+type Shown = { key: string; slot: string; n: number; product: string; layer: string; card: string | null };
+const shownList: Shown[] = order
+  .filter((id) => !c.slots[id]!.fixed)
+  .flatMap((id): Shown[] =>
+    isWheel(id)
+      ? wheelOpts.get(id)!.map((o, i) => ({ key: `${id}:${i + 1}`, slot: id, n: i + 1, product: o.product, layer: o.layer, card: o.card }))
+      : [{ key: `${id}:1`, slot: id, n: 1, product: slotPiece.get(id)!.product, layer: slotPiece.get(id)!.layer, card: c.slots[id]!.card }],
+  );
+/** a product's studio picture: its own room's and slot's still first, then the same product's still from another room
+ *  (the bedroom's throw is the living room's Pecan); never a still of another colour of the card */
+const studioFor = (s: Shown): StudioRow | null => {
+  const ms = c.slots[s.slot]!.of ?? s.slot;
+  return studioRows.find((r) => r.room === GROUP && r.slot === ms && r.variant === s.product) ?? studioRows.find((r) => r.variant === s.product) ?? null;
+};
+const studioOf = new Map(shownList.map((s) => [s.key, studioFor(s)]));
+for (const r of studioOf.values()) if (r && !existsSync(studioFile(r))) fail(`the studio picture ${r.webp} is missing`);
 const STUDIO = 512;
 
 // ---------- build (cached by a stamp of the inputs and this file) ----------
@@ -746,10 +930,11 @@ const sources = [
     PLATE,
     c.truth,
     ...layers.flatMap((l) => [l.layer, l.shadow]),
-    ...sampleOpts.flatMap((o) => [o.layer, o.shadow]),
+    ...[...wheelOpts.values()].flat().flatMap((o) => [o.layer, o.shadow]),
     ...lightSources,
     ...glowEntries.map((g) => g.file),
     c.manifest,
+    ...(c.wheel_manifest ? [c.wheel_manifest] : []),
   ]),
 ];
 // ---------- MOCK7: the pin (content hashes of every file read for this frame) ----------
@@ -779,13 +964,16 @@ const stamp = createHash('sha256')
       c,
       tool: readFileSync(new URL(import.meta.url), 'utf8'),
       sources: sources.map((f) => [f, statSync(join(dir, f)).size, statSync(join(dir, f)).mtimeMs]),
-      studio: studioOf.map((r) => (r ? [r.webp, statSync(repoPath(r.webp)).size] : null)),
+      studio: [...studioOf.entries()].map(([k, r]) => (r ? [k, r.webp, statSync(studioFile(r)).size] : null)),
     }),
   )
   .digest('hex')
   .slice(0, 16);
 const STAMP = join(OUT, 'stamp.json');
 type AtlasRef = [number, number, number, number, number];
+type Sprite = [number, number, number, number];
+/** MOCK12: a picture's place on a sheet of pictures: [page (from 1), x, y, w, h] */
+type SheetRef = [number, number, number, number, number];
 type Built = {
   rects: Record<string, Px>;
   alpha: Record<string, Px>;
@@ -800,21 +988,26 @@ type Built = {
       /** MOCK8: the glows (FB16), on lossy pages after the lights' */
       glow: AtlasRef[];
       pages: { product: [number, number][]; shadow: [number, number][] };
-      /** MOCK5: the sample slot's options on a page of their own; MOCK6: on the frame's own atlas pages (a place each,
-       *  [page, x, y, w, h]); a wheel of many options (MANY) has none here: a patch file each */
-      sample?: { product: AtlasRef[]; shadow: AtlasRef[] };
+      /** MOCK6: a wheel's options (two or three) on the frame's own atlas pages, a place each ([page, x, y, w, h]);
+       *  MOCK12: by wheel. A wheel of many options has none here: a patch file each */
+      wheels: Record<string, { product: AtlasRef[]; shadow: AtlasRef[] }>;
     }
   >;
-  cards: { at: Record<string, [number, number, number, number]>; sheet: [number, number] };
-  shadowOf: number[];
-  /** MOCK8: the glows' regions, and the studio pictures' places on their sheet (by option, null: none) */
+  /** the cards (the product's layer trimmed to it, its rim hardened: MOCK12), by `<slot>:<n>`, on sheets of 2048 */
+  cards: { at: Record<string, SheetRef>; sheets: [number, number][] };
+  /** MOCK12 (FB29): a card the room cuts (an occluder over it, or the frame's edge): the page shows its name instead */
+  cut: Record<string, 'occluded' | 'frame'>;
+  /** MOCK12: how much of the card's rim is cut, for the record (occluded, frame), by `<slot>:<n>` */
+  cutPct: Record<string, [number, number]>;
+  shadowOf: Record<string, number[]>;
+  /** MOCK8: the glows' regions, and the studio pictures' places on their sheets (by `<slot>:<n>`) */
   glows: Px[];
-  studio: { at: ([number, number, number, number] | null)[]; sheet: [number, number] } | null;
+  studio: { at: Record<string, SheetRef>; sheets: [number, number][] };
 };
 let built: Built;
-const others = order.filter((id) => id !== c.sample);
+const others = order.filter((id) => !isWheel(id));
 const cached = existsSync(STAMP) ? read<{ stamp: string; built: Built }>(STAMP) : null;
-if (cached?.stamp === stamp && cached.built.area && cached.built.glows && (!c.sample || MANY || cached.built.atlas[WIDTHS.lo]?.sample)) built = cached.built;
+if (cached?.stamp === stamp && cached.built.cut && cached.built.atlas[WIDTHS.lo]?.wheels) built = cached.built;
 else {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
@@ -827,27 +1020,44 @@ else {
     alpha[`${id}:1`] = await alphaBox(p.layer);
     area[id] = await alphaArea(p.layer);
   }
-  if (c.sample) {
-    rects[c.sample] = await region(sampleOpts);
-    for (const [n, o] of sampleOpts.entries()) alpha[`${c.sample}:${n + 1}`] = await alphaBox(o.layer);
-    area[c.sample] = await alphaArea(sampleOpts[0]!.layer);
+  for (const [id, opts] of wheelOpts) {
+    rects[id] = await region(opts);
+    for (const [n, o] of opts.entries()) alpha[`${id}:${n + 1}`] = await alphaBox(o.layer);
+    area[id] = await alphaArea(opts[0]!.layer);
   }
   const lightRects = await Promise.all(lights.map(lightRegion));
   const glowRects = await Promise.all(glowEntries.map((g) => glowRegion(g.file, g.mul)));
-  // the sample's shadows: one file for options that share it to the byte (the throw's three, the linen towel's two)
-  const shadowOf: number[] = [];
-  const shaOf = sampleOpts.map((o) => sha(join(dir, o.shadow)));
-  sampleOpts.forEach((_, n) => shadowOf.push(shaOf.indexOf(shaOf[n]!) + 1));
+  // a wheel's shadows: one file for options that share it to the byte (the throw's three, the linen towel's two)
+  const shadowOf: Record<string, number[]> = {};
+  for (const [id, opts] of wheelOpts) {
+    const shaOf = opts.map((o) => sha(join(dir, o.shadow)));
+    shadowOf[id] = opts.map((_, n) => shaOf.indexOf(shaOf[n]!) + 1);
+  }
+  /** the wheel's options that have a shadow of their own (the others share one to the byte) */
+  const own = (id: string) => wheelOpts.get(id)!.flatMap((_, n) => (shadowOf[id]![n] === n + 1 ? [n] : []));
+  const onAtlas = WHEELS.filter((id) => !many(id));
   const atlas: Built['atlas'] = {};
-  // the sample's options that have a shadow of their own (the others share one to the byte)
-  const own = sampleOpts.flatMap((_, n) => (shadowOf[n] === n + 1 ? [n] : []));
   for (const Wt of new Set(Object.values(WIDTHS))) {
     // every other product and its shadow, and the light, in pages no wider than the composition (the engine already
-    // needs a texture that wide, so every card that runs the tour holds one). MOCK6: and the sample's options after
-    // them (two or three; MOCK5 gave them two pages of their own), an option that shares its shadow sharing its place
-    const onAtlas = c.sample && !MANY;
-    const sp = onAtlas ? await Promise.all(sampleOpts.map((o) => piece(o.layer, 'product', rects[c.sample!]!, Wt))) : [];
-    const ss = onAtlas ? await Promise.all(own.map((n) => piece(sampleOpts[n]!.shadow, 'shadow', rects[c.sample!]!, Wt))) : [];
+    // needs a texture that wide, so every card that runs the tour holds one). MOCK6: and the wheels' options after them
+    // (two or three a wheel), an option that shares its shadow sharing its place
+    const sp: Awaited<ReturnType<typeof piece>>[] = [];
+    const ss: Awaited<ReturnType<typeof piece>>[] = [];
+    const spAt: Record<string, number[]> = {};
+    const ssAt: Record<string, number[]> = {};
+    for (const id of onAtlas) {
+      const opts = wheelOpts.get(id)!;
+      spAt[id] = [];
+      for (const o of opts) {
+        spAt[id].push(sp.length);
+        sp.push(await piece(o.layer, 'product', rects[id]!, Wt));
+      }
+      ssAt[id] = [];
+      for (const n of own(id)) {
+        ssAt[id].push(ss.length);
+        ss.push(await piece(opts[n]!.shadow, 'shadow', rects[id]!, Wt));
+      }
+    }
     const prods = [...(await Promise.all(others.map((id) => piece(slotPiece.get(id)!.layer, 'product', rects[id]!, Wt)))), ...sp];
     const lossyLights = c.light_pages === 'lossy';
     const lps = await Promise.all(lights.map((f, i) => piece(f, 'light', lightRects[i]!, Wt)));
@@ -893,6 +1103,7 @@ else {
       pcs[k]!.w,
       pcs[k]!.h,
     ];
+    const sBase = others.length + (lossyLights ? 0 : lights.length);
     atlas[Wt] = {
       product: others.map((_, i) => ref(pa, prods, i)),
       shadow: others.map((_, i) => ref(sa, shads, i)),
@@ -906,33 +1117,34 @@ else {
         return [r[0] + nG, r[1], r[2], r[3], r[4]] as AtlasRef;
       }),
       pages,
-      // the sample's options (the wheel swaps them by their place on the page). MOCK4 wrote a file each, MOCK5 two pages
-      // of their own; MOCK6 the frame's pages, so a frame with a wheel is two files fewer (the Artifact's 255)
-      ...(onAtlas
-        ? {
-            sample: {
-              product: sampleOpts.map((_, n) => ref(pa, prods, others.length + n)),
-              shadow: sampleOpts.map((_, n) => ref(sa, shads, others.length + (lossyLights ? 0 : lights.length) + own.indexOf(shadowOf[n]! - 1))),
-            },
-          }
-        : {}),
+      // the wheels' options (the wheel swaps them by their place on the page). MOCK4 wrote a file each, MOCK5 two pages
+      // of their own; MOCK6 the frame's pages, so a frame with a wheel is two files fewer (the Artifact's file limit)
+      wheels: Object.fromEntries(
+        onAtlas.map((id) => [
+          id,
+          {
+            product: spAt[id]!.map((k) => ref(pa, prods, others.length + k)),
+            shadow: shadowOf[id]!.map((s) => ref(sa, shads, sBase + ssAt[id]![own(id).indexOf(s - 1)]!)),
+          },
+        ]),
+      ),
     };
     // MOCK6: a wheel of many options (the kids' art sets to come): a patch each, its product and its shadow a file of
     // their own, which the page loads only when that option is chosen (never in the background, never all ten)
-    if (c.sample && MANY) {
-      const r = rects[c.sample]!;
-      mkdirSync(join(OUT, 'slots', c.sample), { recursive: true });
-      for (const [n, o] of sampleOpts.entries()) {
+    for (const id of WHEELS.filter(many)) {
+      const r = rects[id]!;
+      mkdirSync(join(OUT, 'slots', id), { recursive: true });
+      for (const [n, o] of wheelOpts.get(id)!.entries()) {
         const pp = await piece(o.layer, 'product', r, Wt);
         await sharp(pp.data, { raw: { width: pp.w, height: pp.h, channels: pp.ch } })
           .webp({ nearLossless: true, quality: 60, effort: 5 })
-          .toFile(join(OUT, 'slots', c.sample, `${n + 1}.product.${Wt}.webp`));
-        if (shadowOf[n] !== n + 1) continue;
+          .toFile(join(OUT, 'slots', id, `${n + 1}.product.${Wt}.webp`));
+        if (shadowOf[id]![n] !== n + 1) continue;
         const sh = await piece(o.shadow, 'shadow', r, Wt);
         await sharp(sh.data, { raw: { width: sh.w, height: sh.h, channels: sh.ch } })
           .removeAlpha()
           .webp({ lossless: true, effort: 5 })
-          .toFile(join(OUT, 'slots', c.sample, `${n + 1}.shadow.${Wt}.webp`));
+          .toFile(join(OUT, 'slots', id, `${n + 1}.shadow.${Wt}.webp`));
       }
     }
   }
@@ -942,64 +1154,84 @@ else {
     // the house's own base setting (tools/make-house.ts BASE_WEBP_Q: lossy q90 shows on plaster at 1:1)
     await (Wt === W ? b : b.resize({ width: Wt })).webp({ quality: 95, effort: 5 }).toFile(join(OUT, `base.${Wt}.webp`));
   }
-  // the cards: every product on its own (its layer trimmed to it, FB1), one sheet for the room
+  // MOCK12 (FB29): what the room cuts. Every default layer above a product (its draw order) is an occluder: where a
+  // product's rim meets one, the product is hidden there; where its rim runs along the frame's lines, the hero ended it
+  const top = new Int16Array(W * H).fill(-1);
+  for (const [k, l] of layers.entries()) {
+    const p = await raw(l.layer, 4);
+    for (let i = 0; i < W * H; i++) if (p[i * 4 + 3]! >= 128) top[i] = k;
+  }
+  const lastIndex = (id: string) => Math.max(...pieces.get(id)!.map((p) => layers.indexOf(p)));
+  const cut: Built['cut'] = {};
+  const cutPct: Built['cutPct'] = {};
+  for (const s of shownList) {
+    const r = rimCut(await raw(s.layer, 4), top, lastIndex(s.slot), m.frame_box);
+    cutPct[s.key] = [r.occluded, r.frame];
+    if (r.occluded > CUT.occluded) cut[s.key] = 'occluded';
+    else if (r.frame > CUT.frame) cut[s.key] = 'frame';
+  }
+  // the cards: every product on its own (its layer trimmed to it, FB1; MOCK12: its rim hardened and its edge's colour
+  // taken from inside it, so no room is left round it), on sheets of 2048
   const cardPieces: { data: Buffer; w: number; h: number; ch: 4 }[] = [];
-  const cardSrc: [string, string][] = [
-    ...others.filter((id) => !c.slots[id]!.fixed).map((id): [string, string] => [`${id}:1`, slotPiece.get(id)!.layer]),
-    ...sampleOpts.map((o, n): [string, string] => [`${c.sample}:${n + 1}`, o.layer]),
-  ];
-  for (const [, f] of cardSrc) {
-    const a = await alphaBox(f);
+  for (const s of shownList) {
+    const a = await alphaBox(s.layer);
     const pad = Math.round(Math.max(a.x1 - a.x0, a.y1 - a.y0) * 0.03) + 2;
     const left = Math.max(0, a.x0 - pad);
-    const top = Math.max(0, a.y0 - pad);
-    const bx = { left, top, width: Math.min(W, a.x1 + 1 + pad) - left, height: Math.min(H, a.y1 + 1 + pad) - top };
+    const top0 = Math.max(0, a.y0 - pad);
+    const bx = { left, top: top0, width: Math.min(W, a.x1 + 1 + pad) - left, height: Math.min(H, a.y1 + 1 + pad) - top0 };
     const k = Math.min(1, CARD / Math.max(bx.width, bx.height));
-    const { data, info } = await src(f)
-      .ensureAlpha()
-      .extract(bx)
+    const px = await src(s.layer).ensureAlpha().extract(bx).raw().toBuffer();
+    const { data, info } = await sharp(hardenRim(px, bx.width, bx.height), { raw: { width: bx.width, height: bx.height, channels: 4 } })
       .resize({ width: Math.max(1, Math.round(bx.width * k)), height: Math.max(1, Math.round(bx.height * k)) })
       .raw()
       .toBuffer({ resolveWithObject: true });
     cardPieces.push({ data, w: info.width, h: info.height, ch: 4 });
   }
   const ca = pack(cardPieces, 2048);
-  if (ca.some((a) => a.page)) fail('the cards do not fit one sheet');
-  const cs = await sheet(cardPieces, ca, 0, 4);
-  const cmeta = await cs.metadata();
-  await cs.webp({ quality: 88, alphaQuality: 100, effort: 5 }).toFile(join(OUT, `cards.${CARD}.webp`));
-  // MOCK8 (FB20): the sample's studio pictures, one sheet for the room (the Artifact's 255 files)
-  let studio: Built['studio'] = null;
-  const have = studioOf.flatMap((r, n) => (r ? [{ r, n }] : []));
-  if (have.length) {
-    const pcs = await Promise.all(
-      have.map(async ({ r }) => {
-        const { data, info } = await sharp(repoPath(r.webp))
-          .removeAlpha()
-          .resize({ width: STUDIO, height: STUDIO, fit: 'cover' })
-          .raw()
-          .toBuffer({ resolveWithObject: true });
-        return { data, w: info.width, h: info.height, ch: 3 as const };
-      }),
-    );
-    const sa = pack(pcs, 2048);
-    if (sa.some((a) => a.page)) fail('the studio pictures do not fit one sheet');
-    const ss = await sheet(pcs, sa, 0, 3);
+  const cardSheets: [number, number][] = [];
+  for (let pg = 0; pg <= Math.max(-1, ...ca.map((a) => a.page)); pg++) {
+    const cs = await sheet(cardPieces, ca, pg, 4);
+    const meta = await cs.metadata();
+    cardSheets.push([meta.width!, meta.height!]);
+    await cs.webp({ quality: 88, alphaQuality: 100, effort: 5 }).toFile(join(OUT, `${pageName('cards', pg + 1)}.${CARD}.webp`));
+  }
+  // MOCK8 (FB20), MOCK12: the studio pictures, every product's that has one, on sheets of 2048 (the Artifact's file limit)
+  const have = shownList.filter((s) => studioOf.get(s.key));
+  const spcs = await Promise.all(
+    have.map(async (s) => {
+      const { data, info } = await sharp(studioFile(studioOf.get(s.key)!))
+        .removeAlpha()
+        .resize({ width: STUDIO, height: STUDIO, fit: 'cover' })
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      return { data, w: info.width, h: info.height, ch: 3 as const };
+    }),
+  );
+  const sat = pack(spcs, 2048);
+  const studioSheets: [number, number][] = [];
+  for (let pg = 0; pg <= Math.max(-1, ...sat.map((a) => a.page)); pg++) {
+    const ss = await sheet(spcs, sat, pg, 3);
     const meta = await ss.metadata();
-    await ss.webp({ quality: 88, effort: 5 }).toFile(join(OUT, `studio.${STUDIO}.webp`));
-    const at: ([number, number, number, number] | null)[] = studioOf.map(() => null);
-    have.forEach(({ n }, i) => (at[n] = [sa[i]!.x, sa[i]!.y, pcs[i]!.w, pcs[i]!.h]));
-    studio = { at, sheet: [meta.width!, meta.height!] };
+    studioSheets.push([meta.width!, meta.height!]);
+    await ss.webp({ quality: 88, effort: 5 }).toFile(join(OUT, `${pageName('studio', pg + 1)}.${STUDIO}.webp`));
   }
   built = {
     glows: glowRects,
-    studio,
+    studio: {
+      at: Object.fromEntries(have.map((s, i) => [s.key, [sat[i]!.page + 1, sat[i]!.x, sat[i]!.y, spcs[i]!.w, spcs[i]!.h] as SheetRef])),
+      sheets: studioSheets,
+    },
     rects,
     alpha,
     area,
     lights: lightRects,
     atlas,
-    cards: { at: Object.fromEntries(cardPieces.map((p, i) => [cardSrc[i]![0], [ca[i]!.x, ca[i]!.y, p.w, p.h]])), sheet: [cmeta.width!, cmeta.height!] },
+    cards: {
+      at: Object.fromEntries(shownList.map((s, i) => [s.key, [ca[i]!.page + 1, ca[i]!.x, ca[i]!.y, cardPieces[i]!.w, cardPieces[i]!.h] as SheetRef])),
+      sheets: cardSheets,
+    },
+    cut,
+    cutPct,
     shadowOf,
   };
   writeFileSync(STAMP, JSON.stringify({ stamp, built }));
@@ -1035,16 +1267,28 @@ const depth = (id: string): number => {
   codes.add(Math.round(d * 40));
   return +d.toFixed(3);
 };
-const cardsSrc = `${REL}/cards.${CARD}`;
+/** a picture on a sheet of the frame (a card, a studio picture): its file, its place and the sheet's size */
+const onSheet = (kind: 'cards' | 'studio', size: number, at: SheetRef, sheets: [number, number][]) => ({
+  src: `${REL}/${pageName(kind, at[0])}.${size}`,
+  w: at[3],
+  h: at[4],
+  sprite: [at[1], at[2], at[3], at[4]] as Sprite,
+  sheet: sheets[at[0] - 1]!,
+});
 const option = (slot: string, n: number, product: string, card: string | null) => {
   const p = card ? shop.get(card) : undefined;
   // MOCK6, the safety rule: a product shown and not sold here (or waiting for its standard) has no price and no cart
   const held = !!c.slots[slot]!.sale;
-  const at = built.cards.at[`${slot}:${n}`]!;
-  const a = built.alpha[`${slot}:${n}`]!;
+  const key = `${slot}:${n}`;
+  const a = built.alpha[key]!;
+  const st = built.studio.at[key];
   return {
     position: n,
-    card: { src: cardsSrc, w: at[2], h: at[3], source: 'layer' as const, sprite: at, sheet: built.cards.sheet },
+    card: { ...onSheet('cards', CARD, built.cards.at[key]!, built.cards.sheets), source: 'layer' as const },
+    /** MOCK12: the option's product as the render folder names it (its layer's product; a set's `set-<key>`) */
+    variant: product,
+    // MOCK12 (FB29): the room cuts this card (an occluder, the frame's edge): outside the room it is never shown
+    ...(built.cut[key] ? { cut: built.cut[key] } : {}),
     box: uv({ ...a, x1: a.x1 + 1, y1: a.y1 + 1 }),
     product_id: p?.id ?? null,
     card_id: card,
@@ -1055,21 +1299,9 @@ const option = (slot: string, n: number, product: string, card: string | null) =
     available: !held && !!p && p.availability.status === 'available',
     dims_he: p ? dimsHe(p.dimensions_cm, c.slots[slot]!.kind) : null,
     set: false,
-    // MOCK8 (FB20): the option's studio picture (the product as sold), on the room's studio sheet; a print whose rights
-    // are not confirmed keeps its close-up in the preview only (PR1)
-    ...(slot === c.sample && built.studio?.at[n - 1]
-      ? {
-          studio: {
-            src: `${REL}/studio.${STUDIO}`,
-            w: built.studio.at[n - 1]![2],
-            h: built.studio.at[n - 1]![3],
-            source: 'studio' as const,
-            sprite: built.studio.at[n - 1]!,
-            sheet: built.studio.sheet,
-            ...(x1.has(slot) ? { preview_only: true } : {}),
-          },
-        }
-      : {}),
+    // MOCK8 (FB20): the option's studio picture (the product as sold), on the room's studio sheets; MOCK12 (FB29): every
+    // product's, not the wheel's only. A print whose rights are not confirmed keeps its close-up in the preview (PR1)
+    ...(st ? { studio: { ...onSheet('studio', STUDIO, st, built.studio.sheets), source: 'studio' as const, ...(x1.has(slot) ? { preview_only: true } : {}) } } : {}),
   };
 };
 const at = (Wt: number) => built.atlas[Wt]!;
@@ -1077,10 +1309,9 @@ const slots = await Promise.all(
   order.map(async (id, i) => {
     const cfg = c.slots[id]!;
     const pc = slotPiece.get(id)!;
-    const sample = id === c.sample;
+    const wheel = isWheel(id);
     const k = others.indexOf(id);
-    const opts = sample ? [] : cfg.fixed ? [] : [option(id, 1, pc.product, cfg.card)];
-    if (sample) sampleOpts.forEach((o, n) => opts.push(option(id, n + 1, o.product, o.card)));
+    const opts = wheel ? wheelOpts.get(id)!.map((o, n) => option(id, n + 1, o.product, o.card)) : cfg.fixed ? [] : [option(id, 1, pc.product, cfg.card)];
     const a0 = built.alpha[`${id}:1`]!;
     // one mark a layer where a product is drawn twice (MB1's two sconces), unless the config places them
     let anchors = cfg.anchors;
@@ -1107,25 +1338,25 @@ const slots = await Promise.all(
       fixed: !!cfg.fixed,
       // a print whose rights are not confirmed is shown at ×1 only (MOCK4 776445; MOCK5 every print)
       closeup: x1.has(id) ? false : (cfg.closeup ?? true),
-      shadows: sample ? built.shadowOf : undefined,
+      shadows: wheel ? built.shadowOf[id] : undefined,
       // the owner's count: the key a product is counted by in its room, and its area here (counted where it is biggest)
       count_key: cfg.fixed ? null : countKey(cfg.card),
       area_px: built.area[id] ?? 0,
       // the atlas: [page, x, y, w, h] of this product and of its shadow, per width
-      atlas: sample ? undefined : Object.fromEntries(Object.values(WIDTHS).map((Wt) => [Wt, { product: at(Wt).product[k]!, shadow: at(Wt).shadow[k]! }])),
+      atlas: wheel ? undefined : Object.fromEntries(Object.values(WIDTHS).map((Wt) => [Wt, { product: at(Wt).product[k]!, shadow: at(Wt).shadow[k]! }])),
       // MOCK5: the sample's options, a place each on the atlas pages (MOCK6: the frame's own), per width and option
       atlas_opts:
-        sample && !MANY
+        wheel && !many(id)
           ? Object.fromEntries(
               Object.values(WIDTHS).map((Wt) => {
-                const sa = at(Wt).sample!;
-                return [Wt, sampleOpts.map((_, n) => ({ product: sa.product[n]!, shadow: sa.shadow[n]! }))];
+                const wa = at(Wt).wheels[id]!;
+                return [Wt, wheelOpts.get(id)!.map((_, n) => ({ product: wa.product[n]!, shadow: wa.shadow[n]! }))];
               }),
             )
           : undefined,
       // MOCK6: a wheel of many options: a patch file each (src/<n>.product, src/<shadows[n]>.shadow), loaded only when
       // that option is chosen, never in the background
-      lazy: sample && MANY ? true : undefined,
+      lazy: wheel && many(id) ? true : undefined,
       // MOCK6, the safety rule: shown and not sold here, or waiting for its standard (the line the visitor reads, and why)
       sale: cfg.sale
         ? {
@@ -1139,7 +1370,7 @@ const slots = await Promise.all(
         ? [
             {
               position: 1,
-              card: { src: cardsSrc, w: 1, h: 1, source: 'layer' as const, sprite: [0, 0, 1, 1], sheet: built.cards.sheet },
+              card: { src: `${REL}/${pageName('cards', 1)}.${CARD}`, w: 1, h: 1, source: 'layer' as const, sprite: [0, 0, 1, 1], sheet: built.cards.sheets[0]! },
               box: uv({ ...a0, x1: a0.x1 + 1, y1: a0.y1 + 1 }),
               product_id: null,
               card_id: null,
@@ -1178,7 +1409,9 @@ const data = {
   // MOCK7: the frame's depth for the transitions (a small nearness map, near = white), or null: the page's fallback
   depth: c.depth ? (await nearness(c.depth)).uri : null,
   cover: 0,
-  sample: c.sample ?? undefined,
+  // MOCK12: the frame's wheels (a ring each); `sample` is the first, for what read one wheel a frame
+  sample: WHEELS[0],
+  wheels: WHEELS,
   // ×1 only: no zoom in a frame that shows a print whose rights are unclear
   zoom: x1.size ? false : c.zoom !== false,
   avoid,
@@ -1231,8 +1464,10 @@ const loFiles = [
   ...data.atlas[lo]!.product.map((p) => `${basename(p.src)}.${lo}.webp`),
   ...data.atlas[lo]!.shadow.map((p) => `${basename(p.src)}.${lo}.webp`),
   // MOCK6: a wheel of many options loads its chosen option's patch only (the first, at rest)
-  ...(c.sample && MANY ? [`slots/${c.sample}/1.product.${lo}.webp`, `slots/${c.sample}/1.shadow.${lo}.webp`] : []),
-  `cards.${CARD}.webp`,
+  ...WHEELS.filter(many).flatMap((id) => [`slots/${id}/1.product.${lo}.webp`, `slots/${id}/1.shadow.${lo}.webp`]),
+  // the strip's pictures: the cards and (MOCK12) the studio pictures, the door waits for them
+  ...built.cards.sheets.map((_, i) => `${pageName('cards', i + 1)}.${CARD}.webp`),
+  ...built.studio.sheets.map((_, i) => `${pageName('studio', i + 1)}.${STUDIO}.webp`),
 ];
 const held = slots.filter((s) => s.sale).map((s) => `${s.id} (${s.sale!.state})`);
 const unsold = slots.filter((s) => !s.fixed).flatMap((s) => s.options.filter((o) => !o.product_id).map((o) => `${s.id} ${o.position}`));
@@ -1242,5 +1477,7 @@ console.log(
     `×1 only: ${rights.length || x1.size ? [...x1].map((id) => `${id} (${rights.find((r) => r.slot === id)?.usage_rights ?? 'config'})`).join(', ') || 'none' : 'none'}; ` +
     `a phone's first load ${loFiles.reduce((n, f) => n + kb(f), 0).toFixed(0)} KB in ${loFiles.length} files ` +
     `(atlas pages ${data.atlas[lo]!.product.length}+${data.atlas[lo]!.shadow.length}); ${unsold.length} not priced by the shop yet (${unsold.join(', ')}); ` +
-    `held for safety: ${held.join(', ') || 'none'} → ${outFile}`,
+    `held for safety: ${held.join(', ') || 'none'}; wheels: ${WHEELS.map((id) => `${id} (${wheelOpts.get(id)!.length})`).join(', ') || 'none'}; ` +
+    `outside the room (FB29): ${shownList.filter((s) => studioOf.get(s.key)).length} studio, ${shownList.filter((s) => !studioOf.get(s.key) && !built.cut[s.key]).length} cut clean, ` +
+    `${shownList.filter((s) => !studioOf.get(s.key) && built.cut[s.key]).length} by name (cut by the room: ${shownList.filter((s) => built.cut[s.key]).map((s) => `${s.key} ${built.cut[s.key]}`).join(', ') || 'none'}) → ${outFile}`,
 );
