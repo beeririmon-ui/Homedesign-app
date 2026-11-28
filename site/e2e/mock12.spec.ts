@@ -7,7 +7,7 @@
  *     choices go with it to its other frame and back;
  *  2. FB29: the strip under the room shows a product as sold — its studio picture where one exists (the bedroom's throw,
  *     the bath's towel), else its card with a clean rim, else, where the room cuts the card, its name; never a cut card;
- *  3. no feathered crop: no soft mask on a picture outside the room; the wheel's studio round is a hard-edged circle.
+ *  3. no feathered crop: no mask on a picture outside the room; the wheel's studio round is a clean circle (an SVG clip).
  *
  * The numbers go to the evidence when HD_EVIDENCE_DIR is set; the screens when HD_SHOTS_DIR is set.
  */
@@ -56,7 +56,11 @@ async function choose(page: Page, slot: string, pos: number, name: string) {
   await atRest(page);
   for (let k = 1; k < pos; k++) await page.keyboard.press('ArrowLeft');
   await expect(page.locator('.arc-card[aria-checked="true"]')).toHaveAttribute('aria-label', new RegExp(`^${pos} מתוך 3`));
-  if (name) await shot(page, name);
+  if (name) {
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(300);
+    await shot(page, name);
+  }
   await page.getByRole('button', { name: 'בחירה והצגה בחדר' }).click();
   await expect(page.getByRole('dialog')).toBeHidden();
   await atRest(page);
@@ -141,7 +145,7 @@ test.describe('MOCK12: several wheels in a frame, and the studio pictures outsid
       await expect(tile).toHaveAttribute('data-pic', 'studio');
       expect(await tile.locator('image').getAttribute('href')).toMatch(/studio(-\d+)?\.512\.webp$/);
       expect(await tile.evaluate((e) => getComputedStyle(e).backgroundImage)).toContain('241, 232, 220');
-      await page.locator('.tour-strip').scrollIntoViewIfNeeded();
+      await tile.scrollIntoViewIfNeeded();
       // the door's own controls fade out after the room is at rest: the screen waits for them
       await page.waitForFunction(() => getComputedStyle(document.querySelector('.tour-door-act')!).opacity === '0', undefined, { timeout: 20_000 });
       await page.waitForTimeout(800);
@@ -156,7 +160,7 @@ test.describe('MOCK12: several wheels in a frame, and the studio pictures outsid
     await ctx.close();
   });
 
-  test('no feathered crop: no soft mask on a picture outside the room, and the wheel’s studio round is a clean circle', async ({ page }) => {
+  test('no feathered crop: no mask on a picture outside the room, and the wheel’s studio round is a clean circle', async ({ page }) => {
     await noIntro(page);
     await page.goto('/tour/?skip=1&room=master');
     await atRest(page);
@@ -166,15 +170,22 @@ test.describe('MOCK12: several wheels in a frame, and the studio pictures outsid
     const styles = await page.locator('.arc-card > svg.sprite').evaluateAll((els) =>
       els.map((e) => {
         const cs = getComputedStyle(e);
-        return { mask: cs.maskImage || cs.webkitMaskImage, clip: cs.clipPath, studio: e.classList.contains('studio') };
+        const c = e.querySelector('clipPath circle');
+        const vb = (e.getAttribute('viewBox') ?? '').split(' ').map(Number);
+        return {
+          mask: cs.maskImage || cs.webkitMaskImage,
+          studio: e.classList.contains('studio'),
+          // the round drawn in the picture: a circle of the picture's own size, at its middle
+          round: c ? +c.getAttribute('r')! / (vb[2]! / 2) : null,
+        };
       }),
     );
     expect(styles.length).toBe(3);
     for (const s of styles) {
       expect(s.studio).toBe(true);
-      // a clean circle: a hard mask whose edge is 1.5 px, never MOCK10's fade from 74 %
-      expect(s.mask).toMatch(/radial-gradient\(circle closest-side/);
-      expect(s.mask).toMatch(/calc\(100% - 1\.5px\)/);
+      // a clean circle drawn in the picture (an SVG clip), never MOCK10's mask fading from 74 %
+      expect(s.mask).toBe('none');
+      expect(s.round).toBeCloseTo(1, 3);
     }
     await shot(page, 'mock12-wheel-master-1280.png');
     await page.keyboard.press('Escape');

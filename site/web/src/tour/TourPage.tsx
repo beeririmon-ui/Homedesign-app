@@ -14,7 +14,7 @@
  *  - the visitor may zoom (a pinch, a button), up to ×2.5, and comes back to the whole frame;
  *  - everything round the window is in the page from the start and changes by opacity and transform only.
  */
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { CatalogSlot } from '@hd/shared';
 import { formatIls } from '@hd/shared/money';
 import { shopPath } from '@hd/shared/product-url';
@@ -201,8 +201,12 @@ const FRAME_FADE_MS = 600;
  *  MOCK12 (FB29): what it shows is the product outside the room (tour/pictures.ts `outside`): its studio picture (the
  *  square of the studio's cream, filling its tile), else its card with a clean rim, else, where the room cuts the card,
  *  the slot's name on the same cream. `pic` is passed where the caller already chose (the wheel) */
-function CardPic({ s, o, cls, size, pic }: { s: TourSlot; o: TourOption; cls?: string; size?: number; pic?: Outside }) {
+let clipSeq = 0;
+function CardPic({ s, o, cls, size, pic, round }: { s: TourSlot; o: TourOption; cls?: string; size?: number; pic?: Outside; round?: boolean }) {
   const p = pic ?? outside(s, o);
+  // MOCK12: the wheel's round is drawn inside the picture (an SVG clip): a CSS clip or mask on the picture itself is not
+  // drawn cleanly inside the ring's 3D (a faint square round the card)
+  const clip = useMemo(() => `hd-round-${++clipSeq}`, []);
   if (p.kind === 'name')
     return (
       <span class={`pic-name${cls ? ` ${cls}` : ''}`} data-pic="name" aria-hidden="true">
@@ -226,9 +230,18 @@ function CardPic({ s, o, cls, size, pic }: { s: TourSlot; o: TourOption; cls?: s
         aria-hidden="true"
         focusable="false"
       >
-        <svg x={x} y={y} width={w} height={h} viewBox={`${x} ${y} ${w} ${h}`}>
-          <image href={url} width={c.sheet[0]} height={c.sheet[1]} />
-        </svg>
+        {studio && round ? (
+          <defs>
+            <clipPath id={clip}>
+              <circle cx={x + w / 2} cy={y + h / 2} r={Math.min(w, h) / 2} />
+            </clipPath>
+          </defs>
+        ) : null}
+        <g clip-path={studio && round ? `url(#${clip})` : undefined}>
+          <svg x={x} y={y} width={w} height={h} viewBox={`${x} ${y} ${w} ${h}`}>
+            <image href={url} width={c.sheet[0]} height={c.sheet[1]} />
+          </svg>
+        </g>
       </svg>
     );
   }
@@ -292,7 +305,7 @@ function wheelHouse(s: TourSlot): House {
     thumbNode: (pos) => {
       const o = s.options[pos - 1]!;
       const p = outside(s, o);
-      return p.kind === 'name' || p.card.sprite ? <CardPic s={s} o={o} pic={p} /> : null;
+      return p.kind === 'name' || p.card.sprite ? <CardPic s={s} o={o} pic={p} round /> : null;
     },
     cardGround: s.ground,
     info: (pos) => {
