@@ -1,7 +1,7 @@
 {
  "version": 1,
  "updated": "2026-11-28",
- "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json). 2026-11-03 (NL1, ישיבת ההחלטות): כרית הוואבי-סאבי ₪69 → ₪89 (retail_before_nl1_ils), המחיר שלא מפסיד בכל המידות; retail_src נשאר studio (החלטת המשתמש). 2026-11-25 (M6-L2, briefs/economics-kids-b1-2026-11-25.md): 10 שורות חדשות לחדרי הילדים ול-B1 (retail_src initial-2026-11-25, עם retail_sku): המחיר מהרשומה של הליקוט האחרון או מ-profit-fix 2026-10-11, והמשלוח רק ממה שכבר בריפו (shipping_il בכרטיס, מטמון הספק, או מק\"ט אח באותו ליסטינג ובאותו משקל, מסומן freight_from_sibling ב-freight-cj.json). כולן עוברות את scripts/economics/no_loss.py. ארבע מהן שורות של המקור שעותק mirror_of קורא (תומכי הספרים, הציפיות עם הסלסול, מנורת המשי 30 והכד השחור). הפירוט: data/leads/economics-kids-b1-2026-11-25.md. 2026-11-28 (גישת ה-API של CJ חזרה, briefs/economics-cj-reactivated-2026-11-28.md): 17 שורות חדשות למוצרי CJ שהסיור המודרני החם הציג 'עוד לא במכירה' (retail_src initial-2026-11-28, או initial-no-loss-2026-11-28 כשמחיר הרשומה הועלה למחיר שלא מפסיד, עם retail_sku). המק\"ט, העלות והמשלוח נבדקו מול ה-API של CJ דרך scripts/cj.py ב-2026-11-28; העלות לא השתנתה באף מוצר. המשלוח בשורה חדשה או מעודכנת ב-freight-cj.json (הצעת CJPacket Eub של היום; לסטים גם sale_quote). המחיר מהרשומה של הליקוט, מ-profit-fix 2026-10-11, או מהקטלוג המודרני החם של המעצב כשאין רשומה. הווילון הפשתני ומנורת קוביית הטרוורטין נבדקו ולא קיבלו שורה: עם מחיר הם נכנסים לקטלוג החנות, ותוויות האפשרויות שלהם באותיות לטיניות עוצרות את הבנייה (ת12). כולן עוברות את scripts/economics/no_loss.py. הפירוט: data/leads/economics-cj-2026-11-28.md.",
+ "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json). 2026-11-03 (NL1, ישיבת ההחלטות): כרית הוואבי-סאבי ₪69 → ₪89 (retail_before_nl1_ils), המחיר שלא מפסיד בכל המידות; retail_src נשאר studio (החלטת המשתמש). 2026-11-25 (M6-L2, briefs/economics-kids-b1-2026-11-25.md): 10 שורות חדשות לחדרי הילדים ול-B1 (retail_src initial-2026-11-25, עם retail_sku): המחיר מהרשומה של הליקוט האחרון או מ-profit-fix 2026-10-11, והמשלוח רק ממה שכבר בריפו (shipping_il בכרטיס, מטמון הספק, או מק\"ט אח באותו ליסטינג ובאותו משקל, מסומן freight_from_sibling ב-freight-cj.json). כולן עוברות את scripts/economics/no_loss.py. ארבע מהן שורות של המקור שעותק mirror_of קורא (תומכי הספרים, הציפיות עם הסלסול, מנורת המשי 30 והכד השחור). הפירוט: data/leads/economics-kids-b1-2026-11-25.md. 2026-11-28 (גישת ה-API של CJ חזרה, briefs/economics-cj-reactivated-2026-11-28.md): 17 שורות חדשות למוצרי CJ שהסיור המודרני החם הציג 'עוד לא במכירה' (retail_src initial-2026-11-28, או initial-no-loss-2026-11-28 כשמחיר הרשומה הועלה למחיר שלא מפסיד, עם retail_sku). המק\"ט, העלות והמשלוח נבדקו מול ה-API של CJ דרך scripts/cj.py ב-2026-11-28; העלות לא השתנתה באף מוצר. המשלוח בשורה חדשה או מעודכנת ב-freight-cj.json (הצעת CJPacket Eub של היום; לסטים גם sale_quote). המחיר מהרשומה של הליקוט, מ-profit-fix 2026-10-11, או מהקטלוג המודרני החם של המעצב כשאין רשומה. הווילון הפשתני ומנורת קוביית הטרוורטין נבדקו ולא קיבלו שורה: עם מחיר הם נכנסים לקטלוג החנות, ותוויות האפשרויות שלהם באותיות לטיניות עוצרות את הבנייה (ת12). כולן עוברות את scripts/economics/no_loss.py. הפירוט: data/leads/economics-cj-2026-11-28.md. 2026-11-28 (המשך, briefs/cj-followup-labels-rebuild-2026-11-28.md): הווילון הפשתני (curtains-cj-linen-yarn-sheer-tab, ₪229) ומנורת קוביית הטרוורטין (wall-sconce-cj-travertine-cube-updown-12, ₪299) קיבלו שורה (retail_src initial-2026-11-28) אחרי שתוויות האפשרויות שלהם נכתבו בעברית ב-data/catalog/option-labels-he.json; המספרים מהיומן, ושורות המשלוח שלהם כבר היו ב-freight-cj.json. שמיכת המוסלין (sofa-cover-cj-cotton-muslin-fringe) ₪129 → ₪139, המחיר הנמוך שלא מפסיד במק\"ט שבחדר (retail_src initial-no-loss-2026-11-28; המחיר הקודם ב-retail_before_no_loss_ils). שלושתן עברו את refresh_rows של scripts/economics/no_loss.py.",
  "sources": [
   "data/economics/pricing/living-room-2026-10-11.json",
   "data/economics/pricing/other-rooms-2026-10-11.json",
@@ -5033,8 +5033,10 @@
    ]
   },
   "sofa-cover-cj-cotton-muslin-fringe": {
-   "retail_ils": 129,
-   "retail_src": "initial-2026-10-11",
+   "retail_ils": 139,
+   "retail_src": "initial-no-loss-2026-11-28",
+   "retail_before_no_loss_ils": 129,
+   "retail_sku": "CJYD205807508HS",
    "price_for_qty": 1,
    "il_value": {
     "low": 95,
@@ -5081,39 +5083,202 @@
      }
     ]
    },
-   "customer_total_ils": 158,
-   "vs_typical_pct": -12,
-   "margin_pct": 11.0,
-   "contribution_ils": 11.99,
-   "contribution_with_fee_ils": 34.02,
+   "customer_total_ils": 168,
+   "vs_typical_pct": -6,
+   "margin_pct": 3.7,
+   "contribution_ils": 4.37,
+   "contribution_with_fee_ils": 26.4,
    "flag": "below-floor",
    "slot_alternative_ok": false,
    "nordic_score": 8.0,
    "ship_estimated": false,
-   "price_note": "שמיכת מוסלין כותנה 150×200; SLÅNGRÅMAL של איקאה ₪125, שמיכת קיץ של Home Style ₪119.5 (מחירון ₪239). מתחת לרצפת 40% ואין בעמדה חלופה יפה לפחות כמוהו שעוברת 40%: החריגה חלה, המוצר נשאר. לשיפור: לשפר בסט ספה (שמיכה + 2 ציפיות) במשלוח מאוחד",
+   "price_note": "שמיכת מוסלין כותנה 150×200; SLÅNGRÅMAL של איקאה ₪125, שמיכת קיץ של Home Style ₪119.5 (מחירון ₪239). מתחת לרצפת 40% ואין בעמדה חלופה יפה לפחות כמוהו שעוברת 40%: החריגה חלה, המוצר נשאר. לשיפור: לשפר בסט ספה (שמיכה + 2 ציפיות) במשלוח מאוחד. 2026-11-28 (אין מוצר מפסיד, ה.13; briefs/cj-followup-labels-rebuild-2026-11-28.md): ₪129 → ₪139, המחיר הנמוך שלא מפסיד במק\"ט שבחדר (CJYD205807508HS, 150×200 pecan, $16.25; ₪129 נקבע ל-CJYD205807526ZA הלבן, $11.64, שהיה ברירת המחדל). בתרחיש הכותרת (הסטודיו (cj): CJPacket Eub 12-50, נחיתה ₪100.0) התרומה ב-₪129 הייתה ₪-3.23; ב-₪139 ₪4.37, מרווח 3.7% לפני CAC (נקודת איזון ₪133.25). וריאנט שהאתר גוזר מתחת למחיר שלו מרוצף במחיר שלו (SITE1).",
    "margin_src": "studio",
    "no_loss": {
-    "date": "2026-10-20",
+    "date": "2026-11-28",
     "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
     "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
     "method": "הסטודיו (cj): CJPacket Eub 12-50",
     "units": 1,
-    "landed_ils": 84.81,
-    "contribution_ils": 11.99,
-    "margin_pct": 11.0,
-    "break_even_ils": 113.22,
-    "no_loss_room_sku_ils": 119,
-    "no_loss_all_scenarios_ils": 129,
-    "variants_losing_on_site": [],
+    "landed_ils": 100.02,
+    "contribution_ils": 4.37,
+    "margin_pct": 3.7,
+    "break_even_ils": 133.25,
+    "no_loss_room_sku_ils": 139,
+    "no_loss_all_scenarios_ils": 169,
+    "variants_losing_on_site": [
+     {
+      "variant": "size=80x130, other=green",
+      "variant_sku": "CJYD205807523WD",
+      "sold_at_ils": 119,
+      "landed_ils": 94.12,
+      "contribution_ils": -4.92,
+      "own_no_loss_ils": 129
+     },
+     {
+      "variant": "size=80x130, other=white",
+      "variant_sku": "CJYD205807527AZ",
+      "sold_at_ils": 119,
+      "landed_ils": 94.12,
+      "contribution_ils": -4.92,
+      "own_no_loss_ils": 129
+     },
+     {
+      "variant": "size=80x130, other=pink",
+      "variant_sku": "CJYD205807531EV",
+      "sold_at_ils": 119,
+      "landed_ils": 94.12,
+      "contribution_ils": -4.92,
+      "own_no_loss_ils": 129
+     },
+     {
+      "variant": "size=80x130, other=dark-chestnut-brown",
+      "variant_sku": "CJYD205807535IR",
+      "sold_at_ils": 119,
+      "landed_ils": 94.12,
+      "contribution_ils": -4.92,
+      "own_no_loss_ils": 129
+     },
+     {
+      "variant": "size=80x130, other=flax-brown",
+      "variant_sku": "CJYD205807539MN",
+      "sold_at_ils": 119,
+      "landed_ils": 94.12,
+      "contribution_ils": -4.92,
+      "own_no_loss_ils": 129
+     },
+     {
+      "variant": "size=130x170, other=curry",
+      "variant_sku": "CJYD205807501AZ",
+      "sold_at_ils": 109,
+      "landed_ils": 89.1,
+      "contribution_ils": -7.5,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=130x170, other=cardamom",
+      "variant_sku": "CJYD205807503CX",
+      "sold_at_ils": 109,
+      "landed_ils": 89.1,
+      "contribution_ils": -7.5,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=130x170, other=black-diamond",
+      "variant_sku": "CJYD205807505EV",
+      "sold_at_ils": 109,
+      "landed_ils": 89.1,
+      "contribution_ils": -7.5,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=130x170, other=pecan",
+      "variant_sku": "CJYD205807507GT",
+      "sold_at_ils": 109,
+      "landed_ils": 89.1,
+      "contribution_ils": -7.5,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=130x170, other=clay",
+      "variant_sku": "CJYD205807509IR",
+      "sold_at_ils": 109,
+      "landed_ils": 89.1,
+      "contribution_ils": -7.5,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=130x170, other=green",
+      "variant_sku": "CJYD205807521UF",
+      "sold_at_ils": 79,
+      "landed_ils": 74.48,
+      "contribution_ils": -15.67,
+      "own_no_loss_ils": 109
+     },
+     {
+      "variant": "size=130x170, other=white",
+      "variant_sku": "CJYD205807525YB",
+      "sold_at_ils": 79,
+      "landed_ils": 78.18,
+      "contribution_ils": -19.36,
+      "own_no_loss_ils": 109
+     },
+     {
+      "variant": "size=130x170, other=pink",
+      "variant_sku": "CJYD205807529CX",
+      "sold_at_ils": 79,
+      "landed_ils": 78.18,
+      "contribution_ils": -19.36,
+      "own_no_loss_ils": 109
+     },
+     {
+      "variant": "size=130x170, other=dark-chestnut-brown",
+      "variant_sku": "CJYD205807533GT",
+      "sold_at_ils": 79,
+      "landed_ils": 78.18,
+      "contribution_ils": -19.36,
+      "own_no_loss_ils": 109
+     },
+     {
+      "variant": "size=130x170, other=flax-brown",
+      "variant_sku": "CJYD205807537KP",
+      "sold_at_ils": 79,
+      "landed_ils": 74.48,
+      "contribution_ils": -15.67,
+      "own_no_loss_ils": 109
+     },
+     {
+      "variant": "size=150x200, other=green",
+      "variant_sku": "CJYD205807522VE",
+      "sold_at_ils": 89,
+      "landed_ils": 81.87,
+      "contribution_ils": -15.46,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=150x200, other=white",
+      "variant_sku": "CJYD205807526ZA",
+      "sold_at_ils": 99,
+      "landed_ils": 84.81,
+      "contribution_ils": -10.8,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=150x200, other=pink",
+      "variant_sku": "CJYD205807530DW",
+      "sold_at_ils": 99,
+      "landed_ils": 84.81,
+      "contribution_ils": -10.8,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=150x200, other=dark-chestnut-brown",
+      "variant_sku": "CJYD205807534HS",
+      "sold_at_ils": 99,
+      "landed_ils": 84.81,
+      "contribution_ils": -10.8,
+      "own_no_loss_ils": 119
+     },
+     {
+      "variant": "size=150x200, other=flax-brown",
+      "variant_sku": "CJYD205807538LO",
+      "sold_at_ils": 89,
+      "landed_ils": 81.87,
+      "contribution_ils": -15.46,
+      "own_no_loss_ils": 119
+     }
+    ],
     "highest_comp_ils": 399.0,
-    "ratio_to_highest_comp": 0.32,
+    "ratio_to_highest_comp": 0.35,
     "above_market": false,
     "estimated_inputs": [],
     "scenarios": 30,
-    "variants_checked": 29
+    "variants_checked": 29,
+    "raised_from_ils": 129
    },
    "flags": [
-    "below-floor"
+    "below-floor",
+    "variant-loses-on-site"
    ]
   },
   "sofa-cover-cj-knit-thick-slipcover": {
@@ -20005,6 +20170,120 @@
     "estimated_inputs": [],
     "scenarios": 13,
     "variants_checked": 12
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "curtains-cj-linen-yarn-sheer-tab": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD190543830DW",
+   "price_for_qty": 1,
+   "sale_contains": "וילון שקוף במראה פשתן עם לולאות קדמיות, 132×274, לבן קרם (Cream White-Double Pack 52108 של הספק; 'Double Pack' בשם המק\"ט ולא ברשימת האריזה, לא אומת)",
+   "customer_total_ils": 258,
+   "margin_pct": 43.6,
+   "contribution_ils": 84.65,
+   "contribution_with_fee_ils": 106.68,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪229: ₪229, הקטלוג הבוהו של המעצב (2026-10-12, living-room/curtains, 'זוג 132×274', מחיר מוצע); אין לכרטיס רשומת ליקוט עם מחיר ולא profit-fix. עלות $9.15 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $17.55 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪88.1, מרווח 43.6% לפני CAC. 'Double Pack' בשם המק\"ט לא אומת: ברשימת האריזה 'Curtain*1'.",
+   "source": {
+    "record": "data/catalog/boho-2026-10-12.json",
+    "card": "data/products/curtains/curtains-cj-linen-yarn-sheer-tab.json",
+    "added": "2026-11-28",
+    "by": "briefs/cj-followup-labels-rebuild-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (living-room (עמדת החנות)) 'עוד לא במכירה' כי לא היה מחיר; תומחר בסבב CJ (היומן, סעיף 4) ונכנס אחרי שתוויות האפשרויות נכתבו בעברית (ת12)",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "1728007099449352192",
+     "vid": "1728007103127756800",
+     "variant": "Cream White-Double Pack 52108",
+     "cost_usd": 9.15,
+     "card_cost_usd": 9.15,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 88.11,
+    "contribution_ils": 84.65,
+    "margin_pct": 43.6,
+    "break_even_ils": 117.57,
+    "no_loss_room_sku_ils": 119,
+    "no_loss_all_scenarios_ils": 129,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 30,
+    "variants_checked": 29
+   },
+   "flags": [
+    "ok"
+   ]
+  },
+  "wall-sconce-cj-travertine-cube-updown-12": {
+   "retail_ils": 299,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD254545503CX",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר אחת: קוביית טרוורטין 12×12×12 עם אור מעלה-מטה, LED 9W, ‏220V (LED9W-Type A-Indoor), התקנה קבועה",
+   "customer_total_ils": 299,
+   "margin_pct": 34.2,
+   "contribution_ils": 86.74,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪299: ₪299 ליחידה, profit-fix 2026-10-11 (lighting.json, החלופה קוביית הטרוורטין); אותו מחיר בקטלוג המודרני החם (מוצע). עלות $13.86 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $28.32 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪139.2, מרווח 34.2% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/lighting.json",
+    "card": "data/products/wall-sconce/wall-sconce-cj-travertine-cube-updown-12.json",
+    "added": "2026-11-28",
+    "by": "briefs/cj-followup-labels-rebuild-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (work) 'עוד לא במכירה' כי לא היה מחיר; תומחר בסבב CJ (היומן, סעיף 4) ונכנס אחרי שתוויות האפשרויות נכתבו בעברית (ת12)",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2509290740271629700",
+     "vid": "2509290740281620100",
+     "variant": "LED9W-Type A-Indoor",
+     "cost_usd": 13.86,
+     "card_cost_usd": 13.86,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 139.19,
+    "contribution_ils": 86.74,
+    "margin_pct": 34.2,
+    "break_even_ils": 184.81,
+    "no_loss_room_sku_ils": 189,
+    "no_loss_all_scenarios_ils": 209,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 4,
+    "variants_checked": 3
    },
    "flags": [
     "below-floor"
