@@ -1,0 +1,153 @@
+{
+ "asset_id": "wm-wr1-dining-centerpiece-vase-nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "plan": "docs/proposals/wm-wheels-plan-2026-11-28.md",
+ "room": "dining",
+ "frame": "D1",
+ "slot": "centerpiece-vase",
+ "product": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+ "job": {
+  "model": "nano-banana-2",
+  "type": "image-to-image",
+  "resolution": "2K",
+  "aspect_ratio": "16:9",
+  "idempotency_key": "wm-wr1-kd-vase-wabi-e1-20261128",
+  "pid": "db61b878-b5bf-4036-a935-c6a2a1622be4",
+  "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5ee9d8cd-6a5b-4dda-af5c-96cc28982a7b.png",
+  "image_refs": [
+   "https://ae01.alicdn.com/kf/S51cf5761218e4238b00f1343f9e5c582H.jpg",
+   "https://ae01.alicdn.com/kf/Sfa6d74d44a76431498550fd452ad70efW.jpg"
+  ],
+  "prompt": "Image 1 is the photograph to edit: a dining table with a caramel linen runner, two candles on black holders and a white unglazed amphora vase with two small handles and an olive branch, in the middle of the runner. Images 2 and 3 are product references only. Edit image 1: change ONLY the amphora vase; nothing else changes. It becomes the vase in image 2 (the sand-beige one, colour D; image 3 shows the same series): a handmade matte stoneware bottle vase in warm sand beige, 24.5 cm tall and 11 cm wide, a rounded bell-shaped body that rises into a long, very slender tapering neck with a small mouth, no handles, a soft matte unglazed surface. A slender sprig of the same olive branch stands in its narrow mouth. It stands upright in the same spot on the runner, a little shorter than the amphora (24.5 cm against 26 cm). Light it with the room's own light, with a soft contact shadow on the runner. Where the amphora was and the new vase is not, the wall, the runner and the table continue exactly as they are around it. Keep everything else in image 1 exactly as it is, pixel for pixel: the runner, the candles and their holders, the table, the curtain, the wall, the eucalyptus, the light and every shadow, the camera and the framing. Do not add anything else. Ignore the references' backgrounds, text and the other vases."
+ },
+ "crop": [
+  446,
+  475,
+  1406,
+  1015
+ ],
+ "sent_px": [
+  2560,
+  1440
+ ],
+ "sent_sha256": "3436dbb76d32709a7537d4715a2206067b6cd330d92eb4bf1df788333afe42bd",
+ "registration": {
+  "matches": 577,
+  "inliers": 308,
+  "residual_px_median": 0.75,
+  "residual_px_p90": 1.235,
+  "A": [
+   [
+    0.930175,
+    0.000897,
+    -0.62264
+   ],
+   [
+    -4e-05,
+    0.928474,
+    6.083033
+   ]
+  ],
+  "tone_gain_offset": [
+   [
+    0.9837,
+    -0.0092
+   ],
+   [
+    0.9899,
+    0.0008
+   ],
+   [
+    1.0005,
+    -0.0066
+   ]
+  ],
+  "unchanged_share": 0.941,
+  "returned_px": [
+   2752,
+   1536
+  ],
+  "mean_abs_diff_unchanged": 3.43
+ },
+ "cut": {
+  "row": 17,
+  "refit": [
+   {
+    "piece_bbox": [
+     871,
+     564,
+     999,
+     888
+    ],
+    "scale": 0.7825,
+    "from_centre": [
+     935.0,
+     726.0
+    ],
+    "to_centre": [
+     935.0,
+     760.8
+    ],
+    "matrix_canvas": [
+     [
+      0.7825,
+      0.0,
+      203.4
+     ],
+     [
+      0.0,
+      0.7825,
+      192.73
+     ]
+    ]
+   }
+  ],
+  "core_px": 10516,
+  "core_bbox_canvas": [
+   885,
+   634,
+   985,
+   887
+  ],
+  "alpha_px": 18655,
+  "alpha_255_px": 12147,
+  "shadow_px": 2837,
+  "opts": {
+   "zone": [
+    800,
+    540,
+    1060,
+    905
+   ],
+   "influence": 50,
+   "mask_file": "rooms/dining/opt/kd-vase-wabi-vmask.png",
+   "reveal": false,
+   "solve_above": false,
+   "fill": {
+    "layer_hole": "table-runner",
+    "dx": 120
+   },
+   "refit": [
+    {
+     "bbox": [
+      871,
+      564,
+      999,
+      888
+     ],
+     "center": [
+      935.0,
+      760.8
+     ],
+     "height": 254.3
+    }
+   ]
+  },
+  "fixes": {
+   "shadow_cap": "darkening beyond 12 px of the product capped at 0.14"
+  }
+ },
+ "seed": "not seedable (nano-banana-2): the prompt, the input crop (sha256), the references and the settings are kept",
+ "references_policy": "supplier photos are references only (var2 fetches the card URL); no supplier pixel is in a layer or a committed file"
+}

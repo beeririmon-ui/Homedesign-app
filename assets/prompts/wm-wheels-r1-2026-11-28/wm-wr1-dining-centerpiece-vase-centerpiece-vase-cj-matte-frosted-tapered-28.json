@@ -1,0 +1,108 @@
+{
+ "asset_id": "wm-wr1-dining-centerpiece-vase-centerpiece-vase-cj-matte-frosted-tapered-28",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "plan": "docs/proposals/wm-wheels-plan-2026-11-28.md",
+ "room": "dining",
+ "frame": "D1",
+ "slot": "centerpiece-vase",
+ "product": "centerpiece-vase-cj-matte-frosted-tapered-28",
+ "job": {
+  "model": "nano-banana-2",
+  "type": "image-to-image",
+  "resolution": "2K",
+  "aspect_ratio": "16:9",
+  "idempotency_key": "wm-wr1-kd-vase-black-e1-20261128",
+  "pid": "9a8917e5-e9b2-4074-b47a-a7c3b9076123",
+  "image_url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/5ee9d8cd-6a5b-4dda-af5c-96cc28982a7b.png",
+  "image_refs": [
+   "https://cf.cjdropshipping.com/20200928/1026438594628.jpg",
+   "https://cf.cjdropshipping.com/20200928/4900763338222.jpg"
+  ],
+  "prompt": "Image 1 is the photograph to edit: a dining table with a caramel linen runner, two candles on black holders and a white unglazed amphora vase with two small handles and an olive branch, in the middle of the runner. Images 2 and 3 are product references only. Edit image 1: change ONLY the amphora vase; nothing else changes. It becomes the black vase in image 2 (Black, size L; image 3 shows it on the right): a matte frosted ceramic vase in soft charcoal black, 28 cm tall, a tall straight cylinder that tapers gently towards its foot, a plain round mouth, a fine dry frosted matte surface with a faint speckle, no handles. The same olive branch stands in it as now. It stands upright in the same spot on the runner, a little taller than the amphora (28 cm against 26 cm). Light it with the room's own light, with a soft contact shadow on the runner. Where the amphora was and the new vase is not, the wall, the runner and the table continue exactly as they are around it. Keep everything else in image 1 exactly as it is, pixel for pixel: the runner, the candles and their holders, the table, the curtain, the wall, the eucalyptus, the light and every shadow, the camera and the framing. Do not add anything else. Ignore the references' backgrounds, plants, props and the white vases."
+ },
+ "crop": [
+  446,
+  475,
+  1406,
+  1015
+ ],
+ "sent_px": [
+  2560,
+  1440
+ ],
+ "sent_sha256": "3436dbb76d32709a7537d4715a2206067b6cd330d92eb4bf1df788333afe42bd",
+ "registration": {
+  "matches": 707,
+  "inliers": 436,
+  "residual_px_median": 0.687,
+  "residual_px_p90": 1.27,
+  "A": [
+   [
+    0.930244,
+    -0.000231,
+    0.159225
+   ],
+   [
+    4.3e-05,
+    0.928925,
+    5.502344
+   ]
+  ],
+  "tone_gain_offset": [
+   [
+    0.9786,
+    -0.0048
+   ],
+   [
+    0.9837,
+    0.0049
+   ],
+   [
+    0.9943,
+    -0.0041
+   ]
+  ],
+  "unchanged_share": 0.965,
+  "returned_px": [
+   2752,
+   1536
+  ],
+  "mean_abs_diff_unchanged": 3.56
+ },
+ "cut": {
+  "row": 17,
+  "refit": [],
+  "core_px": 25615,
+  "core_bbox_canvas": [
+   835,
+   599,
+   1016,
+   891
+  ],
+  "alpha_px": 32914,
+  "alpha_255_px": 27229,
+  "shadow_px": 4657,
+  "opts": {
+   "zone": [
+    800,
+    540,
+    1060,
+    905
+   ],
+   "influence": 50,
+   "mask_file": "rooms/dining/opt/kd-vase-black-vmask.png",
+   "reveal": true,
+   "soften": 0.6
+  },
+  "fixes": {
+   "black_toe": {
+    "rule": "L* < 13 mapped to 11.3 + L*/13 x 1.6999999999999993 (the plate p0.5)",
+    "px": 5828
+   },
+   "shadow_cap": "darkening beyond 12 px of the product capped at 0.14"
+  }
+ },
+ "seed": "not seedable (nano-banana-2): the prompt, the input crop (sha256), the references and the settings are kept",
+ "references_policy": "supplier photos are references only (var2 fetches the card URL); no supplier pixel is in a layer or a committed file"
+}

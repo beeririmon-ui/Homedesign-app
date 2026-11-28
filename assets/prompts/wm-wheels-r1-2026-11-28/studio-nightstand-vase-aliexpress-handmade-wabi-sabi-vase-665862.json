@@ -1,0 +1,30 @@
+{
+ "asset_id": "wm-wheel-studio-nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+ "variant": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "jobs": [
+  {
+   "model": "flux-2 1K i2i",
+   "tokens": 250,
+   "pid": "758221cf-3a55-485a-9e1e-b7f5bf795546",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-91b79ef557fa8600dc49b3c204fc88b9-0-1795874762586-a2d7659b.jpg",
+   "input": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/12a9a6a5-69f1-4a5a-af12-009a0629a48f.webp (the SKU photo Color D, rehosted)",
+   "idempotency_key": "wm-wr1-studio-wabi-sabi-d-r1",
+   "matte": {
+    "model": "remove-background",
+    "tokens": 50,
+    "pid": "c970269d-608e-4d50-baa3-3ddaf81b7b38",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-f2c91d7a6ce2c0b06e0b2dfa3344cace-1795874788298-485dad81.png"
+   }
+  }
+ ],
+ "prompt": "Studio product photograph of one vase exactly as in the reference image (same shape, colour, glaze and surface): a handmade matte stoneware bottle vase in warm sand beige (colour D), 24.5 cm tall and 11 cm wide, a rounded bell-shaped body that rises into a long, very slender tapering neck with a small mouth, no handles, a soft matte unglazed surface. It stands upright on the floor of the backdrop, empty: no branches, no flowers. Only the vase, nothing else. Shot on a seamless warm off-white paper backdrop that sweeps from wall to floor in one even very light warm off-white tone (about #F0E7DB, neither yellow nor grey), no horizon line, no texture, evenly lit everywhere with no bright glow or halo around the product. One large soft key light from the upper left with gentle fill; a soft, gentle contact shadow under the product, falling slightly to the lower right. Camera: a three-quarter view from the front-left, the lens about 30 degrees above the floor plane looking down at the product at an angle, not a top-down flat lay, so the front, the thickness and the sides of the product and the backdrop sweep behind it are visible; the product centred and filling about 70 percent of the square frame, the whole product in frame with clear empty backdrop margins on all sides, nothing cropped or hidden. Premium interior catalogue product photograph, photorealistic, crisp true-to-life texture, accurate colours, neutral white balance. No props, no plants, no flowers, no furniture, no people, no text, no logos.",
+ "seed": "not seedable (flux-2)",
+ "settings": {
+  "aspect_ratio": "1:1",
+  "resolution": "1K"
+ },
+ "post": "wr1 tools/studio.py from_matte: one global white balance (the lit backdrop to L* 92 / a* 1 / b* 7; lamps: exposure only), the backdrop rebuilt from its own low-pass darker-only (contact shadow, no light rim), the edge un-mixed with the matte, reframed to the FB20 square",
+ "references": "the card SKU photo (supplier URL, or rehosted on var2); the supplier pixels stay out of the output"
+}

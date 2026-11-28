@@ -1,0 +1,2320 @@
+{
+ "id": "wm-kitchen-dining-stage1-2026-11-20-wheels-r1",
+ "room": "dining-room",
+ "house_room": "kitchen-dining",
+ "style": "warm-modern",
+ "frames": [
+  "D1",
+  "D2"
+ ],
+ "canvas": [
+  2720,
+  1530
+ ],
+ "frame_box": [
+  77.4882,
+  43.4301,
+  2642.5118,
+  1486.5699
+ ],
+ "bases": {
+  "D1": "plate-D1-fb16.png (KD-L4 graded; plate-D1-ungraded.png is the cut base of D1's stage-one passes)",
+  "D2": "plate-D2.png (yaw -86: plate-D2o + plate-D1-ungraded by the rotation, the N-niche edit, KD-L4)",
+  "D2o": "plate-D2o.png (stage one's D2, yaw -91: the source; its passes E-left, Ec, F-niche were cut there)"
+ },
+ "cameras": {
+  "D1": {
+   "loc": [
+    2.8,
+    3.8,
+    1.1
+   ],
+   "yaw": -56.0,
+   "lens_mm": 24,
+   "u0": 0.52,
+   "v0": 0.43
+  },
+  "D2": {
+   "loc": [
+    2.8,
+    3.8,
+    1.1
+   ],
+   "yaw": -86.0,
+   "lens_mm": 24,
+   "u0": 0.52,
+   "v0": 0.43
+  },
+  "D2o": {
+   "loc": [
+    2.8,
+    3.8,
+    1.1
+   ],
+   "yaw": -91.0,
+   "lens_mm": 24,
+   "u0": 0.52,
+   "v0": 0.43,
+   "role": "stage one's D2: the source the D2 plate and its layers are composed from"
+  }
+ },
+ "compose": "plate-<frame>.png; per layer of that frame in z order: shadow (multiply), then the layer (straight alpha); lights (screen, z 90) times (1 - every alpha)",
+ "layers": [
+  {
+   "frame": "D1",
+   "slot": "curtains",
+   "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+   "clay_id": 57,
+   "z": 10,
+   "sub": 0,
+   "shadow_z": 9,
+   "default": true,
+   "layer": "layers/D1/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "shadow": "shadows/D1/curtains/curtains-aliexpress-linen-blend-s-fold-180502.png",
+   "alpha_px": 293102,
+   "shadow_px": 0,
+   "bbox_px": [
+    338,
+    0,
+    702,
+    1057
+   ],
+   "sold": true,
+   "source": "D1 pass B-window-front (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "B-window-front",
+   "toned": true,
+   "glow_fb16": {
+    "file": "light/curtains-aliexpress-linen-blend-s-fold-180502-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
+  },
+  {
+   "frame": "D1",
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-40x50",
+   "clay_id": 67,
+   "z": 12,
+   "sub": 0,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/D1/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "shadow": "shadows/D1/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "alpha_px": 29954,
+   "shadow_px": 22771,
+   "bbox_px": [
+    1400,
+    325,
+    1597,
+    500
+   ],
+   "sold": true,
+   "source": "D2 pass H-islands (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "H-islands",
+   "toned": true,
+   "print": "05, in code (tools/kd_print.py)",
+   "projected_from": "D2"
+  },
+  {
+   "frame": "D1",
+   "slot": "mug-set",
+   "product": "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown",
+   "clay_id": 66,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D1/mug-set/mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown.png",
+   "shadow": "shadows/D1/mug-set/mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown.png",
+   "alpha_px": 6441,
+   "shadow_px": 6406,
+   "bbox_px": [
+    2376,
+    384,
+    2548,
+    435
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Dc-right",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "open-shelf-ceramics",
+   "product": "vase-cj-matte-moon-jar-white-styleg",
+   "clay_id": 69,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D1/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "shadow": "shadows/D1/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "alpha_px": 6862,
+   "shadow_px": 7263,
+   "bbox_px": [
+    1623,
+    390,
+    1712,
+    486
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); 10.9: warped D2o -> D2 and moved on the shelf from Y 1.55 to 1.735 in code (tools/kd_d2stage.py jar); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "jar-move",
+   "toned": true,
+   "retired": null,
+   "derived_from": "D2o",
+   "trim": {
+    "rule": "KD-L5: the body's alpha clipped to its fitted ellipse from y 400 (tools/kd_d2stage.py jar_trim)",
+    "ellipse_px": [
+     738.2,
+     426.7,
+     49.4,
+     50.7
+    ],
+    "fit_residual_px_p50_p95": [
+     0.6,
+     1.8
+    ],
+    "removed_px": 326
+   },
+   "projected_from": "D2"
+  },
+  {
+   "frame": "D1",
+   "slot": "tableware-set",
+   "product": "tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525",
+   "clay_id": 65,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D1/tableware-set/tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525.png",
+   "shadow": "shadows/D1/tableware-set/tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525.png",
+   "alpha_px": 3908,
+   "shadow_px": 3829,
+   "bbox_px": [
+    2234,
+    391,
+    2363,
+    445
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Dc-right",
+   "toned": true,
+   "retired": "10.9 row 2: the set moves from the right shelf into the niche (G-niche-fill)"
+  },
+  {
+   "frame": "D1",
+   "slot": "serving-boards",
+   "product": "cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19",
+   "clay_id": 79,
+   "z": 15,
+   "sub": 0,
+   "shadow_z": 14,
+   "default": true,
+   "layer": "layers/D1/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "shadow": "shadows/D1/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "alpha_px": 14846,
+   "shadow_px": 7487,
+   "bbox_px": [
+    1710,
+    587,
+    1827,
+    743
+   ],
+   "sold": true,
+   "source": "D2 pass Hb-boards (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "Hb-boards",
+   "toned": true,
+   "size_fix": {
+    "board": "B",
+    "scale": 0.78,
+    "anchor_px": [
+     842.0,
+     741.0
+    ],
+    "F_filled_px": 1984,
+    "F_symmetric_about_x": 823,
+    "F_width_px": 75,
+    "F_width_vs_clay": 1.049,
+    "pale_removed_px": 159,
+    "rule": "Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is\n    scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm\n    against 39, width 17.4 against 18.5)"
+   },
+   "projected_from": "D2"
+  },
+  {
+   "frame": "D1",
+   "slot": "cutting-boards",
+   "product": "cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l",
+   "clay_id": 73,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D1/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "shadow": "shadows/D1/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "alpha_px": 7791,
+   "shadow_px": 6342,
+   "bbox_px": [
+    1733,
+    619,
+    1806,
+    742
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "Ec-sconce-board",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D1",
+   "slot": "kitchen-sconce",
+   "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+   "clay_id": 70,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+   "shadow": "shadows/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+   "alpha_px": 3119,
+   "shadow_px": 0,
+   "bbox_px": [
+    1668,
+    295,
+    1727,
+    361
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "Ec-sconce-board",
+   "toned": true,
+   "projected_from": "D2o",
+   "layer_before_fb15": "layers/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "shadow_before_fb15": "shadows/D1/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "lamp on: a warm rim and a pool on the wall in code"
+   },
+   "glow_fb16": {
+    "file": "light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
+  },
+  {
+   "frame": "D1",
+   "slot": "condiment-set",
+   "product": "condiment-set-cj-rubberwood-mill-pair-6in",
+   "clay_id": 61,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D1/condiment-set/condiment-set-cj-rubberwood-mill-pair-6in.png",
+   "shadow": "shadows/D1/condiment-set/condiment-set-cj-rubberwood-mill-pair-6in.png",
+   "alpha_px": 2014,
+   "shadow_px": 2836,
+   "bbox_px": [
+    2183,
+    689,
+    2222,
+    755
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Dc-right",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "condiment-set",
+   "product": "condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white",
+   "clay_id": 62,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D1/condiment-set/condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white.png",
+   "shadow": "shadows/D1/condiment-set/condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white.png",
+   "alpha_px": 2350,
+   "shadow_px": 4486,
+   "bbox_px": [
+    2236,
+    677,
+    2279,
+    756
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Dc-right",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "counter-vessel",
+   "product": "vase-cj-white-textured-jar-medium-bottle",
+   "clay_id": 78,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D1/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "shadow": "shadows/D1/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "alpha_px": 39475,
+   "shadow_px": 1326,
+   "bbox_px": [
+    2560,
+    256,
+    2720,
+    777
+   ],
+   "sold": true,
+   "source": "D2 pass Hv-vessel (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2 -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "Hv-vessel",
+   "toned": true,
+   "cut_fix": {
+    "body_px": 7779,
+    "branch_seed_px": 8259,
+    "branch_alpha_px": 12791,
+    "rule": "tools/kd_d2stage.py vessel_fix: the jar opaque, the branches by the exact difference matte on their base"
+   },
+   "projected_from": "D2"
+  },
+  {
+   "frame": "D1",
+   "slot": "paper-towel-holder",
+   "product": "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c",
+   "clay_id": 74,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D1/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "shadow": "shadows/D1/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "alpha_px": 4592,
+   "shadow_px": 7542,
+   "bbox_px": [
+    2673,
+    631,
+    2720,
+    775
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "F-niche",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D1",
+   "slot": "sink-set",
+   "product": "key-tray-cj-black-walnut-tray-20x13",
+   "clay_id": 71,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D1/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "shadow": "shadows/D1/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "alpha_px": 877,
+   "shadow_px": 2501,
+   "bbox_px": [
+    1630,
+    729,
+    1716,
+    742
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "E-left",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D1",
+   "slot": "sink-set",
+   "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped",
+   "clay_id": 72,
+   "z": 18,
+   "sub": 1,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D1/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "shadow": "shadows/D1/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "alpha_px": 1035,
+   "shadow_px": 1722,
+   "bbox_px": [
+    1661,
+    677,
+    1689,
+    736
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D1 by the rotation homography about PD (depth test on the D1 clay)",
+   "pass_": "E-left",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D1",
+   "slot": "bowl",
+   "product": "bowl-cj-glutinous-white-belly-bowl-21",
+   "clay_id": 63,
+   "z": 20,
+   "sub": 0,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/D1/bowl/bowl-cj-glutinous-white-belly-bowl-21.png",
+   "shadow": "shadows/D1/bowl/bowl-cj-glutinous-white-belly-bowl-21.png",
+   "alpha_px": 6020,
+   "shadow_px": 14345,
+   "bbox_px": [
+    2365,
+    691,
+    2487,
+    766
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Dc-right",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "floor-vase",
+   "product": "pool-cj-wabi-sabi-floor-vase-white",
+   "clay_id": 58,
+   "z": 30,
+   "sub": 0,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/D1/floor-vase/pool-cj-wabi-sabi-floor-vase-white.png",
+   "shadow": "shadows/D1/floor-vase/pool-cj-wabi-sabi-floor-vase-white.png",
+   "alpha_px": 19535,
+   "shadow_px": 27106,
+   "bbox_px": [
+    1098,
+    611,
+    1300,
+    1020
+   ],
+   "sold": true,
+   "source": "D1 pass Bc-corner (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Bc-corner",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "table-runner",
+   "product": "table-runner-aliexpress-french-linen-stonewash-40x140-caramel",
+   "clay_id": 52,
+   "z": 52,
+   "sub": 0,
+   "shadow_z": 51,
+   "default": true,
+   "layer": "layers/D1/table-runner/table-runner-aliexpress-french-linen-stonewash-40x140-caramel.png",
+   "shadow": "shadows/D1/table-runner/table-runner-aliexpress-french-linen-stonewash-40x140-caramel.png",
+   "alpha_px": 33977,
+   "shadow_px": 15181,
+   "bbox_px": [
+    395,
+    834,
+    1290,
+    968
+   ],
+   "sold": true,
+   "source": "D1 pass A-table (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "A-table",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "candle-holders",
+   "product": "candle-holders-aliexpress-matte-black-iron-pillar-set2",
+   "clay_id": 55,
+   "z": 56,
+   "sub": 0,
+   "shadow_z": 55,
+   "default": true,
+   "layer": "layers/D1/candle-holders/candle-holders-aliexpress-matte-black-iron-pillar-set2.png",
+   "shadow": "shadows/D1/candle-holders/candle-holders-aliexpress-matte-black-iron-pillar-set2.png",
+   "alpha_px": 15172,
+   "shadow_px": 3986,
+   "bbox_px": [
+    633,
+    787,
+    847,
+    924
+   ],
+   "sold": true,
+   "source": "D1 pass A-table (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "A-table",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "centerpiece-vase",
+   "product": "nightstand-vase-cj-unglazed-white-amphora-26-type-c",
+   "clay_id": 53,
+   "z": 56,
+   "sub": 0,
+   "shadow_z": 55,
+   "default": true,
+   "layer": "layers/D1/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26-type-c.png",
+   "shadow": "shadows/D1/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26-type-c.png",
+   "alpha_px": 24244,
+   "shadow_px": 14869,
+   "bbox_px": [
+    836,
+    600,
+    1016,
+    891
+   ],
+   "sold": true,
+   "source": "D1 pass A-table (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "A-table",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "bench-pad",
+   "product": "bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki",
+   "clay_id": 60,
+   "z": 72,
+   "sub": 0,
+   "shadow_z": 71,
+   "default": true,
+   "layer": "layers/D1/bench-pad/bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki.png",
+   "shadow": "shadows/D1/bench-pad/bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki.png",
+   "alpha_px": 118627,
+   "shadow_px": 100979,
+   "bbox_px": [
+    843,
+    1020,
+    1676,
+    1357
+   ],
+   "sold": true,
+   "source": "D1 pass B-window-front (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "B-window-front",
+   "toned": true
+  },
+  {
+   "frame": "D1",
+   "slot": "dining-pendant",
+   "product": "pendant-cj-scalloped-pleated-bell-45",
+   "clay_id": 50,
+   "z": 80,
+   "sub": 0,
+   "shadow_z": 79,
+   "default": false,
+   "layer": "layers/D1/dining-pendant/pendant-cj-scalloped-pleated-bell-45.png",
+   "shadow": "shadows/D1/dining-pendant/pendant-cj-scalloped-pleated-bell-45.png",
+   "alpha_px": 46639,
+   "shadow_px": 0,
+   "bbox_px": [
+    765,
+    0,
+    1065,
+    433
+   ],
+   "sold": true,
+   "source": "D1 pass V3-pendant (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "V3-pendant",
+   "toned": true,
+   "variant": "V3"
+  },
+  {
+   "frame": "D1",
+   "slot": "dining-pendant",
+   "product": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light",
+   "clay_id": 50,
+   "z": 80,
+   "sub": 0,
+   "shadow_z": 79,
+   "default": true,
+   "layer": "layers/D1/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb15.png",
+   "shadow": "shadows/D1/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb15.png",
+   "alpha_px": 38915,
+   "shadow_px": 17711,
+   "bbox_px": [
+    749,
+    0,
+    1080,
+    416
+   ],
+   "sold": true,
+   "source": "D1 pass A-table (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "A-table",
+   "toned": true,
+   "layer_before_fb15": "layers/D1/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light.png",
+   "shadow_before_fb15": "shadows/D1/dining-pendant/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "lamp on: the shade's glow (G1.10) in code"
+   },
+   "glow_fb16": {
+    "file": "light/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
+  },
+  {
+   "frame": "D1",
+   "slot": "dining-pendant",
+   "product": "pendant-cj-silk-pumpkin-lantern-50cm-warm-light",
+   "clay_id": 50,
+   "z": 80,
+   "sub": 0,
+   "shadow_z": 79,
+   "default": false,
+   "variant": "V2",
+   "layer": "layers/D1/dining-pendant/pendant-cj-silk-pumpkin-lantern-50cm-warm-light.png",
+   "shadow": "shadows/D1/dining-pendant/pendant-cj-silk-pumpkin-lantern-50cm-warm-light.png",
+   "alpha_px": 38267,
+   "shadow_px": 0,
+   "bbox_px": [
+    749,
+    0,
+    1080,
+    416
+   ],
+   "sold": true,
+   "source": "code variant (tools/kd_variants.py v2), 0 tokens: V1's rendered shade (the two SKU drawings show the same 50 cm flat ribbed silk pumpkin with a bottom ring), V2's suspension: a thin white wire, no rod",
+   "pass_": "V2-code",
+   "retired": "10.9.6 KD-L3: V2 leaves the wheel (V1 + V3)"
+  },
+  {
+   "frame": "D2",
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-40x50",
+   "clay_id": 67,
+   "z": 12,
+   "sub": 0,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/D2/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "shadow": "shadows/D2/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-40x50.png",
+   "alpha_px": 41907,
+   "shadow_px": 31304,
+   "bbox_px": [
+    409,
+    296,
+    656,
+    474
+   ],
+   "sold": true,
+   "source": "D2 pass H-islands (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "H-islands",
+   "toned": true,
+   "print": "05, in code (tools/kd_print.py)"
+  },
+  {
+   "frame": "D2",
+   "slot": "canisters",
+   "product": "zendrop-2814530-white",
+   "clay_id": 76,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2/canisters/zendrop-2814530-white-fb15.png",
+   "shadow": "shadows/D2/canisters/zendrop-2814530-white-fb15.png",
+   "alpha_px": 8107,
+   "shadow_px": 2216,
+   "bbox_px": [
+    1923,
+    671,
+    2082,
+    747
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "F-niche",
+   "toned": true,
+   "projected_from": "D2o",
+   "layer_before_fb15": "layers/D2/canisters/zendrop-2814530-white.png",
+   "shadow_before_fb15": "shadows/D2/canisters/zendrop-2814530-white.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "warm balance towards the niche it stands in (code)"
+   }
+  },
+  {
+   "frame": "D2",
+   "slot": "mug-set",
+   "product": "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown",
+   "clay_id": 66,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2/mug-set/mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown.png",
+   "shadow": "shadows/D2/mug-set/mug-set-cj-sandy-stoneware-mug-glazed-rim-set3-light-brown.png",
+   "alpha_px": 4124,
+   "shadow_px": 4047,
+   "bbox_px": [
+    1394,
+    428,
+    1520,
+    466
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Dc-right",
+   "toned": true,
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "slot": "open-shelf-ceramics",
+   "product": "vase-cj-matte-moon-jar-white-styleg",
+   "clay_id": 69,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "shadow": "shadows/D2/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "alpha_px": 8061,
+   "shadow_px": 8563,
+   "bbox_px": [
+    688,
+    374,
+    788,
+    473
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); 10.9: warped D2o -> D2 and moved on the shelf from Y 1.55 to 1.735 in code (tools/kd_d2stage.py jar)",
+   "pass_": "jar-move",
+   "toned": true,
+   "retired": null,
+   "derived_from": "D2o",
+   "trim": {
+    "rule": "KD-L5: the body's alpha clipped to its fitted ellipse from y 400 (tools/kd_d2stage.py jar_trim)",
+    "ellipse_px": [
+     738.2,
+     426.7,
+     49.4,
+     50.7
+    ],
+    "fit_residual_px_p50_p95": [
+     0.6,
+     1.8
+    ],
+    "removed_px": 326
+   }
+  },
+  {
+   "frame": "D2",
+   "slot": "tableware-set",
+   "product": "tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525",
+   "clay_id": 65,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2/tableware-set/tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525.png",
+   "shadow": "shadows/D2/tableware-set/tableware-set-aliexpress-kiln-corrugated-stoneware-set-300525.png",
+   "alpha_px": 16453,
+   "shadow_px": 13090,
+   "bbox_px": [
+    1834,
+    381,
+    2042,
+    485
+   ],
+   "sold": true,
+   "source": "D2 pass G-niche-fill (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "G-niche-fill",
+   "toned": true
+  },
+  {
+   "frame": "D2",
+   "slot": "serving-boards",
+   "product": "cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19",
+   "clay_id": 79,
+   "z": 15,
+   "sub": 0,
+   "shadow_z": 14,
+   "default": true,
+   "layer": "layers/D2/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "shadow": "shadows/D2/serving-boards/cutting-boards-cj-black-walnut-paddle-pair-39-34-b-spliced-39x18-f-34x19.png",
+   "alpha_px": 16027,
+   "shadow_px": 7845,
+   "bbox_px": [
+    786,
+    586,
+    910,
+    744
+   ],
+   "sold": true,
+   "source": "D2 pass Hb-boards (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Hb-boards",
+   "toned": true,
+   "size_fix": {
+    "board": "B",
+    "scale": 0.78,
+    "anchor_px": [
+     842.0,
+     741.0
+    ],
+    "F_filled_px": 1984,
+    "F_symmetric_about_x": 823,
+    "F_width_px": 75,
+    "F_width_vs_clay": 1.049,
+    "pale_removed_px": 159,
+    "rule": "Hb r1 drew the paddle B about 1.2x wide and 1.36x tall (its body filled the placeholder and the handle went on top): B alone is\n    scaled by s about its bottom-left corner (its contact and its edge against F stay); s = 0.78 splits the error (height 41.4 cm\n    against 39, width 17.4 against 18.5)"
+   }
+  },
+  {
+   "frame": "D2",
+   "slot": "cutting-boards",
+   "product": "cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l",
+   "clay_id": 73,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D2/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "shadow": "shadows/D2/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "alpha_px": 8562,
+   "shadow_px": 6813,
+   "bbox_px": [
+    811,
+    618,
+    889,
+    744
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Ec-sconce-board",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D2",
+   "slot": "kitchen-sconce",
+   "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+   "clay_id": 70,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+   "shadow": "shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb15.png",
+   "alpha_px": 3661,
+   "shadow_px": 0,
+   "bbox_px": [
+    738,
+    276,
+    804,
+    345
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Ec-sconce-board",
+   "toned": true,
+   "projected_from": "D2o",
+   "layer_before_fb15": "layers/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "shadow_before_fb15": "shadows/D2/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "fb15": {
+    "date": "2026-11-26",
+    "how": "code",
+    "code": "lamp on: a warm rim and a pool on the wall in code"
+   },
+   "glow_fb16": {
+    "file": "light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
+    "blend": "screen",
+    "over": "whole graded composite"
+   }
+  },
+  {
+   "frame": "D2",
+   "slot": "condiment-set",
+   "product": "condiment-set-cj-rubberwood-mill-pair-6in",
+   "clay_id": 61,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2/condiment-set/condiment-set-cj-rubberwood-mill-pair-6in.png",
+   "shadow": "shadows/D2/condiment-set/condiment-set-cj-rubberwood-mill-pair-6in.png",
+   "alpha_px": 1584,
+   "shadow_px": 2191,
+   "bbox_px": [
+    1240,
+    686,
+    1273,
+    748
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Dc-right",
+   "toned": true,
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "slot": "condiment-set",
+   "product": "condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white",
+   "clay_id": 62,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2/condiment-set/condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white.png",
+   "shadow": "shadows/D2/condiment-set/condiment-set-cj-kiln-stoneware-oil-cruet-trio-kiln-baked-white.png",
+   "alpha_px": 1771,
+   "shadow_px": 3324,
+   "bbox_px": [
+    1284,
+    675,
+    1319,
+    748
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Dc-right",
+   "toned": true,
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "slot": "counter-vessel",
+   "product": "vase-cj-white-textured-jar-medium-bottle",
+   "clay_id": 78,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "shadow": "shadows/D2/counter-vessel/vase-cj-white-textured-jar-medium-bottle.png",
+   "alpha_px": 20706,
+   "shadow_px": 639,
+   "bbox_px": [
+    1528,
+    338,
+    1718,
+    756
+   ],
+   "sold": true,
+   "source": "D2 pass Hv-vessel (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Hv-vessel",
+   "toned": true,
+   "cut_fix": {
+    "body_px": 7779,
+    "branch_seed_px": 8259,
+    "branch_alpha_px": 12791,
+    "rule": "tools/kd_d2stage.py vessel_fix: the jar opaque, the branches by the exact difference matte on their base"
+   }
+  },
+  {
+   "frame": "D2",
+   "slot": "paper-towel-holder",
+   "product": "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c",
+   "clay_id": 74,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "shadow": "shadows/D2/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "alpha_px": 4712,
+   "shadow_px": 10106,
+   "bbox_px": [
+    1604,
+    629,
+    1667,
+    753
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "F-niche",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D2",
+   "slot": "sink-set",
+   "product": "key-tray-cj-black-walnut-tray-20x13",
+   "clay_id": 71,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "shadow": "shadows/D2/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "alpha_px": 1005,
+   "shadow_px": 3012,
+   "bbox_px": [
+    695,
+    734,
+    792,
+    746
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "E-left",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D2",
+   "slot": "sink-set",
+   "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped",
+   "clay_id": 72,
+   "z": 18,
+   "sub": 1,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "shadow": "shadows/D2/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "alpha_px": 1257,
+   "shadow_px": 2042,
+   "bbox_px": [
+    731,
+    678,
+    763,
+    740
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D2o -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "E-left",
+   "toned": true,
+   "projected_from": "D2o"
+  },
+  {
+   "frame": "D2",
+   "slot": "bowl",
+   "product": "bowl-cj-glutinous-white-belly-bowl-21",
+   "clay_id": 63,
+   "z": 20,
+   "sub": 0,
+   "shadow_z": 19,
+   "default": true,
+   "layer": "layers/D2/bowl/bowl-cj-glutinous-white-belly-bowl-21.png",
+   "shadow": "shadows/D2/bowl/bowl-cj-glutinous-white-belly-bowl-21.png",
+   "alpha_px": 3960,
+   "shadow_px": 9229,
+   "bbox_px": [
+    1386,
+    687,
+    1477,
+    753
+   ],
+   "sold": true,
+   "source": "D1 pass Dc-right (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Dc-right",
+   "toned": true,
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "slot": "tea-towel",
+   "product": "tea-towel-aliexpress-pure-linen-towel-38x55-caramel-2pc",
+   "clay_id": 77,
+   "z": 22,
+   "sub": 0,
+   "shadow_z": 21,
+   "default": true,
+   "layer": "layers/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel-2pc.png",
+   "shadow": "shadows/D2/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel-2pc.png",
+   "alpha_px": 18199,
+   "shadow_px": 6090,
+   "bbox_px": [
+    2249,
+    543,
+    2374,
+    700
+   ],
+   "sold": true,
+   "source": "D2 pass G-niche-fill (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "G-niche-fill",
+   "toned": true
+  },
+  {
+   "frame": "D2",
+   "slot": "floor-vase",
+   "product": "pool-cj-wabi-sabi-floor-vase-white",
+   "clay_id": 58,
+   "z": 30,
+   "sub": 0,
+   "shadow_z": 29,
+   "default": true,
+   "layer": "layers/D2/floor-vase/pool-cj-wabi-sabi-floor-vase-white.png",
+   "shadow": "shadows/D2/floor-vase/pool-cj-wabi-sabi-floor-vase-white.png",
+   "alpha_px": 42833,
+   "shadow_px": 51797,
+   "bbox_px": [
+    0,
+    598,
+    271,
+    1106
+   ],
+   "sold": true,
+   "source": "D1 pass Bc-corner (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "Bc-corner",
+   "toned": true,
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "slot": "table-runner",
+   "product": "table-runner-aliexpress-french-linen-stonewash-40x140-caramel",
+   "clay_id": 52,
+   "z": 52,
+   "sub": 0,
+   "shadow_z": 51,
+   "default": true,
+   "layer": "layers/D2/table-runner/table-runner-aliexpress-french-linen-stonewash-40x140-caramel.png",
+   "shadow": "shadows/D2/table-runner/table-runner-aliexpress-french-linen-stonewash-40x140-caramel.png",
+   "alpha_px": 9725,
+   "shadow_px": 710,
+   "bbox_px": [
+    0,
+    879,
+    256,
+    943
+   ],
+   "sold": true,
+   "source": "D1 pass A-table (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "A-table",
+   "toned": true,
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "slot": "bench-pad",
+   "product": "bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki",
+   "clay_id": 60,
+   "z": 72,
+   "sub": 0,
+   "shadow_z": 71,
+   "default": true,
+   "layer": "layers/D2/bench-pad/bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki.png",
+   "shadow": "shadows/D2/bench-pad/bench-pad-aliexpress-linen-look-box-cushion-130x35x5-khaki.png",
+   "alpha_px": 133373,
+   "shadow_px": 120792,
+   "bbox_px": [
+    0,
+    1062,
+    749,
+    1525
+   ],
+   "sold": true,
+   "source": "D1 pass B-window-front (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py); projected D1 -> D2 by the rotation homography about PD (depth test on the D2 clay)",
+   "pass_": "B-window-front",
+   "toned": true,
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2o",
+   "slot": "framed-art",
+   "product": "framed-art-aliexpress-misty-landscape-386242-work-05-30x40",
+   "clay_id": 67,
+   "z": 12,
+   "sub": 0,
+   "shadow_z": 11,
+   "default": true,
+   "layer": "layers/D2o/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
+   "shadow": "shadows/D2o/framed-art/framed-art-aliexpress-misty-landscape-386242-work-05-30x40.png",
+   "alpha_px": 23813,
+   "shadow_px": 19654,
+   "bbox_px": [
+    235,
+    338,
+    431,
+    464
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true,
+   "print": "05, in code (tools/kd_print.py)",
+   "retired": "10.9 row 3: the 64 x 49 frame (H-islands) replaces the 44 x 34"
+  },
+  {
+   "frame": "D2o",
+   "slot": "canisters",
+   "product": "zendrop-2814530-white",
+   "clay_id": 76,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2o/canisters/zendrop-2814530-white.png",
+   "shadow": "shadows/D2o/canisters/zendrop-2814530-white.png",
+   "alpha_px": 7273,
+   "shadow_px": 1897,
+   "bbox_px": [
+    1765,
+    671,
+    1915,
+    744
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "F-niche",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "open-shelf-ceramics",
+   "product": "vase-cj-matte-moon-jar-white-styleg",
+   "clay_id": 69,
+   "z": 14,
+   "sub": 0,
+   "shadow_z": 13,
+   "default": true,
+   "layer": "layers/D2o/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "shadow": "shadows/D2o/open-shelf-ceramics/vase-cj-matte-moon-jar-white-styleg.png",
+   "alpha_px": 9105,
+   "shadow_px": 9614,
+   "bbox_px": [
+    425,
+    363,
+    539,
+    464
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true,
+   "retired": "10.9 row 3: the moon jar moves to Y 1.735 (tools/kd_d2stage.py jar)"
+  },
+  {
+   "frame": "D2o",
+   "slot": "cutting-boards",
+   "product": "cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l",
+   "clay_id": 73,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D2o/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "shadow": "shadows/D2o/cutting-boards/cutting-boards-aliexpress-2pcs-1pc-wooden-cutting-280363-l.png",
+   "alpha_px": 9239,
+   "shadow_px": 7438,
+   "bbox_px": [
+    638,
+    617,
+    720,
+    746
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Ec-sconce-board",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "kitchen-sconce",
+   "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+   "clay_id": 70,
+   "z": 16,
+   "sub": 0,
+   "shadow_z": 15,
+   "default": true,
+   "layer": "layers/D2o/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "shadow": "shadows/D2o/kitchen-sconce/wall-sconce-cj-travertine-dome-15-alt-warm-light.png",
+   "alpha_px": 3943,
+   "shadow_px": 0,
+   "bbox_px": [
+    560,
+    262,
+    630,
+    332
+   ],
+   "sold": true,
+   "source": "D2 pass Ec-sconce-board (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "Ec-sconce-board",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "paper-towel-holder",
+   "product": "paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c",
+   "clay_id": 74,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2o/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "shadow": "shadows/D2o/paper-towel-holder/paper-towel-holder-aliexpress-solid-wood-slotted-paper-towel-stand-style-c.png",
+   "alpha_px": 4644,
+   "shadow_px": 10261,
+   "bbox_px": [
+    1454,
+    628,
+    1516,
+    752
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "F-niche",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "sink-set",
+   "product": "key-tray-cj-black-walnut-tray-20x13",
+   "clay_id": 71,
+   "z": 18,
+   "sub": 0,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2o/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "shadow": "shadows/D2o/sink-set/key-tray-cj-black-walnut-tray-20x13.png",
+   "alpha_px": 1062,
+   "shadow_px": 3303,
+   "bbox_px": [
+    513,
+    737,
+    617,
+    749
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "sink-set",
+   "product": "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped",
+   "clay_id": 72,
+   "z": 18,
+   "sub": 1,
+   "shadow_z": 17,
+   "default": true,
+   "layer": "layers/D2o/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "shadow": "shadows/D2o/sink-set/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle-striped.png",
+   "alpha_px": 1299,
+   "shadow_px": 2231,
+   "bbox_px": [
+    552,
+    679,
+    585,
+    742
+   ],
+   "sold": true,
+   "source": "D2 pass E-left (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "E-left",
+   "toned": true
+  },
+  {
+   "frame": "D2o",
+   "slot": "tea-towel",
+   "product": "tea-towel-aliexpress-pure-linen-towel-38x55-caramel",
+   "clay_id": 77,
+   "z": 22,
+   "sub": 0,
+   "shadow_z": 21,
+   "default": true,
+   "layer": "layers/D2o/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "shadow": "shadows/D2o/tea-towel/tea-towel-aliexpress-pure-linen-towel-38x55-caramel.png",
+   "alpha_px": 16999,
+   "shadow_px": 10650,
+   "bbox_px": [
+    2085,
+    546,
+    2190,
+    737
+   ],
+   "sold": true,
+   "source": "D2 pass F-niche (nano-banana-2 mask edit), cut in code (tools/kd_cut2.py)",
+   "pass_": "F-niche",
+   "toned": true,
+   "retired": "10.9 row 6: the set of 2 on the oven handle (G-niche-fill)"
+  }
+ ],
+ "light": [
+  {
+   "frame": "D1",
+   "file": "light/D1/A-table-lamps.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "dining-pendant"
+   ],
+   "pass_": "A-table"
+  },
+  {
+   "frame": "D2o",
+   "file": "light/D2o/Ec-sconce-board-lamps.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "kitchen-sconce"
+   ],
+   "pass_": "Ec-sconce-board"
+  },
+  {
+   "frame": "D1",
+   "file": "light/D1/Ec-sconce-board-lamps-from-D2o.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "kitchen-sconce"
+   ],
+   "pass_": "Ec-sconce-board",
+   "projected_from": "D2o"
+  },
+  {
+   "file": "warm-modern/stage1-2026-11-20/light/D1/kitchen-sconce-pool-fb15.png",
+   "blend": "screen",
+   "z": 90,
+   "px": 60554,
+   "fb15": "the light of the stone shade on its wall (code, screen)",
+   "frame": "D1"
+  },
+  {
+   "frame": "D2",
+   "file": "light/D2/A-table-lamps-from-D1.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "dining-pendant"
+   ],
+   "pass_": "A-table",
+   "projected_from": "D1"
+  },
+  {
+   "frame": "D2",
+   "file": "light/D2/Ec-sconce-board-lamps-from-D2o.png",
+   "z": 90,
+   "blend": "screen",
+   "lamps": [
+    "kitchen-sconce"
+   ],
+   "pass_": "Ec-sconce-board",
+   "projected_from": "D2o"
+  },
+  {
+   "file": "warm-modern/stage1-2026-11-20/light/D2/kitchen-sconce-pool-fb15.png",
+   "blend": "screen",
+   "z": 90,
+   "px": 67700,
+   "fb15": "the light of the stone shade on its wall (code, screen)",
+   "frame": "D2"
+  }
+ ],
+ "status": "for QA: 10.9 'D2 takes the stage' (2026-11-24), only what changed; then the owner's approval 3. Not for the site before QA.",
+ "updated": "2026-11-24 (10.9 + QA fixes KD-L5, KD-L6)",
+ "frames_out": {
+  "D1-defaults": "D1-defaults.png / D1-defaults-frame.png (plate graded, KD-L4; the D2 changes projected)",
+  "D2-defaults": "D2-defaults.png / D2-defaults-frame.png (yaw -86, KD-15)",
+  "D1-V3": "D1-V3.png / D1-V3-frame.png (pendant V3)"
+ },
+ "sample_slot": {
+  "slot": "dining-pendant",
+  "wheel": [
+   "V1",
+   "V3"
+  ],
+  "V1": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light (default)",
+  "V2": "retired (10.9.6 KD-L3: the same shade as V1); the new V2 (the AE silk dome 337877) is not rendered (no CE)",
+  "V3": "pendant-cj-scalloped-pleated-bell-45 (crop edit V3-pendant)"
+ },
+ "jobs": "jobs.json",
+ "checks": "checks.json",
+ "compose_record": "compose.json",
+ "qa_sheet": "qa-sheet.jpg",
+ "readme": "README.md",
+ "rebuild": [
+  "stage one's sources, unchanged: plate-D2o.png, plate-D1-ungraded.png and the layers cut on them (the stage-one rebuild with D2 read as D2o)",
+  "python3 tools/kd_d2stage.py plate            (KD-15: the -86 plate from the two plates; scratchpad intermediate)",
+  "python3 tools/kd_crop.py assemble N-niche && python3 tools/kd_d2stage.py niche-apply   (KD-16)",
+  "python3 tools/kd_d2stage.py grade            (KD-L4: plate-D1.png, plate-D2.png)",
+  "python3 tools/kd_d2stage.py jar && python3 tools/kd_d2stage.py jar-trim && python3 tools/kd_d2stage.py retire   (jar-trim: KD-L5)",
+  "python3 tools/compose_edits.py project        (the bases of the next edits need the projected layers)",
+  "python3 tools/kd_crop.py assemble G-niche-fill ; ... H-islands ; ... Hv-vessel ; ... Hb-boards   (crop canvases, scratchpad)",
+  "python3 tools/kd_cut2.py cut G-niche-fill H-islands Hv-vessel Hb-boards",
+  "python3.12 -I tools/kd_print.py   (print 05, the 40x50 SKU, into the frame's canvas; reads the listing file from the scratchpad)",
+  "python3 tools/kd_d2stage.py vessel-fix && python3 tools/kd_d2stage.py boards-fix   (boards-fix: B x0.78, F symmetric about x 823, KD-L6)",
+  "python3 tools/compose_edits.py project && python3 tools/kd_variants.py frames && python3 tools/checks.py && python3 tools/kd_qa_sheet.py"
+ ],
+ "source_frames": [
+  "D2o"
+ ],
+ "stage_10_9": {
+  "spec": "docs/proposals/wm-kitchen-dining-render-2026-11-19.md 10.9, with the manager's rulings of 2026-11-24",
+  "record": "d2stage.json",
+  "clay": "assets/blockout/house/framing/wm-dining-2026-11-24/ (D2-plate, D2, D1 at the 10.9 products)",
+  "passes": [
+   "N-niche (the niche, architecture)",
+   "G-niche-fill (tableware, towels)",
+   "H-islands (the frame; its boards and vessel rejected)",
+   "Hv-vessel",
+   "Hb-boards"
+  ],
+  "prompts": "assets/prompts/warm-modern-dining-2026-11-24/"
+ },
+ "fb15": {
+  "date": "2026-11-26",
+  "brief": "briefs/wm-fb15-rooms-pasted-fix-2026-11-26.md",
+  "tool": "assets/renders/tools/fb15/ (fb15.py, fb15_write.py, fb15_code.py, fb15_rooms.py)",
+  "rollback": "every edited row keeps layer_before_fb15 / shadow_before_fb15; manifest.json is untouched"
+ },
+ "fb16": {
+  "date": "2026-11-26",
+  "brief": "briefs/wm-fb16-house-light-pass-2026-11-26.md",
+  "spec": "docs/proposals/wm-fb16-house-light-2026-11-26.md",
+  "previous": "manifest-fb15.json",
+  "tool": "assets/renders/tools/fb16/ (run16.py, fb16.py)",
+  "compose": "the previous formula on the fb16 base; then L0: the grade (frames.<id>.grade, Lab, analytic) on the composite, then each glow screened over the whole composite (not x keep). Products are not redrawn: every layer and shadow file is the previous one",
+  "frames": {
+   "D1": {
+    "grade": {
+     "space": "CIELAB (D65, sRGB 8-bit in and out)",
+     "L_knots_in": [
+      0.0,
+      11.206,
+      88.226,
+      97.0,
+      100.0
+     ],
+     "L_knots_out": [
+      0.0,
+      10.02,
+      76.53,
+      96.0,
+      100.0
+     ],
+     "L_interp": "monotone cubic (Fritsch-Carlson)",
+     "ab": "a' = a * (L'+16)/(L+16) + da * w(L'),  b' = b * (L'+16)/(L+16) + db * w(L');  w = smoothstep(15, 30, L') * (1 - smoothstep(92, 99, L'))",
+     "da": 1.179,
+     "db": 0.566,
+     "fit": {
+      "iterations": 3,
+      "plaster_in_lab": [
+       88.23,
+       0.33,
+       6.77
+      ],
+      "black_in_p05": 11.21,
+      "measured": {
+       "plaster": [
+        76.39,
+        1.5,
+        6.48
+       ],
+       "plaster_px": 371209,
+       "black_p05": 10.06
+      },
+      "black_loop": {
+       "iteration": 2,
+       "black_target_in_fit": 9.99,
+       "p05_final": 11.65
+      }
+     }
+    },
+    "glows": [
+     {
+      "file": "light/window-glow-D1-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(b) window glow: area source from the clay (irradiance, and the near field within about 1 m), low frequency, +3.5 L on the shade plaster at full strength",
+      "product": null,
+      "slot": null,
+      "px": 4016165
+     },
+     {
+      "file": "light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(d) kitchen-sconce: was NOT lit; warm body + wall pool",
+      "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+      "slot": "kitchen-sconce",
+      "px": 206706
+     },
+     {
+      "file": "light/pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(d) dining-pendant: the emitting shade keeps its pre-grade brightness (it is the source)",
+      "product": "pendant-cj-silk-ribbed-pumpkin-40-50cm-warm-light",
+      "slot": "dining-pendant",
+      "px": 34682
+     },
+     {
+      "file": "light/curtains-aliexpress-linen-blend-s-fold-180502-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(b) curtains: the fabric over the glass, backlit by the window (+4 L)",
+      "product": "curtains-aliexpress-linen-blend-s-fold-180502",
+      "slot": "curtains",
+      "px": 22351
+     }
+    ],
+    "outside": {
+     "plate": "assets/renders/outside/warm-modern/fb16-2026-11-26/outside-north-fb16.jpg",
+     "mapping": "cylindrical about the window's outward normal",
+     "fp_px_per_rad": 1100.0,
+     "horizon_row": 833.3,
+     "az_offset_deg": 0.0,
+     "az_deg": [
+      16.5,
+      24.9
+     ],
+     "dof_sigma_px": 1.8,
+     "calibration": {
+      "L_p10_p90_before": [
+       20.5,
+       55.0
+      ],
+      "L_p10_p90_after": [
+       59.0,
+       89.0
+      ],
+      "sky_ab_before": [
+       -2.8,
+       12.0
+      ],
+      "target_L": 89.0,
+      "target_b": 5.0,
+      "note": "lift: the view reads several stops over the room; dark canopy to about L lo, the sky to the spec"
+     },
+     "layers_over_the_window": {
+      "curtains": {
+       "frac": 0.036,
+       "opaque_frac": 0.0
+      }
+     }
+    },
+    "base": "plate-D1-fb16.png"
+   },
+   "D2": {
+    "grade": {
+     "space": "CIELAB (D65, sRGB 8-bit in and out)",
+     "L_knots_in": [
+      0.0,
+      11.072,
+      87.897,
+      97.0,
+      100.0
+     ],
+     "L_knots_out": [
+      0.0,
+      11.5,
+      76.5,
+      96.0,
+      100.0
+     ],
+     "L_interp": "monotone cubic (Fritsch-Carlson)",
+     "ab": "a' = a * (L'+16)/(L+16) + da * w(L'),  b' = b * (L'+16)/(L+16) + db * w(L');  w = smoothstep(15, 30, L') * (1 - smoothstep(92, 99, L'))",
+     "da": 0.693,
+     "db": -0.762,
+     "fit": {
+      "iterations": 1,
+      "plaster_in_lab": [
+       87.9,
+       0.91,
+       8.16
+      ],
+      "black_in_p05": 11.07,
+      "measured": {
+       "plaster": [
+        76.49,
+        1.55,
+        6.52
+       ],
+       "plaster_px": 344680,
+       "black_p05": 11.56
+      },
+      "black_loop": {
+       "iteration": 1,
+       "black_target_in_fit": 11.5,
+       "p05_final": 11.56
+      }
+     }
+    },
+    "glows": [
+     {
+      "file": "light/wall-sconce-cj-travertine-dome-15-alt-warm-light-fb16.png",
+      "blend": "screen",
+      "over": "the whole graded composite (not x keep)",
+      "note": "(d) kitchen-sconce: was NOT lit; warm body + wall pool",
+      "product": "wall-sconce-cj-travertine-dome-15-alt-warm-light",
+      "slot": "kitchen-sconce",
+      "px": 219434
+     }
+    ],
+    "outside": null,
+    "base": null
+   }
+  }
+ },
+ "wheels": {
+  "centerpiece-vase": {
+   "slot": "centerpiece-vase",
+   "z": 56,
+   "shadow_z": 55,
+   "default": "nightstand-vase-cj-unglazed-white-amphora-26",
+   "order": [
+    "nightstand-vase-cj-unglazed-white-amphora-26",
+    "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+    "centerpiece-vase-cj-matte-frosted-tapered-28"
+   ],
+   "sets": {
+    "nightstand-vase-cj-unglazed-white-amphora-26": {
+     "products": [
+      {
+       "card_id": "nightstand-vase-cj-unglazed-white-amphora-26",
+       "card": "data/products/master/nightstand-vase/nightstand-vase-cj-unglazed-white-amphora-26.json",
+       "sku": "CJYD234431803CX",
+       "option": {},
+       "role": "vase 26 x 12 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26.png",
+     "layer": "layers/D1/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26-type-c.png",
+     "shadow": "shadows/D1/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26-type-c.png",
+     "alpha_px": 24244,
+     "shadow_px": 14869,
+     "bbox_px": [
+      836,
+      600,
+      1016,
+      891
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862": {
+     "products": [
+      {
+       "card_id": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+       "card": "data/products/master/nightstand-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.json",
+       "sku": "12000045681158503",
+       "option": {},
+       "role": "vase 24.5 x 11 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/centerpiece-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.png",
+     "layer": "layers/centerpiece-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.png",
+     "shadow": "shadows/centerpiece-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.png",
+     "alpha_px": 18655,
+     "alpha_255_px": 12147,
+     "shadow_px": 2837,
+     "bbox_px": [
+      818,
+      629,
+      1064,
+      909
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [446, 475, 1406, 1015], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-dining-centerpiece-vase-nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.json",
+     "registration": {
+      "matches": 577,
+      "inliers": 308,
+      "residual_px_median": 0.75,
+      "residual_px_p90": 1.235,
+      "A": [
+       [
+        0.930175,
+        0.000897,
+        -0.62264
+       ],
+       [
+        -4e-05,
+        0.928474,
+        6.083033
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9837,
+        -0.0092
+       ],
+       [
+        0.9899,
+        0.0008
+       ],
+       [
+        1.0005,
+        -0.0066
+       ]
+      ],
+      "unchanged_share": 0.941,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.43
+     },
+     "rnd2": {
+      "pre_changed_px": 30951,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 30615,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 8486,
+      "mean": 39.12,
+      "p99": 136.3
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 1.532,
+      "grain_ratio": 0.367,
+      "score": 5.44,
+      "fails": [
+       "SHARP 1.53 (sharper than the plate)",
+       "GRAIN 0.37 (smoother)",
+       "LIGHT 44 deg (indicative)",
+       "CONTACT -21.1 L* (indicative)"
+      ]
+     },
+     "cut": {
+      "refit": [
+       {
+        "piece_bbox": [
+         871,
+         564,
+         999,
+         888
+        ],
+        "scale": 0.7825,
+        "from_centre": [
+         935.0,
+         726.0
+        ],
+        "to_centre": [
+         935.0,
+         760.8
+        ],
+        "matrix_canvas": [
+         [
+          0.7825,
+          0.0,
+          203.4
+         ],
+         [
+          0.0,
+          0.7825,
+          192.73
+         ]
+        ]
+       }
+      ],
+      "core_px": 10516,
+      "core_bbox_canvas": [
+       885,
+       634,
+       985,
+       887
+      ]
+     },
+     "note": "refit x0.78 about the foot (card size); the olive sprig (filler) is in the layer"
+    },
+    "centerpiece-vase-cj-matte-frosted-tapered-28": {
+     "products": [
+      {
+       "card_id": "centerpiece-vase-cj-matte-frosted-tapered-28",
+       "card": "data/products/dining/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.json",
+       "sku": "CJJJJTJT21220-Black L",
+       "option": {},
+       "role": "vase 28 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.png",
+     "layer": "layers/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.png",
+     "shadow": "shadows/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.png",
+     "alpha_px": 32914,
+     "alpha_255_px": 27229,
+     "shadow_px": 4657,
+     "bbox_px": [
+      829,
+      593,
+      1022,
+      897
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [446, 475, 1406, 1015], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-dining-centerpiece-vase-centerpiece-vase-cj-matte-frosted-tapered-28.json",
+     "registration": {
+      "matches": 707,
+      "inliers": 436,
+      "residual_px_median": 0.687,
+      "residual_px_p90": 1.27,
+      "A": [
+       [
+        0.930244,
+        -0.000231,
+        0.159225
+       ],
+       [
+        4.3e-05,
+        0.928925,
+        5.502344
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9786,
+        -0.0048
+       ],
+       [
+        0.9837,
+        0.0049
+       ],
+       [
+        0.9943,
+        -0.0041
+       ]
+      ],
+      "unchanged_share": 0.965,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.56
+     },
+     "rnd2": {
+      "pre_changed_px": 35247,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 35217,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 23056,
+      "mean": 2.5,
+      "p99": 19.2
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 1,
+      "sharp_ratio": 1.552,
+      "grain_ratio": 0.384,
+      "score": 6.14,
+      "fails": [
+       "SHARP 1.55 (sharper than the plate)",
+       "GRAIN 0.38 (smoother)",
+       "CONTACT -20.7 L* (indicative)",
+       "SHADOW x1"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 25615,
+      "core_bbox_canvas": [
+       835,
+       599,
+       1016,
+       891
+      ]
+     },
+     "note": "the olive branch (filler) is in the layer"
+    }
+   },
+   "note": "D1 only; D2 shows the default (plan 6)"
+  }
+ },
+ "centerpiece-vase": {
+  "wheel": {
+   "slot": "centerpiece-vase",
+   "z": 56,
+   "shadow_z": 55,
+   "default": "nightstand-vase-cj-unglazed-white-amphora-26",
+   "order": [
+    "nightstand-vase-cj-unglazed-white-amphora-26",
+    "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+    "centerpiece-vase-cj-matte-frosted-tapered-28"
+   ],
+   "sets": {
+    "nightstand-vase-cj-unglazed-white-amphora-26": {
+     "products": [
+      {
+       "card_id": "nightstand-vase-cj-unglazed-white-amphora-26",
+       "card": "data/products/master/nightstand-vase/nightstand-vase-cj-unglazed-white-amphora-26.json",
+       "sku": "CJYD234431803CX",
+       "option": {},
+       "role": "vase 26 x 12 cm"
+      }
+     ],
+     "default": true,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26.png",
+     "layer": "layers/D1/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26-type-c.png",
+     "shadow": "shadows/D1/centerpiece-vase/nightstand-vase-cj-unglazed-white-amphora-26-type-c.png",
+     "alpha_px": 24244,
+     "shadow_px": 14869,
+     "bbox_px": [
+      836,
+      600,
+      1016,
+      891
+     ],
+     "source": "the frame's own default layer (unchanged)"
+    },
+    "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862": {
+     "products": [
+      {
+       "card_id": "nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862",
+       "card": "data/products/master/nightstand-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.json",
+       "sku": "12000045681158503",
+       "option": {},
+       "role": "vase 24.5 x 11 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/centerpiece-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.png",
+     "layer": "layers/centerpiece-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.png",
+     "shadow": "shadows/centerpiece-vase/nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.png",
+     "alpha_px": 18655,
+     "alpha_255_px": 12147,
+     "shadow_px": 2837,
+     "bbox_px": [
+      818,
+      629,
+      1064,
+      909
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [446, 475, 1406, 1015], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-dining-centerpiece-vase-nightstand-vase-aliexpress-handmade-wabi-sabi-vase-665862.json",
+     "registration": {
+      "matches": 577,
+      "inliers": 308,
+      "residual_px_median": 0.75,
+      "residual_px_p90": 1.235,
+      "A": [
+       [
+        0.930175,
+        0.000897,
+        -0.62264
+       ],
+       [
+        -4e-05,
+        0.928474,
+        6.083033
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9837,
+        -0.0092
+       ],
+       [
+        0.9899,
+        0.0008
+       ],
+       [
+        1.0005,
+        -0.0066
+       ]
+      ],
+      "unchanged_share": 0.941,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.43
+     },
+     "rnd2": {
+      "pre_changed_px": 30951,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 30615,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 8486,
+      "mean": 39.12,
+      "p99": 136.3
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 0,
+      "sharp_ratio": 1.532,
+      "grain_ratio": 0.367,
+      "score": 5.44,
+      "fails": [
+       "SHARP 1.53 (sharper than the plate)",
+       "GRAIN 0.37 (smoother)",
+       "LIGHT 44 deg (indicative)",
+       "CONTACT -21.1 L* (indicative)"
+      ]
+     },
+     "cut": {
+      "refit": [
+       {
+        "piece_bbox": [
+         871,
+         564,
+         999,
+         888
+        ],
+        "scale": 0.7825,
+        "from_centre": [
+         935.0,
+         726.0
+        ],
+        "to_centre": [
+         935.0,
+         760.8
+        ],
+        "matrix_canvas": [
+         [
+          0.7825,
+          0.0,
+          203.4
+         ],
+         [
+          0.0,
+          0.7825,
+          192.73
+         ]
+        ]
+       }
+      ],
+      "core_px": 10516,
+      "core_bbox_canvas": [
+       885,
+       634,
+       985,
+       887
+      ]
+     },
+     "note": "refit x0.78 about the foot (card size); the olive sprig (filler) is in the layer"
+    },
+    "centerpiece-vase-cj-matte-frosted-tapered-28": {
+     "products": [
+      {
+       "card_id": "centerpiece-vase-cj-matte-frosted-tapered-28",
+       "card": "data/products/dining/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.json",
+       "sku": "CJJJJTJT21220-Black L",
+       "option": {},
+       "role": "vase 28 cm"
+      }
+     ],
+     "default": false,
+     "studio": "assets/renders/wheel-studio/warm-modern/dining/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.png",
+     "layer": "layers/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.png",
+     "shadow": "shadows/centerpiece-vase/centerpiece-vase-cj-matte-frosted-tapered-28.png",
+     "alpha_px": 32914,
+     "alpha_255_px": 27229,
+     "shadow_px": 4657,
+     "bbox_px": [
+      829,
+      593,
+      1022,
+      897
+     ],
+     "source": "nano-banana-2 2K in-context edit of a 960 x 540 crop of the room display composite (canvas [446, 475, 1406, 1015], sent x2.6667), registered and tone-fitted, cut in code (wr1 tools: edit.py, polycut.py)",
+     "prompt_record": "assets/prompts/wm-wheels-r1-2026-11-28/wm-wr1-dining-centerpiece-vase-centerpiece-vase-cj-matte-frosted-tapered-28.json",
+     "registration": {
+      "matches": 707,
+      "inliers": 436,
+      "residual_px_median": 0.687,
+      "residual_px_p90": 1.27,
+      "A": [
+       [
+        0.930244,
+        -0.000231,
+        0.159225
+       ],
+       [
+        4.3e-05,
+        0.928925,
+        5.502344
+       ]
+      ],
+      "tone_gain_offset": [
+       [
+        0.9786,
+        -0.0048
+       ],
+       [
+        0.9837,
+        0.0049
+       ],
+       [
+        0.9943,
+        -0.0041
+       ]
+      ],
+      "unchanged_share": 0.965,
+      "returned_px": [
+       2752,
+       1536
+      ],
+      "mean_abs_diff_unchanged": 3.56
+     },
+     "rnd2": {
+      "pre_changed_px": 35247,
+      "pre_changed_outside_regions_px": 0,
+      "disp_changed_px": 35217,
+      "disp_changed_outside_regions_px": 0,
+      "hide_option_changed_outside_its_region_px": 0
+     },
+     "fidelity_to_edit_core": {
+      "px": 23056,
+      "mean": 2.5,
+      "p99": 19.2
+     },
+     "pasted": {
+      "edge_rows_x1": 0,
+      "shadow_rows_x1": 1,
+      "sharp_ratio": 1.552,
+      "grain_ratio": 0.384,
+      "score": 6.14,
+      "fails": [
+       "SHARP 1.55 (sharper than the plate)",
+       "GRAIN 0.38 (smoother)",
+       "CONTACT -20.7 L* (indicative)",
+       "SHADOW x1"
+      ]
+     },
+     "cut": {
+      "refit": [],
+      "core_px": 25615,
+      "core_bbox_canvas": [
+       835,
+       599,
+       1016,
+       891
+      ]
+     },
+     "note": "the olive branch (filler) is in the layer"
+    }
+   },
+   "note": "D1 only; D2 shows the default (plan 6)"
+  }
+ },
+ "wheels_r1": {
+  "date": "2026-11-28",
+  "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+  "plan": "docs/proposals/wm-wheels-plan-2026-11-28.md",
+  "status": "not QA'd; HD_PUBLIC=0 only (rule 7)",
+  "previous": "manifest-fb16.json",
+  "how": "per slot: `<slot>.wheel` (order, default, sets: layer, shadow; M0-W's cushions.wheel format) and the same under `wheels.<slot>`; the defaults are the frame's own rows (unchanged); several wheels compose together (each option changes only its own slot's region, RND2)",
+  "lights": null,
+  "grade": "FB16 room: the edits were sent from the display composite (the frame grade D1 and the glows), tone-fitted to it, then taken back to pre-grade (the glows unscreened, the grade inverted, fb16.inv_grade) before the cut: the engine grades the stack as before",
+  "jobs": "assets/prompts/wm-wheels-r1-2026-11-28/jobs.json",
+  "qa_sheet": "scratch only (wr1/rooms/dining/qa-sheet-dining-r1.jpg)",
+  "studio": "assets/renders/wheel-studio/warm-modern/manifest.json",
+  "dropped": [
+   {
+    "slot": "framed-art (plan 3.2 #2, code, 0 tokens)",
+    "option": "386242 designs 08 and 01 in D1 and D2; 05 into the blank-frame still",
+    "why": "held, not dropped: setting the designs in code (as tools/kd_print.py and work_prints.py did) puts the listing's pixels into a layer and a committed still, which this brief forbids; waits for the coordinator's ruling (0 tokens either way)"
+   }
+  ],
+  "notes": [
+   "centerpiece-vase V2 (wabi-sabi D): the edit drew the bottle about 1.28x the card's 24.5 cm (by the amphora's 26 cm); refit in code x0.78 about its foot, before the solve; the runner layer has a hole under the amphora (cut with it standing there): filled in code from the same runner rows 120 px to the right",
+   "centerpiece-vase V3 (black L): black toe to the plate p0.5 (the edit's darks were under the room's black point); far shadow capped"
+  ]
+ }
+}

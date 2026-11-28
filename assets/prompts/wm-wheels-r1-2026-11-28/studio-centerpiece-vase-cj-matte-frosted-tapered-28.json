@@ -1,0 +1,30 @@
+{
+ "asset_id": "wm-wheel-studio-centerpiece-vase-cj-matte-frosted-tapered-28",
+ "variant": "centerpiece-vase-cj-matte-frosted-tapered-28",
+ "date": "2026-11-28",
+ "brief": "briefs/wm-wheels-round1-2026-11-28.md",
+ "jobs": [
+  {
+   "model": "flux-2 1K i2i",
+   "tokens": 250,
+   "pid": "f0cea2e3-88df-4f01-814a-d012af6a7861",
+   "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/img-bbdc06d846adcb1bd512265074722599-0-1795874755587-3af56a88.jpg",
+   "input": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/68daffd3-f3ab-4d0e-b47e-8fffe5daa680.jpg (the SKU photo Black L, rehosted)",
+   "idempotency_key": "wm-wr1-studio-tapered-black-l-r1",
+   "matte": {
+    "model": "remove-background",
+    "tokens": 50,
+    "pid": "963ff3c1-fa3c-4f4d-a756-bb295ea56bd2",
+    "url": "https://cqfxzynnlzsxugtwrsex.supabase.co/storage/v1/object/public/generated-images/09acbcfd-5936-4b44-9775-f842f767bcef/nobg-04dbd9b54b5ce1215d0a9aa8cf107bac-1795874792473-4f76ab05.png"
+   }
+  }
+ ],
+ "prompt": "Studio product photograph of one vase exactly as in the reference image (same shape, colour, glaze and surface): a matte frosted ceramic vase in soft charcoal black (Black, size L), 28 cm tall, a tall straight cylinder that tapers gently towards its foot, a plain round mouth, a fine dry frosted matte surface with a faint speckle, no handles. It stands upright on the floor of the backdrop, empty: no branches, no flowers. Only the vase, nothing else. Shot on a seamless warm off-white paper backdrop that sweeps from wall to floor in one even very light warm off-white tone (about #F0E7DB, neither yellow nor grey), no horizon line, no texture, evenly lit everywhere with no bright glow or halo around the product. One large soft key light from the upper left with gentle fill; a soft, gentle contact shadow under the product, falling slightly to the lower right. Camera: a three-quarter view from the front-left, the lens about 30 degrees above the floor plane looking down at the product at an angle, not a top-down flat lay, so the front, the thickness and the sides of the product and the backdrop sweep behind it are visible; the product centred and filling about 70 percent of the square frame, the whole product in frame with clear empty backdrop margins on all sides, nothing cropped or hidden. Premium interior catalogue product photograph, photorealistic, crisp true-to-life texture, accurate colours, neutral white balance. No props, no plants, no flowers, no furniture, no people, no text, no logos.",
+ "seed": "not seedable (flux-2)",
+ "settings": {
+  "aspect_ratio": "1:1",
+  "resolution": "1K"
+ },
+ "post": "wr1 tools/studio.py from_matte: one global white balance (the lit backdrop to L* 92 / a* 1 / b* 7; lamps: exposure only), the backdrop rebuilt from its own low-pass darker-only (contact shadow, no light rim), the edge un-mixed with the matte, reframed to the FB20 square",
+ "references": "the card SKU photo (supplier URL, or rehosted on var2); the supplier pixels stay out of the output"
+}
