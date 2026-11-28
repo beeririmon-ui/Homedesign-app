@@ -1,13 +1,14 @@
 {
  "version": 1,
- "updated": "2026-11-25",
- "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json). 2026-11-03 (NL1, ישיבת ההחלטות): כרית הוואבי-סאבי ₪69 → ₪89 (retail_before_nl1_ils), המחיר שלא מפסיד בכל המידות; retail_src נשאר studio (החלטת המשתמש). 2026-11-25 (M6-L2, briefs/economics-kids-b1-2026-11-25.md): 10 שורות חדשות לחדרי הילדים ול-B1 (retail_src initial-2026-11-25, עם retail_sku): המחיר מהרשומה של הליקוט האחרון או מ-profit-fix 2026-10-11, והמשלוח רק ממה שכבר בריפו (shipping_il בכרטיס, מטמון הספק, או מק\"ט אח באותו ליסטינג ובאותו משקל, מסומן freight_from_sibling ב-freight-cj.json). כולן עוברות את scripts/economics/no_loss.py. ארבע מהן שורות של המקור שעותק mirror_of קורא (תומכי הספרים, הציפיות עם הסלסול, מנורת המשי 30 והכד השחור). הפירוט: data/leads/economics-kids-b1-2026-11-25.md.",
+ "updated": "2026-11-28",
+ "note": "מחיר התחלתי לפי שווי בישראל (חוקי הסטודיו ה.10–13). נבנה מ-data/economics/pricing/*-2026-10-11.json. retail_ils הוא המחיר לצרכן לכל המכירה; עריכה בסטודיו גוברת עליו. flag: ok ≥40%, below-floor 0–40%, loss = מפסיד, לא למכירה. 2026-10-18 (תיקון תמחור): 15 שורות לכרטיסים שהמכירה שלהם אינה N × העלות שבכרטיס (סטים, זוגות, אהיל + סט תלייה): sale_cost_usd ו-sale_shipping_usd הם העלות והמשלוח של המכירה כולה; הסטודיו והאתר קוראים את sale_cost_usd כעלות המכירה, ו-shipping_cost_usd הוא משלוח בלבד (2026-10-18: shipping_includes_usd הוסר מ-9 שורות: 7 אהילים, הקנקן והצנצנת ושלישיית הבקבוק). 2026-10-20 (אין מוצר מפסיד, ה.13 בתיקון 2026-10-20, מדיניות ההחלה): 91 מחירים הועלו למחיר הנמוך שבו המק\"ט שבחדר, ביחידות המכירה, בשיטת ברירת המחדל, לא מפסיד (retail_src initial-no-loss-2026-10-20; המחיר הקודם ב-retail_before_no_loss_ils). flag: ok ≥40%, below-floor 0–40%, above-market = מעל ההשוואה הגבוהה, express-only = רק אקספרס (לא למכירה עד NL2), cannot-compute; flags מוסיף variant-loses-on-site (SITE1) ו-owner-set; no_loss = תרחיש הכותרת, נקודת האיזון, הוריאנטים שמפסידים באתר והיחס להשוואה (data/economics/no-loss-changes-2026-10-20.json). 2026-11-03 (NL1, ישיבת ההחלטות): כרית הוואבי-סאבי ₪69 → ₪89 (retail_before_nl1_ils), המחיר שלא מפסיד בכל המידות; retail_src נשאר studio (החלטת המשתמש). 2026-11-25 (M6-L2, briefs/economics-kids-b1-2026-11-25.md): 10 שורות חדשות לחדרי הילדים ול-B1 (retail_src initial-2026-11-25, עם retail_sku): המחיר מהרשומה של הליקוט האחרון או מ-profit-fix 2026-10-11, והמשלוח רק ממה שכבר בריפו (shipping_il בכרטיס, מטמון הספק, או מק\"ט אח באותו ליסטינג ובאותו משקל, מסומן freight_from_sibling ב-freight-cj.json). כולן עוברות את scripts/economics/no_loss.py. ארבע מהן שורות של המקור שעותק mirror_of קורא (תומכי הספרים, הציפיות עם הסלסול, מנורת המשי 30 והכד השחור). הפירוט: data/leads/economics-kids-b1-2026-11-25.md. 2026-11-28 (גישת ה-API של CJ חזרה, briefs/economics-cj-reactivated-2026-11-28.md): 17 שורות חדשות למוצרי CJ שהסיור המודרני החם הציג 'עוד לא במכירה' (retail_src initial-2026-11-28, או initial-no-loss-2026-11-28 כשמחיר הרשומה הועלה למחיר שלא מפסיד, עם retail_sku). המק\"ט, העלות והמשלוח נבדקו מול ה-API של CJ דרך scripts/cj.py ב-2026-11-28; העלות לא השתנתה באף מוצר. המשלוח בשורה חדשה או מעודכנת ב-freight-cj.json (הצעת CJPacket Eub של היום; לסטים גם sale_quote). המחיר מהרשומה של הליקוט, מ-profit-fix 2026-10-11, או מהקטלוג המודרני החם של המעצב כשאין רשומה. הווילון הפשתני ומנורת קוביית הטרוורטין נבדקו ולא קיבלו שורה: עם מחיר הם נכנסים לקטלוג החנות, ותוויות האפשרויות שלהם באותיות לטיניות עוצרות את הבנייה (ת12). כולן עוברות את scripts/economics/no_loss.py. הפירוט: data/leads/economics-cj-2026-11-28.md.",
  "sources": [
   "data/economics/pricing/living-room-2026-10-11.json",
   "data/economics/pricing/other-rooms-2026-10-11.json",
   "data/leads/final-2026-10-13/round5/pricing-fix-2026-10-18.md",
   "data/economics/no-loss-changes-2026-10-20.json",
-  "data/leads/economics-kids-b1-2026-11-25.md"
+  "data/leads/economics-kids-b1-2026-11-25.md",
+  "data/leads/economics-cj-2026-11-28.md"
  ],
  "products": {
   "accent-sconces-aliexpress-indoor-stone-wall-lamp": {
@@ -18781,6 +18782,1229 @@
     "estimated_inputs": [],
     "scenarios": 2,
     "variants_checked": 1
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "accent-sconces-cj-travertine-block-updown-8x16": {
+   "retail_ils": 299,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD254545505EV",
+   "price_for_qty": 1,
+   "sale_contains": "מנורת קיר אחת: בלוק טרוורטין 8×16 עם אור מעלה-מטה, LED 9W, ‏220V (LED9W-Type B-Indoor), התקנה קבועה",
+   "customer_total_ils": 299,
+   "margin_pct": 41.0,
+   "contribution_ils": 103.94,
+   "contribution_with_fee_ils": null,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪299: ₪299 ליחידה, profit-fix 2026-10-11 (lighting.json, living-room/accent-sconces); בקטלוג המודרני החם ₪599 לזוג. עלות $14.97 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $22 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪122.0, מרווח 41% לפני CAC.",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/lighting.json",
+    "card": "data/products/accent-sconces/accent-sconces-cj-travertine-block-updown-8x16.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (living-room (חדר שלב 2)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2509290740271629700",
+     "vid": "2509290740281620400",
+     "variant": "LED9W-Type B-Indoor",
+     "cost_usd": 14.97,
+     "card_cost_usd": 14.97,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 122.0,
+    "contribution_ils": 103.94,
+    "margin_pct": 41.0,
+    "break_even_ils": 162.18,
+    "no_loss_room_sku_ils": 169,
+    "no_loss_all_scenarios_ils": 169,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 4,
+    "variants_checked": 3
+   },
+   "flags": [
+    "ok"
+   ]
+  },
+  "cushions-cj-chenille-check-milky-white": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD299890824XC",
+   "price_for_qty": 1,
+   "sale_contains": "ציפית אחת 50×50, שניל בריבועים טון-על-טון, לבן חלבי (בלי מילוי)",
+   "customer_total_ils": 88,
+   "margin_pct": 19.4,
+   "contribution_ils": 9.7,
+   "contribution_with_fee_ils": 31.73,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪59: ₪59 לציפית, profit-fix 2026-10-11 (textiles.json, living-room/cushions, החלופה ליחידה). עלות $3.7 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $6.58 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪33.9, מרווח 19.4% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/textiles.json",
+    "card": "data/products/cushions/cushions-cj-chenille-check-milky-white.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (living-room (עמדת החנות)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2607220939201603400",
+     "vid": "2607220939211607200",
+     "variant": "Small Plaid Milky White-50x50cm pillowcase-1PC",
+     "cost_usd": 3.7,
+     "card_cost_usd": 3.7,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 33.92,
+    "contribution_ils": 9.7,
+    "margin_pct": 19.4,
+    "break_even_ils": 46.24,
+    "no_loss_room_sku_ils": 49,
+    "no_loss_all_scenarios_ils": 59,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 40,
+    "variants_checked": 39
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "candle-holders-cj-ceramic-pedestal-tray": {
+   "retail_ils": 149,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD234800201AZ",
+   "price_for_qty": 2,
+   "sell_qty": 2,
+   "sale_contains": "זוג צלחות קרמיקה לבנות על רגל עץ, לנר עמוד (2 יח' של CJYD234800201AZ)",
+   "customer_total_ils": 178,
+   "margin_pct": 26.6,
+   "contribution_ils": 33.58,
+   "contribution_with_fee_ils": 55.61,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪149: ₪149 לזוג, הקטלוג המודרני החם של המעצב (2026-10-12, 'White, זוג', מחיר מוצע); אין לכרטיס רשומת ליקוט עם מחיר ולא profit-fix. עלות 2 × $4.86 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $8.88 ליחידה (הצעת CJ 2026-11-28); ל-2 יח' בחבילה משולבת $14.04 (נוסחת הסטודיו; הצעת CJ ל-2 באותו יום $14.03, לא יותר) = נחיתה ₪78.4, מרווח 26.6% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/catalog/warm-modern-2026-10-12.json",
+    "card": "data/products/candle-holders/candle-holders-cj-ceramic-pedestal-tray.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (living-room (חדר שלב 2)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2504070856201629400",
+     "vid": "2504070856201629600",
+     "variant": "White",
+     "cost_usd": 4.86,
+     "card_cost_usd": 4.86,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (2 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 2,
+    "landed_ils": 78.41,
+    "contribution_ils": 33.58,
+    "margin_pct": 26.6,
+    "break_even_ils": 104.79,
+    "no_loss_room_sku_ils": 109,
+    "no_loss_all_scenarios_ils": 119,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [
+     "qty-freight-estimated"
+    ],
+    "scenarios": 4,
+    "variants_checked": 1
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "pendant-cj-silk-ribbed-pumpkin-40": {
+   "retail_ils": 369,
+   "retail_src": "initial-no-loss-2026-11-28",
+   "retail_before_no_loss_ils": 329,
+   "retail_sku": "CJYD304604003CX",
+   "price_for_qty": 1,
+   "sale_contains": "מנורה תלויה אחת: פנס משי מצולע 50 ס\"מ, אור חם, ‏220V (Warm Light-50CM), התקנה קבועה",
+   "customer_total_ils": 369,
+   "margin_pct": 0.5,
+   "contribution_ils": 1.62,
+   "contribution_with_fee_ils": null,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪369: המחיר הנמוך שלא מפסיד (ה.13) במק\"ט שבחדר. מקור המחיר: ₪329, profit-fix 2026-10-11 (lighting.json, living-room/pendant), שנקבע למידה 40 ס\"מ של אותו ליסטינג; המק\"ט שבחדר הוא 50 ס\"מ; הוא מתחת למחיר הזה, ולכן הועלה. עלות $35.59 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $48.5 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪277.5, מרווח 0.5% לפני CAC. מתחת לרף 40% (ה.11). וריאנט שהאתר גוזר מפסיד במחיר הנגזר; האתר מרצפן אותו במחיר שלו (SITE1).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/lighting.json",
+    "card": "data/products/pendant/pendant-cj-silk-ribbed-pumpkin-40.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (dining, work (30 ס\"מ, וריאנט)) 'עוד לא במכירה' כי לא היה מחיר ולא שורת משלוח",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2608080928561604300",
+     "vid": "2608080928561606200",
+     "variant": "Warm Light-50CM",
+     "cost_usd": 35.59,
+     "card_cost_usd": 35.59,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 277.5,
+    "contribution_ils": 1.62,
+    "margin_pct": 0.5,
+    "break_even_ils": 366.87,
+    "no_loss_room_sku_ils": 369,
+    "no_loss_all_scenarios_ils": 439,
+    "variants_losing_on_site": [
+     {
+      "variant": "size=30, other=warm-light",
+      "variant_sku": "CJYD304604001AZ",
+      "sold_at_ils": 219,
+      "landed_ils": 216.18,
+      "contribution_ils": -51.02,
+      "own_no_loss_ils": 289
+     },
+     {
+      "variant": "size=30, other=white-light",
+      "variant_sku": "CJYD304604004DW",
+      "sold_at_ils": 219,
+      "landed_ils": 216.18,
+      "contribution_ils": -51.02,
+      "own_no_loss_ils": 289
+     },
+     {
+      "variant": "size=40, other=warm-light",
+      "variant_sku": "CJYD304604002BY",
+      "sold_at_ils": 309,
+      "landed_ils": 254.59,
+      "contribution_ils": -21.06,
+      "own_no_loss_ils": 339
+     },
+     {
+      "variant": "size=40, other=white-light",
+      "variant_sku": "CJYD304604005EV",
+      "sold_at_ils": 309,
+      "landed_ils": 254.59,
+      "contribution_ils": -21.06,
+      "own_no_loss_ils": 339
+     }
+    ],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 6,
+    "variants_checked": 5,
+    "raised_from_ils": 329
+   },
+   "flags": [
+    "below-floor",
+    "variant-loses-on-site"
+   ]
+  },
+  "nightstand-tray-cj-black-walnut-rect-tray": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJJJJTJT41624-Brown 25.5x16.5x1.5cm",
+   "price_for_qty": 1,
+   "sale_contains": "מגש אגוז שחור מלא 25.5×16.5×1.5, פינות מעוגלות ושפה דקה",
+   "customer_total_ils": 118,
+   "margin_pct": 22.9,
+   "contribution_ils": 17.24,
+   "contribution_with_fee_ils": 39.27,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪89: ₪89, מחיר העמדה ברשומה (cj-zendrop-master-corridor.json, master/nightstand-tray). עלות $7.02 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $7.88 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪49.2, מרווח 22.9% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-master-corridor.json",
+    "card": "data/products/master/nightstand-tray/nightstand-tray-cj-black-walnut-rect-tray.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (master) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "8AA9B9C0-1AB4-4B24-BF4B-2080C8B96642",
+     "vid": "1735912392388784128",
+     "variant": "Brown 25.5x16.5x1.5cm",
+     "cost_usd": 7.02,
+     "card_cost_usd": 7.02,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 49.17,
+    "contribution_ils": 17.24,
+    "margin_pct": 22.9,
+    "break_even_ils": 66.31,
+    "no_loss_room_sku_ils": 69,
+    "no_loss_all_scenarios_ils": 89,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 6,
+    "variants_checked": 5
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "trinket-dish-cj-travertine-rough-edge-10x10": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD227511501AZ",
+   "price_for_qty": 1,
+   "sale_contains": "לוח טרוורטין 10×10 בשוליים שבורים",
+   "customer_total_ils": 88,
+   "margin_pct": 32.8,
+   "contribution_ils": 16.4,
+   "contribution_with_fee_ils": 38.43,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪59: ₪59, מחיר העמדה ברשומה (cj-zendrop-master-corridor.json, master/trinket-dish). עלות $1.76 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $6.49 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪27.2, מרווח 32.8% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-master-corridor.json",
+    "card": "data/products/master/trinket-dish/trinket-dish-cj-travertine-rough-edge-10x10.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (master) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2501200638211624700",
+     "vid": "2501200638211624900",
+     "variant": "Rough Edge Cave Stone 10X10",
+     "cost_usd": 1.76,
+     "card_cost_usd": 1.76,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 27.22,
+    "contribution_ils": 16.4,
+    "margin_pct": 32.8,
+    "break_even_ils": 37.42,
+    "no_loss_room_sku_ils": 39,
+    "no_loss_all_scenarios_ils": 39,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 5,
+    "variants_checked": 4
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "bath-towels-cj-waffle-cotton-milky-white-70x140": {
+   "retail_ils": 129,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD178122202BY",
+   "price_for_qty": 2,
+   "sell_qty": 2,
+   "sale_contains": "זוג מגבות רחצה וופל כותנה 70×140, לבן חלבי (2 יח' של CJYD178122202BY)",
+   "il_value": {
+    "high": 195.9,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "סט 2 מגבות גוף מכותנה בגוון שמנת Terry",
+      "size": null,
+      "price": 195.9,
+      "url": "https://www.foxhome.co.il/products/0336839401"
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "מגבת רחצה מכותנה עם טקסטורת וופל עדינה 90x150 (ליחידה)",
+      "size": "90x150",
+      "price": 129.9,
+      "url": "https://www.zarahome.com/il/%D7%9E%D7%92%D7%91%D7%AA-%D7%A8%D7%97%D7%A6%D7%94-%D7%9E%D7%9B%D7%95%D7%AA%D7%A0%D7%94-%D7%A2%D7%9D-%D7%98%D7%A7%D7%A1%D7%98%D7%95%D7%A8%D7%94-l44587013"
+     }
+    ],
+    "basis": "ההשוואות של profit-fix 2026-10-11 (rest-textiles.json, bath/bath-towels); high = סט 2 של Fox Home, למכירה של זוג",
+    "date": "2026-11-28"
+   },
+   "customer_total_ils": 158,
+   "margin_pct": 31.6,
+   "contribution_ils": 34.56,
+   "contribution_with_fee_ils": 56.59,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪129: ₪129 לזוג, profit-fix 2026-10-11 (rest-textiles.json, bath/bath-towels); אותו מחיר בקטלוג המודרני החם. עלות 2 × $4.29 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $7 ליחידה (הצעת CJ 2026-11-28); ל-2 יח' בחבילה משולבת $10.27 (נוסחת הסטודיו; הצעת CJ ל-2 באותו יום $10.27, לא יותר) = נחיתה ₪62.2, מרווח 31.6% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/rest-textiles.json",
+    "card": "data/products/bath/bath-towels/bath-towels-cj-waffle-cotton-milky-white-70x140.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (bath) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "1670273561132539904",
+     "vid": "1670273561182871552",
+     "variant": "Milky White-70X140cm",
+     "cost_usd": 4.29,
+     "card_cost_usd": 4.29,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (2 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 2,
+    "landed_ils": 62.2,
+    "contribution_ils": 34.59,
+    "margin_pct": 31.6,
+    "break_even_ils": 83.46,
+    "no_loss_room_sku_ils": 89,
+    "no_loss_all_scenarios_ils": 99,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 195.9,
+    "ratio_to_highest_comp": 0.66,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 12,
+    "variants_checked": 5
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle": {
+   "retail_ils": 59,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD301460604DW",
+   "price_for_qty": 1,
+   "sale_contains": "בקבוק משאבה קרמי מחורץ בגוון חול, 7.5×16.5 (Striped Bottle)",
+   "il_value": {
+    "high": 60,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "מתקן קרמי Icon",
+      "size": null,
+      "price": 60.0,
+      "url": "https://www.foxhome.co.il/products/0336875800"
+     }
+    ],
+    "basis": "הרשומה והערות הכרטיס (final-round 2026-10-13): Fox Home Icon ₪60",
+    "date": "2026-11-28"
+   },
+   "customer_total_ils": 88,
+   "margin_pct": 19.7,
+   "contribution_ils": 9.86,
+   "contribution_with_fee_ils": 31.89,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪59: ₪59, מחיר העמדה ברשומה (cj-zendrop-bath.json, bath/soap-dispenser), שנגזר מ-Fox Home Icon ₪60. עלות $2.35 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $7.88 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪33.8, מרווח 19.7% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-bath.json",
+    "card": "data/products/bath/soap-dispenser/soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (bath, dining (ליד הכיור)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2607280914231639000",
+     "vid": "2607280914241631300",
+     "variant": "Striped Bottle",
+     "cost_usd": 2.35,
+     "card_cost_usd": 2.35,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 33.76,
+    "contribution_ils": 9.86,
+    "margin_pct": 19.7,
+    "break_even_ils": 46.02,
+    "no_loss_room_sku_ils": 49,
+    "no_loss_all_scenarios_ils": 49,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 60.0,
+    "ratio_to_highest_comp": 0.98,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 4,
+    "variants_checked": 3
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "vanity-vase-cj-matte-black-pottery-bud-vase-10": {
+   "retail_ils": 49,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJJJJTJT12606-HQ06",
+   "price_for_qty": 1,
+   "sale_contains": "אגרטל חרס שחור מט לענף אחד, HQ06, ‏7×9.8",
+   "il_value": {
+    "low": 19,
+    "typical": 42,
+    "high": 95,
+    "comps": [
+     {
+      "retailer": "ACE",
+      "title": "אגרטל קטן עד 25 ס\"מ (חציון הרשת)",
+      "size": null,
+      "price": 69.9,
+      "url": null
+     },
+     {
+      "retailer": "Home Center",
+      "title": "אגרטל קטן עד 25 ס\"מ (חציון הרשת)",
+      "size": null,
+      "price": 29.9,
+      "url": null
+     },
+     {
+      "retailer": "IKEA",
+      "title": "אגרטל קטן עד 25 ס\"מ (חציון הרשת)",
+      "size": null,
+      "price": 39.0,
+      "url": null
+     },
+     {
+      "retailer": "Zara Home",
+      "title": "אגרטל קטן עד 25 ס\"מ (חציון הרשת)",
+      "size": null,
+      "price": 269.0,
+      "url": null
+     }
+    ],
+    "basis": "data/economics/market-prices.json, קטגוריה vase-small (2026-10-09): P10, חציון, P90 וחציון לפי רשת; לפי הרשומה (cj-zendrop-bath.json: 're-derived from market-prices.json vase-small (median 42)')",
+    "date": "2026-11-28"
+   },
+   "customer_total_ils": 78,
+   "vs_typical_pct": 86,
+   "margin_pct": 14.8,
+   "contribution_ils": 6.16,
+   "contribution_with_fee_ils": 28.19,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪49: ₪49, מחיר העמדה ברשומה (cj-zendrop-bath.json, bath/vanity-vase), שנגזר מקטגוריית האגרטל הקטן ב-market-prices.json. עלות $2.06 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $6.99 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪29.9, מרווח 14.8% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-bath.json",
+    "card": "data/products/bath/vanity-vase/vanity-vase-cj-matte-black-pottery-bud-vase-10.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (bath) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "C38E0E2C-C113-4A90-8782-B2DBE210FC15",
+     "vid": "976F9608-5EE5-4DF8-94FC-575FEC298CC2",
+     "variant": "HQ06",
+     "cost_usd": 2.06,
+     "card_cost_usd": 2.06,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 29.87,
+    "contribution_ils": 6.16,
+    "margin_pct": 14.8,
+    "break_even_ils": 40.89,
+    "no_loss_room_sku_ils": 49,
+    "no_loss_all_scenarios_ils": 49,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 95.0,
+    "ratio_to_highest_comp": 0.52,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 8,
+    "variants_checked": 7
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "tea-towel-cj-waffle-cotton-beige-45x65-pair": {
+   "retail_ils": 39,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD223761715OL",
+   "price_for_qty": 1,
+   "sale_contains": "זוג מגבות מטבח וופל כותנה 45×65, בז' (מק\"ט הזוג של הספק, Beige 2pcs, יחידה אחת)",
+   "il_value": {
+    "low": 37.66,
+    "high": 39.95,
+    "comps": [
+     {
+      "retailer": "Fox Home",
+      "title": "סט 2 מגבות מטבח מכותנה Alpha",
+      "size": null,
+      "price": 37.66,
+      "url": "https://www.foxhome.co.il/products/סט-2-מגבות-מטבח-מכותנה-alpha"
+     },
+     {
+      "retailer": "Home Style",
+      "title": "מארז מגבות מטבח כותנה עלמה 3X40/66",
+      "size": null,
+      "price": 39.95,
+      "url": "https://www.homestyle.co.il/products/3249-110"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "סט 4 מגבות מטבח מכותנה Alpha",
+      "size": null,
+      "price": 75.32,
+      "url": "https://www.foxhome.co.il/products/סט-4-מגבות-מטבח-alpha"
+     }
+    ],
+    "basis": "ההשוואות של profit-fix 2026-10-11 (rest-textiles.json, dining-room/tea-towel); low/high = הזוג והמארז של 3, הקרובים למכירה של זוג (הסט של 4 הוא שני זוגות)",
+    "date": "2026-11-28"
+   },
+   "customer_total_ils": 68,
+   "margin_pct": 3.9,
+   "contribution_ils": 1.3,
+   "contribution_with_fee_ils": 23.33,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪39: ₪39 לזוג, profit-fix 2026-10-11 (rest-textiles.json, dining-room/tea-towel: 'The same 2-pack alone'), ביחידת המכירה של הסטודיו (מק\"ט הזוג של הספק); הסט של 4 (2 זוגות) הוצע שם ב-₪69. עלות $2.24 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $5.98 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪27.1, מרווח 3.9% לפני CAC. מתחת לרף 40% (ה.11). וריאנט שהאתר גוזר מפסיד במחיר הנגזר; האתר מרצפן אותו במחיר שלו (SITE1).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/rest-textiles.json",
+    "card": "data/products/dining/tea-towel/tea-towel-cj-waffle-cotton-beige-45x65-pair.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (bath (וריאנט חאקי)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2412080948421613600",
+     "vid": "2412080948421617000",
+     "variant": "Beige 2pcs-45 x 65cm",
+     "cost_usd": 2.24,
+     "card_cost_usd": 2.24,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 27.13,
+    "contribution_ils": 1.3,
+    "margin_pct": 3.9,
+    "break_even_ils": 37.29,
+    "no_loss_room_sku_ils": 39,
+    "no_loss_all_scenarios_ils": 49,
+    "variants_losing_on_site": [
+     {
+      "variant": "color=beige, size=35x35",
+      "variant_sku": "CJYD223761702BY",
+      "sold_at_ils": 29,
+      "landed_ils": 21.98,
+      "contribution_ils": -1.15,
+      "own_no_loss_ils": 39
+     },
+     {
+      "variant": "color=dark-gray, size=35x35",
+      "variant_sku": "CJYD223761704DW",
+      "sold_at_ils": 29,
+      "landed_ils": 22.04,
+      "contribution_ils": -1.21,
+      "own_no_loss_ils": 39
+     },
+     {
+      "variant": "color=khaki, size=35x35",
+      "variant_sku": "CJYD223761706FU",
+      "sold_at_ils": 29,
+      "landed_ils": 22.04,
+      "contribution_ils": -1.21,
+      "own_no_loss_ils": 39
+     },
+     {
+      "variant": "color=light-gray, size=35x35",
+      "variant_sku": "CJYD223761708HS",
+      "sold_at_ils": 29,
+      "landed_ils": 22.04,
+      "contribution_ils": -1.21,
+      "own_no_loss_ils": 39
+     }
+    ],
+    "highest_comp_ils": 39.95,
+    "ratio_to_highest_comp": 0.98,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 12,
+    "variants_checked": 11
+   },
+   "flags": [
+    "below-floor",
+    "variant-loses-on-site"
+   ]
+  },
+  "throw-cj-waffle-blanket-200x230-beige": {
+   "retail_ils": 189,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJCS275531425YB",
+   "price_for_qty": 1,
+   "sale_contains": "שמיכת וופל 200×230, בז'",
+   "customer_total_ils": 218,
+   "margin_pct": 22.5,
+   "contribution_ils": 35.98,
+   "contribution_with_fee_ils": 58.01,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪189: ₪189, מחיר העמדה ברשומה (cj-zendrop-master-corridor.json, master/throw). עלות $11.81 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $20.43 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪106.4, מרווח 22.5% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-master-corridor.json",
+    "card": "data/products/master/throw/throw-cj-waffle-blanket-200x230-beige.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (master (MB1, הספסל)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2602051022191606300",
+     "vid": "2604090815351635400",
+     "variant": "Beige-200X230CM",
+     "cost_usd": 11.81,
+     "card_cost_usd": 11.81,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    },
+    "read_by_copies": [
+     "bench-throw-cj-waffle-blanket-200x230-beige"
+    ]
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 106.39,
+    "contribution_ils": 35.98,
+    "margin_pct": 22.5,
+    "break_even_ils": 141.63,
+    "no_loss_room_sku_ils": 149,
+    "no_loss_all_scenarios_ils": 169,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 18,
+    "variants_checked": 17
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "basket-cj-two-tone-rope-jute-white-30": {
+   "retail_ils": 89,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJJT110953804DW",
+   "price_for_qty": 1,
+   "sale_contains": "סל חבל דו-גוני 30×30, טבעי-לבן (Yellow-30X30 של הספק)",
+   "customer_total_ils": 118,
+   "margin_pct": 35.1,
+   "contribution_ils": 26.45,
+   "contribution_with_fee_ils": 48.48,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪89: ₪89, profit-fix 2026-10-11 (decor.json, living-room/basket); אותו מחיר בקטלוג המודרני החם. עלות $4.99 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $7.12 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪40.0, מרווח 35.1% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/profit-fix-2026-10-11/decor.json",
+    "card": "data/products/basket/basket-cj-two-tone-rope-jute-white-30.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (work, master (MB1, הספסל)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "1388737903689076736",
+     "vid": "1388737905056419840",
+     "variant": "Yellow-30X30",
+     "cost_usd": 4.99,
+     "card_cost_usd": 4.99,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    },
+    "read_by_copies": [
+     "bench-basket-cj-two-tone-rope-jute-white-30"
+    ]
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 39.96,
+    "contribution_ils": 26.45,
+    "margin_pct": 35.1,
+    "break_even_ils": 54.19,
+    "no_loss_room_sku_ils": 59,
+    "no_loss_all_scenarios_ils": 69,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 5,
+    "variants_checked": 4
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "mug-set-cj-sandy-stoneware-mug-glazed-rim-set3": {
+   "retail_ils": 169,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJHS114636401AZ",
+   "price_for_qty": 3,
+   "sell_qty": 3,
+   "sale_contains": "סט 3 ספלי אבנית 350 מ\"ל, חום בהיר עם פס זיגוג בשפה (3 יח' של CJHS114636401AZ)",
+   "il_value": {
+    "low": 198,
+    "high": 237,
+    "comps": [
+     {
+      "retailer": "Tema",
+      "title": "ספל קרמיקה נורדיק סאנד (ליחידה)",
+      "size": null,
+      "price": 66.0,
+      "url": "https://www.tema-shop.com/search?q=ספל"
+     },
+     {
+      "retailer": "Tema",
+      "title": "ספל אפור 200 מ\"ל (ליחידה)",
+      "size": null,
+      "price": 75.0,
+      "url": "https://www.tema-shop.com/search?q=ספל"
+     },
+     {
+      "retailer": "Tema",
+      "title": "ספל גדול לבן (ליחידה)",
+      "size": null,
+      "price": 79.0,
+      "url": "https://www.tema-shop.com/search?q=ספל"
+     }
+    ],
+    "basis": "price_basis_he של הרשומה (wave2-ceramics-textiles.json): '3 ספלי אבנית ~₪200–237'; low/high = 3 × ₪66 / 3 × ₪79",
+    "date": "2026-11-28"
+   },
+   "customer_total_ils": 198,
+   "margin_pct": 22.9,
+   "contribution_ils": 32.74,
+   "contribution_with_fee_ils": 54.77,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪169: ₪169 לסט של 3, מחיר העמדה ברשומה (wave2-ceramics-textiles.json, dining-room/mug-set). עלות 3 × $3.63 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $8.39 ליחידה (הצעת CJ 2026-11-28); ל-3 יח' בחבילה משולבת $17.71 (נוסחת הסטודיו; הצעת CJ ל-3 באותו יום $17.71, לא יותר) = נחיתה ₪94.4, מרווח 22.9% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/wave2-ceramics-textiles.json",
+    "card": "data/products/dining/mug-set/mug-set-cj-sandy-stoneware-mug-glazed-rim-set3.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (dining) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "1397784824281960448",
+     "vid": "1397784825615749120",
+     "variant": "Light brown 350ml",
+     "cost_usd": 3.63,
+     "card_cost_usd": 3.63,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (3 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 3,
+    "landed_ils": 94.38,
+    "contribution_ils": 32.8,
+    "margin_pct": 22.9,
+    "break_even_ils": 125.82,
+    "no_loss_room_sku_ils": 129,
+    "no_loss_all_scenarios_ils": 169,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 237.0,
+    "ratio_to_highest_comp": 0.71,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 12,
+    "variants_checked": 5
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "key-tray-cj-black-walnut-tray-20x13": {
+   "retail_ils": 119,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJJJJTJT41624-Brown",
+   "price_for_qty": 1,
+   "sale_contains": "מגש אגוז שחור מלא 20×13×1.5 ('No. 3', המק\"ט Brown)",
+   "customer_total_ils": 148,
+   "margin_pct": 55.4,
+   "contribution_ils": 55.84,
+   "contribution_with_fee_ils": 77.87,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪119: ₪119, מחיר העמדה ברשומה (cj-zendrop-hall-work.json, hall/key-tray). עלות $3.62 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $6.49 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪33.4, מרווח 55.4% לפני CAC.",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-hall-work.json",
+    "card": "data/products/entrance/key-tray/key-tray-cj-black-walnut-tray-20x13.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (dining (ליד הכיור)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "8AA9B9C0-1AB4-4B24-BF4B-2080C8B96642",
+     "vid": "4BD3AF04-6348-4B65-968D-76B00EC3C558",
+     "variant": "Brown",
+     "cost_usd": 3.62,
+     "card_cost_usd": 3.62,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 33.36,
+    "contribution_ils": 55.84,
+    "margin_pct": 55.4,
+    "break_even_ils": 45.5,
+    "no_loss_room_sku_ils": 49,
+    "no_loss_all_scenarios_ils": 59,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 6,
+    "variants_checked": 5
+   },
+   "flags": [
+    "ok"
+   ]
+  },
+  "nightstand-vase-cj-unglazed-white-amphora-26": {
+   "retail_ils": 229,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJYD234431803CX",
+   "price_for_qty": 1,
+   "sale_contains": "אמפורה לבנה לא מזוגגת 26×12 עם שתי ידיות (Type C)",
+   "customer_total_ils": 258,
+   "margin_pct": 42.8,
+   "contribution_ils": 83.07,
+   "contribution_with_fee_ils": 105.1,
+   "flag": "ok",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪229: ₪229, מחיר העמדה ברשומה (cj-zendrop-master-corridor.json, master/nightstand-vase). עלות $12.11 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $15.07 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪89.7, מרווח 42.8% לפני CAC.",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/cj-zendrop-master-corridor.json",
+    "card": "data/products/master/nightstand-vase/nightstand-vase-cj-unglazed-white-amphora-26.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (dining (מרכז השולחן)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2504030226541602000",
+     "vid": "2504030226541602500",
+     "variant": "Type C",
+     "cost_usd": 12.11,
+     "card_cost_usd": 12.11,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 89.69,
+    "contribution_ils": 83.07,
+    "margin_pct": 42.8,
+    "break_even_ils": 119.65,
+    "no_loss_room_sku_ils": 129,
+    "no_loss_all_scenarios_ils": 129,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 3,
+    "variants_checked": 2
+   },
+   "flags": [
+    "ok"
+   ]
+  },
+  "bowl-cj-burnt-paulownia-footed-bowl-23": {
+   "retail_ils": 79,
+   "retail_src": "initial-no-loss-2026-11-28",
+   "retail_before_no_loss_ils": 75,
+   "retail_sku": "CJJT276748902BY",
+   "price_for_qty": 1,
+   "sale_contains": "קערת פאולוניה חרוכה על רגל 23×9, Fire Color",
+   "il_value": {
+    "typical": 85,
+    "high": 99,
+    "comps": [
+     {
+      "retailer": "1item",
+      "title": "קערת עץ מוגבהת (אותה קערת פאולוניה חרוכה, 25×10.5)",
+      "size": "25x10.5",
+      "price": 79.0,
+      "url": "https://www.1item.co.il/products/raised-paulownia-wood-bowl-fruit-display"
+     },
+     {
+      "retailer": "1item",
+      "title": "קערת שיטה על רגל 17 ס\"מ",
+      "size": null,
+      "price": 79.0,
+      "url": "https://www.1item.co.il/products/acacia-wood-pedestal-decor-bowl-14cm"
+     },
+     {
+      "retailer": "Fox Home",
+      "title": "קערת הגשה Mika",
+      "size": null,
+      "price": 83.93,
+      "url": "https://www.foxhome.co.il/products/0334386361"
+     },
+     {
+      "retailer": "Dar Marrakech",
+      "title": "קערה על רגל",
+      "size": null,
+      "price": 99.0,
+      "url": null
+     }
+    ],
+    "basis": "price_basis_he של הרשומה (wave2-ceramics-textiles.json): 'טיפוסי ~₪85'",
+    "date": "2026-11-28"
+   },
+   "customer_total_ils": 108,
+   "vs_typical_pct": 27,
+   "margin_pct": 8.4,
+   "contribution_ils": 5.62,
+   "contribution_with_fee_ils": 27.65,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪79: המחיר הנמוך שלא מפסיד (ה.13) במק\"ט שבחדר. מקור המחיר: ₪75, מחיר העמדה ברשומה (wave2-ceramics-textiles.json, dining-room/bowl); הוא מתחת למחיר הזה, ולכן הועלה. עלות $6.47 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $9.65 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪53.2, מרווח 8.4% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/final-2026-10-13/results/wave2-ceramics-textiles.json",
+    "card": "data/products/dining/bowl/bowl-cj-burnt-paulownia-footed-bowl-23.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (work (המדף)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "2602251057331608300",
+     "vid": "2602251057331608900",
+     "variant": "Fire Color-23x9cm",
+     "cost_usd": 6.47,
+     "card_cost_usd": 6.47,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    },
+    "read_by_copies": [
+     "shelf-object-cj-burnt-paulownia-footed-bowl-23"
+    ]
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 53.2,
+    "contribution_ils": 5.62,
+    "margin_pct": 8.4,
+    "break_even_ils": 71.61,
+    "no_loss_room_sku_ils": 79,
+    "no_loss_all_scenarios_ils": 79,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": 99.0,
+    "ratio_to_highest_comp": 0.8,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 2,
+    "variants_checked": 1,
+    "raised_from_ils": 75
+   },
+   "flags": [
+    "below-floor"
+   ]
+  },
+  "bowl-cj-matte-black-bowl-20": {
+   "retail_ils": 69,
+   "retail_src": "initial-2026-11-28",
+   "retail_sku": "CJJT131449012LO",
+   "price_for_qty": 1,
+   "sale_contains": "קערת קרמיקה שחורה מט 20×8 (12style)",
+   "customer_total_ils": 98,
+   "margin_pct": 19.9,
+   "contribution_ils": 11.62,
+   "contribution_with_fee_ils": 33.65,
+   "flag": "below-floor",
+   "nordic_score": null,
+   "ship_estimated": false,
+   "price_note": "₪69: ₪69, מחיר העמדה ברשומה (round-3-results/cj.json, living-room/bowl, 2026-10-11); בקטלוג המודרני החם ₪79 (מוצע). עלות $4.75 (ה-API של CJ ב-2026-11-28, כמו בכרטיס) + CJPacket Eub 12-50 $7.25 (הצעת CJ 2026-11-28, המק\"ט שבחדר) = נחיתה ₪39.6, מרווח 19.9% לפני CAC. מתחת לרף 40% (ה.11).",
+   "source": {
+    "record": "data/leads/next-sourcing/round-3-results/cj.json",
+    "card": "data/products/bowl/bowl-cj-matte-black-bowl-20.json",
+    "added": "2026-11-28",
+    "by": "briefs/economics-cj-reactivated-2026-11-28.md",
+    "log": "data/leads/economics-cj-2026-11-28.md",
+    "why": "CJ-2026-11-28: מוצג בסיור המודרני החם (living-room (M0-W)) 'עוד לא במכירה' כי לא היה מחיר",
+    "cj_api": {
+     "date": "2026-11-28",
+     "pid": "1447121145164861440",
+     "vid": "1447121145315856384",
+     "variant": "12style",
+     "cost_usd": 4.75,
+     "card_cost_usd": 4.75,
+     "cost_changed": false,
+     "inventory": "not returned by /product/query (inventoryNum null)"
+    }
+   },
+   "margin_src": "studio",
+   "no_loss": {
+    "date": "2026-11-28",
+    "policy": "headline = room SKU, sale units, default method (BRIEF Apply 2026-10-20)",
+    "headline_scenario": "המכירה (1 יח'), המק\"ט שבחדר",
+    "method": "הסטודיו (cj): CJPacket Eub 12-50",
+    "units": 1,
+    "landed_ils": 39.6,
+    "contribution_ils": 11.62,
+    "margin_pct": 19.9,
+    "break_even_ils": 53.71,
+    "no_loss_room_sku_ils": 59,
+    "no_loss_all_scenarios_ils": 69,
+    "variants_losing_on_site": [],
+    "highest_comp_ils": null,
+    "ratio_to_highest_comp": null,
+    "above_market": false,
+    "estimated_inputs": [],
+    "scenarios": 13,
+    "variants_checked": 12
    },
    "flags": [
     "below-floor"

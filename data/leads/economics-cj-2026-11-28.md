@@ -1,0 +1,193 @@
+# כלכלה למוצרי CJ בסיור, אחרי שגישת ה-API חזרה (2026-11-28)
+
+הבריף: `briefs/economics-cj-reactivated-2026-11-28.md`. כל נתון של CJ נבדק היום דרך `scripts/cj.py` בלבד (`product` ו-`freight`). לא נשלחה בקשת sourcing, ולא היה קשר עם ספקים. הכרטיסים לא שונו. השתנו רק `data/economics/products.json`, `data/economics/freight-cj.json` והיומן הזה.
+
+## 1. הרשימה: 21 מוצרי CJ מוסתרים
+המקור: `npx --no-install tsx tools/build-catalog.ts --rooms=living-room --products=tools/tour/rooms.products.json --out=<שם> --lenient`, כמו `npm run tour`, השדה `hidden`. הבנייה נעשתה מחדש על HEAD ‏`db428f72`, והרשימה זהה לזו של `catalog.tour-rooms.full.json`. נלקחו המזהים עם `-cj-` שהסיבה שלהם מתחילה ב-"no price" או ב-"no shipping line".
+
+| כרטיס | חדר בסיור | עמדה | סיבה |
+| --- | --- | --- | --- |
+| `curtains-cj-linen-yarn-sheer-tab` | סלון (עמדת החנות) | curtains | אין מחיר |
+| `accent-sconces-cj-travertine-block-updown-8x16` | סלון (חדר שלב 2) | accent-sconces | אין מחיר |
+| `wall-sconce-cj-travertine-cube-updown-12` | עבודה | wall-sconce | אין מחיר |
+| `cushions-cj-chenille-check-milky-white` | סלון (עמדת החנות) | cushions | אין מחיר |
+| `candle-holders-cj-ceramic-pedestal-tray` | סלון (חדר שלב 2) | candle-holders | אין מחיר |
+| `pendant-cj-silk-ribbed-pumpkin-40` | מטבח (D1), עבודה (30 ס"מ) | pendant | אין שורת משלוח |
+| `nightstand-tray-cj-black-walnut-rect-tray` | הורים | nightstand-tray | אין מחיר |
+| `trinket-dish-cj-travertine-rough-edge-10x10` | הורים | trinket-dish | אין מחיר |
+| `bath-towels-cj-waffle-cotton-milky-white-70x140` | אמבטיה | bath-towels | אין מחיר |
+| `soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle` | אמבטיה, מטבח (ליד הכיור) | soap-dispenser | אין מחיר |
+| `vanity-vase-cj-matte-black-pottery-bud-vase-10` | אמבטיה | vanity-vase | אין מחיר |
+| `tea-towel-cj-waffle-cotton-beige-45x65-pair` | אמבטיה (וריאנט חאקי) | tea-towel | אין מחיר |
+| `bench-throw-cj-waffle-blanket-200x230-beige` (עותק של `throw-cj-waffle-blanket-200x230-beige`) | הורים (MB1) | bench-throw | אין מחיר |
+| `bench-basket-cj-two-tone-rope-jute-white-30` (עותק של `basket-cj-two-tone-rope-jute-white-30`) | הורים (MB1) | bench-basket | אין מחיר |
+| `mug-set-cj-sandy-stoneware-mug-glazed-rim-set3` | מטבח | mug-set | אין מחיר |
+| `key-tray-cj-black-walnut-tray-20x13` | מטבח (ליד הכיור) | key-tray | אין מחיר |
+| `nightstand-vase-cj-unglazed-white-amphora-26` | מטבח (מרכז השולחן) | nightstand-vase | אין מחיר |
+| `pendant-cj-scalloped-pleated-bell` | מטבח (V3) | pendant | אין מחיר |
+| `basket-cj-two-tone-rope-jute-white-30` | עבודה | basket | אין מחיר |
+| `shelf-object-cj-burnt-paulownia-footed-bowl-23` (עותק של `bowl-cj-burnt-paulownia-footed-bowl-23`) | עבודה | shelf-object | אין מחיר |
+| `bowl-cj-matte-black-bowl-20` | סלון (M0-W) | bowl | אין מחיר |
+
+## 2. הבדיקה מול CJ
+- **42 בקשות:** ‏18 `product` ו-24 `freight`, אחת לכל 1.6 שניות לפחות. אף בקשה לא נכשלה, וכל ההודעות היו "Success". כל תשובה נשמרה במטמון בתיקיית ה-scratch.
+- **המק"ט קיים:** כל 18 הליסטינגים נמצאו, וכל מק"ט שבחדר קיים ב-API.
+- **העלות לא השתנתה באף מוצר:** עלות המק"ט שבחדר ב-API שווה ל-`price.cost` בכרטיס. גם שאר המק"טים בכרטיסים זהים לעלות ב-API. לכן אין `sale_cost_usd` בשורות.
+- **המלאי לא מדווח.** ‏`/product/query` מחזיר `inventoryNum: null` לכל וריאנט, ולכן אי אפשר לאמת מלאי דרך `cj.py`. הווריאנטים פעילים, ו-CJ מצטט להם משלוח. לא הוצא אף מוצר בגלל מלאי.
+- **מק"טים ב-API שאין בכרטיס** (לא נגעתי בכרטיסים):
+  - בציפית: `CJYD299890850XC`, ‏Coffee 60×60 2PCS, ‏$5.16;
+  - במגבת המטבח: `CJYD223761701AZ`, ‏Beige set 35×35, ‏$1.09.
+- **המשלוח:** שיטת ברירת המחדל, CJPacket Eub ‏12–50 יום (הזולה, בלי אקספרס), זהה בכל מוצר להצעה של אוקטובר. ההצעה החדשה היחידה היא לתליון 50 ס"מ: ‏$48.50. רק מחירי ה-To Door זזו מעט, והם לא בשימוש.
+
+## 3. מה מולא: שורה לכל מוצר
+- **מה נכתב:** כל השורות ב-`data/economics/products.json` עם `retail_sku`. ‏`retail_src` הוא `initial-2026-11-28` (מחיר התחלתי, לא אושר, ה.9), או `initial-no-loss-2026-11-28` כשמחיר המקור הועלה. השורות מחזיקות גם `source.cj_api` (התאריך, ה-vid, העלות ב-API מול הכרטיס).
+- **מי חישב:** שדות הרווחיות וה-`no_loss` נכתבו ב-`refresh_rows` של `no_loss.py`, רק על השורות האלה, כמו בסבב של 2026-11-25.
+- **המשלוח:** שורה ב-`freight-cj.json` עם הצעת היום למק"ט שבחדר. לסטים יש גם `sale_quote`, הצעת CJ לכמות המכירה, והיא לא גבוהה מנוסחת החבילה המשולבת.
+- **המרווח:** לפני CAC.
+
+**סדר מקורות המחיר:**
+1. הרשומה של הליקוט האחרון של הכרטיס (מחיר העמדה);
+2. אחרת profit-fix 2026-10-11;
+3. אחרת הקטלוג המודרני החם של המעצב (`data/catalog/warm-modern-2026-10-12.json`, מחיר מוצע).
+
+המחיר הסופי הוא הגבוה מבין מחיר המקור והמחיר הנמוך שלא מפסיד במק"ט שבחדר (מדיניות ההחלה של 2026-10-20). שום מחיר לא הורד.
+
+- **מנורת הבלוק** (`accent-sconces-cj-travertine-block-updown-8x16`, סלון):
+  - ₪299 ליחידה, מ-profit-fix (`lighting.json`).
+  - עלות $14.97 ומשלוח $22.00, נחיתה ₪122.0.
+  - מרווח 41.0% (ok). לא-מפסיד ₪169.
+  - בקטלוג המודרני החם היא ₪599 לזוג.
+- **הציפית** (`cushions-cj-chenille-check-milky-white`, סלון):
+  - ₪59 לציפית, מ-profit-fix (`textiles.json`).
+  - ‏$3.70 ומשלוח $6.58, נחיתה ₪33.9.
+  - מרווח 19.4% (below-floor). לא-מפסיד ₪49 למק"ט שבחדר, ₪59 בכל התרחישים.
+- **הפמוטים** (`candle-holders-cj-ceramic-pedestal-tray`, סלון):
+  - ₪149 לזוג, מהקטלוג המודרני החם ("White, זוג"). אין לכרטיס רשומת ליקוט עם מחיר ולא profit-fix.
+  - ‏`sell_qty` 2. ‏2 × $4.86, ומשלוח $14.04 בחבילה משולבת (הצעת CJ ל-2: ‏$14.03). נחיתה ₪78.4.
+  - מרווח 26.6% (below-floor). לא-מפסיד ₪109.
+- **התליון** (`pendant-cj-silk-ribbed-pumpkin-40`, מטבח, ובעבודה ב-30 ס"מ):
+  - **₪369, המחיר שלא מפסיד.** המקור הוא ₪329 ב-profit-fix (`lighting.json`), אבל ₪329 נקבע למידה 40 ס"מ, והמק"ט שבחדר הוא 50 ס"מ.
+  - ‏$35.59 ומשלוח $48.50 (הצעה ראשונה ל-50 ס"מ), נחיתה ₪277.5.
+  - **מרווח 0.5%** (below-floor). ב-₪329 הוא היה מפסיד 10.3%.
+  - בלי השוואות. ראו סעיף 5.
+- **מגש הלילה** (`nightstand-tray-cj-black-walnut-rect-tray`, הורים):
+  - ₪89, מחיר העמדה ברשומה (`cj-zendrop-master-corridor.json`).
+  - ‏$7.02 ומשלוח $7.88, נחיתה ₪49.2.
+  - מרווח 22.9% (below-floor). לא-מפסיד ₪69.
+- **לוח הטרוורטין** (`trinket-dish-cj-travertine-rough-edge-10x10`, הורים):
+  - ₪59, מהרשומה (`cj-zendrop-master-corridor.json`).
+  - ‏$1.76 ומשלוח $6.49, נחיתה ₪27.2.
+  - מרווח 32.8% (below-floor). לא-מפסיד ₪39.
+- **מגבות הרחצה** (`bath-towels-cj-waffle-cotton-milky-white-70x140`, אמבטיה):
+  - ₪129 לזוג, מ-profit-fix (`rest-textiles.json`). זה גם המחיר בקטלוג המודרני החם.
+  - ‏`sell_qty` 2. ‏2 × $4.29, ומשלוח $10.27 לזוג. נחיתה ₪62.2.
+  - מרווח 31.6% (below-floor). לא-מפסיד ₪89.
+  - ‏`il_value`: ‏Fox Home ‏₪195.9 לזוג, Zara Home ‏₪129.9 ליחידה. יחס 0.66.
+- **מתקן הסבון** (`soap-dispenser-cj-sand-ribbed-ceramic-pump-bottle`, אמבטיה ומטבח):
+  - ₪59, מהרשומה (`cj-zendrop-bath.json`).
+  - ‏$2.35 ומשלוח $7.88, נחיתה ₪33.8.
+  - מרווח 19.7% (below-floor). לא-מפסיד ₪49.
+  - ‏`il_value`: ‏Fox Home Icon ‏₪60. יחס 0.98.
+- **האגרטל הקטן** (`vanity-vase-cj-matte-black-pottery-bud-vase-10`, אמבטיה):
+  - ₪49, מהרשומה (`cj-zendrop-bath.json`).
+  - ‏$2.06 ומשלוח $6.99, נחיתה ₪29.9.
+  - מרווח 14.8% (below-floor). המחיר שווה בדיוק למחיר הלא-מפסיד.
+  - ‏`il_value` מקטגוריית האגרטל הקטן ב-`market-prices.json`, כמו ברשומה.
+- **מגבות המטבח** (`tea-towel-cj-waffle-cotton-beige-45x65-pair`, אמבטיה, וריאנט חאקי):
+  - ₪39 לזוג, מ-profit-fix (`rest-textiles.json`, "The same 2-pack alone"), ביחידת המכירה של הסטודיו (מק"ט הזוג). הסט של 4 הוצע שם ב-₪69.
+  - ‏$2.24 ומשלוח $5.98, נחיתה ₪27.1.
+  - מרווח 3.9% (below-floor). המחיר שווה בדיוק למחיר הלא-מפסיד.
+  - ‏`il_value`: ‏Fox Home ‏₪37.66 לזוג, Home Style ‏₪39.95 ל-3.
+- **השמיכה** (שורת המקור `throw-cj-waffle-blanket-200x230-beige`; העותק `bench-throw` בהורים קורא אותה):
+  - ₪189, מהרשומה (`cj-zendrop-master-corridor.json`).
+  - ‏$11.81 ומשלוח $20.43, נחיתה ₪106.4.
+  - מרווח 22.5% (below-floor). לא-מפסיד ₪149.
+- **הסל** (`basket-cj-two-tone-rope-jute-white-30`, עבודה; העותק `bench-basket` בהורים קורא אותה):
+  - ₪89, מ-profit-fix (`decor.json`). זה גם המחיר בקטלוג המודרני החם.
+  - ‏$4.99 ומשלוח $7.12, נחיתה ₪40.0.
+  - מרווח 35.1% (below-floor). לא-מפסיד ₪59.
+- **הספלים** (`mug-set-cj-sandy-stoneware-mug-glazed-rim-set3`, מטבח):
+  - ₪169 לסט של 3, מהרשומה (`wave2-ceramics-textiles.json`).
+  - ‏`sell_qty` 3: הסטודיו קרא יחידה אחת, אבל הכרטיס, הרשומה ושם העמדה בסיור הם סט של 3.
+  - ‏3 × $3.63, ומשלוח $17.71 (הצעת CJ ל-3), נחיתה ₪94.4.
+  - מרווח 22.9% (below-floor). לא-מפסיד ₪129.
+  - ‏`il_value`: ‏Tema ‏₪66–79 לספל. יחס 0.71.
+- **מגש המפתחות** (`key-tray-cj-black-walnut-tray-20x13`, מטבח ליד הכיור):
+  - ₪119, מהרשומה (`cj-zendrop-hall-work.json`).
+  - ‏$3.62 ומשלוח $6.49, נחיתה ₪33.4.
+  - מרווח 55.4% (ok). לא-מפסיד ₪49.
+- **האמפורה** (`nightstand-vase-cj-unglazed-white-amphora-26`, מרכז שולחן המטבח):
+  - ₪229, מהרשומה (`cj-zendrop-master-corridor.json`).
+  - ‏$12.11 ומשלוח $15.07, נחיתה ₪89.7.
+  - מרווח 42.8% (ok). לא-מפסיד ₪129.
+- **קערת הפאולוניה** (שורת המקור `bowl-cj-burnt-paulownia-footed-bowl-23`; העותק `shelf-object` בעבודה קורא אותה):
+  - **₪79**, המחיר שלא מפסיד בסיומת 9. המקור הוא ₪75 ברשומה (`wave2-ceramics-textiles.json`). ב-₪75 התרומה הייתה ₪2.6, אבל המחיר הלא-מפסיד של האתר הוא ₪79, ובדיקת האתר הייתה נכשלת ב-₪75.
+  - ‏$6.47 ומשלוח $9.65, נחיתה ₪53.2.
+  - מרווח 8.4% (below-floor).
+  - ‏`il_value` מהרשומה: ‏1item ‏₪79 (אותה קערה), השוואה גבוהה ₪99. יחס 0.80.
+- **הקערה השחורה** (`bowl-cj-matte-black-bowl-20`, סלון M0-W):
+  - ₪69, מחיר העמדה ברשומה (`next-sourcing/round-3-results/cj.json`).
+  - ‏$4.75 ומשלוח $7.25, נחיתה ₪39.6.
+  - מרווח 19.9% (below-floor). לא-מפסיד ₪59.
+  - בקטלוג המודרני החם היא ₪79.
+
+## 4. מה לא מולא ולמה
+- **הווילון** (`curtains-cj-linen-yarn-sheer-tab`) **ומנורת הקובייה** (`wall-sconce-cj-travertine-cube-updown-12`): נבדקו, תומחרו ועברו את בדיקת אי-ההפסד, ובכל זאת **נשארו בלי שורה.**
+  - **הסיבה:** עם מחיר שניהם נכנסים לקטלוג החנות הקפדני (סלון). שם הבנייה נעצרת, כי ל-80 תוויות אפשרויות שלהם יש אותיות לטיניות (ת12):
+    - בווילון: "Double Pack 52108" ועוד, ו-"Sea Mist";
+    - במנורה: "Type A/B", ‏"Indoor/Outdoor".
+  - **התוצאה:** ‏vitest נכשל בשני קבצים (`api/test/s14.test.ts`, `tools/test/s14-catalog.test.ts`).
+  - **התיקון:** תוויות עבריות ב-`data/catalog/option-labels-he.json`. זה מחוץ לתחום שלי.
+  - **המספרים מוכנים:**
+    - הווילון: ₪229, מהקטלוג הבוהו של המעצב (אין רשומה אחרת). ‏$9.15 ומשלוח $17.55, נחיתה ₪88.1, מרווח 43.6%, לא-מפסיד ₪119.
+    - המנורה: ₪299, מ-profit-fix. ‏$13.86 ומשלוח $28.32, נחיתה ₪139.2, מרווח 34.2%, לא-מפסיד ₪189.
+  - **שורת המשלוח שלהם ב-`freight-cj.json` כן עודכנה:** הצעה מהיום, זהה לאוקטובר.
+  - **אצל הווילון "Double Pack" לא אומת:** הוא מופיע בשם המק"ט, אבל ברשימת האריזה לא.
+- **פעמון הקפלים** (`pendant-cj-scalloped-pleated-bell`): **אין מקור מחיר בריפו.**
+  - לכרטיס אין רשומת ליקוט עם מחיר, אין profit-fix ואין מחיר באף קטלוג. בקטלוג הים-תיכוני הוא רק `also_scored`.
+  - סטטוס הכרטיס הוא `rejected`, בגלל כיפה וחרוז בכרום.
+  - **לא ניחשתי מחיר.**
+  - המק"ט והמשלוח אומתו: ‏$29.52, ‏Eub ‏$35.88, ללא שינוי. השורה שלו ב-`freight-cj.json` לא שונתה.
+
+## 5. השפעות לוואי
+- **עותקים:** שלוש מהשורות הן של כרטיס המקור שהעותק קורא (`mirror_of`), ולכן המקור מתומחר גם בחדר שלו:
+  - השמיכה: master/throw;
+  - הסל: living-room/basket, ו-bench-basket קורא אותה;
+  - קערת הפאולוניה: dining-room/bowl.
+- **בחנות (הסלון הנורדי, הקטלוג הציבורי)** הבנייה בוחרת את 3 המתומחרים עם הציון הגבוה. לכן נכנסים 4 מוצרים ויוצאים 2:
+  - **כריות:** השניל המשובץ (8.0) נכנס במקום הבוקלה של AliExpress (7.5).
+  - **תלויה:** פנס המשי המצולע (7.5, ₪369 ל-50 ס"מ) נכנס במקום מנורת הבד `pendant-aliexpress-wabi-sabi-cloth-pendant-979993` (7.0).
+  - **מנורות הדגשה:** מנורת הבלוק נוספה כבחירה שלישית.
+  - **פמוטים:** הצלחת הקרמית (5.0) נוספה כבחירה שנייה.
+  - מחיר של מוצר קיים לא השתנה.
+- **התליון ב-0.5% (החלטה לבעלים):**
+  - ב-40% המחיר היה ₪669, בערך פי 1.8.
+  - האתר גוזר את המידות 30 ו-40 מתחת למחיר הלא-מפסיד שלהן, ולכן מרצפן אותן: 30 ס"מ (הווריאנט של חדר העבודה) ב-₪289, ו-40 ס"מ ב-₪339.
+  - **למה הריצוף גבוה:** למק"ט 50 ס"מ אין `shipping_il` בכרטיס, ולכן האתר מתמחר את שאר המידות על משלוח ה-50 ($48.50).
+  - **מה יוריד אותו:** עם `shipping_il` של $48.50 על מק"ט ה-50 בכרטיס (עריכת כרטיס, לא שלי), הריצוף של ה-30 ירד. המשלוח של ה-30 הוא $29.33 בפועל.
+- **מגבות המטבח:** ארבע מהמגבות הבודדות (וריאנטים ב-$0.68–$0.70) נגזרות ל-₪29 ומרוצפות ב-₪39.
+- **`freight-cj.json`:**
+  - 17 שורות חדשות. בשתיים ששונו (הווילון, הפמוטים) נשמר `previous`.
+  - ‏`updated` ו-`calls_used` בראש הקובץ לא שונו, כי לכל שורה יש `checked_at` משלה.
+  - בשורות של מוצרים אחרים לא נגעתי.
+- **`products.json`:** ‏`updated`, הערת הקובץ ו-`sources` עודכנו.
+
+## 6. בדיקות
+- **`/usr/bin/python3 -I scripts/economics/no_loss.py --check`:** אף אחד מ-17 המוצרים לא מפסיד.
+  - 0 כשלי אינווריאנט.
+  - הקוד יוצא ב-1 רק בגלל `sofa-cover-cj-cotton-muslin-fringe` (₪129 מול ₪139), שמפסיד מקודם ולא נגעתי בו.
+  - הספירות: ok ‏331 → 348, ‏no-price ‏120 → 104, ‏cannot-compute ‏12 → 11 (התליון).
+  - ‏`python3` של ברירת המחדל (3.11) לא טוען את Pillow כאן, ולכן הורץ `/usr/bin/python3` (3.13) עם `-I`.
+- **`--check-derived`:** אפס תרחישים מפסידים.
+- **`--check-site`, על קטלוג הסיור החדש ועל קטלוג החנות:** הפסד אחד בלבד, אותה ספה.
+- **בניית קטלוג הסיור:** כל 18 המוצרים (17 שורות) מקבלים מחיר. נשארים בלי מחיר הפעמון, הווילון ומנורת הקובייה. המוסתרים: ‏37 → 19.
+  - קטלוג הסיור הרשמי (`catalog.tour-rooms.*`) לא נבנה מחדש. ‏`npm run tour` יעדכן אותו.
+  - הקטלוגים הזמניים שבניתי נמחקו.
+- **`python3 -I scripts/sourcing/options.py validate`:** ‏513 כרטיסים, 0 לא תקינים.
+- **`npx --no-install vitest run` (מ-`site/`):**
+  - 56 קבצים: 55 עברו, 1 דולג.
+  - 606 בדיקות: 590 עברו, 16 דולגו.
+  - זהה למצב שלפני השינוי.
+  - ריצת ביניים, עם הווילון והמנורה מתומחרים, נכשלה ב-2 קבצים (ראו סעיף 4).
+- **JSON:** שני הקבצים נטענים.
+  - בדיקת round-trip: 191 השורות הקודמות ב-`products.json` ו-154 השורות האחרות ב-`freight-cj.json` לא השתנו.
